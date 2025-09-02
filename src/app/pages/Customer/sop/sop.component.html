@@ -1,0 +1,29 @@
+<form [formGroup]="form">
+  <ng-container *ngFor="let field of formChain; let i = index">
+    <label>{{ field.label }}</label>
+
+    <!-- Dropdown -->
+    <select *ngIf="field.type === 'dropdown'" [formControlName]="field.key" (change)="onControlChange(i)">
+      <option value="">-- Select {{ field.label }} --</option>
+      <option *ngFor="let opt of field.options" [value]="opt.value">{{ opt.label }}</option>
+    </select>
+
+    <!-- Listbox -->
+    <select *ngIf="field.type === 'listbox'" [formControlName]="field.key" multiple (change)="onControlChange(i)">
+      <option *ngFor="let opt of field.options" [value]="opt.value">{{ opt.label }}</option>
+    </select>
+
+    <!-- Radiobutton -->
+    <div *ngIf="field.type === 'radiobutton'" (change)="onControlChange(i)">
+      <label *ngFor="let opt of field.options">
+        <input type="radio" [formControlName]="field.key" [value]="opt.value" />
+        {{ opt.label }}
+      </label>
+    </div>
+
+    <!-- Textbox -->
+    <input *ngIf="field.type === 'textbox'" type="text" [formControlName]="field.key" (blur)="onControlChange(i)" />
+  </ng-container>
+</form>
+
+<pre>{{ form.value | json }}</pre>

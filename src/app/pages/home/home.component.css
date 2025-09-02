@@ -1,0 +1,30 @@
+.span-text{
+        justify-content: flex-end;
+        display: flex;
+        flex-direction: column;
+        color: white;
+        font-size: 0.8em;
+        font-family: Nunito Sans;
+        font-weight: 600;
+        line-height: 1em;
+        padding: 0.3em;
+        word-wrap: break-word
+    }
+.span-header{
+  font-size: 0.7em;
+  font-family: Nunito Sans;
+}
+p {
+  font-family: Nunito Sans;
+}
+.progress-bar{
+  transition: 1s;
+}
+    .checkin{
+      align-self: stretch; 
+      color: #5D7177; 
+      font-size: 0.5em; 
+      font-family: Nunito Sans; 
+      font-weight: 600;
+      word-wrap: break-word
+    }

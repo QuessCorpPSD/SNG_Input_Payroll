@@ -1,0 +1,36 @@
+<div class="container">
+    <div class="row justify-content-md-center mt-5">
+        <div class="col-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title mb-4">Sign In</h5>
+                    <form>
+    
+                        <p *ngIf="validationErrors.length > 0" class='text-center '>
+                            <small class='text-danger'>{{validationErrors}}</small>
+                        </p>
+                        <div class="mb-3">
+                            <label for="username" class="form-label">
+                                User Name
+                            </label>
+                            <input type="text" class="form-control" id="username" name="username" required [(ngModel)]="username" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password
+                            </label>
+                            <input type="password" class="form-control" id="password" name="password" required
+                                [(ngModel)]="password" />
+                        </div>
+                        <div class="d-grid gap-2">
+                            
+                            <button  type="button"
+                                class="btn btn-primary btn-sm" (click)="validateLogin()">Login</button>
+                            <p class="text-center">Don't have account? <a routerLink="/register">Register here</a></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+          
+</div>

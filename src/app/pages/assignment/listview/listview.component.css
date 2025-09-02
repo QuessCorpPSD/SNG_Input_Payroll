@@ -1,0 +1,111 @@
+.table-custom {
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 12px;
+    overflow: hidden;
+     font-family: Nunito Sans; 
+
+}
+
+.table-custom tr {
+    
+    border: 1px solid #dcdedf;
+     font-family: Nunito Sans; 
+   
+}
+.table.table-bordered td {
+    padding-top: 1px;
+    padding-bottom: 1px;
+    line-height: 1;}
+
+.table-custom th,
+.table-custom td {
+    
+     font-family: Nunito Sans; 
+    border-left:  none ;
+    border-right:  none ;
+    vertical-align: middle;
+}
+
+.info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+#hc {
+    border-radius: 15px;
+    background-color: #F6EFFF;
+    padding: 10px;
+    width: 100px;
+    height: 10px;
+    font-size: 0.7em;
+}
+
+#ptag {
+    border-radius: 25px;
+    border-color: #f3f6f7;
+    border-style: solid;
+    background-color: white;
+    padding: 15px;
+    width: 70px;
+    font-weight: bold;
+    height: 10px;
+    font-size: 0.7em;
+    color: #9E9DE2;
+}
+.span-text-header{
+    font-family: Nunito Sans; 
+    font-size: 0.7em;
+    display: inline-block;
+    padding: 0px;
+}
+.hover-target {
+    padding: 10px;
+    background-color: #f0f0f0;
+    width: 200px;
+    text-align: center;
+    cursor: pointer;
+    font-family: Nunito Sans; 
+  }
+.span-text-detail{
+    font-family: Nunito Sans; 
+    font-size: 0.5em;
+}
+#companyCode {
+    border-radius: 25px;
+    border-color: #f3f6f7;
+    border-style: solid;
+    background-color: white;
+    padding: 15px;
+    font-weight: bold;
+    width: 130px;
+    height: 10px;
+    font-size: 13px;
+    color: #9E9DE2;
+    vertical-align: top;
+}
+
+#hc1 {
+    border-radius: 15px;
+    background-color: #FFF2E1;
+    padding: 10px;
+    width: 100px;
+    height: 10px;
+    font-size: 0.7em;
+    color: #f4c542;
+    font-weight: bold;
+}
+
+#hc2 {
+    border-radius: 5px;
+    background-color: #DDF6EB;
+
+    padding: 6px;
+    width: 220px;
+    font-size: 12px;
+    color: #00C874;
+    font-weight: bold;
+    vertical-align: middle;
+}

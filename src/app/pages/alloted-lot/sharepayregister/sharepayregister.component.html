@@ -1,0 +1,135 @@
+
+
+  
+  
+  
+  
+
+
+ <div class="modal-backdrop">
+    <div class="import-file-model">
+    <div class="modal-box">
+        <div class="h">           
+            <div class="h1-title">
+                  <b class="import-file">Import File</b>
+            </div>
+            <div class="h4">
+                  <div class="lorem-ipsum-is-simply">Lorem Ipsum is simply dummyLorem Ipsum is simply</div>
+            </div>
+      </div>
+      
+      <div class="modal-body">
+            <div class="frame-parent">
+                  <div class="frame-group">
+                        <div 
+                        (dragover)="onDragOver($event)"
+                        (dragleave)="onDragLeave($event)"
+                        (drop)="onDrop($event)"
+                        [class.dragover]="isDragging" class="inside-file-wrapper">
+                              <div class="inside-file">
+                                    <img class="upload-1-icon" alt="" src="../../../../assets/upload 1.png">
+                                    <input type="file" accept=".xls,.xlsx" (change)="onFileSelected($event)" hidden #fileInput multiple>
+                                    <div class="drag-drop-container">
+                                          <span>Drag & Drop or </span>
+                                          <button class="btn-borderless" (click)="fileInput.click()">Choose File</button>
+                                    </div>
+                              </div>
+                        </div>
+                        <div class="file-uploaded" *ngFor="let item of files;let i=index">
+                              <img class="upload-1-icon" alt="" src="../../../../assets/xls 1.png">                              
+                              <div class="file-name-parent">
+                                    <div class="file-name">{{item.name}}</div>
+                                    <div class="mb">{{item.size}}</div>
+                              </div>
+                              <div class="text-end">
+                                    <i (click)="deleteFromArray(i)">
+                                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                                                <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                                              </svg>
+                                    </i>
+                              </div>
+                              
+                              
+                        </div>
+                        <div class="h41">
+                              <div class="supported-formate-pdf">Supported formate:  XLS</div>
+                              <div class="maximum-size30mb">Maximum size:30mb</div>
+                        </div>
+                  </div>
+      
+            </div>
+      </div>
+      </div>
+  
+      <div class="modal-footer">
+            <div class="clearfix">
+
+            </div>
+            <div class="float-left">
+                  <!-- <button style="width: 4em; height: 36px; padding-left: 0.5em; padding-right: 0.5em; padding-top: 1px; padding-bottom: 1px; background: white; border-radius: 6px; outline: 1px #D9D9D9 solid; outline-offset: -1px; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+                        <div data-property-1="repeat" style="width: 16px; height: 16px; position: relative">
+                              <svg width="14" height="16" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M10.8047 0.195262C10.5443 -0.0650874 10.1222 -0.0650874 9.86185 0.195262C9.6015 0.455612 9.6015 0.877722 9.86185 1.13807L11.3904 2.66667H3.66659C1.82564 2.66667 0.333252 4.15905 0.333252 6V7.33333C0.333252 7.70152 0.631729 8 0.999919 8C1.36811 8 1.66659 7.70152 1.66659 7.33333V6C1.66659 4.89543 2.56202 4 3.66659 4H11.3904L9.86185 5.5286C9.6015 5.78895 9.6015 6.21106 9.86185 6.4714C10.1222 6.73175 10.5443 6.73175 10.8047 6.4714L13.4713 3.80474C13.7317 3.54439 13.7317 3.12228 13.4713 2.86193L10.8047 0.195262Z" fill="#9FA6B2"/>
+                                    <path d="M4.13799 9.5286C4.39834 9.78895 4.39834 10.2111 4.13799 10.4714L2.60939 12H10.3333C11.4378 12 12.3333 11.1046 12.3333 10V8.66667C12.3333 8.29848 12.6317 8 12.9999 8C13.3681 8 13.6666 8.29848 13.6666 8.66667V10C13.6666 11.841 12.1742 13.3333 10.3333 13.3333H2.60939L4.13799 14.8619C4.39834 15.1223 4.39834 15.5444 4.13799 15.8047C3.87764 16.0651 3.45553 16.0651 3.19518 15.8047L0.528514 13.1381C0.268165 12.8777 0.268165 12.4556 0.528514 12.1953L3.19518 9.5286C3.45553 9.26825 3.87764 9.26825 4.13799 9.5286Z" fill="#9FA6B2"/>
+                                    </svg>
+                        </div>
+                        <div style="color: #9FA6B2; font-size: 14px; font-family: Nunito Sans; font-weight: 600; word-wrap: break-word">Merge</div>
+                      </button> -->
+                  <!-- <button class="btn-borderless"><i><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sign-merge-left-fill" viewBox="0 0 16 16">
+                        <path d="M9.05.435c-.58-.58-1.52-.58-2.1 0L.436 6.95c-.58.58-.58 1.519 0 2.098l6.516 6.516c.58.58 1.519.58 2.098 0l6.516-6.516c.58-.58.58-1.519 0-2.098zM7.25 6H6.034a.25.25 0 0 1-.192-.41l1.966-2.36a.25.25 0 0 1 .384 0l1.966 2.36a.25.25 0 0 1-.192.41H8.75v6h-1.5V8.823c-.551.686-1.229 1.363-1.88 2.015l-.016.016-.708-.708c.757-.756 1.48-1.48 2.016-2.196q.377-.499.588-.95z"/>
+                      </svg></i></button> -->
+            </div>
+<div class="float-right"> 
+
+    <button (click)="closeModal()" data-property-1="Secondary Button" style="width: 4em; height: 36px; padding-left: 0.5em; padding-right: 0.5em; padding-top: 1px; padding-bottom: 1px; background: white; border-radius: 6px; outline: 1px #D9D9D9 solid; outline-offset: -1px; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+      <div style="color: #131313; font-size: 14px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">Cancel</div>
+    </button>
+    &nbsp;
+    <button (click)="BulkFileUpload()" style="width: 4empx; height: 36px; padding-left: 0.5em; padding-right: 0.5em; padding-top: 1px; padding-bottom: 1px; background: #E7E9EC; border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+      <div style="color: #9FA6B2; font-size: 14px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word"><svg width="10" height="12" viewBox="0 0 10 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4.64645 0.646447C4.84171 0.451184 5.15829 0.451184 5.35355 0.646447L7.35355 2.64645C7.54882 2.84171 7.54882 3.15829 7.35355 3.35355C7.15829 3.54882 6.84171 3.54882 6.64645 3.35355L5.5 2.20711V8C5.5 8.27614 5.27614 8.5 5 8.5C4.72386 8.5 4.5 8.27614 4.5 8V2.20711L3.35355 3.35355C3.15829 3.54882 2.84171 3.54882 2.64645 3.35355C2.45118 3.15829 2.45118 2.84171 2.64645 2.64645L4.64645 0.646447Z" fill="#302CB3"/>
+            <path d="M0.5 8C0.776142 8 1 8.22386 1 8.5V10C1 10.2761 1.22386 10.5 1.5 10.5H8.5C8.77614 10.5 9 10.2761 9 10V8.5C9 8.22386 9.22386 8 9.5 8C9.77614 8 10 8.22386 10 8.5V10C10 10.8284 9.32843 11.5 8.5 11.5H1.5C0.671573 11.5 0 10.8284 0 10V8.5C0 8.22386 0.223858 8 0.5 8Z" fill="#302CB3"/>
+            </svg> Upload</div>
+    </button>
+    
+<!-- <button class="btn-borderless" tooltip="Import"><i>
+    <svg width="10" height="12" viewBox="0 0 10 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4.64645 0.646447C4.84171 0.451184 5.15829 0.451184 5.35355 0.646447L7.35355 2.64645C7.54882 2.84171 7.54882 3.15829 7.35355 3.35355C7.15829 3.54882 6.84171 3.54882 6.64645 3.35355L5.5 2.20711V8C5.5 8.27614 5.27614 8.5 5 8.5C4.72386 8.5 4.5 8.27614 4.5 8V2.20711L3.35355 3.35355C3.15829 3.54882 2.84171 3.54882 2.64645 3.35355C2.45118 3.15829 2.45118 2.84171 2.64645 2.64645L4.64645 0.646447Z" fill="#302CB3"/>
+        <path d="M0.5 8C0.776142 8 1 8.22386 1 8.5V10C1 10.2761 1.22386 10.5 1.5 10.5H8.5C8.77614 10.5 9 10.2761 9 10V8.5C9 8.22386 9.22386 8 9.5 8C9.77614 8 10 8.22386 10 8.5V10C10 10.8284 9.32843 11.5 8.5 11.5H1.5C0.671573 11.5 0 10.8284 0 10V8.5C0 8.22386 0.223858 8 0.5 8Z" fill="#302CB3"/>
+        </svg>                                    
+</i></button> -->
+</div>
+
+            <div>
+                 
+            </div>
+           
+            
+       
+      </div>
+    </div>
+</div>
+  
+  <div *ngIf="isLoading" class="loader-overlay">
+    <div class="loader"></div>
+</div>
+
+
+<!-- <div class="modal-backdrop">
+    <div class="model">
+
+    </div>
+    <div class="modal-box">
+        <h6>Share PayRegister</h6>
+
+
+        <p *ngIf="selectedFile">Selected File: {{ selectedFile.name }}</p>
+
+        <div class="modal-footer">
+            <button (click)="onClose()">Close</button>
+        </div>
+    </div>
+
+</div> -->
+  

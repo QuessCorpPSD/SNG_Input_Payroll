@@ -1,0 +1,12 @@
+.form_class{
+    font-family: Nunito Sans;
+}
+.span_text{
+     font-family: Nunito Sans;
+     
+     color: red;
+}
+.card-header.custom-header {
+  padding: 6px 16px;
+  height: 40px;
+}

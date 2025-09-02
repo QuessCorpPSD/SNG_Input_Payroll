@@ -1,0 +1,451 @@
+<div class="container py-4">
+  <div class="row g-3" *ngIf="carddashboard">
+    
+    <div class="col-12 col-md-3">
+        <div class="p-3  text-white  rounded-4" style="background: conic-gradient(from 140deg at 70.81% 15.58%, #4446CE 0deg, #212784 360deg);">
+            <div class="label-class">Total Assignment</div>
+            <h3 class="mt-2 mb-0 fw-bold">{{carddashboard.totalLot}}</h3>
+        </div>
+    </div>
+
+    <div class="col-12 col-md-3">
+      <div class="p-3 text-white  rounded-4" style="background: conic-gradient(from 140deg at 70.81% 15.58%, #0D825D 0deg, #084430 360deg);">
+        <div  class="label-class">Completed Assignment</div>
+         <h3 class="mt-2 mb-0 fw-bold">{{carddashboard.completedLot}}</h3>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-3">
+      <div class="p-3  text-white  rounded-4" style="background: conic-gradient(from 140deg at 70.81% 15.58%, #820D7A 0deg, #44082F 360deg);">
+        <div  class="label-class">Overdue Assignment</div>
+         <h3 class="mt-2 mb-0 fw-bold">{{carddashboard.overdue_lot}}</h3>
+      </div>
+    </div>
+    
+    <div class="col-12 col-md-3">
+      <div class="p-3 text-white rounded-4" style="background: conic-gradient(from 140deg at 70.81% 15.58%, #D7D733 0deg, #909021 360deg);">
+        <div class="label-class">Pending Assignment</div>
+        <h3 class="mt-2 mb-0 fw-bold">{{carddashboard.pendingLot}}</h3>
+      </div>
+    </div>
+  </div>
+  <form [formGroup]="range">
+    <div class="row g-3 py-2">
+      <!-- Financial Year -->
+      <div class="col-12 col-md-3">
+        <div class="d-flex flex-column">
+          <label class="form-label fw-semibold" style="font-size: 12px; color: #222;">Financial year</label>
+          <div class="input-group">
+            <financial-year (financialEmit)="handlefinancialYearEvent($event)"></financial-year>
+          </div>
+        </div>
+      </div>
+  
+      <!-- User List -->
+      <div class="col-12 col-md-3">
+        <div class="d-flex flex-column">
+          <label class="form-label fw-semibold" style="font-size: 12px; color: #222;">User List</label>
+          <div class="input-group w-100">
+            <user (userEmit)="handleuserEvent($event)"></user>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Date Range -->
+  
+      <div class="col-12 col-md-2">
+  
+  
+        <div class="d-flex flex-column">
+          <label class="form-label fw-semibold" style="font-size: 12px; color: #222;">From Date</label>
+          <div class="mb-3">
+            <input type="date" class="form-control" formControlName="start" maxlength="10">
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-md-2">
+  
+        <div class="d-flex flex-column">
+          <label class="form-label fw-semibold" style="font-size: 12px; color: #222;"> To Date</label>
+          <div class="mb-3">
+            <input type="date" class="form-control" formControlName="end" maxlength="10">
+          </div>
+        </div>
+      </div>
+  
+  
+  
+      <!-- Search Button -->
+      <div class="col-12 col-md-1 d-flex align-items-center">
+        <button (click)="GetDatashboardByFilter()" class="btn text-white fw-semibold w-40"
+          style="height: 36px; background-color: #302CB3; border-radius: 6px; font-size: 12px; font-family: 'Nunito Sans'; letter-spacing: 0.24px;">
+          <!-- <i>
+          <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor"
+            class="bi bi-search" viewBox="0 0 16 16">
+            <path
+              d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+          </svg>
+        </i> &nbsp;  -->Search
+        </button>
+      </div>
+  
+    </div>
+  </form>
+<div class="row gap-3 py-2">
+  <div class="card rounded-4">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <!-- Left: Title -->
+        <div style="color: #302CB3; font-size: 18px; font-family: 'Nunito Sans'; font-weight: 700;">
+          Assignment  List
+        </div>
+
+        <!-- Right: Filter & Export buttons -->
+        <div class="d-flex gap-2">
+          <!-- Filter Button -->
+          <div class="dropdown">
+            <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+              style="width: 105px; height: 36px; background: white; border-radius: 36px; border: 1px solid #E9E9E9; display: flex; align-items: center; justify-content: space-between; padding: 0 12px;">
+
+              <span class="d-flex align-items-center">
+                <span style="width: 12px; height: 12px;">
+                  <!-- Filter Icon -->
+
+                </span>
+                <svg width="12" height="10" viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M0.546448 0.289562C0.628377 0.112979 0.805344 0 1.00001 0H11C11.1947 0 11.3716 0.112979 11.4536 0.289562C11.5355 0.466144 11.5075 0.674224 11.3818 0.822863L7.50001 5.41307V9.5C7.50001 9.67329 7.41028 9.83422 7.26287 9.92533C7.11546 10.0164 6.93139 10.0247 6.7764 9.94721L4.7764 8.94721C4.60701 8.86252 4.50001 8.68939 4.50001 8.5V5.41307L0.618222 0.822863C0.492523 0.674224 0.464519 0.466144 0.546448 0.289562Z"
+                    fill="#131313" />
+                </svg> Filter
+              </span>
+
+
+            </button>
+
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">New Lot</a></li>
+              <li><a class="dropdown-item" href="#">Complete</a></li>
+              <li><a class="dropdown-item" href="#">Revised Lot</a></li>
+            </ul>
+          </div>
+
+
+          <!-- Export Button -->
+          <div (click)="exportToExcelCompleted()"
+            style="width: 97px; height: 36px; background: white; border-radius: 36px; border: 1px solid #E9E9E9; display: flex; align-items: center; padding: 0 12px; gap: 10px;">
+
+            <div style="color: #222; font-size: 12px; font-family: 'Nunito Sans'; font-weight: 600;"><i><svg width="12"
+                  height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M6.5 1C6.5 0.723858 6.27614 0.5 6 0.5C5.72386 0.5 5.5 0.723858 5.5 1V6.79289L4.35355 5.64645C4.15829 5.45118 3.84171 5.45118 3.64645 5.64645C3.45118 5.84171 3.45118 6.15829 3.64645 6.35355L5.64609 8.3532C5.6473 8.3544 5.64851 8.35561 5.64973 8.3568C5.6969 8.40313 5.75098 8.43822 5.80861 8.46206C5.86713 8.48633 5.93125 8.4998 5.9985 8.5L6 8.5L6.0015 8.5C6.13732 8.4996 6.26039 8.44505 6.35027 8.3568C6.35149 8.35561 6.3527 8.3544 6.35391 8.3532L8.35355 6.35355C8.54882 6.15829 8.54882 5.84171 8.35355 5.64645C8.15829 5.45118 7.84171 5.45118 7.64645 5.64645L6.5 6.79289V1Z"
+                    fill="#131313" />
+                  <path
+                    d="M1.5 8C1.77614 8 2 8.22386 2 8.5V10C2 10.2761 2.22386 10.5 2.5 10.5H9.5C9.77614 10.5 10 10.2761 10 10V8.5C10 8.22386 10.2239 8 10.5 8C10.7761 8 11 8.22386 11 8.5V10C11 10.8284 10.3284 11.5 9.5 11.5H2.5C1.67157 11.5 1 10.8284 1 10V8.5C1 8.22386 1.22386 8 1.5 8Z"
+                    fill="#131313" />
+                </svg>
+              </i> Export</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="card-body rounded-4 py-0">
+      <div class="example-container mat-elevation-z8">
+        <table mat-table [dataSource]="dataSource" class="custom-table mat-elevation-z8 custom-table">
+
+
+          <ng-container matColumnDef="all" sticky>
+            <th mat-header-cell *matHeaderCellDef style="max-width: 10px;" sticky></th>
+            <!-- <th mat-header-cell *matHeaderCellDef style="max-width: 10px;"> <mat-checkbox
+                (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+                [indeterminate]="selection.hasValue() && !isAllSelected()">
+              </mat-checkbox> </th> -->
+            <td mat-cell *matCellDef="let element"> <mat-checkbox (click)="$event.stopPropagation()"
+                (change)="$event ? selection.toggle(element) : null" [checked]="selection.isSelected(element)">
+              </mat-checkbox> </td>
+          </ng-container>
+
+
+          <ng-container matColumnDef="input" sticky>
+            <th mat-header-cell *matHeaderCellDef> Input </th>
+            <td mat-cell *matCellDef="let element">
+              <i (click)="InputDownload(element)"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M6.6 0.545455C6.6 0.244208 6.33137 0 6 0C5.66863 0 5.4 0.244208 5.4 0.545455V6.86497L4.02426 5.61431C3.78995 5.40129 3.41005 5.40129 3.17574 5.61431C2.94142 5.82732 2.94142 6.17268 3.17574 6.38569L5.57531 8.56712C5.57675 8.56844 5.57821 8.56975 5.57967 8.57106C5.63628 8.6216 5.70117 8.65987 5.77033 8.68588C5.84055 8.71236 5.9175 8.72705 5.9982 8.72727L6 8.72727L6.0018 8.72727C6.16478 8.72684 6.31247 8.66733 6.42033 8.57106C6.42179 8.56975 6.42325 8.56844 6.42469 8.56712L8.82426 6.38569C9.05858 6.17268 9.05858 5.82732 8.82426 5.61431C8.58995 5.40129 8.21005 5.40129 7.97574 5.61431L6.6 6.86497V0.545455Z"
+                    fill="#302CB3" />
+                  <path
+                    d="M0.6 8.18182C0.931371 8.18182 1.2 8.42603 1.2 8.72727V10.3636C1.2 10.6649 1.46863 10.9091 1.8 10.9091H10.2C10.5314 10.9091 10.8 10.6649 10.8 10.3636V8.72727C10.8 8.42603 11.0686 8.18182 11.4 8.18182C11.7314 8.18182 12 8.42603 12 8.72727V10.3636C12 11.2674 11.1941 12 10.2 12H1.8C0.805887 12 0 11.2674 0 10.3636V8.72727C0 8.42603 0.268629 8.18182 0.6 8.18182Z"
+                    fill="#302CB3" />
+                </svg></i>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="output" sticky>
+            <th mat-header-cell *matHeaderCellDef> Output
+            
+                 <!-- <div>
+        <input matInput placeholder="Filter" [(ngModel)]="filterValues.companyShortName" (input)="applyFilters()" />
+      </div> -->
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <a (click)="OutPutFileDownload(element)"> <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M6.6 0.545455C6.6 0.244208 6.33137 0 6 0C5.66863 0 5.4 0.244208 5.4 0.545455V6.86497L4.02426 5.61431C3.78995 5.40129 3.41005 5.40129 3.17574 5.61431C2.94142 5.82732 2.94142 6.17268 3.17574 6.38569L5.57531 8.56712C5.57675 8.56844 5.57821 8.56975 5.57967 8.57106C5.63628 8.6216 5.70117 8.65987 5.77033 8.68588C5.84055 8.71236 5.9175 8.72705 5.9982 8.72727L6 8.72727L6.0018 8.72727C6.16478 8.72684 6.31247 8.66733 6.42033 8.57106C6.42179 8.56975 6.42325 8.56844 6.42469 8.56712L8.82426 6.38569C9.05858 6.17268 9.05858 5.82732 8.82426 5.61431C8.58995 5.40129 8.21005 5.40129 7.97574 5.61431L6.6 6.86497V0.545455Z"
+                    fill="#302CB3" />
+                  <path
+                    d="M0.6 8.18182C0.931371 8.18182 1.2 8.42603 1.2 8.72727V10.3636C1.2 10.6649 1.46863 10.9091 1.8 10.9091H10.2C10.5314 10.9091 10.8 10.6649 10.8 10.3636V8.72727C10.8 8.42603 11.0686 8.18182 11.4 8.18182C11.7314 8.18182 12 8.42603 12 8.72727V10.3636C12 11.2674 11.1941 12 10.2 12H1.8C0.805887 12 0 11.2674 0 10.3636V8.72727C0 8.42603 0.268629 8.18182 0.6 8.18182Z"
+                    fill="#302CB3" />
+                </svg></a>
+            </td>
+          </ng-container>
+
+        
+
+          <ng-container matColumnDef="companyShortName" sticky>
+            <th mat-header-cell *matHeaderCellDef style="width: 15px;"> Customer Name </th>
+            <td mat-cell *matCellDef="let element">
+               <span matTooltip="{{element.company_Name}}">
+               {{element.companyShortName}} ...
+              </span>
+            </td>
+          </ng-container>
+
+            <ng-container matColumnDef="lot_Number" sticky>
+            <th mat-header-cell *matHeaderCellDef> Lot No </th>
+            <td mat-cell *matCellDef="let element"> {{element.lot_Number}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="headCount" sticky>
+            <th mat-header-cell *matHeaderCellDef> HeadCount </th>
+            <td mat-cell *matCellDef="let element"> {{element.headCount}} </td>
+          </ng-container>
+
+           <ng-container matColumnDef="ctc">
+            <th mat-header-cell *matHeaderCellDef> CTC </th>
+            <td mat-cell *matCellDef="let element"> {{element.ctc}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="netPay">
+            <th mat-header-cell *matHeaderCellDef> Net Pay </th>
+            <td mat-cell *matCellDef="let element"> {{element.netPay}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="createdOn">
+            <th mat-header-cell *matHeaderCellDef> Input Submitted Date </th>
+            <td mat-cell *matCellDef="let element"> {{element.createdOn | date:'MMM d, y'}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="allottedDateTime">
+            <th mat-header-cell *matHeaderCellDef> Assign Date</th>
+            <td mat-cell *matCellDef="let element"> {{element.allottedDateTime | date:'MMM d, y'}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="assignedTo">
+            <th mat-header-cell *matHeaderCellDef> Assigned To </th>
+            <td mat-cell *matCellDef="let element"> {{element.assignedTo}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="estimateTime">
+            <th mat-header-cell *matHeaderCellDef> Estimated Time(min) </th>
+            <td mat-cell *matCellDef="let element"> {{element.estimateTime}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="qC_Verified_DateTime">
+            <th mat-header-cell *matHeaderCellDef> Completion Date </th>
+            <td mat-cell *matCellDef="let element"> {{element.qC_Verified_DateTime | date:'MMM d, y'}} </td>
+          </ng-container>
+
+           <ng-container matColumnDef="score">
+            <th mat-header-cell *matHeaderCellDef> Score </th>
+            <td mat-cell *matCellDef="let element"> 
+              <div class="rectangle" [ngStyle]="{ 'background-color':getScoreColor(element)  }"></div>
+            </td>
+          </ng-container>         
+         
+
+          <ng-container matColumnDef="reportingManager">
+            <th mat-header-cell *matHeaderCellDef> Reporting Manager </th>
+            <td mat-cell *matCellDef="let element"> {{element.reportingManager}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="invoiceGenerated">
+            <th mat-header-cell *matHeaderCellDef> Invoice Generated </th>
+            <td mat-cell *matCellDef="let element"> {{element.invoiceGenerated}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="invoiceGeneratedDate">
+            <th mat-header-cell *matHeaderCellDef> Invoice Generated Date </th>
+            <td mat-cell *matCellDef="let element"> {{element.invoiceGeneratedDate | date:'MMM d, y'}} </td>
+          </ng-container>
+
+         
+
+          <ng-container matColumnDef="customer_Confirmation_DateTime">
+            <th mat-header-cell *matHeaderCellDef> Customer Confirmation DateTime </th>
+            <td mat-cell *matCellDef="let element"> {{element.customer_Confirmation_DateTime | date:'MMM d, y'}}
+            </td>
+          </ng-container>
+
+           <ng-container matColumnDef="salaryPayout">
+            <th mat-header-cell *matHeaderCellDef> Salary Payout </th>
+            <td mat-cell *matCellDef="let element"> {{element.salaryPayout}} </td>
+          </ng-container>
+          <!-- Header and Row Definitions -->
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        <mat-paginator class="mat-footer-paginator" [pageSizeOptions]="[5,10, 25, 100]" showFirstLastButtons
+          stickyEnd></mat-paginator>
+      </div>
+    </div>
+
+  </div>
+</div>
+<div class="row gap-3 py-2">
+  <div class="card rounded-4">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <!-- Left: Title -->
+        <div style="color: #302CB3; font-size: 18px; font-family: 'Nunito Sans'; font-weight: 700;">
+          Pending Assignment List
+        </div>
+         <div class="d-flex gap-2">
+          <!-- Export Button -->
+          <button  (click)="exportToExcelPending()"
+            style="width: 97px; height: 36px; background: white; border-radius: 36px; border: 1px solid #E9E9E9; display: flex; align-items: center; padding: 0 12px; gap: 10px;">
+
+            <div style="color: #222; font-size: 12px; font-family: 'Nunito Sans'; font-weight: 600; display: flex; align-items: center; gap: 6px;">
+  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M6.5 1C6.5 0.723858 6.27614 0.5 6 0.5C5.72386 0.5 5.5 0.723858 5.5 1V6.79289L4.35355 5.64645C4.15829 5.45118 3.84171 5.45118 3.64645 5.64645C3.45118 5.84171 3.45118 6.15829 3.64645 6.35355L5.64609 8.3532C5.6473 8.3544 5.64851 8.35561 5.64973 8.3568C5.6969 8.40313 5.75098 8.43822 5.80861 8.46206C5.86713 8.48633 5.93125 8.4998 5.9985 8.5L6 8.5L6.0015 8.5C6.13732 8.4996 6.26039 8.44505 6.35027 8.3568C6.35149 8.35561 6.3527 8.3544 6.35391 8.3532L8.35355 6.35355C8.54882 6.15829 8.54882 5.84171 8.35355 5.64645C8.15829 5.45118 7.84171 5.45118 7.64645 5.64645L6.5 6.79289V1Z"
+      fill="#131313" />
+    <path
+      d="M1.5 8C1.77614 8 2 8.22386 2 8.5V10C2 10.2761 2.22386 10.5 2.5 10.5H9.5C9.77614 10.5 10 10.2761 10 10V8.5C10 8.22386 10.2239 8 10.5 8C10.7761 8 11 8.22386 11 8.5V10C11 10.8284 10.3284 11.5 9.5 11.5H2.5C1.67157 11.5 1 10.8284 1 10V8.5C1 8.22386 1.22386 8 1.5 8Z"
+      fill="#131313" />
+  </svg>
+  <span>Export</span>
+</div>
+
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+    <div class="card-body rounded-4">
+      <div class="example-container mat-elevation-z8">
+        <table mat-table [dataSource]="pendingLots" class="custom-table mat-elevation-z8 custom-table">
+        
+             <ng-container matColumnDef="companyShortName" sticky>
+            <th mat-header-cell *matHeaderCellDef style="width: 15px;"> Customer Name </th>
+            <td mat-cell *matCellDef="let element">
+              
+             <span 
+  
+  matTooltip={{element.company_Name}} 
+>
+  {{element.companyShortName}} ...
+</span>
+            </td>
+          </ng-container>
+
+            <ng-container matColumnDef="lot_Number" sticky>
+            <th mat-header-cell *matHeaderCellDef> Lot No </th>
+            <td mat-cell *matCellDef="let element"> {{element.lot_Number}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="headCount" sticky>
+            <th mat-header-cell *matHeaderCellDef> HeadCount </th>
+            <td mat-cell *matCellDef="let element"> {{element.headCount}} </td>
+          </ng-container>
+
+           <ng-container matColumnDef="ctc">
+            <th mat-header-cell *matHeaderCellDef> CTC </th>
+            <td mat-cell *matCellDef="let element"> {{element.ctc}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="netPay">
+            <th mat-header-cell *matHeaderCellDef> Net Pay </th>
+            <td mat-cell *matCellDef="let element"> {{element.netPay}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="createdOn">
+            <th mat-header-cell *matHeaderCellDef> Input Submitted Date </th>
+            <td mat-cell *matCellDef="let element"> {{element.createdOn | date:'MMM d, y'}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="allottedDateTime">
+            <th mat-header-cell *matHeaderCellDef> Assign Date</th>
+            <td mat-cell *matCellDef="let element"> {{element.allottedDateTime | date:'MMM d, y'}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="assignedTo">
+            <th mat-header-cell *matHeaderCellDef> Assigned To </th>
+            <td mat-cell *matCellDef="let element"> {{element.assignedTo}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="estimateTime">
+            <th mat-header-cell *matHeaderCellDef> Estimated Time(min) </th>
+            <td mat-cell *matCellDef="let element"> {{element.estimateTime}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="qC_Verified_DateTime">
+            <th mat-header-cell *matHeaderCellDef> Completion Date </th>
+            <td mat-cell *matCellDef="let element"> {{element.qC_Verified_DateTime | date:'MMM d, y'}} </td>
+          </ng-container>
+
+           <ng-container matColumnDef="score">
+            <th mat-header-cell *matHeaderCellDef> Score </th>
+            <td mat-cell *matCellDef="let element"> 
+              <div class="rectangle" [ngStyle]="{ 'background-color':getScoreColor(element)  }"></div>
+            </td>
+          </ng-container>         
+         
+
+          <ng-container matColumnDef="reportingManager">
+            <th mat-header-cell *matHeaderCellDef> Reporting Manager </th>
+            <td mat-cell *matCellDef="let element"> {{element.reportingManager}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="invoiceGenerated">
+            <th mat-header-cell *matHeaderCellDef> Invoice Generated </th>
+            <td mat-cell *matCellDef="let element"> {{element.invoiceGenerated}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="invoiceGeneratedDate">
+            <th mat-header-cell *matHeaderCellDef> Invoice Generated Date </th>
+            <td mat-cell *matCellDef="let element"> {{element.invoiceGeneratedDate | date:'MMM d, y'}} </td>
+          </ng-container>
+
+         
+
+          <ng-container matColumnDef="customer_Confirmation_DateTime">
+            <th mat-header-cell *matHeaderCellDef> Customer Confirmation DateTime </th>
+            <td mat-cell *matCellDef="let element"> {{element.customer_Confirmation_DateTime | date:'MMM d, y'}}
+            </td>
+          </ng-container>
+
+           <ng-container matColumnDef="salaryPayout">
+            <th mat-header-cell *matHeaderCellDef> Salary Payout </th>
+            <td mat-cell *matCellDef="let element"> {{element.salaryPayout}} </td>
+          </ng-container>
+       
+         
+          
+          <tr mat-header-row *matHeaderRowDef="displayedPeningColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedPeningColumns;"></tr>
+        </table>
+        <mat-paginator class="mat-footer-paginator" #PeningLotPaginator [pageSizeOptions]="[5,10, 25, 100]" showFirstLastButtons stickyEnd></mat-paginator>
+      </div>
+    </div> 
+
+  </div>
+</div>
+</div>
+<div *ngIf="isLoading" class="loader-overlay">
+  <div class="loader"></div>
+</div>
+<br>
+<br>

@@ -1,0 +1,272 @@
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, width=device-width">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <!-- <div class="header">
+        <div class="logo-section">
+            <div class="group">
+                <img alt="" src="../../../assets/quessbluesvg.svg" alt="logo">
+            </div>
+        </div>
+        <div class="right-section">
+            <div class="icons">
+                <img src="../../../assets/ButtonIcons.svg" alt="bi-bell" class="bell" />
+            </div>
+            <div class="divider"></div>
+            <div class="profile">
+                <img src="../../../assets/Profile.png" alt="Avatar" class="avatar" />
+                <span class="name">Sajith.M</span>
+            </div>
+        </div>
+    </div> -->
+    <div class="headerSOP">
+        <div> <img src="../../../assets/Forward File 1.svg" /><b class="customer-sop">Customer SOP</b></div>
+    </div>
+    <div class="contentCategory">
+        <div style="width: 100%;">
+            <div class="Categorylist">
+                <ul class="horizontal-list">
+                    <li *ngFor="let cat of category" (click)="onCategoryClick(cat)"
+                        [class.selectedCat]="selectedCategory === cat">
+                        {{ cat.categoryName }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div style="width: 30%;display: none;" class="progress-bar-type-4-progres">
+            <div class="info-indicator">
+                <div class="information">
+                    <div class="title">
+                        <b class="textprogress">Your progress</b>
+                    </div>
+                    <div class="status">
+                        <div class="time">
+                            <b class="b">45%</b>
+                            <b class="b">to complete</b>
+                        </div>
+                    </div>
+                </div>
+                <div class="progress-indicatior">
+                    <div class="indicator">
+                    </div>
+                    <div class="section-1">
+                    </div>
+                    <div class="section-2">
+                    </div>
+                    <div class="section-3">
+                    </div>
+                    <div class="section-4">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="contentQuestion">
+        <div class="Questionlist">
+            <div class="accordion-question-will-be-lis-wrapper">
+                <div class="accordion-question-will">
+                    <ul>
+                        <li *ngFor="let question of questions" class="question-item"
+                            [class.selected]="selectedQuestion === question" (click)="onQuestionClick(question)">
+
+                            <span>{{ question.questionOrder }}. {{ question.questionName }}</span>
+                            <img *ngIf="question.answered" src="../../../assets/Component 2.svg" alt="check" width="18"
+                                height="18" />
+
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="contentAnswer">
+        <div style="padding: 2% 5% 5% 2%">
+            <form [formGroup]="sopForm" (ngSubmit)="onSubmit()">
+                <div class="answer-panel" *ngIf="selectedQuestion">
+                    <div class="source-of-getting">
+                        {{ selectedQuestion.questionOrder }}. {{ selectedQuestion.questionName }}
+                    </div>
+
+                    <!-- Top-level answers -->
+                    <div *ngIf="renderKey">
+                        <div *ngFor="let ans of selectedAnswers">
+                            <ng-container
+                                *ngTemplateOutlet="answerTemplate; context: { $implicit: ans }"></ng-container>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ✅ Recursive Template -->
+                <ng-template #answerTemplate let-ans>
+                    <!-- ✅ Checkbox -->
+                    <!-- ✅ Render checkbox options only -->
+                    <div *ngIf="ans.answertype === 'checkbox'" class="checkbox-group-horizontal">
+                        <div class="docs-h6" *ngIf="ans.Title">
+                            <label>{{ ans.Title }}</label>
+                        </div>
+                        <div class="checkboxcheckbox" *ngFor="let item of ans.options">
+                            <div class="component-37-parent" (click)="item.checked = !item.checked">
+                                <div [ngClass]="item.checked ? 'property-1active-state' : 'component-37'">
+                                    <img *ngIf="item.checked" class="component-3-icon" src="../../../assets/check.svg"
+                                        alt="Checkmark" />
+                                </div>
+                                <div class="option">{{ item.label }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <ng-container *ngFor="let item of ans.options">
+                        <div *ngIf="item.checked && item.subarr?.length" class="checkbox-subanswer-column">
+                            <div class="subanswer-row">
+                                <div class="subanswer-grid">
+                                    <div *ngFor="let subans of item.subarr" class="subanswer-item">
+                                        <ng-container
+                                            *ngTemplateOutlet="answerTemplate; context: { $implicit: subans }"></ng-container>
+                                    </div>
+                                </div>
+                                <div style="padding-top: 3%;">
+                                    <!-- Add New Button -->
+                                    <div class="button-parent" *ngIf="item.addMultiple"
+                                        (click)="addNewEntry(item.formGroupKey, item.subarr)">
+                                        <div class="button">
+                                            <img class="plus-icon" src="../../../assets/plus.svg" alt="Add" />
+                                        </div>
+                                        <div class="add-new">Add new</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Display Grid -->
+                            <table class="styled-table" *ngIf="item.addedEntries?.length">
+                                <thead>
+                                    <tr>
+                                        <th *ngFor="let sub of item.subarr">{{ sub.Title }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let row of item.addedEntries">
+                                        <td *ngFor="let cell of row">{{ cell }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </ng-container>
+
+                    <!-- ✅ Radiobutton -->
+
+                    <!-- ✅ Radiobutton -->
+
+                    <div *ngIf="ans.answertype === 'radiobutton'" class="radio-group-wrapper">
+                        <div class="docs-h6" *ngIf="ans.Title">
+                            <label>{{ ans.Title }}</label>
+                        </div>
+
+                        <!-- 🧩 Radio options inline -->
+                        <div class="radio-options-inline">
+                            <div class="radio-option" *ngFor="let item of ans.options"
+                                (click)="onRadioSelect(ans, item.label)">
+                                <div class="radio-button-label">
+                                    <img class="component-39-icon"
+                                        [src]="ans.selectedOption === item.label ? '../../../assets/radiochecked.svg' : '../../../assets/radiodefault.svg'"
+                                        alt="Radio icon" />
+                                    <span>{{ item.label }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ✅ Subanswer BELOW the options -->
+                        <div *ngIf="getSelectedRadioSubanswers(ans).length > 0" class="subanswer-wrapper">
+                            <div *ngFor="let subans of getSelectedRadioSubanswers(ans)">
+                                <ng-container
+                                    *ngTemplateOutlet="answerTemplate; context: { $implicit: subans }"></ng-container>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- dropdown -->
+                    <div *ngIf="ans.answertype === 'dropdown'" class="dropdown-group-wrapper">
+                        <div class="docs-h6" *ngIf="ans.Title">
+                            <label>{{ ans.Title }}</label>
+                        </div>
+
+                        <select class="custom-select" [formControl]="getControlFor(ans.controlName)"
+                            (change)="onDropdownValueChange($event, ans)">
+                            <option value="">-- Select --</option>
+                            <option *ngFor="let opt of ans.options" [value]="opt.value">{{ opt.label }}</option>
+                        </select>
+
+                        <!-- ✅ Subanswers BELOW dropdown -->
+                        <ng-container *ngIf="dropdownSubMap[ans.controlName] as subarr">
+                            <div *ngIf="subarr.length > 0" class="subanswer-wrapper">
+                                <div *ngFor="let subans of subarr">
+                                    <ng-container
+                                        *ngTemplateOutlet="answerTemplate; context: { $implicit: subans }"></ng-container>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+
+                    <!-- ✅ Textbox -->
+                    <div *ngIf="ans.answertype.startsWith('textbox')" style="padding-bottom: 2%;">
+                        <div class="docs-h6" *ngIf="ans.Title">
+                            <label>{{ ans.Title }}</label>
+                        </div>
+                        <!-- 👇 only render input if FormGroup exists -->
+                        <ng-container *ngIf="getControlGroup(ans.key) as controlGroup">
+                            <div class="input-wrapper" [formGroup]="controlGroup">
+                                <input [type]="ans.answertype === 'textboxcal' ? 'date' : 'text'" class="rectangle-div"
+                                    [formControlName]="ans.key" (input)="
+        ans.answertype === 'textboxalphanumeric' ? onAlphanumericInput($event)
+        : ans.answertype === 'textboxnumeric' ? onNumericInput($event)
+        : null        " (blur)="onTextboxBlur(ans)" />
+                            </div>
+                        </ng-container>
+                    </div>
+                    <!-- ✅ Button Add -->
+
+                    <div *ngIf="ans.answertype === 'buttonAdd'" class="button-add-wrapper" style="padding-bottom: 2%;">
+                        <button type="button" class="custom-add-button" (click)="onButtonAddClick(ans)">
+                            {{ ans.Title || 'Add' }}
+                        </button>
+                    </div>
+                    
+                    <!-- ✅ Bind Table Data for buttonAddDataMap -->
+                    <ng-container *ngIf="selectedQuestionId && buttonAddDataMap[selectedQuestionId] as questionMap">
+                        <ng-container *ngIf="questionMap[ans.key] as tableRows">
+                            <table *ngIf="tableRows.length > 0" class="styled-table1">
+                                <thead>
+                                    <tr>
+                                        <th *ngFor="let cell of tableRows[0]">{{ cell.title }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let row of tableRows">
+                                        <td *ngFor="let cell of row">{{ cell.value }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </ng-container>
+                    </ng-container>
+
+                </ng-template>
+                <div style="padding-top: 3%;">
+                    <div *ngIf="selectedQuestion" class="property-1active-submit"
+                        (click)="onQuestionSubmit(selectedQuestion.questionId)">
+                        <div class="submit">Submit</div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+<div *ngIf="isLoading" class="loader-overlay">
+    <div class="loader"></div>
+</div>

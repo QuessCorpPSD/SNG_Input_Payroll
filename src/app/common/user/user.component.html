@@ -1,0 +1,23 @@
+ <!-- [value]="selectedOption?.name" -->
+ <mat-form-field id="mat-form-field" class="w-100 custom-height rounded-4" appearance="outline">
+      
+      <input
+        type="text"
+        matInput
+        [formControl]="myControl"
+        [matAutocomplete]="auto" placeholder="Search Name"
+        
+      />
+      <mat-autocomplete
+        #auto="matAutocomplete"
+        [displayWith]="displayFn"
+        (optionSelected)="onOptionSelected($event.option.value)"
+      >
+        <mat-option
+          *ngFor="let option of userfilteredOptions$ | async"
+          [value]="option"
+        >
+          {{ option.name }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>

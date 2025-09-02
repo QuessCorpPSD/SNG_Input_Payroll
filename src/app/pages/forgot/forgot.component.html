@@ -1,0 +1,47 @@
+<div class="container min-vh-100 d-flex justify-content-center align-items-center bg-light">
+  <div class="card shadow-sm p-4 w-100" style="max-width: 400px;">
+    <h4 class="text-center mb-3">Forgot Password</h4>
+   <form [formGroup]="forgotForm" (ngSubmit)="forgotpassword()" novalidate>
+  <div class="mb-3">
+    <label for="password" class="form-label">Password</label>
+    <input
+      type="password"
+      class="form-control"
+      id="password"
+      formControlName="Password"
+      placeholder="Password"
+      [class.is-invalid]="forgotForm.get('Password')?.invalid && forgotForm.get('Password')?.touched"
+    />
+    <div *ngIf="forgotForm.get('Password')?.touched && forgotForm.get('Password')?.invalid" class="invalid-feedback">
+      <div *ngIf="forgotForm.get('Password')?.errors?.['required']">Password is required.</div>
+      <div *ngIf="forgotForm.get('Password')?.errors?.['minlength']">Minimum 6 characters required.</div>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label for="conpassword" class="form-label">Confirm Password</label>
+    <input
+      type="password"
+      class="form-control"
+      id="conpassword"
+      formControlName="ConfirmPassword"
+      placeholder="Confirm Password"
+      [class.is-invalid]="forgotForm.get('ConfirmPassword')?.invalid && forgotForm.get('ConfirmPassword')?.touched || forgotForm.errors?.['mismatch'] && forgotForm.get('ConfirmPassword')?.touched"
+    />
+    <div *ngIf="forgotForm.get('ConfirmPassword')?.touched && forgotForm.get('ConfirmPassword')?.invalid" class="invalid-feedback">
+      Confirm Password is required.
+    </div>
+    <div *ngIf="password" class="invalid-feedback">
+      Passwords do not match.
+    </div>
+  </div>
+
+  <button type="submit" (click)="forgotpassword()" class="btn btn-primary w-100">Reset Password</button>
+
+  <div class="text-center mt-3">
+    <a href="#/login">Back to Login</a>
+  </div>
+</form>
+
+  </div>
+</div>

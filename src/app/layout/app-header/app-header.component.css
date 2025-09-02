@@ -1,0 +1,84 @@
+.topbar {
+    height: 60px;
+    background: #ffffff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);   
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    position: fixed;
+    width: 99.5%;    
+    top: 0;
+    margin-left:-0.9em;
+   
+}
+
+.tooltip-wrapper {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.custom-tooltip {
+  visibility: hidden;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  padding: 6px 10px;
+  border-radius: 4px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%; /* Position above the div */
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  white-space: nowrap;
+}
+.overlay-card {
+  position: relative;
+}
+.example-list {
+   font-family: Nunito Sans; 
+  border: solid 1px #ccc;
+  border-radius: 5px;
+  background: #fff;
+  text-align: left;
+  padding: 10px;
+  margin: 0;
+}
+
+.example-list > li {
+   font-family: Nunito Sans; 
+  list-style-type: none;
+  border-bottom: none 1px #8b8b8b;
+  padding: 8px 0;
+}
+
+.example-list > li:last-child {
+  border-bottom: none;
+   font-family: Nunito Sans; 
+}
+
+.overlay-image {
+  position: absolute;
+  top: 50%;
+  right: 1rem; /* equivalent to Bootstrap's me-3 */
+  transform: translateY(-50%);
+  height: 120px;
+  width: auto;
+  border-radius: 8px;
+}
+
+
+.tooltip-wrapper:hover .custom-tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+.profile-img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover; /* Ensures image fits inside the circle */
+    border: 3px solid #fff; /* Optional border */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional shadow */
+  }

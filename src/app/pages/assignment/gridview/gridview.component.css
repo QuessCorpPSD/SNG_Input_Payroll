@@ -1,0 +1,219 @@
+
+
+.title {
+    font-size: 28px;
+    color: #2f2f8b;
+    font-weight: bold;
+}
+
+.section h2 {
+    font-size: 20px;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.assignment-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin: 5px;
+}
+
+.assignment-card {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.assignment-number {
+    font-size: 10px;
+    color:black;
+    font-family: Nunito Sans; 
+    margin: 10px 0;
+}
+
+.assignment-meta {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    font-size: 14px;
+    color: #666;
+    font-family: Nunito Sans; 
+}
+
+.assignment-meta .revise {
+    background: #ffcc80;
+    padding: 5px 8px;
+    font-family: Nunito Sans; 
+    border-radius: 5px;
+}
+
+.estimated-time {
+    margin-top: 10px;
+    color: #28a745;
+    font-size: 14px;
+    background: #d4edda;
+    padding: 5px;
+    border-radius: 5px;
+    font-family: Nunito Sans; 
+}
+
+i {
+    margin-right: 5px;
+} 
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+.dropdown-btn {
+    background-color: #edf0f1;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-family: Nunito Sans; 
+}
+.dropdown-content {
+    display: block;
+    position: absolute;
+    background-color: rgb(250, 244, 244);
+    min-width: 180px;
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.2);
+    border-radius: 1px;
+    z-index: 1;
+    font-family: Nunito Sans; 
+}
+.dropdown-content a {
+    color: black;
+    padding: 10px;
+    text-decoration: none;
+    display: block;
+    font-family: Nunito Sans; 
+}
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+card-body {
+    font-family: Nunito Sans; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f4f4;
+}
+.card {
+    font-family: Nunito Sans; 
+    background: white;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.assignment-number {
+    font-size: 0.6em;
+    font-weight: bold;
+    color: #3a3a8c;
+    font-family: Nunito Sans;
+}
+
+.visible {
+    height: 3em;
+    width: 10em;
+    font-family: Nunito Sans;
+    background: rgb(169, 169, 166);
+    color: #302CB3;
+  }
+.info {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    margin: 3px 0;
+    vertical-align: top;
+    font-size: 0.6em;
+     font-family: Nunito Sans; 
+}
+.info i {
+    color: #777;
+    font-family: Nunito Sans; 
+}
+.tag {
+    font-size: 0.6em;
+    background: #f4c542;
+    padding: 2px 3px;
+    border-radius: 5px;
+    color: #fff;
+    font-family: Nunito Sans; 
+}
+
+  #hc {
+    border-radius: 15px;
+    background-color:  #F6EFFF ;
+    padding: 10px; 
+    width: 100px;
+    height: 10px;  
+    font-size: 0.6em;
+    font-family: Nunito Sans; 
+  }
+  #ptag {
+    border-radius: 25px;
+    border-color:#f3f6f7 ;
+    border-style: solid;
+    background-color: white ;
+    padding: 9px; 
+    width: 6.9em;
+    font-weight: bold;
+    height: 10px;  
+    font-size: 0.6em;
+    color: #9E9DE2;
+    font-family: Nunito Sans; 
+  }
+  #companyCode {
+    border-radius: 25px;
+    border-color:#f3f6f7 ;
+    border-style: solid;
+    background-color: white ;    
+    padding: 10px; 
+    font-weight: bold;
+    width: 6.6rem;
+    height: 8px;  
+    font-size: 0.6em;
+    color: #9E9DE2;
+    vertical-align: top;
+    font-family: Nunito Sans; 
+  }
+  #hc1 {
+    border-radius: 15px;
+    background-color:  #FFF2E1 ;
+    padding: 10px; 
+    width: 100px;
+    height: 10px;  
+    font-size: 10px;
+    color:#f4c542;
+    font-weight: bold;
+    font-family: Nunito Sans; 
+  }
+  #hc2 {
+    border-radius: 5px;
+    background-color:  #DDF6EB ;    
+    padding: 6px; 
+    width: 90%;
+    font-size: 12px;
+    color:#00C874;
+    font-weight: bold;   
+    vertical-align: middle;
+    margin-left: 10px;
+    font-family: Nunito Sans; 
+  }
+ 
+  
+  
+.time {
+    background: #d4f4d2;
+    padding: 1px 3px;
+    border-radius: 2px;
+    color: #2a6b2a;
+}

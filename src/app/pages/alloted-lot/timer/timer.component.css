@@ -1,0 +1,76 @@
+.countdown-container {
+    text-align: center;
+    font-family: Arial, sans-serif;
+  }
+  
+  p {
+    font-size: 2rem;
+    font-weight: bold;
+  }
+  
+  button {
+    margin: 5px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+
+  }
+
+
+  .progress-container {
+    width: 60%;
+    height: 15px;
+    background-color: #246d07;
+    border-radius: 15px;
+    overflow: visible;
+  
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    
+    margin-top: -10px;
+  }
+  
+  .progress-bar {
+    height: 100%;
+    background-color: #ec1212;
+    transition: width 0.1s linear;
+    color: white;
+    text-align: center;
+    white-space: nowrap;
+    overflow: visible; /* or hidden depending on your layout */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .progress-text {
+    position: absolute;
+
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: rgb(6, 6, 6);
+  }
+  
+  /* .progress-container {
+    width: 60%;    
+    background-color: #25c02f;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 10px;
+    font-family: Nunito Sans;
+    color: black;
+    font-size: 1em;
+    margin-right: 10px;
+    margin-top: -10px;
+  }
+  
+  .progress-bar {
+    height: 100%;
+    background-color: #f02626;
+    transition: width 1s linear;
+    color: black;
+    font-size: 1em;
+  } */
+  

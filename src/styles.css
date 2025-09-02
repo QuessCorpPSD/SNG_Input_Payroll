@@ -1,0 +1,34 @@
+/* You can add global styles to this file, and also import other style files */
+	
+.container {
+    width: 1200px; /* hard-coded width */
+  }
+@media (max-width: 768px) {
+    .my-class {
+      display: none !important;
+    }
+  }
+* {
+    max-width: 100%;  
+ }
+
+html, body { height: 100%;width: 100%; }
+ .mat-tooltip {
+  background-color: #4CAF50 !important; /* Your desired color */
+  color: white !important;              /* Optional: change text color */
+}
+.overlay-div {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* semi-transparent black */
+    z-index: 10;
+  }
+ 
+
+
+
+
+

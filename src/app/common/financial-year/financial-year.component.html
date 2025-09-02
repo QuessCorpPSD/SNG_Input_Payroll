@@ -1,0 +1,21 @@
+<mat-form-field class="w-100 custom-height rounded-4" appearance="outline">
+  
+  <input
+    type="text"
+    matInput
+    [formControl]="myControl" placeholder="Search Financial Year"
+    [matAutocomplete]="auto"
+  />
+  <mat-autocomplete
+    #auto="matAutocomplete"
+    [displayWith]="displayFn"
+    (optionSelected)="onOptionSelected($event.option.value)"
+  >
+    <mat-option
+      *ngFor="let option of filteredOptions$ | async"
+      [value]="option"
+    >
+      {{ option.financial_Year_Name }}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>

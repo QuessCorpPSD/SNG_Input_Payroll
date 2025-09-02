@@ -1,0 +1,55 @@
+<div class="full-background"></div>
+
+<div class="col-md-5 offset-md-7">
+    <div style="padding-top: 10%;"></div>
+    <div class="card">
+        <div class="inner-card-padding">
+            <div class="top-card-frame p-1 d-flex align-items-left gap-3">
+                <div class="q-logo">
+                    <img class="q-logo-item" alt="logo" src="../../../assets/Logo container.svg">
+                </div>
+                <div class="header-text">
+                    <b class="get-started">Get Started</b>
+                    <div class="welcome-to-qpay">Welcome to PSD</div>
+                </div>
+            </div>
+
+            <div class="employee-and-password-fram">
+                <div class="frame-parent">
+                    <div class="frame-group">
+                        <div class="text-parent">
+
+                            <div class="mb-3">
+                                <label class="form-label"><b>Employee ID*</b></label>
+                                <input type="text" class="form-control" [(ngModel)]="username"
+                                    (keypress)="numberOnly($event)" maxlength="10">
+                            </div>
+
+
+                            <div class="mb-3 position-relative">
+                                <label class="form-label"><b>Password*</b></label>
+                                <input [type]="isPasswordVisible ? 'text' : 'password'" class="form-control"
+                                    [(ngModel)]="password">
+                                <img class="eye-icon" (click)="togglePassword()"
+                                    [src]="isPasswordVisible ? '../../../assets/eye-open.svg' : '../../../assets/eye.svg'"
+                                    alt="toggle password">
+                            </div>
+                        </div>
+                        <div class="text-end mb-3">
+                            <a href="#" style="font-size: 0.8em;" class="text-decoration-none text-primary"
+                                [routerLink]="['/forgot']">Forgot Password?</a>
+                        </div>
+                        <div class="button p-1">
+                            <button
+                                style="color: white;background-color:#302cb3 ;font-size: 16px; font-family: Nunito Sans;"
+                                class="sign-in btn" (click)="validateLogin()">Sign In</button>
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

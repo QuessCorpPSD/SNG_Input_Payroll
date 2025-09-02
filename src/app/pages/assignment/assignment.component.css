@@ -1,0 +1,48 @@
+
+
+body {
+  --bs-body-font-family: var(--bs-font-monospace);
+  --bs-body-line-height: 1.4;
+  --bs-body-bg: var(--bs-gray-100);
+}
+
+.table {
+  --bs-table-color: var(--bs-gray-600);
+  --bs-table-bg: var(--bs-gray-100);
+  --bs-table-border-color: transparent;
+  font-family: Nunito Sans; 
+}
+.card{
+width: 30vh;
+}
+
+.dark-mode {
+    background-color: #302CB3;    
+  }
+  
+  .light-mode {
+    background-color: #FFFFFF;    
+  }
+  .div-rect {
+    
+    width: 30px;    
+    padding: 10px;
+    margin: 0px;
+  }
+  .borderless-btn {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 5px 9px;
+}
+.title{
+  
+  font-size: 1em;
+   font-family: Nunito Sans; 
+}
+
+.title-detail{
+  padding: 4px;
+  font-size: 0.8em;
+   font-family: Nunito Sans; 
+}

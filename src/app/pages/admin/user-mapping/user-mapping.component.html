@@ -1,0 +1,173 @@
+<div class="container-fluid p-2">
+  <div class="card mx-auto" style="max-width: 80%;" >
+    <div class="card-header" style="background-color: #302cb3;color: #ffffff;height: 40px;" >
+        <div class="row mb-3" >
+          <div class="col-12">
+            <h5 class="text-left fw-bold">Add User</h5>
+          </div>
+        </div>
+    </div>
+    <div class="card-body">
+      <form class="form_class" [formGroup]="AddUser">
+        
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label>Name</label>
+            <input type="text" formControlName="Name" class="form-control border-bottom" placeholder="Name"
+              [class.is-invalid]="AddUser.get('Name')?.invalid && AddUser.get('Name')?.touched">
+          </div>
+          <div class="col-md-6">
+            <label>Employee ID</label>
+            <input type="text" formControlName="EmployeeID" appAutofocus (keypress)="allowOnlyNumbers($event)"
+              (change)="onInputBlurChange($event)" class="form-control border-bottom"
+              [class.is-invalid]="AddUser.get('EmployeeID')?.invalid && AddUser.get('EmployeeID')?.touched"
+              placeholder="Employee ID">
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label>Password</label>
+            <input type="password" formControlName="Password" class="form-control border-bottom"
+              [class.is-invalid]="AddUser.get('Password')?.invalid && AddUser.get('Password')?.touched"
+              placeholder="Password">
+          </div>
+          <div class="col-md-6">
+            <label>Confirm Password</label>
+            <input type="password" formControlName="ConPassword" class="form-control border-bottom"
+              [class.is-invalid]="AddUser.hasError('passwordsMismatch') && AddUser.get('ConPassword')?.touched"
+              placeholder="Confirm Password">
+            <div class="invalid-feedback" *ngIf="ispasswordmatch">
+              Passwords do not match
+            </div>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label>Email</label>
+            <input type="text" formControlName="Mail_Id" class="form-control border-bottom"
+              [class.is-invalid]="AddUser.get('Mail_Id')?.invalid && AddUser.get('Mail_Id')?.touched"
+              placeholder="Email">
+          </div>
+          <div class="col-md-6">
+            <label>Reporting To</label>
+            <select formControlName="Reporting_To" class="form-select border-bottom"
+              [class.is-invalid]="AddUser.get('Reporting_To')?.invalid && AddUser.get('Reporting_To')?.touched">
+              <option value="0">-- Select --</option>
+              <option *ngFor="let process of reporting" [value]="process.user_Id">{{process.name}}</option>
+            </select>
+          </div>
+        </div>
+          <div class="row mb-3">
+          <div class="col-md-6">
+            <label>Role</label>
+             <select formControlName="Role_Id" class="form-select border-bottom" [class.is-invalid]="AddUser.get('Role_Id')?.invalid && AddUser.get('Role_Id')?.touched">
+                        <option value="0">-- Select --</option>
+                        <option *ngFor="let process of roles" [value]="process.roleId">{{process.roleName}}</option>
+                    </select>
+          </div>
+          <div class="col-md-6">
+            <label>Access Type</label>
+            <select formControlName="Access_Type_Id" class="form-select border-bottom" [class.is-invalid]="AddUser.get('Access_Type_Id')?.invalid && AddUser.get('Access_Type_Id')?.touched">
+                        <option value="0">-- Select --</option>
+                        <option *ngFor="let process of accessType" [value]="process.access_Type_Id">
+                            {{process.access_Type_Name}}</option>
+                    </select>
+          </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <div class="col-md-3">
+                    <label>Is Active</label><br>
+                </div>
+                <div class="col-md-2">
+                    <input type="checkbox" formControlName="IsActive"
+                        [class.is-invalid]="AddUser.get('IsActive')?.invalid && AddUser.get('IsActive')?.touched">
+                </div>
+        
+            </div>
+            <div class="col-md-6">
+                <label>Process Category</label><br>
+                <select
+                    [class.is-invalid]="AddUser.get('Process_Category')?.invalid && AddUser.get('Process_Category')?.touched"
+                    formControlName="Process_Category" id="ProcessCategory" name="Process_category"
+                    class="form-select border-bottom">
+                    <option value="0">-- Select --</option>
+                    <option *ngFor="let process of ProcessCategory" [value]="process.process_Category">
+                        {{process.process_Category}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label>Team Lead</label><br>
+                <select [class.is-invalid]="AddUser.get('TeamLeadUserId')?.invalid && AddUser.get('TeamLeadUserId')?.touched"
+                    formControlName="TeamLeadUserId" (change)="onTeamSelectChange()" class="form-select border-bottom">
+                    <option value="0">-- Select --</option>
+                    <option *ngFor="let process of teamLead" [value]="process.user_Id">{{process.name}}</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label>Email Id</label><br>
+                <input [class.is-invalid]="AddUser.get('TeamLeadEmailId')?.invalid && AddUser.get('TeamLeadEmailId')?.touched"
+                    formControlName="TeamLeadEmailId" type="text" class="form-control border-bottom"
+                    placeholder="Team Lead Email Id">
+            </div>
+        </div>
+         <div class="row mb-3">
+            <div class="col-md-6">
+                <label>Manager</label><br>
+               <select [class.is-invalid]="AddUser.get('Manager_User_Id')?.invalid && AddUser.get('Manager_User_Id')?.touched" formControlName="Manager_User_Id" (change)="onManagerSelectChange()" class="form-select border-bottom">
+                        <option value="0">-- Select --</option>
+                        <option *ngFor="let man of Managers" [value]="man.user_Id">{{man.name}}</option>
+                    </select>
+            </div>
+            <div class="col-md-6">
+                <label>Email Id</label><br>
+               <input [class.is-invalid]="AddUser.get('Manager_Email_Id')?.invalid && AddUser.get('Manager_Email_Id')?.touched" type="text" formControlName="Manager_Email_Id" class="form-control border-bottom"
+                        placeholder="Manager Email Id">
+            </div>
+        </div>
+          <div class="row mb-3">
+            <div class="col-md-6">
+                <label>Functionalty Head</label><br>
+               <select formControlName="Fun_Manager_User_Id" (change)="onFunHeadSelectChange()"
+                        class="form-select custom-select-bottom-border"
+                        [class.is-invalid]="AddUser.get('Fun_Manager_User_Id')?.invalid && AddUser.get('Fun_Manager_User_Id')?.touched">
+                        <option value="0">-- Select --</option>
+                        <option *ngFor="let fun of fun_head" [value]="fun.user_Id">{{ fun.name }}</option>
+                    </select>
+            </div>
+            <div class="col-md-6">
+                <label>Email Id</label><br>
+             <input [class.is-invalid]="AddUser.get('Fun_Manager_Email_Id')?.invalid && AddUser.get('Fun_Manager_Email_Id')?.touched" formControlName="Fun_Manager_Email_Id" type="text" class="form-control border-bottom"
+                        placeholder="Functionaly Head Email">
+            </div>
+        </div>
+
+        <!-- Add similar blocks for each pair of inputs as needed -->
+        <!-- Example: Role, Access Type -->
+        <!-- Example: IsActive, Process Category -->
+        <!-- Example: Team Lead, Team Lead Email -->
+        <!-- Example: Manager, Manager Email -->
+        <!-- Example: Functional Manager, Functional Manager Email -->
+
+        
+
+        <div class="row mb-3 text-center">
+          <div class="col-12">
+            <button (click)="onSubmit()" type="button"
+              class="btn btn-primary me-2" style="background-color:#302cb3;">Submit</button>
+            <button type="button" class="btn btn-secondary" style="background-color:#302cb3;">Cancel</button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+<br/>
+<br/>
+<br/>

@@ -1,0 +1,11 @@
+.content {
+    height: 95vh;
+    margin-left: 260px;
+    margin-top: 67px;
+    padding: 20px;
+    background: #fff;
+    font-family: "Poppins", sans-serif;
+    color: #302CB3;
+    position: fixed;
+    width: 100%;
+}

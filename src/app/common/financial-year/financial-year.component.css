@@ -1,0 +1,41 @@
+/* styles.css or component-specific styles */
+.custom-height .mat-mdc-form-field-flex {
+  height: 36px !important; /* Adjust to desired height */
+  align-items: center;
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+}
+.custom-height .mat-mdc-form-field-infix {
+  padding: 0 !important;
+  min-height: 0 !important;
+  height: 20px !important;
+  display: flex;
+  align-items: center;
+}
+::ng-deep .mat-mdc-date-range-picker-content {
+  width: 320px !important;
+  max-width: 100% !important;
+}
+::ng-deep .mat-calendar-actions {
+  padding: 1px 2px !important;
+  font-size: 12px !important;
+}
+
+.custom-height .mat-mdc-floating-label {
+  top: 14px !important; /* Float label higher */
+  font-size: 11px !important;
+}
+
+.custom-height input.mat-input-element {
+  padding: 0 0 1px 0 !important;
+  height: 20px !important;
+  font-size: 11px !important;
+  line-height: 1 !important;
+}
+
+/* Optional: minimize autocomplete option height */
+::ng-deep .mat-mdc-autocomplete-panel .mat-mdc-option {
+  min-height: 36px !important;
+  font-size: 11px !important;
+  padding: 4px 12px !important;
+}
