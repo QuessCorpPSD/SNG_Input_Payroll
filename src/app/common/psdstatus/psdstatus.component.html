@@ -1,0 +1,328 @@
+<mat-card style="width: 612px; margin: 500px;">
+    <mat-card-header>
+        <mat-card-title style="padding-bottom: 20px;">
+            <div
+                style="color: #302CB3; font-family: Nunito Sans; font-size: 22px; font-style: normal; font-weight: 700; line-height: normal;">
+                Payroll Status</div>
+        </mat-card-title> </mat-card-header>
+    <mat-card-content
+        style="width: 612px; height: 245px;display: flex; padding: 28px 20px 10px 20px; flex-direction: column; align-items: center; gap: 16px; align-self: stretch;border-radius: 0 0 10px 10px; border-top: 1px solid var(--Card-Box-border-color, #D6D6D6); background: #FFF;">
+        <div
+            style="width:568px; height: 93px;display: flex;width: 568px;padding: 10px;flex-direction: column;align-items: center;gap: 16px;border-radius: 20px;border: 1px solid #00C874;background: #EEFFEC;">
+            <table *ngIf="lotStatus" style="table-layout: fixed;">
+                <tr>
+                    <td style="background-color: #EEFFEC; width:35px; text-align: center; vertical-align: middle;"> <i style="background-color: #EEFFEC;">
+                            <svg width="35px" height="35px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                                <g filter="url(#filter0_d_204_2229)">
+                                    <path
+                                        d="M2 15C2 7.26801 8.26801 1 16 1C23.732 1 30 7.26801 30 15C30 22.732 23.732 29 16 29C8.26801 29 2 22.732 2 15Z"
+                                        fill="#00C874" />
+                                    <path
+                                        d="M24.0306 9.21938L20.2806 5.46938C20.2109 5.39975 20.1282 5.34454 20.0371 5.3069C19.9461 5.26926 19.8485 5.24992 19.75 5.25H12.25C11.8522 5.25 11.4706 5.40804 11.1893 5.68934C10.908 5.97064 10.75 6.35218 10.75 6.75V8.25H9.25C8.85218 8.25 8.47064 8.40804 8.18934 8.68934C7.90804 8.97064 7.75 9.35218 7.75 9.75V23.25C7.75 23.6478 7.90804 24.0294 8.18934 24.3107C8.47064 24.592 8.85218 24.75 9.25 24.75H19.75C20.1478 24.75 20.5294 24.592 20.8107 24.3107C21.092 24.0294 21.25 23.6478 21.25 23.25V21.75H22.75C23.1478 21.75 23.5294 21.592 23.8107 21.3107C24.092 21.0294 24.25 20.6478 24.25 20.25V9.75C24.2501 9.65148 24.2307 9.55391 24.1931 9.46286C24.1555 9.37182 24.1003 9.28908 24.0306 9.21938ZM19.75 23.25H9.25V9.75H16.4397L19.75 13.0603V20.985C19.75 20.9906 19.75 20.9953 19.75 21C19.75 21.0047 19.75 21.0094 19.75 21.015V23.25ZM22.75 20.25H21.25V12.75C21.2501 12.6515 21.2307 12.5539 21.1931 12.4629C21.1555 12.3718 21.1003 12.2891 21.0306 12.2194L17.2806 8.46938C17.2109 8.39975 17.1282 8.34454 17.0371 8.3069C16.9461 8.26926 16.8485 8.24992 16.75 8.25H12.25V6.75H19.4397L22.75 10.0603V20.25ZM17.5 17.25C17.5 17.4489 17.421 17.6397 17.2803 17.7803C17.1397 17.921 16.9489 18 16.75 18H12.25C12.0511 18 11.8603 17.921 11.7197 17.7803C11.579 17.6397 11.5 17.4489 11.5 17.25C11.5 17.0511 11.579 16.8603 11.7197 16.7197C11.8603 16.579 12.0511 16.5 12.25 16.5H16.75C16.9489 16.5 17.1397 16.579 17.2803 16.7197C17.421 16.8603 17.5 17.0511 17.5 17.25ZM17.5 20.25C17.5 20.4489 17.421 20.6397 17.2803 20.7803C17.1397 20.921 16.9489 21 16.75 21H12.25C12.0511 21 11.8603 20.921 11.7197 20.7803C11.579 20.6397 11.5 20.4489 11.5 20.25C11.5 20.0511 11.579 19.8603 11.7197 19.7197C11.8603 19.579 12.0511 19.5 12.25 19.5H16.75C16.9489 19.5 17.1397 19.579 17.2803 19.7197C17.421 19.8603 17.5 20.0511 17.5 20.25Z"
+                                        fill="white" />
+                                </g>
+                                <defs>
+                                    <filter id="filter0_d_204_2229" x="0" y="0" width="32" height="32"
+                                        filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                                        <feColorMatrix in="SourceAlpha" type="matrix"
+                                            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                                        <feOffset dy="1" />
+                                        <feGaussianBlur stdDeviation="1" />
+                                        <feComposite in2="hardAlpha" operator="out" />
+                                        <feColorMatrix type="matrix"
+                                            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.05 0" />
+                                        <feBlend mode="normal" in2="BackgroundImageFix"
+                                            result="effect1_dropShadow_204_2229" />
+                                        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_204_2229"
+                                            result="shape" />
+                                    </filter>
+                                </defs>
+                            </svg>
+                        </i></td>
+                    <td style="width:80px;text-align: center; vertical-align: middle;">
+                        <hr style="border-top: 2px solid #00C874;">
+                    </td>
+                    <td *ngIf="lotStatus.qC_Verified_Status"
+                        style="display:flex; background-color: #EEFFEC; width:35px; text-align: center; vertical-align: middle;"> <i
+                            style="background-color: #EEFFEC;">
+                            <svg width="35px" height="35px" viewBox="0 0 32 32" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g filter="url(#filter0_d_843_1004)">
+                                    <path
+                                        d="M2 15C2 7.26801 8.26801 1 16 1C23.732 1 30 7.26801 30 15C30 22.732 23.732 29 16 29C8.26801 29 2 22.732 2 15Z"
+                                        fill="#00C874" />
+                                    <path
+                                        d="M24.9999 7.5V22.5C24.9999 22.8978 24.8419 23.2794 24.5606 23.5607C24.2793 23.842 23.8978 24 23.4999 24H16.7499C16.551 24 16.3603 23.921 16.2196 23.7803C16.0789 23.6397 15.9999 23.4489 15.9999 23.25C15.9999 23.0511 16.0789 22.8603 16.2196 22.7197C16.3603 22.579 16.551 22.5 16.7499 22.5H23.4999V7.5H8.49993V16.5C8.49993 16.6989 8.42091 16.8897 8.28026 17.0303C8.13961 17.171 7.94884 17.25 7.74993 17.25C7.55102 17.25 7.36025 17.171 7.2196 17.0303C7.07895 16.8897 6.99993 16.6989 6.99993 16.5V7.5C6.99993 7.10218 7.15796 6.72064 7.43927 6.43934C7.72057 6.15804 8.1021 6 8.49993 6H23.4999C23.8978 6 24.2793 6.15804 24.5606 6.43934C24.8419 6.72064 24.9999 7.10218 24.9999 7.5ZM15.7806 17.4694C15.7109 17.3996 15.6282 17.3443 15.5371 17.3066C15.4461 17.2688 15.3485 17.2494 15.2499 17.2494C15.1514 17.2494 15.0538 17.2688 14.9627 17.3066C14.8717 17.3443 14.789 17.3996 14.7193 17.4694L9.99993 22.1897L8.28055 20.4694C8.21087 20.3997 8.12815 20.3444 8.0371 20.3067C7.94606 20.269 7.84847 20.2496 7.74993 20.2496C7.65138 20.2496 7.5538 20.269 7.46276 20.3067C7.37171 20.3444 7.28899 20.3997 7.2193 20.4694C7.14962 20.5391 7.09435 20.6218 7.05663 20.7128C7.01892 20.8039 6.99951 20.9015 6.99951 21C6.99951 21.0985 7.01892 21.1961 7.05663 21.2872C7.09435 21.3782 7.14962 21.4609 7.2193 21.5306L9.4693 23.7806C9.53896 23.8504 9.62168 23.9057 9.71272 23.9434C9.80377 23.9812 9.90137 24.0006 9.99993 24.0006C10.0985 24.0006 10.1961 23.9812 10.2871 23.9434C10.3782 23.9057 10.4609 23.8504 10.5306 23.7806L15.7806 18.5306C15.8503 18.461 15.9056 18.3783 15.9433 18.2872C15.9811 18.1962 16.0005 18.0986 16.0005 18C16.0005 17.9014 15.9811 17.8038 15.9433 17.7128C15.9056 17.6217 15.8503 17.539 15.7806 17.4694Z"
+                                        fill="white" />
+                                </g>
+                                <defs>
+                                    <filter id="filter0_d_843_1004" x="0" y="0" width="32" height="32"
+                                        filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                                        <feColorMatrix in="SourceAlpha" type="matrix"
+                                            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                                        <feOffset dy="1" />
+                                        <feGaussianBlur stdDeviation="1" />
+                                        <feComposite in2="hardAlpha" operator="out" />
+                                        <feColorMatrix type="matrix"
+                                            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.05 0" />
+                                        <feBlend mode="normal" in2="BackgroundImageFix"
+                                            result="effect1_dropShadow_843_1004" />
+                                        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_843_1004"
+                                            result="shape" />
+                                    </filter>
+                                </defs>
+                            </svg>
+                        </i>
+                    <td *ngIf="lotStatus.qC_Verified_Status" style="width:80px; text-align: center; vertical-align: middle;">
+                        <hr style="border-top: 2px solid #00C874;">
+                    </td>
+                    <td *ngIf="!lotStatus.qC_Verified_Status"
+                        style="display:flex; background-color: #EEFFEC; width:35px; text-align: center; vertical-align: middle;"> <i
+                            style="background-color: #EEFFEC;">
+                            <svg width="35px" height="35px" viewBox="0 0 32 32" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g filter="url(#filter0_d_842_909)">
+                                    <path
+                                        d="M2 15C2 7.26801 8.26801 1 16 1C23.732 1 30 7.26801 30 15C30 22.732 23.732 29 16 29C8.26801 29 2 22.732 2 15Z"
+                                        fill="#E9E9E9" />
+                                    <path
+                                        d="M24.9999 7.5V22.5C24.9999 22.8978 24.8419 23.2794 24.5606 23.5607C24.2793 23.842 23.8978 24 23.4999 24H16.7499C16.551 24 16.3603 23.921 16.2196 23.7803C16.0789 23.6397 15.9999 23.4489 15.9999 23.25C15.9999 23.0511 16.0789 22.8603 16.2196 22.7197C16.3603 22.579 16.551 22.5 16.7499 22.5H23.4999V7.5H8.49993V16.5C8.49993 16.6989 8.42091 16.8897 8.28026 17.0303C8.13961 17.171 7.94884 17.25 7.74993 17.25C7.55102 17.25 7.36025 17.171 7.2196 17.0303C7.07895 16.8897 6.99993 16.6989 6.99993 16.5V7.5C6.99993 7.10218 7.15796 6.72064 7.43927 6.43934C7.72057 6.15804 8.1021 6 8.49993 6H23.4999C23.8978 6 24.2793 6.15804 24.5606 6.43934C24.8419 6.72064 24.9999 7.10218 24.9999 7.5ZM15.7806 17.4694C15.7109 17.3996 15.6282 17.3443 15.5371 17.3066C15.4461 17.2688 15.3485 17.2494 15.2499 17.2494C15.1514 17.2494 15.0538 17.2688 14.9627 17.3066C14.8717 17.3443 14.789 17.3996 14.7193 17.4694L9.99993 22.1897L8.28055 20.4694C8.21087 20.3997 8.12815 20.3444 8.0371 20.3067C7.94606 20.269 7.84847 20.2496 7.74993 20.2496C7.65138 20.2496 7.5538 20.269 7.46276 20.3067C7.37171 20.3444 7.28899 20.3997 7.2193 20.4694C7.14962 20.5391 7.09435 20.6218 7.05663 20.7128C7.01892 20.8039 6.99951 20.9015 6.99951 21C6.99951 21.0985 7.01892 21.1961 7.05663 21.2872C7.09435 21.3782 7.14962 21.4609 7.2193 21.5306L9.4693 23.7806C9.53896 23.8504 9.62168 23.9057 9.71272 23.9434C9.80377 23.9812 9.90137 24.0006 9.99993 24.0006C10.0985 24.0006 10.1961 23.9812 10.2871 23.9434C10.3782 23.9057 10.4609 23.8504 10.5306 23.7806L15.7806 18.5306C15.8503 18.461 15.9056 18.3783 15.9433 18.2872C15.9811 18.1962 16.0005 18.0986 16.0005 18C16.0005 17.9014 15.9811 17.8038 15.9433 17.7128C15.9056 17.6217 15.8503 17.539 15.7806 17.4694Z"
+                                        fill="#A5A3A0" />
+                                </g>
+                                <defs>
+                                    <filter id="filter0_d_842_909" x="0" y="0" width="32" height="32"
+                                        filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                                        <feColorMatrix in="SourceAlpha" type="matrix"
+                                            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                                        <feOffset dy="1" />
+                                        <feGaussianBlur stdDeviation="1" />
+                                        <feComposite in2="hardAlpha" operator="out" />
+                                        <feColorMatrix type="matrix"
+                                            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.05 0" />
+                                        <feBlend mode="normal" in2="BackgroundImageFix"
+                                            result="effect1_dropShadow_842_909" />
+                                        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_842_909"
+                                            result="shape" />
+                                    </filter>
+                                </defs>
+                            </svg>
+                        </i>
+                    </td>
+                    <td *ngIf="!lotStatus.qC_Verified_Status" style="width: 80px; text-align: center; vertical-align: middle;">
+                        <hr class="p-0" style="border-top: 2px dotted #6c757d;">
+                    </td>
+                    <td *ngIf="lotStatus.report_Status" style="display:flex; background-color: #EEFFEC; width:35px; text-align: center; vertical-align: middle;"> <i
+                            style="background-color: #EEFFEC;">
+                            <svg width="35px" height="35px" viewBox="0 0 32 32" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g filter="url(#filter0_d_843_1009)">
+                                    <path
+                                        d="M2 15C2 7.26801 8.26801 1 16 1C23.732 1 30 7.26801 30 15C30 22.732 23.732 29 16 29C8.26801 29 2 22.732 2 15Z"
+                                        fill="#00C874" />
+                                    <path
+                                        d="M24.0306 9.21938L20.2806 5.46938C20.2109 5.39975 20.1282 5.34454 20.0371 5.3069C19.9461 5.26926 19.8485 5.24992 19.75 5.25H12.25C11.8522 5.25 11.4706 5.40804 11.1893 5.68934C10.908 5.97064 10.75 6.35218 10.75 6.75V8.25H9.25C8.85218 8.25 8.47064 8.40804 8.18934 8.68934C7.90804 8.97064 7.75 9.35218 7.75 9.75V23.25C7.75 23.6478 7.90804 24.0294 8.18934 24.3107C8.47064 24.592 8.85218 24.75 9.25 24.75H19.75C20.1478 24.75 20.5294 24.592 20.8107 24.3107C21.092 24.0294 21.25 23.6478 21.25 23.25V21.75H22.75C23.1478 21.75 23.5294 21.592 23.8107 21.3107C24.092 21.0294 24.25 20.6478 24.25 20.25V9.75C24.2501 9.65148 24.2307 9.55391 24.1931 9.46286C24.1555 9.37182 24.1003 9.28908 24.0306 9.21938ZM19.75 23.25H9.25V9.75H16.4397L19.75 13.0603V20.985C19.75 20.9906 19.75 20.9953 19.75 21C19.75 21.0047 19.75 21.0094 19.75 21.015V23.25ZM22.75 20.25H21.25V12.75C21.2501 12.6515 21.2307 12.5539 21.1931 12.4629C21.1555 12.3718 21.1003 12.2891 21.0306 12.2194L17.2806 8.46938C17.2109 8.39975 17.1282 8.34454 17.0371 8.3069C16.9461 8.26926 16.8485 8.24992 16.75 8.25H12.25V6.75H19.4397L22.75 10.0603V20.25ZM17.5 17.25C17.5 17.4489 17.421 17.6397 17.2803 17.7803C17.1397 17.921 16.9489 18 16.75 18H12.25C12.0511 18 11.8603 17.921 11.7197 17.7803C11.579 17.6397 11.5 17.4489 11.5 17.25C11.5 17.0511 11.579 16.8603 11.7197 16.7197C11.8603 16.579 12.0511 16.5 12.25 16.5H16.75C16.9489 16.5 17.1397 16.579 17.2803 16.7197C17.421 16.8603 17.5 17.0511 17.5 17.25ZM17.5 20.25C17.5 20.4489 17.421 20.6397 17.2803 20.7803C17.1397 20.921 16.9489 21 16.75 21H12.25C12.0511 21 11.8603 20.921 11.7197 20.7803C11.579 20.6397 11.5 20.4489 11.5 20.25C11.5 20.0511 11.579 19.8603 11.7197 19.7197C11.8603 19.579 12.0511 19.5 12.25 19.5H16.75C16.9489 19.5 17.1397 19.579 17.2803 19.7197C17.421 19.8603 17.5 20.0511 17.5 20.25Z"
+                                        fill="white" />
+                                </g>
+                                <defs>
+                                    <filter id="filter0_d_843_1009" x="0" y="0" width="32" height="32"
+                                        filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                                        <feColorMatrix in="SourceAlpha" type="matrix"
+                                            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                                        <feOffset dy="1" />
+                                        <feGaussianBlur stdDeviation="1" />
+                                        <feComposite in2="hardAlpha" operator="out" />
+                                        <feColorMatrix type="matrix"
+                                            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.05 0" />
+                                        <feBlend mode="normal" in2="BackgroundImageFix"
+                                            result="effect1_dropShadow_843_1009" />
+                                        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_843_1009"
+                                            result="shape" />
+                                    </filter>
+                                </defs>
+                            </svg>
+                        </i>
+                    <td *ngIf="lotStatus.report_Status" style="width:80px; text-align: center; vertical-align: middle;">
+                        <hr style="border-top: 2px solid #00C874;">
+                    </td>
+                    <td *ngIf="!lotStatus.report_Status" style="display:flex; background-color: #EEFFEC; width:35px; text-align: center; vertical-align: middle;"> <i
+                            style="background-color: #EEFFEC;">
+                            <svg width="35px" height="35px" viewBox="0 0 33 32" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g filter="url(#filter0_d_204_2260)">
+                                    <path
+                                        d="M2.5 15C2.5 7.26801 8.76801 1 16.5 1C24.232 1 30.5 7.26801 30.5 15C30.5 22.732 24.232 29 16.5 29C8.76801 29 2.5 22.732 2.5 15Z"
+                                        fill="#E9E9E9" />
+                                    <path
+                                        d="M24.5306 9.21938L20.7806 5.46938C20.7109 5.39975 20.6282 5.34454 20.5371 5.3069C20.4461 5.26926 20.3485 5.24992 20.25 5.25H12.75C12.3522 5.25 11.9706 5.40804 11.6893 5.68934C11.408 5.97064 11.25 6.35218 11.25 6.75V8.25H9.75C9.35218 8.25 8.97064 8.40804 8.68934 8.68934C8.40804 8.97064 8.25 9.35218 8.25 9.75V23.25C8.25 23.6478 8.40804 24.0294 8.68934 24.3107C8.97064 24.592 9.35218 24.75 9.75 24.75H20.25C20.6478 24.75 21.0294 24.592 21.3107 24.3107C21.592 24.0294 21.75 23.6478 21.75 23.25V21.75H23.25C23.6478 21.75 24.0294 21.592 24.3107 21.3107C24.592 21.0294 24.75 20.6478 24.75 20.25V9.75C24.7501 9.65148 24.7307 9.55391 24.6931 9.46286C24.6555 9.37182 24.6003 9.28908 24.5306 9.21938ZM20.25 23.25H9.75V9.75H16.9397L20.25 13.0603V20.985C20.25 20.9906 20.25 20.9953 20.25 21C20.25 21.0047 20.25 21.0094 20.25 21.015V23.25ZM23.25 20.25H21.75V12.75C21.7501 12.6515 21.7307 12.5539 21.6931 12.4629C21.6555 12.3718 21.6003 12.2891 21.5306 12.2194L17.7806 8.46938C17.7109 8.39975 17.6282 8.34454 17.5371 8.3069C17.4461 8.26926 17.3485 8.24992 17.25 8.25H12.75V6.75H19.9397L23.25 10.0603V20.25ZM18 17.25C18 17.4489 17.921 17.6397 17.7803 17.7803C17.6397 17.921 17.4489 18 17.25 18H12.75C12.5511 18 12.3603 17.921 12.2197 17.7803C12.079 17.6397 12 17.4489 12 17.25C12 17.0511 12.079 16.8603 12.2197 16.7197C12.3603 16.579 12.5511 16.5 12.75 16.5H17.25C17.4489 16.5 17.6397 16.579 17.7803 16.7197C17.921 16.8603 18 17.0511 18 17.25ZM18 20.25C18 20.4489 17.921 20.6397 17.7803 20.7803C17.6397 20.921 17.4489 21 17.25 21H12.75C12.5511 21 12.3603 20.921 12.2197 20.7803C12.079 20.6397 12 20.4489 12 20.25C12 20.0511 12.079 19.8603 12.2197 19.7197C12.3603 19.579 12.5511 19.5 12.75 19.5H17.25C17.4489 19.5 17.6397 19.579 17.7803 19.7197C17.921 19.8603 18 20.0511 18 20.25Z"
+                                        fill="#A5A3A0" />
+                                </g>
+                                <defs>
+                                    <filter id="filter0_d_204_2260" x="0.5" y="0" width="32" height="32"
+                                        filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                                        <feColorMatrix in="SourceAlpha" type="matrix"
+                                            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                                        <feOffset dy="1" />
+                                        <feGaussianBlur stdDeviation="1" />
+                                        <feComposite in2="hardAlpha" operator="out" />
+                                        <feColorMatrix type="matrix"
+                                            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.05 0" />
+                                        <feBlend mode="normal" in2="BackgroundImageFix"
+                                            result="effect1_dropShadow_204_2260" />
+                                        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_204_2260"
+                                            result="shape" />
+                                    </filter>
+                                </defs>
+                            </svg>
+                        </i>
+
+                    </td>
+                    <td *ngIf="!lotStatus.report_Status" style="width: 80px; text-align: center; vertical-align: middle;">
+                        <hr style="border-top: 2px dotted #6c757d;">
+                    </td>
+                    <td style="background-color: #EEFFEC; width: 73px; vertical-align: middle; text-align: center;"> <i style="background-color: #EEFFEC;">
+                            <svg width="35px" height="35px" viewBox="0 0 32 32" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g filter="url(#filter0_d_842_920)">
+                                    <path
+                                        d="M2 15C2 7.26801 8.26801 1 16 1C23.732 1 30 7.26801 30 15C30 22.732 23.732 29 16 29C8.26801 29 2 22.732 2 15Z"
+                                        fill="#E9E9E9" />
+                                    <path
+                                        d="M25.1744 12.6394C24.8209 12.27 24.4553 11.8894 24.3175 11.5547C24.19 11.2481 24.1825 10.74 24.175 10.2478C24.1609 9.33281 24.1459 8.29594 23.425 7.575C22.7041 6.85406 21.6672 6.83906 20.7522 6.825C20.26 6.8175 19.7519 6.81 19.4453 6.6825C19.1116 6.54469 18.73 6.17906 18.3606 5.82562C17.7137 5.20406 16.9788 4.5 16 4.5C15.0212 4.5 14.2872 5.20406 13.6394 5.82562C13.27 6.17906 12.8894 6.54469 12.5547 6.6825C12.25 6.81 11.74 6.8175 11.2478 6.825C10.3328 6.83906 9.29594 6.85406 8.575 7.575C7.85406 8.29594 7.84375 9.33281 7.825 10.2478C7.8175 10.74 7.81 11.2481 7.6825 11.5547C7.54469 11.8884 7.17906 12.27 6.82562 12.6394C6.20406 13.2863 5.5 14.0212 5.5 15C5.5 15.9788 6.20406 16.7128 6.82562 17.3606C7.17906 17.73 7.54469 18.1106 7.6825 18.4453C7.81 18.7519 7.8175 19.26 7.825 19.7522C7.83906 20.6672 7.85406 21.7041 8.575 22.425C9.29594 23.1459 10.3328 23.1609 11.2478 23.175C11.74 23.1825 12.2481 23.19 12.5547 23.3175C12.8884 23.4553 13.27 23.8209 13.6394 24.1744C14.2863 24.7959 15.0212 25.5 16 25.5C16.9788 25.5 17.7128 24.7959 18.3606 24.1744C18.73 23.8209 19.1106 23.4553 19.4453 23.3175C19.7519 23.19 20.26 23.1825 20.7522 23.175C21.6672 23.1609 22.7041 23.1459 23.425 22.425C24.1459 21.7041 24.1609 20.6672 24.175 19.7522C24.1825 19.26 24.19 18.7519 24.3175 18.4453C24.4553 18.1116 24.8209 17.73 25.1744 17.3606C25.7959 16.7137 26.5 15.9788 26.5 15C26.5 14.0212 25.7959 13.2872 25.1744 12.6394ZM24.0916 16.3228C23.6425 16.7916 23.1775 17.2763 22.9309 17.8716C22.6947 18.4434 22.6844 19.0969 22.675 19.7297C22.6656 20.3859 22.6553 21.0731 22.3638 21.3638C22.0722 21.6544 21.3897 21.6656 20.7297 21.675C20.0969 21.6844 19.4434 21.6947 18.8716 21.9309C18.2763 22.1775 17.7916 22.6425 17.3228 23.0916C16.8541 23.5406 16.375 24 16 24C15.625 24 15.1422 23.5387 14.6772 23.0916C14.2122 22.6444 13.7238 22.1775 13.1284 21.9309C12.5566 21.6947 11.9031 21.6844 11.2703 21.675C10.6141 21.6656 9.92688 21.6553 9.63625 21.3638C9.34562 21.0722 9.33437 20.3897 9.325 19.7297C9.31562 19.0969 9.30531 18.4434 9.06906 17.8716C8.8225 17.2763 8.3575 16.7916 7.90844 16.3228C7.45937 15.8541 7 15.375 7 15C7 14.625 7.46125 14.1422 7.90844 13.6772C8.35562 13.2122 8.8225 12.7238 9.06906 12.1284C9.30531 11.5566 9.31562 10.9031 9.325 10.2703C9.33437 9.61406 9.34469 8.92688 9.63625 8.63625C9.92781 8.34562 10.6103 8.33437 11.2703 8.325C11.9031 8.31562 12.5566 8.30531 13.1284 8.06906C13.7238 7.8225 14.2084 7.3575 14.6772 6.90844C15.1459 6.45937 15.625 6 16 6C16.375 6 16.8578 6.46125 17.3228 6.90844C17.7878 7.35562 18.2763 7.8225 18.8716 8.06906C19.4434 8.30531 20.0969 8.31562 20.7297 8.325C21.3859 8.33437 22.0731 8.34469 22.3638 8.63625C22.6544 8.92781 22.6656 9.61031 22.675 10.2703C22.6844 10.9031 22.6947 11.5566 22.9309 12.1284C23.1775 12.7238 23.6425 13.2084 24.0916 13.6772C24.5406 14.1459 25 14.625 25 15C25 15.375 24.5387 15.8578 24.0916 16.3228ZM20.2806 12.2194C20.3504 12.289 20.4057 12.3717 20.4434 12.4628C20.4812 12.5538 20.5006 12.6514 20.5006 12.75C20.5006 12.8486 20.4812 12.9462 20.4434 13.0372C20.4057 13.1283 20.3504 13.211 20.2806 13.2806L15.0306 18.5306C14.961 18.6004 14.8783 18.6557 14.7872 18.6934C14.6962 18.7312 14.5986 18.7506 14.5 18.7506C14.4014 18.7506 14.3038 18.7312 14.2128 18.6934C14.1217 18.6557 14.039 18.6004 13.9694 18.5306L11.7194 16.2806C11.5786 16.1399 11.4996 15.949 11.4996 15.75C11.4996 15.551 11.5786 15.3601 11.7194 15.2194C11.8601 15.0786 12.051 14.9996 12.25 14.9996C12.449 14.9996 12.6399 15.0786 12.7806 15.2194L14.5 16.9397L19.2194 12.2194C19.289 12.1496 19.3717 12.0943 19.4628 12.0566C19.5538 12.0188 19.6514 11.9994 19.75 11.9994C19.8486 11.9994 19.9462 12.0188 20.0372 12.0566C20.1283 12.0943 20.211 12.1496 20.2806 12.2194Z"
+                                        fill="#A5A3A0" />
+                                </g>
+                                <defs>
+                                    <filter id="filter0_d_842_920" x="0" y="0" width="32" height="32"
+                                        filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                                        <feColorMatrix in="SourceAlpha" type="matrix"
+                                            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                                        <feOffset dy="1" />
+                                        <feGaussianBlur stdDeviation="1" />
+                                        <feComposite in2="hardAlpha" operator="out" />
+                                        <feColorMatrix type="matrix"
+                                            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.05 0" />
+                                        <feBlend mode="normal" in2="BackgroundImageFix"
+                                            result="effect1_dropShadow_842_920" />
+                                        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_842_920"
+                                            result="shape" />
+                                    </filter>
+                                </defs>
+                            </svg>
+
+                        </i>
+                    </td>
+                    <td style="width: 80px; text-align: center; vertical-align: middle;">
+                        <hr class="p-0" style="border-top: 2px dotted #6c757d;">
+                    </td>
+                    <td style="display:flex; background-color: #EEFFEC; width: 35px; text-align: center; vertical-align: middle;">
+                        <i style="background-color: #EEFFEC;">
+                            <svg width="35px" height="35px" viewBox="0 0 32 32" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g filter="url(#filter0_d_842_938)">
+                                    <path
+                                        d="M2 15C2 7.26801 8.26801 1 16 1C23.732 1 30 7.26801 30 15C30 22.732 23.732 29 16 29C8.26801 29 2 22.732 2 15Z"
+                                        fill="#E9E9E9" />
+                                    <path
+                                        d="M24.0306 10.7194L18.7806 5.46938C18.7109 5.39975 18.6282 5.34454 18.5371 5.3069C18.4461 5.26926 18.3485 5.24992 18.25 5.25H9.25C8.85218 5.25 8.47064 5.40804 8.18934 5.68934C7.90804 5.97064 7.75 6.35218 7.75 6.75V23.25C7.75 23.6478 7.90804 24.0294 8.18934 24.3107C8.47064 24.592 8.85218 24.75 9.25 24.75H22.75C23.1478 24.75 23.5294 24.592 23.8107 24.3107C24.092 24.0294 24.25 23.6478 24.25 23.25V11.25C24.2501 11.1515 24.2307 11.0539 24.1931 10.9629C24.1555 10.8718 24.1003 10.7891 24.0306 10.7194ZM19 7.81031L21.6897 10.5H19V7.81031ZM22.75 23.25H9.25V6.75H17.5V11.25C17.5 11.4489 17.579 11.6397 17.7197 11.7803C17.8603 11.921 18.0511 12 18.25 12H22.75V23.25ZM19.75 15.75C19.75 15.9489 19.671 16.1397 19.5303 16.2803C19.3897 16.421 19.1989 16.5 19 16.5H13C12.8011 16.5 12.6103 16.421 12.4697 16.2803C12.329 16.1397 12.25 15.9489 12.25 15.75C12.25 15.5511 12.329 15.3603 12.4697 15.2197C12.6103 15.079 12.8011 15 13 15H19C19.1989 15 19.3897 15.079 19.5303 15.2197C19.671 15.3603 19.75 15.5511 19.75 15.75ZM19.75 18.75C19.75 18.9489 19.671 19.1397 19.5303 19.2803C19.3897 19.421 19.1989 19.5 19 19.5H13C12.8011 19.5 12.6103 19.421 12.4697 19.2803C12.329 19.1397 12.25 18.9489 12.25 18.75C12.25 18.5511 12.329 18.3603 12.4697 18.2197C12.6103 18.079 12.8011 18 13 18H19C19.1989 18 19.3897 18.079 19.5303 18.2197C19.671 18.3603 19.75 18.5511 19.75 18.75Z"
+                                        fill="#A5A3A0" />
+                                </g>
+                                <defs>
+                                    <filter id="filter0_d_842_938" x="0" y="0" width="32" height="32"
+                                        filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                                        <feColorMatrix in="SourceAlpha" type="matrix"
+                                            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                                        <feOffset dy="1" />
+                                        <feGaussianBlur stdDeviation="1" />
+                                        <feComposite in2="hardAlpha" operator="out" />
+                                        <feColorMatrix type="matrix"
+                                            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.05 0" />
+                                        <feBlend mode="normal" in2="BackgroundImageFix"
+                                            result="effect1_dropShadow_842_938" />
+                                        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_842_938"
+                                            result="shape" />
+                                    </filter>
+                                </defs>
+                            </svg>
+                        </i>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="cell-font" >
+                        {{InputText}}
+                    </td>
+                    <td></td>
+                    <td class="cell-font">
+                        QC - Verified
+                    </td>
+                    <td></td>
+                    <td class="cell-font">
+                        Report
+                    </td>
+                    <td></td>
+                    <td class="cell-font">
+                        Customer Confirmation
+                    </td>
+                    <td></td>
+                    <td class="cell-font">
+                        Invoice
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div
+            style="width: 572px; height: 32px; display: flex; flex-direction: row; padding-left: 5px; align-items: flex-start; gap: 20px; border-radius: 0 0 10px 10px; background: #FFF;">
+            <div
+                style="width: 270px; height: 32px; padding: 8px 10px; background: white; border-radius: 6px; outline: 1px #DEDDE0 solid; outline-offset: -1px; display: flex; align-items: center; gap: 10px;">
+                <div data-property-1="clock" style="width: 12px; height: 12px; position: relative;">
+                    <div>
+                        <img src="assets/Icons/clock.svg"
+                            style="width: 11px; height: 11px; left: 0.5px; top: 0.5px; position: absolute;" />
+                    </div>
+                </div>
+                <div style="color: #222222; font-size: 12px; font-family: Nunito Sans; font-weight: 600;">
+                    Allocated time : 1hr:15min:45sec
+                </div>
+            </div>
+
+            <div
+                style="width: 270px; height: 32px; padding: 8px 10px; background: white; border-radius: 6px; outline: 1px #DEDDE0 solid; outline-offset: -1px; display: flex; align-items: center; gap: 10px;">
+                <div data-property-1="clock" style="width: 12px; height: 12px; position: relative;">
+                    <div>
+                        <img src="assets/Icons/clock.svg"
+                            style="width: 11px; height: 11px; left: 0.5px; top: 0.5px; position: absolute;" />
+                    </div>
+                </div>
+                <div style="color: #222222; font-size: 12px; font-family: Nunito Sans; font-weight: 600;">
+                    Estimated time left: 00:15min:45sec
+                </div>
+            </div>
+        </div>
+        <div
+            style="height: 60px; width: 572px; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 10px; align-self: stretch;">
+            <div
+                style="align-self: stretch; color: #575757; font-family: Nunito Sans; font-size: 12px; font-style: normal; font-weight: 500; line-height: 19.4px;">
+                Remark</div>
+            <div
+                style="color: #000; font-family: Nunito Sans; font-size: 12px; font-style: normal; font-weight: 500; line-height: 19.4px; /* 161.667% */">
+                Dummy Text</div>
+        </div>
+
+
+    </mat-card-content>
+
+    <mat-card-actions
+        style="display: flex; padding: 14px 20px; justify-content: flex-end; align-items: center; gap: 12px; align-self: stretch;border-radius: 0 0 10px 10px; border-top: 1px solid var(--Card-Box-border-color, #D6D6D6); background: var(--Card-card-background, #F9F9F9);">
+        <button (click)="closeclick()"
+            style="margin-right: 10px;width: 130px; height: 30px; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
+            <div
+                style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
+                Ok, Understood</div>
+        </button>
+    </mat-card-actions>
+</mat-card>

@@ -39,9 +39,7 @@ isLoading=false;
     const input = event.target as HTMLInputElement;
  
     if (input.files) {
-     
       this.files.push(...Array.from(input.files));
-    
     }
   }
   ngOnInit(): void {

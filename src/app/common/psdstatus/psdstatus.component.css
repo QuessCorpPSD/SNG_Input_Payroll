@@ -1,0 +1,11 @@
+.cell-font{
+    color: #1F2937;
+text-align: center;
+
+/* Medium/Medium */
+font-family: "Nunito Sans";
+font-size: 12px;
+font-style: normal;
+font-weight: 500;
+line-height: 19.4px; /* 161.667% */
+}

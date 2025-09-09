@@ -1,0 +1,188 @@
+<div class="row gap-3 py-2">
+    <div class="justify-content-between align-items-center mb-3">
+        <div class="d-flex gap-2" style="padding-left: 20px;">
+            <div class="right-align">
+                <payrollinput [visibleDropdowns]="[1, 2]" [showSearchButton]="true"
+                    [payPeriodTypefromParent]="payPeriodTypefromParent" (companyUI)="handleCompanyEvent($event)"
+                    (payperiodUI)="handlePayperiodEvent($event)" (searchClicked)="searchClick()">
+                </payrollinput>
+            </div>
+        </div>
+        <div *ngIf="isLoading" class="loading-overlay">
+            <img src="assets/Loading.gif" alt="Loading...">
+        </div>
+        <div style="width:100%; gap: 15px;" class="right-align2">
+
+            <div class="py-2">
+                <div
+                    style="display: inline-block; align-items: bottom; border-radius: 10px; border: 1px solid #7E7E7E; width: 260px; height: 30px; background-color: white; padding: 0px 10px 0px 10px;">
+                    <i style="margin-right: 6px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M8.30883 9.01596C7.539 9.63177 6.5625 10 5.5 10C3.01472 10 1 7.98528 1 5.5C1 3.01472 3.01472 1 5.5 1C7.98528 1 10 3.01472 10 5.5C10 6.56251 9.63176.53901 9.01594 8.30885L10.8535 10.1465C11.0488 10.3417 11.0488 10.6583 10.8535 10.8536C10.6583 11.0488 10.3417 11.0488 10.1464 10.8536L8.30883 9.01596ZM2 5.5C2 3.567 3.567 2 5.5 2C7.433 2 9 3.567 9 5.5C9 6.44299 8.62707 7.29888 8.02066 7.92823C8.00355 7.94139 7.98711 7.95579 7.97144 7.97146C7.95578 7.98712 7.94137 8.00357 7.92822 8.02067C7.29887 8.62708 6.44299 9 5.5 9C3.567 9 2 7.433 2 5.5Z"
+                                fill="#7E7E7E" />
+                        </svg>
+                    </i>
+                    <input type="text" [(ngModel)]="searchText" (keyup.enter)="applyFilter()" placeholder="Search"
+                        style="border: none; outline: none; width: 80%; font-size: 12px; background-color: transparent; height:15px;" />
+                </div>
+            </div>
+            <div style="display: inline-block; margin-right: 10px;">
+                <label style="position: relative; display: inline-block;">
+                    <select [(ngModel)]="selectedTemplate" (change)="onTemplateChange()" class="select-drop">
+                        <option value="" disabled selected hidden>Filter</option>
+                        <option *ngFor="let item of TemplateOptions" [value]="item.value">{{ item.Text }}</option>
+                    </select>
+                    <i
+                        style="position: absolute; top: 50%; right: 15px; transform: translateY(-50%); pointer-events: none;">
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M0.546448 1.28956C0.628377 1.11298 0.805344 1 1.00001 1H11C11.1947 1 11.3716 1.11298 11.4536 1.28956C11.5355 1.46614 11.5075 1.67422 11.3818 1.82286L7.50001 6.41307V10.5C7.50001 10.6733 7.41028 10.8342 7.26287 10.9253C7.11546 11.0164 6.93139 11.0247 6.7764 10.9472L4.7764 9.94721C4.60701 9.86252 4.50001 9.68939 4.50001 9.5V6.41307L0.618222 1.82286C0.492523 1.67422 0.464519 1.46614 0.546448 1.28956ZM2.07766 2L5.38179 5.90714C5.45812 5.9974 5.50001 6.11179 5.50001 6.23V9.19098L6.50001 9.69098V6.23C6.50001 6.11179 6.54189 5.9974 6.61822 5.90714L9.92235 2H2.07766Z"
+                                fill="#7E7E7E" />
+                        </svg>
+                    </i>
+                </label>
+            </div>
+            <div style="display: inline-block;">
+                <button (click)="onConsolidatedClick()" class="plain-button"
+                    style="position: relative; padding-right: 30px;">
+                    Consolidated Register
+                    <i
+                        style="position: absolute; top: 50%; right: 15px; transform: translateY(-50%); pointer-events: none;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M5.77652 0.552786C5.91728 0.482405 6.08296 0.482405 6.22373 0.552786L11.2237 3.05279C11.3931 3.13748 11.5001 3.31061 11.5001 3.5C11.5001 3.68939 11.3931 3.86252 11.2237 3.94721L6.22373 6.44721C6.08296 6.5176 5.91728 6.5176 5.77652 6.44721L0.776515 3.94721C0.607123 3.86252 0.500122 3.68939 0.500122 3.5C0.500122 3.31061 0.607123 3.13748 0.776515 3.05279L5.77652 0.552786ZM2.11816 3.5L6.00012 5.44098L9.88209 3.5L6.00012 1.55902L2.11816 3.5Z"
+                                fill="#7E7E7E" />
+                            <path
+                                d="M0.552896 8.27638C0.676391 8.02939 0.976727 7.92928 1.22372 8.05277L6.00011 10.441L10.7765 8.05277C11.0235 7.92928 11.3238 8.02939 11.4473 8.27638C11.5708 8.52337 11.4707 8.82371 11.2237 8.9472L6.22372 11.4472C6.08295 11.5176 5.91727 11.5176 5.7765 11.4472L0.776503 8.9472C0.529513 8.82371 0.429401 8.52337 0.552896 8.27638Z"
+                                fill="#7E7E7E" />
+                            <path
+                                d="M1.22372 5.55277C0.976727 5.42928 0.676391 5.52939 0.552896 5.77638C0.429401 6.02337 0.529513 6.32371 0.776503 6.4472L5.7765 8.9472C5.91727 9.01758 6.08295 9.01758 6.22372 8.9472L11.2237 6.4472C11.4707 6.32371 11.5708 6.02337 11.4473 5.77638C11.3238 5.52939 11.0235 5.42928 10.7765 5.55277L6.00011 7.94097L1.22372 5.55277Z"
+                                fill="#7E7E7E" />
+                        </svg>
+
+                    </i>
+                </button>
+            </div>
+            <button *ngIf="isAnyFilteredRowSelected() && !isSelectedLotSubmitted()" (click)="FinalSubmitClick()"
+                style="display: inline-block; margin-right: 10px;width: 130px; height: 30px; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
+                <div
+                    style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
+                    Final Submission</div>
+            </button>
+        </div>
+        <div *ngIf="isLoading" class="loading-overlay">
+            <img src="assets/Loading.gif" alt="Loading...">
+        </div>
+
+        <div *ngIf="showPopup" class="overlay">
+            <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage"
+                class="centered-popup" (close)="showPopup = false"></app-alertpopup>
+        </div>
+        <div *ngIf="showpsd" class="overlay">
+            <psdstatus class="centered-popup" [Company_Id]="companyIdtopsd" [pay_period_id]="payPeriodIdtopsd"
+                [lotnumber]="lotNotopsd" [payroll_Input_Type]="inputTypetopsd ?? ''" [InputText]="inputTexttopsd"
+                (close)="showpsd = false"></psdstatus>
+        </div>
+        <div class="card-body rounded-4 py-0">
+            <div class="example-container mat-elevation-z8">
+                <table mat-table #searchgrid [dataSource]="dataSource" matSort class="custom-table">
+
+                    <!-- Checkbox Column -->
+                    <ng-container matColumnDef="select">
+                        <mat-header-cell *matHeaderCellDef class="fixed-width-column">
+                            <mat-checkbox (change)="toggleAllRows()" [checked]="selection.hasValue() && isAllSelected()"
+                                [indeterminate]="isPartialSelected()">
+                            </mat-checkbox>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element" class="fixed-width-column">
+                            <mat-checkbox (click)="$event.stopPropagation()" (change)="toggleRow(element)"
+                                [checked]="selection.isSelected(element)">
+                            </mat-checkbox>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Lot Type -->
+                    <ng-container matColumnDef="inputName">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Submission Type</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ element.inputName
+                            }}</mat-cell>
+                    </ng-container>
+
+                    <!-- HeadCount -->
+                    <ng-container matColumnDef="headCount">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Head Count</mat-header-cell>
+                        <mat-cell *matCellDef="let element"><span class="offer-style">{{ element.headCount
+                                }}</span></mat-cell>
+                    </ng-container>
+
+                    <!-- User Name -->
+                    <ng-container matColumnDef="firstName">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>User Name</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ element.firstName }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Status -->
+                    <ng-container matColumnDef="currentStatus">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Current Status</mat-header-cell>
+                        <mat-cell *matCellDef="let element"><span [ngClass]="{
+                                'box-green': element.currentStatus === 'Input Submitted',
+                                'box-red': element.currentStatus === 'Modify Request',
+                                'box-yellow': element.currentStatus === 'In-Progress',
+                            }">{{ element.currentStatus }}</span></mat-cell>
+                    </ng-container>
+
+                    <!-- LOT Number -->
+                    <ng-container matColumnDef="inputLotNumber">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Assignment Number</mat-header-cell>
+                        <mat-cell *matCellDef="let element"><span class="box-blue">{{ element.inputLotNumber
+                                }}</span></mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="register">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Register</mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <img *ngIf="element.isProcessed==true && element.isEmployeeID==false "
+                                src="assets/Icons/download_enabled.svg" alt="Download PayRegister"
+                                style="cursor: pointer; width: 24px; height: 22px;"
+                                (click)="DownloadRegister(element.inputLotNumber)" />
+                            <img *ngIf="element.isProcessed==false && element.isEmployeeID==false "
+                                src="assets/Icons/download_disabled.svg"
+                                style="cursor: pointer; width: 24px; height: 22px;" />
+                            <img *ngIf="element.isEmployeeID==true" src="assets/Icons/red_download_enabled.svg"
+                                alt="EmployeeIdDownload" style="cursor: pointer; width: 24px; height: 22px;"
+                                (click)="DownloadEmployeeIDReport(element.inputLotNumber)" />
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="psdstatus">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>PSD Status</mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <img *ngIf="element.isSubmitted==false " src="assets/Icons/eye_disabled.svg"
+                                alt="Download PayRegister" style="cursor: pointer; width: 24px; height: 22px;" />
+                            <img *ngIf="element.isSubmitted==true " src="assets/Icons/eye_enabled.svg"
+                                style="cursor: pointer; width: 24px; height: 22px;"
+                                (click)="PsdStatusclick(element.inputLotNumber, element.revised)" />
+                        </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="revised">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Revised</mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <img *ngIf="element.revised==1" src="assets/Icons/repeat_enabled.svg" alt="repeatEnable"
+                                style="cursor: pointer; width: 24px; height: 22px;" />
+                            <img *ngIf="element.revised==0" src="assets/Icons/repeat_disabled.svg" alt="repeatdisable"
+                                style="cursor: pointer; width: 24px; height: 22px;" />
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Header and Row Declaration -->
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                </table>
+            </div>
+            <mat-paginator class="mat-footer-paginator" [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons
+                stickyEnd>
+            </mat-paginator>
+        </div>
+    </div>
+</div>
