@@ -1,0 +1,195 @@
+    <div class="row gap-3 py-2">
+        <div class="justify-content-between align-items-center mb-3">
+            <div class="d-flex gap-2" style="padding-left: 20px;">
+                <div style="display: inline-block; margin-right: 10px;padding-top: 12px;">
+                    <input type="file" #fileInput style="display: none;" (change)="onFileChange($event)"
+                        accept=".xlsx, .xls" />
+                </div>
+                <div class="right-align">
+                    <payrollinput [visibleDropdowns]="[1, 2, 5, 6]" [showSearchButton]="true"
+                        [payPeriodTypefromParent]="payPeriodTypefromParentall" (companyUI)="handleCompanyEvent($event)"
+                        (payperiodUI)="handlePayperiodEvent($event)" (sitenameUI)="handleGroupNameEvent($event)"
+                        (citynameUI)="handleCityEvent($event)" (searchClicked)="searchClick()">
+                    </payrollinput>
+                </div>
+            </div>
+            <div *ngIf="isLoading" class="loading-overlay">
+                <img src="assets/Loading.gif" alt="Loading...">
+            </div>
+            <div style="display: flex; margin-right: 10px; gap:10px; padding-left: 20px;">
+                <div style="width:100%; padding-bottom: 10px; gap: 15px; padding-right: 30px;" class="right-align py-2">
+                    <div
+                        style="display: inline-block; align-items: center; border-radius: 10px; border: 1px solid #7E7E7E; width: 260px; height: 30px; background-color: white; padding: 0px 10px 0px 10px;">
+                        <i style="margin-right: 6px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14"
+                                fill="none">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M8.30883 9.01596C7.539 9.63177 6.5625 10 5.5 10C3.01472 10 1 7.98528 1 5.5C1 3.01472 3.01472 1 5.5 1C7.98528 1 10 3.01472 10 5.5C10 6.56251 9.63176.53901 9.01594 8.30885L10.8535 10.1465C11.0488 10.3417 11.0488 10.6583 10.8535 10.8536C10.6583 11.0488 10.3417 11.0488 10.1464 10.8536L8.30883 9.01596ZM2 5.5C2 3.567 3.567 2 5.5 2C7.433 2 9 3.567 9 5.5C9 6.44299 8.62707 7.29888 8.02066 7.92823C8.00355 7.94139 7.98711 7.95579 7.97144 7.97146C7.95578 7.98712 7.94137 8.00357 7.92822 8.02067C7.29887 8.62708 6.44299 9 5.5 9C3.567 9 2 7.433 2 5.5Z"
+                                    fill="#7E7E7E" />
+                            </svg>
+                        </i>
+                        <input type="text" [(ngModel)]="searchText" (keyup.enter)="applyFilter()" placeholder="Search"
+                            style="border: none; outline: none; width: 80%; font-size: 12px; background-color: transparent; height:15px;" />
+                    </div>
+                    <div style="display: inline-block; margin-right: 10px;"
+                        *ngIf="this.rows && this.rows.length>0 && anyRowSelected">
+                        <button (click)="Rejectclick()"
+                            style="width: 120px; height: 30px; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #198754; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex;border: none;">
+                            <div
+                                style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
+                                Reject</div>
+                        </button>
+                    </div>
+                    <button (click)="AttendanceReportclick()"
+                        style="width: 150px; height: 30px; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex;border: none;">
+                        <div
+                            style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
+                            Attendance Report</div>
+                    </button>
+                </div>
+            </div>
+            <div class="table-wrap">
+                <div class="table-scroll">
+                    <table class="ts">
+                        <!-- HEADER ROW 1: fixed cols + date numbers -->
+                        <thead>
+                            <tr class="head-1">
+                                <th class="sl">SlNo</th>
+                                <th class="sel"><mat-checkbox [(ngModel)]="allSelected"
+                                        (change)="toggleAllRows($event.checked)">
+                                    </mat-checkbox></th>
+                                <th>Export</th>
+                                <th class="empid">EmpID</th>
+                                <th class="name">EmployeeName</th>
+                                <th class="doj">DOJ</th>
+                                <th class="sep">Separation</th>
+                                <th class="status">Status</th>
+                                <th class="remarks">Remarks</th>
+                                <th class="approver">Approver</th>
+                                <th class="ot">OT</th>
+                                <th class="wdwh">WD-WH</th>
+                                <th class="dehe">DE-HE</th>
+                                <th class="L">L</th>
+                                <th class="H">H</th>
+                                <th class="CO">CO</th>
+                                <th class="WO">WO</th>
+
+                                <th *ngFor="let d of dayCols; trackBy: trackDay" class="day-col">
+                                    {{ d.dayNum }}
+                                </th>
+                            </tr>
+
+                            <!-- HEADER ROW 2: day initials (S M T …) -->
+                            <tr class="head-2">
+                                <th colspan="17"></th>
+                                <th *ngFor="let d of dayCols; trackBy: trackDay" class="day-col">
+                                    {{ d.dowShort }}
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr *ngFor="let r of filteredRows; trackBy: trackRow">
+                                <td class="sl">{{ r.SlNo }}</td>
+                                <td class="sel"><mat-checkbox [(ngModel)]="r.selected" (change)="onRowChange()">
+                                    </mat-checkbox></td>
+                                <td class="import">
+                                    <img src="assets/Icons/download_enabled.svg" alt="Export"
+                                        style="cursor: pointer; width: 24px; height: 22px;"
+                                        (click)="openAttachmentsPopup(r); $event.stopPropagation()" />
+                                </td>
+                                <td class="empid">{{ r.EmpID }}</td>
+                                <td class="name">{{ r.EmployeeName }}</td>
+                                <td class="doj">{{ r.DOJ }}</td>
+                                <td class="sep">{{ r.Seperation }}</td>
+
+                                <td class="status">
+                                    <select [(ngModel)]="r.Status">
+                                        <option *ngFor="let s of statusOptions" [value]="s">{{ s }}</option>
+                                    </select>
+                                </td>
+
+                                <td class="remarks">
+                                    <input type="text" [(ngModel)]="r.Remarks" />
+                                </td>
+
+                                <td class="approver">
+                                    <input type="text" [(ngModel)]="r.Approver" />
+                                </td>
+
+                                <td class="ot">
+                                    <input type="text" [(ngModel)]="r.OT" style="text-align: center;" maxlength="3"
+                                        (input)="onNumericInput($event)" />
+                                </td>
+
+                                <td class="wdwh">{{ r.WDWH }}</td>
+                                <td class="dehe">{{ r.DEHE }}</td>
+                                <td class="L">{{ r.L }}</td>
+                                <td class="H">{{ r.H }}</td>
+                                <td class="CO">{{ r.CO }}</td>
+                                <td class="WO">{{ r.WO }}</td>
+
+                                <!-- dynamic day cells -->
+                                <td *ngFor="let d of dayCols; let i = index; trackBy: trackDay" class="day-col"
+                                    [class.weekend]="d.isWeekend">
+                                    <input #cellInput type="text" [(ngModel)]="r.dayValues[i]"
+                                        (ngModelChange)="onType(r, i, $event)" (blur)="onBlur(r, i,cellInput)"
+                                        style="text-align:center;" maxlength="5" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div *ngIf="showPopup" class="overlay"></div>
+            <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage"
+                class="centered-popup" (close)="showPopup = false"></app-alertpopup>
+            <div *ngIf="isLoading" class="loading-overlay">
+                <img src="assets/Loading.gif" alt="Loading...">
+            </div>
+            <!-- Backdrop -->
+            <div class="att-modal-backdrop" *ngIf="showAttachmentPopup" (click)="closeAttachmentsPopup()"></div>
+
+            <!-- Modal -->
+            <div class="att-modal" *ngIf="showAttachmentPopup">
+                <div class="att-modal__header">
+                    <div class="att-modal__title">
+                        Attachments — {{ selectedAttachmentEmpCode }}
+                    </div>
+                    <button class="att-close" type="button" (click)="closeAttachmentsPopup()">×</button>
+                </div>
+
+                <div class="att-modal__body">
+                    <!-- Loading -->
+                    <div *ngIf="isAttachmentsLoading" class="att-loading">Loading attachments…</div>
+
+                    <!-- Table -->
+                    <table class="att-table" *ngIf="!isAttachmentsLoading">
+                        <thead>
+                            <tr>
+                                <th style="width:60%">File name</th>
+                                <th style="width:90px; text-align:center;">Download</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let it of attachmentresponse">
+                                <td [title]="it.fileName">{{ extractName(it.fileName) }}</td>
+                                <td style="text-align:center;">
+                                    <img src="assets/Icons/download_enabled.svg" alt="Download"
+                                        style="cursor:pointer; width:22px; height:20px;"
+                                        (click)="downloadAttachment(it)" />
+                                </td>
+                            </tr>
+                            <tr *ngIf="attachmentresponse.length === 0">
+                                <td colspan="3" style="padding:10px; color:#777;">No attachments found.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="att-modal__footer">
+                    <button type="button" class="att-btn" (click)="closeAttachmentsPopup()">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>

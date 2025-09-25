@@ -87,6 +87,26 @@
             </svg>
           </i><span style="font-family: Nunito Sans;">Payroll Input</span> </a>
 
+        <a [routerLink]="['/Master/masternavigation']" class="nav-link" routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          [ngClass]="{ 'inactive-link': !isActive('/Master/holidaymaster') }"><i>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <!-- Row 1 -->
+              <rect x="2" y="2" width="6" height="6" rx="1"></rect>
+              <rect x="9" y="2" width="6" height="6" rx="1"></rect>
+              <rect x="16" y="2" width="6" height="6" rx="1"></rect>
+              <!-- Row 2 -->
+              <rect x="2" y="9" width="6" height="6" rx="1"></rect>
+              <rect x="9" y="9" width="6" height="6" rx="1"></rect>
+              <rect x="16" y="9" width="6" height="6" rx="1"></rect>
+              <!-- Row 3 -->
+              <rect x="2" y="16" width="6" height="6" rx="1"></rect>
+              <rect x="9" y="16" width="6" height="6" rx="1"></rect>
+              <rect x="16" y="16" width="6" height="6" rx="1"></rect>
+            </svg>
+
+          </i><span style="font-family: Nunito Sans;">Masters</span> </a>
+
         <a (click)="Logout()"><i>
             <svg width="19" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path

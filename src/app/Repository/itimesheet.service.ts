@@ -13,16 +13,23 @@ export interface ITimesheetService {
 
   UploadDailyTimesheet(formData: FormData): Observable<APIResponse>;
   GetUnseizeData(companyCode: string, payPeriod: number, siteCode: string, city_Id: number, empid: string): Observable<APIResponse>;
-  PostUnseize (empIdJson: string,companyId: number, payPeriodId: number, siteCode: number, userId: string):Observable<APIResponse>;
-  GetUnseizeAttachment(companyCode: string, siteId: number, empCode: string, payPeriod: string):Observable<APIResponse>;
-  GetUnseizeFile(formData:FormData):Observable<APIResponse>;
+  PostUnseize(empIdJson: string, companyId: number, payPeriodId: number, siteCode: number, userId: string): Observable<APIResponse>;
+  GetUnseizeAttachment(companyCode: string, siteId: number, empCode: string, payPeriod: string): Observable<APIResponse>;
+  GetUnseizeFile(formData: FormData): Observable<APIResponse>;
 
   UploadDocumentSingleMulitiple(formData: FormData): Observable<APIResponse>;
 
-  GetTimesheetAttachment(CompanyCode:string,Site_ID:string,Employee_Code:string,
-    Payperiod:string)  : Observable<APIResponse>;
+  GetTimesheetAttachment(CompanyCode: string, Site_ID: string, Employee_Code: string,
+    Payperiod: string): Observable<APIResponse>;
 
-    DownloadFile(filepath:string,filename:string)  : Observable<APIResponse>;
+  DownloadFile(filepath: string, filename: string): Observable<APIResponse>;
 
-    SaveTimesheet(payload:any):Observable<APIResponse>;
+  SaveTimesheet(payload: any): Observable<APIResponse>;
+
+  GetTimesheetDataforAudit(companyCode: string, payPeriod: number, siteCode: string,
+    city_Id: string, empid: number): Observable<APIResponse>;
+
+  RejectTimesheet(RejectEmpId: any): Observable<APIResponse>;
+
+  AttendanceReport(formData: FormData): Observable<APIResponse>;
 }

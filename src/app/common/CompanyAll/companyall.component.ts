@@ -83,14 +83,10 @@ searchText: string = '';
       console.warn('UserProfile not found in session storage');
     }
     this.BindCompanyCode();
-    const userInfo = {
-      "userId": this.userdetail.userId,
-      "userName": this.userdetail.userName,
-    };
   }
 
   BindCompanyCode() {
-    this._commonService.GetCompanyCodes(this.userdetail.userId).subscribe({
+    this._commonService.GetCompanyCodes(this.userdetail.user_Id).subscribe({
       next: res => {
         //console.log(res);
         this.companyCode = res.Data;

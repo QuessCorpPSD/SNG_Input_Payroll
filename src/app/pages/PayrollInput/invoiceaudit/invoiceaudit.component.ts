@@ -26,6 +26,7 @@ import { finalize } from "rxjs";
 import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.component";
 import { HttpResponse } from "@angular/common/http";
 import { PayrollinputComponent } from "../payrollinput.component";
+import { SelectionModel } from "@angular/cdk/collections";
 
 
 const timesheetservice = InjectionToken<ITimesheetService>;
@@ -70,20 +71,20 @@ export interface AttachmentItem {
 }
 
 @Component({
-  selector: 'timesheet',
+  selector: 'invoiceaudit',
   standalone: true,
   imports: [CommonModule, MatTableModule, MatCheckboxModule, MatPaginatorModule,
     MatSortModule, MatSelectModule, MatInputModule, MatFormFieldModule, ReactiveFormsModule,
     FormsModule, PayrollinputComponent, AlertpopupComponent],
-  templateUrl: './timesheet.component.html',
-  styleUrl: './timesheet.component.css',
+  templateUrl: './invoiceaudit.component.html',
+  styleUrl: './invoiceaudit.component.css',
   encapsulation: ViewEncapsulation.None,
   providers: [
     { provide: DASH_TOKEN, useClass: OnboardingServices },
     { provide: timesheetservice, useClass: TimesheetService },
   ]
 })
-export class TimesheetComponent {
+export class InvoiceauditComponent {
   selectedCC?: number;
   selectedPP?: string;
   companyUI: any;
@@ -194,8 +195,10 @@ export class TimesheetComponent {
     }
     //console.log(this.payperiodUI);
   }
+
+
   ngOnInit(): void {
-    this.Switchpage = "Daily";
+
     const json = this._sessionStoreage.getItem('UserProfile');
     if (json) {
       this.userdetail = JSON.parse(this.decry.decrypt(json));
@@ -204,10 +207,6 @@ export class TimesheetComponent {
       console.warn('UserProfile not found in session storage');
     }
 
-    const userInfo = {
-      "userId": this.userdetail.userId,
-      "userName": this.userdetail.userName,
-    };
     this.citynameUI = {
       city_Name: '',
       city_Id: 0
@@ -234,6 +233,29 @@ export class TimesheetComponent {
       this.attendanceDownload();
       this.isLoading = true;
     }
+  }
+
+
+  selection = new SelectionModel<any>(true, []);
+  isAnyFilteredRowSelected(): boolean {
+    return this.selection.selected.some(sel =>
+      this.apiResponseDaily.filteredData.some(row => row.offerId === sel.offerId)
+    );
+  }
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.apiResponseDaily?.data?.length;
+    return numSelected === numRows;
+  }
+
+  isPartialSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.apiResponseDaily.data.length;
+    return numSelected > 0 && numSelected < numRows;
+  }
+
+  toggleRow(row: any) {
+    this.selection.toggle(row);
   }
 
   attendanceDownload() {
@@ -455,16 +477,16 @@ export class TimesheetComponent {
 
     if (this.companyUI && this.payperiodUI && this.sitenameUI) {
       this.isLoading = true;
-      this.GetEmployeeTimesheetDaywise(this.companyUI.companyCode, this.payperiodUI.payfrequencyid,
+      this.GetTimesheetDataforAudit(this.companyUI.companyCode, this.payperiodUI.payfrequencyid,
         this.sitenameUI.siteCode, this.citynameUI.city_Id, this.userdetail.userId)
     }
   }
 
-  GetEmployeeTimesheetDaywise(companyCode: string, payPeriod: string, siteCode: string,
-    city_Id: string, empid: string) {
-    this.timesheetService.GetEmployeeTimesheetDaywise(companyCode, payPeriod, siteCode, city_Id, empid).subscribe({
+  GetTimesheetDataforAudit(companyCode: string, payPeriod: number, siteCode: string,
+    city_Id: string, empid: number) {
+    this.timesheetService.GetTimesheetDataforAudit(companyCode, payPeriod, siteCode, city_Id, empid).subscribe({
       next: res => {
-        console.log(res.Data);
+        //console.log(res.Data);
         if (!res.Data || res.Data == null) {
           alert("No data available to display.");
           this.isLoading = false;
@@ -472,7 +494,7 @@ export class TimesheetComponent {
         }
 
         this.apiResponseDaily = res.Data;
-
+        //console.log(this.apiResponseDaily);
         const table: RawRow[] = this.apiResponseDaily?.data?.Table0 ?? [];
         if (!table.length) return;
 
@@ -494,42 +516,42 @@ export class TimesheetComponent {
               isWeekend: dow === 0 || dow === 6
             } as DayCol;
           });
-
+        //console.log(this.dayCols);
         // 2) normalize table rows to view rows
         this.rows = table.map((r: RawRow): ViewRow => {
           const row: ViewRow = {
-            SlNo: r['SlNo'],
-            EmpID: r['EmpID'],
-            EmpTempID: r['EmpTempID'],
-            EmployeeCode: r['EmployeeCode'],
-            EmployeeName: r['EmployeeName'],
-            DOJ: r['DOJ'] ?? null,
-            Seperation: r['Seperation'] ?? null,
-            WDWH: r['WD-WH'] ?? null,
-            DEHE: r['DE-HE'] ?? null,  // will be recalculated if data exists
-            L: r['L'] ?? null,
-            H: r['H'] ?? null,
-            CO: r['CO'] ?? null,
-            WO: r['WO'] ?? null,
-            Status: r['Status'] ?? 'Assigned',
-            Remarks: r['Remarks'] ?? null,
-            Approver: r['Approver'] ?? null,
-            OT: r['OT'] ?? null,
-            dayValues: this.dayCols.map(dc => (r[dc.key] ?? null)),
+            SlNo: r["SlNo"],
+            EmpID: r["EmpID"],
+            EmpTempID: r["EmpTempID"],
+            EmployeeCode: r["EmployeeCode"],
+            EmployeeName: r["EmployeeName"],
+            DOJ: r["DOJ"] ?? null,
+            Seperation: r["Seperation"] ?? null,
+            WDWH: r["WD-WH"] ?? null,
+            DEHE: r["DE-HE"] ?? null,
+            L: r["L"] ?? null,
+            H: r["H"] ?? null,
+            CO: r["CO"] ?? null,
+            WO: r["WO"] ?? null,
+            Status: r["Status"] ?? "Assigned",
+            Remarks: r["Remarks"] ?? null,
+            Approver: r["Approver"] ?? null,
+            OT: r["OT"] ?? null,
+            dayValues: Array.isArray(this.dayCols)
+              ? this.dayCols.map(dc => r[dc.key] ?? null)
+              : [],
             selected: false
           };
 
-          // 🔥 recalc only if at least one dayValue is not null/empty
-          if (row.dayValues.some(v => v !== null && v !== '')) {
-            this.recalculateSummary(row);
-          }
+          // if (row.dayValues.some(v => v !== null && v !== "")) {
+          //   this.recalculateSummary(row);
+          // }
 
           return row;
         });
+        //console.log(this.rows);
 
         this.filteredRows = [...this.rows];
-
-
 
         this.isLoading = false;
 
@@ -543,227 +565,6 @@ export class TimesheetComponent {
 
   trackRow: TrackByFunction<ViewRow> = (_, row) => row.EmpID;
   trackDay: TrackByFunction<DayCol> = (_, d) => d.key;
-
-
-
-  onDailyTemplateClick(): void {
-    this.isLoading = true;
-    if (!this.companyUI) {
-      alert("Select Company Code");
-      this.isLoading = false;
-      return;
-    }
-    if (!this.payperiodUI) {
-      alert("Select Pay Peroid");
-      this.isLoading = false;
-      return;
-    }
-    if (!this.sitenameUI) {
-      alert("Select Group Name");
-      this.isLoading = false;
-      return;
-    }
-
-    if (!this.citynameUI) {
-      this.citynameUI = {
-        cityid: 0
-      };
-    }
-    else {
-      this.attendanceDailyDownload();
-    }
-  }
-
-  attendanceDailyDownload() {
-    this.isLoading = true;
-
-    // (Optional) remove if unused
-    // const formData = new FormData();
-
-    this.timesheetService
-      .GetEmployeeTimesheetDaywiseDownload(
-        this.companyUI.companyCode,
-        this.payperiodUI.payfrequencyid,
-        this.sitenameUI?.siteCode ?? '',
-        this.citynameUI?.city_Id ?? 0,
-        this.userdetail.userId
-      )
-      .pipe(
-        // ensure loader always stops
-        finalize(() => (this.isLoading = false))
-      )
-      .subscribe({
-        next: (res) => {
-          if (!res?.Data) {
-            alert('No data available to display.');
-            return;
-          }
-
-          this.apiResponseDailyTemplate = res.Data;
-
-          const table0 = Array.isArray(this.apiResponseDailyTemplate?.Table0)
-            ? this.apiResponseDailyTemplate.Table0
-            : this.apiResponseDailyTemplate?.data?.Table0 ?? [];
-
-          if (!Array.isArray(table0) || table0.length === 0) {
-            alert('No data available to display.');
-            return;
-          }
-
-          const dataToExport = table0.map((item: any) => {
-            const upper: any = {};
-            for (const key in item) {
-              if (Object.prototype.hasOwnProperty.call(item, key)) {
-                upper[key.toUpperCase()] = item[key];
-              }
-            }
-            return upper;
-          });
-
-          // If downloadExcel is heavy/sync, queue it so spinner can render
-          requestAnimationFrame(() => {
-            this.downloadExcel(dataToExport, 'Attendance_Daily');
-          });
-        },
-        error: (err) => {
-          console.error('Error:', err);
-          alert('Failed to download. Please try again.');
-        }
-      });
-  }
-
-  onDailyImportClick(fileInputDaily: HTMLInputElement): void {
-    this.isLoading = true;
-    if (!this.companyUI) {
-      alert("Select Company Code");
-      this.isLoading = false;
-      return;
-    }
-    if (!this.payperiodUI) {
-      alert("Select Pay Peroid");
-      this.isLoading = false;
-      return;
-    }
-    if (!this.payperiodUI) {
-      alert("Select Group Name");
-      this.isLoading = false;
-      return;
-    }
-    fileInputDaily.click();
-  }
-
-  onFileChangeDaily(event: any): void {
-    const target: DataTransfer = <DataTransfer>(event.target);
-
-    if (!target.files || target.files.length !== 1) {
-      console.error('Please upload only one Excel file.');
-      this.isLoading = false;
-      return;
-    }
-
-    const file = target.files[0];
-    this.excelFiledaily = target.files[0];
-    //Check Column Headers
-    const formData = new FormData();
-    if (this.excelFiledaily) {
-      formData.append('file', this.excelFiledaily);
-      formData.append('User', this.userdetail.userId);
-      formData.append('CompanyCode', this.companyUI.companyCode);
-      formData.append('SiteID', this.sitenameUI.siteCode);
-      formData.append('Payperiod', this.payperiodUI.payfrequencyid);
-      this.timesheetService.UploadDailyTimesheet(formData).subscribe({
-        next: res => {
-          this.UploadedResponse = res;
-
-          if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.data.response === 'Import Successfully Done.') {
-            alert('Import Successfully Done.');
-            this.isLoading = false;
-            this.showPopup = true;
-            this.popupMessage = 'Import Successfully Done.';
-          }
-          else if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.data.response === 'Failed to import.') {
-
-            const errorArray = JSON.parse(this.UploadedResponse.data.errors[0]);
-            const exportData = errorArray.map((item: any) => ({
-              MESSAGE: item.MESSAGE || item.Message || ''
-            }));
-
-            const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
-            const workbook: XLSX.WorkBook = {
-              Sheets: { 'ErrorMessages': worksheet },
-              SheetNames: ['ErrorMessages']
-            };
-
-            // Export the file
-            XLSX.writeFile(workbook, 'ErrorMessages_Increment.xlsx');
-            this.isLoading = false;
-            this.showPopup = true;
-            this.popupMessage = 'Import Failed.';
-
-          }
-          else {
-            if (this.UploadedResponse.data.response != '') {
-              alert(this.UploadedResponse.data.response);
-              this.isLoading = false;
-            }
-            else {
-              alert('Error while processing response.');
-              this.isLoading = false;
-            }
-
-          }
-        },
-        error: err => {
-          console.error('❌ Upload failed', err);
-        }
-      });
-
-    }
-    else {
-      alert("No File");
-      this.isLoading = false;
-    }
-  }
-
-  openUploader(input: HTMLInputElement) {
-    input.value = '';      // clear so the same file can be selected again
-    input.click();
-  }
-
-
-  onFileSelected(row: ViewRow, evt: Event): void {
-    const input = evt.target as HTMLInputElement;
-    const file = input.files?.[0];
-    if (!file) return;
-
-    const empCode = row.EmployeeCode; // or row.EmployeeCode
-
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('User', this.userdetail.userId);
-    formData.append('Employeeid', empCode);
-    formData.append('CompanyCode', this.companyUI.companyCode);
-    formData.append('Site_ID', this.sitenameUI.siteCode);
-    formData.append('Payperiod_ID', this.payperiodUI.payfrequencyid);
-    formData.append('Payperiod', this.payperiodUI.payPeriod);
-
-    // Example API call
-    this.timesheetService.UploadDocumentSingleMulitiple(formData).subscribe({
-      next: res => {
-        if (res.Data?.response === 'File Uploaded successfully') {
-          alert('File Uploaded successfully');
-          input.value = '';
-          return;
-        }
-        else {
-          alert('File Uploaded failed');
-          input.value = '';
-          return;
-        }
-      },
-      error: (err) => {/* show error toast */ }
-    });
-  }
 
   toggleAllRows(checked: boolean) {
     this.rows.forEach(r => r.selected = checked);
@@ -1044,199 +845,76 @@ export class TimesheetComponent {
     return d ? `${i}.${d}` : i;
   }
 
-  Saveclick() {
+  Rejectclick() {
     this.isLoading = true;
     const selectedRows = this.rows.filter(r => r.selected);
+    const selectedOfferIds = selectedRows.map(row => ({ EmpID: row.EmployeeCode }));
+    const RejectEmpId = {
+      EmpID: selectedOfferIds,
+      companyCode: this.companyUI.companyCode,
+      payPeriodId: this.payperiodUI.payfrequencyid,
+      userId: this.userdetail.user_Id
+    }
+    console.log(RejectEmpId);
+    console.log(this.userdetail.user_Id);
+    if (RejectEmpId && Array.isArray(RejectEmpId.EmpID) && RejectEmpId.EmpID.length > 0) {
+      this.timesheetService.RejectTimesheet(RejectEmpId).subscribe({
+        next: res => {
+          const result = res.Data;
+          const errormsg = result[0]?.RESULT;
 
-    if (!selectedRows.length) {
-      alert("Please select at least one row before saving.");
+          if (errormsg === 'Selected Timesheet Rejected') {
+            this.showPopup = true;
+            this.popupMessage = "TImesheet Rejected Successful";
+            this.isLoading = false;
+          } else {
+            alert("No validations returned");
+            this.isLoading = false;
+          }
+
+          this.isLoading = false;
+        },
+        error: err => {
+          console.error(err.message);
+          alert("Rejection failed.");
+          this.isLoading = false;
+        }
+      });
+    }
+    else {
+      alert("Please select atleast one Employee Id");
+      this.isLoading = false;
       return;
     }
-
-    for (const row of selectedRows) {
-      for (let i = 0; i < row.dayValues.length; i++) {
-        const val = row.dayValues[i];
-        const col = this.dayCols[i]; // get date from header
-
-        if (val === null || val === undefined || val === '') {
-          alert(`Row ${row.SlNo}: Missing entry for date ${col.date}`);
-          return; // stop save
-        }
-      }
-    }
-
-    const payload = {
-      companyCode: this.companyUI.companyCode,
-      siteId: this.sitenameUI.siteCode,
-      payPeriodId: this.payperiodUI.payfrequencyid,
-      payPeriod: this.payperiodUI.payPeriod,  // "2025-07"
-      createdBy: this.userdetail.userId,
-      status: "1",  // Save Status
-      rows: selectedRows.map(row => ({
-        EmpID: row.EmployeeCode || '',
-        DOJ: row.DOJ || '',
-        Seperation: row.Seperation || '',
-        Status: row.Status || '',
-        Remarks: row.Remarks || '',
-        Approver: row.Approver || '',
-        OT: row.OT || '',
-        dayEntries: row.dayValues.map((val, i) => ({
-          date: this.dayCols[i].date,
-          value: val
-        }))
-      }))
-    };
-
-
-    this.timesheetService.SaveTimesheet(payload).subscribe({
-      next: res => {
-        console.log(res);
-        this.UploadedResponse = res;
-
-        // Parse string to array
-        let parsedResponse = [];
-        try {
-          parsedResponse = JSON.parse(this.UploadedResponse.Data.response);
-        } catch (e) {
-          console.error("Failed to parse response:", e);
-        }
-
-        if (this.UploadedResponse.StatusCode === 200 && parsedResponse[0]?.[""] === 'Data submitted successfully.') {
-          this.isLoading = false;
-          this.showPopup = true;
-          this.popupMessage = 'Daily Timesheet Saved Successfully Done.';
-        }
-        else if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.data.response === 'Failed to import.') {
-
-          const errorArray = JSON.parse(this.UploadedResponse.data.errors[0]);
-          const exportData = errorArray.map((item: any) => ({
-            MESSAGE: item.RESULT || item.Result || ''
-          }));
-
-          const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
-          const workbook: XLSX.WorkBook = {
-            Sheets: { 'ErrorMessages': worksheet },
-            SheetNames: ['ErrorMessages']
-          };
-
-          // Export the file
-          XLSX.writeFile(workbook, 'ErrorMessages_Timesheet.xlsx');
-          this.isLoading = false;
-          this.showPopup = true;
-          this.popupMessage = 'Failed to Save.';
-
-        }
-        else {
-          if (this.UploadedResponse.data.response != '') {
-            alert(this.UploadedResponse.data.response);
-            this.isLoading = false;
-          }
-          else {
-            alert('Error while processing response.');
-            this.isLoading = false;
-          }
-
-        }
-      },
-      error: err => console.error("Error:", err)
-    });
   }
 
-  Submitclick() {
+  AttendanceReportclick() {
+    //console.log(this.payperiodUI);
     this.isLoading = true;
-    const selectedRows = this.rows.filter(r => r.selected);
+    const formData = new FormData();
+    formData.append('companyCode', this.companyUI.companyCode);
+    formData.append('groupName', this.sitenameUI.siteCode);
+    formData.append('payPeriodId', this.payperiodUI.payfrequencyid);
 
-    if (!selectedRows.length) {
-      alert("Please select at least one row before saving.");
-      return;
-    }
-
-    for (const row of selectedRows) {
-      for (let i = 0; i < row.dayValues.length; i++) {
-        const val = row.dayValues[i];
-        const col = this.dayCols[i]; // get date from header
-
-        if (val === null || val === undefined || val === '') {
-          alert(`Row ${row.SlNo}: Missing entry for date ${col.date}`);
-          return; // stop save
-        }
-      }
-    }
-
-    const payload = {
-      companyCode: this.companyUI.companyCode,
-      siteId: this.sitenameUI.siteCode,
-      payPeriodId: this.payperiodUI.payfrequencyid,
-      payPeriod: this.payperiodUI.payPeriod,  // "2025-07"
-      createdBy: this.userdetail.userId,
-      status: "2",  // Submit Status
-      rows: selectedRows.map(row => ({
-        EmpID: row.EmployeeCode || '',
-        DOJ: row.DOJ || '',
-        Seperation: row.Seperation || '',
-        Status: row.Status || '',
-        Remarks: row.Remarks || '',
-        Approver: row.Approver || '',
-        OT: row.OT || '',
-        dayEntries: row.dayValues.map((val, i) => ({
-          date: this.dayCols[i].date,
-          value: val
-        }))
-      }))
-    };
-
-
-    this.timesheetService.SaveTimesheet(payload).subscribe({
-      next: res => {
-        console.log(res);
-        this.UploadedResponse = res;
-
-        // Parse string to array
-        let parsedResponse = [];
-        try {
-          parsedResponse = JSON.parse(this.UploadedResponse.Data.response);
-        } catch (e) {
-          console.error("Failed to parse response:", e);
-        }
-        if (this.UploadedResponse.StatusCode === 200 && parsedResponse[0]?.[""] === 'Data submitted successfully.') {
-          this.isLoading = false;
-          this.showPopup = true;
-          this.popupMessage = 'Daily Timesheet Successfully Submitted.';
-        }
-        else if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.data.response === 'Failed to import.') {
-
-          const errorArray = JSON.parse(this.UploadedResponse.data.errors[0]);
-          const exportData = errorArray.map((item: any) => ({
-            MESSAGE: item.RESULT || item.Result || ''
-          }));
-
-          const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
-          const workbook: XLSX.WorkBook = {
-            Sheets: { 'ErrorMessages': worksheet },
-            SheetNames: ['ErrorMessages']
-          };
-
-          // Export the file
-          XLSX.writeFile(workbook, 'ErrorMessages_Timesheet.xlsx');
-          this.isLoading = false;
-          this.showPopup = true;
-          this.popupMessage = 'Failed to Submit.';
-
-        }
-        else {
-          if (this.UploadedResponse.data.response != '') {
-            alert(this.UploadedResponse.data.response);
-            this.isLoading = false;
+    this.timesheetService.AttendanceReport(formData)
+      .pipe(
+        finalize(() => this.isLoading = false) // ✅ only one place to stop loading
+      )
+      .subscribe({
+        next: res => {
+          //console.log(res);
+          if (res.StatusCode === 200) {
+            const data = res.Data;
+            this.downloadExcelFromBase64(data.file, data.fileName);
+          } else {
+            alert("Something went wrong while generating the report.");
           }
-          else {
-            alert('Error while processing response.');
-            this.isLoading = false;
-          }
-
+        },
+        error: error => {
+          console.error('Error:', error);
+          alert("Server error occurred.");
         }
-      },
-      error: err => console.error("Error:", err)
-    });
+      });
   }
 
   applyFilter() {
@@ -1256,5 +934,4 @@ export class TimesheetComponent {
   onNumericInput(event: any) {
     event.target.value = event.target.value.replace(/[^0-9]/g, '');
   }
-
 }

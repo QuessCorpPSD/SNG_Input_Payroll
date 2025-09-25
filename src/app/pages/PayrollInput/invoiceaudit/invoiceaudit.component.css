@@ -21,12 +21,12 @@
   flex-direction: column;
   gap: 8px;
   padding-left:20px;
-  padding-right: 40px;
+  padding-right: 25px;
   /* no overflow here */
 }
 
 .table-scroll {
-  max-height: 450px;
+  max-height: 350px;
   overflow-y: auto;
   overflow-x: auto;              /* both axes if needed */
   scrollbar-gutter: stable;       /* reserves space for scrollbar (no overlap, no layout shift) */
@@ -42,10 +42,10 @@
   gap: 8px;
   font-family: "Nunito Sans";
   font-size: 12px;
-  max-height: 500px;
+  max-height: 350px;
   overflow: hidden; 
   scrollbar-width: 100%;    
-  padding-left: 24px;
+  padding-left: 20px;
   padding-left: 40px;
 
 }

@@ -26,6 +26,9 @@ import { UnseizeComponent } from './pages/PayrollInput/unseize/unseize.component
 import { OnetimeinputComponent } from './pages/PayrollInput/onetimeinput/onetimeinput.component';
 import { FinalsubmissionComponent } from './pages/PayrollInput/finalsubmission/finalsubmission.component';
 import { TimesheetComponent } from './pages/PayrollInput/timesheet/timesheet.component';
+import { InvoiceauditComponent } from './pages/PayrollInput/invoiceaudit/invoiceaudit.component';
+import { MasternavigationComponent } from './pages/Masters/MasterNavigation/masternavigation/masternavigation.component';
+import { HolidaymasterComponent } from './pages/Masters/holidaymaster/holidaymaster.component';
 
 
 
@@ -48,9 +51,24 @@ export const routes: Routes = [
           { path: 'activation', component: ActivationLWDComponent },
           { path: 'unseize', component: UnseizeComponent },
           { path: 'timesheet', component: TimesheetComponent },
+          { path: 'invoiceaudit', component: InvoiceauditComponent },
           { path: 'increment', component: IncrementComponent },
           { path: 'onetimeinput', component: OnetimeinputComponent },
           { path: 'finalsubmission', component: FinalsubmissionComponent }
+        ]
+      },
+            {
+        path: 'masternavigation',
+        component: MasternavigationComponent,
+        children: [
+          { path: 'holidaymaster', component: HolidaymasterComponent }
+          // { path: 'activation', component: ActivationLWDComponent },
+          // { path: 'unseize', component: UnseizeComponent },
+          // { path: 'timesheet', component: TimesheetComponent },
+          // { path: 'invoiceaudit', component: InvoiceauditComponent },
+          // { path: 'increment', component: IncrementComponent },
+          // { path: 'onetimeinput', component: OnetimeinputComponent },
+          // { path: 'finalsubmission', component: FinalsubmissionComponent }
         ]
       },
       //   { path: 'UI', component: SopComponent },

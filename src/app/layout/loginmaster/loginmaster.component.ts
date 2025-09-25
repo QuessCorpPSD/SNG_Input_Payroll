@@ -72,24 +72,22 @@ username:string = ''
  if (!this.router.navigated) {
     location.reload(); // Only if you need hard reload
   }
-  // Optionally clear any custom cache service data
-  //this.cacheService?.clear(); // if you're using a caching service
-   this.http.get('http://localhost:7000', { responseType: 'text' })
-      .subscribe({
-        next: (response: string) => {
-          
-          // If you're using jQuery (not recommended), you can do:
-          this.computername=response
-         // console.log("Computer Name " +this.computername);
-          // Angular way (recommended):
-          // this.companyName = response;
-        },
-        error: (error) => {
-          console.error('Error fetching data', error);
-        }
-      });
-    //console.log(this.deviceInfo);
-  }
+  
+    $.ajax({
+      url: 'http://localhost:7000',
+      type: 'GET',
+      cache: false,
+      success: (response) => {
+        this.computername = response;
+        console.log("Computer Name:", response);
+      },
+      error: (xhr, status, error) => {
+        console.error('Error fetching data:', error);
+      }
+    });
+ 
+
+ }
  
  getIpAddress(): void {
     this.http.get('https://api.ipify.org?format=json').subscribe({

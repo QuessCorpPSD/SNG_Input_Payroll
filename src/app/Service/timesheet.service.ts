@@ -16,6 +16,7 @@ export class TimesheetService implements ITimesheetService {
 
   GetEmployeeTimesheetDaywise(companyCode: string, payPeriod: string, siteCode: string,
     city_Id: string, empid: string): Observable<APIResponse> {
+    console.log(this.environment.apiUrl + 'Timesheet/GetEmployeeTimesheetDaywise/' + companyCode + '/' + siteCode + '/' + empid + '/' + payPeriod + '/' + city_Id);
     return this.http.get<APIResponse>(this.environment.apiUrl + 'Timesheet/GetEmployeeTimesheetDaywise/' + companyCode + '/' + siteCode + '/' + empid + '/' + payPeriod + '/' + city_Id);
   }
 
@@ -51,20 +52,20 @@ export class TimesheetService implements ITimesheetService {
     return this.http.post<APIResponse>(url, formData);
   }
 
-    UploadDocumentSingleMulitiple(formData: FormData): Observable<APIResponse> {
+  UploadDocumentSingleMulitiple(formData: FormData): Observable<APIResponse> {
     return this.http.post<APIResponse>(
       this.environment.apiUrl + 'Timesheet/UploadDocumentSingleMulitiple',
       formData // send as FormData directly
     );
   }
 
-   GetTimesheetAttachment(CompanyCode:string,Site_ID:string,Employee_Code:string,
-    Payperiod:string)  : Observable<APIResponse> {
+  GetTimesheetAttachment(CompanyCode: string, Site_ID: string, Employee_Code: string,
+    Payperiod: string): Observable<APIResponse> {
     return this.http.get<APIResponse>(this.environment.apiUrl + 'Timesheet/GetTimesheetAttachment/' + CompanyCode + '/' + Site_ID + '/' + Employee_Code + '/' + Payperiod);
   }
 
-  DownloadFile(filepath:string,filename:string) : Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.environment.apiUrl + 'Common/DownloadFile?filePath='+filepath+'&fileName='+filename);
+  DownloadFile(filepath: string, filename: string): Observable<APIResponse> {
+    return this.http.get<APIResponse>(this.environment.apiUrl + 'Common/DownloadFile?filePath=' + filepath + '&fileName=' + filename);
   }
 
   SaveTimesheet(formData: FormData): Observable<APIResponse> {
@@ -73,6 +74,24 @@ export class TimesheetService implements ITimesheetService {
       formData // send as FormData directly
     );
   }
- 
+
+  GetTimesheetDataforAudit(companyCode: string, payPeriod: number, siteCode: string,
+    city_Id: string, empid: number): Observable<APIResponse> {
+    console.log(this.environment.apiUrl + 'Timesheet/GetTimesheetDataforAudit/' + companyCode + '/' + siteCode + '/' + empid + '/' + payPeriod + '/' + city_Id);
+    return this.http.get<APIResponse>(this.environment.apiUrl + 'Timesheet/GetTimesheetDataforAudit/' + companyCode + '/' + siteCode + '/' + empid + '/' + payPeriod + '/' + city_Id);
+  }
+
+  RejectTimesheet(rejectEmpId: any): Observable<APIResponse> {
+    const url = `${this.environment.apiUrl}Timesheet/RejectTimesheet`;
+    console.log("RejectTimesheet API:", url, rejectEmpId);
+    return this.http.post<APIResponse>(url, rejectEmpId);
+  }
+
+  AttendanceReport(formData: FormData): Observable<APIResponse> {
+        const url = `${this.environment.apiUrl}Timesheet/GetAttendanceReport`;
+        //console.log(url);
+        return this.http.post<APIResponse>(url, formData);
+    }
+
 }
 
