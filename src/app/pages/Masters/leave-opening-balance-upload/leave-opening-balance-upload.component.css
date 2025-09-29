@@ -1,0 +1,105 @@
+.h1 {
+  font-size: 15px;
+  color: #fff;
+  text-align: center;
+  background-color: rgb(55, 112, 153);
+  width: 100%;
+  padding: 0px 360px; 
+  font-family: inherit;
+  box-sizing: border-box; 
+  
+}
+
+@media(min-width: 768px) {
+  .h1 {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0px 360px;
+  }
+}
+
+.btn-search {
+  background-color: #0d6efd;
+  color: #fff;
+}
+
+
+.btn-download {
+  background-color: #20c997;
+  color: #fff;
+}
+
+.btn-upload {
+  background-color: #6f42c1;
+  color: #fff;
+}
+
+.material-icons {
+  font-size: 20px;
+  vertical-align: middle;
+}
+
+.form-control-sm, .form-select-sm {
+  height: calc(1.5em + 0.5rem + 2px);
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+}
+.small-input {
+  max-width: 200px; 
+}
+
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25;
+}
+input[type="date"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  width: 100%;
+  padding: 8px 8px;
+  font-size: 14px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #495057;
+  box-sizing: border-box;
+  height: 30px; 
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 5;
+  cursor: pointer;
+}
+
+input[type="date"]:focus {
+  border-color: #86b7fe;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+  
+}
+
+
+.small-datepicker .mat-mdc-text-field-wrapper {
+  --mdc-outlined-text-field-container-height: 36px; /* default is 56px */
+  --mdc-outlined-text-field-input-text-size: 13px;  /* smaller font */
+  --mdc-outlined-text-field-label-text-size: 12px;  /* smaller label */
+}
+
+.small-datepicker .mat-mdc-input-element {
+  padding: 0 4px !important;
+}
+
+.card-body {
+  width: 100%;
+  display: flex;
+  gap: 15px;
+  padding: 0px !important;
+}
+
+.form-label {
+  font-size: 12px !important;
+  color: #222 !important;
+}

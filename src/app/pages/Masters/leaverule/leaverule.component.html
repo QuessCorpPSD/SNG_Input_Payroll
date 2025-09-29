@@ -3,16 +3,20 @@
         <div class="row g-3 align-items-end">
             <div class="card-body d-flex gap-2">
                 <div class="col-md-3">
-                <label class="form-label">Company Code</label>
+                    <label class="form-label text-muted small">Company Code</label>
                     <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label">Site Name</label>
+                    <label class="form-label text-muted small">Site Name</label>
                     <groupname [selectedCompanyId]="companyId" (sitenameEmit)="groupnameEvent($event)">
                     </groupname>
                 </div>
                 <div class="col-md-3">
-                    <div class="d-flex gap-2" style="padding-top: 32px;">
+                    <label class="form-label text-muted small">State</label>
+                    <state (stateEmit)="stateEvent($event)"></state>
+                </div>
+                <div class="col-md-3" style="padding-top: 27px;">
+                    <div class="d-flex gap-2">
                         <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
                             (click)="Searchclick()" matTooltip="Search">
                             <mat-icon>search</mat-icon>
@@ -26,12 +30,12 @@
                             <mat-icon>cloud_download</mat-icon>
                         </button>
                         <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
-                            (click)="ImportClick(fileInput)" matTooltip="Upload">
+                            (click)="ImportClick(fileInput)" matTooltip="Import">
                             <mat-icon>cloud_upload</mat-icon>
                         </button>
                         <button *ngIf="this.dataSource && this.dataSource.data && this.dataSource.data.length > 0"
                             class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
-                            (click)="ExportClick()" matTooltip="Excel Export" >
+                            (click)="ExportClick()" matTooltip="Excel Export">
                             <mat-icon>table_chart</mat-icon>
                         </button>
                         <input type="file" #fileInput style="display: none;" (click)="fileInput.value=''"
@@ -40,36 +44,36 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-12" style="padding-left: 25px;">
-                <div class="table-wrapper">
-                    <div class="table-scroll">
-                        <table class="previewtable" mat-table [dataSource]="dataSource" matSort
-                            class="custom-table mat-elevation-z8">
-                            <!-- Dynamic Columns -->
-                            <ng-container *ngFor="let column of dynamicColumns" [matColumnDef]="column">
-                                <mat-header-cell *matHeaderCellDef mat-sort-header>{{ column }}</mat-header-cell>
-                                <mat-cell *matCellDef="let element"> {{ element[column] }} </mat-cell>
-                            </ng-container>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12" style="padding-left: 25px;">
+        <div class="table-wrapper">
+            <div class="table-scroll">
+                <table class="previewtable" mat-table [dataSource]="dataSource" matSort
+                    class="custom-table mat-elevation-z8">
+                    <!-- Dynamic Columns -->
+                    <ng-container *ngFor="let column of dynamicColumns" [matColumnDef]="column">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>{{ headerMap[column] || column
+                            }}</mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{ element[column] }} </mat-cell>
+                    </ng-container>
 
-                            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                            <mat-row *matRowDef="let row; columns: displayedColumns;"
-                                (click)="onTopRowClick(row)"></mat-row>
-                        </table>
-                    </div>
-                    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons></mat-paginator>
-                </div>
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onTopRowClick(row)"></mat-row>
+                </table>
             </div>
+            <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons></mat-paginator>
         </div>
     </div>
 </div>
 <ng-template #popupTpl>
     <h2 mat-dialog-title class="d-flex justify-content-between align-items-center">
-    <span>Holiday Master</span>
-    <button mat-icon-button mat-dialog-close aria-label="Close">
-      <mat-icon>close</mat-icon>
-    </button>
-  </h2>
+        <span>Leave Rules</span>
+        <button mat-icon-button mat-dialog-close aria-label="Close">
+            <mat-icon>close</mat-icon>
+        </button>
+    </h2>
 
     <mat-dialog-content class="mat-typography">
         <!-- your exact div goes here -->
@@ -78,7 +82,7 @@
                 <div class="col-md-4">
                     <label class="form-label text-muted small">Company Code</label>
                     <ng-container *ngIf="isNew; else existingCompany">
-                        <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+                        <companyall (companyEmit)="handleCompanyEventpopup($event)"></companyall>
                     </ng-container>
                     <ng-template #existingCompany>
                         <label class="form-control" style="font-size: 11px;">{{ selectedrowCompanyCode }}</label>
@@ -88,7 +92,7 @@
                 <div class="col-md-4">
                     <label class="form-label text-muted small">Site Name</label>
                     <ng-container *ngIf="isNew; else existingSite">
-                        <groupname [selectedCompanyId]="companyId" (sitenameEmit)="groupnameEvent($event)">
+                        <groupname [selectedCompanyId]="companyIdpopup" (sitenameEmit)="groupnameEventpopup($event)">
                         </groupname>
                     </ng-container>
                     <ng-template #existingSite>
@@ -99,7 +103,7 @@
                 <div class="col-md-4">
                     <label class="form-label text-muted small">State</label>
                     <ng-container *ngIf="isNew; else existingState">
-                        <state (stateEmit)="stateEvent($event)"></state>
+                        <state (stateEmit)="stateEventpopup($event)"></state>
                     </ng-container>
                     <ng-template #existingState>
                         <label class="form-control" style="font-size: 11px;">{{ selectedrowState }}</label>
@@ -108,58 +112,86 @@
             </div>
 
             <div class="row" style="padding-top: 1rem;">
-                <div class="col-md-4">
-                    <label class="form-label text-muted small d-block">From Date</label>
-                    <ng-container *ngIf="isNew; else existingFromDate">
-                        <input type="date" class="form-control" [(ngModel)]="selectedFromdate"
-                        style="font-size: 11px;">
+                <div class="col-md-2">
+                    <label class="form-label text-muted small d-block">From Month</label>
+                    <ng-container>
+                        <select class="form-control" [(ngModel)]="selectedFromdate" style="font-size: 11px;">
+                            <option *ngFor="let m of months" [value]="m">{{ m }}</option>
+                        </select>
                     </ng-container>
-                    <ng-template #existingFromDate>
-                        <label class="form-control" style="font-size: 11px;">
-                            {{ selectedrowFromdate | date:'dd/MM/yyyy' }}
-                        </label>
-                    </ng-template>
                 </div>
 
-                <div class="col-md-4">
-                    <label class="form-label text-muted small d-block">To Date</label>
-                    <ng-container *ngIf="isNew; else existingToDate">
-                        <input type="date" class="form-control" [(ngModel)]="selectedTodate"
-                        style="font-size: 11px;">
+                <div class="col-md-2">
+                    <label class="form-label text-muted small d-block">To Month</label>
+                    <ng-container>
+                        <select class="form-control" [(ngModel)]="selectedTodate" style="font-size: 11px;">
+                            <option *ngFor="let m of months" [value]="m">{{ m }}</option>
+                        </select>
                     </ng-container>
-                    <ng-template #existingToDate>
-                        <label class="form-control" style="font-size: 11px;">
-                            {{ selectedrowTodate | date:'dd/MM/yyyy' }}
-                        </label>
-                    </ng-template>
                 </div>
+                <div class="col-md-4">
+                    <label class="form-label text-muted small d-block">Effective Date</label>
+                    <ng-container>
+                        <input type="date" class="form-control" [(ngModel)]="selectedEffectiveDate"
+                            style="font-size: 11px;">
+                    </ng-container>
+                </div>
+
             </div>
 
             <br />
             <div>
-                <form [formGroup]="holidayForm">
+                <form [formGroup]="leaveruleForm">
                     <table class="table table-bordered w-100" style="font-size: 11px;">
                         <thead>
                             <tr>
                                 <th>Sl. No</th>
-                                <th>DATE</th>
-                                <th>HOLIDAY TYPE</th>
-                                <th>HOLIDAY DESCRIPTION</th>
-                                <th>ACTION</th>
+                                <th>Leave Type</th>
+                                <th>Credit</th>
+                                <th>Invoice leave details</th>
+                                <th>Carry Forward</th>
+                                <th>Max Days</th>
+                                <th>Encashment</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody formArrayName="holidays">
-                            <tr *ngFor="let row of holidays.controls; let i = index" [formGroupName]="i">
+                        <tbody formArrayName="leaverules">
+                            <tr *ngFor="let row of leaverules.controls; let i = index" [formGroupName]="i">
                                 <td>{{ i + 1 }}</td>
-                                <td><input type="date" formControlName="date" class="form-control" style="font-size: 11px;"/></td>
                                 <td>
-                                    <select formControlName="type" class="form-control" style="font-size: 11px;">
-                                        <option value="NH">NH</option>
-                                        <option value="H">H</option>
-                                        <option value="WO">WO</option>
+                                    <select class="form-control" formControlName="leavetype" style="font-size: 11px;">
+                                        <option value="">Select</option>
+                                        <option *ngFor="let lt of leavetypedetails" [value]="lt.leavetype">{{
+                                            lt.leavetype }}</option>
                                     </select>
                                 </td>
-                                <td><input type="text" formControlName="description" class="form-control" style="font-size: 11px;"/></td>
+                                <td><input class="form-control" type="text" formControlName="credit"
+                                        style="font-size: 11px;" (input)="onDecimalInput($event, row.get('credit'))"
+                                        maxlength="5" width="10%" />
+                                </td>
+                                <td><input class="form-control" type="text" formControlName="invoiceLeaveDetails"
+                                        style="font-size: 11px;"
+                                        (input)="onDecimalInput($event, row.get('invoiceLeaveDetails'))"
+                                        maxlength="5" />
+                                </td>
+                                <td>
+                                    <select formControlName="carryForward" class="form-control"
+                                        style="font-size: 11px;">
+                                        <option value="0">Select</option>
+                                        <option value="1">Yes</option>
+                                        <option value="2">No</option>
+                                    </select>
+                                </td>
+                                <td><input class="form-control" type="text" formControlName="maxDays"
+                                        style="font-size: 11px;" (input)="onDecimalInput($event, row.get('maxDays'))"
+                                        maxlength="5" /></td>
+                                <td>
+                                    <select formControlName="encashment" class="form-control" style="font-size: 11px;">
+                                        <option value="0">Select</option>
+                                        <option value="1">Yes</option>
+                                        <option value="2">No</option>
+                                    </select>
+                                </td>
                                 <td class="text-center">
                                     <button class="btn btn-sm btn-add" *ngIf="!row.value.isSaved" (click)="addRow(i)"
                                         [disabled]="row.invalid">

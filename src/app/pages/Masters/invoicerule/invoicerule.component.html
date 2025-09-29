@@ -1,0 +1,538 @@
+<div class="container-fluid w-100">
+    <div class="card-body">
+        <div class="row g-3 align-items-end w-100">
+
+            <!-- Company Code -->
+            <div class="col-md-4">
+                <label class="form-label text-muted small">Company Code</label>
+                <companyall (companyEmit)="handleCompanyEvent($event)" style="width: 300px;"></companyall>
+            </div>
+
+            <!-- Site Name -->
+            <div class="col-md-3">
+                <label class="form-label text-muted small">Site Name</label>
+                <groupname [selectedCompanyId]="selectedCC" (sitenameEmit)="handleGroupNameEvent($event)"></groupname>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="col-md-5 d-flex gap-2">
+                <button class="btn btn-primary btn-sm d-flex align-items-center justify-content-center"
+                    (click)="searchClick()" matTooltip="Search">
+                    <mat-icon>search</mat-icon>
+                </button>
+                <button class="btn btn-success btn-sm d-flex align-items-center justify-content-center"
+                    (click)="Addclicked()" matTooltip="Add">
+                    <mat-icon>add</mat-icon>
+                </button>
+                <!-- <button class="btn btn-success btn-sm d-flex align-items-center justify-content-center"
+                    (click)="TemplateClick()" matTooltip="Template Download">
+                    <mat-icon>article</mat-icon>
+                </button> -->
+                <!-- <button class="btn btn-success btn-sm d-flex align-items-center justify-content-center"
+                    matTooltip="File Uplaod">
+                    <mat-icon>cloud_upload</mat-icon>
+                </button> -->
+                <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                    (click)="ExportClick()" matTooltip="Excel Export">
+                    <mat-icon>table_chart</mat-icon>
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div *ngIf="showPreviewModal" class="modal-overlay">
+    <div class="modal-content">
+        <div
+            style="font-family: nunito-sans;font-size: 18px; font-weight: 600; color: #302CB3; text-align: center; vertical-align: bottom; ">
+            <h3>Preview Excel Data</h3>
+        </div>
+        <div class="table-wrapper">
+            <div style="  max-height: 400px; overflow-y: auto; overflow-x: auto;">
+                <table class="previewtable" style="border:1px solid #E8E8E8; padding: 5px 5px 5px 5px;">
+                    <thead>
+                        <tr>
+                            <th *ngFor="let col of getTableColumns()">{{ col }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let row of excelPreviewData">
+                            <td *ngFor="let col of getTableColumns()">{{ row[col] }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-actions">
+                <button (click)="submitExcelData()"
+                    style="display: inline-block; margin-right: 10px;width: 130px; height: 30px; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
+                    <div
+                        style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
+                        Submit</div>
+                </button>
+                <button (click)="showPreviewModal=false"
+                    style="display: inline-block; margin-right: 10px;width: 130px; height: 30px; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
+                    <div
+                        style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
+                        Cancel</div>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>
+
+<div class="table-wrapper">
+    <div class="table-scroll">
+        <table mat-table [dataSource]="dataSource" matSort class="custom-table mat-elevation-z8">
+
+            <!-- Checkbox Column -->
+            <ng-container matColumnDef="select">
+                <mat-header-cell *matHeaderCellDef class="fixed-width-column">
+                    <mat-checkbox (change)="toggleAllRows()" [checked]="selection.hasValue() && isAllSelected()"
+                        [indeterminate]="isPartialSelected()">
+                    </mat-checkbox>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let element" class="fixed-width-column">
+                    <mat-checkbox (click)="$event.stopPropagation()" (change)="toggleRow(element)"
+                        [checked]="selection.isSelected(element)">
+                    </mat-checkbox>
+                </mat-cell>
+            </ng-container>
+            <!-- id Column -->
+            <ng-container matColumnDef="invoicingRulesID">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>id</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.invoicingRulesID
+                    }}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="delete">
+                <mat-header-cell *matHeaderCellDef mat-sort-header class="fixed-width-column"></mat-header-cell>
+                <mat-cell *matCellDef="let element" class="fixed-width-column">
+                    <img src="assets/delete.svg" style="cursor: pointer; width: 24px; height: 22px;"
+                        (click)="deleteClick(element.invoicingRulesID)" />
+                </mat-cell>
+            </ng-container>
+            <!-- company Code Column -->
+            <ng-container matColumnDef="companyCode">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Company Code</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.companyCode
+                    }}</mat-cell>
+            </ng-container>
+            <!-- Site Name Column -->
+            <ng-container matColumnDef="siteName">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Site Name</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.siteName
+                    }}</mat-cell>
+            </ng-container>
+            <!-- days per month Column -->
+            <ng-container matColumnDef="daysPerMonth">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Days Per Month</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.daysPerMonth
+                    }}</mat-cell>
+            </ng-container>
+            <!-- weekends Column -->
+            <ng-container matColumnDef="weekends">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Weekends Rule</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.weekends
+                    }}</mat-cell>
+            </ng-container>
+            <!-- holidays Column -->
+            <ng-container matColumnDef="holidays">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Holidays Rule</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.holidays
+                    }}</mat-cell>
+            </ng-container>
+            <!-- compoffrule Column -->
+            <ng-container matColumnDef="compOff">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Comp Off Rule</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.compOff
+                    }}</mat-cell>
+            </ng-container>
+            <!-- Header and Row Declaration -->
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </table>
+    </div>
+
+    <mat-paginator class="mat-footer-paginator" [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons stickyEnd>
+    </mat-paginator>
+</div>
+<div *ngIf="showPopup" class="overlay">
+    <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+        (close)="showPopup = false"></app-alertpopup>
+</div>
+
+<div *ngIf="isAddclicked" class="popup-overlay" (keydown.escape)="closeclick()">
+    <mat-card class="popup-card">
+        <mat-card-header style="border-bottom: 1px solid #89898B; gap:570px">
+            <mat-card-title>Add Invoice Rule</mat-card-title>
+            <button style="border: none; background: transparent;"><mat-icon
+                    (click)="closeclick()" matTooltip="close">close</mat-icon></button>
+        </mat-card-header>
+        <mat-card-content class="scroll-content">
+            <form [formGroup]="invoiceruleform">
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-12" style="padding-top:10px">
+                        <div
+                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                            Company Code</div>
+                        <div style="padding-top: 5px;">
+                            <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div
+                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                            Site Name</div>
+                        <div style="padding-top: 5px;">
+                            <groupname [selectedCompanyId]="selectedCC" (sitenameEmit)="handleGroupNameEvent($event)">
+                            </groupname>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div
+                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                            Billing Type</div>
+                        <div style="padding-top: 5px;">
+                            <select formControlName="billingType" class="w-100 custom-height rounded-1 select-drop"
+                                appearance="outline" style="background-color: white;height:30px;">
+                                <option value="">Select</option>
+                                <option *ngFor="let type of billingType" [ngValue]="type">
+                                    {{ type.text }}
+                                </option>
+                            </select>
+                        </div>
+                        <div *ngIf="invoiceruleform.get('billingType')?.touched && invoiceruleform.get('billingType')?.hasError('required')"
+                            class="text-danger">
+                            Billing type is required
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="checkbox-wrapper">
+                            <div
+                                style="width: 200px; height: 42.35px; color: var(--text-field-heading-, #89898B); font-size: 12px; font-family: Nunito Sans; font-weight: 500; display: flex; padding-top:17px; padding-left:15px; gap:20px;">
+                                <span style="width:200px;">Days As Per Timesheet</span>
+                                <input formControlName="daysAsPerTimesheet" type="checkbox" class="custom-checkbox" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div
+                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                            Days Per Month</div>
+                        <div style="padding-top: 5px;">
+                            <input formControlName="dayspermonth" type="number" placeholder="Enter Days Per Month" />
+                        </div>
+                        <div *ngIf="invoiceruleform.get('dayspermonth')?.touched && invoiceruleform.get('dayspermonth')?.hasError('required')"
+                            class="text-danger">
+                            Days Per Month is required
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div
+                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                            Weekends Rule</div>
+                        <div style="padding-top: 5px;">
+                            <select formControlName="weekendsrule">
+                                <option value="">Select</option>
+                                <option *ngFor="let type of standardSelect" [ngValue]="type">
+                                    {{ type.text }}
+                                </option>
+                            </select>
+                        </div>
+                        <div *ngIf="invoiceruleform.get('weekendsrule')?.touched && invoiceruleform.get('weekendsrule')?.hasError('required')"
+                            class="text-danger">
+                            Weekends Rule is required
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div
+                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                            Holidays Rule</div>
+                        <div style="padding-top: 5px;">
+                            <select formControlName="holidaysrule">
+                                <option value="">Select</option>
+                                <option *ngFor="let type of standardSelect" [ngValue]="type">
+                                    {{ type.text }}
+                                </option>
+                            </select>
+                        </div>
+                        <div *ngIf="invoiceruleform.get('holidaysrule')?.touched && invoiceruleform.get('holidaysrule')?.hasError('required')"
+                            class="text-danger">
+                            Holidays Rule is required
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div
+                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                            Comp Off Rule</div>
+                        <div style="padding-top: 5px;">
+                            <select formControlName="comppoffrule">
+                                <option value="">Select</option>
+                                <option *ngFor="let type of standardSelect" [ngValue]="type">
+                                    {{ type.text }}
+                                </option>
+                            </select>
+                        </div>
+                        <div *ngIf="invoiceruleform.get('comppoffrule')?.touched && invoiceruleform.get('comppoffrule')?.hasError('required')"
+                            class="text-danger">
+                            Compp off Rule is required
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div
+                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                            Maternity Leave</div>
+                        <div style="padding-top: 5px;">
+                            <select formControlName="maternityleave">
+                                <option value="">Select</option>
+                                <option *ngFor="let type of standardSelect" [ngValue]="type">
+                                    {{ type.text }}
+                                </option>
+                            </select>
+                        </div>
+                        <div *ngIf="invoiceruleform.get('maternityleave')?.touched && invoiceruleform.get('maternityleave')?.hasError('required')"
+                            class="text-danger">
+                            Maternity Leave is required
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div
+                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                            Leave Types</div>
+                        <div style="padding-top: 5px;">
+                            <select formControlName="leavetypes">
+                                <option value="">Select</option>
+                                <option *ngFor="let type of leavetypes" [ngValue]="type">
+                                    {{ type.text }}
+                                </option>
+                            </select>
+                        </div>
+                        <div *ngIf="invoiceruleform.get('leavetypes')?.touched && invoiceruleform.get('leavetypes')?.hasError('required')"
+                            class="text-danger">
+                            Leave types is required
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div
+                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                            Leave Credit</div>
+                        <div style="padding-top: 5px;">
+                            <input type="number" formControlName="leavecredit" step="0.01" />
+                        </div>
+                        <div *ngIf="invoiceruleform.get('leavecredit')?.touched && invoiceruleform.get('leavecredit')?.hasError('required')"
+                            class="text-danger">
+                            Leave Credit is required
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div
+                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                            Leave Rule</div>
+                        <div style="padding-top: 5px;">
+                            <select formControlName="leaverule">
+                                <option value="">Select</option>
+                                <option *ngFor="let type of standardSelect" [ngValue]="type">
+                                    {{ type.text }}
+                                </option>
+                            </select>
+                        </div>
+                        <div *ngIf="invoiceruleform.get('leaverule')?.touched && invoiceruleform.get('leaverule')?.hasError('required')"
+                            class="text-danger">
+                            Leave Rule is required
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div
+                            style="width: 120px; height: 42.35px; color: var(--text-field-heading-, #89898B); font-size: 12px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word;  padding-top:17px; padding-left:30px; gap:20px;">
+                            Pay Period:</div>
+                    </div>
+                    <div class="col-md-2">
+                        <div
+                            style="width: 40px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                            From</div>
+                        <div style="padding-top: 5px;">
+                            <select formControlName="payperiodfrom" (change)="onMonthChange()">
+                                <option value="">Select</option>
+                                <option *ngFor="let type of months" [ngValue]="type">
+                                    {{ type.text }}
+                                </option>
+                            </select>
+                        </div>
+                        <div *ngIf="invoiceruleform.get('payperiodfrom')?.touched && invoiceruleform.get('payperiodfrom')?.hasError('required')"
+                            class="text-danger">
+                            Pay Period From is required
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div
+                            style="width: 40px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                            To</div>
+                        <div style="padding-top: 5px;">
+                            <input formControlName="payperiodto" type="text" readonly="true">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div
+                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                            Carry Forward</div>
+                        <div style="padding-top: 5px;">
+                            <select formControlName="carryforward">
+                                <option value="">Select</option>
+                                <option *ngFor="let type of standardSelect" [ngValue]="type">
+                                    {{ type.text }}
+                                </option>
+                            </select>
+                        </div>
+                        <div *ngIf="invoiceruleform.get('carryforward')?.touched && invoiceruleform.get('carryforward')?.hasError('required')"
+                            class="text-danger">
+                            Carry Forward is required
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div
+                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                            No of Carry Forwards</div>
+                        <div style="padding-top: 5px;">
+                            <input formControlName="noofcarryforwards" type="number"
+                                placeholder="Enter No. of Carry Forwards">
+                        </div>
+                        <div *ngIf="invoiceruleform.get('noofcarryforwards')?.touched && invoiceruleform.get('noofcarryforwards')?.hasError('required')"
+                            class="text-danger">
+                            No of Carry Forwards is required
+                        </div>
+
+                    </div>
+                    <div class="col-md-4">
+                        <div
+                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                            OT Rule</div>
+                        <div style="padding-top: 5px;">
+                            <select formControlName="otrule">
+                                <option value="">Select</option>
+                                <option *ngFor="let type of standardSelect" [ngValue]="type">
+                                    {{ type.text }}
+                                </option>
+                            </select>
+                        </div>
+                        <div *ngIf="invoiceruleform.get('otrule')?.touched && invoiceruleform.get('otrule')?.hasError('required')"
+                            class="text-danger">
+                            OT Rule required
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div
+                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                            Gratuity</div>
+                        <div style="padding-top: 5px;">
+                            <select formControlName="gratuity">
+                                <option value="">Select</option>
+                                <option *ngFor="let type of standardSelect" [ngValue]="type">
+                                    {{ type.text }}
+                                </option>
+                            </select>
+                        </div>
+                        <div *ngIf="invoiceruleform.get('gratuity')?.touched && invoiceruleform.get('gratuity')?.hasError('required')"
+                            class="text-danger">
+                            Gratuity is required
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div
+                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                            Reimbursement</div>
+                        <div style="padding-top: 5px;">
+                            <select formControlName="reimbursement">
+                                <option value="">Select</option>
+                                <option *ngFor="let type of standardSelect" [ngValue]="type">
+                                    {{ type.text }}
+                                </option>
+                            </select>
+                        </div>
+                        <div *ngIf="invoiceruleform.get('reimbursement')?.touched && invoiceruleform.get('reimbursement')?.hasError('required')"
+                            class="text-danger">
+                            Reimbursement is required
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div
+                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                            Service Fee on Expenses</div>
+                        <div style="padding-top: 5px;">
+                            <select formControlName="servicefeeonexpenses">
+                                <option value="">Select</option>
+                                <option *ngFor="let type of standardSelect" [ngValue]="type">
+                                    {{ type.text }}
+                                </option>
+                            </select>
+                        </div>
+                        <div *ngIf="invoiceruleform.get('servicefeeonexpenses')?.touched && invoiceruleform.get('servicefeeonexpenses')?.hasError('required')"
+                            class="text-danger">
+                            Service Fee on Expenses is required
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div
+                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                            Rebates</div>
+                        <div style="padding-top: 5px;">
+                            <select formControlName="rebates">
+                                <option value="">Select</option>
+                                <option *ngFor="let type of standardSelect" [ngValue]="type">
+                                    {{ type.text }}
+                                </option>
+                            </select>
+                        </div>
+                        <div *ngIf="invoiceruleform.get('rebates')?.touched && invoiceruleform.get('rebates')?.hasError('required')"
+                            class="text-danger">
+                            Rebates is required
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div
+                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                            Discounts</div>
+                        <div style="padding-top: 5px;">
+                            <select formControlName="discounts">
+                                <option value="">Select</option>
+                                <option *ngFor="let type of standardSelect" [ngValue]="type">
+                                    {{ type.text }}
+                                </option>
+                            </select>
+                        </div>
+                        <div *ngIf="invoiceruleform.get('discounts')?.touched && invoiceruleform.get('discounts')?.hasError('required')"
+                            class="text-danger">
+                            Discounts is required
+                        </div>
+                    </div>
+                    <div class="col-md-12" style="padding-bottom: 10px;">
+                        <div
+                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                            Billable Days Formula</div>
+                        <div style="padding-top: 5px;">
+                            <input formControlName="billabledaysformula" type="text"
+                                placeholder="Enter Billable Days Formula">
+                        </div>
+                        <div *ngIf="invoiceruleform.get('billabledaysformula')?.touched && invoiceruleform.get('billabledaysformula')?.hasError('required')"
+                            class="text-danger">
+                            Billable Days Formula is required
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </mat-card-content>
+
+        <mat-card-actions
+            style="display: flex; padding: 14px 20px; justify-content: flex-end; align-items: center; gap: 12px; align-self: stretch;border-radius: 0 0 10px 10px; border-top: 1px solid var(--Card-Box-border-color, #D6D6D6); background: var(--Card-card-background, #F9F9F9);">
+            <button (click)="SaveData()"
+                style="margin-right: 10px;width: 130px; height: 30px; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
+                <div
+                    style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
+                    Save</div>
+            </button>
+        </mat-card-actions>
+    </mat-card>
+</div>

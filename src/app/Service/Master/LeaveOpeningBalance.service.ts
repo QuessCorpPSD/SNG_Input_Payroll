@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { IVendoremployeeService } from '../../Repository/Master/ivendoremployee.service';
 import { Observable } from 'rxjs';
 import { APIResponse } from '../../Models/apiresponse';
-import { environment } from '../../../Environments/environment.development';
+import { environment } from '../../../environments/environment.development';
 import { HttpClient } from '@angular/common/http';
 import { ILeaveOpeningBalance } from '../../Repository/Master/ileaveopeningbalance.service';
 

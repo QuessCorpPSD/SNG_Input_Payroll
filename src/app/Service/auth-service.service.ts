@@ -18,7 +18,7 @@ export class AuthServiceService implements IAuthServiceService {
 
   ValidateLogin(login):Observable<APIResponse>{
     var inputval=JSON.stringify(login);
-   
+   console.log(inputval);
     const config = new HttpHeaders().set('Content-Type', 'application/json')
     .set('Accept', 'application/json')
     return this.http.post<APIResponse>(this.environment.apiUrl+"Authendicate/UserLogin",inputval, { headers: config }).pipe(

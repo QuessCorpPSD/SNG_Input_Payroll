@@ -29,6 +29,11 @@ import { TimesheetComponent } from './pages/PayrollInput/timesheet/timesheet.com
 import { InvoiceauditComponent } from './pages/PayrollInput/invoiceaudit/invoiceaudit.component';
 import { MasternavigationComponent } from './pages/Masters/MasterNavigation/masternavigation/masternavigation.component';
 import { HolidaymasterComponent } from './pages/Masters/holidaymaster/holidaymaster.component';
+import { InvoiceruleComponent } from './pages/Masters/invoicerule/invoicerule.component';
+import { LeavemasterComponent } from './pages/Masters/leavemaster/leavemaster.component';
+import { LeaveruleComponent } from './pages/Masters/leaverule/leaverule.component';
+import { LeaveOpeningBalanceUploadComponent } from './pages/Masters/leave-opening-balance-upload/leave-opening-balance-upload.component';
+import { VendorEmployeeComponent } from './pages/Masters/vendor-employee/vendor-employee.component';
 
 
 
@@ -61,14 +66,12 @@ export const routes: Routes = [
         path: 'masternavigation',
         component: MasternavigationComponent,
         children: [
-          { path: 'holidaymaster', component: HolidaymasterComponent }
-          // { path: 'activation', component: ActivationLWDComponent },
-          // { path: 'unseize', component: UnseizeComponent },
-          // { path: 'timesheet', component: TimesheetComponent },
-          // { path: 'invoiceaudit', component: InvoiceauditComponent },
-          // { path: 'increment', component: IncrementComponent },
-          // { path: 'onetimeinput', component: OnetimeinputComponent },
-          // { path: 'finalsubmission', component: FinalsubmissionComponent }
+          { path: 'holidaymaster', component: HolidaymasterComponent },
+          { path: 'invoicerule', component: InvoiceruleComponent },
+          { path: 'leavemaster', component: LeavemasterComponent },
+          { path: 'leaverule', component: LeaveruleComponent },
+          { path: 'lob', component: LeaveOpeningBalanceUploadComponent },
+          { path: 'vendoremployee', component: VendorEmployeeComponent }
         ]
       },
       //   { path: 'UI', component: SopComponent },

@@ -1,0 +1,124 @@
+.h1 {
+  font-size: 15px;
+  color: #fff;
+  text-align: center;
+  background-color: rgb(55, 112, 153);
+  width: 100%;
+  padding: 0px 360px; 
+  font-family: inherit;
+  box-sizing: border-box; 
+  
+}
+
+@media(min-width: 768px) {
+  .h1 {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0px 360px;
+  }
+}
+
+.btn-search {
+  background-color: #0d6efd;
+  color: #fff;
+}
+
+
+.btn-download {
+  background-color: #20c997;
+  color: #fff;
+}
+
+.btn-upload {
+  background-color: #6f42c1;
+  color: #fff;
+}
+
+.material-icons {
+  font-size: 20px;
+  vertical-align: middle;
+}
+
+.form-control-sm, .form-select-sm {
+  height: calc(1.5em + 0.5rem + 2px);
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+}
+.small-input {
+  max-width: 200px; 
+}
+
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.table-container {
+  overflow-x: auto;     
+  overflow-y: hidden;
+  border: 1px solid #ddd;
+  max-width: 950px;
+
+}
+
+
+th.mat-header-cell {
+  background-color: #302CB3;
+  color: white;
+  font-weight: 700;
+  position: sticky;       
+  top: 0;
+  z-index: 10;             
+  box-shadow: 0 2px 2px -1px rgba(0,0,0,0.4);
+}
+
+
+
+
+.mat-paginator {
+  margin-top: 1rem;
+  font-family: 'Nunito Sans', sans-serif;
+}
+
+.mat-paginator-range-label {
+  font-size: 13px;
+  color: #555;
+}
+
+.mat-paginator-icon {
+  color: #302CB3;
+}
+
+@media (max-width: 768px) {
+  table.mat-elevation-z8 th.mat-header-cell,
+  table.mat-elevation-z8 td.mat-cell {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+}
+
+.card-body {
+  width: 100%;
+  display: flex;
+  gap: 15px;
+  padding: 0px !important;
+}
+
+.form-label {
+  font-size: 12px !important;
+  color: #222 !important;
+}
+
+.select-drop {
+  font-size: 12px;
+  font-family: "nunito-sans";
+  font-weight: 500;
+  border: 1px solid #a0a0a0;
+}
