@@ -1,0 +1,25 @@
+<div class="headerSOP">
+        <div style="width: 50%;"> <img src="../../../assets/Forward File 1.svg" /><b class="customer-sop">Invoice</b>
+        </div>
+</div>
+<div class="contentCategory">
+        <div style="width: 100%;">
+                <div class="Categorylist">
+                        <ul class="horizontal-list">
+                                <li><a [routerLink]="['/Master/invoicenavigation/perfomainvoice']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Perfoma Invoice</a></li>
+                               
+                                <li><a [routerLink]="['/Master/invoicenavigation/initiate']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Invoice Initiate</a></li>
+
+                                <!--  <li><a [routerLink]="['/Master/masternavigation/leaverule']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">EInvoice</a></li> -->
+
+                        </ul>
+                </div>
+        </div>
+</div>
+<router-outlet></router-outlet>

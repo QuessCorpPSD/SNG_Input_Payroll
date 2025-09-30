@@ -109,4 +109,11 @@ export class CommonService implements ICommonService {
     //console.log(url);
     return this.http.get<APIResponse>(url);
   }
+   GetInvoiceType():Observable<APIResponse>
+  {
+    const url = `${this.environment.apiUrl}InvoiceInitiation/GetTaxTypes`;
+    console.log(url);
+    return this.http.get<APIResponse>(url);
+  }
+  
 }

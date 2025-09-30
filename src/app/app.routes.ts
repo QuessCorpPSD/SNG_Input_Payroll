@@ -34,6 +34,9 @@ import { LeavemasterComponent } from './pages/Masters/leavemaster/leavemaster.co
 import { LeaveruleComponent } from './pages/Masters/leaverule/leaverule.component';
 import { LeaveOpeningBalanceUploadComponent } from './pages/Masters/leave-opening-balance-upload/leave-opening-balance-upload.component';
 import { VendorEmployeeComponent } from './pages/Masters/vendor-employee/vendor-employee.component';
+import { InvoicenavigationComponent } from './pages/Invoice/invoicenavigation/invoicenavigation.component';
+import { InitiateComponent } from './pages/Invoice/initiate/initiate.component';
+import { PerfomainvoiceComponent } from './pages/Invoice/perfomainvoice/perfomainvoice.component';
 
 
 
@@ -72,6 +75,14 @@ export const routes: Routes = [
           { path: 'leaverule', component: LeaveruleComponent },
           { path: 'lob', component: LeaveOpeningBalanceUploadComponent },
           { path: 'vendoremployee', component: VendorEmployeeComponent }
+        ]
+      },
+      {
+        path: 'invoicenavigation',
+        component: InvoicenavigationComponent,
+        children: [
+          { path: 'initiate', component: InitiateComponent },
+          { path: 'perfomainvoice', component: PerfomainvoiceComponent }
         ]
       },
       //   { path: 'UI', component: SopComponent },

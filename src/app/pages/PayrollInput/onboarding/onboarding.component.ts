@@ -3,7 +3,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { OnboardingGrid } from '../../../Models/OnboardingGrid';
 import { PayrollinputComponent } from '../payrollinput.component';
 import { IOnboardingServices } from '../../../Repository/IOnboardingService';
-import { ICommonService } from '../../../../../dev/src/app/Repository/ICommonService';
+import { ICommonService } from '../../../Repository/ICommonService';
 import { OnboardingStateService } from '../../../onboarding-state.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { EncryptionService } from '../../../Shared/encryption.service';
