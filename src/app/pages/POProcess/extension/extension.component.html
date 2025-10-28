@@ -1,0 +1,335 @@
+<form [formGroup]="POAddForm" novalidate>
+    <mat-card class="custom-card">
+        <mat-card-header class="sticky-header"> <mat-card-title><mat-icon>add_shopping_cart</mat-icon> Purchase
+                Order Extension</mat-card-title>
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="onClose()" class="no-border-icon">
+                <mat-icon>close</mat-icon>
+            </button></mat-card-header>
+        <mat-card-content class="scroll-content">
+            <br />
+
+            <!-- Row 1: Company & Dates -->
+            <div class="row g-3 align-items-end">
+                <div class="col-12 col-md-4">
+                    <label for="companyCode" class="form-label text-muted small mb-1">Company Code</label>
+                    <CompanyPicker id="companyCode1" formControlName="CompanyCode"
+                        (companyEmit)="handleCompanyEvent($event)">
+                    </CompanyPicker>
+                    <div *ngIf="POAddForm.get('CompanyCode')?.touched && POAddForm.get('CompanyCode')?.hasError('required')"
+                        class="text-danger small">
+                        Company Code is required
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+
+                    <label for="POCategory" class="form-label text-muted small mb-1">PO Category </label>
+                    <select id="POCategory1" class="form-select form-select-sm" formControlName="POCategory">
+                        <option value="">-- Select --</option>
+                        <option *ngFor="let categ of this.Category" [value]="categ.categoryID">{{categ.category_Name}}
+                        </option>
+                    </select>
+                    <div *ngIf="POAddForm.get('POCategory')?.touched && POAddForm.get('POCategory')?.hasError('required')"
+                        class="text-danger small">
+                        PO Category is required
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <label for="poNo" class="form-label text-muted small mb-1">PO No</label>
+                    <input type="text" class="form-control form-control-sm" formControlName="PONo" id="poNo1"
+                        placeholder="Enter PO number">
+                    <div *ngIf="POAddForm.get('PONo')?.touched && POAddForm.get('PONo')?.hasError('required')"
+                        class="text-danger small">
+                        PONo is required
+                    </div>
+                </div>
+
+            </div>
+            <br/>
+            <div class="row g-3 align-items-end">
+
+                <div class="col-12 col-md-4">
+                    <label for="poDate" class="form-label text-muted small mb-1">PO Date</label>
+                    <input type="text" class="form-control form-control-sm" id="poDate1" formControlName="PODate"
+                        [disabled]="isdisable">
+                    <div *ngIf="POAddForm.get('PODate')?.touched && POAddForm.get('PODate')?.hasError('required')"
+                        class="text-danger small">
+                        PODate is required
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <label for="startDate" class="form-label text-muted small mb-1">Start Date</label>
+                    <input type="date" class="form-control form-control-sm" id="startDate1" formControlName="StartDate">
+                    <div *ngIf="POAddForm.get('StartDate')?.touched && POAddForm.get('StartDate')?.hasError('required')"
+                        class="text-danger small">
+                        StartDate is required
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-4">
+                    <label for="endDate" class="form-label text-muted small mb-1">End Date</label>
+                    <input type="date" class="form-control form-control-sm" id="endDate1" formControlName="EndDate">
+                    <div *ngIf="POAddForm.get('EndDate')?.touched && POAddForm.get('EndDate')?.hasError('required')"
+                        class="text-danger small">
+                        EndDate is required
+                    </div>
+                </div>
+
+
+
+
+            </div>
+            <br/>
+
+
+
+            <!-- Row 2: PO Details -->
+            <div class="row g-3">
+                <div class="col-12 col-md-4">
+
+                    <label for="POQuantityTypes" class="form-label text-muted small mb-1">PO Quantity Type</label>
+                    <select id="POQuantityType" class="form-select form-select-sm" formControlName="POQuantity">
+                        <option value="">-- Select --</option>
+                        <option *ngFor="let categ of this.Priceing" [value]="categ.rowid">{{categ.code}}</option>
+
+                    </select>
+                    <div *ngIf="POAddForm.get('POQuantity')?.touched && POAddForm.get('POQuantity')?.hasError('required')"
+                        class="text-danger small">
+                        PO Quantity Type is required
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+
+                    <label for="BillingTypes" class="form-label text-muted small mb-1">Billing Type</label>
+                    <select id="BillingType" class="form-select form-select-sm" formControlName="BillingType">
+                        <option value="">-- Select --</option>
+                        <option *ngFor="let bill of this.BillingType" [value]="bill.rowid">{{bill.code}}</option>
+                    </select>
+                    <div *ngIf="POAddForm.get('BillingType')?.touched && POAddForm.get('BillingType')?.hasError('required')"
+                        class="text-danger small">
+                        Billing Type is required
+                    </div>
+                </div>
+
+
+                <div class="col-12 col-md-4">
+                    <label for="POQuantity" class="form-label text-muted small mb-1">PO Quantity (Auto Populate)</label>
+                    <input type="text" class="form-control form-control-sm" id="POQuantity1">
+                </div>
+            </div>
+            <br/>
+            <div class="row g-3">
+                <div class="col-12 col-md-4">
+                    <label for="PricingTypes" class="form-label text-muted small mb-1">Pricing Type</label>
+                    <select id="PricingType" class="form-select form-select-sm" formControlName="PricingType">
+                        <option value="">-- Select --</option>
+                        <option *ngFor="let categ of this.InvoiceType" [value]="categ.invoiceTypeID">
+                            {{categ.invoiceType}}</option>
+                    </select>
+                    <div *ngIf="POAddForm.get('PricingType')?.touched && POAddForm.get('PricingType')?.hasError('required')"
+                        class="text-danger small">
+                        Pricing Type Code is required
+                    </div>
+                </div>
+
+
+                <div class="col-12 col-md-4">
+                    <label for="CurrencyTypes" class="form-label text-muted small mb-1">Currency Type</label>
+                    <select id="CurrencyType" class="form-select form-select-sm" formControlName="CompanyCode">
+                        <option value="">-- Select --</option>
+                        <option *ngFor="let categ of this.currency" [value]="categ.rowid">{{categ.code}}</option>
+                    </select>
+                </div>
+                <div class="col-12 col-md-4">
+                    <label for="POValue" class="form-label text-muted small mb-1">PO Value</label>
+                    <input type="text" class="form-control form-control-sm" id="POQuantity" formControlName="POValue">
+                    <div *ngIf="POAddForm.get('POValue')?.touched && POAddForm.get('POValue')?.hasError('required')"
+                        class="text-danger small">
+                        PO Value is required
+                    </div>
+                </div>
+            </div>
+
+            <br/>
+            
+            <div class="row g-3 ">
+
+                <div class="col-12 col-md-4">
+                    <label for="internalExternals" class="form-label text-muted small mb-1">Internal/External</label>
+                    <select class="form-select form-select-sm" id="internalExternal" formControlName="CompanyCode">
+                        <option value="">-- Select --</option>
+                        <option>Internal</option>
+                        <option>External</option>
+                    </select>
+                </div>
+                   <div class="col-md-4"> 
+                        <label class="form-label text-muted small mb-1">Upload Document<span
+                                class="text-danger">*</span></label>
+
+                        <div class="d-flex align-items-center gap-3">
+                            <input type="file" #fileInput (change)="onFileSelected($event)" hidden />
+
+                            <button type="button" class="btn btn-outline-secondary btn-sm d-flex align-items-center"
+                                (click)="fileInput.click()" style="gap: 8px;">
+                                <img src="assets/Icons/Upload_enabled.svg" alt="Upload"
+                                    style="width: 20px; height: 20px;" />
+                                <span>Choose File</span>
+                            </button>
+
+                            <!-- <span class="text-muted small text-truncate" style="max-width: 250px;" *ngIf="selectedFile"
+                                [title]="selectedFile.name">
+                                {{ selectedFile.name }}
+                            </span> -->
+                        </div>
+
+                        <div *ngIf="POAddForm.get('Document')?.touched && POAddForm.get('Document')?.hasError('required')"
+                            class="text-danger small mt-1">
+                            Document is required
+                        </div>
+
+                    </div> 
+
+
+            </div>
+            <!-- Addresses -->
+            <div class="row g-4 mt-1">
+                <!-- Billing -->
+                <div class="col-12 col-lg-6">
+                    <div class="section border rounded-4 p-3">
+                        <div class="d-flex align-items-center mb-2">
+                            <span class="badge bg-light text-dark me-2">Billing</span>
+                            <span class="text-muted small">To Address</span>
+                        </div>
+
+                        <div class="row g-3" formGroupName="BillingAddress">
+                            <div class="col-12">
+                                <label for="billAddress" class="form-label text-muted small mb-1">Address</label>
+                                <input type="text" class="form-control form-control-sm" id="billAddress"
+                                    placeholder="Street, area" formControlName="Address">
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <label for="billState" class="form-label text-muted small mb-1">Province/State</label>
+
+                                <select id="billState" class="form-select form-select-sm" formControlName="State">
+                                    <option value="">-- Select --</option>
+                                    <option *ngFor="let categ of this.State" [value]="categ.stateId">
+                                        {{categ.state_Name}}</option>
+                                </select>
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <label class="form-label text-muted small mb-1">City</label>
+                                <select id="BillCity" class="form-select form-select-sm" formControlName="City">
+                                    <option value="">-- Select --</option>
+                                    <option *ngFor="let categ of this.City" [value]="categ.city_Id">{{categ.city_Name}}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <label for="billPin" class="form-label text-muted small mb-1">Pin
+                                    Code</label>
+                                <input type="text" class="form-control form-control-sm" id="billPin"
+                                    formControlName="PinCode">
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <label class="form-label text-muted small mb-1">Phone</label>
+                                <input type="text" class="form-control form-control-sm" id="billPhone"
+                                    formControlName="Phone">
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <label class="form-label text-muted small mb-1">Email
+                                    ID</label>
+                                <input type="email" class="form-control form-control-sm" id="billEmail"
+                                    formControlName="EmailID">
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <label for="billGst" class="form-label text-muted small mb-1">GST No</label>
+                                <input type="text" class="form-control form-control-sm" id="billGst"
+                                    formControlName="GSTNO">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shipping -->
+                <div class="col-12 col-lg-6">
+                    <div class="section border rounded-4 p-3">
+                        <div class="d-flex align-items-center mb-2">
+                            <span class="badge bg-light text-dark me-2">Shipping</span>
+                            <span class="text-muted small">To Address</span>
+                        </div>
+
+                        <div class="row g-3" formGroupName="BillingAddress">
+                            <div class="col-12">
+                                <label for="shipAddress" class="form-label text-muted small mb-1">Address</label>
+                                <input type="text" class="form-control form-control-sm" id="shipAddress"
+                                    placeholder="Street, area" formControlName="Address">
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <label for="shipState" class="form-label text-muted small mb-1">Province/State</label>
+                                <select id="State" class="form-select form-select-sm"
+                                    (change)="onBillingCityChange($event)" formControlName="State">
+                                    <option value="">-- Select --</option>
+                                    <option *ngFor="let categ of this.State" [value]="categ.stateId">
+                                        {{categ.state_Name}}</option>
+                                </select>
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <label for="shipCity" class="form-label text-muted small mb-1">City</label>
+                                <select id="City" class="form-select form-select-sm" formControlName="City">
+                                    <option value="">-- Select --</option>
+                                    <option *ngFor="let categ of this.ShippingCity" [value]="categ.city_Id">
+                                        {{categ.city_Name}}</option>
+                                </select>
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <label for="shipPin" class="form-label text-muted small mb-1">Pin
+                                    Code</label>
+                                <input type="text" class="form-control form-control-sm" id="shipPin"
+                                    formControlName="PinCode">
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <label for="shipPhone" class="form-label text-muted small mb-1">Phone</label>
+                                <input type="text" class="form-control form-control-sm" id="shipPhone"
+                                    formControlName="Phone">
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <label for="shipEmail" class="form-label text-muted small mb-1">Email
+                                    ID</label>
+                                <input type="email" class="form-control form-control-sm" id="shipEmail"
+                                    formControlName="EmailID">
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <label for="shipGst" class="form-label text-muted small mb-1">GST No</label>
+                                <input type="text" class="form-control form-control-sm" id="shipGst"
+                                    formControlName="GSTNO">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Row -->
+
+
+        </mat-card-content>
+        <mat-card-footer class="footer">
+            <div class="d-flex justify-content-end mt-3">
+                <button type="reset" class="btn btn-primary me-2 rounded-pill px-3">Reset</button>
+                <button type="button" class="btn btn-primary rounded-pill px-3"
+                    >Save</button>
+            </div>
+        </mat-card-footer>
+    </mat-card>
+</form>

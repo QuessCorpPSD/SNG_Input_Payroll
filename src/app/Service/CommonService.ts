@@ -109,11 +109,18 @@ export class CommonService implements ICommonService {
     //console.log(url);
     return this.http.get<APIResponse>(url);
   }
-   GetInvoiceType():Observable<APIResponse>
-  {
+
+  GetPOStatus(): Observable<APIResponse> {
+    //console.log(this.environment.apiUrl + "Common/GetAllInputType");
+    return this.http.get<APIResponse>(this.environment.apiUrl + "PurchaseOrder/GetPOStatus")
+  }
+  GetPOItemType(): Observable<APIResponse> {
+    return this.http.get<APIResponse>(this.environment.apiUrl + "PurchaseOrder/GetPoItemType")
+  }
+  GetInvoiceType(): Observable<APIResponse> {
     const url = `${this.environment.apiUrl}InvoiceInitiation/GetTaxTypes`;
     console.log(url);
     return this.http.get<APIResponse>(url);
   }
-  
+
 }

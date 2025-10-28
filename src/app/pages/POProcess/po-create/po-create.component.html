@@ -1,0 +1,118 @@
+<div class="container py-4">
+  
+    <div class="row g-3 align-items-end">
+
+      <!-- Company Code -->
+      <div class="col-md-3">
+        <label class="form-label text-muted small">Company Code</label>
+        <CompanyPicker (companyEmit)="handleCompanyEvent($event)"></CompanyPicker>
+      </div>
+
+      <!-- PO Number -->
+      <div class="col-md-3">
+        <label class="form-label text-muted small">PO Number</label>
+        <ponumbersearch [comapnyId]="comapnyId" (ponumbersearchEmit)="handleponumbersearchEvent($event)">
+        </ponumbersearch>
+      </div>
+
+      <!-- PO Type -->
+      <div class="col-md-3">
+        <label class="form-label text-muted small">Pricing Type</label>
+        <potype (potypeEmit)="potypeEvent($event)" class="PricingType"></potype>
+        <!-- <p *ngIf="PricingType">Selected: {{ PricingType.displayName }}</p> -->
+      </div>
+
+
+      <!-- Display the default or selected value somewhere -->
+      <!-- <p *ngIf="PricingType">Selected: {{ PricingType }}</p> -->
+
+      <div class="col-md-3">
+        <label class="form-label text-muted small">IsActive</label>
+        <app-is-active (potypeEmit)="potypeEvent($event)"></app-is-active>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="col-md-3 d-flex gap-2">
+        <button (click)="MainPOSearch()"
+          class="btn  btn-sm d-flex align-items-center justify-content-center">
+          <mat-icon>search</mat-icon>
+        </button>
+        <button class="btn  btn-sm d-flex align-items-center justify-content-center" (click)="AddPOOpen()">
+          <mat-icon>add</mat-icon>
+        </button>
+        <!-- <button  class="btn btn-success btn-sm d-flex align-items-center justify-content-center" (click)="ExtensionPO()">
+          <mat-icon>extension</mat-icon>
+        </button> -->
+        <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Template"
+          (click)="DownloadTemplate()">
+          <mat-icon>cloud_download</mat-icon>
+        </button>
+        <button class="btn  btn-sm d-flex align-items-center justify-content-center"
+          (click)="ImportClick(fileInput)">
+          <img src="assets/Icons/Upload_enabled.svg" />
+        </button>
+        <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center">
+          Clear
+        </button>
+      </div>
+      <input type="file" #fileInput style="display: none;" (click)="fileInput.value=''" (change)="onFileChange($event)"
+        accept=".xlsx, .xls" />
+
+    </div>
+    <div class="table1-container" *ngIf="dataSource1 && dataSource1.data && dataSource1.data.length > 0">
+      <div *ngFor="let column of displayedColumns1" class="field-row">
+        <label class="field-label">{{ columnMap1[column] || column }}</label>
+        <input class="field-input" [value]="dataSource1.data[0][column]" disabled />
+      </div>
+    </div>
+
+    <br />
+    <div class="table-wrapper" *ngIf="dataSource.filteredData.length > 0">
+      <div class="table-container">
+        <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 mat-table">
+
+          <!-- Columns -->
+          <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              {{ getReadableColumnName(column) }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element[column] }}
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+      <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons aria-label="Select page">
+      </mat-paginator>
+    </div>
+
+    <div class="table-wrapper" *ngIf="dataSource2.filteredData.length > 0">
+      <div class="table-container">
+        <table mat-table [dataSource]="dataSource2" matSort class="mat-elevation-z8 mat-table">
+
+          <ng-container *ngFor="let column of displayedColumns2" [matColumnDef]="column">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              {{ getReadableColumnName(column) }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element[column] }}
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns2;"></tr>
+        </table>
+      </div>
+      <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons aria-label="Select page">
+      </mat-paginator>
+    </div>
+
+</div>
+<div *ngIf="showPopup" class="overlay">
+  <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+    (close)="showPopup = false"></app-alertpopup>
+</div>
+<br/>

@@ -25,6 +25,8 @@ export interface ICommonService {
     GetCityByCompanyCode(companyId: any, Group_Id: any): Observable<APIResponse>
     GetAllState(): Observable<APIResponse>;
     GetCityByStateId(stateId): Observable<APIResponse>;
-         GetInvoiceType():Observable<APIResponse>;
+    GetPOStatus(): Observable<APIResponse>;
+    GetPOItemType(): Observable<APIResponse>;
+    GetInvoiceType(): Observable<APIResponse>;
 
 }

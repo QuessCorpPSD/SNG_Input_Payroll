@@ -37,6 +37,10 @@ import { VendorEmployeeComponent } from './pages/Masters/vendor-employee/vendor-
 import { InvoicenavigationComponent } from './pages/Invoice/invoicenavigation/invoicenavigation.component';
 import { InitiateComponent } from './pages/Invoice/initiate/initiate.component';
 import { PerfomainvoiceComponent } from './pages/Invoice/perfomainvoice/perfomainvoice.component';
+import { PoNavigationComponent } from './pages/POProcess/po-navigation/po-navigation.component';
+import { PoCreateComponent } from './pages/POProcess/po-create/po-create.component';
+import { EmployeePOComponent } from './pages/POProcess/employee-po/employee-po.component';
+import { POApproveComponent } from './pages/POProcess/poapprove/poapprove.component';
 
 
 
@@ -65,7 +69,7 @@ export const routes: Routes = [
           { path: 'finalsubmission', component: FinalsubmissionComponent }
         ]
       },
-            {
+      {
         path: 'masternavigation',
         component: MasternavigationComponent,
         children: [
@@ -83,6 +87,17 @@ export const routes: Routes = [
         children: [
           { path: 'initiate', component: InitiateComponent },
           { path: 'perfomainvoice', component: PerfomainvoiceComponent }
+        ]
+      },
+
+      {
+        path: 'ponavigation',
+        component: PoNavigationComponent,
+        children: [
+          { path: 'Mainpo', component: PoCreateComponent },
+          { path: 'employeepo', component: EmployeePOComponent },
+          { path: 'employeeapproval', component: POApproveComponent },
+
         ]
       },
       //   { path: 'UI', component: SopComponent },

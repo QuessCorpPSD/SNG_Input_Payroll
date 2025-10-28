@@ -1058,10 +1058,6 @@ export class TimesheetComponent {
         const val = row.dayValues[i];
         const col = this.dayCols[i]; // get date from header
 
-        if (val === null || val === undefined || val === '') {
-          alert(`Row ${row.SlNo}: Missing entry for date ${col.date}`);
-          return; // stop save
-        }
       }
     }
 
@@ -1156,10 +1152,6 @@ export class TimesheetComponent {
         const val = row.dayValues[i];
         const col = this.dayCols[i]; // get date from header
 
-        if (val === null || val === undefined || val === '') {
-          alert(`Row ${row.SlNo}: Missing entry for date ${col.date}`);
-          return; // stop save
-        }
       }
     }
 

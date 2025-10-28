@@ -62,6 +62,7 @@ export class PotypeComponent {
 
   onOptionSelected(option: any) {
     this.selectedOption = option;
+    console.log('POType', JSON.stringify(this.selectedOption));
    this.potypeEmit.emit(this.selectedOption);
   }
 }

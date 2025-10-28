@@ -1,0 +1,152 @@
+<div class="container-fluid">
+  <div class="card-body">
+    <div class="row g-3 align-items-end">
+
+      <!-- Company Code -->
+      <div class="col-md-3">
+        <label class="form-label text-muted small">Company Code</label>
+        <CompanyPicker (companyEmit)="handleCompanyEvent($event)"></CompanyPicker>
+
+      </div>
+
+      <!-- PO Number -->
+      <div class="col-md-2">
+        <label class="form-label text-muted small">PO Number</label>
+        <ponumbersearch [comapnyId]="comapnyId" (ponumbersearchEmit)="handleponumbersearchEvent($event)">
+        </ponumbersearch>
+      </div>
+
+      <!-- PO Type -->
+      <div class="col-md-2">
+        <label class="form-label text-muted small">Client Employee Id</label>
+        <input type="text" [(ngModel)]="clientEmployeeId" class="form-control form-control-sm"
+          placeholder="Enter Client Employee ID">
+      </div>
+      <div class="col-md-2">
+        <label class="form-label text-muted small">Status</label>
+        <app-postatus (postatusEmit)="PostatusEvent($event)"></app-postatus>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label text-muted small">Pricing Type</label>
+        <potype (potypeEmit)="potypeEvent($event)" class="PricingType"></potype>
+        <!-- <p *ngIf="PricingType">Selected: {{ PricingType.displayName }}</p> -->
+      </div>
+
+
+      <!-- Action Buttons -->
+      <div class="col-md-3 d-flex gap-2">
+        <button class="btn  btn-sm d-flex align-items-center justify-content-center" (click)="Searchclick()">
+          <mat-icon>search</mat-icon>
+        </button>
+        <!-- <button class="btn btn-success btn-sm d-flex align-items-center justify-content-center" (click)="AddPOOpen()">
+          <mat-icon>add</mat-icon>
+        </button> -->
+        <button class="btn  btn-sm d-flex align-items-center justify-content-center" matTooltip="Template"
+          (click)="DownloadTemplate()">
+          <mat-icon>cloud_download</mat-icon>
+        </button>
+        <button class="btn btn-sm d-flex align-items-center justify-content-center"
+          (click)="ImportClick(fileInput)">
+          <img src="assets/Icons/Upload_enabled.svg" />
+        </button>
+
+
+        <!-- <button class="btn btn-success btn-sm d-flex align-items-center justify-content-center">
+          <img src="assets/Icons/Upload_enabled.svg" />
+        </button> -->
+
+      </div>
+      <input type="file" #fileInput style="display: none;" (click)="fileInput.value=''" (change)="onFileChange($event)"
+        accept=".xlsx, .xls" />
+
+    </div>
+  </div>
+  <div class="table-wrap" *ngIf="filteredRows.length>0">
+    <div class="row">
+      <div class="col-md-2" style="display: flex;gap: 10px;">
+        <div style="width: 15px;height: 15px;border-width: 1.5px; border-style: solid;
+         cursor: pointer;border-color: lightgray;"></div>
+        Not Assigned
+      </div>
+      <div class="col-md-2" style="display: flex;gap: 10px;">
+        <div style="width: 15px;height: 15px;border-width: 1.5px; border-style: solid;
+         cursor: pointer;border-color: black;"></div>
+        Pending
+      </div>
+      <div class="col-md-2" style="display: flex;gap: 10px;">
+        <div style="width: 15px;height: 15px;border-width: 1.5px; border-style: solid;
+         cursor: pointer;border-color: green;"></div>
+        Approved
+      </div>
+      <div class="col-md-2" style="display: flex;gap: 10px;">
+        <div style="width: 15px;height: 15px;border-width: 1.5px; border-style: solid;
+         cursor: pointer;border-color: red;"></div>
+        Reject
+      </div>
+      <div class="col-md-2" style="display: flex;gap:10px;">
+        <div style="width: 15px;height: 15px;border-width: 1.5px; border-style: solid;
+         cursor: pointer;border-color: yellow;"></div>
+        Revoke
+      </div>
+    </div>
+    <div class="table-scroll">
+      <table class="ts">
+        <!-- HEADER ROW 1: fixed cols + date numbers -->
+        <thead>
+          <tr class="head-1">
+            <th class="sel"></th>
+            <th class="sl">Company Code</th>
+            <th class="Map">Site Name</th>
+            <th class="hc">Employee ID</th>
+            <th class="net">Employee Name</th>
+            <th class="sub">Employee Code</th>
+            <th class="ic">DOJ</th>
+            <th class="sel">PO Number</th>
+            <th class="remarks">PO Rate</th>
+            <th class="remarks">PO Start Date</th>
+            <th class="remarks">PO End Date</th>
+            <th class="remarks">Item Type</th>
+            <th class="remarks">Status</th>
+            <th class="remarks">Pricing Type</th>
+
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr
+            *ngFor="let r of dataSource.filteredData | slice:(paginator?.pageIndex ?? 0)* (paginator?.pageSize ?? 5) : ((paginator?.pageIndex ?? 0)+1)*(paginator?.pageSize ?? 5)">
+            <td class="sel" style="display: flex; justify-content: center; align-items: center;">
+              <div style="width: 15px;height: 15px;border-width: 1.5px; border-style: solid; cursor: pointer;"
+                [ngStyle]="{'border-color': getBorderColor(r.StatusID)}" (click)="AddPOOpen(r)">
+              </div>
+            </td>
+
+            <td class="sl">{{ r["COMPANY CODE"] }}</td>
+            <td class="Map">{{ r["SITE NAME"] }}</td>
+            <td class="hc">{{ r["EMPLOYEE ID"] }}</td>
+            <td class="net">{{ r["EMPLOYEE NAME"] }}</td>
+            <td class="sub">{{ r.Employee_Code }}</td>
+            <td class="ic">{{ r.DOJ }}</td>
+            <td class="sel">{{ r.PoNumber }}</td>
+            <td class="sel">{{ r.FixedRate }}</td>
+            <td class="ic">{{ r["PO START DATE"] }}</td>
+            <td class="ic">{{ r["PO END DATE"] }}</td>
+            <td class="ic">{{ r.ItemType }}</td>
+            <td class="ic">{{ r.STATUS_NAME }}</td>
+            <td class="ic">{{ r.PricingType }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <mat-paginator [length]="filteredRows.length" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"
+      showFirstLastButtons>
+    </mat-paginator>
+  </div>
+</div>
+<div *ngIf="isLoading" class="loading-overlay">
+  <img src="assets/Loading.gif" alt="Loading...">
+</div>
+<div *ngIf="showPopup" class="overlay">
+  <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+    (close)="showPopup = false"></app-alertpopup>
+</div>

@@ -1,0 +1,49 @@
+
+    <mat-card class="custom-card">
+        <mat-card-header class="sticky-header"> <mat-card-title></mat-card-title>
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="onClose()" class="no-border-icon">
+                <mat-icon>close</mat-icon>
+            </button></mat-card-header>
+        <mat-card-content class="scroll-content">
+            <div class="container-fluid">
+   <div class="file-upload-container">
+  <h3>Bulk File Upload</h3>
+
+  <!-- File Input -->
+  <input
+    type="file"
+    
+    (change)="onFilesSelected($event)"
+    #fileInput
+    hidden
+  />
+
+  <!-- Upload Button -->
+  <button class="btn-upload" (click)="fileInput.click()">Select Files</button>
+
+  <!-- File List Preview -->
+  <div class="file-list" *ngIf="selectedFiles.length > 0">
+    <h4>Selected Files:</h4>
+    <ul>
+      <li *ngFor="let file of selectedFiles; let i = index">
+        {{ file.name }} ({{ file.size / 1024 | number:'1.0-2' }} KB)
+        <button class="btn-remove" (click)="removeFile(i)">Remove</button>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Upload Action -->
+  <button
+    class="btn-submit"
+    (click)="uploadFiles()"
+    [disabled]="selectedFiles.length === 0"
+  >
+    Upload All
+  </button>
+</div>
+
+</div>
+        </mat-card-content>
+    </mat-card>
+

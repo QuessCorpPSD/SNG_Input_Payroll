@@ -1,0 +1,155 @@
+<div class="container-fluid w-100">
+    <div class="card-body">
+        <div class="row g-3 align-items-end w-100">
+
+            <!-- Company Code -->
+            <div class="col-md-4">
+                <label class="form-label text-muted small">Company Code</label>
+                <companyall (companyEmit)="handleCompanyEvent($event)" style="width: 300px;"></companyall>
+            </div>
+
+            <!-- Site Name -->
+            <div class="col-md-3">
+                <label class="form-label text-muted small">Pay Period</label>
+                <PayPeriod [selectedCompanyId]="selectedCC" [payPeriodType]="payPeriodTypetoChild"
+                    (payperiodEmit)="handlePayperiodEvent($event)"></PayPeriod>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="col-md-5 d-flex gap-2">
+                <button class="btn btn-primary btn-sm d-flex align-items-center justify-content-center"
+                    (click)="searchClick()" matTooltip="Search">
+                    <mat-icon>search</mat-icon>
+                </button>
+            </div>
+            <div class="col-md-5 d-flex gap-2">
+                <button *ngIf="isAnyFilteredRowSelected()" (click)="IRNInitiate()"
+                    style="display: inline-block; width: 130px; height: 30px; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
+                    <div
+                        style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
+                        Initiate IRN</div>
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>
+
+<div class="table-wrapper">
+    <div class="table-scroll">
+        <table mat-table [dataSource]="dataSource" matSort class="custom-table mat-elevation-z8">
+
+            <!-- Checkbox Column -->
+            <ng-container matColumnDef="select">
+                <mat-header-cell *matHeaderCellDef class="fixed-width-column">
+                    <mat-checkbox (change)="toggleAllRows()" [checked]="selection.hasValue() && isAllSelected()"
+                        [indeterminate]="isPartialSelected()">
+                    </mat-checkbox>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let element" class="fixed-width-column">
+                    <mat-checkbox (click)="$event.stopPropagation()" (change)="toggleRow(element)"
+                        [checked]="selection.isSelected(element)">
+                    </mat-checkbox>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="invoice_Id">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>invoice_Id</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.invoice_Id
+                    }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="invoice_Number">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Invoice Number</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.invoice_Number
+                    }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Company_Id">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Company_Id</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Company_Id
+                    }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Company_Code">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Company Code</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Company_Code
+                    }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Cost_Center_Mapping_Id">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Cost_Center_Mapping_Id</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Cost_Center_Mapping_Id
+                    }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Map_Name">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Map Name</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Map_Name
+                    }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Pay_Period_Id">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Pay_Period_Id</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Pay_Period_Id
+                    }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Pay_Period">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Pay Period</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Pay_Period
+                    }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Invoice_Type_Id">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Invoice_Type_Id</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Invoice_Type_Id
+                    }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Invoice_Type">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Invoice Type</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Invoice_Type
+                    }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="StateId">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>StateId</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.StateId
+                    }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="State_Name">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>State Name</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.State_Name
+                    }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Net_Amount">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Net Amount</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Net_Amount
+                    }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Status">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Status
+                    }}</mat-cell>
+            </ng-container>
+            <!-- Header and Row Declaration -->
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </table>
+    </div>
+
+    <mat-paginator class="mat-footer-paginator" [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons stickyEnd>
+    </mat-paginator>
+</div>
+<div *ngIf="showPopup" class="overlay">
+    <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+        (close)="showPopup = false"></app-alertpopup>
+</div>

@@ -49,4 +49,10 @@ export class InvoiceRepository implements IInvoiceRepository {
         return this.http.post<APIResponse>(url, JSON.stringify(val), { headers });
     }
 
+    GetAllInvoiceDetails(companyId: number, payPeriodId: number, userId: string): Observable<APIResponse>{
+    const url = `${this.environment.apiUrl}Invoice/GetAllInvoiceDetails/${companyId}/${payPeriodId}/${userId}`;
+    //console.log(url);
+    return this.http.get<APIResponse>(url);
+  }
+
 }

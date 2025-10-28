@@ -1,0 +1,75 @@
+.file-upload-container {
+  max-width: 500px;
+  margin: 30px auto;
+  padding: 20px;
+  border: 2px dashed #6c63ff;
+  border-radius: 12px;
+  text-align: center;
+  background: #f9f9f9;
+}
+
+.btn-upload,
+.btn-submit {
+  background-color: #6c63ff;
+  color: white;
+  padding: 8px 16px;
+  margin: 10px 5px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-upload:hover,
+.btn-submit:hover {
+  background-color: #5848d1;
+}
+
+.file-list {
+  margin-top: 20px;
+  text-align: left;
+}
+
+.file-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.file-list li {
+  padding: 6px;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.custom-card {
+  height: 500px;          /* fix card height */
+  overflow: hidden;       /* prevent full scroll */
+  display: flex;
+  flex-direction: column;
+}
+.no-border-icon {
+  box-shadow: none !important;
+  border: none !important;
+  background: transparent !important;
+}
+.sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: white;      /* keep background visible */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.btn-remove {
+  background: red;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-remove:hover {
+  background: darkred;
+}
