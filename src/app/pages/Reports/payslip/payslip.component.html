@@ -1,0 +1,110 @@
+<div class="container">
+    <div class="row py-2">
+        <br />
+        <form>
+            <div class="row align-items-end ">
+                <div class="col-md-3 ">
+                    <label class="form-label text-muted small">Company Code</label>
+                    <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Pay Period</label>
+                    <PayPeriod [selectedCompanyId]="companyId" [payPeriodType]="payPeriodTypefromParentall"
+                        (payperiodEmit)="handlePayperiodEvent($event)"></PayPeriod>
+                </div>
+                <div class="col-md-2" style="padding-top: 25px;">
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                            matTooltip="Search" (click)="Searchclick()">
+                            <mat-icon>search</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                style="margin-right: 10px;margin-bottom: 10px; align-items: center; border-radius: 10px; border: 1px solid #e9e9e9; width: 200px; height: 35px; background-color: white; padding: 5px 10px 0px 10px; box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.12);float: right;">
+                <i style="margin-right: 6px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 12 12" fill="none">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M8.30883 9.01596C7.539 9.63177 6.5625 10 5.5 10C3.01472 10 1 7.98528 1 5.5C1 3.01472 3.01472 1 5.5 1C7.98528 1 10 3.01472 10 5.5C10 6.56251 9.63176.53901 9.01594 8.30885L10.8535 10.1465C11.0488 10.3417 11.0488 10.6583 10.8535 10.8536C10.6583 11.0488 10.3417 11.0488 10.1464 10.8536L8.30883 9.01596ZM2 5.5C2 3.567 3.567 2 5.5 2C7.433 2 9 3.567 9 5.5C9 6.44299 8.62707 7.29888 8.02066 7.92823C8.00355 7.94139 7.98711 7.95579 7.97144 7.97146C7.95578 7.98712 7.94137 8.00357 7.92822 8.02067C7.29887 8.62708 6.44299 9 5.5 9C3.567 9 2 7.433 2 5.5Z"
+                            fill="#7E7E7E" />
+                    </svg>
+                </i>
+                <input type="text" [(ngModel)]="searchText" (ngModelChange)="applyFilter()" placeholder="Filter"
+                    style="border: none; outline: none; width: 80%; font-size: 12px; background-color: transparent;" />
+            </div>
+            <table class="table table-bordered">
+                <tr>
+                    <th style="display: none;">
+                        <span class="span-text-header">Employee Id</span>
+                    </th>
+                    <th>
+                        <span class="span-text-header">Employee Id</span>
+                    </th>
+                    <th>
+                        <span class="span-text-header">Name</span>
+                    </th>
+                    <th>
+                        <span class="span-text-header">Date of Joining</span>
+                    </th>
+                    <th>
+                        <span class="span-text-header">Designation</span>
+                    </th>
+                    <th>
+                        <span class="span-text-header">Gross Salary</span>
+                    </th>
+                    <th>
+                        <span class="span-text-header">Total Deduction</span>
+                    </th>
+                    <th>
+                        <span class="span-text-header">Net Pay</span>
+                    </th>
+                    <th>
+                        <span class="span-text-header">Download</span>
+                    </th>
+                </tr>
+                <tbody *ngIf="paginatedData">
+                    <tr *ngFor="let item of paginatedData; trackBy: trackRow"
+                        style="height: 30px;vertical-align: middle;">
+                        <td style="display: none;">
+                            <span class="span-text-detail">{{item.Employee_Id}}</span>
+                        </td>
+                        <td>
+                            <span class="span-text-detail">{{item.Employee_Code}}</span>
+                        </td>
+                        <td>
+                            <span class="span-text-detail">{{item.Name}}</span>
+                        </td>
+                        <td>
+                            <span class="span-text-detail">{{item.Date_Of_Joining}}</span>
+                        </td>
+                        <td>
+                            <span class="span-text-detail">{{item.Designation_Name}}</span>
+                        </td>
+                        <td>
+                            <span class="span-text-detail">{{item.Gross_salary}}</span>
+                        </td>
+                        <td>
+                            <span class="span-text-detail">{{item.TotalDeduction}}</span>
+                        </td>
+                        <td>
+                            <span class="span-text-detail">{{item.Need_To_Pay}}</span>
+                        </td>
+                        <td style="text-align: center;">
+                            <mat-icon (click)="Download(item.Employee_Id,item.Employee_Code)" style="cursor: pointer;">download</mat-icon>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="margin-bottom: 5%;">
+                <mat-paginator [length]="filteredRows.length" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20, 50]"
+                    (page)="onPageChange($event)">
+                </mat-paginator>
+            </div>
+        </form>
+    </div>
+</div>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>

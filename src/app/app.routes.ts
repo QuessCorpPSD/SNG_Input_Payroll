@@ -26,6 +26,9 @@ import { UnseizeComponent } from './pages/PayrollInput/unseize/unseize.component
 import { OnetimeinputComponent } from './pages/PayrollInput/onetimeinput/onetimeinput.component';
 import { FinalsubmissionComponent } from './pages/PayrollInput/finalsubmission/finalsubmission.component';
 import { TimesheetComponent } from './pages/PayrollInput/timesheet/timesheet.component';
+import { ReportsComponent } from './pages/Reports/reports.component';
+import { PayregisterunprocessedComponent } from './pages/Reports/payregisterunprocessed/payregisterunprocessed.component';
+import { PayslipComponent } from './pages/Reports/payslip/payslip.component';
 
 
 
@@ -51,6 +54,14 @@ export const routes: Routes = [
           { path: 'increment', component: IncrementComponent },
           { path: 'onetimeinput', component: OnetimeinputComponent },
           { path: 'finalsubmission', component: FinalsubmissionComponent }
+        ]
+      },
+      {
+        path: 'reports',
+        component: ReportsComponent,
+        children: [
+          { path: 'payregisterunprocessed', component: PayregisterunprocessedComponent } ,
+           { path: 'payslip', component: PayslipComponent }         
         ]
       },
       //   { path: 'UI', component: SopComponent },

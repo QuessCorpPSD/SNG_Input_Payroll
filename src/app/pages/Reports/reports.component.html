@@ -1,0 +1,17 @@
+<div class="headerSOP">
+    <div style="width: 50%;"> <img src="../../../assets/Forward File 1.svg" /><b class="customer-sop">Reports
+        </b></div>
+</div>
+<div class="contentCategory">
+    <div style="width: 100%;">
+        <div class="Categorylist">
+            <ul class="horizontal-list">
+                <li><a [routerLink]="['/Master/reports/payregisterunprocessed']" class="nav-link"
+                        routerLinkActive="selectedInput" [routerLinkActiveOptions]="{ exact: true }">PayRegister</a></li>
+                  <li><a [routerLink]="['/Master/reports/payslip']" class="nav-link"
+                        routerLinkActive="selectedInput" [routerLinkActiveOptions]="{ exact: true }">Payslip</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<router-outlet></router-outlet>

@@ -276,6 +276,10 @@
                                 <th *ngFor="let d of dayCols; trackBy: trackDay" class="day-col">
                                     {{ d.dayNum }}
                                 </th>
+                                <th class="ot">OTWKD</th>
+                                <th class="ot">OTWND</th>
+                                <th class="ot">NSOTH</th>
+                                <th class="ot">POTRS</th>
                             </tr>
 
                             <!-- HEADER ROW 2: day initials (S M T …) -->
@@ -341,6 +345,22 @@
                                         (ngModelChange)="onType(r, i, $event)" (blur)="onBlur(r, i,cellInput)"
                                         style="text-align:center;" maxlength="5" />
                                 </td>
+                                <td class="ot">
+                  <input type="text" [(ngModel)]="r.OTWKD" style="text-align: center;" maxlength="6"
+                  (input)="onDecimalInput($event)"/>
+                </td>
+                <td class="ot">
+                  <input type="text" [(ngModel)]="r.OTWND" style="text-align: center;" maxlength="6"
+                  (input)="onDecimalInput($event)"/>
+                </td>
+                <td class="ot">
+                  <input type="text" [(ngModel)]="r.NSOTH" style="text-align: center;" maxlength="6"
+                  (input)="onDecimalInput($event)"/>
+                </td>
+                <td class="ot">
+                  <input type="text" [(ngModel)]="r.POTRS" style="text-align: center;" maxlength="6"
+                  (input)="onDecimalInput($event)"/>
+                </td>
                             </tr>
                         </tbody>
                     </table>

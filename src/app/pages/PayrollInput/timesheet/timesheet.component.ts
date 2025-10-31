@@ -59,6 +59,10 @@ interface ViewRow {
   OT: string | null;
   // one value per dynamic day column (same index order as dayCols)
   dayValues: (string | null)[];
+   OTWKD: string | null;
+  OTWND: string | null;
+  NSOTH: string | null;
+  POTRS: string | null;
   selected: boolean;
 }
 
@@ -255,7 +259,10 @@ export class TimesheetComponent {
             this.isLoading = false;
           }
         },
-        error: error => console.error('Error:', error)
+        error: error => {console.error('Error:', error);
+           this.isLoading = false;
+        alert('Failed to connect to server');
+        }
       })
     }
     this.isLoading = false;
@@ -515,6 +522,10 @@ export class TimesheetComponent {
             Approver: r['Approver'] ?? null,
             OT: r['OT'] ?? null,
             dayValues: this.dayCols.map(dc => (r[dc.key] ?? null)),
+             OTWKD: r['OTWKD'] ?? null,
+            OTWND: r['OTWND'] ?? null,
+            NSOTH: r['NSOTH'] ?? null,
+            POTRS: r['POTRS'] ?? null,
             selected: false
           };
 
@@ -714,6 +725,7 @@ export class TimesheetComponent {
         },
         error: err => {
           console.error('❌ Upload failed', err);
+          this.isLoading=false;
         }
       });
 
@@ -881,6 +893,7 @@ export class TimesheetComponent {
         },
         error: error => {
           console.error('Error:', error);
+          this.isLoading=false;
         }
       });
   }
@@ -1079,6 +1092,10 @@ export class TimesheetComponent {
         Remarks: row.Remarks || '',
         Approver: row.Approver || '',
         OT: row.OT || '',
+        OTWKD: row.OTWKD || '',
+        OTWND: row.OTWND || '',
+        NSOTH: row.NSOTH || '',
+        POTRS: row.POTRS || '',
         dayEntries: row.dayValues.map((val, i) => ({
           date: this.dayCols[i].date,
           value: val
@@ -1128,7 +1145,8 @@ export class TimesheetComponent {
 
         }
       },
-      error: err => console.error("Error:", err)
+      error: err => {console.error("Error:", err);
+        this.isLoading=false;}
     });
   }
 
@@ -1168,6 +1186,10 @@ export class TimesheetComponent {
         Remarks: row.Remarks || '',
         Approver: row.Approver || '',
         OT: row.OT || '',
+        OTWKD: row.OTWKD || '',
+        OTWND: row.OTWND || '',
+        NSOTH: row.NSOTH || '',
+        POTRS: row.POTRS || '',
         dayEntries: row.dayValues.map((val, i) => ({
           date: this.dayCols[i].date,
           value: val
@@ -1217,7 +1239,8 @@ export class TimesheetComponent {
 
         }
       },
-      error: err => console.error("Error:", err)
+      error: err =>{ console.error("Error:", err);
+        this.isLoading=false;}
     });
   }
 

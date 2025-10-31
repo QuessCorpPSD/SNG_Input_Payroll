@@ -76,23 +76,24 @@ searchText: string = '';
   ngOnInit(): void {
 
     const json = this._sessionStoreage.getItem('UserProfile');
+    
     if (json) {
       this.userdetail = JSON.parse(this.decry.decrypt(json));
-      //console.log(this.userdetail.userId);
+      console.log(this.userdetail);
     } else {
       console.warn('UserProfile not found in session storage');
     }
     this.BindCompanyCode();
     const userInfo = {
-      "userId": this.userdetail.userId,
+      "userId": this.userdetail.user_Id,
       "userName": this.userdetail.userName,
     };
   }
 
   BindCompanyCode() {
-    this._commonService.GetCompanyCodes(this.userdetail.userId).subscribe({
+    this._commonService.GetCompanyCodes(this.userdetail.user_Id).subscribe({
       next: res => {
-        //console.log(res);
+        console.log('res',res);
         this.companyCode = res.Data;
         this.filteredOptions$ = this.myControl.valueChanges.pipe(
           startWith(''),
