@@ -38,7 +38,6 @@ import { Console } from 'console';
     CompanyComponent,
     PotypeComponent,
     PonumbersearchComponent,
-    IsActiveComponent,
     MatTableModule,
     MatPaginatorModule
 
@@ -52,7 +51,7 @@ export class PoCreateComponent {
   PONumbber: string = '';
   ponumber: any;
   PricingType: any;
-  IActive: any; 
+  IActive: any; // Could be typed if you know the type
   message: string = '';
   popupMessage: string = '';
   popupSubMessage: string = '';
@@ -84,8 +83,6 @@ export class PoCreateComponent {
   dynamicColumns2: string[] = [];
   displayedColumns2: any[] = [];
   dataSource2 = new MatTableDataSource<any>();
-  selectedPONumber: any;
-    showPaginator = false;
 
 
   constructor(private dialog: MatDialog, private poRespository: PoRespository, private _sessionStoreage: SessionStorageService, private decry: EncryptionService) { }
@@ -100,14 +97,18 @@ export class PoCreateComponent {
   //     }
   //   });
   // }
-  potypeEvent(event) {
-    this.PricingType = event.company_Id;
+
+  potypeEvent(potype: any) {
+    //console.log(potype)
+    this.PricingType = potype.company_Id;
     console.log(this.PricingType);
     // this.PricingType = this.PricingType;
   }
 
+  //   isactiveEvent(event) {
+  // }
+
   handleCompanyEvent(event: any) {
-    console.log(event);
     this.comapnyId = event.companyId;
     this.selectedCompanyCode = event.companyCode;
 
@@ -123,12 +124,10 @@ export class PoCreateComponent {
   };
   MainPOSearch() {
     const companyidstr = this.comapnyId === 0 ? '""' : this.comapnyId;
-    
     const pricingtypestr = this.PricingType === '' ? '""' : this.PricingType;
-    const ponumberstr = this.ponumber === '' ? '""' : this.ponumber;
-    // const ponumberstr1 = ponumberstr.replace('/', '_');
+    const ponumberstr = this.selectedPONumbber === '' ? '""' : this.selectedPONumbber;
+    const ponumberstr1 = ponumberstr.replace('/', '_');
 
-    console.log("API Params =>", companyidstr, pricingtypestr, ponumberstr);
 
     if (companyidstr === 0) {
       alert('Please select a valid Company');
@@ -138,24 +137,20 @@ export class PoCreateComponent {
       alert('Please select a Pricing Type');
       return;
     }
-    if (!ponumberstr) {
+    if (!ponumberstr1) {
       alert('Please enter a PO Number');
       return;
     }
 
     this.poRespository
       .Mainposearch(
-        String(companyidstr), String(pricingtypestr), String(ponumberstr)
+        String(companyidstr), String(pricingtypestr), String(ponumberstr1)
       )
       .subscribe({
         next: (res) => {
           const table0 = res?.Data?.data?.Table0 ?? [];
           const table1 = res?.Data?.data?.Table1 ?? [];
           const table2 = res?.Data?.data?.Table2 ?? [];
-
-          console.log('Table0:', table0);
-          console.log('Table1:', table1);
-          console.log('Table2:', table2);
 
           if (table0.length > 0 || table1.length > 0 || table2.length > 0) {
 
@@ -188,14 +183,10 @@ export class PoCreateComponent {
               this.tableHeaders2 = Object.keys(table2[0]);
               this.dynamicColumns2 = Object.keys(table2[0]);
               this.displayedColumns2 = [...this.dynamicColumns2];
-              console.log('Table2 Columns:', this.displayedColumns2);
 
               this.dataSource2 = new MatTableDataSource(table2);
               this.dataSource2.paginator = this.paginator2; // make sure paginator2 defined
               this.dataSource2.sort = this.sort2;           // make sure sort2 defined
-              console.log('Table2 dataSource:', this.dataSource2);
-              console.log('Full API Response:', res);
-              console.log('Table2:', res?.Data?.data?.Table2);
 
             } else {
               this.dataSource2.data = [];
@@ -218,6 +209,16 @@ export class PoCreateComponent {
       });
   }
   ExtensionPO() {
+    if (!this.comapnyId) {
+      alert('Please select company Code');
+      return;
+    }
+    if (!this.selectedPONumbber) {
+      alert('Please select PO Number');
+      return;
+    }
+
+
     this.dialog.open(ExtensionComponent, {
       width: '90%',
       height: '90vh',
@@ -245,8 +246,7 @@ export class PoCreateComponent {
   // }
 
   handleponumbersearchEvent(event: any) {
-    this.ponumber = event.ponumber;
-    console.log(this.ponumber);
+    this.selectedPONumbber = event.ponumber;
   }
   ngOnInit(): void {
     const json = this._sessionStoreage.getItem('UserProfile');
@@ -272,7 +272,7 @@ export class PoCreateComponent {
     }
     this.poRespository.GetPOCreateDownloadTemplate(userId).subscribe({
       next: res => {
-        const data = res?.data?.data?.Table0 ?? [];
+        const data = res?.Data?.data?.Table0 ?? [];
         if (!data.length) {
           alert('No template data available.');
           return;
@@ -296,6 +296,7 @@ export class PoCreateComponent {
   }
 
   ImportClick(fileInput: HTMLInputElement): void {
+    fileInput.value = '';
     fileInput.click();
   }
 

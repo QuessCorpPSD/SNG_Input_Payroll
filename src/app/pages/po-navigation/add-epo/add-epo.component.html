@@ -1,0 +1,239 @@
+<form [formGroup]="POAddForm" novalidate>
+  <mat-card class="custom-card">
+    <mat-card-header class="sticky-header">
+      <mat-card-title><mat-icon>person</mat-icon> Employee PO</mat-card-title>
+      <span class="spacer"></span>
+      <button mat-icon-button (click)="onClose()" class="no-border-icon">
+        <mat-icon>close</mat-icon>
+      </button>
+      <br />
+    </mat-card-header>
+
+    <mat-card-content class="scroll-content">
+      <br />
+
+      <!-- Row 1 -->
+      <div class="row g-3">
+
+        <div class="col-md-4">
+          <label class="form-label">Company Code</label>
+          <input type="text" class="form-control form-control-sm" formControlName="CompanyCode">
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">PO No</label>
+          <ng-container *ngIf="statusId === 0">
+            <ponumbersearch [comapnyId]="companyId" (ponumbersearchEmit)="handleponumbersearchEvent($event)">
+            </ponumbersearch>
+          </ng-container>
+          <ng-container *ngIf="statusId != 0">
+            <input type="text" class="form-control form-control-sm" formControlName="PONo"
+              placeholder="Enter PO number">
+          </ng-container>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">PO Start Date</label>
+          <input type="date" class="form-control form-control-sm" formControlName="POStartDate" >
+        </div>
+
+      </div>
+
+      <!-- Row 2 -->
+      <div class="row g-3 mt-1">
+        <div class="col-md-4">
+          <label class="form-label">PO End Date</label>
+          <input type="date" class="form-control form-control-sm" formControlName="POEndDate" [readonly]="true">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">PO Total Value</label>
+          <input type="number" class="form-control form-control-sm" formControlName="POtotalvalue">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Start Date</label>
+          <input type="date" class="form-control form-control-sm" formControlName="StartDate"
+            placeholder="Select Start Date" (keydown.enter)="handlestartdatesearchEvent($event)"
+            (blur)="handlestartdatesearchEvent($event)">
+        </div>
+      </div>
+
+      <!-- Row 3 -->
+      <div class="row g-3 mt-1">
+        <div class="col-md-4">
+          <label class="form-label">End Date</label>
+          <input type="date" class="form-control form-control-sm" formControlName="EndDate"
+            placeholder="Select End Date" (keydown.enter)="handleenddatesearchEvent($event)"
+            (blur)="handleenddatesearchEvent($event)">
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">Duration</label>
+          <ng-container>
+            <input type="text" class="form-control form-control-sm" formControlName="Duration"  />
+          </ng-container>
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label text-muted small">Item Type</label>
+          <ng-container>
+             <app-poitemtype (itemTypeEmit)="ItemTypeEvent($event)" #poItemType></app-poitemtype>
+          </ng-container>
+          <!--  <ng-container *ngIf="statusId === 0">
+           <app-poitemtype (itemTypeEmit)="ItemTypeEvent($event)"></app-poitemtype> 
+             <app-poitemtype (itemTypeEmit)="ItemTypeEvent($event)" #poItemType></app-poitemtype>
+          </ng-container>-->
+          <!-- <ng-container *ngIf="statusId != 0">
+            <input type="text" class="form-control form-control-sm" formControlName="ItemType" />
+          </ng-container> -->
+        </div>
+
+      </div>
+      <div *ngIf="showExtensionInput" class="row g-3 mt-1">
+        <div class="col-md-4">
+          <label class="form-label">Extension End Date</label>
+          <input type="date" class="form-control form-control-sm" formControlName="ExtensionEndDate">
+        </div>
+      </div>
+
+      <!-- Row 4 -->
+      <div class="row g-3 mt-1">
+        <div class="col-md-4">
+          <label class="form-label">Employee ID</label>
+          <input type="number" class="form-control form-control-sm" formControlName="EmployeeID">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Employee Name</label>
+          <input type="text" class="form-control form-control-sm" formControlName="EmployeeName">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Client Emp No</label>
+          <input type="number" class="form-control form-control-sm" formControlName="ClientEmpNo">
+        </div>
+      </div>
+
+      <!-- Row 5 -->
+      <div class="row g-3 mt-1">
+        <div class="col-md-4">
+          <label class="form-label">Offer PO Value</label>
+          <input type="text" class="form-control form-control-sm" formControlName="OfferPOValue">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Quantity Type</label>
+          <select formControlName="Quantitytype" class="form-select form-select-sm">
+            <option value="">-- Select --</option>
+            <option *ngFor="let qty of POQuantitytype" [value]="qty.rowid">
+              {{ qty.code }}
+            </option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Quantity</label>
+          <ng-container>
+            <input type="text" class="form-control form-control-sm" formControlName="Quantity"/>
+          </ng-container>
+        </div>
+      </div>
+
+      <!-- Row 6 -->
+      <div class="row g-3 mt-1">
+        <div class="col-md-4">
+          <label class="form-label">CTC</label>
+          <input type="text" class="form-control form-control-sm" formControlName="CTC">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Service Charge %</label>
+          <input type="text" class="form-control form-control-sm" formControlName="ServiceCharge">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">PO Rate</label>
+          <input type="text" class="form-control form-control-sm" formControlName="PORate"
+            (keydown.enter)="handleporatesearchEvent($event)" (blur)="handleporatesearchEvent($event)" />
+        </div>
+      </div>
+      <!-- Row 7 -->
+      <div class="row g-3 mt-1">
+        <div class="col-md-4">
+          <label class="form-label">Balance Amount</label>
+          <input type="text" class="form-control form-control-sm" formControlName="BalanceAmount">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Monthly Rate</label>
+          <input type="text" class="form-control form-control-sm" formControlName="MonthlyRate">
+        </div>
+        <div class="col-md-4" >
+          <label class="form-label">Resource Value</label>
+          <input type="text" class="form-control form-control-sm" formControlName="ResourceValue">
+        </div>
+        <div class="col-md-4" *ngIf="statusId === 0 || statusId === 2">
+          <label class="form-label text-muted small mb-1">Upload Document<span class="text-danger">*</span></label>
+
+          <div class="d-flex align-items-center gap-3">
+            <input type="file" #fileInput (change)="onFileSelected($event)" hidden />
+
+            <button type="button" class="btn btn-outline-secondary btn-sm d-flex align-items-center"
+              (click)="fileInput.click()" style="gap: 8px;">
+              <img src="assets/Icons/Upload_enabled.svg" alt="Upload" style="width: 20px; height: 20px;" />
+              <span>Choose File</span>
+            </button>
+
+            <span class="text-muted small text-truncate" style="max-width: 250px;" *ngIf="selectedFile"
+              [title]="selectedFile.name">
+              {{ selectedFile.name }}
+            </span>
+          </div>
+
+          <div *ngIf="POAddForm.get('Document')?.touched && POAddForm.get('Document')?.hasError('required')"
+            class="text-danger small mt-1">
+            Document is required
+          </div>
+
+        </div>
+      </div>
+    </mat-card-content>
+
+    <mat-card-footer>
+      <div class="row mt-4">
+        <div class="col-12">
+          <div class="btn-1" style="display: flex; justify-content: flex-end; gap: 10px; width: 100%;">
+
+            <ng-container *ngIf="statusId === 3">
+              <!-- Extension Button: Disabled when Revised is clicked -->
+              <button class="Extension-btn"
+                style="background-color: #ffc107; border: none; border-radius: 7px; width: 85px; height: 30px; cursor: pointer; "
+                (click)="toggleExtensionInput()">
+                Extension
+              </button>
+
+              <!-- Revised Button: Disabled when Extension is clicked -->
+              <button
+                style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: darkgray;"
+                (click)="onRevised()">
+                Revised
+              </button>
+            </ng-container>
+
+            <button *ngIf="statusId === 0 || statusId === 2" type="reset"
+              style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0;">
+              Reset
+            </button>
+
+            <button type="submit" *ngIf="statusId === 0 || statusId === 2 || isExtensionClicked==true
+            || isRevisedClicked==true"
+              style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue;color: white;"
+              (click)=" saveEmployeePO()">
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </mat-card-footer>
+  </mat-card>
+</form>
+
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>
+<div *ngIf="showPopup" class="overlay">
+  <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+    (close)="showPopup = false"></app-alertpopup>
+</div>

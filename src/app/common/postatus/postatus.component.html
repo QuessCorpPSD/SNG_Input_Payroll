@@ -1,4 +1,8 @@
-<mat-form-field class="w-100 custom-height rounded-1" appearance="outline" style="background-color: white; height:30px;">
+<mat-form-field
+  class="w-100 custom-height rounded-1"
+  appearance="outline"
+  style="background-color: white; height:30px;"
+>
   <input
     style="color: #222; font-family: nunito sans; font-size: 12px; font-weight: 500;"
     type="text"
@@ -7,6 +11,7 @@
     placeholder="Select PO Status"
     [matAutocomplete]="auto"
   />
+
   <mat-autocomplete
     #auto="matAutocomplete"
     [displayWith]="displayFn"

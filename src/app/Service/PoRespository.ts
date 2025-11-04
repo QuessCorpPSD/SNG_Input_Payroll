@@ -4,7 +4,6 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { APIResponse } from "../Models/apiresponse";
 import { Observable } from "rxjs";
 import { IPORespository } from "../Repository/IPORepository";
-// import { v } from "@angular/cdk/scrolling-module.d-ud2XrbF8";
 
 
 @Injectable({
@@ -29,9 +28,8 @@ export class PoRespository implements IPORespository {
         return this.http.get<APIResponse>(this.env.apiUrl + 'PurchaseOrder/PoSearchByCompanyId/' + companyId)
     }
 
-    Mainposearch(companyId: string, pricingType: string, Ponumber: string): Observable<APIResponse> {
-        console.log(companyId, pricingType, Ponumber);
-        return this.http.get<APIResponse>(this.env.apiUrl + 'PurchaseOrder/MainPoSearch/' + companyId + '/' + pricingType + '/' + Ponumber)
+    Mainposearch(companyId : string,pricingType:string,Ponumber:string): Observable<APIResponse> {
+        return this.http.get<APIResponse>(this.env.apiUrl + 'PurchaseOrder/MainPoSearch/' + companyId+'/'+pricingType+'/'+Ponumber)
     }
 
     GetPOQuantyValues(val): Observable<APIResponse> {
@@ -59,9 +57,9 @@ export class PoRespository implements IPORespository {
     BulkPOUpload(formData: FormData): Observable<APIResponse> {
         return this.http.post<APIResponse>(
             this.env.apiUrl + 'PurchaseOrder/BulkPOCreate',
-            formData
+            formData 
         );
-    }
+    } 
     POSearchCompanyAndPoNumber(val): Observable<APIResponse> {
         const url = `${this.env.apiUrl}PurchaseOrder/POSearchCompanyAndPoNumber`;
         const headers = new HttpHeaders({
@@ -97,13 +95,16 @@ export class PoRespository implements IPORespository {
             payload
         );
     }
-    GetPOCreateDownloadTemplate(userId: any): Observable<any> {
+    GetPOCreateDownloadTemplate(userId:any): Observable<any> {
         return this.http.get<APIResponse>(this.env.apiUrl + 'PurchaseOrder/GetPoCreateTemplate/DownloadTemplate/' + userId)
     }
 
-    GetEmployeePOSerach(payload: any): Observable<APIResponse> {
-        console.log('Sending PO Search payload:', payload);
-        return this.http.post<APIResponse>(this.env.apiUrl + 'PurchaseOrder/EmployeePoView', payload);
+       GetEmployeePOSerach(payload: any): Observable<APIResponse> {
+        //console.log('Sending PO save payload:', payload);
+        return this.http.post<APIResponse>(
+            this.env.apiUrl + 'PurchaseOrder/EmployeePoView',
+            payload
+        );
     }
 
 }

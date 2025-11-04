@@ -1,0 +1,34 @@
+<div style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700;">
+    PO MonthWise Active Report </div>
+
+<div class="container-fluid w-100">
+    <div class="card-body">
+        <div class="row g-3 align-items-end w-100" style="padding-top:10px;">
+            <div class="col-md-4">
+                <label class="form-label text-muted small">From Date</label>
+                <input type="date" placeholder="Enter From Date" [(ngModel)]="txtFromDate" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label text-muted small">To Date</label>
+                <input type="date" placeholder="Enter To Date" [(ngModel)]="txtToDate" />
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="col-md-4 d-flex gap-2">
+                <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                    (click)="ExportClick()" matTooltip="Excel Export">
+                    <mat-icon>table_chart</mat-icon>
+                </button>
+                <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                    (click)="ClearClick()" matTooltip="Clear">
+                    <mat-icon>clear</mat-icon>
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>

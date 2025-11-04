@@ -1,0 +1,86 @@
+<div style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700;">
+    PO Employeewise Report </div>
+
+<div class="container-fluid w-100">
+    <div class="card-body">
+        <div class="row g-3 align-items-end w-100" style="padding-top:10px;">
+            <div class="col-md-4">
+                <label class="form-label text-muted small">Employee ID</label>
+                <input type="text" placeholder="Enter EmployeeId" [(ngModel)]="txtEmployeeId" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label text-muted small">Employee Type</label>
+                <select [(ngModel)]="ddEmployeeType">
+                    <option value="0">New</option>
+                    <option value="1">Old</option>
+                </select>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="col-md-5 d-flex gap-2">
+                <button class="btn btn-primary btn-sm d-flex align-items-center justify-content-center"
+                    (click)="searchClick()" matTooltip="Search">
+                    <mat-icon>search</mat-icon>
+                </button>
+                <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                    (click)="ExportClick()" matTooltip="Excel Export">
+                    <mat-icon>table_chart</mat-icon>
+                </button>
+                <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                    (click)="ClearClick()" matTooltip="Clear">
+                    <mat-icon>clear</mat-icon>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- <div class="container-fluid w-100">
+    <div class="card-body">
+        <div class="row g-3 align-items-end w-100 col-md-9" style="padding-top:10px;">
+            <div class="col-md-3">
+                <label class="form-label text-muted small">Employee ID</label>
+                <input type="text" placeholder="Enter EmployeeId" [(ngModel)]="txtEmployeeId" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label text-muted small">Employee Report Type</label>
+                <select [(ngModel)]="ddEmployeeType">
+                    <option value="0" selected>New</option>
+                    <option value="1">Old</option>
+                </select>
+            </div>
+            <div class="col-md-3 d-flex gap-2">
+                <button class="btn btn-primary btn-sm d-flex align-items-center justify-content-center"
+                    (click)="searchClick()" matTooltip="Search">
+                    <mat-icon>search</mat-icon>
+                </button>
+                <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                    (click)="ExportClick()" matTooltip="Excel Export">
+                    <mat-icon>table_chart</mat-icon>
+                </button>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>
+
+<div *ngIf="showGrid">
+    <div class="table-wrapper">
+        <div style="max-height: auto; overflow-y: auto; overflow-x: auto;">
+            <table class="previewtable" style="border:1px solid #E8E8E8; padding: 5px 5px 5px 5px;">
+                <thead>
+                    <tr>
+                        <th *ngFor="let col of getTableColumns()">{{ col }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let row of POEmployeeData">
+                        <td *ngFor="let col of getTableColumns()">{{ row[col] }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,295 @@
+.mat-footer-paginator {
+    position: sticky;
+    bottom: 0;
+    width: 1070px;
+    background: white;
+    box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+}
+
+.table-wrapper {
+    display: flex;
+    width: 1070px;
+    flex-direction: column;
+    gap: 8px;
+    padding-top: 20px;
+}
+
+.custom-table {
+    background: white;
+    width: 1070px;
+    overflow: auto;
+    border: 1px solid #ddd;
+}
+
+::ng-deep .mat-elevation-z8 {
+    box-shadow: none !important;
+}
+
+::ng-deep .mat-mdc-header-cell {
+    color: #A0A0A0;
+    font-size: 12px;
+    font-family: "Nunito Sans";
+    font-weight: 600;
+    line-height: 19.40px;
+    word-wrap: break-word;
+    border-right: 1px solid #ddd;
+    position: sticky;
+    display: flex;
+    justify-content: center;
+    vertical-align: middle; 
+    text-align: center;
+}
+.fixed-width-column {
+    width: 50px;
+    min-width: 50px;
+    max-width: 75px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.container-fluid{
+    padding-left: 0px !important;
+}
+
+.fixed-width-column2 {
+    width: 30px;
+    min-width: 30px;
+    max-width: 50px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+::ng-deep .mat-mdc-cell {
+    font-family: "Nunito Sans";
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 22.4px;
+    letter-spacing: 0.24px;
+    color: #222;
+    border-bottom: 1px dashed #E8E8E8 !important;
+    border-right: 1px solid #ddd;
+    display: flex;
+    justify-content: center;
+    vertical-align: middle; 
+    text-align: center;
+}
+
+.table-scroll {
+    max-height: 450px;
+    /* adjust based on your need */
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+
+.offer-style {
+    border-radius: 6px;
+    border: 1px solid #C7F5BB;
+    background: #E9FFE3;
+    height: 22px;
+    width: 87px;
+    text-align: center;
+}
+
+select {
+  width: 100%;
+  padding: 6px 8px;
+  border-radius: 4px;
+  border: 1px solid #A0A0A0;
+  font-size: 12px;
+  font-family: "Nunito Sans";
+  color: #222; 
+  appearance: outline;
+}
+input {
+    width: 100%;
+  padding: 6px 8px;
+  border-radius: 4px;
+  border: 1px solid #A0A0A0;
+  font-size: 12px;
+  font-family: "Nunito Sans";
+  color: #222; 
+  appearance: outline;
+}
+
+option {
+  padding: 8px;
+  background-color: #fff;     /* default background */
+  color: #222;   
+  font-size: 12px;
+  font-family: "Nunito Sans";   /* text color */
+}
+
+option:hover {
+  background-color: #ddd;  /* hover color */
+  color: #fff;
+}
+
+option:checked {
+  background-color: #7E7E7E;  /* selected option */
+  color: #fff;
+}
+
+.scroll-content {
+  flex: 1;                  /* take remaining space */
+  overflow-y: auto;         /* enable vertical scrolling */
+  padding-right: 8px;       /* avoid scrollbar overlapping text */
+}
+
+.previewtable {
+  width: auto;
+  table-layout: auto;
+  border-collapse: collapse;
+  font-family: "Nunito Sans";
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 22.4px;
+  letter-spacing: 0.24px;
+  color: #7E7E7E;
+  border: 1px solid #E8E8E8;
+  /* 🔹 Full table border */
+}
+
+.previewtable th,
+.previewtable td {
+  font-family: "Nunito Sans";
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 22.4px;
+  letter-spacing: 0.24px;
+  white-space: nowrap;
+  padding: 8px;
+  border: 1px solid #E8E8E8;
+  /* 🔹 Cell border */
+  text-align: left;
+}
+
+.previewtable th {
+  font-family: "Nunito Sans";
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 22.4px;
+  letter-spacing: 0.24px;
+  background-color: #f9f9f9;
+  /* Optional for visibility */
+  color: #A0A0A0;
+}
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5); /* dark background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000; /* stay above everything */
+}
+
+.popup-card {
+  width: 800px;         /* adjust size */
+  max-width: 75%;
+  height: 80vh;         /* 80% of viewport height */
+  max-height: 80vh;     /* ensures it won’t exceed 80% */
+  overflow-y: auto;     /* make inner content scrollable */
+}
+.custom-checkbox {
+  width: 16px;   /* base size */
+  height: 16px;
+  transform: scale(1.5); /* increase/decrease size */
+  cursor: pointer;
+  align-items: center;
+  padding-left: 50px;
+}
+.checkbox-wrapper {
+  display: flex;
+  align-items: center;   /* vertical center */
+  justify-content: space-between; /* keep label left, checkbox right */
+  width: 300px;
+  height: 42px;
+  font-size: 12px;
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 500;
+  color: var(--text-field-heading-, #89898B);
+  text-align: end;
+}
+
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -5px;
+  margin-left: -5px;
+}
+
+/* your.component.scss */
+.custom-input {
+  width: 150px;         
+  height: 60px;        
+  
+  .mat-form-field-wrapper {
+    padding-bottom: 0px;
+  }
+
+  .mat-form-field-flex {
+    height: 10px;       
+  }
+
+  .mat-input-element {
+    height: 10px;
+    padding: 1px 2px;   
+    font-size: 14px;    
+  }
+
+  .mat-form-field-underline {
+    bottom: 0px;
+  }
+
+  .mat-form-field-subscript-wrapper {
+    display: none;      
+  }
+}
+
+.card-body {
+  width: 100%;
+  padding-top:10px;
+  display: flex;
+  gap: 15px;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.centered-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+}

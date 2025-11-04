@@ -1,0 +1,11 @@
+<mat-form-field class="w-100 custom-height rounded-1" appearance="outline"
+    style="background-color: white; height: 30px;">
+    <input matInput type="text" placeholder="Select Item Type" [formControl]="myControl" [matAutocomplete]="auto"
+        style="color: #222; font-family: Nunito Sans; font-size: 12px; font-weight: 500;" />
+
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="onOptionSelected($event)">
+        <mat-option *ngFor="let option of filteredOptions$ | async" [value]="option" style="font-size: 11px; line-height: 20px;">
+            {{ option.description}}
+        </mat-option>
+    </mat-autocomplete>
+</mat-form-field>

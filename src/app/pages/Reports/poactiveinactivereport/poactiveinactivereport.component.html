@@ -1,0 +1,125 @@
+<div style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700;">
+    PO Employee Active/InActive Report</div>
+
+<div class="container-fluid w-100">
+    <div class="card-body">
+        <div class="row g-3 align-items-end w-100" style="padding-top:10px;">
+            <div class="col-md-3">
+                <label class="form-label text-muted small">Company Code</label>
+                <companyall (companyEmit)="handleCompanyEvent($event)" style="width: 300px;"></companyall>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label text-muted small">Site Name</label>
+                <groupname [selectedCompanyId]="selectedCC" (sitenameEmit)="handleGroupNameEvent($event)"></groupname>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label text-muted small">PO Type</label>
+                <select [(ngModel)]="ddPOType" (change)="POTypeChange(ddPOType)">
+                    <option value="REGULAR">Regular</option>
+                    <option value="THIRDPARTY">Third Party</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label text-muted small">Active/InActive</label>
+                <select [(ngModel)]="ddActive">
+                    <option value="1">Active</option>
+                    <option value="0">InActive</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label text-muted small">Year</label>
+                <select [(ngModel)]="ddYear">
+                    <option value="0">Select Year</option>
+                    <option *ngFor="let item of YearName" [value]="item.Year">
+                        {{ item.Year }}
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label text-muted small">Vertical</label>
+                <select [(ngModel)]="ddVertical">
+                    <option value="0">Select Vertical</option>
+                    <option *ngFor="let item of VerticalName" [value]="item.VERTICAL_NAME">
+                        {{ item.VERTICAL_NAME }}
+                    </option>
+                </select>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="col-md-5 d-flex gap-2">
+                <button class="btn btn-primary btn-sm d-flex align-items-center justify-content-center"
+                    (click)="searchClick()" matTooltip="Search">
+                    <mat-icon>search</mat-icon>
+                </button>
+                <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                    (click)="ExportClick()" matTooltip="Excel Export">
+                    <mat-icon>table_chart</mat-icon>
+                </button>
+                <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                    (click)="ClearClick()" matTooltip="Clear">
+                    <mat-icon>clear</mat-icon>
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>
+
+<div class="table-wrapper">
+    <div class="table-scroll">
+        <table mat-table [dataSource]="dataSource" matSort class="custom-table mat-elevation-z8">
+
+            <ng-container matColumnDef="EMP_ID">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Emp Code</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.EMP_ID
+                    }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="CLIENT_EMP_ID">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Client Emp ID</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.CLIENT_EMP_ID
+                    }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="EMP_NAME">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Emp Name</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.EMP_NAME
+                    }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="radarDOJ">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>DOJ</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element['Radar DOJ']
+                    }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="SITENAME">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Site Name</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.SITENAME
+                    }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="MonthlyRate">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Monthly Rate</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.MonthlyRate
+                    }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="povalue">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>PO Value</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element['Overall PO Value']
+                    }}</mat-cell>
+            </ng-container>
+            <!-- Header and Row Declaration -->
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </table>
+    </div>
+
+    <mat-paginator class="mat-footer-paginator" [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons stickyEnd>
+    </mat-paginator>
+</div>

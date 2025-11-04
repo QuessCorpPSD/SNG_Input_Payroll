@@ -1,0 +1,23 @@
+<div class="headerSOP">
+        <div style="width: 50%;"> <img src="../../../assets/Forward File 1.svg" /><b class="customer-sop">PO Process</b></div>
+</div>
+<div class="contentCategory">
+        <div style="width: 100%;">
+                <div class="Categorylist">
+                        <ul class="horizontal-list">
+                                <li><a [routerLink]="['/Master/ponavigation/Entry']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Main PO</a></li>
+                                <li><a [routerLink]="['/Master/ponavigation/Employee']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Employee PO</a></li>
+                                <li><a [routerLink]="['/Master/ponavigation/Approve']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Employee PO Approval</a></li>
+
+                     
+                        </ul>
+                </div>
+        </div>
+</div>
+<router-outlet></router-outlet>

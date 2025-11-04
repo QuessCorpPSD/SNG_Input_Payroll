@@ -136,21 +136,25 @@ export class AddPOComponent implements OnInit {
     this.POAddForm.reset();
   }
 
+
   ValidatedSubmit(): Promise<void> {
     this.isLoading = true;
-
     return new Promise((resolve, reject) => {
-      // Check if the form is valid
       if (this.POAddForm.invalid) {
+
+        const controls = this.POAddForm.controls;
+        for (const name in controls) {
+          if (controls[name].invalid) {
+
+          }
+        }
         reject('Form validation failed');
         this.isLoading = false;
         return;
       }
 
-      // Get raw form values
       const formValue = this.POAddForm.getRawValue();
 
-      // Prepare payload
       const payload = {
         company_ID: this.companyId || 0,
         po_ID: this.poId || 0,
@@ -168,73 +172,88 @@ export class AddPOComponent implements OnInit {
         extention: formValue.extention || 0,
         extendedStartDate: formValue.extendedStartDate || '',
         extendedEndDate: formValue.extendedEndDate || '',
-        createdBy: this.userdetail?.userId?.toString() || '', // Safe check for userId
+        createdBy: this.userdetail.userId.toString() || '',
         billingType: parseInt(formValue.BillingType).toString() || '',
         action: formValue.action || 1,
         po_CategoryID: parseInt(formValue.POCategory) || 0
       };
+      // this.poService.AddPOSave(payload).subscribe({
+      //   next: (res) => {
+      //     console.log('PO Save success:', res);
+      //   },
+      //   error: (err) => {
+      //     console.error('PO save error:', err);
+      //     if (err.error) {
+      //       console.error('Server error response:', err.error);
+      //     }
+      //   }
+      // });
 
-      console.log('User Detail:', this.userdetail);
-      console.log('Form Values:', this.POAddForm.getRawValue());
-      console.log('Payload to be sent:', payload);
 
-      // Call the API to save the PO
       this.poService.AddPOSave(payload).subscribe({
         next: poSaveResponse => {
-          // Check if the response indicates success
           if (poSaveResponse.Data?.response.includes("SuccessFully Updated")) {
-            console.log('PO Save Success:', poSaveResponse);
+            console.log('file:', this.selectedFile);
+            // console.log('File name',this.selectedFile.name);
+            console.log('File_Path', "File path");
+            console.log('PONumber', formValue.POform);
+            console.log('CreatedBy', this.userdetail.userId.toString());
 
-            // File upload handling if a file is selected
             if (this.selectedFile) {
               const formData = new FormData();
               formData.append('file', this.selectedFile);
               formData.append('File_Name', this.selectedFile.name);
               formData.append('File_Path', "File Path");
               formData.append('PONumber', payload.poNumber);
-              formData.append('CreatedBy', this.userdetail?.userId?.toString() || '');
+              formData.append('CreatedBy', this.userdetail.userId.toString());
 
               this.poService.ImportFileUpload(formData).subscribe({
                 next: fileUploadResponse => {
-                  // Check if file upload was successful
+
                   if (fileUploadResponse?.Data?.response.includes("Record(s) Inserted Successfully!")) {
                     this.showPopup = true;
+
                     this.popupMessage = fileUploadResponse?.Data?.response;
                     this.isLoading = false;
-                    resolve(); // Resolve if file upload is successful
-                  } else {
-                    // If file upload fails
-                    this.showPopup = true;
-                    this.popupMessage = fileUploadResponse?.Data?.response;
-                    this.isLoading = false;
-                    reject(fileUploadResponse?.Data?.response); // Reject on file upload failure
+                    return;
                   }
+                  else {
+                    this.showPopup = true;
+
+                    this.popupMessage = fileUploadResponse?.Data?.response;
+                    this.isLoading = false;
+                    return;
+                  }
+
+                  console.log('File uploaded:', fileUploadResponse);
+                  resolve();
                 },
                 error: uploadErr => {
                   console.error('File upload error:', uploadErr);
-                  reject(uploadErr); // Reject on file upload error
+                  reject(uploadErr);
                 }
               });
             } else {
-              resolve(); // Resolve if no file is uploaded
+              resolve();
             }
-          } else {
-            // Handle PO save failure
+          }
+          else {
+            
             this.showPopup = true;
+
             this.popupMessage = poSaveResponse?.Data?.response;
             this.isLoading = false;
-            reject(poSaveResponse?.Data?.response); // Reject if PO save failed
+            return;
           }
+
         },
         error: saveErr => {
           console.error('PO save error:', saveErr);
-          this.isLoading = false;
-          reject(saveErr); 
+          reject(saveErr);
         }
       });
     });
   }
-
 
 
 
@@ -353,6 +372,20 @@ export class AddPOComponent implements OnInit {
 
 
 
+    // Uncomment and adjust if you want to auto-load cities on state change
+    /*
+    this.POAddForm.get('BillingAddress.State')?.valueChanges
+      .pipe(
+        filter(v => !!v),
+        distinctUntilChanged()
+      )
+      .subscribe((stateId: string) => {
+        console.log("State " + stateId);
+        this.BindBillingCity(stateId);
+        this.POAddForm.get('BillingAddress.City')?.reset('');
+      });
+    */
+    //  this.POAddForm.get('PONumber')?.disable();
 
 
 
@@ -370,7 +403,7 @@ export class AddPOComponent implements OnInit {
       const val = {
         startDate: this.formatDateString(startDate),
         endDate: this.formatDateString(endDate),
-        quantitytype: parseInt(quantityRowId),  // convert "36.0" to 36 integer
+        quantitytype: parseInt(quantityRowId, 10),  // convert "36.0" to 36 integer
         companyId: this.companyId
       };
 
@@ -427,6 +460,23 @@ export class AddPOComponent implements OnInit {
       }
     });
   }
+  // BindPONumber() {
+  //   if (!this.companyId) {
+  //     console.warn('BindPONumber: companyId is undefined or null, skipping API call.');
+  //     return;
+  //   }
+  //   console.log('companyId', this.companyId);
+  //   this.poService.PONumberSearch(this.companyId).subscribe({
+  //     next: res => {
+  //       console.log('PO Number response:', res.Data);
+  //       this.PONumber = res.Data;
+  //       // console.log('poid:',this.poid)
+  //     },
+  //     error: err => {
+  //       console.log('PO Number error:', err);
+  //     }
+  //   });
+  // }
 
 
 

@@ -37,10 +37,20 @@ import { VendorEmployeeComponent } from './pages/Masters/vendor-employee/vendor-
 import { InvoicenavigationComponent } from './pages/Invoice/invoicenavigation/invoicenavigation.component';
 import { InitiateComponent } from './pages/Invoice/initiate/initiate.component';
 import { PerfomainvoiceComponent } from './pages/Invoice/perfomainvoice/perfomainvoice.component';
-import { PoNavigationComponent } from './pages/POProcess/po-navigation/po-navigation.component';
+import { PoNavigationComponent } from './pages/po-navigation/po-navigation.component';
 import { PoCreateComponent } from './pages/POProcess/po-create/po-create.component';
-import { EmployeePOComponent } from './pages/POProcess/employee-po/employee-po.component';
-import { POApproveComponent } from './pages/POProcess/poapprove/poapprove.component';
+import { EmployeePOComponent } from './pages/po-navigation/employee-po/employee-po.component';
+import { POApproveComponent } from './pages/po-navigation/poapprove/poapprove.component';
+import { ReportsComponent } from './pages/Reports/reports.component';
+import { PayregisterunprocessedComponent } from './pages/Reports/payregisterunprocessed/payregisterunprocessed.component';
+import { PayslipComponent } from './pages/Reports/payslip/payslip.component';
+import { InvoiceLeaveBalanceReportComponent } from './pages/Reports/invoice-leave-balance-report/invoice-leave-balance-report.component';
+import { LeaveBalanceReportComponent } from './pages/Reports/leave-balance-report/leave-balance-report.component';
+import { PoactiveinactivereportComponent } from './pages/Reports/poactiveinactivereport/poactiveinactivereport.component';
+import { PoemployeereportComponent } from './pages/Reports/poemployeereport/poemployeereport.component';
+import { PomonthwisereportComponent } from './pages/Reports/pomonthwisereport/pomonthwisereport.component';
+import { QITSBillingReportComponent } from './pages/Reports/qits-billing-report/qits-billing-report.component';
+import { TimesheetReportComponent } from './pages/Reports/timesheet-report/timesheet-report.component';
 
 
 
@@ -94,10 +104,26 @@ export const routes: Routes = [
         path: 'ponavigation',
         component: PoNavigationComponent,
         children: [
-          { path: 'Mainpo', component: PoCreateComponent },
-          { path: 'employeepo', component: EmployeePOComponent },
-          { path: 'employeeapproval', component: POApproveComponent },
+          { path: 'Entry', component: PoCreateComponent },
+          { path: 'Employee', component: EmployeePOComponent },
+          { path: 'Approve', component: POApproveComponent },
 
+        ]
+      },
+      {
+        path: 'reports',
+        component: ReportsComponent,
+        children: [
+          { path: 'payregisterunprocessed', component: PayregisterunprocessedComponent },
+          { path: 'payslip', component: PayslipComponent },
+          { path: 'app-invoice-leave-balance-report', component: InvoiceLeaveBalanceReportComponent },
+          { path: 'app-leave-balance-report', component: LeaveBalanceReportComponent },
+          { path: 'poactiveinactivereport', component: PoactiveinactivereportComponent },
+          { path: 'poemployeereport', component: PoemployeereportComponent },
+          { path: 'pomonthwisereport', component: PomonthwisereportComponent },
+          { path: 'app-qits-billing-report', component: QITSBillingReportComponent },
+          { path: 'app-timesheet-report', component: TimesheetReportComponent },
+          { path: 'poactiveinactivereport', component: PoactiveinactivereportComponent }
         ]
       },
       //   { path: 'UI', component: SopComponent },

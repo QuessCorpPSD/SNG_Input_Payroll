@@ -1,3 +1,4 @@
+
 .custom-input {
   width: 150px;
   height: 60px;
@@ -56,40 +57,36 @@
   z-index: 1000;
 }
 
-table-wrapper {
-  display: flex;
-  flex-direction: column;
-  /* gap: 8px; */
-  /* padding: 20px 24px 0 24px; */
-}
-
 .table-container {
   overflow-x: auto;
-  overflow-y: auto;
+  overflow-y: hidden;
   border: 1px solid #ddd;
   max-width: 950px;
   margin: 20px 0;
 }
 
-.container-fluid{
-  height: 100vh !important;
-  overflow-y: auto !important;
+::ng-deep .mat-header-cell {
+  background-color: #302CB3;
+  /* Optional */
+  color: rgb(18, 227, 15) !important;
+  font-weight: 700;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 2px 2px -1px rgba(84, 84, 84, 0.4);
+  padding: 10px;
+  text-align: left;
+  border-left: 1px solid #ddd;
 }
 
 th {
   color: #948c8c;
-  border: 1px solid #ddd;
-  /* margin-bottom: 60px; */
-  padding: 10px;
-  background-color: blue;
-  padding-bottom: 5px;
-
 }
 
-td {
+td,
+th {
   border: 1px solid #ddd;
   padding: 10px;
-
 }
 
 .mat-paginator {
@@ -148,6 +145,7 @@ td {
 
   .field-label {
     padding: 5px 2px;
+    /* display: block; */
     align-items: start;
   }
 }
@@ -156,8 +154,79 @@ td {
 
   table.mat-elevation-z8 th.mat-header-cell,
   table.mat-elevation-z8 td.mat-cell {
-    padding: 0px 5px;
-    font-size: 10px;
+    padding: 8px 10px;
+    font-size: 13px;
     border: 1px solid #ddd;
   }
+}
+
+.table-wrapper {
+    display: flex;
+    /* width: 1185px; */
+    flex-direction: column;
+    gap: 8px;
+    padding: 20px 24px 0 24px;
+    /* padding lives here */
+    /* no overflow here */
+}
+
+.table-scroll {
+    max-height: 450px;
+    overflow-y: auto;
+    overflow-x: auto;
+    /* both axes if needed */
+    scrollbar-gutter: stable;
+    /* reserves space for scrollbar (no overlap, no layout shift) */
+    /* optional: extra end padding so content doesn’t touch the scrollbar track */
+    padding-right: 8px;
+    /* tweak to taste */
+}
+
+.table-scroll table {
+    border-collapse: collapse;
+    width: max-content;
+    /* prevent shrink */
+    min-width: 100%;
+    /* fill container */
+}
+
+
+.ts {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: max-content;
+    min-width: 100%;
+    font-family: Nunito Sans, sans-serif;
+}
+
+.ts th,
+.ts td {
+    border: 1px solid #e8e8e8;
+    padding: 4px 5px;
+    background: #fff;
+    white-space: nowrap;
+}
+
+.ts thead .head-1 th {
+    /* background: #2f6d8f;
+  color: #fff; */
+    /* position: sticky; */
+    top: 0;
+    z-index: 2;
+    color: #A0A0A0;
+    font-size: 12px;
+    /* or any size you prefer */
+    font-family: "Nunito Sans";
+    font-weight: 600;
+    line-height: 35.33px;
+    word-wrap: break-word;
+}
+
+.ts thead .head-2 th {
+    /* background: #3e7fa3;
+  color: #fff; */
+    font-weight: 600;
+    /* position: sticky; */
+    top: 34px;
+    z-index: 2;
 }
