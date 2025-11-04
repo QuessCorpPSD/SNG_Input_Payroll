@@ -59,6 +59,10 @@ interface ViewRow {
   OT: string | null;
   // one value per dynamic day column (same index order as dayCols)
   dayValues: (string | null)[];
+   OTWKD: string | null;
+  OTWND: string | null;
+  NSOTH: string | null;
+  POTRS: string | null;
   selected: boolean;
 }
 
@@ -195,7 +199,7 @@ export class TimesheetComponent {
     //console.log(this.payperiodUI);
   }
   ngOnInit(): void {
-    this.Switchpage = "Daily";
+    this.Switchpage = "Month";
     const json = this._sessionStoreage.getItem('UserProfile');
     if (json) {
       this.userdetail = JSON.parse(this.decry.decrypt(json));
@@ -255,7 +259,10 @@ export class TimesheetComponent {
             this.isLoading = false;
           }
         },
-        error: error => console.error('Error:', error)
+        error: error => {console.error('Error:', error);
+           this.isLoading = false;
+        alert('Failed to connect to server');
+        }
       })
     }
     this.isLoading = false;
@@ -464,8 +471,7 @@ export class TimesheetComponent {
     city_Id: string, empid: string) {
     this.timesheetService.GetEmployeeTimesheetDaywise(companyCode, payPeriod, siteCode, city_Id, empid).subscribe({
       next: res => {
-        console.log(res.Data);
-        if (!res.Data || res.Data == null) {
+        if (!res.Data || res.Data === null) {
           alert("No data available to display.");
           this.isLoading = false;
           return;
@@ -516,6 +522,10 @@ export class TimesheetComponent {
             Approver: r['Approver'] ?? null,
             OT: r['OT'] ?? null,
             dayValues: this.dayCols.map(dc => (r[dc.key] ?? null)),
+             OTWKD: r['OTWKD'] ?? null,
+            OTWND: r['OTWND'] ?? null,
+            NSOTH: r['NSOTH'] ?? null,
+            POTRS: r['POTRS'] ?? null,
             selected: false
           };
 
@@ -715,6 +725,7 @@ export class TimesheetComponent {
         },
         error: err => {
           console.error('❌ Upload failed', err);
+          this.isLoading=false;
         }
       });
 
@@ -882,6 +893,7 @@ export class TimesheetComponent {
         },
         error: error => {
           console.error('Error:', error);
+          this.isLoading=false;
         }
       });
   }
@@ -943,8 +955,8 @@ export class TimesheetComponent {
             totalHours += num;
             if (num < workingHours && num != 0) {
               row.DEHE += 0.5;
-            }
-            else if (num == 0) {
+            } 
+            else if(num==0) {
               row.DEHE += 0;
             }
             else {
@@ -1058,6 +1070,10 @@ export class TimesheetComponent {
         const val = row.dayValues[i];
         const col = this.dayCols[i]; // get date from header
 
+        if (val === null || val === undefined || val === '') {
+          alert(`Row ${row.SlNo}: Missing entry for date ${col.date}`);
+          return; // stop save
+        }
       }
     }
 
@@ -1076,6 +1092,10 @@ export class TimesheetComponent {
         Remarks: row.Remarks || '',
         Approver: row.Approver || '',
         OT: row.OT || '',
+        OTWKD: row.OTWKD || '',
+        OTWND: row.OTWND || '',
+        NSOTH: row.NSOTH || '',
+        POTRS: row.POTRS || '',
         dayEntries: row.dayValues.map((val, i) => ({
           date: this.dayCols[i].date,
           value: val
@@ -1086,18 +1106,9 @@ export class TimesheetComponent {
 
     this.timesheetService.SaveTimesheet(payload).subscribe({
       next: res => {
-        console.log(res);
         this.UploadedResponse = res;
 
-        // Parse string to array
-        let parsedResponse = [];
-        try {
-          parsedResponse = JSON.parse(this.UploadedResponse.Data.response);
-        } catch (e) {
-          console.error("Failed to parse response:", e);
-        }
-
-        if (this.UploadedResponse.StatusCode === 200 && parsedResponse[0]?.[""] === 'Data submitted successfully.') {
+        if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.data.response === 'Data submitted successfully.') {
           this.isLoading = false;
           this.showPopup = true;
           this.popupMessage = 'Daily Timesheet Saved Successfully Done.';
@@ -1134,7 +1145,8 @@ export class TimesheetComponent {
 
         }
       },
-      error: err => console.error("Error:", err)
+      error: err => {console.error("Error:", err);
+        this.isLoading=false;}
     });
   }
 
@@ -1152,6 +1164,10 @@ export class TimesheetComponent {
         const val = row.dayValues[i];
         const col = this.dayCols[i]; // get date from header
 
+        if (val === null || val === undefined || val === '') {
+          alert(`Row ${row.SlNo}: Missing entry for date ${col.date}`);
+          return; // stop save
+        }
       }
     }
 
@@ -1170,6 +1186,10 @@ export class TimesheetComponent {
         Remarks: row.Remarks || '',
         Approver: row.Approver || '',
         OT: row.OT || '',
+        OTWKD: row.OTWKD || '',
+        OTWND: row.OTWND || '',
+        NSOTH: row.NSOTH || '',
+        POTRS: row.POTRS || '',
         dayEntries: row.dayValues.map((val, i) => ({
           date: this.dayCols[i].date,
           value: val
@@ -1177,20 +1197,12 @@ export class TimesheetComponent {
       }))
     };
 
-
+    
     this.timesheetService.SaveTimesheet(payload).subscribe({
       next: res => {
-        console.log(res);
         this.UploadedResponse = res;
 
-        // Parse string to array
-        let parsedResponse = [];
-        try {
-          parsedResponse = JSON.parse(this.UploadedResponse.Data.response);
-        } catch (e) {
-          console.error("Failed to parse response:", e);
-        }
-        if (this.UploadedResponse.StatusCode === 200 && parsedResponse[0]?.[""] === 'Data submitted successfully.') {
+        if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.data.response === 'Data submitted successfully.') {
           this.isLoading = false;
           this.showPopup = true;
           this.popupMessage = 'Daily Timesheet Successfully Submitted.';
@@ -1227,7 +1239,8 @@ export class TimesheetComponent {
 
         }
       },
-      error: err => console.error("Error:", err)
+      error: err =>{ console.error("Error:", err);
+        this.isLoading=false;}
     });
   }
 
