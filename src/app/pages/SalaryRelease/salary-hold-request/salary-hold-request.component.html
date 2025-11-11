@@ -1,0 +1,151 @@
+<div class="container-fluid">
+    <div class="card-body g-2">
+        <br />
+        <form>
+
+
+            <div class="row g-2 align-items-end ">
+
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Company Code</label>
+                    <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+                </div>
+
+
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Pay Period</label>
+                    <payperiod-salary [selectedCompanyId]="selectedCC"
+                        (payperiodEmit)="handlePayperiodEvent($event)"></payperiod-salary>
+                </div>
+
+                <div class="col-md-3 d-flex gap-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Search"
+                        (click)="SearchSalaryHoldRelease()">
+                        <mat-icon>search</mat-icon>
+
+                    </button>
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="Export to Excel" (click)="searchAndDownloadExcel()">
+                        <mat-icon>table_chart</mat-icon>
+                    </button>
+                    <button class="btn  btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="Download Template" (click)="DownloadTemplate()">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button>
+
+                    <button *ngIf="isUploadDataVisible"
+                        class="btn btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="Submit Uploaded Data" (click)="submitUploadedData()">
+                        <mat-icon>check_circle</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Import"
+                        (click)="triggerFileInput()">
+                        <mat-icon>cloud_upload</mat-icon>
+                    </button>
+
+                    <input type="file" #fileInput style="display: none;" (change)="onFileSelected($event)" />
+
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+        <div class="table-wrapper" *ngIf="isUploadGridVisible">
+            <div class="table-scroll" >
+                <mat-table [dataSource]="uploadedDataSource" class="mat-elevation-z0">
+                    <!-- Dynamic columns based on Excel headers -->
+                    <ng-container *ngFor="let column of uploadDisplayedColumns" [matColumnDef]="column">
+                        <mat-header-cell *matHeaderCellDef class="bg-light">
+                            <strong>{{ column }}</strong>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="border-bottom">
+                            {{ row[column] }}
+                        </mat-cell>
+                    </ng-container>
+
+                    <mat-header-row *matHeaderRowDef="uploadDisplayedColumns" class="bg-light"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: uploadDisplayedColumns;"></mat-row>
+                </mat-table>
+            </div>
+
+            <!-- No data message -->
+            <div *ngIf="uploadedData.length === 0" class="text-center p-4">
+                <p class="text-muted">No data to display</p>
+            </div>
+        </div>
+
+<br />
+
+<div class="table-wrapper" *ngIf="isTableVisible && !isUploadGridVisible">
+    <div class="table-scroll">
+        <mat-table [dataSource]="dataSource" matSort class="custom-table mat-elevation-z8">
+  
+            <ng-container matColumnDef="serial_No">
+                <mat-header-cell *matHeaderCellDef class="col-select"> Sl No </mat-header-cell>
+                <mat-cell *matCellDef="let row" class="col-select"> {{ row.serial_No }} </mat-cell>
+            </ng-container>
+
+            <!-- Company Code Column -->
+            <ng-container matColumnDef="company_Code">
+                <mat-header-cell *matHeaderCellDef> Company Code </mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{ row.company_Code }} </mat-cell>
+            </ng-container>
+
+            <!-- Headcount Column -->
+            <ng-container matColumnDef="employee_Code">
+                <mat-header-cell *matHeaderCellDef> Employee Code </mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{ row.employee_Code }} </mat-cell>
+            </ng-container>
+
+            <!-- Net Pay Column -->
+            <ng-container matColumnDef="employee_Name">
+                <mat-header-cell *matHeaderCellDef> Employee Name </mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{ row.employee_Name }} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="pay_Period">
+                <mat-header-cell *matHeaderCellDef> Pay Period </mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{ row.pay_Period }} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="map_Name">
+                <mat-header-cell *matHeaderCellDef> Map Name </mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{ row.map_Name }} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="invoice_No">
+                <mat-header-cell *matHeaderCellDef> Invoice No </mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{ row.invoice_No }} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="hold_status">
+                <mat-header-cell *matHeaderCellDef> Hold Status </mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{ row.hold_status }} </mat-cell>
+            </ng-container>
+
+            <!-- Table Header Row -->
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+            <!-- Table Data Rows -->
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+    </div>
+
+    <!-- Paginator -->
+    <mat-paginator [length]="dataSource.data.length" [pageSize]="10" [pageSizeOptions]="[5, 10, 20, 25]">
+    </mat-paginator>
+</div>
+
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>
+
+
+<div *ngIf="showPopup" class="overlay"></div>
+<app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+    (close)="closePopup()"></app-alertpopup>

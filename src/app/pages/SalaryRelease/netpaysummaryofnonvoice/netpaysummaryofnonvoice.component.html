@@ -1,0 +1,38 @@
+<div class="container-fluid">
+    <div class="card-body g-2">
+        <br />
+        <form>
+
+            <div class="row g-2 align-items-end ">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Company Code</label>
+                    <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+                </div>
+
+
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Pay Period</label>
+                    <payperiod-salary [selectedCompanyId]="selectedCC"
+                        (payperiodEmit)="handlePayperiodEvent($event)"></payperiod-salary>
+                </div>
+
+                <div class="col-md-3 d-flex gap-2">
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="Download Template" (click)="DownloadTemplate()">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button>
+
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>
+
+<div *ngIf="showPopup" class="overlay"></div>
+<app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+    (close)="closePopup()"></app-alertpopup>

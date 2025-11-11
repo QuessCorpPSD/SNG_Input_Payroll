@@ -1,0 +1,56 @@
+.h1 {
+  font-size: 15px;
+  color: #fff;
+  text-align: center;
+  background-color: rgb(55, 112, 153);
+  width: 100%;
+  padding: 0px 360px; 
+  font-family: inherit;
+  box-sizing: border-box; 
+  
+}
+
+
+@media(min-width: 768px) {
+  .h1 {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0px 360px;
+  }
+}
+
+
+
+.btn-download {
+  background-color: #20c997;
+  color: #fff;
+}
+
+
+.material-icons {
+  font-size: 20px;
+  vertical-align: middle;
+}
+
+.form-control-sm, .form-select-sm {
+  height: calc(1.5em + 0.5rem + 2px);
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+}
+.small-input {
+  max-width: 200px; 
+}
+
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+

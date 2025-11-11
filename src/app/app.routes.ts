@@ -52,6 +52,23 @@ import { PoemployeereportComponent } from './pages/Reports/poemployeereport/poem
 import { PomonthwisereportComponent } from './pages/Reports/pomonthwisereport/pomonthwisereport.component';
 import { QITSBillingReportComponent } from './pages/Reports/qits-billing-report/qits-billing-report.component';
 import { TimesheetReportComponent } from './pages/Reports/timesheet-report/timesheet-report.component';
+import { BonusflushComponent } from './pages/SalaryRelease/bonusflush/bonusflush.component';
+import { DBTholdemployeesalaryComponent } from './pages/SalaryRelease/dbtholdemployeesalary/dbtholdemployeesalary.component';
+import { EmployeesalaryreleaseComponent } from './pages/SalaryRelease/employeesalaryrelease/employeesalaryrelease.component';
+import { HoldEmployeSalaryComponent } from './pages/SalaryRelease/hold-employe-salary/hold-employe-salary.component';
+import { HoldReleaseRequestComponent } from './pages/SalaryRelease/hold-release-request/hold-release-request.component';
+import { NetPaySammaryComponent } from './pages/SalaryRelease/net-pay-sammary/net-pay-sammary.component';
+import { NetpaysummaryofnonvoiceComponent } from './pages/SalaryRelease/netpaysummaryofnonvoice/netpaysummaryofnonvoice.component';
+import { NewJoineeExistingEmployeeBankVerifiedReportComponent } from './pages/SalaryRelease/new-joinee-existing-employee-bank-verified-report/new-joinee-existing-employee-bank-verified-report.component';
+import { PartialHoldComponent } from './pages/SalaryRelease/partial-hold/partial-hold.component';
+import { ReleaseHoldEmployeeSalaryComponent } from './pages/SalaryRelease/release-hold-employee-salary/release-hold-employee-salary.component';
+import { SalaryAdvanceRequestComponent } from './pages/SalaryRelease/salary-advance-request/salary-advance-request.component';
+import { SalaryHoldRequestComponent } from './pages/SalaryRelease/salary-hold-request/salary-hold-request.component';
+import { SalaryReleaseNavigationComponent } from './pages/SalaryRelease/salary-release-navigation/salary-release-navigation.component';
+import { SalaryReleaseRequestComponent } from './pages/SalaryRelease/salary-release-request/salary-release-request.component';
+import { UANReleaseComponent } from './pages/SalaryRelease/uanrelease/uanrelease.component';
+import { UpfrontPortalFinalApprovalComponent } from './pages/SalaryRelease/upfront-portal-final-approval/upfront-portal-final-approval.component';
+import { VANPaymentRequestComponent } from './pages/SalaryRelease/vanpayment-request/vanpayment-request.component';
 
 
 
@@ -78,6 +95,68 @@ export const routes: Routes = [
           { path: 'increment', component: IncrementComponent },
           { path: 'onetimeinput', component: OnetimeinputComponent },
           { path: 'finalsubmission', component: FinalsubmissionComponent }
+        ]
+      },
+      {
+        path: 'SalaryRelease',
+         component: SalaryReleaseNavigationComponent,
+        children: [
+          {
+            path: 'SalaryReleaseRequest',
+            component: SalaryReleaseRequestComponent
+          },
+          {
+            path: 'SalaryHoldRequest',
+            component: SalaryHoldRequestComponent
+          },
+          {
+            path: 'HoldReleaseRequest',
+            component: HoldReleaseRequestComponent
+          },
+          {
+            path: 'PartialHoldEmployeeSalary',
+            component: PartialHoldComponent
+          },
+          {
+            path: 'DBTHoldEmployeeSalary',
+            component: DBTholdemployeesalaryComponent
+          },
+          {
+            path: 'UpfrontPortalFinalApproval',
+            component: UpfrontPortalFinalApprovalComponent
+          },
+          {
+            path: 'ReleaseHoldEmployeeSalary',
+            component: ReleaseHoldEmployeeSalaryComponent
+          },
+          {
+            path: 'NetpaySummarynonvoice',
+            component: NetpaysummaryofnonvoiceComponent
+          },
+
+          {
+            path: 'NewJoineeBankFailure',
+            component: NewJoineeExistingEmployeeBankVerifiedReportComponent 
+
+          },
+          {
+            path: 'bonusflushout',
+            component: BonusflushComponent 
+
+          },
+          {
+            path: 'UANRelease',
+            component:UANReleaseComponent
+          },
+
+            
+          { path: 'NetPaySammary', component: NetPaySammaryComponent },         
+          { path: 'VANPaymentRequest', component:VANPaymentRequestComponent  } ,
+          { path: 'HoldEmployeSalary', component:HoldEmployeSalaryComponent  },
+          { path: 'SalaryAdvanceRequest',component:SalaryAdvanceRequestComponent  },
+          {path:'Employeesalaryrelease',component:EmployeesalaryreleaseComponent }
+
+
         ]
       },
       //   { path: 'UI', component: SopComponent },

@@ -1,0 +1,176 @@
+
+<div class="container-fluid">
+    <div class="card-body g-2">
+        <br />
+        <form>
+            <div class="row g-2 align-items-end ">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Company Code</label>
+                    <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Pay Period</label>
+                    <payperiod-salary [selectedCompanyId]="selectedCC"
+                        (payperiodEmit)="handlePayperiodEvent($event)"></payperiod-salary>
+                </div>
+
+                <div class="col-md-3 d-flex gap-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Search"
+                        (click)="HoldReleaseEmployeSearch()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="Export to Excel" (click)="exportToExcel()">
+                        <mat-icon>table_chart</mat-icon>
+                    </button>
+                    <button class="btn  btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="Download Template" (click)="DownloadTemplate()" [disabled]="isLoading">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button>
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Import"
+                        (click)="triggerFileInput()" [disabled]="isLoading">
+                        <mat-icon>cloud_upload</mat-icon>
+                    </button>
+
+                    <button *ngIf="isUploadDataVisible"
+                        class="btn btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="Submit Uploaded Data" (click)="submitUploadedData()" [disabled]="isLoading">
+                        <mat-icon>check_circle</mat-icon>
+                    </button>
+
+                    <input type="file" #fileInput style="display: none;" (change)="onFileSelected($event)"
+                        accept=".xlsx, .xls" />
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Release"
+                    (click)="sendRequest()">
+                        <img src="assets/Icons/product-request-svgrepo-com.svg" width="25" height="25" />
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<br/>
+
+<div class="table-wrapper1" *ngIf="isUploadGridVisible ">
+  <div class="table-scroll">
+    <mat-table [dataSource]="uploadedDataSource" matSort class="custom-table mat-elevation-z8 auto-fit-table">
+      <!-- Dynamic columns based on Excel headers -->
+      <ng-container *ngFor="let column of uploadDisplayedColumns" [matColumnDef]="column">
+        <mat-header-cell *matHeaderCellDef class="col-tem">
+          <strong>{{ column }}</strong>
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row" class="col-tem">
+          {{ row[column] }}
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: uploadDisplayedColumns;"></mat-row>
+    </mat-table>
+  </div>
+
+  <!-- No data message -->
+  <div *ngIf="uploadedData.length === 0" class="text-center p-4">
+    <p class="text-muted">No data to display</p>
+  </div>
+</div>
+<br/>
+
+<!-- Search Results Table -->
+<div class="table-wrapper" *ngIf="isTableVisible ">
+    <div class="table-scroll">
+        <mat-table [dataSource]="dataSource" matSort class="custom-table mat-elevation-z8">
+            <!-- Your existing table columns -->
+            <ng-container matColumnDef="select">
+                <mat-header-cell *matHeaderCellDef class="bg-light">
+                    <mat-checkbox (change)="selectAllRows($event)" [checked]="isSelectAllChecked">
+                    </mat-checkbox>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row" class="border-bottom">
+                    <mat-checkbox [(ngModel)]="row.selected" (change)="updateSelectedRows()">
+                    </mat-checkbox>
+                </mat-cell>
+            </ng-container>
+
+            <!-- Serial No Column -->
+            <ng-container matColumnDef="serial_No">
+                <mat-header-cell *matHeaderCellDef class="bg-light">Serial No</mat-header-cell>
+                <mat-cell *matCellDef="let row" class="border-bottom">{{ row.serial_No }}</mat-cell>
+            </ng-container>
+
+            <!-- Company Code Column -->
+            <ng-container matColumnDef="company_Code">
+                <mat-header-cell *matHeaderCellDef class="bg-light">Company Code</mat-header-cell>
+                <mat-cell *matCellDef="let row" class="border-bottom">{{ row.company_Code }}</mat-cell>
+            </ng-container>
+
+            <!-- Company Name Column -->
+            <ng-container matColumnDef="company_Name">
+                <mat-header-cell *matHeaderCellDef class="bg-light">Company Name</mat-header-cell>
+                <mat-cell *matCellDef="let row" class="border-bottom">{{ row.company_Name }}</mat-cell>
+            </ng-container>
+
+            <!-- Employee Code Column -->
+            <ng-container matColumnDef="employee_Code">
+                <mat-header-cell *matHeaderCellDef class="bg-light">Employee Code</mat-header-cell>
+                <mat-cell *matCellDef="let row" class="border-bottom">{{ row.employee_Code }}</mat-cell>
+            </ng-container>
+
+            <!-- Employee Name Column -->
+            <ng-container matColumnDef="employee_Name">
+                <mat-header-cell *matHeaderCellDef class="bg-light">Employee Name</mat-header-cell>
+                <mat-cell *matCellDef="let row" class="border-bottom">{{ row.employee_Name }}</mat-cell>
+            </ng-container>
+
+            <!-- Purpose Column -->
+            <ng-container matColumnDef="purpose">
+                <mat-header-cell *matHeaderCellDef class="bg-light">Purpose</mat-header-cell>
+                <mat-cell *matCellDef="let row" class="border-bottom">{{ row.purpose }}</mat-cell>
+            </ng-container>
+
+            <!-- Input No Column -->
+            <ng-container matColumnDef="inpuT_NO">
+                <mat-header-cell *matHeaderCellDef class="bg-light">Input No</mat-header-cell>
+                <mat-cell *matCellDef="let row" class="border-bottom">{{ row.inpuT_NO || 'N/A' }}</mat-cell>
+            </ng-container>
+
+            <!-- Batch ID Column -->
+            <ng-container matColumnDef="batchID">
+                <mat-header-cell *matHeaderCellDef class="bg-light">Batch ID</mat-header-cell>
+                <mat-cell *matCellDef="let row" class="border-bottom">{{ row.batchID }}</mat-cell>
+            </ng-container>
+
+            <!-- Net Pay Column -->
+            <ng-container matColumnDef="net_Pay">
+                <mat-header-cell *matHeaderCellDef class="bg-light">Net Pay</mat-header-cell>
+                <mat-cell *matCellDef="let row" class="border-bottom">{{ row.net_Pay }}</mat-cell>
+            </ng-container>
+
+            <!-- Salary Hold Type Column -->
+            <ng-container matColumnDef="salary_Hold_Type">
+                <mat-header-cell *matHeaderCellDef class="bg-light">Salary Hold Type</mat-header-cell>
+                <mat-cell *matCellDef="let row" class="border-bottom">{{ row.salary_Hold_Type }}</mat-cell>
+            </ng-container>
+
+            <!-- Table Rows -->
+            <mat-header-row *matHeaderRowDef="displayedColumns" class="bg-light"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+    </div>
+
+    <mat-paginator [length]="dataSource.data.length" [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"
+        (page)="pageChanged($event)">
+    </mat-paginator>
+</div>
+
+<!-- Loading Overlay -->
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>
+
+<div *ngIf="showPopup" class="overlay"></div>
+<app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+    (close)="closePopup()"></app-alertpopup>

@@ -1,0 +1,282 @@
+
+::ng-deep .mat-elevation-z8 {
+  box-shadow: none !important;
+}
+
+::ng-deep .mat-mdc-header-cell {
+  color: #A0A0A0;
+  font-size: 12px;
+  font-family: "Nunito Sans";
+  font-weight: 600;
+  word-wrap: break-word;
+  border-right: 1px solid #ddd;
+  position: sticky;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  text-align: center;
+  height: 30px !important;
+}
+
+::ng-deep .mat-mdc-cell {
+  font-family: "Nunito Sans";
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 22.4px;  letter-spacing: 0.24px;
+  color: #222;
+  border-bottom: 1px dashed #E8E8E8 !important;
+  border-right: 1px solid #ddd;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  text-align: center;
+
+}
+
+::ng-deep .mat-header-row {
+  height: 32px !important;          /* Set header row height */
+}
+
+::ng-deep .mat-header-cell {
+  line-height: 32px !important;     /* Vertically center text */
+  padding: 0 8px !important;        /* Adjust horizontal spacing */
+}
+
+::ng-deep  .mat-row {
+  height: 32px !important;/* or whatever fits your design */
+}
+
+.table-wrapper {
+  display: block;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px 24px 0 16px;
+  max-width: 760px;
+  /* padding-left: 50px; */
+
+}
+.table-wrapper1 {
+  display: block;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px 24px 0 16px;
+  max-width: 960px;
+  /* padding-left: 50px; */
+
+}
+
+.table-scroll {
+  max-height: 450px;
+  overflow-y: auto;
+  overflow-x: auto;
+  scrollbar-gutter: stable;
+  /* padding-right: 8px; */
+  /* max-width: 770px; */
+  /* padding-left: 50px; */
+
+
+}
+
+
+
+.mat-row:hover {
+  background-color: #f1f1f1;
+}
+
+.mat-paginator-range-label {
+  font-size: 14px;
+
+}
+
+.mat-paginator-icon {
+  color: #302cb3;
+}
+
+.mat-checkbox-checked {
+  color: #302cb3;
+}
+
+.small-checkbox .mat-mdc-checkbox .mdc-checkbox {
+  --mdc-checkbox-state-layer-size: 2px;
+  --mdc-checkbox-icon-size: 0px;
+}
+
+@media (max-width: 768px) {
+
+  th,
+  td {
+    font-size: 12px;
+    padding: 8px;
+  }
+}
+
+@media (max-width: 768px) {
+
+  table.mat-elevation-z8 th.mat-header-cell,
+  table.mat-elevation-z8 td.mat-cell {
+    padding: 0px 5px;
+    font-size: 10px;
+    border: 1px solid #ddd;
+  }
+}
+
+.card{
+  width: 160px;
+}
+.table-responsive {
+  overflow-x: auto;
+  /* width: 20px; */
+}
+
+
+
+
+.border-bottom {
+  border-bottom: 1px solid #dee2e6;
+}
+
+
+/* Responsive text */
+@media (max-width: 768px) {
+  .container-fluid {
+    padding: 0 10px;
+  }
+  
+  .d-flex.gap-2 {
+    gap: 0.5rem !important;
+  }
+}
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  flex-direction: column;
+}
+
+.loading-overlay .spinner-border {
+  width: 3rem;
+  height: 3rem;
+}
+
+.loading-overlay span {
+  margin-top: 10px;
+  font-weight: bold;
+  color: #302CB3;
+}
+
+.centered-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2200;
+}
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2100;
+}
+
+.col-select {
+  width: 70px !important;
+  max-width: 70px !important;
+  min-width: 70px !important;
+  padding: 0 !important;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+/* Reduce checkbox size */
+.small-checkbox .mat-checkbox-inner-container {
+  width: 16px;
+  height: 16px;
+}
+
+/* Make the mat-table behave like a regular HTML table */
+.auto-fit-table {
+  width: auto !important;         /* Auto width based on content */
+  table-layout: auto !important;  /* Key for auto-fit behavior */
+}
+
+/* Ensure header and cells shrink/grow naturally */
+.auto-fit-table .mat-header-cell,
+.auto-fit-table .mat-cell {
+  flex: none !important;          /* Disable Material's flex stretching */
+  white-space: nowrap;            /* Prevent wrapping, optional */
+  padding: 4px 12px;
+}
+
+.mat-header-row {
+  height: 30px !important;
+}
+
+.mat-header-cell {
+  line-height: 30px !important;
+  font-size: 13px;
+  padding: 0 8px;
+}
+
+/* .col-tem {
+  width: 170px !important;
+  max-width: 170px !important;
+  min-width: 170px !important;
+  padding: 0 !important;
+  text-align: left;
+
+
+} */
+
+.col-row {
+  width: 160px !important;
+  max-width:  160px !important;
+  min-width:  160px !important;
+  /* padding: 2px !important; */
+  display: flex;
+  justify-content: left;
+  text-align: left;
+  padding-left: 8px;
+  /* font-size: medium; */
+}
+
+.col-row1 {
+  width: 160px !important;
+  max-width:  160px !important;
+  min-width:  160px !important;
+  /* padding: 2px !important; */
+  display: flex;
+  justify-content: right;
+  text-align: right;
+  padding-left: 8px;
+}
+
+.col-row2 {
+  width:  160px !important;
+  max-width:  160px !important;
+  min-width:  160px !important;
+  /* padding: 2px !important; */
+  display: flex;
+  justify-content: left;
+  text-align: left;
+  padding-left: 8px;
+}
+
+
+
+
+
+
+
+
