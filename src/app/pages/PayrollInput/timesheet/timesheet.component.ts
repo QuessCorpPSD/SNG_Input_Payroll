@@ -59,7 +59,7 @@ interface ViewRow {
   OT: string | null;
   // one value per dynamic day column (same index order as dayCols)
   dayValues: (string | null)[];
-   OTWKD: string | null;
+  OTWKD: string | null;
   OTWND: string | null;
   NSOTH: string | null;
   POTRS: string | null;
@@ -259,9 +259,10 @@ export class TimesheetComponent {
             this.isLoading = false;
           }
         },
-        error: error => {console.error('Error:', error);
-           this.isLoading = false;
-        alert('Failed to connect to server');
+        error: error => {
+          console.error('Error:', error);
+          this.isLoading = false;
+          alert('Failed to connect to server');
         }
       })
     }
@@ -522,7 +523,7 @@ export class TimesheetComponent {
             Approver: r['Approver'] ?? null,
             OT: r['OT'] ?? null,
             dayValues: this.dayCols.map(dc => (r[dc.key] ?? null)),
-             OTWKD: r['OTWKD'] ?? null,
+            OTWKD: r['OTWKD'] ?? null,
             OTWND: r['OTWND'] ?? null,
             NSOTH: r['NSOTH'] ?? null,
             POTRS: r['POTRS'] ?? null,
@@ -725,7 +726,7 @@ export class TimesheetComponent {
         },
         error: err => {
           console.error('❌ Upload failed', err);
-          this.isLoading=false;
+          this.isLoading = false;
         }
       });
 
@@ -893,7 +894,7 @@ export class TimesheetComponent {
         },
         error: error => {
           console.error('Error:', error);
-          this.isLoading=false;
+          this.isLoading = false;
         }
       });
   }
@@ -955,8 +956,8 @@ export class TimesheetComponent {
             totalHours += num;
             if (num < workingHours && num != 0) {
               row.DEHE += 0.5;
-            } 
-            else if(num==0) {
+            }
+            else if (num == 0) {
               row.DEHE += 0;
             }
             else {
@@ -1145,8 +1146,10 @@ export class TimesheetComponent {
 
         }
       },
-      error: err => {console.error("Error:", err);
-        this.isLoading=false;}
+      error: err => {
+        console.error("Error:", err);
+        this.isLoading = false;
+      }
     });
   }
 
@@ -1197,7 +1200,7 @@ export class TimesheetComponent {
       }))
     };
 
-    
+
     this.timesheetService.SaveTimesheet(payload).subscribe({
       next: res => {
         this.UploadedResponse = res;
@@ -1239,8 +1242,10 @@ export class TimesheetComponent {
 
         }
       },
-      error: err =>{ console.error("Error:", err);
-        this.isLoading=false;}
+      error: err => {
+        console.error("Error:", err);
+        this.isLoading = false;
+      }
     });
   }
 
@@ -1261,5 +1266,20 @@ export class TimesheetComponent {
   onNumericInput(event: any) {
     event.target.value = event.target.value.replace(/[^0-9]/g, '');
   }
-
+  onDecimalInput(event: any) {
+    let value = event.target.value;
+    value = value.replace(/[^0-9.]/g, '');
+    const parts = value.split('.');
+    if (parts.length > 2) {
+      value = parts[0] + '.' + parts.slice(1).join('');
+    }
+    if (parts[0].length > 3) {
+      parts[0] = parts[0].substring(0, 3);
+    }
+    if (parts[1] && parts[1].length > 2) {
+      parts[1] = parts[1].substring(0, 2);
+    }
+    value = parts.join('.');
+    event.target.value = value;
+  }
 }
