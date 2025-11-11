@@ -196,6 +196,13 @@ export const routes: Routes = [
           { path: 'poactiveinactivereport', component: PoactiveinactivereportComponent }
         ]
       },
+      {
+        path: 'process',
+        component: ProcessComponent,
+        children: [
+          { path: 'reprocess', component: ReprocessComponent }
+        ]
+      },
       //   { path: 'UI', component: SopComponent },
       { path: '**', redirectTo: '/Home', pathMatch: 'full' }
 
