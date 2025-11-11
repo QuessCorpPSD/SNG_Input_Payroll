@@ -26,9 +26,7 @@ import { UnseizeComponent } from './pages/PayrollInput/unseize/unseize.component
 import { OnetimeinputComponent } from './pages/PayrollInput/onetimeinput/onetimeinput.component';
 import { FinalsubmissionComponent } from './pages/PayrollInput/finalsubmission/finalsubmission.component';
 import { TimesheetComponent } from './pages/PayrollInput/timesheet/timesheet.component';
-import { ReportsComponent } from './pages/Reports/reports.component';
-import { PayregisterunprocessedComponent } from './pages/Reports/payregisterunprocessed/payregisterunprocessed.component';
-import { PayslipComponent } from './pages/Reports/payslip/payslip.component';
+
 import { InvoiceauditComponent } from './pages/PayrollInput/invoiceaudit/invoiceaudit.component';
 import { MasternavigationComponent } from './pages/Masters/MasterNavigation/masternavigation/masternavigation.component';
 import { HolidaymasterComponent } from './pages/Masters/holidaymaster/holidaymaster.component';
