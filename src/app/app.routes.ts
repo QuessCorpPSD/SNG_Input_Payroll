@@ -98,6 +98,18 @@ export const routes: Routes = [
           { path: 'finalsubmission', component: FinalsubmissionComponent }
         ]
       },
+      {
+        path: 'masternavigation',
+        component: MasternavigationComponent,
+        children: [
+          { path: 'holidaymaster', component: HolidaymasterComponent },
+          { path: 'invoicerule', component: InvoiceruleComponent },
+          { path: 'leavemaster', component: LeavemasterComponent },
+          { path: 'leaverule', component: LeaveruleComponent },
+          { path: 'lob', component: LeaveOpeningBalanceUploadComponent },
+          { path: 'vendoremployee', component: VendorEmployeeComponent }
+        ]
+      },
        {
         path: 'SalaryRelease',
          component: SalaryReleaseNavigationComponent,
