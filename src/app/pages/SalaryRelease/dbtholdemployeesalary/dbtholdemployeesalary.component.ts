@@ -75,7 +75,7 @@ export class DBTholdemployeesalaryComponent {
     const json = this._sessionStoreage.getItem('UserProfile');
     if (json) {
       this.userdetail = JSON.parse(this.decry.decrypt(json));
-
+      console.log(this.userdetail);
     } else {
       console.warn('UserProfile not found in session storage');
     }
@@ -85,14 +85,14 @@ export class DBTholdemployeesalaryComponent {
       "userName": this.userdetail.userName
     }
 
-    this.BindUploadType(this.userdetail.userId);
+    this.BindUploadType();
 
   }
 
 
-  BindUploadType(userName: string): void {
+  BindUploadType(): void {
     // this.isLoading = true;
-    this.partialhold.GetUploadType(userName).subscribe({
+    this.partialhold.GetUploadType(this.userdetail.user_Id).subscribe({
       next: (res) => {
         if (res && res.Data) {
           this.type = res.Data;
@@ -203,7 +203,7 @@ export class DBTholdemployeesalaryComponent {
 
           this.formData = new FormData();
           this.formData.append('File', file, file.name);
-          this.formData.append('QZoneUserName', this.userdetail.userId);
+          this.formData.append('QZoneUserName', this.userdetail.user_Id);
           this.formData.append('Flag', this.selectedUploadType);
 
           this.isUploadGridVisible = true;
