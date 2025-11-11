@@ -98,18 +98,69 @@ export const routes: Routes = [
           { path: 'finalsubmission', component: FinalsubmissionComponent }
         ]
       },
-      {
+       {
         path: 'SalaryRelease',
          component: SalaryReleaseNavigationComponent,
         children: [
-          { path: 'holidaymaster', component: HolidaymasterComponent },
-          { path: 'invoicerule', component: InvoiceruleComponent },
-          { path: 'leavemaster', component: LeavemasterComponent },
-          { path: 'leaverule', component: LeaveruleComponent },
-          { path: 'lob', component: LeaveOpeningBalanceUploadComponent },
-          { path: 'vendoremployee', component: VendorEmployeeComponent }
+          {
+            path: 'SalaryReleaseRequest',
+            component: SalaryReleaseRequestComponent
+          },
+          {
+            path: 'SalaryHoldRequest',
+            component: SalaryHoldRequestComponent
+          },
+          {
+            path: 'HoldReleaseRequest',
+            component: HoldReleaseRequestComponent
+          },
+          {
+            path: 'PartialHoldEmployeeSalary',
+            component: PartialHoldComponent
+          },
+          {
+            path: 'DBTHoldEmployeeSalary',
+            component: DBTholdemployeesalaryComponent
+          },
+          {
+            path: 'UpfrontPortalFinalApproval',
+            component: UpfrontPortalFinalApprovalComponent
+          },
+          {
+            path: 'ReleaseHoldEmployeeSalary',
+            component: ReleaseHoldEmployeeSalaryComponent
+          },
+          {
+            path: 'NetpaySummarynonvoice',
+            component: NetpaysummaryofnonvoiceComponent
+          },
+ 
+          {
+            path: 'NewJoineeBankFailure',
+            component: NewJoineeExistingEmployeeBankVerifiedReportComponent
+ 
+          },
+          {
+            path: 'bonusflushout',
+            component: BonusflushComponent
+ 
+          },
+          {
+            path: 'UANRelease',
+            component:UANReleaseComponent
+          },
+ 
+           
+          { path: 'NetPaySammary', component: NetPaySammaryComponent },        
+          { path: 'VANPaymentRequest', component:VANPaymentRequestComponent  } ,
+          { path: 'HoldEmployeSalary', component:HoldEmployeSalaryComponent  },
+          { path: 'SalaryAdvanceRequest',component:SalaryAdvanceRequestComponent  },
+          {path:'Employeesalaryrelease',component:EmployeesalaryreleaseComponent }
+ 
+ 
         ]
       },
+ 
       {
         path: 'invoicenavigation',
         component: InvoicenavigationComponent,
