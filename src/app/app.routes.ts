@@ -5,7 +5,6 @@ import { IndexComponent } from './account/index/index.component';
 import { NotAuthorizedComponent } from './not-authorized/not-authorized.component';
 import { AuthGuard } from './Shared/auth-guard.service';
 import { MasterComponent } from './layout/master/master.component';
-
 import { AboutComponent } from './pages/about/about.component';
 import { HomeComponent } from './pages/home/home.component';
 import { AssignmentComponent } from './pages/assignment/assignment.component';
@@ -51,6 +50,8 @@ import { PoemployeereportComponent } from './pages/Reports/poemployeereport/poem
 import { PomonthwisereportComponent } from './pages/Reports/pomonthwisereport/pomonthwisereport.component';
 import { QITSBillingReportComponent } from './pages/Reports/qits-billing-report/qits-billing-report.component';
 import { TimesheetReportComponent } from './pages/Reports/timesheet-report/timesheet-report.component';
+import { ProcessComponent } from './pages/Process/process.component';
+import { ReprocessComponent } from './pages/Process/reprocess/reprocess.component';
 
 
 
@@ -122,8 +123,14 @@ export const routes: Routes = [
           { path: 'poemployeereport', component: PoemployeereportComponent },
           { path: 'pomonthwisereport', component: PomonthwisereportComponent },
           { path: 'app-qits-billing-report', component: QITSBillingReportComponent },
-          { path: 'app-timesheet-report', component: TimesheetReportComponent },
-          { path: 'poactiveinactivereport', component: PoactiveinactivereportComponent }
+          { path: 'app-timesheet-report', component: TimesheetReportComponent }
+        ]
+      },
+      {
+        path: 'process',
+        component: ProcessComponent,
+        children: [
+          { path: 'reprocess', component: ReprocessComponent }
         ]
       },
       //   { path: 'UI', component: SopComponent },

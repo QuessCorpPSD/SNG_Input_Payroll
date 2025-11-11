@@ -9,6 +9,9 @@ export interface Payperiodclass {
   payfrequencyid: number
   paySequenceNo: string
   payPeriod: string
+  end_At:string
+  displayName:string
+
 }
 
 export interface Mapnameclass {

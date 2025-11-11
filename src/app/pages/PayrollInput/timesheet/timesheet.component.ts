@@ -1262,4 +1262,23 @@ export class TimesheetComponent {
     event.target.value = event.target.value.replace(/[^0-9]/g, '');
   }
 
+  onDecimalInput(event: any) {
+    let value = event.target.value;
+    value = value.replace(/[^0-9.]/g, '');
+    const parts = value.split('.');
+    if (parts.length > 2) {
+      value = parts[0] + '.' + parts.slice(1).join('');
+    }
+    if (parts[0].length > 3) {
+      parts[0] = parts[0].substring(0, 3);
+    }
+    if (parts[1] && parts[1].length > 2) {
+      parts[1] = parts[1].substring(0, 2);
+    }
+    value = parts.join('.');
+    event.target.value = value;
+  }
+
+
+
 }
