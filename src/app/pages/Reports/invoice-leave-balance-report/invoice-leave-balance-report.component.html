@@ -2,67 +2,63 @@
     Invoice Leave Balance Report</div>
 
 <div class="container-fluid">
-    <div class="card-body g-2">
+    <div class="row py-2">
         <br />
-        <form>
-            <div class="row g-2 align-items-end ">
+        <div class="row align-items-end ">
 
-                <div class="col-md-3 ">
-                    <label class="form-label text-muted small">Company Code</label>
-                    <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
-                </div>
-
-                <div class="col-md-3">
-                    <label class="form-label text-muted small">Site Name</label>
-                    <groupname [selectedCompanyId]="companyId" (sitenameEmit)="groupnameEvent($event)">
-                    </groupname>
-                </div>
-
-                <div class="col-md-3">
-                    <label class="form-label text-muted small">From Pay Period</label>
-                    <select class="form-select form-select-sm small-input" [(ngModel)]="selectedFromMonth"
-                        (change)="onFromMonthChange($event)">
-                        <option value="">Select Month</option>
-                        <option *ngFor="let month of months" [value]="month.value">{{ month.name }}</option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label text-muted small">From Pay Period Year</label>
-                    <select class="form-select form-select-sm small-input" name="fromYear"
-                        [(ngModel)]="selectedFromYear">
-                        <option value="">Select Year</option>
-                        <option *ngFor="let y of years" [value]="y.year">{{ y.year }}</option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label text-muted small">To Pay Period</label>
-                    <select class="form-select form-select-sm small-input" [(ngModel)]="selectedToMonth"
-                        (change)="onToMonthChange($event)">
-                        <option value="">Select Month</option>
-                        <option *ngFor="let month of months" [value]="month.value">{{ month.name }}</option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label text-muted small">To Pay Period Year</label>
-                    <select class="form-select form-select-sm small-input" name="toYear" [(ngModel)]="selectedToYear">
-                        <option value="">Select Year</option>
-                        <option *ngFor="let y of years" [value]="y.year">{{ y.year }}</option>
-                    </select>
-                </div>
-
-
-                <div class="col-md-3" style="padding-top: 27px;">
-                    <div class="d-flex gap-2">
-
-
-                        <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
-                            matTooltip="Template" (click)="Download()">
-                            <mat-icon>download</mat-icon>
-                        </button>
-                    </div>
-                </div>
-
+            <div class="col-md-3 ">
+                <label class="form-label text-muted small">Company Code</label>
+                <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
             </div>
-        </form>
+
+            <div class="col-md-3">
+                <label class="form-label text-muted small">Site Name</label>
+                <groupname [selectedCompanyId]="companyId" (sitenameEmit)="groupnameEvent($event)">
+                </groupname>
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label text-muted small">From Pay Period</label>
+                <select class="form-select form-select-sm small-input" [(ngModel)]="selectedFromMonth"
+                    (change)="onFromMonthChange($event)">
+                    <option value="">Select Month</option>
+                    <option *ngFor="let month of months" [value]="month.value">{{ month.name }}</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label text-muted small">From Pay Period Year</label>
+                <select class="form-select form-select-sm small-input" name="fromYear" [(ngModel)]="selectedFromYear">
+                    <option value="">Select Year</option>
+                    <option *ngFor="let y of years" [value]="y.year">{{ y.year }}</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label text-muted small">To Pay Period</label>
+                <select class="form-select form-select-sm small-input" [(ngModel)]="selectedToMonth"
+                    (change)="onToMonthChange($event)">
+                    <option value="">Select Month</option>
+                    <option *ngFor="let month of months" [value]="month.value">{{ month.name }}</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label text-muted small">To Pay Period Year</label>
+                <select class="form-select form-select-sm small-input" name="toYear" [(ngModel)]="selectedToYear">
+                    <option value="">Select Year</option>
+                    <option *ngFor="let y of years" [value]="y.year">{{ y.year }}</option>
+                </select>
+            </div>
+
+
+            <div class="col-md-3" style="padding-top: 27px;">
+                <div class="d-flex gap-2">
+
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                        matTooltip="Template" (click)="Download()">
+                        <mat-icon>download</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

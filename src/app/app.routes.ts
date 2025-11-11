@@ -5,7 +5,6 @@ import { IndexComponent } from './account/index/index.component';
 import { NotAuthorizedComponent } from './not-authorized/not-authorized.component';
 import { AuthGuard } from './Shared/auth-guard.service';
 import { MasterComponent } from './layout/master/master.component';
-
 import { AboutComponent } from './pages/about/about.component';
 import { HomeComponent } from './pages/home/home.component';
 import { AssignmentComponent } from './pages/assignment/assignment.component';
@@ -52,6 +51,8 @@ import { PoemployeereportComponent } from './pages/Reports/poemployeereport/poem
 import { PomonthwisereportComponent } from './pages/Reports/pomonthwisereport/pomonthwisereport.component';
 import { QITSBillingReportComponent } from './pages/Reports/qits-billing-report/qits-billing-report.component';
 import { TimesheetReportComponent } from './pages/Reports/timesheet-report/timesheet-report.component';
+import { ProcessComponent } from './pages/Process/process.component';
+import { ReprocessComponent } from './pages/Process/reprocess/reprocess.component';
 import { BonusflushComponent } from './pages/SalaryRelease/bonusflush/bonusflush.component';
 import { DBTholdemployeesalaryComponent } from './pages/SalaryRelease/dbtholdemployeesalary/dbtholdemployeesalary.component';
 import { EmployeesalaryreleaseComponent } from './pages/SalaryRelease/employeesalaryrelease/employeesalaryrelease.component';
@@ -101,62 +102,47 @@ export const routes: Routes = [
         path: 'SalaryRelease',
          component: SalaryReleaseNavigationComponent,
         children: [
-          {
-            path: 'SalaryReleaseRequest',
-            component: SalaryReleaseRequestComponent
-          },
-          {
-            path: 'SalaryHoldRequest',
-            component: SalaryHoldRequestComponent
-          },
-          {
-            path: 'HoldReleaseRequest',
-            component: HoldReleaseRequestComponent
-          },
-          {
-            path: 'PartialHoldEmployeeSalary',
-            component: PartialHoldComponent
-          },
-          {
-            path: 'DBTHoldEmployeeSalary',
-            component: DBTholdemployeesalaryComponent
-          },
-          {
-            path: 'UpfrontPortalFinalApproval',
-            component: UpfrontPortalFinalApprovalComponent
-          },
-          {
-            path: 'ReleaseHoldEmployeeSalary',
-            component: ReleaseHoldEmployeeSalaryComponent
-          },
-          {
-            path: 'NetpaySummarynonvoice',
-            component: NetpaysummaryofnonvoiceComponent
-          },
+          { path: 'holidaymaster', component: HolidaymasterComponent },
+          { path: 'invoicerule', component: InvoiceruleComponent },
+          { path: 'leavemaster', component: LeavemasterComponent },
+          { path: 'leaverule', component: LeaveruleComponent },
+          { path: 'lob', component: LeaveOpeningBalanceUploadComponent },
+          { path: 'vendoremployee', component: VendorEmployeeComponent }
+        ]
+      },
+      {
+        path: 'invoicenavigation',
+        component: InvoicenavigationComponent,
+        children: [
+          { path: 'initiate', component: InitiateComponent },
+          { path: 'perfomainvoice', component: PerfomainvoiceComponent }
+        ]
+      },
 
-          {
-            path: 'NewJoineeBankFailure',
-            component: NewJoineeExistingEmployeeBankVerifiedReportComponent 
+      {
+        path: 'ponavigation',
+        component: PoNavigationComponent,
+        children: [
+          { path: 'Entry', component: PoCreateComponent },
+          { path: 'Employee', component: EmployeePOComponent },
+          { path: 'Approve', component: POApproveComponent },
 
-          },
-          {
-            path: 'bonusflushout',
-            component: BonusflushComponent 
-
-          },
-          {
-            path: 'UANRelease',
-            component:UANReleaseComponent
-          },
-
-            
-          { path: 'NetPaySammary', component: NetPaySammaryComponent },         
-          { path: 'VANPaymentRequest', component:VANPaymentRequestComponent  } ,
-          { path: 'HoldEmployeSalary', component:HoldEmployeSalaryComponent  },
-          { path: 'SalaryAdvanceRequest',component:SalaryAdvanceRequestComponent  },
-          {path:'Employeesalaryrelease',component:EmployeesalaryreleaseComponent }
-
-
+        ]
+      },
+      {
+        path: 'reports',
+        component: ReportsComponent,
+        children: [
+          { path: 'payregisterunprocessed', component: PayregisterunprocessedComponent },
+          { path: 'payslip', component: PayslipComponent },
+          { path: 'app-invoice-leave-balance-report', component: InvoiceLeaveBalanceReportComponent },
+          { path: 'app-leave-balance-report', component: LeaveBalanceReportComponent },
+          { path: 'poactiveinactivereport', component: PoactiveinactivereportComponent },
+          { path: 'poemployeereport', component: PoemployeereportComponent },
+          { path: 'pomonthwisereport', component: PomonthwisereportComponent },
+          { path: 'app-qits-billing-report', component: QITSBillingReportComponent },
+          { path: 'app-timesheet-report', component: TimesheetReportComponent },
+          { path: 'poactiveinactivereport', component: PoactiveinactivereportComponent }
         ]
       },
       //   { path: 'UI', component: SopComponent },

@@ -142,6 +142,45 @@
             </svg>
           </i><span style="font-family: Nunito Sans;">Salary Release</span> </a>
           
+        <a [routerLink]="['/Master/process']" class="nav-link" routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          [ngClass]="{ 'inactive-link': !isActive('/Master/process') }"><i>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none"
+              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <!-- Document shape with folded corner -->
+              <path d="M5 3h9l5 5v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z" />
+              <path d="M14 3v5h5" />
+
+              <!-- Text lines -->
+              <path d="M7 11h7" />
+              <path d="M7 14h5" />
+            </svg>
+          </i><span style="font-family: Nunito Sans;">Process</span> </a>
+
+        <a [routerLink]="['/Master/reports']" class="nav-link" routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          [ngClass]="{ 'inactive-link': !isActive('/Master/reports') }"><i>
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M3 3.75C3.41421 3.75 3.75 4.08579 3.75 4.5C3.75 4.91421 3.41421 5.25 3 5.25H2.25C1.83579 5.25 1.5 4.91421 1.5 4.5C1.5 4.08579 1.83579 3.75 2.25 3.75H3Z"
+                [attr.fill]="isActive('/Master/reports')?'#302CB3':'#A9ACB1'" />
+              <path
+                d="M6 3.75C5.58579 3.75 5.25 4.08579 5.25 4.5C5.25 4.91421 5.58579 5.25 6 5.25H15.75C16.1642 5.25 16.5 4.91421 16.5 4.5C16.5 4.08579 16.1642 3.75 15.75 3.75H6Z"
+                [attr.fill]="isActive('/Master/reports')?'#302CB3':'#A9ACB1'" />
+              <path
+                d="M6 8.25C5.58579 8.25 5.25 8.58579 5.25 9C5.25 9.41421 5.58579 9.75 6 9.75H15.75C16.1642 9.75 16.5 9.41421 16.5 9C16.5 8.58579 16.1642 8.25 15.75 8.25H6Z"
+                [attr.fill]="isActive('/Master/reports')?'#302CB3':'#A9ACB1'" />
+              <path
+                d="M5.25 13.5C5.25 13.0858 5.58579 12.75 6 12.75H15.75C16.1642 12.75 16.5 13.0858 16.5 13.5C16.5 13.9142 16.1642 14.25 15.75 14.25H6C5.58579 14.25 5.25 13.9142 5.25 13.5Z"
+                [attr.fill]="isActive('/Master/reports')?'#302CB3':'#A9ACB1'" />
+              <path
+                d="M3.75 9C3.75 8.58579 3.41421 8.25 3 8.25H2.25C1.83579 8.25 1.5 8.58579 1.5 9C1.5 9.41421 1.83579 9.75 2.25 9.75H3C3.41421 9.75 3.75 9.41421 3.75 9Z"
+                [attr.fill]="isActive('/Master/reports')?'#302CB3':'#A9ACB1'" />
+              <path
+                d="M3 12.75C3.41421 12.75 3.75 13.0858 3.75 13.5C3.75 13.9142 3.41421 14.25 3 14.25H2.25C1.83579 14.25 1.5 13.9142 1.5 13.5C1.5 13.0858 1.83579 12.75 2.25 12.75H3Z"
+                [attr.fill]="isActive('/Master/reports')?'#302CB3':'#A9ACB1'" />
+            </svg>
+          </i><span style="font-family: Nunito Sans;">Reports</span> </a>
         <a (click)="Logout()"><i>
             <svg width="19" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path

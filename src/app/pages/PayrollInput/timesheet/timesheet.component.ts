@@ -1266,6 +1266,7 @@ export class TimesheetComponent {
   onNumericInput(event: any) {
     event.target.value = event.target.value.replace(/[^0-9]/g, '');
   }
+
   onDecimalInput(event: any) {
     let value = event.target.value;
     value = value.replace(/[^0-9.]/g, '');
@@ -1282,4 +1283,7 @@ export class TimesheetComponent {
     value = parts.join('.');
     event.target.value = value;
   }
+
+
+
 }

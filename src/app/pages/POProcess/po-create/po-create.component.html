@@ -95,7 +95,7 @@
   </table>
 </div>
 
-<mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+<mat-paginator *ngIf="(dataSource?.data?.length || 0) > 0" [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
 
 <div class="table-scroll">
   <table mat-table [dataSource]="dataSource2" matSort class="mat-elevation-z8 mat-table"
@@ -116,4 +116,4 @@
   </table>
 </div>
 
-<mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+<mat-paginator *ngIf="(dataSource?.data?.length || 0) > 0" [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>

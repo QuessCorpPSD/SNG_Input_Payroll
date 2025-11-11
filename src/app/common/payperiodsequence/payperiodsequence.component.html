@@ -1,0 +1,20 @@
+<mat-form-field class="w-100 custom-height rounded-4" appearance="outline" style="background-color: white;height:30px;">
+  <input style="color: #222;font-family: nunito sans; font-size: 12px; font-weight: 500;"
+    type="text"
+    matInput
+    [formControl]="myControl" placeholder="Select PayPeriod"
+    [matAutocomplete]="auto"
+  />
+  <mat-autocomplete 
+    #auto="matAutocomplete"
+    [displayWith]="displayFn"
+    (optionSelected)="onOptionSelected($event.option.value)"
+  >
+    <mat-option style="font-size: 11px;min-height: 15px;"
+      *ngFor="let option of filteredOptions$ | async"
+      [value]="option"
+    >
+      {{ option.payPeriod }}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>

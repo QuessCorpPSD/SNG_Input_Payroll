@@ -12,6 +12,7 @@ export class InvoiceLeaveBalanceReportService implements IInvoiceLeaveBalanceRep
     constructor(private http: HttpClient) {
     }
     GetLeaveYear(): Observable<APIResponse> {
+        console.log(this.environment.apiUrl + 'LeaveBalanceReport/GetLeaveYear');
         return this.http.get<APIResponse>(this.environment.apiUrl + 'LeaveBalanceReport/GetLeaveYear')
     }
 

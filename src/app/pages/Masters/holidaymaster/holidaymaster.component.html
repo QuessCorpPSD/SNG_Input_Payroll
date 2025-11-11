@@ -41,7 +41,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12" style="padding-left: 25px;">
+            <div class="col-md-12" style="padding-left: 25px;" *ngIf="(dataSource?.data?.length || 0) > 0">
                 <div class="table-wrapper">
                     <div class="table-scroll">
                         <table class="previewtable" mat-table [dataSource]="dataSource" matSort
@@ -57,7 +57,7 @@
                                 (click)="onTopRowClick(row)"></mat-row>
                         </table>
                     </div>
-                    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons></mat-paginator>
+                    <mat-paginator  [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons></mat-paginator>
                 </div>
             </div>
         </div>
