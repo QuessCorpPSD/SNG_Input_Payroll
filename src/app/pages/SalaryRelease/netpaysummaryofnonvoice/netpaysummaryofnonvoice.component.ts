@@ -105,7 +105,7 @@ export class NetpaysummaryofnonvoiceComponent {
     }
 
     const userInfo = {
-      "userId": this.userdetail.userId,
+      "userId": this.userdetail.user_Id,
       "userName": this.userdetail.userName
     }
   }
@@ -115,7 +115,7 @@ export class NetpaysummaryofnonvoiceComponent {
 
    const companyID = this.companyId;
     const payPeriodId = this.payPeriodId;
-    const QzoneUsername = this.userdetail.userId;
+    const QzoneUsername = this.userdetail.user_Id;
 
     console.log(companyID, payPeriodId, QzoneUsername);
 

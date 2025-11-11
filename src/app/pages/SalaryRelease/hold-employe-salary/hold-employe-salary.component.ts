@@ -100,7 +100,7 @@ export class HoldEmployeSalaryComponent {
     }
 
     const userInfo = {
-      "userId": this.userdetail.userId,
+      "userId": this.userdetail.user_Id,
       "userName": this.userdetail.userName
     }
     this.BindHoldType();
@@ -226,9 +226,9 @@ export class HoldEmployeSalaryComponent {
 
   DownloadTemplate() {
     this.isLoading = true;
-    const Qzoneusername = this.userdetail?.userId;
+    const Qzoneusername = this.userdetail?.user_Id;
     const Flag = 'HoldReleaseRequest';
-    const createdBy = '3';
+    const createdBy = this.userdetail.user_Id;
     if (!Qzoneusername) {
       this.showAlertPopup('User ID not available');
       return;
@@ -335,8 +335,8 @@ export class HoldEmployeSalaryComponent {
 
           this.formData = new FormData();
           this.formData.append('File', file, file.name);
-          this.formData.append('QZoneUserName', this.userdetail.userId);
-          this.formData.append('CreatedBy', '3');
+          this.formData.append('QZoneUserName', this.userdetail.user_Id);
+          this.formData.append('CreatedBy', this.userdetail.user_Id);
 
           this.isUploadGridVisible = true;
           this.isUploadDataVisible = true;

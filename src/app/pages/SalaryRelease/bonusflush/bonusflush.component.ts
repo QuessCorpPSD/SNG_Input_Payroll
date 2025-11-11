@@ -63,7 +63,7 @@ export class BonusflushComponent {
     }
 
     const userInfo = {
-      "userId": this.userdetail.userId,
+      "userId": this.userdetail.user_Id,
       "userName": this.userdetail.userName
     };
   }
@@ -93,7 +93,7 @@ export class BonusflushComponent {
       companyId: this.companyId,
       fromDate: formattedFromDate,
       toDate: formattedToDate,
-      userName: this.userdetail?.userId || ''
+      userName: this.userdetail?.user_Id || ''
     });
 
     // Call service method with individual parameters
@@ -101,7 +101,7 @@ export class BonusflushComponent {
       this.companyId,
       formattedFromDate,
       formattedToDate,
-      this.userdetail?.userId || ''
+      this.userdetail?.user_Id || ''
     ).subscribe(
       (response: APIResponse) => {
         try {
@@ -242,9 +242,9 @@ export class BonusflushComponent {
       return;
     }
 
-    const Qzoneusername = this.userdetail?.userId;
+    const Qzoneusername = this.userdetail?.user_Id;
     const Flag = 'BonusFlushOut';
-    const createdBy = '3';
+    const createdBy = this.userdetail.user_Id;
     if (!Qzoneusername) {
       this.showAlertPopup('User ID not available');
       return;
@@ -327,7 +327,7 @@ export class BonusflushComponent {
 
           this.formData = new FormData();
           this.formData.append('File', file, file.name);
-          this.formData.append('QZoneUserName', this.userdetail.userId);
+          this.formData.append('QZoneUserName', this.userdetail.user_Id);
           this.formData.append('Flag', 'Bonus Release');
 
           this.isUploadGridVisible = true;

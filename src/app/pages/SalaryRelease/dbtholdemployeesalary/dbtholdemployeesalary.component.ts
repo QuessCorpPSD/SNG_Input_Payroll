@@ -81,7 +81,7 @@ export class DBTholdemployeesalaryComponent {
     }
 
     const userInfo = {
-      "userId": this.userdetail.userId,
+      "userId": this.userdetail.user_Id,
       "userName": this.userdetail.userName
     }
 
@@ -108,8 +108,8 @@ export class DBTholdemployeesalaryComponent {
   DownloadTemplate() {
     this.isLoading = true;
     const Flag = this.selectedUploadType;
-    const Qzoneusername = this.userdetail.userId;
-    const createdBy = '3';
+    const Qzoneusername = this.userdetail.user_Id;
+    const createdBy = this.userdetail.user_Id;
 
     console.log(Flag);
 

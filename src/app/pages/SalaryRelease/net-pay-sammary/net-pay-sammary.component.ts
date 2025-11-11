@@ -94,7 +94,7 @@ export class NetPaySammaryComponent {
     }
 
     const userInfo = {
-      "userId": this.userdetail.userId,
+      "userId": this.userdetail.user_Id,
       "userName": this.userdetail.userName
     }
 
@@ -116,7 +116,7 @@ export class NetPaySammaryComponent {
 
     const companyCode = this.companyId;
     const payPeriodId = this.payPeriodId;
-    const QzoneUsername = this.userdetail.userId;
+    const QzoneUsername = this.userdetail.user_Id;
 
     console.log(companyCode, payPeriodId, QzoneUsername);
 
