@@ -359,7 +359,7 @@ export class EmployeePOComponent {
       poNumber: this.selectedOption || "",
       clientEmployeeId: this.clientEmployeeId || "",
       status: (this.statusId === 0 || !this.statusId) ? "" : String(this.statusId),
-      pricingType: this.PricingType || "",
+      //pricingType: this.PricingType || "",
     }
 
     this.poService.GetEmployeePOSerach(requestPayload).subscribe({

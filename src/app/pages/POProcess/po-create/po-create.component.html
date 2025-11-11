@@ -4,20 +4,20 @@
 
       <!-- Company Code -->
       <div class="col-md-3">
-        <label class="form-label text-muted small">Company Code</label>
+        <label class="form-label text-muted small">Company Code<span style="color: red;">*</span></label>
         <CompanyPicker (companyEmit)="handleCompanyEvent($event)"></CompanyPicker>
       </div>
 
       <!-- PO Number -->
       <div class="col-md-3">
-        <label class="form-label text-muted small">PO Number</label>
+        <label class="form-label text-muted small">PO Number<span style="color: red;">*</span></label>
         <ponumbersearch [comapnyId]="comapnyId" (ponumbersearchEmit)="handleponumbersearchEvent($event)">
         </ponumbersearch>
       </div>
 
       <!-- PO Type -->
       <div class="col-md-3">
-        <label class="form-label text-muted small">Pricing Type</label>
+        <label class="form-label text-muted small">Pricing Type<span style="color: red;">*</span></label>
         <potype (potypeEmit)="potypeEvent($event)" class="PricingType"></potype>
         <!-- <p *ngIf="PricingType">Selected: {{ PricingType.displayName }}</p> -->
       </div>
@@ -116,4 +116,4 @@
   </table>
 </div>
 
-<mat-paginator *ngIf="(dataSource?.data?.length || 0) > 0" [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+<mat-paginator *ngIf="(dataSource2?.data?.length || 0) > 0" [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>

@@ -256,16 +256,11 @@ export class PoCreateComponent {
     } else {
       console.warn('UserProfile not found in session storage');
     }
-
-    const userInfo = {
-      "userId": this.userdetail.userId,
-      "userName": this.userdetail.userName
-    }
-
+    
   }
 
   DownloadTemplate() {
-    const userId = this.userdetail?.userId;
+    const userId = this.userdetail?.user_Id;
     if (!userId) {
       alert('User ID not available');
       return;
