@@ -26,6 +26,9 @@ import { UnseizeComponent } from './pages/PayrollInput/unseize/unseize.component
 import { OnetimeinputComponent } from './pages/PayrollInput/onetimeinput/onetimeinput.component';
 import { FinalsubmissionComponent } from './pages/PayrollInput/finalsubmission/finalsubmission.component';
 import { TimesheetComponent } from './pages/PayrollInput/timesheet/timesheet.component';
+import { ReportsComponent } from './pages/Reports/reports.component';
+import { PayregisterunprocessedComponent } from './pages/Reports/payregisterunprocessed/payregisterunprocessed.component';
+import { PayslipComponent } from './pages/Reports/payslip/payslip.component';
 import { InvoiceauditComponent } from './pages/PayrollInput/invoiceaudit/invoiceaudit.component';
 import { MasternavigationComponent } from './pages/Masters/MasterNavigation/masternavigation/masternavigation.component';
 import { HolidaymasterComponent } from './pages/Masters/holidaymaster/holidaymaster.component';
@@ -77,53 +80,6 @@ export const routes: Routes = [
           { path: 'increment', component: IncrementComponent },
           { path: 'onetimeinput', component: OnetimeinputComponent },
           { path: 'finalsubmission', component: FinalsubmissionComponent }
-        ]
-      },
-      {
-        path: 'masternavigation',
-        component: MasternavigationComponent,
-        children: [
-          { path: 'holidaymaster', component: HolidaymasterComponent },
-          { path: 'invoicerule', component: InvoiceruleComponent },
-          { path: 'leavemaster', component: LeavemasterComponent },
-          { path: 'leaverule', component: LeaveruleComponent },
-          { path: 'lob', component: LeaveOpeningBalanceUploadComponent },
-          { path: 'vendoremployee', component: VendorEmployeeComponent }
-        ]
-      },
-      {
-        path: 'invoicenavigation',
-        component: InvoicenavigationComponent,
-        children: [
-          { path: 'initiate', component: InitiateComponent },
-          { path: 'perfomainvoice', component: PerfomainvoiceComponent }
-        ]
-      },
-
-      {
-        path: 'ponavigation',
-        component: PoNavigationComponent,
-        children: [
-          { path: 'Entry', component: PoCreateComponent },
-          { path: 'Employee', component: EmployeePOComponent },
-          { path: 'Approve', component: POApproveComponent },
-
-        ]
-      },
-      {
-        path: 'reports',
-        component: ReportsComponent,
-        children: [
-          { path: 'payregisterunprocessed', component: PayregisterunprocessedComponent },
-          { path: 'payslip', component: PayslipComponent },
-          { path: 'app-invoice-leave-balance-report', component: InvoiceLeaveBalanceReportComponent },
-          { path: 'app-leave-balance-report', component: LeaveBalanceReportComponent },
-          { path: 'poactiveinactivereport', component: PoactiveinactivereportComponent },
-          { path: 'poemployeereport', component: PoemployeereportComponent },
-          { path: 'pomonthwisereport', component: PomonthwisereportComponent },
-          { path: 'app-qits-billing-report', component: QITSBillingReportComponent },
-          { path: 'app-timesheet-report', component: TimesheetReportComponent },
-          { path: 'poactiveinactivereport', component: PoactiveinactivereportComponent }
         ]
       },
       //   { path: 'UI', component: SopComponent },

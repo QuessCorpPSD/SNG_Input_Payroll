@@ -140,7 +140,7 @@ getUserRole(roleId: number): Role {
   this._authService.ValidateLogin(login).subscribe({
     next: (loginStatus) => {
       const data = loginStatus.Data;
-      console.log(data);
+      console.log('data',data);
       if (data.error_Message === "" && data.user_Id > 0) {
         this.Name = data.userName;
         this.sessionStorageService.setItem('UserProfile', this._encry.encrypt(JSON.stringify(data)));
