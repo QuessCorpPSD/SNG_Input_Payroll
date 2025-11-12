@@ -1,0 +1,39 @@
+/* Make select box compact */
+.small-select {
+  font-size: 12px; /* smaller font */
+  width: 120px;    /* optional fixed width */
+}
+
+/* Outer wrapper: background + rounded border */
+.small-select .mat-mdc-text-field-wrapper {
+  background-color: #f5f5f5 !important; /* change background */
+  border-radius: 8px !important;        /* rounded corners */
+  border: 1px solid #ccc !important;    /* border */
+  padding: 0 4px;                       /* tighter spacing */
+}
+
+/* Reduce height */
+.small-select .mat-mdc-form-field-flex {
+  min-height: 10px !important;
+  align-items: center;
+}
+.table-container {
+  width: 900px;
+  overflow-x: auto;   /* enables X scroll */
+}
+table {
+  min-width: 100%;  /* force wider width so scroll appears */
+}
+/* Adjust select trigger (the text area inside) */
+.small-select .mat-mdc-select-trigger {
+  padding: 0 6px !important;
+  min-height: 10px !important;
+  display: flex;
+  align-items: center;
+}
+
+/* Hide the default select arrow */
+.small-select .mat-mdc-select-arrow,
+.small-select .mat-mdc-select-arrow-wrapper {
+  display: none !important;
+}

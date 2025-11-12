@@ -2,14 +2,10 @@
   width: 90%;
   overflow-x: auto;   /* enables X scroll */
 }
-.card-body
-{
-  margin :0 0 0 0 !important;
-}
 .mat-column-serial_No {
-  width: 100px;   /* Fixed column width */
-  max-width: 100px;
-  min-width: 100px;
+  width: 70px;   /* Fixed column width */
+  max-width: 70px;
+  min-width: 70px;
   text-align: center;
 }
 .mat-column-input_No {
@@ -180,11 +176,11 @@
   min-width: 100px;
   text-align: center;
 }
-.mat-column-map_Name {
-  width: 200px;   /* Fixed column width */
-  max-width: 200px;
-  min-width: 200px;
-  text-align: center;
+.mat-column-map_name {
+  width: 300px;   /* Fixed column width */
+  max-width: 300px;
+  min-width: 300px;
+  text-align: left;
 }
 .fixed-table {
   table-layout: fixed;
@@ -375,6 +371,77 @@ th.mat-column-position, td.mat-column-position {
 ::ng-deep .mat-mdc-form-field-infix {
   padding-top: 4px;
   padding-bottom: 4px;
+   margin-top: 5px;
   min-height: 20px !important;
+ 
+}
+::ng-deep .mat-mdc-tab-labels {
+  background-color: #fff;
+   width: 35%;
+}
+::ng-deep .custom-tabs .mat-mdc-tab.mdc-tab--active {
+  background-color: #C4D5F5 !important;
+  color: #282727 !important;
+}
+::ng-deep .mat-mdc-tab-label.mat-mdc-tab-label-active {
+  color: #222425;
+  font-weight: 600;
+  font:bold;     
+  border-radius: 6px 6px 0 0; 
+  background-color:#e0e7ff  !important;
+}
+
+.link-text {
+  color: #0b0d0f;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.dialog-card {
+  padding: 16px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.custom-dialog-container .mat-mdc-dialog-surface {
+  border-radius: 16px !important;
+  overflow: visible !important;
+}
+.mat-mdc-row,
+.mat-mdc-header-row {
+  height: 20px !important;
+}
+
+.mat-mdc-cell,
+.mat-mdc-header-cell {
+  padding: 2px 4px !important;
+  font-size: 13px !important;
+}
+.mat-card-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.loader-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.loader {
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid #3498db;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 0.8s linear infinite;
 }
 

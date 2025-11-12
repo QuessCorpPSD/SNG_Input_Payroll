@@ -7,4 +7,13 @@ export interface IInvoiceRepository  {
     InvoiceInitiate(val): Observable<APIResponse> ;
     ExportToExcel(val): Observable<APIResponse>;
     GetAllInvoiceDetails(companyId: number, payPeriodId: number, userId: string): Observable<APIResponse>;
+     BillableSearch(val):Observable<APIResponse>;
+     BillableUpload(val):Observable<APIResponse>;
+     BillableDaysSearchExport(val):Observable<APIResponse>;
+     BillableTemplateDownload(importtype):Observable<APIResponse>;
+     Search(val):Observable<APIResponse>;
+    
+    ExportToExcel(val): Observable<APIResponse>;
+    InitialSearch(val): Observable<APIResponse>;
+    InitiationSearchExport(val): Observable<APIResponse>;
 }
