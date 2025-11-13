@@ -71,6 +71,7 @@ import { UANReleaseComponent } from './pages/SalaryRelease/uanrelease/uanrelease
 import { UpfrontPortalFinalApprovalComponent } from './pages/SalaryRelease/upfront-portal-final-approval/upfront-portal-final-approval.component';
 import { VANPaymentRequestComponent } from './pages/SalaryRelease/vanpayment-request/vanpayment-request.component';
 import { BillableDaysComponent } from './pages/Invoice/billable-days/billable-days.component';
+import { GstinvoiceComponent } from './pages/Invoice/gstinvoice/gstinvoice.component';
 
 
 
@@ -179,8 +180,9 @@ export const routes: Routes = [
         component: InvoicenavigationComponent,
         children: [
           { path: 'initiate', component: InitiateComponent },
-          { path: 'perfomainvoice', component: PerfomainvoiceComponent },
-          { path: 'billabledays', component: BillableDaysComponent }
+          //{ path: 'perfomainvoice', component: PerfomainvoiceComponent },
+          { path: 'billabledays', component: BillableDaysComponent },
+          { path: 'gstinvoice', component: GstinvoiceComponent }
         ]
       },
 
