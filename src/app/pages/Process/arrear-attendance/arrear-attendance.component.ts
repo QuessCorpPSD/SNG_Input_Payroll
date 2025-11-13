@@ -15,50 +15,48 @@ import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import * as XLSX from 'xlsx';
 import FileSaver from 'file-saver';
-import { IAttendanceProcessRepository } from '../../../Repository/Process/IAttendnaceProcessRepository';
-import { AttendanceProcessRepository } from '../../../Service/Process/AttendanceProcessRepository';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { IArrearAttendanceProcessRepository } from '../../../Repository/Process/IArrearAttendanceProcessRepository';
+import { ArrearAttendanceProcessRepository } from '../../../Service/Process/ArrearAttendanceProcessRepository';
+import { Console } from 'console';
 
-export const Pay_TOKEN = new InjectionToken<IAttendanceProcessRepository>('Pay_TOKEN');
+export const Pay_TOKEN = new InjectionToken<IArrearAttendanceProcessRepository>('Pay_TOKEN');
 
 
 type RawRow = Record<string, any>;
 
 interface ViewRow {
-  Company_Code: number;
+  Company_code: number;
   Company_Name: string;
   Employee_Code: string;
   Employee_Name: string;
   Pay_Period: string;
   Month_Days: string;
   Work_Days: string;
-  ProcessType: string;
   Loss_Of_Pay_Days: string;
-  Effective_Date: string;
+  Arrear_Pay_Period: string;
 }
 
 @Component({
-  selector: 'attendance',
+  selector: 'arrearattendance',
   standalone: true,
   imports: [CommonModule, MatTabsModule, CompanyallComponent,
     PayperiodsequenceComponent, MatIconModule, FormsModule, MatCardModule, MatFormFieldModule,
     MatSelectModule, AlertpopupComponent, PayprocesstypeComponent, MatPaginatorModule],
-  templateUrl: './attendance.component.html',
-  styleUrl: './attendance.component.css',
+  templateUrl: './arrear-attendance.component.html',
+  styleUrl: './arrear-attendance.component.css',
   providers: [DatePipe,
     {
       provide: Pay_TOKEN,
-      useClass: AttendanceProcessRepository,
+      useClass: ArrearAttendanceProcessRepository,
     }
   ]
 })
-export class AttendanceComponent implements OnInit {
+export class ArrearAttendanceComponent implements OnInit {
   selectedCompanyId!: number;
   payPeriod!: Payperiodclass;
   payPeriodType!: string;
   isLoading: boolean = false;
-  empid: any;
-  selectoption: any;
   userdetail!: any;
   UploadedResponse: any;
   showPopup = false;
@@ -71,7 +69,7 @@ export class AttendanceComponent implements OnInit {
   pageSize = 10;
   currentPage = 0;
 
-  constructor(private datePipe: DatePipe, @Inject(Pay_TOKEN) private _attendanceProcessService: IAttendanceProcessRepository,
+  constructor(private datePipe: DatePipe, @Inject(Pay_TOKEN) private _attendanceProcessService: IArrearAttendanceProcessRepository,
     private _sessionStoreage: SessionStorageService, private decry: EncryptionService,) {
 
   }
@@ -93,13 +91,6 @@ export class AttendanceComponent implements OnInit {
     } else {
       console.warn('UserProfile not found in session storage');
     }
-
-    const userInfo = {
-      "userId": this.userdetail.userId,
-      "userName": this.userdetail.userName,
-    };
-    this.selectoption = "-1";
-    this.empid = "";
   }
 
   Searchclick() {
@@ -117,14 +108,8 @@ export class AttendanceComponent implements OnInit {
     }
 
     const payload = {
-      mode: "Search",
-      Value1: "1",
-      searchxml: {
-        Company_id: String(this.selectedCompanyId),
-        Pay_Frequency_Id: String(this.payPeriod.payfrequencyid),
-        Resign_Status: String(this.selectoption),
-        Emp_Code: String(this.empid),
-      }
+      Company_id: String(this.selectedCompanyId),
+      Pay_Frequency_Id: String(this.payPeriod.payfrequencyid),
     };
 
     this._attendanceProcessService.SearchDetails(payload).subscribe({
@@ -142,16 +127,15 @@ export class AttendanceComponent implements OnInit {
 
           this.rows = table.map((r: RawRow): ViewRow => {
             const row: ViewRow = {
-              Company_Code: r['Company_Code'],
+              Company_code: r['Company_code'],
               Company_Name: r['Company_Name'],
               Employee_Code: r['Employee_Code'],
               Employee_Name: r['Employee_Name'],
               Pay_Period: r['Pay_Period'],
               Month_Days: r['Month_Days'],
               Work_Days: r['Work_Days'],
-              ProcessType: r['ProcessType'],
               Loss_Of_Pay_Days: r['Loss_Of_Pay_Days'],
-              Effective_Date: r['Effective_Date']
+              Arrear_Pay_Period: r['Arrear_Pay_Period']
 
             };
 
@@ -188,7 +172,7 @@ export class AttendanceComponent implements OnInit {
 
   DownloadTemplate() {
 
-    const baseHeaders = ["COMPCODE", "PAYPERIOD", "EMPID", "LOPDAYS", "ACTION"];
+    const baseHeaders = ["COMPANY_CODE", "CURRENT_PAYPERIOD", "ARREAR_PAYPERIOD", "EMPID", "LOP_DAYS", "ACTION"];
     const data: any[][] = [baseHeaders];
     const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(data);
 
@@ -196,7 +180,7 @@ export class AttendanceComponent implements OnInit {
 
     XLSX.utils.book_append_sheet(wb, ws, "Table");
 
-    XLSX.writeFile(wb, "Attendance_Process_Template.xlsx");
+    XLSX.writeFile(wb, "Arrear_Attendance_Process_Template.xlsx");
   }
 
   ExportClick() {
@@ -214,17 +198,14 @@ export class AttendanceComponent implements OnInit {
     }
 
     const payload = {
-      mode: "Search",
-      Value1: "1",
-      searchxml: {
-        Company_id: String(this.selectedCompanyId),
-        Pay_Frequency_Id: String(this.payPeriod.payfrequencyid)
-      }
+      Company_id: String(this.selectedCompanyId),
+      Pay_Frequency_Id: String(this.payPeriod.payfrequencyid),
     };
 
     this._attendanceProcessService.ExporttoExcel(payload).subscribe({
       next: res => {
         this.UploadedResponse = res;
+
         if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.Data.statusCode === 200) {
           const tables = res?.Data?.data;
 
@@ -233,6 +214,7 @@ export class AttendanceComponent implements OnInit {
             console.warn("No valid tables found in API response.");
             return;
           }
+
 
           // Prepare function to convert a table to worksheet
           function convertTableToSheet(tableData: any[]): XLSX.WorkSheet {
@@ -254,15 +236,15 @@ export class AttendanceComponent implements OnInit {
           // Create workbook with both sheets
           const workbook: XLSX.WorkBook = {
             Sheets: {
-              "Attendance": AttendanceSheet
+              "Arrear Attendance": AttendanceSheet
             },
-            SheetNames: ["Attendance"]
+            SheetNames: ["Arrear Attendance"]
           };
 
           // Generate filename
           const today = new Date();
           const dateStr = today.toISOString().split("T")[0];
-          const fileName = `Attendance_Process_${dateStr}.xlsx`;
+          const fileName = `Arrear_Attendance_Process_${dateStr}.xlsx`;
 
           // Write workbook to file
           const excelBuffer: any = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
@@ -316,7 +298,7 @@ export class AttendanceComponent implements OnInit {
     formData.append('file', file);
     formData.append('User', this.userdetail.user_Id);
 
-    this._attendanceProcessService.ImportAttendnace(formData).subscribe({
+    this._attendanceProcessService.ImportArrearAttendnace(formData).subscribe({
       next: res => {
 
         this.UploadedResponse = res;
@@ -342,7 +324,7 @@ export class AttendanceComponent implements OnInit {
           };
 
           // Export the file
-          XLSX.writeFile(workbook, 'ErrorMessages_Attendance_Process.xlsx');
+          XLSX.writeFile(workbook, 'ErrorMessages_Arrear_Attendance_Process.xlsx');
           this.isLoading = false;
           this.showPopup = true;
           this.popupMessage = 'Import Failed.';
@@ -378,3 +360,4 @@ export class AttendanceComponent implements OnInit {
     this.setPaginatedData();
   }
 }
+

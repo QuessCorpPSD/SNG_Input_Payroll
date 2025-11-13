@@ -71,6 +71,7 @@ import { UANReleaseComponent } from './pages/SalaryRelease/uanrelease/uanrelease
 import { UpfrontPortalFinalApprovalComponent } from './pages/SalaryRelease/upfront-portal-final-approval/upfront-portal-final-approval.component';
 import { VANPaymentRequestComponent } from './pages/SalaryRelease/vanpayment-request/vanpayment-request.component';
 import { AttendanceComponent } from './pages/Process/attendance/attendance.component';
+import { ArrearAttendanceComponent } from './pages/Process/arrear-attendance/arrear-attendance.component';
 import { BillableDaysComponent } from './pages/Invoice/billable-days/billable-days.component';
 import { GstinvoiceComponent } from './pages/Invoice/gstinvoice/gstinvoice.component';
 import { SalaryadvacerequestComponent } from './pages/salaryadvancemodule/salaryadvacerequest/salaryadvacerequest.component';
@@ -225,7 +226,8 @@ export const routes: Routes = [
         component: ProcessComponent,
         children: [
           { path: 'reprocess', component: ReprocessComponent },
-          { path: 'attendance', component: AttendanceComponent }
+          { path: 'attendance', component: AttendanceComponent },
+          { path: 'arrearattendance', component: ArrearAttendanceComponent }
         ]
       },
       {
