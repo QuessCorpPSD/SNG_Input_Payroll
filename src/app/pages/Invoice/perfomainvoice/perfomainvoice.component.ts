@@ -127,14 +127,15 @@ export class PerfomainvoiceComponent {
 
     if (this.companyUI && this.payperiodUI) {
       this.isLoading = true;
-      this.GetPerformaInvoice(this.companyUI.companyId, this.payperiodUI.payPeriod)
+      this.GetPerformaInvoice(this.companyUI.companyId, this.payperiodUI.payPeriod, this.companyUI.invoice_Billing_Type)
     }
   }
 
-  GetPerformaInvoice(ComapnayId: string, payPeriod: string) {
-    this.perfomainvoiceSer.GetPerformaInvoice(ComapnayId, payPeriod).subscribe({
+  GetPerformaInvoice(ComapnayId: string, payPeriod: string, invoiceBillingType: number) {
+    this.perfomainvoiceSer.GetPerformaInvoice(ComapnayId, payPeriod, invoiceBillingType, this.userdetail.user_Id).subscribe({
       next: res => {
-        if (!res.Data || res.Data === null) {
+        console.log(res.Data);
+        if (!res?.Data?.Table0 || res.Data.Table0.length === 0) {
           alert("No data available to display.");
           this.isLoading = false;
           return;
