@@ -187,7 +187,7 @@ export const routes: Routes = [
         component: InvoicenavigationComponent,
         children: [
           { path: 'initiate', component: InitiateComponent },
-          //{ path: 'perfomainvoice', component: PerfomainvoiceComponent },
+          { path: 'perfomainvoice', component: PerfomainvoiceComponent },
           { path: 'billabledays', component: BillableDaysComponent },
           { path: 'gstinvoice', component: GstinvoiceComponent }
         ]

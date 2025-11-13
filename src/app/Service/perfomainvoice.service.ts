@@ -14,8 +14,8 @@ export class perfomainvoiceservice implements iperfomainvoiceservice {
   constructor(private http: HttpClient) {
   }
 
-  GetPerformaInvoice(CompanyId: string, PayPriod: string): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.environment.apiUrl + 'Invoice/GetPerformaInvoice/' + CompanyId + '/' + PayPriod);
+  GetPerformaInvoice(CompanyId: string, PayPriod: string, invoiceBillingType: number, CreatedBy: string): Observable<APIResponse> {
+    return this.http.get<APIResponse>(this.environment.apiUrl + 'Invoice/GetPerformaInvoice/' + CompanyId + '/' + PayPriod + '/' + invoiceBillingType + '/' + CreatedBy);
   }
 
   PerformaInvoiceSplit(formData: FormData): Observable<APIResponse> {

@@ -5,7 +5,7 @@ import { APIResponse } from '../Models/apiresponse';
 
 export interface iperfomainvoiceservice {
 
-    GetPerformaInvoice(CompanyId: string, PayPriod: string): Observable<APIResponse>;
+    GetPerformaInvoice(CompanyId: string, PayPriod: string, invoiceBillingType: number, userId: string): Observable<APIResponse>;
     PerformaInvoiceSplit(formData: FormData): Observable<APIResponse>;
     PerformaInvoiceMerge(payload: any): Observable<APIResponse>;
     PerformaInvoiceInitiate(payload: any): Observable<APIResponse>;
