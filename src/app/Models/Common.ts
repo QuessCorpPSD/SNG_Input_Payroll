@@ -2,6 +2,7 @@ export interface Company {
   company_Id: number
   companyCode: string
   companyName: string
+  invoice_Billing_Type: number
   displayName: string
 }
 

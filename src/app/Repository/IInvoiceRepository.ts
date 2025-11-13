@@ -1,19 +1,20 @@
 import { Observable } from "rxjs";
 import { APIResponse } from "../Models/apiresponse";
 
-export interface IInvoiceRepository  {
+export interface IInvoiceRepository {
 
-    Search(val):Observable<APIResponse>;
-    InvoiceInitiate(val): Observable<APIResponse> ;
+    Search(val): Observable<APIResponse>;
+    InvoiceInitiate(val): Observable<APIResponse>;
     ExportToExcel(val): Observable<APIResponse>;
     GetAllInvoiceDetails(companyId: number, payPeriodId: number, userId: string): Observable<APIResponse>;
-     BillableSearch(val):Observable<APIResponse>;
-     BillableUpload(val):Observable<APIResponse>;
-     BillableDaysSearchExport(val):Observable<APIResponse>;
-     BillableTemplateDownload(importtype):Observable<APIResponse>;
-     Search(val):Observable<APIResponse>;
-    
+    BillableSearch(val): Observable<APIResponse>;
+    BillableUpload(val): Observable<APIResponse>;
+    BillableDaysSearchExport(val): Observable<APIResponse>;
+    BillableTemplateDownload(importtype): Observable<APIResponse>;
+    Search(val): Observable<APIResponse>;
     ExportToExcel(val): Observable<APIResponse>;
     InitialSearch(val): Observable<APIResponse>;
     InitiationSearchExport(val): Observable<APIResponse>;
+    UploadReject(formData): Observable<APIResponse>;
+    GetGSTInvoice(userId: number): Observable<APIResponse>;
 }

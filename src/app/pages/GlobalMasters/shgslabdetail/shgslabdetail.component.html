@@ -1,0 +1,143 @@
+<!-- <div style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; min-width: 960px">
+    SHG Slab Detail
+</div> -->
+
+<div class="container py-2">
+    <div class="row g-3 align-items-end">
+        <div class="col-md-3">
+            <label class="form-label text-muted small" [ariaRequired]="true">Effective Date <span class="text-danger">*</span></label>
+            <input type="date" class="form-control form-control-sm" [(ngModel)]="Selecteddate" />
+        </div>
+        <div class="col-md-2 d-flex gap-2">
+            <button class="btn  btn-sm d-flex align-items-center justify-content-center" matTooltip="Search"
+                (click)="onsearch()">
+                <mat-icon>search</mat-icon>
+            </button>
+            <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="export to excel" (click)="exportToExcel()">
+                <mat-icon>table_chart</mat-icon>
+            </button>
+            <button class="btn  btn-sm d-flex align-items-center justify-content-center" matTooltip="Add"
+                (click)="AddShgslabdetailOpen()">
+                <mat-icon>add</mat-icon>
+            </button>
+
+        </div>
+    </div>
+</div>
+<br />
+<div class="table-wrapper1" *ngIf="showTable">
+    <div class="table-scroll">
+        <mat-table [dataSource]="dataSource" class="mat-elevation-z8 custom-table">
+
+            <!-- Action Column -->
+            <ng-container matColumnDef="Action">
+                <mat-header-cell *matHeaderCellDef>
+                    <div class="header-cell">Action</div>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Delete">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </mat-cell>
+            </ng-container>
+
+            <!-- Sl.No Column -->
+            <ng-container matColumnDef="slNo">
+                <mat-header-cell *matHeaderCellDef>Sl.No</mat-header-cell>
+                <mat-cell *matCellDef="let row">{{ row.Serial_No }}</mat-cell>
+            </ng-container>
+
+            <!-- Effective Date Column -->
+            <ng-container matColumnDef="effectivedate">
+                <mat-header-cell *matHeaderCellDef>Effective Date</mat-header-cell>
+                <mat-cell *matCellDef="let row">{{ row.Effective_Date }}</mat-cell>
+            </ng-container>
+
+            <!-- Category Column -->
+            <ng-container matColumnDef="category">
+                <mat-header-cell *matHeaderCellDef>Category</mat-header-cell>
+                <mat-cell *matCellDef="let row">{{ row.Category }}</mat-cell>
+            </ng-container>
+
+            <!-- From Value Column -->
+            <ng-container matColumnDef="fromvalue">
+                <mat-header-cell *matHeaderCellDef>From Value</mat-header-cell>
+                <mat-cell *matCellDef="let row">{{ row.From_Value }}</mat-cell>
+            </ng-container>
+
+            <!-- To Value Column -->
+            <ng-container matColumnDef="tovalue">
+                <mat-header-cell *matHeaderCellDef>To Value</mat-header-cell>
+                <mat-cell *matCellDef="let row">{{ row.To_Value }}</mat-cell>
+            </ng-container>
+
+            <!-- Value Column -->
+            <ng-container matColumnDef="value">
+                <mat-header-cell *matHeaderCellDef>Value</mat-header-cell>
+                <mat-cell *matCellDef="let row">{{ row.EmployerContributionPerc }}</mat-cell>
+            </ng-container>
+
+            <!-- 🔹 Filter Row Columns -->
+            <ng-container matColumnDef="Actionfilter">
+                <mat-header-cell *matHeaderCellDef></mat-header-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="slNoFilter">
+                <mat-header-cell *matHeaderCellDef>
+                </mat-header-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="effectivedateFilter">
+                <mat-header-cell *matHeaderCellDef>
+                    <input matInput placeholder="Search Date" [(ngModel)]="filterValues.effectivedate"
+                        (keyup)="applyFilter()" />
+                </mat-header-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="categoryFilter">
+                <mat-header-cell *matHeaderCellDef>
+                    <input matInput placeholder="Search Category" [(ngModel)]="filterValues.category"
+                        (keyup)="applyFilter()" />
+                </mat-header-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="fromvalueFilter">
+                <mat-header-cell *matHeaderCellDef>
+                    <input matInput placeholder="Search From" [(ngModel)]="filterValues.fromvalue"
+                        (keyup)="applyFilter()" />
+                </mat-header-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="tovalueFilter">
+                <mat-header-cell *matHeaderCellDef>
+                    <input matInput placeholder="Search To" [(ngModel)]="filterValues.tovalue"
+                        (keyup)="applyFilter()" />
+                </mat-header-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="valueFilter">
+                <mat-header-cell *matHeaderCellDef>
+                    <input matInput placeholder="Search Value" [(ngModel)]="filterValues.value"
+                        (keyup)="applyFilter()" />
+                </mat-header-cell>
+            </ng-container>
+
+            <!-- Header Row (labels) -->
+            <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+
+            <!-- Filter Row (inputs) -->
+            <mat-header-row *matHeaderRowDef="filteredDisplayedColumns" class="filter-row"></mat-header-row>
+
+            <!-- Data Rows -->
+            <mat-row *matRowDef="let row; columns: uploadDisplayedColumns"></mat-row>
+
+        </mat-table>
+        <div *ngIf="dataSource.data.length === 0" class="text-center p-4">
+            <p class="text-muted">No data to display</p>
+        </div>
+
+        <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    </div>
+</div>
+
+<!-- No Data Message -->

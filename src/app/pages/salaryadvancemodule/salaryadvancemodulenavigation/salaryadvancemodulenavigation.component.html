@@ -1,0 +1,21 @@
+<div class="headerSOP">
+</div>
+<div class="contentCategory">
+    <div style="width: 100%;">
+        <div class="Categorylist">
+            <ul class="horizontal-list">
+                <li><a [routerLink]="['/Master/salaryadvancemodule/salaryadvancerequest']" class="nav-link"
+                        routerLinkActive="selectedInput" [routerLinkActiveOptions]="{ exact: true }">Salary Advance
+                        Request</a></li>
+                <li><a [routerLink]="['/Master/salaryadvancemodule/salaryadvanceapprove']" class="nav-link"
+                        routerLinkActive="selectedInput" [routerLinkActiveOptions]="{ exact: true }">Salary Advance
+                        Approve</a></li>
+                <li><a [routerLink]="['/Master/salaryadvancemodule/salaryadvancereport']" class="nav-link"
+                        routerLinkActive="selectedInput" [routerLinkActiveOptions]="{ exact: true }">Salary Advance
+                        report</a></li>
+
+            </ul>
+        </div>
+    </div>
+</div>
+<router-outlet></router-outlet>

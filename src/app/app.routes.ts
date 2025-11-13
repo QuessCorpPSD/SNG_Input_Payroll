@@ -72,6 +72,13 @@ import { UpfrontPortalFinalApprovalComponent } from './pages/SalaryRelease/upfro
 import { VANPaymentRequestComponent } from './pages/SalaryRelease/vanpayment-request/vanpayment-request.component';
 import { BillableDaysComponent } from './pages/Invoice/billable-days/billable-days.component';
 import { GstinvoiceComponent } from './pages/Invoice/gstinvoice/gstinvoice.component';
+import { SalaryadvacerequestComponent } from './pages/salaryadvancemodule/salaryadvacerequest/salaryadvacerequest.component';
+import { SalaryadvanceapproveComponent } from './pages/salaryadvancemodule/salaryadvanceapprove/salaryadvanceapprove.component';
+import { SalaryadvancemodulenavigationComponent } from './pages/salaryadvancemodule/salaryadvancemodulenavigation/salaryadvancemodulenavigation.component';
+import { SalaryadvancereportComponent } from './pages/salaryadvancemodule/salaryadvancereport/salaryadvancereport.component';
+import { GlobalmasternavigationComponent } from './pages/GlobalMasters/globalmasternavigation/globalmasternavigation.component';
+import { PaycodesComponent } from './pages/GlobalMasters/paycodes/paycodes.component';
+import { ShgslabdetailComponent } from './pages/GlobalMasters/shgslabdetail/shgslabdetail.component';
 
 
 
@@ -112,9 +119,9 @@ export const routes: Routes = [
           { path: 'vendoremployee', component: VendorEmployeeComponent }
         ]
       },
-       {
+      {
         path: 'SalaryRelease',
-         component: SalaryReleaseNavigationComponent,
+        component: SalaryReleaseNavigationComponent,
         children: [
           {
             path: 'SalaryReleaseRequest',
@@ -148,33 +155,33 @@ export const routes: Routes = [
             path: 'NetpaySummarynonvoice',
             component: NetpaysummaryofnonvoiceComponent
           },
- 
+
           {
             path: 'NewJoineeBankFailure',
             component: NewJoineeExistingEmployeeBankVerifiedReportComponent
- 
+
           },
           {
             path: 'bonusflushout',
             component: BonusflushComponent
- 
+
           },
           {
             path: 'UANRelease',
-            component:UANReleaseComponent
+            component: UANReleaseComponent
           },
- 
-           
-          { path: 'NetPaySammary', component: NetPaySammaryComponent },        
-          { path: 'VANPaymentRequest', component:VANPaymentRequestComponent  } ,
-          { path: 'HoldEmployeSalary', component:HoldEmployeSalaryComponent  },
-          { path: 'SalaryAdvanceRequest',component:SalaryAdvanceRequestComponent  },
-          {path:'Employeesalaryrelease',component:EmployeesalaryreleaseComponent }
- 
- 
+
+
+          { path: 'NetPaySammary', component: NetPaySammaryComponent },
+          { path: 'VANPaymentRequest', component: VANPaymentRequestComponent },
+          { path: 'HoldEmployeSalary', component: HoldEmployeSalaryComponent },
+          { path: 'SalaryAdvanceRequest', component: SalaryAdvanceRequestComponent },
+          { path: 'Employeesalaryrelease', component: EmployeesalaryreleaseComponent }
+
+
         ]
       },
- 
+
       {
         path: 'invoicenavigation',
         component: InvoicenavigationComponent,
@@ -218,6 +225,22 @@ export const routes: Routes = [
         children: [
           { path: 'reprocess', component: ReprocessComponent }
         ]
+      },
+      {
+        path: 'salaryadvancemodule', component: SalaryadvancemodulenavigationComponent,
+        children: [
+          { path: 'salaryadvancerequest', component: SalaryadvacerequestComponent },
+          { path: 'salaryadvanceapprove', component: SalaryadvanceapproveComponent },
+          { path: 'salaryadvancereport', component: SalaryadvancereportComponent },
+        ]
+      },
+      {
+        path: 'navigationglobal', component: GlobalmasternavigationComponent,
+        children: [
+          { path: "paycodes", component: PaycodesComponent },
+          { path: "shgslabdetail", component: ShgslabdetailComponent },
+        ]
+
       },
       //   { path: 'UI', component: SopComponent },
       { path: '**', redirectTo: '/Home', pathMatch: 'full' }

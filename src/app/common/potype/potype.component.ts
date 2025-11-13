@@ -30,7 +30,7 @@ export  const COMM_TOKEN=new InjectionToken<ICommonService>('COMM_TOKEN');
 export class PotypeComponent {
   searchText: string = '';
   myControl = new FormControl<string | Company>('');
-  ponumber: Company[] = [{"company_Id":1,"companyName":"REGULAR","companyCode":"","displayName":"Regular"},{"company_Id":2,"companyName":"THIRDPARTY","companyCode":"THIRDPARTY","displayName":"ThirdParty"}];
+  ponumber: Company[] = [{"company_Id":1,"companyName":"REGULAR","companyCode":"","displayName":"Regular", "invoice_Billing_Type" : 0},{"company_Id":2,"companyName":"THIRDPARTY","companyCode":"THIRDPARTY","displayName":"ThirdParty", "invoice_Billing_Type": 0}];
   //$!: Observable<Company[]>; 
   selectedOption?: Company;
   userdetail! : any;

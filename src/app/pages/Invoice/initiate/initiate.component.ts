@@ -52,6 +52,7 @@ export class InitiateComponent implements OnInit {
   @ViewChild('editDialog') editDialog!: TemplateRef<any>;
   dialogRef!: MatDialogRef<any>;
   isLoading:boolean= false;
+  companyUI: any;
   displayColumns=['action','serial_No','map_name','net_CTC','netPay','lotNo','input_No','pO_Number','employee_Head_Count','service_Charge','serviceChargeAmount','service_Charge_Master','service_Charge_Type','bgvbl','astfee','discT1','discT2','idcard','email','regfee','trnfee','ggdbt','ppekit','vmsfee','edufee','ntpry','renmac','draded','othdd','mbapp','calcrg','calrt','narration']
   constructor(@Inject(Invoice_TOKEN) private _invoiceService: IInvoiceRepository,private _decrypt:EncryptionService,
   private _sessionStoreage:SessionStorageService,private dialog: MatDialog){
@@ -182,6 +183,8 @@ export class InitiateComponent implements OnInit {
     handleCompanyEvent(company)
     {
       this.selectedCompanyId = company.companyId;
+      this.companyUI = company;
+      console.log(this.companyUI);
     }
     handlePayperiodEvent(payperiod: Payperiodclass){
       this.payPeriod = payperiod;
@@ -237,11 +240,13 @@ export class InitiateComponent implements OnInit {
       const request = {
         "Company_Id": this.selectedCompanyId,
         "PayPeriod_Id": this.payPeriod.payfrequencyid,
-        "InvoiceType": 0,
-        "ActionType": "S"
+        "ActionType": "Search",
+        "Invoice_Billing_Type": this.companyUI.invoice_Billing_Type,
+        "CreatedBy": this.userdetail.user_Id
       }
       this._invoiceService.InitialSearch(request).subscribe({
         next:res=>{
+          console.log(res);
            this.dataSource = new MatTableDataSource<any>(Array.isArray(res.Data) ? res.Data : []);
            this.dataSource.paginator=this.PeningLot_paginator;
            this.issearch=false;

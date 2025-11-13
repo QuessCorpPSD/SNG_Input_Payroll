@@ -1,0 +1,74 @@
+<form [formGroup]="addshgform" novalidate>
+    <mat-card class="custom-card">
+        <mat-card-header class="sticky-header">
+
+            <mat-card-title>Add SHG Slab Detail</mat-card-title>
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="onClose()" class="no-border-icon">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+
+        <mat-card-content class="scroll-content">
+            <br />
+            <!-- Row 1 -->
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">Effective Date<span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" formControlName="EffectiveDate" />
+                    <!-- <select class="form-select" formControlName="POCategory">
+                        <option value="">-- Select --</option>
+                    </select> -->
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Category<span class="text-danger">*</span></label>
+                    <!-- <input type="date" class="form-control" formControlName="Category" /> -->
+                    <select class="form-select" formControlName="Category">
+                        <option value="">-- Select --</option>
+                        <!-- <option value="Yes">Yes</option>
+                        <option value="No">No</option> -->
+                        <option *ngFor="let p of category " [value]="p.spr_status_id">{{p.spr_status}} </option>
+                    </select>
+                </div>
+                <!-- <div class="col-md-4">
+                    <label class="form-label">Bank A/C Digit<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" formControlName="BankA/CDigit" />
+                    <select class="form-select" formControlName="POCategory">
+                        <option value="">-- Select --</option>
+                    </select>
+                </div> -->
+                <div class="col-md-4">
+                    <label class="form-label">Income From<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" formControlName="IncomeFrom" />
+
+                    <!-- <select class="form-select" formControlName="IFSCCodeApplicable">
+                        <option value="">-- Select --</option>
+                    </select> -->
+                </div>
+            </div>
+            <!-- Row 2 -->
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">Income To<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" formControlName="IncomeTo" />
+                    <!-- <select class="form-select" formControlName="POCategory">
+                        <option value="">-- Select --</option>
+                    </select> -->
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Value<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" formControlName="Value" />
+                    <!-- <select class="form-select" formControlName="POCategory">
+                        <option value="">-- Select --</option>
+                    </select> -->
+                </div>
+            </div>
+        </mat-card-content>
+        <mat-card-footer class="footer">
+            <div class="d-flex justify-content-end mt-3">
+                <button type="button" class="btn btn-primary rounded-pill px-3" (click)="onSaveSHG()">Save</button>
+                <button type="reset" class="btn btn-primary me-2 rounded-pill px-3">Cancel</button>
+            </div>
+        </mat-card-footer>
+    </mat-card>
+</form>

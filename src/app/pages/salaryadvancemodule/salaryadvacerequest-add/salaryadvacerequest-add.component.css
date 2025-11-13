@@ -1,0 +1,30 @@
+.custom-card {
+  overflow: hidden;       /* prevent full scroll */
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 10px;
+}
+
+.scroll-content {
+    flex: 1;
+    overflow-y: auto;
+}
+.sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: white;     
+  display: flex;
+  justify-content: space-between;
+  align-items: left;
+}
+
+/* mat-card-footer.footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+
+} */
+.no-border-icon{
+    border: none;
+}

@@ -6,17 +6,15 @@ import { environment } from "../../environments/environment.development";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class InvoiceRepository implements IInvoiceRepository {
-     environment=environment;
-        constructor(private http:HttpClient)
-        {
-    
-        }
+    environment = environment;
+    constructor(private http: HttpClient) {
 
-        BillableSearch(val):Observable<APIResponse>
-    {
+    }
+
+    BillableSearch(val): Observable<APIResponse> {
         var inputval = JSON.stringify(val);
 
         const config = new HttpHeaders({
@@ -27,9 +25,8 @@ export class InvoiceRepository implements IInvoiceRepository {
             .set('Accept', 'application/json')
         return this.http.post<APIResponse>(this.environment.apiUrl + "BillableDays/SearchDetails", inputval, { headers: config })
     }
-    BillableDaysSearchExport(val):Observable<APIResponse>
-    {
-       var inputval = JSON.stringify(val);
+    BillableDaysSearchExport(val): Observable<APIResponse> {
+        var inputval = JSON.stringify(val);
         const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
@@ -38,8 +35,8 @@ export class InvoiceRepository implements IInvoiceRepository {
             .set('Accept', 'application/json')
         return this.http.post<APIResponse>(this.environment.apiUrl + "BillableDays/ExportToExcel", inputval, { headers: config })
     }
-    BillableUpload(val):Observable<APIResponse>{
-      var inputval = JSON.stringify(val);
+    BillableUpload(val): Observable<APIResponse> {
+        var inputval = JSON.stringify(val);
         const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
@@ -48,11 +45,11 @@ export class InvoiceRepository implements IInvoiceRepository {
             .set('Accept', 'application/json')
         return this.http.post<APIResponse>(this.environment.apiUrl + "BillableDays/BillableDaysUpload", inputval, { headers: config })
     }
-    BillableTemplateDownload(importtype):Observable<APIResponse>{
-return this.http.get<APIResponse>(this.environment.apiUrl + 'BillableDays/DownloadTemplate/' + importtype);
+    BillableTemplateDownload(importtype): Observable<APIResponse> {
+        return this.http.get<APIResponse>(this.environment.apiUrl + 'BillableDays/DownloadTemplate/' + importtype);
     }
 
-        Search(val): Observable<APIResponse> {
+    Search(val): Observable<APIResponse> {
 
         const url = `${this.environment.apiUrl}InvoiceInitiation/Search`;
         const headers = new HttpHeaders({
@@ -64,7 +61,7 @@ return this.http.get<APIResponse>(this.environment.apiUrl + 'BillableDays/Downlo
         return this.http.post<APIResponse>(url, JSON.stringify(val), { headers });
     }
 
-      InitialSearch(val): Observable<APIResponse> {
+    InitialSearch(val): Observable<APIResponse> {
 
         const url = `${this.environment.apiUrl}InvoiceInitiation/InitiationSearch`;
         const headers = new HttpHeaders({
@@ -109,10 +106,26 @@ return this.http.get<APIResponse>(this.environment.apiUrl + 'BillableDays/Downlo
     }
 
 
-    GetAllInvoiceDetails(companyId: number, payPeriodId: number, userId: string): Observable<APIResponse>{
-    const url = `${this.environment.apiUrl}Invoice/GetAllInvoiceDetails/${companyId}/${payPeriodId}/${userId}`;
-    //console.log(url);
-    return this.http.get<APIResponse>(url);
-  }
+    GetAllInvoiceDetails(companyId: number, payPeriodId: number, userId: string): Observable<APIResponse> {
+        const url = `${this.environment.apiUrl}Invoice/GetAllInvoiceDetails/${companyId}/${payPeriodId}/${userId}`;
+        //console.log(url);
+        return this.http.get<APIResponse>(url);
+    }
 
+    UploadReject(formData): Observable<APIResponse> {
+        const url = `${this.environment.apiUrl}Onboarding/PostUploadReject`;
+        //console.log(url)
+        return this.http.post<APIResponse>(url, formData);
+    }
+
+    UploadCancel(formData): Observable<APIResponse> {
+        const url = `${this.environment.apiUrl}Onboarding/PostCancelReject`;
+        //console.log(url)
+        return this.http.post<APIResponse>(url, formData);
+    }
+    GetGSTInvoice(userId: number): Observable<APIResponse> {
+        const url = `${this.environment.apiUrl}GSTInvoice/GetGSTInvoice/${userId}`;
+        //console.log(url);
+        return this.http.get<APIResponse>(url);
+    }
 }
