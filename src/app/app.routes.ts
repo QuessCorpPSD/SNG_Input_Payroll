@@ -70,6 +70,7 @@ import { SalaryReleaseRequestComponent } from './pages/SalaryRelease/salary-rele
 import { UANReleaseComponent } from './pages/SalaryRelease/uanrelease/uanrelease.component';
 import { UpfrontPortalFinalApprovalComponent } from './pages/SalaryRelease/upfront-portal-final-approval/upfront-portal-final-approval.component';
 import { VANPaymentRequestComponent } from './pages/SalaryRelease/vanpayment-request/vanpayment-request.component';
+import { AttendanceComponent } from './pages/Process/attendance/attendance.component';
 
 
 
@@ -212,7 +213,8 @@ export const routes: Routes = [
         path: 'process',
         component: ProcessComponent,
         children: [
-          { path: 'reprocess', component: ReprocessComponent }
+          { path: 'reprocess', component: ReprocessComponent },
+          { path: 'attendance', component: AttendanceComponent }
         ]
       },
       //   { path: 'UI', component: SopComponent },
