@@ -1,0 +1,126 @@
+<div class="container py-1">
+    <div class="container-fluid">
+        <div>
+            <div class="row  align-items-end ">
+                <!-- Company Code -->
+                <div class="col-12 col-md-6">
+                    <label for="companySelect" class="form-label small fw-semibold">Company Code</label><span
+                        style="color: red;">*</span>
+                    <!-- keep your custom component; add an id for accessibility -->
+                    <companyall id="companySelect" (companyEmit)="handleCompanyEvent($event)"></companyall>
+                </div>
+
+                <!-- Pay Period -->
+                <div class="col-12 col-md-3">
+                    <label for="payPeriod" class="form-label small fw-semibold">Pay Period</label><span
+                        style="color: red;">*</span>
+                    <!-- pass inputs as before -->
+                    <payperiodsequence id="payPeriod" [selectedCompanyId]="selectedCompanyId"
+                        [payPeriodType]="payPeriodType" (payperiodEmit)="handlePayperiodEvent($event)">
+                    </payperiodsequence>
+                </div>
+                <div class="col-12 col-md-3" style="cursor: pointer;">
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
+                            (click)="Searchclick()" matTooltip="Search">
+                            <mat-icon>search</mat-icon>
+                        </button>
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                            (click)="DownloadTemplate()" matTooltip="Template">
+                            <mat-icon>cloud_download</mat-icon>
+                        </button>
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
+                            (click)="ImportClick(fileInput)" matTooltip="Upload">
+                            <mat-icon>cloud_upload</mat-icon>
+                        </button>
+                        <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                            (click)="ExportClick()" matTooltip="Excel Export">
+                            <mat-icon>table_chart</mat-icon>
+                        </button>
+                        <input type="file" #fileInput style="display: none;" (click)="fileInput.value=''"
+                            (change)="onFileChange($event)" accept=".xlsx, .xls" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row py-2">
+            <table class="table table-bordered">
+                <tr>
+                    <!-- <th style="display: none;">
+                        <span class="span-text-header">Sno</span>
+                    </th> -->
+                    <th>
+                        <span class="span-text-header">Company Code</span>
+                    </th>
+                    <th>
+                        <span class="span-text-header">Company Name</span>
+                    </th>
+                    <th>
+                        <span class="span-text-header">Employee Id</span>
+                    </th>
+                    <th>
+                        <span class="span-text-header">Employee Name</span>
+                    </th>
+                    <th>
+                        <span class="span-text-header">Pay Period</span>
+                    </th>
+                    <th>
+                        <span class="span-text-header">Month Days</span>
+                    </th>
+                    <th>
+                        <span class="span-text-header">Work Days</span>
+                    </th>
+                    <th>
+                        <span class="span-text-header">LOP Days</span>
+                    </th>
+                    <th>
+                        <span class="span-text-header">Arrear Pay Period</span>
+                    </th>
+                </tr>
+                <tbody *ngIf="paginatedData">
+                    <tr *ngFor="let item of paginatedData;"
+                        style="height: 30px;vertical-align: middle;">
+                        <td>
+                            <span class="span-text-detail">{{item.Company_code}}</span>
+                        </td>
+                        <td>
+                            <span class="span-text-detail">{{item.Company_Name}}</span>
+                        </td>
+                        <td>
+                            <span class="span-text-detail">{{item.Employee_Code}}</span>
+                        </td>
+                        <td>
+                            <span class="span-text-detail">{{item.Employee_Name}}</span>
+                        </td>
+                        <td>
+                            <span class="span-text-detail">{{item.Pay_Period}}</span>
+                        </td>
+                        <td>
+                            <span class="span-text-detail">{{item.Month_Days}}</span>
+                        </td>
+                        <td>
+                            <span class="span-text-detail">{{item.Work_Days}}</span>
+                        </td>
+                        <td>
+                            <span class="span-text-detail">{{item.Loss_Of_Pay_Days}}</span>
+                        </td>
+                        <td>
+                            <span class="span-text-detail">{{item.Arrear_Pay_Period}}</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="margin-bottom: 5%;">
+                <mat-paginator [length]="filteredRows.length" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20, 50]"
+                    (page)="onPageChange($event)">
+                </mat-paginator>
+            </div>
+        </div>
+        <div *ngIf="showPopup" class="overlay"></div>
+        <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+            (close)="showPopup = false"></app-alertpopup>
+        <div *ngIf="isLoading" class="loading-overlay">
+            <img src="assets/Loading.gif" alt="Loading...">
+        </div>
+    </div>
+</div>
