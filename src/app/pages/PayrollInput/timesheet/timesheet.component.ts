@@ -660,6 +660,7 @@ export class TimesheetComponent {
       this.isLoading = false;
       return;
     }
+    fileInputDaily.value='';
     fileInputDaily.click();
   }
 
@@ -678,7 +679,7 @@ export class TimesheetComponent {
     const formData = new FormData();
     if (this.excelFiledaily) {
       formData.append('file', this.excelFiledaily);
-      formData.append('User', this.userdetail.userId);
+      formData.append('User', this.userdetail.user_Id);
       formData.append('CompanyCode', this.companyUI.companyCode);
       formData.append('SiteID', this.sitenameUI.siteCode);
       formData.append('Payperiod', this.payperiodUI.payfrequencyid);
@@ -686,15 +687,15 @@ export class TimesheetComponent {
         next: res => {
           this.UploadedResponse = res;
 
-          if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.data.response === 'Import Successfully Done.') {
+          if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.Data.response === 'Import Successfully Done.') {
             alert('Import Successfully Done.');
             this.isLoading = false;
             this.showPopup = true;
             this.popupMessage = 'Import Successfully Done.';
           }
-          else if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.data.response === 'Failed to import.') {
+          else if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.Data.response === 'Failed to import.') {
 
-            const errorArray = JSON.parse(this.UploadedResponse.data.errors[0]);
+            const errorArray = JSON.parse(this.UploadedResponse.Data.errors[0]);
             const exportData = errorArray.map((item: any) => ({
               MESSAGE: item.MESSAGE || item.Message || ''
             }));
@@ -713,8 +714,8 @@ export class TimesheetComponent {
 
           }
           else {
-            if (this.UploadedResponse.data.response != '') {
-              alert(this.UploadedResponse.data.response);
+            if (this.UploadedResponse.Data.response != '') {
+              alert(this.UploadedResponse.Data.response);
               this.isLoading = false;
             }
             else {
@@ -1109,14 +1110,14 @@ export class TimesheetComponent {
       next: res => {
         this.UploadedResponse = res;
 
-        if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.data.response === 'Data submitted successfully.') {
+        if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.Data.response === 'Data submitted successfully.') {
           this.isLoading = false;
           this.showPopup = true;
           this.popupMessage = 'Daily Timesheet Saved Successfully Done.';
         }
-        else if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.data.response === 'Failed to import.') {
+        else if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.Data.response === 'Failed to import.') {
 
-          const errorArray = JSON.parse(this.UploadedResponse.data.errors[0]);
+          const errorArray = JSON.parse(this.UploadedResponse.Data.errors[0]);
           const exportData = errorArray.map((item: any) => ({
             MESSAGE: item.RESULT || item.Result || ''
           }));
@@ -1135,8 +1136,8 @@ export class TimesheetComponent {
 
         }
         else {
-          if (this.UploadedResponse.data.response != '') {
-            alert(this.UploadedResponse.data.response);
+          if (this.UploadedResponse.Data.response != '') {
+            alert(this.UploadedResponse.Data.response);
             this.isLoading = false;
           }
           else {
@@ -1205,14 +1206,14 @@ export class TimesheetComponent {
       next: res => {
         this.UploadedResponse = res;
 
-        if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.data.response === 'Data submitted successfully.') {
+        if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.Data.response === 'Data submitted successfully.') {
           this.isLoading = false;
           this.showPopup = true;
           this.popupMessage = 'Daily Timesheet Successfully Submitted.';
         }
-        else if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.data.response === 'Failed to import.') {
+        else if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.Data.response === 'Failed to import.') {
 
-          const errorArray = JSON.parse(this.UploadedResponse.data.errors[0]);
+          const errorArray = JSON.parse(this.UploadedResponse.Data.errors[0]);
           const exportData = errorArray.map((item: any) => ({
             MESSAGE: item.RESULT || item.Result || ''
           }));
@@ -1231,8 +1232,8 @@ export class TimesheetComponent {
 
         }
         else {
-          if (this.UploadedResponse.data.response != '') {
-            alert(this.UploadedResponse.data.response);
+          if (this.UploadedResponse.Data.response != '') {
+            alert(this.UploadedResponse.Data.response);
             this.isLoading = false;
           }
           else {
