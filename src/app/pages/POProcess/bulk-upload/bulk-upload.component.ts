@@ -101,7 +101,7 @@ export class BulkUploadComponent {
     });
 
     formData.append('flag', 'Upload');
-    formData.append('createdBy', this.userdetail.userId.toString());
+    formData.append('createdBy', this.userdetail.user_Id.toString());
 
     // ✅ Safe debug log
     formData.forEach((value, key) => {

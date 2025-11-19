@@ -175,7 +175,7 @@ export class EmployeePOComponent {
     }
 
     const userInfo = {
-      "userId": this.userdetail.userId,
+      "userId": this.userdetail.user_Id,
       "userName": this.userdetail.userName
     }
 
@@ -183,7 +183,7 @@ export class EmployeePOComponent {
 
 
   DownloadTemplate() {
-    const userId = this.userdetail?.userId;
+    const userId = this.userdetail?.user_Id;
     if (!userId) {
       alert('User ID not available');
       return;
@@ -213,6 +213,7 @@ export class EmployeePOComponent {
     });
   }
   ImportClick(fileInput: HTMLInputElement): void {
+    fileInput.value='';
     fileInput.click();
   }
 
@@ -230,7 +231,7 @@ export class EmployeePOComponent {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('flag', 'Upload')
-    formData.append('CreatedBy', this.userdetail.userId);
+    formData.append('CreatedBy', this.userdetail.user_Id);
     
 
     this.epoRespository.BulkPOUpload(formData).subscribe({

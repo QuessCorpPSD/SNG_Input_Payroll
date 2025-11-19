@@ -250,7 +250,7 @@ export class LeaveruleComponent {
     }
 
     const userInfo = {
-      "userId": this.userdetail.userId,
+      "userId": this.userdetail.user_Id,
       "userName": this.userdetail.userName,
     };
 
@@ -479,7 +479,7 @@ export class LeaveruleComponent {
 
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('User', this.userdetail.userId);
+    formData.append('User', this.userdetail.user_Id);
 
     this.leaveruleService.UploadLeaveRule(formData).subscribe({
       next: (res) => {
@@ -741,7 +741,7 @@ export class LeaveruleComponent {
       }));
 
     const requestPayload = {
-      Created_By: this.userdetail.userId,
+      Created_By: this.userdetail.user_Id,
       Mode: 'Add', // or 'UPDATE'
       leaverulemaster: leaverulePayload
     };
@@ -944,7 +944,7 @@ export class LeaveruleComponent {
       }));
 
     const requestPayload = {
-      Created_By: this.userdetail.userId,
+      Created_By: this.userdetail.user_Id,
       Mode: 'Edit', // or 'UPDATE'
       leaverulemaster: leaverulePayload
     };
@@ -1067,7 +1067,7 @@ export class LeaveruleComponent {
 
 
     const requestPayload = {
-      Created_By: this.userdetail.userId,
+      Created_By: this.userdetail.user_Id,
       Mode: 'Delete',  // or Delete.
       leaverulemaster: leaverulePayload
     };

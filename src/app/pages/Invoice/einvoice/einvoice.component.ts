@@ -136,7 +136,7 @@ export class EInvoiceComponent {
   }
 
   BindDashBoard(companyId: number, payPeriodId: number) {
-    this.invoicerepo.GetAllInvoiceDetails(companyId, payPeriodId, this.userdetail.userId).subscribe({
+    this.invoicerepo.GetAllInvoiceDetails(companyId, payPeriodId, this.userdetail.user_Id).subscribe({
       next: res => {
         if (!res.Data || res.Data.length === 0) {
           alert("No data available to display.");

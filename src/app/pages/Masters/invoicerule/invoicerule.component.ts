@@ -434,7 +434,7 @@ export class InvoiceruleComponent {
       rebates: formValue.rebates.text,
       discounts: formValue.discounts.text,
       billabledaysformula: formValue.billabledaysformula,
-      userId: this.userdetail.userId
+      userId: this.userdetail.user_Id
     };
 
     this.invoicerule.PostAddInvoiceRule(InvoiceRuleAdd).subscribe({
@@ -548,7 +548,7 @@ export class InvoiceruleComponent {
     const formData = new FormData();
     if (this.excelFile) {
       formData.append('file', this.excelFile);
-      formData.append('userId', this.userdetail.userId);
+      formData.append('userId', this.userdetail.user_Id);
 
       this.invoicerule.PostInvoiceRuleUpload(formData).subscribe({
         next: res => {

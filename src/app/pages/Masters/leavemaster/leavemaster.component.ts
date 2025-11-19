@@ -273,7 +273,7 @@ export class LeavemasterComponent {
       siteId: this.sitenameUI?.siteCode,
       siteName: this.sitenameUI?.siteName,
       leavetype: formValue.leavetype,
-      userId: this.userdetail.userId
+      userId: this.userdetail.user_Id
     };
     //console.log(leaveMasterAdd);
     this.leavemaster.PostAddLeaveMaster(leaveMasterAdd).subscribe({

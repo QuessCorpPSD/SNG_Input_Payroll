@@ -23,6 +23,7 @@ import * as XLSX from 'xlsx';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { Console } from 'console';
+import { response } from 'express';
 
 @Component({
   selector: 'app-po-create',
@@ -309,10 +310,12 @@ export class PoCreateComponent {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('flag', 'Upload')
-    formData.append('CreatedBy', this.userdetail.userId);
+    formData.append('CreatedBy', this.userdetail.user_Id);
 
     this.poRespository.BulkPOUpload(formData).subscribe({
       next: (res) => {
+
+        console.log('response',JSON.stringify(res?.Data));
 
         if (res?.Data?.response?.includes("Row(s) Uploaded Successfully.")) {
           this.showPopup = true;

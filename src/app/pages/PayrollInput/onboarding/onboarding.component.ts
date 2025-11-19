@@ -144,7 +144,7 @@ export class OnboardingComponent implements OnInit {
     }
 
     const userInfo = {
-      "userId": this.userdetail.userId,
+      "userId": this.userdetail.user_Id,
       "userName": this.userdetail.userName,
     };
 
@@ -382,7 +382,7 @@ export class OnboardingComponent implements OnInit {
           this.excelData = jsonData.map((row: any) => row.OfferID?.toString().trim());
           this.validateOffer = JSON.stringify(this.excelData);
           //console.log(this.validateOffer);
-          this.onboardService.PostRollbackOfferId(this.validateOffer, this.userdetail.userId).subscribe({
+          this.onboardService.PostRollbackOfferId(this.validateOffer, this.userdetail.user_Id).subscribe({
             next: res => {
               this.datatable = res.Data;
               if (this.datatable && Array.isArray(this.datatable) && this.datatable.length > 0) {
@@ -430,7 +430,7 @@ export class OnboardingComponent implements OnInit {
       formData.append('file', this.excelFile);
       formData.append('companyCode', this.companyUI.companyCode);
       formData.append('companyId', this.companyUI.companyId);
-      formData.append('userId', this.userdetail.userId);
+      formData.append('userId', this.userdetail.user_Id);
       // formData.append('payPeriod', this.payperiodUI.payPeriod);
       // formData.append('payPeriodId', this.payperiodUI.payfrequencyid);
 
@@ -475,7 +475,7 @@ export class OnboardingComponent implements OnInit {
     const selectedOfferIds = filteredSelected.map(item => item.offerId);
     this.offerIdJson = JSON.stringify(selectedOfferIds);
     if (this.offerIdJson.length > 0) {
-      this.onboardService.MovetoQpay(this.offerIdJson, this.companyUI.companyId, this.payperiodUI.payPeriod, this.payperiodUI.payfrequencyid, this.userdetail.userId).subscribe({
+      this.onboardService.MovetoQpay(this.offerIdJson, this.companyUI.companyId, this.payperiodUI.payPeriod, this.payperiodUI.payfrequencyid, this.userdetail.user_Id).subscribe({
         next: res => {
           //console.log(res);
           this.datatable = res.Data;

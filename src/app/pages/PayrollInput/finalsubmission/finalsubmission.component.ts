@@ -112,7 +112,7 @@ export class FinalsubmissionComponent {
       alert("Select Pay Period");
       return;
     }
-    this.BindDashBoard(this.companyUI.companyId, this.payperiodUI.payfrequencyid, this.inputTypeUI.inputId)
+    //this.BindDashBoard(this.companyUI.companyId, this.payperiodUI.payfrequencyid, this.inputTypeUI.inputId)
 
   }
 
@@ -164,7 +164,7 @@ export class FinalsubmissionComponent {
     }
 
     const userInfo = {
-      "userId": this.userdetail.userId,
+      "userId": this.userdetail.user_Id,
       "userName": this.userdetail.userName,
     };
 
@@ -213,7 +213,7 @@ export class FinalsubmissionComponent {
 
 
   BindDashBoard(companyId: number, payPeriodId: number, inputId: number) {
-    this.onboardService.GetFinalSubmitData(companyId, payPeriodId, inputId, this.userdetail.userId).subscribe({
+    this.onboardService.GetFinalSubmitData(companyId, payPeriodId, inputId, this.userdetail.user_Id).subscribe({
       next: res => {
         if (!res.Data || res.Data.length === 0) {
           alert("No data available to display.");
@@ -298,7 +298,7 @@ export class FinalsubmissionComponent {
     formData.append('payPeriod', this.payperiodUI.payPeriod);
     formData.append('payPeriodId', this.payperiodUI.payfrequencyid);
     formData.append('lotNumber', lotNumber);
-    formData.append('userId', this.userdetail.userId);
+    formData.append('userId', this.userdetail.user_Id);
 
     this.onboardService.PostFinalSubmission(formData).subscribe({
       next: res => {
@@ -428,7 +428,7 @@ export class FinalsubmissionComponent {
           if (res.StatusCode === 200) {
             const data = res.Data;
             this.downloadExcelFromBase64(data.file, data.fileName);
-            this.BindDashBoard(this.companyUI.companyId, this.payperiodUI.payfrequencyid, this.inputTypeUI.inputId);
+            //this.BindDashBoard(this.companyUI.companyId, this.payperiodUI.payfrequencyid, this.inputTypeUI.inputId);
           } else {
             alert("Something went wrong while generating the report.");
           }

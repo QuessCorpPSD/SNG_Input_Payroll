@@ -281,7 +281,7 @@ export class GstinvoiceComponent {
         formData.append('file', this.excelFile);
         formData.append('companyCode', this.companyUI.companyCode);
         formData.append('companyId', this.companyUI.companyId);
-        formData.append('userId', this.userdetail.userId);
+        formData.append('userId', this.userdetail.user_Id);
         // formData.append('payPeriod', this.payperiodUI.payPeriod);
         // formData.append('payPeriodId', this.payperiodUI.payfrequencyid);
 
@@ -308,7 +308,7 @@ export class GstinvoiceComponent {
         formData.append('file', this.excelFile);
         formData.append('companyCode', this.companyUI.companyCode);
         formData.append('companyId', this.companyUI.companyId);
-        formData.append('userId', this.userdetail.userId);
+        formData.append('userId', this.userdetail.user_Id);
         // formData.append('payPeriod', this.payperiodUI.payPeriod);
         // formData.append('payPeriodId', this.payperiodUI.payfrequencyid);
 

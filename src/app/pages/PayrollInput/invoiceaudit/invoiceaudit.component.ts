@@ -425,7 +425,7 @@ export class InvoiceauditComponent {
       formData.append('companyId', this.companyUI.companyId);
       formData.append('payPeriod', this.payperiodUI.payPeriod);
       formData.append('payPeriodId', this.payperiodUI.payfrequencyid);
-      formData.append('userId', this.userdetail.userId);
+      formData.append('userId', this.userdetail.user_Id);
 
       this.onboardService.PostAttendanceData(formData).subscribe({
         next: res => {
@@ -478,7 +478,7 @@ export class InvoiceauditComponent {
     if (this.companyUI && this.payperiodUI && this.sitenameUI) {
       this.isLoading = true;
       this.GetTimesheetDataforAudit(this.companyUI.companyCode, this.payperiodUI.payfrequencyid,
-        this.sitenameUI.siteCode, this.citynameUI.city_Id, this.userdetail.userId)
+        this.sitenameUI.siteCode, this.citynameUI.city_Id, this.userdetail.user_Id)
     }
   }
 
@@ -604,7 +604,7 @@ export class InvoiceauditComponent {
     const fd = new FormData();
     fd.append('file', file);
     fd.append('Employeeid', codesCsv);
-    fd.append('User', String(this.userdetail.userId));
+    fd.append('User', String(this.userdetail.user_Id));
     fd.append('CompanyCode', this.companyUI.companyCode);
     fd.append('Site_ID', this.sitenameUI.siteCode);
     fd.append('Payperiod_ID', String(this.payperiodUI.payfrequencyid));

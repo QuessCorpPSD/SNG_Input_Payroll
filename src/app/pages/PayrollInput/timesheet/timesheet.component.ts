@@ -142,7 +142,7 @@ export class TimesheetComponent {
     public stateService: OnboardingStateService, private _sessionStoreage: SessionStorageService,
     private decry: EncryptionService, @Inject(timesheetservice) private timesheetService: ITimesheetService
   ) { }
- 
+
   handleCompanyEvent(company: any) {
 
     this.companyUI = company;
@@ -209,7 +209,7 @@ export class TimesheetComponent {
     }
 
     const userInfo = {
-      "userId": this.userdetail.userId,
+      "userId": this.userdetail.user_Id,
       "userName": this.userdetail.userName,
     };
     this.citynameUI = {
@@ -253,9 +253,13 @@ export class TimesheetComponent {
           //console.log(res);
           if (res.StatusCode == 200) {
             const data = res.Data;
-            var base64 = data.file;
-            //console.log(data.FileName);
-            this.downloadExcelFromBase64(base64, data.fileName)
+            const base64 = data?.file;
+
+            if (base64) {
+              this.downloadExcelFromBase64(base64, data.fileName);
+            } else {
+              alert("No data found for the given company and pay period.");
+            }
             this.isLoading = false;
           }
         },
@@ -309,6 +313,7 @@ export class TimesheetComponent {
       this.isLoading = false;
       return;
     }
+    fileInput.value='';
     fileInput.click();
   }
 
@@ -333,8 +338,7 @@ export class TimesheetComponent {
       formData2.append('payPeriodId', this.payperiodUI.payfrequencyid);
       this.onboardService.VerifyAttendanceHeaders(formData2).subscribe({
         next: res => {
-          const Parsed = JSON.parse(res.Data);
-          const headerResult = Parsed[0].Result.toString();
+          const headerResult = res.Data[0].Result.toString();
           //console.log(headerResult);
 
           if (headerResult === '1') {
@@ -411,7 +415,7 @@ export class TimesheetComponent {
       formData.append('companyId', this.companyUI.companyId);
       formData.append('payPeriod', this.payperiodUI.payPeriod);
       formData.append('payPeriodId', this.payperiodUI.payfrequencyid);
-      formData.append('userId', this.userdetail.userId);
+      formData.append('userId', this.userdetail.user_Id);
 
       this.onboardService.PostAttendanceData(formData).subscribe({
         next: res => {
@@ -464,7 +468,7 @@ export class TimesheetComponent {
     if (this.companyUI && this.payperiodUI && this.sitenameUI) {
       this.isLoading = true;
       this.GetEmployeeTimesheetDaywise(this.companyUI.companyCode, this.payperiodUI.payfrequencyid,
-        this.sitenameUI.siteCode, this.citynameUI.city_Id, this.userdetail.userId)
+        this.sitenameUI.siteCode, this.citynameUI.city_Id, this.userdetail.user_Id)
     }
   }
 
@@ -597,7 +601,7 @@ export class TimesheetComponent {
         this.payperiodUI.payfrequencyid,
         this.sitenameUI?.siteCode ?? '',
         this.citynameUI?.city_Id ?? 0,
-        this.userdetail.userId
+        this.userdetail.user_Id
       )
       .pipe(
         // ensure loader always stops
@@ -660,6 +664,7 @@ export class TimesheetComponent {
       this.isLoading = false;
       return;
     }
+    fileInputDaily.value = '';
     fileInputDaily.click();
   }
 
@@ -678,7 +683,7 @@ export class TimesheetComponent {
     const formData = new FormData();
     if (this.excelFiledaily) {
       formData.append('file', this.excelFiledaily);
-      formData.append('User', this.userdetail.userId);
+      formData.append('User', this.userdetail.user_Id);
       formData.append('CompanyCode', this.companyUI.companyCode);
       formData.append('SiteID', this.sitenameUI.siteCode);
       formData.append('Payperiod', this.payperiodUI.payfrequencyid);
@@ -686,15 +691,14 @@ export class TimesheetComponent {
         next: res => {
           this.UploadedResponse = res;
 
-          if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.data.response === 'Import Successfully Done.') {
-            alert('Import Successfully Done.');
+          if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.Data.response === 'Import Successfully Done.') {
             this.isLoading = false;
             this.showPopup = true;
             this.popupMessage = 'Import Successfully Done.';
           }
-          else if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.data.response === 'Failed to import.') {
+          else if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.Data.response === 'Failed to import.') {
 
-            const errorArray = JSON.parse(this.UploadedResponse.data.errors[0]);
+            const errorArray = JSON.parse(this.UploadedResponse.Data.errors[0]);
             const exportData = errorArray.map((item: any) => ({
               MESSAGE: item.MESSAGE || item.Message || ''
             }));
@@ -713,8 +717,8 @@ export class TimesheetComponent {
 
           }
           else {
-            if (this.UploadedResponse.data.response != '') {
-              alert(this.UploadedResponse.data.response);
+            if (this.UploadedResponse.Data.response != '') {
+              alert(this.UploadedResponse.Data.response);
               this.isLoading = false;
             }
             else {
@@ -752,7 +756,7 @@ export class TimesheetComponent {
 
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('User', this.userdetail.userId);
+    formData.append('User', this.userdetail.user_Id);
     formData.append('Employeeid', empCode);
     formData.append('CompanyCode', this.companyUI.companyCode);
     formData.append('Site_ID', this.sitenameUI.siteCode);
@@ -815,7 +819,7 @@ export class TimesheetComponent {
     const fd = new FormData();
     fd.append('file', file);
     fd.append('Employeeid', codesCsv);
-    fd.append('User', String(this.userdetail.userId));
+    fd.append('User', String(this.userdetail.user_Id));
     fd.append('CompanyCode', this.companyUI.companyCode);
     fd.append('Site_ID', this.sitenameUI.siteCode);
     fd.append('Payperiod_ID', String(this.payperiodUI.payfrequencyid));
@@ -1070,11 +1074,6 @@ export class TimesheetComponent {
       for (let i = 0; i < row.dayValues.length; i++) {
         const val = row.dayValues[i];
         const col = this.dayCols[i]; // get date from header
-
-        if (val === null || val === undefined || val === '') {
-          alert(`Row ${row.SlNo}: Missing entry for date ${col.date}`);
-          return; // stop save
-        }
       }
     }
 
@@ -1083,7 +1082,7 @@ export class TimesheetComponent {
       siteId: this.sitenameUI.siteCode,
       payPeriodId: this.payperiodUI.payfrequencyid,
       payPeriod: this.payperiodUI.payPeriod,  // "2025-07"
-      createdBy: this.userdetail.userId,
+      createdBy: String(this.userdetail.user_Id),
       status: "1",  // Save Status
       rows: selectedRows.map(row => ({
         EmpID: row.EmployeeCode || '',
@@ -1099,7 +1098,7 @@ export class TimesheetComponent {
         POTRS: row.POTRS || '',
         dayEntries: row.dayValues.map((val, i) => ({
           date: this.dayCols[i].date,
-          value: val
+          value: val || '0'
         }))
       }))
     };
@@ -1109,14 +1108,14 @@ export class TimesheetComponent {
       next: res => {
         this.UploadedResponse = res;
 
-        if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.data.response === 'Data submitted successfully.') {
+        if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.Data.response === 'Data submitted successfully.') {
           this.isLoading = false;
           this.showPopup = true;
           this.popupMessage = 'Daily Timesheet Saved Successfully Done.';
         }
-        else if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.data.response === 'Failed to import.') {
+        else if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.Data.response === 'Failed to import.') {
 
-          const errorArray = JSON.parse(this.UploadedResponse.data.errors[0]);
+          const errorArray = JSON.parse(this.UploadedResponse.Data.errors[0]);
           const exportData = errorArray.map((item: any) => ({
             MESSAGE: item.RESULT || item.Result || ''
           }));
@@ -1135,8 +1134,8 @@ export class TimesheetComponent {
 
         }
         else {
-          if (this.UploadedResponse.data.response != '') {
-            alert(this.UploadedResponse.data.response);
+          if (this.UploadedResponse.Data.response != '') {
+            alert(this.UploadedResponse.Data.response);
             this.isLoading = false;
           }
           else {
@@ -1166,11 +1165,6 @@ export class TimesheetComponent {
       for (let i = 0; i < row.dayValues.length; i++) {
         const val = row.dayValues[i];
         const col = this.dayCols[i]; // get date from header
-
-        if (val === null || val === undefined || val === '') {
-          alert(`Row ${row.SlNo}: Missing entry for date ${col.date}`);
-          return; // stop save
-        }
       }
     }
 
@@ -1179,7 +1173,7 @@ export class TimesheetComponent {
       siteId: this.sitenameUI.siteCode,
       payPeriodId: this.payperiodUI.payfrequencyid,
       payPeriod: this.payperiodUI.payPeriod,  // "2025-07"
-      createdBy: this.userdetail.userId,
+      createdBy: String(this.userdetail.user_Id),
       status: "2",  // Submit Status
       rows: selectedRows.map(row => ({
         EmpID: row.EmployeeCode || '',
@@ -1195,7 +1189,7 @@ export class TimesheetComponent {
         POTRS: row.POTRS || '',
         dayEntries: row.dayValues.map((val, i) => ({
           date: this.dayCols[i].date,
-          value: val
+          value: val || '0'
         }))
       }))
     };
@@ -1205,14 +1199,14 @@ export class TimesheetComponent {
       next: res => {
         this.UploadedResponse = res;
 
-        if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.data.response === 'Data submitted successfully.') {
+        if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.Data.response === 'Data submitted successfully.') {
           this.isLoading = false;
           this.showPopup = true;
           this.popupMessage = 'Daily Timesheet Successfully Submitted.';
         }
-        else if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.data.response === 'Failed to import.') {
+        else if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.Data.response === 'Failed to import.') {
 
-          const errorArray = JSON.parse(this.UploadedResponse.data.errors[0]);
+          const errorArray = JSON.parse(this.UploadedResponse.Data.errors[0]);
           const exportData = errorArray.map((item: any) => ({
             MESSAGE: item.RESULT || item.Result || ''
           }));
@@ -1231,8 +1225,8 @@ export class TimesheetComponent {
 
         }
         else {
-          if (this.UploadedResponse.data.response != '') {
-            alert(this.UploadedResponse.data.response);
+          if (this.UploadedResponse.Data.response != '') {
+            alert(this.UploadedResponse.Data.response);
             this.isLoading = false;
           }
           else {

@@ -115,7 +115,7 @@ export class BillableDaysComponent implements OnInit {
           "content": res
         };
         const request = {
-          "CreatedBy": this.userdetail.userId,
+          "CreatedBy": this.userdetail.user_Id,
           "File": files_docs,
           "importType": this.importType.value
         };

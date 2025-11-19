@@ -109,7 +109,7 @@ export class AddEpoComponent implements OnInit {
     }
 
     const userInfo = {
-      "userId": this.userdetail.userId,
+      "userId": this.userdetail.user_Id,
       "userName": this.userdetail.userName
     }
 
@@ -651,7 +651,7 @@ export class AddEpoComponent implements OnInit {
         MonthlyRate: (formValue.MonthlyRate ?? 0).toString(),
         Totalresourcevalue: (formValue.ResourceValue ?? 0).toString(),
         EmployeePOAttachment: this.selectedFile ? this.selectedFile.name : "",
-        CreatedBy: this.userdetail.userId.toString(),
+        CreatedBy: this.userdetail.user_Id.toString(),
         Flag: flag.toString(),
         PricingType: (this.data?.row?.PricingType ?? "").toString(),
         ChkFlag: "0",
@@ -673,7 +673,7 @@ export class AddEpoComponent implements OnInit {
               formData.append('File_Name', this.selectedFile.name);
               formData.append('File_Path', "File Path");
               formData.append('PONumber', payload.PoNumber);
-              formData.append('CreatedBy', this.userdetail.userId.toString());
+              formData.append('CreatedBy', this.userdetail.user_Id.toString());
 
               this.poService.ImportFileUpload(formData).subscribe({
                 next: fileUploadResponse => {
