@@ -1,0 +1,137 @@
+<form novalidate>
+    <mat-card class="custom-card">
+        <mat-card-header class="sticky-header">
+            <br />
+            <mat-card-title style="color: #302CB3;"> Add One Time Replacement</mat-card-title>
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="onClose()" class="no-border-icon">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+        <br />
+
+        <mat-card-content>
+            <!-- Form fields stay the same -->
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Company Code</label>
+                    <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Pay Category</label>
+                    <select class="form-select form-select-sm">
+                        <option>Select</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Employee Code</label>
+                    <select class="form-select form-select-sm">
+                        <option>Select</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Employee Name</label>
+                    <input type="text" class="form-control form-control-sm" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Pay Sequence No</label>
+                    <select class="form-select form-select-sm">
+                        <option>Select</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Pay Period</label>
+                    <input type="text" class="form-control form-control-sm" />
+                </div>
+            </div>
+        </mat-card-content>
+
+        <!-- Table Wrapper -->
+        <div class="table-wrapper1">
+            <div class="col-md-3 d-flex gap-2">
+                <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Add"
+                    (click)="OnAddRow()">
+                    <mat-icon>add</mat-icon>
+                </button>
+                <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Delete"
+                    (click)="OnDeleteRow(uploadedData.length - 1)">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </div>
+            <div class="table-scroll">
+                <mat-table [dataSource]="uploadedDataSource" matSort
+                    class="custom-table mat-elevation-z8 auto-fit-table">
+                    <!-- Columns go here (as in your previous HTML) -->
+                    <ng-container matColumnDef="SNo">
+                        <mat-header-cell *matHeaderCellDef><strong>SNo</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['SNo'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Pay Code Column -->
+                    <ng-container matColumnDef="Pay Code">
+                        <mat-header-cell *matHeaderCellDef><strong>Pay Code</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Pay Code'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Amount Column -->
+                    <ng-container matColumnDef="Amount">
+                        <mat-header-cell *matHeaderCellDef><strong>Amount</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Amount'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Mode Of Entry Column -->
+                    <ng-container matColumnDef="Mode Of Entry">
+                        <mat-header-cell *matHeaderCellDef><strong>Mode Of Entry</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Mode Of Entry'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Type Column -->
+                    <ng-container matColumnDef="Type">
+                        <mat-header-cell *matHeaderCellDef><strong>Type</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Type'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Arrear Pay Sequence Number Column -->
+                    <ng-container matColumnDef="Arrear Pay Sequence Number">
+                        <mat-header-cell *matHeaderCellDef><strong>Arrear Pay Sequence Number</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Arrear Pay Sequence Number'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Arrear Pay Period Column -->
+                    <ng-container matColumnDef="Arrear Pay Period">
+                        <mat-header-cell *matHeaderCellDef><strong>Arrear Pay Period</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Arrear Pay Period'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Pay_Type Column -->
+                    <ng-container matColumnDef="Pay_Type">
+                        <mat-header-cell *matHeaderCellDef><strong>Pay Type</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Pay_Type'] }}</mat-cell>
+                    </ng-container>
+                    <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: uploadDisplayedColumns;"></mat-row>
+
+
+                </mat-table>
+            </div>
+
+            <div *ngIf="uploadedData.length === 0" class="text-center p-4">
+                <p class="text-muted">No data to display</p>
+            </div>
+
+            <mat-paginator [length]="uploadedData.length" [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"
+                showFirstLastButtons aria-label="Select page">
+            </mat-paginator>
+        </div>
+
+        <mat-card-footer class="footer">
+            <div class="d-flex justify-content-end mt-3">
+                <button type="reset" class="btn btn-primary me-2 rounded-pill px-3">Cancel</button>
+                <button type="button" class="btn btn-primary rounded-pill px-3">Save</button>
+            </div>
+        </mat-card-footer> 
+    </mat-card>
+</form>

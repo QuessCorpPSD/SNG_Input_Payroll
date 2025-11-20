@@ -1,0 +1,130 @@
+<br />
+<div class="page-wrapper">
+    <div class="scrollable-content">
+
+        <div style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; min-width: 960px">
+            Allow Reprocess
+        </div>
+
+        <div class="container py-4">
+
+            <div class="row align-items-end">
+
+                <!-- Company Code -->
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Company code</label>
+                    <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+                </div>
+
+                <!-- BUTTONS INLINE -->
+                <div class="col-md-9">
+                    <div class="d-flex align-items-center gap-2 pt-4">
+
+                        <!-- Search -->
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Search"
+                            (click)="onSearchClick()">
+                            <mat-icon>search</mat-icon>
+                        </button>
+
+                        <!-- Export to Excel -->
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                            matTooltip="Export to Excel" (click)="exportToExcel()">
+                            <mat-icon>table_chart</mat-icon>
+                        </button>
+
+                        <!-- Allow Reprocess -->
+                        <button class="btn btn-primary px-3" (click)="saveAllowReprocess()">
+                            Allow Reprocess
+                        </button>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <br />
+
+        <div *ngIf="showTable" class="table-wrapper1">
+
+            <div class="table-scroll">
+
+                <mat-table [dataSource]="uploadedDataSource" matSort
+                    class="custom-table mat-elevation-z8 auto-fit-table">
+
+                    <!-- SELECT COLUMN -->
+                    <ng-container matColumnDef="select">
+                        <mat-header-cell *matHeaderCellDef class="select">
+                            <mat-checkbox [(ngModel)]="isSelectAllChecked" (change)="selectAllRows($event)">
+                            </mat-checkbox>
+                        </mat-header-cell>
+
+                        <mat-cell *matCellDef="let row" class="select">
+                            <mat-checkbox [(ngModel)]="row.selected" (change)="updateSelectedRows()"></mat-checkbox>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- SNo -->
+                    <ng-container matColumnDef="SNo">
+                        <mat-header-cell *matHeaderCellDef class="SNo"><strong>SNo</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="SNo">{{ row.Serial_No }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Company Code -->
+                    <ng-container matColumnDef="Company_Code">
+                        <mat-header-cell *matHeaderCellDef><strong>Company Code</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Company_Code }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Client Name -->
+                    <ng-container matColumnDef="Client_Name">
+                        <mat-header-cell *matHeaderCellDef><strong>Company Name</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Client_Name }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Pay Sequence Number -->
+                    <ng-container matColumnDef="Pay_Sequence_Number">
+                        <mat-header-cell *matHeaderCellDef><strong>Pay Sequence No</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Pay_Sequence_Number }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Pay Period -->
+                    <ng-container matColumnDef="Pay_Period">
+                        <mat-header-cell *matHeaderCellDef><strong>Pay Period</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Pay_Period }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Reprocess Flag -->
+                    <ng-container matColumnDef="Reprocess_Flag">
+                        <mat-header-cell *matHeaderCellDef><strong>Reprocess Flag</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Reprocess_Flag }}</mat-cell>
+                    </ng-container>
+
+                    <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: uploadDisplayedColumns;"></mat-row>
+
+                </mat-table>
+
+            </div>
+
+            <mat-paginator [length]="uploadedData.length" [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"
+                showFirstLastButtons>
+            </mat-paginator>
+
+        </div>
+        <div *ngIf="isLoading" class="loading-overlay">
+            <img src="assets/Loading.gif" />
+        </div>
+
+        <!-- Popup -->
+        <div *ngIf="showPopup" class="overlay"></div>
+
+        <app-alertpopup *ngIf="showPopup" class="centered-popup" [message]="popupMessage" [submessage]="popupSubMessage"
+            (close)="closePopup()">
+        </app-alertpopup>
+
+
+    </div>
+</div>

@@ -42,7 +42,7 @@ interface ViewRow {
   standalone: true,
   imports: [CommonModule, MatTabsModule, CompanyallComponent,
     PayperiodsequenceComponent, MatIconModule, FormsModule, MatCardModule, MatFormFieldModule,
-    MatSelectModule, AlertpopupComponent, PayprocesstypeComponent, MatPaginatorModule],
+    MatSelectModule, AlertpopupComponent, MatPaginatorModule],
   templateUrl: './arrear-attendance.component.html',
   styleUrl: './arrear-attendance.component.css',
   providers: [DatePipe,

@@ -81,6 +81,19 @@ import { SalaryadvancereportComponent } from './pages/salaryadvancemodule/salary
 import { GlobalmasternavigationComponent } from './pages/GlobalMasters/globalmasternavigation/globalmasternavigation.component';
 import { PaycodesComponent } from './pages/GlobalMasters/paycodes/paycodes.component';
 import { ShgslabdetailComponent } from './pages/GlobalMasters/shgslabdetail/shgslabdetail.component';
+import { AllowReProcessComponent } from './pages/Process/allow-re-process/allow-re-process.component';
+import { AttendancebatchidUpdateComponent } from './pages/Process/attendancebatchid-update/attendancebatchid-update.component';
+import { FFprocessComponent } from './pages/Process/ffprocess/ffprocess.component';
+import { FNFRevokeComponent } from './pages/Process/fnfrevoke/fnfrevoke.component';
+import { ITAdjustmentComponent } from './pages/Process/itadjustment/itadjustment.component';
+import { LockpayperiodComponent } from './pages/Process/lockpayperiod/lockpayperiod.component';
+import { LOPAdjustmentsComponent } from './pages/Process/lopadjustments/lopadjustments.component';
+import { OneTimeReplacementComponent } from './pages/Process/one-time-replacement/one-time-replacement.component';
+import { OtherincomeComponent } from './pages/Process/otherincome/otherincome.component';
+import { PayregisteruploadComponent } from './pages/Process/payregisterupload/payregisterupload.component';
+import { PaytransactionComponent } from './pages/Process/paytransaction/paytransaction.component';
+import { ReimbrusmentcalenderComponent } from './pages/Process/reimbrusmentcalender/reimbrusmentcalender.component';
+import { PayProcessComponent } from './pages/Process/pay-process/pay-process.component';
 
 
 
@@ -227,7 +240,20 @@ export const routes: Routes = [
         children: [
           { path: 'reprocess', component: ReprocessComponent },
           { path: 'attendance', component: AttendanceComponent },
-          { path: 'arrearattendance', component: ArrearAttendanceComponent }
+          { path: 'arrearattendance', component: ArrearAttendanceComponent },
+          { path: 'LOPAdjustment', component: LOPAdjustmentsComponent },
+          { path: 'AttendancebatchIdupdate', component: AttendancebatchidUpdateComponent },
+          { path: 'payprocess', component: PayProcessComponent },
+          { path: 'ITAdjustment', component: ITAdjustmentComponent },
+          { path: 'otherincome', component: OtherincomeComponent },
+          { path: 'OneTimeReplacement', component: OneTimeReplacementComponent },
+          { path: 'FNFRevoke', component: FNFRevokeComponent },
+          { path: 'FFprocess', component: FFprocessComponent },
+          { path: 'AllowReProcess', component: AllowReProcessComponent },
+          { path: "paytransaction", component: PaytransactionComponent, },
+          { path: "lockpayperiod", component: LockpayperiodComponent, },
+          { path: "payregisterupload", component: PayregisteruploadComponent, },
+          { path: "reimbrusmentcalendar", component: ReimbrusmentcalenderComponent, },
         ]
       },
       {

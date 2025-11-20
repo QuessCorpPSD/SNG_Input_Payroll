@@ -1,0 +1,59 @@
+<form [formGroup]="AddLockPayPeriod" novalidate>
+    <mat-card class="custom-card">
+        <mat-card-header class="sticky-header">
+
+            <mat-card-title>Add Lock Pay Period</mat-card-title>
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="onClose()" class="no-border-icon">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+
+        <mat-card-content class="scroll-content">
+            <br />
+            <!-- Row 1 -->
+            <div class="row g-3 mb-3">
+                <div class="col-md-12">
+                    <label class="form-label">Company Code<span class="text-danger"></span></label>
+                    <input type="text" class="form-control" formControlName="CompanyCode" />
+                    <!-- <select class="form-select" formControlName="POCategory">
+                        <option value="">-- Select --</option>
+                    </select> -->
+                </div>
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-12">
+                    <label class="form-label">Company Name<span class="text-danger"></span></label>
+                    <input type="text" class="form-control" formControlName="CompanyName" />
+                    <!-- <select class="form-select" formControlName="POCategory">
+                        <option value="">-- Select --</option>
+                    </select> -->
+                </div>
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-12">
+                    <label class="form-label">Pay Period<span class="text-danger"></span></label>
+                    <input type="text" class="form-control" formControlName="PayPeriod" />
+
+                    <!-- <select class="form-select" formControlName="POform">
+                        <option value="">-- Select --</option>
+                        <option *ngFor="let PONo of PONumber" [value]="PONo.poid">{{PONo.ponumber}}</option>
+                    </select> -->
+                </div>
+            </div>
+        </mat-card-content>
+        <mat-card-footer class="footer">
+            <div class="d-flex justify-content-end mt-3">
+                <button type="button" class="btn btn-primary rounded-pill px-3" (click)="addLockPayPPeriod()">Lock</button>
+                <button type="reset" class="btn btn-primary me-2 rounded-pill px-3" (click)="onClose()">Cancel</button>
+            </div>
+        </mat-card-footer>
+    </mat-card>
+</form>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets\Loading.gif" alt="Loading...">
+</div>
+
+<app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+    (close)="showPopup = false">
+</app-alertpopup>

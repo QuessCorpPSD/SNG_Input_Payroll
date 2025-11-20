@@ -1,22 +1,83 @@
 <div class="headerSOP">
-    <div style="width: 50%;"> <img src="../../../assets/Forward File 1.svg" /><b class="customer-sop">Process
-        </b></div>
+        <div style="width: 50%;"> <img src="../../../assets/Forward File 1.svg" /><b class="customer-sop">Process
+                </b></div>
 </div>
 <div class="contentCategory">
-    <div style="width: 100%;">
-        <div class="Categorylist">
-            <ul class="horizontal-list">
-                <li><a [routerLink]="['/Master/process/reprocess']" class="nav-link"
-                        routerLinkActive="selectedInput" [routerLinkActiveOptions]="{ exact: true }">Payroll Process</a>
-                </li>
-                <li><a [routerLink]="['/Master/process/attendance']" class="nav-link"
-                        routerLinkActive="selectedInput" [routerLinkActiveOptions]="{ exact: true }">Attendance</a>
-                </li>
-                <li><a [routerLink]="['/Master/process/arrearattendance']" class="nav-link"
-                        routerLinkActive="selectedInput" [routerLinkActiveOptions]="{ exact: true }">Arrear Attendance</a>
-                </li>
-            </ul>
+        <div style="width: 100%;">
+                <div class="Categorylist">
+                        <ul class="horizontal-list">
+                                <li><a [routerLink]="['/Master/process/reprocess']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Payroll Process</a>
+                                </li>
+                                <li><a [routerLink]="['/Master/process/attendance']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Attendance</a>
+                                </li>
+                                <li><a [routerLink]="['/Master/process/arrearattendance']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Arrear
+                                                Attendance</a>
+                                </li>
+                                <li><a [routerLink]="['/Master/process/payprocess']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Pay Process</a>
+                                <li><a [routerLink]="['/Master/process/reprocess']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">ReProcess</a>
+                                </li>
+                                <li><a [routerLink]="['/Master/process/LOPAdjustment']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">LOP Adjustment</a>
+                                </li>
+                                <li><a [routerLink]="['/Master/process/ITAdjustment']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">IT Adjustment</a>
+                                </li>
+                                <li><a [routerLink]="['/Master/process/AttendancebatchIdupdate']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Attendance Batch ID
+                                                Update</a>
+                                </li>
+
+                                <li><a [routerLink]="['/Master/process/otherincome']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Other Income</a>
+                                </li>
+                                <li><a [routerLink]="['/Master/process/OneTimeReplacement']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">One-Time Replacement</a>
+                                </li>
+                                <li><a [routerLink]="['/Master/process/FFprocess']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">F&F Process</a>
+                                </li>
+                                <li><a [routerLink]="['/Master/process/FNFRevoke']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">F&F Revoke</a>
+                                </li>
+                                <li><a [routerLink]="['/Master/process/AllowReProcess']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Allow ReProcess</a>
+                                </li>
+                                <li><a [routerLink]="['/Master/process/paytransaction']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Pay Transaction</a>
+                                </li>
+                                <li><a [routerLink]="['/Master/process/lockpayperiod']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Lock Payperiod</a>
+                                </li>
+                                <li><a [routerLink]="['/Master/process/payregisterupload']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Payregister Upload</a>
+                                </li>
+                                <li><a [routerLink]="['/Master/process/reimbrusmentcalendar']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Reimbrusment Calendar</a>
+                                </li>
+                        </ul>
+                </div>
         </div>
-    </div>
 </div>
 <router-outlet></router-outlet>
