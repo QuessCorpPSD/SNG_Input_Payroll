@@ -81,6 +81,12 @@ import { SalaryadvancereportComponent } from './pages/salaryadvancemodule/salary
 import { GlobalmasternavigationComponent } from './pages/GlobalMasters/globalmasternavigation/globalmasternavigation.component';
 import { PaycodesComponent } from './pages/GlobalMasters/paycodes/paycodes.component';
 import { ShgslabdetailComponent } from './pages/GlobalMasters/shgslabdetail/shgslabdetail.component';
+import { CustomernavigationComponent } from './pages/customers/customernavigation/customernavigation.component';
+import { CompanyComponent } from './common/company/company.component';
+import { DepartmentComponent } from './pages/customers/department/department.component';
+import { DesignationComponent } from './pages/customers/designation/designation.component';
+import { BandDetailsComponent } from './pages/customers/band-details/band-details.component';
+import { CostCenterMappingComponent } from './pages/customers/cost-center-mapping/cost-center-mapping.component';
 
 
 
@@ -203,6 +209,15 @@ export const routes: Routes = [
           { path: 'Employee', component: EmployeePOComponent },
           { path: 'Approve', component: POApproveComponent },
 
+        ]
+      },
+      {
+        path: 'customer', component: CustomernavigationComponent,
+        children: [
+          { path: "department", component: DepartmentComponent, },
+          { path: "designation", component: DesignationComponent, },
+          { path: "BandDetails", component: BandDetailsComponent, },
+          { path: "CostCenterMapping", component: CostCenterMappingComponent, },
         ]
       },
       {

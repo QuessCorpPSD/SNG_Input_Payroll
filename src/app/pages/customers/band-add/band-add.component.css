@@ -1,0 +1,171 @@
+/* ---------- TABLE WRAPPER ---------- */
+.table-wrapper1 {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: 6px;
+    max-width: 800px;
+}
+
+/* ---------- SCROLL CONTAINER ---------- */
+.table-scroll {
+  max-height: 400px;
+  overflow: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+
+/* ---------- HEADER ---------- */
+::ng-deep .mat-mdc-header-cell {
+    background-color: #f5f5f5 !important;
+    color: #555 !important;
+    font-size: 13px;
+    font-family: "Nunito Sans", sans-serif;
+    font-weight: 600;
+    height: 32px !important;
+    border-right: 1px solid #ddd;
+    padding: 0 10px !important;
+}
+
+/* ---------- CELLS ---------- */
+::ng-deep .mat-mdc-cell {
+    font-family: "Nunito Sans", sans-serif;
+    font-size: 12px;
+    color: #222;
+    border-bottom: 1px dashed #E8E8E8 !important;
+    border-right: 1px solid #ddd;
+    padding: 0 10px !important;
+    height: 30px;
+}
+
+/* Hover effect */
+::ng-deep .mat-row:hover {
+    background-color: #f9f9f9 !important;
+}
+
+/* ---------- PAGINATOR ---------- */
+::ng-deep .mat-mdc-paginator {
+    border: 1px solid #ddd;
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    background-color: #fafafa !important;
+    color: #555;
+    padding: 4px 12px !important;
+}
+
+::ng-deep .mat-mdc-paginator-range-label {
+    font-size: 13px;
+    color: #555;
+}
+
+::ng-deep .mat-mdc-paginator-icon {
+    color: #302CB3 !important;
+}
+
+/* ---------- AUTO-FIT TABLE WIDTH ---------- */
+.auto-fit-table {
+    width: auto !important;
+    table-layout: auto !important;
+}
+
+.auto-fit-table .mat-header-cell,
+.auto-fit-table .mat-cell {
+    flex: none !important;
+    white-space: nowrap;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 768px) {
+
+    ::ng-deep .mat-mdc-header-cell,
+    ::ng-deep .mat-mdc-cell {
+        font-size: 11px;
+        padding: 4px 6px;
+    }
+}
+
+.custom-card {
+  overflow: hidden;       /* prevent full scroll */
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 17px;
+}
+
+.scroll-content {
+    flex: 1;
+    overflow-y: auto;
+}
+.sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: white;      /* keep background visible */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+.col-select {
+    width: 70px !important;
+    max-width: 70px !important;
+    min-width: 70px !important;
+    padding: 0 !important;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.col-row {
+    width: 160px !important;
+    max-width: 160px !important;
+    min-width: 160px !important;
+    /* padding: 2px !important; */
+    display: flex;
+    justify-content: left;
+    text-align: left;
+    padding-left: 8px;
+    /* font-size: medium; */
+}
+
+/* mat-card-footer.footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+
+} */
+.no-border-icon{
+    border: none;
+}
+.rounded-pill {
+    border-color: white;
+}
+
+.btn-primary {
+    margin-right: 20px;
+    background-color: #4f4a9c;
+    color: white;
+    border:1.5px solid #4f4a9c
+}
+
+.btn1-:hover {
+    background-color: #4f4a9c ;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: white;
+    color: #212529 ;
+}
+
+.btn-light:hover~.btn-primary {
+    background-color: white;
+    color: #212529;
+}
+
+.btn-primary:hover~.btn-light {
+    background-color: #4f4a9c;
+    color: #212529;
+}

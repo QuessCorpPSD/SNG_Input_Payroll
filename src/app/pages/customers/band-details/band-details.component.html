@@ -1,0 +1,109 @@
+<br />
+<div class="page-wrapper">
+    <div class="scrollable-content">
+        <div style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; min-width: 960px">
+            Band Details
+        </div>
+
+        <div class="container py-4">
+
+            <div class="row g-3 align-items-end">
+
+                <!-- Company Code -->
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Company code</label>
+                    <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+                </div>
+
+                <!-- Buttons row -->
+                <div class="col-md-2 d-flex gap-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Search"
+                        (click)="onSearchClick()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+
+                    <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                            matTooltip="export to excel">
+                            <mat-icon>table_chart</mat-icon>
+                        </button> -->
+
+                    <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Import">
+                        <mat-icon>cloud_upload</mat-icon>
+                    </button> -->
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Add"
+                        (click)="AddPOOpen()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+
+            </div>
+
+            <br />
+            <!-- TABLE SECTION -->
+            <div class="table-wrapper1" *ngIf="showTable">
+                <div class="table-scroll">
+
+                    <mat-table [dataSource]="uploadedDataSource" matSort
+                        class="custom-table mat-elevation-z8 auto-fit-table">
+
+                        <ng-container matColumnDef="Action">
+                            <mat-header-cell *matHeaderCellDef class="Action"><strong>Action</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row" class="Action">
+                                <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                    matTooltip="Delete">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                                <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                    matTooltip="Edit">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="SNo">
+                            <mat-header-cell *matHeaderCellDef class="SNo"><strong>SNo</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row" class="SNo">{{ row['SNo'] }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Company Code">
+                            <mat-header-cell *matHeaderCellDef><strong>Company Code</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row['Company Code'] }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Band Code">
+                            <mat-header-cell *matHeaderCellDef><strong>Band Code</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row['Band Code'] }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Band Name">
+                            <mat-header-cell *matHeaderCellDef><strong>Band Name</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row['Band Name'] }}</mat-cell>
+                        </ng-container>
+
+
+                        <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: uploadDisplayedColumns;"></mat-row>
+
+                    </mat-table>
+
+                    <div *ngIf="uploadedData.length === 0" class="text-center p-4">
+                        <p class="text-muted">No data to display</p>
+                    </div>
+
+                </div>
+
+                <mat-paginator [length]="uploadedData.length" [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"
+                    showFirstLastButtons>
+                </mat-paginator>
+
+            </div>
+        </div>
+    </div>
+    <div *ngIf="isLoading" class="loading-overlay">
+        <img src="assets/Loading.gif" alt="Loading...">
+    </div>
+    <div *ngIf="showPopup" class="overlay">
+        <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+            (close)="showPopup = false"></app-alertpopup>
+    </div>

@@ -1,0 +1,108 @@
+<form [formGroup]="DesinationAddForm" novalidate>
+    <mat-card class="custom-card">
+        <mat-card-header class="sticky-header">
+
+            <mat-card-title>Add Designation</mat-card-title>
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="onClose()" class="no-border-icon">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+        <mat-card-content class="scroll-content">
+            <br />
+            <!-- Row 1 -->
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">Company Code<span class="text-danger">*</span></label>
+                    <companyall (companyEmit)="handleCompanyEvent($event)" formControlName="CompanyCode"></companyall>
+                    <div class="text-danger small" *ngIf="DesinationAddForm.get('CompanyCode')?.touched 
+             && DesinationAddForm.get('CompanyCode')?.hasError('required')">
+                        CompanyCode is required
+                    </div>
+                    <!-- <input type="text" class="form-control" formControlName="PayCode" /> -->
+                    <!-- <select class="form-select" formControlName="CompanyCode">
+                        <option value="">-- Select --</option>
+                    </select> -->
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Designation Name<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" formControlName="DesignationName" />
+                    <div class="text-danger small" *ngIf="DesinationAddForm.get('DesignationName')?.touched 
+             && DesinationAddForm.get('DesignationName')?.hasError('required')">
+                        DepartmentName is required
+                    </div>
+                    <!-- <select class="form-select" formControlName="POform">
+                        <option value="">-- Select --</option>
+                        <option *ngFor="let PONo of PONumber" [value]="PONo.poid">{{PONo.ponumber}}</option>
+                    </select> -->
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Standard Designation<span class="text-danger"></span></label>
+                    <input type="text" class="form-control" formControlName="StandardDesignation"
+                        placeholder="Enter Standard Designation">
+                </div>
+            </div>
+            <!-- Row 2 -->
+            <div class="row g-3 mb-3">
+
+                <div class="col-md-4">
+                    <label class="form-label">Amount<span class="text-danger"></span></label>
+                    <input type="text" class="form-control" formControlName="Amount" placeholder="Enter Amount">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Skill_Category<span class="text-danger"></span></label>
+                    <select class="form-select" formControlName="Skill_Category">
+                        <option value="">-- Select --</option>
+                        <option value="Skilled">Skilled</option>
+                        <option value="Semi_Skilled">Semi_Skilled</option>
+                        <option value="Un_Skilled">Un_Skilled</option>
+                        <option value="High_Skilled">Highly_Skilled</option>
+                    </select>
+                    <!-- <input type="text" class="form-control" formControlName="Skill_Category"> -->
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">NP Days<span class="text-danger"></span></label>
+                    <input type="number" class="form-control" formControlName="NPDays">
+                </div>
+            </div>
+            <!-- Row 3 -->
+            <div class="row g-3 mb-3">
+
+                <div class="col-md-4" style="display: none;">
+                    <label class="form-label">Desigantion Code<span class="text-danger"></span></label>
+                    <input type="text" class="form-control" formControlName="DesigantionCode" />
+                    <!-- <select class="form-select" formControlName="POCategory">
+                        <option value="">-- Select --</option>
+                    </select> -->
+                </div>
+            </div>
+        </mat-card-content>
+        <mat-card-footer class="footer">
+            <div class="d-flex justify-content-end mt-3">
+                <div class="btn-1"
+                    style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
+
+                    <button type="Cancel"
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;"
+                        (click)="onClose()">
+                        Cancel
+                    </button>
+
+                    <button type="submit"
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white; "
+                        (click)="Save()">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </mat-card-footer>
+    </mat-card>
+</form>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets\Loading.gif" alt="Loading...">
+</div>
+
+<app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+    (close)="showPopup = false">
+</app-alertpopup>
+
