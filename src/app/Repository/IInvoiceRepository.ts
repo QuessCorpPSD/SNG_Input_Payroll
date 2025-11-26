@@ -1,5 +1,6 @@
 import { Observable } from "rxjs";
 import { APIResponse } from "../Models/apiresponse";
+import { HttpResponse } from "@angular/common/http";
 
 export interface IInvoiceRepository {
 
@@ -17,4 +18,6 @@ export interface IInvoiceRepository {
     InitiationSearchExport(val): Observable<APIResponse>;
     UploadReject(formData): Observable<APIResponse>;
     GetGSTInvoice(userId: number): Observable<APIResponse>;
+    DownloadInvoice(invoiceId: number): Observable<HttpResponse<Blob>>;
+    BulkDownloadInvoice(BulkInvoices: any): Observable<HttpResponse<Blob>>;
 }

@@ -55,30 +55,22 @@ export class GstinvoiceComponent {
   userdetail!: any;
 
   displayedColumns: string[] = [
-'invoice_Number'
-,'company_Code'
-,'map_Name'
-,'city_Name'
-,'pay_Period'
-,'invoiceType'
-,'invoice_Date'
-,'particulars'
-,'amount'
-,'iGST_Percentage'
-,'iGST_Amount'
-,'service_Charge'
-,'service_Charge_Amount'
-,'sourcing_Fee'
-,'sourcing_Fee_Amount'
-,'no_Of_Employees'
-,'net_Amount'
-,'input_No'
-,'employee_PF'
-,'employer_PF'
-,'dO_Number'
-,'status'
-,'group_Name'
-,'crn_Number'
+    'select'
+    , 'pdfdownload'
+    , 'invoice_Number'
+    , 'sap_Invoice_Number'
+    , 'sap_Account_Number'
+    , 'invoice_Date'
+    , 'company_Code'
+    , 'pay_Period'
+    , 'map_Name'
+    , 'group_Name'
+    , 'invoiceType'
+    , 'net_Amount'
+    , 'status'
+    , 'sap_Cancel_Document'
+    , 'sap_Credit_Note_Document'
+    , 'crn_Number'
   ];
 
   TemplateOptions = [
@@ -95,14 +87,17 @@ export class GstinvoiceComponent {
   }
 
   selection = new SelectionModel<GstInvoiceGrid>(true, []);
+
   isAnyFilteredRowSelected(): boolean {
     return this.selection.selected.some(sel =>
-      this.dataSource.filteredData.some(row => row.invoice_Id === sel.invoice_Id)
+      this.dataSource.filteredData.some(row => row.invoice_Id === sel.invoice_Id
+      )
     );
   }
+
   isAllSelected() {
     const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource?.data?.length;
+    const numRows = this.dataSource.data.length;
     return numSelected === numRows;
   }
 
@@ -111,17 +106,17 @@ export class GstinvoiceComponent {
     const numRows = this.dataSource.data.length;
     return numSelected > 0 && numSelected < numRows;
   }
-
   toggleAllRows() {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.dataSource.data.forEach((row: GstInvoiceGrid) => this.selection.select(row));
+    if (this.isAllSelected()) {
+      this.selection.clear();
+    } else {
+      this.dataSource.data.forEach((row: any) => this.selection.select(row));
+    }
   }
 
   toggleRow(row: GstInvoiceGrid) {
     this.selection.toggle(row);
   }
-
   templateDataMap: { [key: string]: any[] } = {
     reject: [
       { 'Invoice Number': '', 'Discrepancy By': '', 'Discrepancy': '' },
@@ -136,7 +131,9 @@ export class GstinvoiceComponent {
     this.userdetail = JSON.parse(this._decrypt.decrypt(userdetail!));
     this.BindDashBoard(this.userdetail.user_Id);
   }
-
+  applyFilter() {
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
+  }
   BindDashBoard(userId: number) {
     this._invoiceService.GetGSTInvoice(userId).subscribe({
       next: res => {
@@ -343,14 +340,68 @@ export class GstinvoiceComponent {
   getTableColumns(): string[] {
     return this.excelPreviewData?.length ? Object.keys(this.excelPreviewData[0]) : [];
   }
-  applyFilter() {
+  DownloadInvoice(invoiceId: number, invoice_Number: string) {
+    this.isLoading = true;
+    this._invoiceService.DownloadInvoice(invoiceId).subscribe(response => {
+      const contentDisposition = response.headers.get('Content-Disposition');
+      let fileName = invoice_Number + '_' + this.companyUI.displayName + '.pdf';
 
+      // Extract file name from header
+      if (contentDisposition) {
+        const match = contentDisposition.match(/filename="?(.*?)"?$/);
+        if (match && match.length > 1) {
+          fileName = match[1];
+        }
+      }
+
+      const blob = new Blob([response.body!], { type: 'application/pdf' });
+
+      // Create link and trigger download
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      a.click();
+      window.URL.revokeObjectURL(url);
+      this.isLoading = false;
+    });
   }
-  RejectClick() {
+  BulkDownload() {
+    this.isLoading = true;
+    const filteredSelected = this.selection.selected.filter((item: any) =>
+      this.dataSource.filteredData.includes(item)
+    );
+    const selectedInvoiceIds = filteredSelected.map(item => item.invoice_Id);
+    if (!selectedInvoiceIds.length) {
+      alert("No invoices selected");
+      return;
+    }
+    const BulkInvoices = {
+      invoiceIds: selectedInvoiceIds
+    }
+    this._invoiceService.BulkDownloadInvoice(BulkInvoices).subscribe(response => {
+      const contentDisposition = response.headers.get('Content-Disposition');
+      let fileName = this.companyUI.displayName + '.zip';
 
-  }
-  Downloadpdf() {
+      // Extract file name from header
+      if (contentDisposition) {
+        const match = contentDisposition.match(/filename="?(.*?)"?$/);
+        if (match && match.length > 1) {
+          fileName = match[1];
+        }
+      }
 
+      const blob = new Blob([response.body!], { type: 'application/pdf' });
+
+      // Create link and trigger download
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      a.click();
+      window.URL.revokeObjectURL(url);
+      this.isLoading = false;
+    });
   }
 }
 

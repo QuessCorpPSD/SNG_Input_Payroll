@@ -22,7 +22,7 @@
 
 .fixed-width-column {
   width: 50px;
-  min-width: 50px;
+  min-width: 30px;
   max-width: 75px;
   overflow: hidden;
   white-space: nowrap;
@@ -30,10 +30,25 @@
   
 }
 
-.custom-table {
+.auto-width-column {
+  width: auto;
+  min-width: 250px;
+  word-wrap: break-word;
+}
+
+/* .custom-table {
   background: white;
   overflow: auto;
   border: 1px solid #ddd;
+} */
+
+.custom-table {
+  background: white;
+  overflow-x: auto;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  max-height: 400px;   /* required for vertical scroll */
+  width: 100%;         /* or set a fixed width */
 }
 
 ::ng-deep .mat-elevation-z8 {
@@ -67,15 +82,15 @@
   border-right: 1px solid #ddd;
   display: flex;
   justify-content: center;
-  align-items: center;
   text-align: center;
+  word-wrap: break-word;
 
 }
 
 .table-scroll {
   max-height: 450px;
   overflow-y: auto;
-  overflow-x: hidden;
+  overflow-x: auto;
 }
 
 ::ng-deep .mat-header-row {

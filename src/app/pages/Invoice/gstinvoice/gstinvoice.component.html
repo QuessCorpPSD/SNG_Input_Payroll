@@ -5,8 +5,8 @@
                 <!-- Template Dropdown -->
                 <div style="display: inline-block; margin-right: 10px; padding-top: 12px;">
                     <label style="position: relative; display: inline-block;">
-                        <button (click)="onFileDownload()" class="select-drop">
-                            File Download
+                        <button (click)="BulkDownload()" class="select-drop">
+                            Bulk Download
                         </button>
                         <i
                             style="position: absolute; top: 50%; right: 15px; transform: translateY(-50%); pointer-events: none;">
@@ -44,7 +44,7 @@
                     </label>
                 </div>
 
-                <div style="display: inline-block;padding-top: 12px;">
+                <!-- <div style="display: inline-block;padding-top: 12px;">
                     <input type="file" #fileInput style="display: none;" (change)="onFileChange($event)"
                         accept=".xlsx, .xls" />
                     <label style="position: relative; display: inline-block;">
@@ -64,7 +64,7 @@
                             </svg>
                         </i>
                     </label>
-                </div>
+                </div> -->
                 <!-- Import Dropdown -->
                 <div style="display: inline-block;padding-top: 12px;">
                     <input type="file" #fileInput2 style="display: none;" (change)="onFileChange2($event)"
@@ -142,12 +142,12 @@
                     <input type="text" [(ngModel)]="searchText" (keyup.enter)="applyFilter()" placeholder="Search"
                         style="border: none; outline: none; width: 80%; font-size: 12px; background-color: transparent; height:15px;" />
                 </div>
-                <button *ngIf="isAnyFilteredRowSelected()" (click)="RejectClick()"
+                <!-- <button *ngIf="isAnyFilteredRowSelected()" (click)="RejectClick()"
                     style="display: inline-block; width: 130px; height: 30px; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
                     <div
                         style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
                         Reject</div>
-                </button>
+                </button> -->
             </div>
             <div class="card-body rounded-4 py-0">
                 <div class="example-container mat-elevation-z8">
@@ -168,12 +168,18 @@
                                 </mat-checkbox>
                             </mat-cell>
                         </ng-container>
-
                         <ng-container matColumnDef="pdfdownload">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
-                            <mat-cell *matCellDef="let element">
-                                <img src="assets/Icons/download_enabled.svg" alt="Download PayRegister"
-                                    style="cursor: pointer; width: 24px; height: 22px;" (click)="Downloadpdf()" />
+                            <mat-header-cell *matHeaderCellDef mat-sort-header
+                                class="fixed-width-column"></mat-header-cell>
+                            <mat-cell *matCellDef="let element" class="fixed-width-column">
+                                <img src="assets/Icons/download_enabled.svg"
+                                    (click)="DownloadInvoice(element.Invoice_Id, element.Invoice_Number)"
+                                    matTooltip="Pdf Download" matTooltipPosition="above"
+                                    style="cursor: pointer; width: 24px; height: 22px; max-width: 100px;" />
+                                <!-- <img *ngIf="!element.IRN_Number && !element.BatchFile" src="assets/Icons/download_disabled.svg"
+                                style="cursor: pointer; width: 24px; height: 22px;" />
+                            <img *ngIf="!element.IRN_Number && element.BatchFile" src="data:image/gif;base64,R0lGODlhGAASAPQAAP///wAAAMzMzICAgP//AP8AAP/MAP/MzP8zM////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAAAAAAALAAAAAAYABIAAAWRICCOZGmeaKqubOtCzPcCzPdFADs="
+                               mat-tooltip="Processing" width="24px;" height="22px;" /> -->
                             </mat-cell>
                         </ng-container>
 
@@ -185,7 +191,27 @@
 
                         <ng-container matColumnDef="invoice_Number">
                             <mat-header-cell *matHeaderCellDef mat-sort-header>Invoice Number</mat-header-cell>
-                            <mat-cell *matCellDef="let element">{{ element.invoice_Number }}</mat-cell>
+                            <mat-cell *matCellDef="let element"><span class="offer-style">{{ element.invoice_Number }}</span></mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="sap_Invoice_Number">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>SAP Invoice No</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.sap_Invoice_Number }}</mat-cell>
+                        </ng-container> 
+
+                        <ng-container matColumnDef="sap_Account_Number">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>SAP Account No</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.sap_Account_Number }}</mat-cell>
+                        </ng-container> 
+                        
+                        <ng-container matColumnDef="sap_Cancel_Document">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>SAP Cancel DOC No</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.sap_Cancel_Document }}</mat-cell>
+                        </ng-container> 
+
+                        <ng-container matColumnDef="sap_Credit_Note_Document">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>SAP Credit Note No</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.sap_Credit_Note_Document }}</mat-cell>
                         </ng-container>
 
                         <ng-container matColumnDef="company_Id">
@@ -241,7 +267,8 @@
 
                         </ng-container> <ng-container matColumnDef="invoice_Date">
                             <mat-header-cell *matHeaderCellDef mat-sort-header>Invoice Date</mat-header-cell>
-                            <mat-cell *matCellDef="let element">{{ element.invoice_Date }}</mat-cell>
+                            <mat-cell *matCellDef="let element">{{ element.invoice_Date | date:'dd/MM/yyyy'
+                                }}</mat-cell>
 
                         </ng-container> <ng-container matColumnDef="particulars">
                             <mat-header-cell *matHeaderCellDef mat-sort-header>Particulars</mat-header-cell>
@@ -275,8 +302,8 @@
                             <mat-header-cell *matHeaderCellDef mat-sort-header>Sourcing Fee Amount</mat-header-cell>
                             <mat-cell *matCellDef="let element">{{ element.sourcing_Fee_Amount }}</mat-cell>
 
-                        </ng-container> <ng-container matColumnDef="No Of Employees">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header>no_Of_Employees</mat-header-cell>
+                        </ng-container> <ng-container matColumnDef="no_Of_Employees">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>No Of Employees</mat-header-cell>
                             <mat-cell *matCellDef="let element">{{ element.no_Of_Employees }}</mat-cell>
 
                         </ng-container> <ng-container matColumnDef="net_Amount">
@@ -316,8 +343,8 @@
                             <mat-cell *matCellDef="let element">{{ element.group_Detail_Id }}</mat-cell>
 
                         </ng-container> <ng-container matColumnDef="group_Name">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header>Group Name</mat-header-cell>
-                            <mat-cell *matCellDef="let element">{{ element.group_Name }}</mat-cell>
+                            <mat-header-cell *matHeaderCellDef mat-sort-header class="auto-width-column">Group Name</mat-header-cell>
+                            <mat-cell *matCellDef="let element" class="auto-width-column">{{ element.group_Name }}</mat-cell>
 
                         </ng-container> <ng-container matColumnDef="crn_Number">
                             <mat-header-cell *matHeaderCellDef mat-sort-header>CRN Number</mat-header-cell>
@@ -335,28 +362,7 @@
                         <ng-container matColumnDef="crn_IRN_Cancel_Date">
                             <mat-header-cell *matHeaderCellDef mat-sort-header>crn_IRN_Cancel_Date</mat-header-cell>
                             <mat-cell *matCellDef="let element">{{ element.crn_IRN_Cancel_Date }}</mat-cell>
-                        </ng-container>
-
-                        <ng-container matColumnDef="sap_Invoice_Number">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header>SAP Invoice Number</mat-header-cell>
-                            <mat-cell *matCellDef="let element">{{ element.sap_Invoice_Number }}</mat-cell>
-                        </ng-container>
-
-                        <ng-container matColumnDef="sap_Account_Number">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header>SAP Account Number</mat-header-cell>
-                            <mat-cell *matCellDef="let element">{{ element.sap_Account_Number }}</mat-cell>
-                        </ng-container>
-
-                        <ng-container matColumnDef="sap_Cancel_Document">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header>SAP Cancel Document</mat-header-cell>
-                            <mat-cell *matCellDef="let element">{{ element.sap_Cancel_Document }}</mat-cell>
-                        </ng-container>
-
-                        <ng-container matColumnDef="sap_Credit_Note_Document">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header>Sap_Credit_Note_Document IRN
-                                Number</mat-header-cell>
-                            <mat-cell *matCellDef="let element">{{ element.sap_Credit_Note_Document }}</mat-cell>
-                        </ng-container>
+                        </ng-container>            
 
                         <ng-container matColumnDef="bGVBL">
                             <mat-header-cell *matHeaderCellDef mat-sort-header>BGVBL</mat-header-cell>
