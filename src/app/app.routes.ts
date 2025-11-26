@@ -94,6 +94,12 @@ import { PayregisteruploadComponent } from './pages/Process/payregisterupload/pa
 import { PaytransactionComponent } from './pages/Process/paytransaction/paytransaction.component';
 import { ReimbrusmentcalenderComponent } from './pages/Process/reimbrusmentcalender/reimbrusmentcalender.component';
 import { PayProcessComponent } from './pages/Process/pay-process/pay-process.component';
+import { CustomernavigationComponent } from './pages/customers/customernavigation/customernavigation.component';
+import { CompanyComponent } from './common/company/company.component';
+import { DepartmentComponent } from './pages/customers/department/department.component';
+import { DesignationComponent } from './pages/customers/designation/designation.component';
+import { BandDetailsComponent } from './pages/customers/band-details/band-details.component';
+import { CostCenterMappingComponent } from './pages/customers/cost-center-mapping/cost-center-mapping.component';
 
 
 
@@ -216,6 +222,15 @@ export const routes: Routes = [
           { path: 'Employee', component: EmployeePOComponent },
           { path: 'Approve', component: POApproveComponent },
 
+        ]
+      },
+      {
+        path: 'customer', component: CustomernavigationComponent,
+        children: [
+          { path: "department", component: DepartmentComponent, },
+          { path: "designation", component: DesignationComponent, },
+          { path: "BandDetails", component: BandDetailsComponent, },
+          { path: "CostCenterMapping", component: CostCenterMappingComponent, },
         ]
       },
       {

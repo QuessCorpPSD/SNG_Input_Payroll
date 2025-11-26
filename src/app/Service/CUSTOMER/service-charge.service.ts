@@ -1,0 +1,29 @@
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment.development';
+import { APIResponse } from '../../Models/apiresponse';
+import { IServiceCharge } from '../../Repository/customer/IserviceCharge';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ServiceChargeService implements IServiceCharge {
+  env = environment
+  constructor(private http: HttpClient) {
+  }
+  UploadOneTime(formData: FormData): Observable<APIResponse> {
+    return this
+      .http.post<APIResponse>(
+        this.env.apiUrl + 'ServiceCharge/FileUpload',
+        formData
+      );
+  }
+  GetServiceCharge(): Observable<APIResponse> {
+    return this.http.get<APIResponse>(this.env.apiUrl + 'ServiceCharge/servicechargemaster')
+  }
+    GetServicechargetype(companyid:any): Observable<APIResponse> {
+    return this.http.get<APIResponse>(this.env.apiUrl + 'ServiceCharge/servicechargetype/'+ companyid)
+  }
+
+}

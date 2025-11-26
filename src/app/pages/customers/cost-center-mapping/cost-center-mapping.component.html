@@ -1,0 +1,142 @@
+<br />
+<div class="page-wrapper">
+    <div class="scrollable-content">
+        <div style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; min-width: 960px">
+            Cost Center Mapping
+        </div>
+
+        <div class="container py-4">
+
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3 small-input">
+                    <label class="form-label text-muted small">Cost Center Map Name</label>
+                    <input type="text" class="form-control form-control-sm" placeholder="Enter Cost Center Map Name"
+                        [(ngModel)]="searchMapName">
+
+                </div>
+
+                <!-- Buttons row -->
+                <div class="col-md-2 d-flex gap-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Search"
+                        (click)="onSearchClick()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="Export to Excel" (click)="exportExcelBase64()">
+                        <mat-icon>table_chart</mat-icon>
+                    </button>
+
+
+
+
+                    <input type="file" #fileInput style="display: none;" (click)="fileInput.value=''"
+                        (change)="onFileChange($event)" accept=".xlsx, .xls" />
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Import"
+                        (click)="ImportClick(fileInput)">
+                        <mat-icon>cloud_upload</mat-icon>
+                    </button>
+
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Template"
+                        (click)=" DownloadTemplate()">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Add"
+                        (click)="AddPOOpen()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+
+            </div>
+
+            <br />
+            <!-- TABLE SECTION -->
+            <div class="table-wrapper1" style="min-width: 800px;" *ngIf="showTable">
+                <div class="table-scroll">
+
+                    <mat-table [dataSource]="uploadedDataSource" matSort
+                        class="custom-table mat-elevation-z8 auto-fit-table">
+
+                        <ng-container matColumnDef="Action">
+                            <mat-header-cell *matHeaderCellDef class="Action"><strong>Action</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row" class="Action">
+                                <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                    matTooltip="Delete">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                                <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                    matTooltip="Edit">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="SNo">
+                            <mat-header-cell *matHeaderCellDef class="SNo"><strong>SNo</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row" class="SNo">{{ row['SNo'] }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Map Name">
+                            <mat-header-cell *matHeaderCellDef><strong>Map Name</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row['Map Name'] }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Business Unit Name -->
+                        <ng-container matColumnDef="Business Unit Name">
+                            <mat-header-cell *matHeaderCellDef><strong>Business Unit Name</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row['Business Unit Name'] }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Company code -->
+                        <ng-container matColumnDef="Company code">
+                            <mat-header-cell *matHeaderCellDef><strong>Company code</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row['Company code'] }}</mat-cell>
+                        </ng-container>
+
+                        <!-- company Name -->
+                        <ng-container matColumnDef="company Name">
+                            <mat-header-cell *matHeaderCellDef><strong>company Name</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row['company Name'] }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Cost Center -->
+                        <ng-container matColumnDef="Cost Center">
+                            <mat-header-cell *matHeaderCellDef><strong>Cost Center</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row['Cost Center'] }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Company Location -->
+                        <ng-container matColumnDef="Company Location">
+                            <mat-header-cell *matHeaderCellDef><strong>Company Location</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row['Company Location'] }}</mat-cell>
+                        </ng-container>
+
+
+                        <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: uploadDisplayedColumns;"></mat-row>
+
+                    </mat-table>
+
+                    <div *ngIf="uploadedData.length === 0" class="text-center p-4">
+                        <p class="text-muted">No data to display</p>
+                    </div>
+
+                </div>
+
+                <mat-paginator [length]="uploadedData.length" [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"
+                    showFirstLastButtons>
+                </mat-paginator>
+
+            </div>
+        </div>
+    </div>
+    <div *ngIf="isLoading" class="loading-overlay">
+        <img src="assets/Loading.gif" alt="Loading...">
+    </div>
+    <div *ngIf="showPopup" class="overlay">
+        <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+            (close)="showPopup = false"></app-alertpopup>
+    </div>

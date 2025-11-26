@@ -1,0 +1,84 @@
+<form [formGroup]="AddDepartmentForm" novalidate>
+    <mat-card class="custom-card">
+        <mat-card-header class="sticky-header">
+
+            <mat-card-title>Add Department</mat-card-title>
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="onClose()" class="no-border-icon">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+
+        <mat-card-content class="scroll-content">
+            <br />
+            <!-- Row 1 -->
+            <div class="row g-3 mb-3">
+                <div class="col-md-12">
+                    <label class="form-label">Company Code<span class="text-danger">*</span></label>
+                    <companyall (companyEmit)="handleCompanyEvent($event)" formControlName="companyCode"></companyall>
+                    <div class="text-danger small" *ngIf="AddDepartmentForm.get('companyCode')?.touched 
+             && AddDepartmentForm.get('companyCode')?.hasError('required')">
+                        companyCode is required
+                    </div>
+                    <!-- <input type="text" class="form-control" formControlName="PayCode" /> -->
+                    <!-- <select class="form-select" formControlName="CompanyCode">
+                        <option value="">-- Select --</option>
+                    </select> -->
+                </div>
+            </div>
+            <div class="row g-3 mb-3" style="display: none;">
+                <div class="col-md-12">
+                    <label class="form-label">Department Code<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" formControlName="DepartmentCode" />
+                    <div class="text-danger small" *ngIf="AddDepartmentForm.get('DepartmentCode')?.touched 
+             && AddDepartmentForm.get('DepartmentCode')?.hasError('required')">
+                        DepartmentCode is required
+                    </div>
+                    <!-- <select class="form-select" formControlName="POCategory">
+                        <option value="">-- Select --</option>
+                    </select> -->
+                </div>
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-12">
+                    <label class="form-label">Department Name<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" formControlName="DepartmentName" />
+                    <div class="text-danger small" *ngIf="AddDepartmentForm.get('DepartmentName')?.touched 
+             && AddDepartmentForm.get('DepartmentName')?.hasError('required')">
+                        DepartmentName is required
+                    </div>
+                    <!-- <select class="form-select" formControlName="POform">
+                        <option value="">-- Select --</option>
+                        <option *ngFor="let PONo of PONumber" [value]="PONo.poid">{{PONo.ponumber}}</option>
+                    </select> -->
+                </div>
+            </div>
+        </mat-card-content>
+        <mat-card-footer class="footer">
+            <div class="d-flex justify-content-end mt-3">
+                <div class="btn-1"
+                    style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
+
+                    <button type="Cancel"
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;"
+                        (click)="onClose()">
+                        Cancel
+                    </button>
+
+                    <button type="submit"
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white; "
+                        (click)="Save()">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </mat-card-footer>
+    </mat-card>
+</form>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets\Loading.gif" alt="Loading...">
+</div>
+
+<app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+    (close)="showPopup = false">
+</app-alertpopup>
