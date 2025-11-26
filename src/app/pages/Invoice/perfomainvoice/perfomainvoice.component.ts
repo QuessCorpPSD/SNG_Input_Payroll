@@ -89,7 +89,7 @@ export class PerfomainvoiceComponent {
     }
 
     const userInfo = {
-      "userId": this.userdetail.userId,
+      "userId": this.userdetail.user_Id,
       "userName": this.userdetail.userName,
     };
     
@@ -266,7 +266,7 @@ export class PerfomainvoiceComponent {
       formData.append('file', this.excelFile);
       formData.append('CompanyId', this.companyUI.companyId);
       formData.append('payperiod', this.payperiodUI.payPeriod);
-      formData.append('CreatedBy', this.userdetail.userId);
+      formData.append('CreatedBy', this.userdetail.user_Id);
       this.perfomainvoiceSer.PerformaInvoiceSplit(formData).subscribe({
         next: res => {
           this.UploadedResponse = res;
@@ -332,7 +332,7 @@ export class PerfomainvoiceComponent {
       CompanyId: String(this.companyUI.companyId),
       PayPeriodId: String(this.payperiodUI.payfrequencyid),
       MergeLot: assignmentsString,
-      CreatedBy: this.userdetail.userId,
+      CreatedBy: this.userdetail.user_Id,
       Remarks: this.MergeRemarks
     }
 
@@ -403,7 +403,7 @@ export class PerfomainvoiceComponent {
       NetPay: String(selectedRow.NetPay),
       Invoice_Category_Id: String(selectedRow.Invoice_Category_Id),
       Invoice_Category: String(selectedRow.Invoice_Category),
-      CreatedBy: this.userdetail.userId
+      CreatedBy: this.userdetail.user_Id
     };
 
     this.perfomainvoiceSer.PerformaInvoiceInitiate(requestPayload).subscribe({

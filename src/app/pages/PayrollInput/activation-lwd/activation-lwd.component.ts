@@ -62,7 +62,7 @@ export class ActivationLWDComponent {
   ngOnInit(): void {
       const userdetail = this.sessionStorageService.getItem('UserProfile');
     var user = JSON.parse(this._encry.decrypt(userdetail!));
-    this.employeeId = String(user.userId);
+    this.employeeId = String(user.user_Id);
 
     this.mapnameUI = {
       mapName: '',

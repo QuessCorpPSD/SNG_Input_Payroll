@@ -95,7 +95,7 @@ export class AttendanceComponent implements OnInit {
     }
 
     const userInfo = {
-      "userId": this.userdetail.userId,
+      "userId": this.userdetail.user_Id,
       "userName": this.userdetail.userName,
     };
     this.selectoption = "-1";

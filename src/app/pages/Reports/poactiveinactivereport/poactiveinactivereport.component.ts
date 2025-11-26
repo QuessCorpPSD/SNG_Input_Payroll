@@ -111,7 +111,7 @@ export class PoactiveinactivereportComponent {
     }
 
     const userInfo = {
-      "userId": this.userdetail.userId,
+      "userId": this.userdetail.user_Id,
       "userName": this.userdetail.userName,
     };
   }
@@ -127,7 +127,7 @@ export class PoactiveinactivereportComponent {
   }
 
   BindVertical(potype: string): void {
-    this.poreportService.GetVerticals(this.userdetail.userId, potype).subscribe({
+    this.poreportService.GetVerticals(this.userdetail.user_Id, potype).subscribe({
       next: res => {
         //console.log(res.Data);
         this.VerticalName = res.Data;
@@ -186,7 +186,7 @@ export class PoactiveinactivereportComponent {
       poType: this.ddPOType,
       poYear: this.ddYear,
       vertical: this.ddVertical,
-      userId: this.userdetail.userId
+      userId: this.userdetail.user_Id
     };
     this.poreportService.GetAllActiveInactivePO(POActiveReportParams).subscribe({
       next: res => {
@@ -218,7 +218,7 @@ export class PoactiveinactivereportComponent {
       poType: this.ddPOType,
       poYear: this.ddYear,
       vertical: this.ddVertical,
-      userId: this.userdetail.userId
+      userId: this.userdetail.user_Id
     };
     this.poreportService.GetAllActiveInactivePO(POActiveReportParams).subscribe({
       next: res => {

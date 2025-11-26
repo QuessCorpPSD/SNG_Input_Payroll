@@ -232,7 +232,7 @@ export class VendorEmployeeComponent {
 
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('User', this.userdetail?.userId);
+    formData.append('User', this.userdetail?.user_Id);
 
     this.vendoremployeeService.UploadVendorEmployee(formData).subscribe({
       next: (res) => {

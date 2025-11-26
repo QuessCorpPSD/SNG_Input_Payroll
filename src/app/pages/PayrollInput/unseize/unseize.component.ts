@@ -139,7 +139,7 @@ export class UnseizeComponent {
     }
 
     const userInfo = {
-      "userId": this.userdetail.userId,
+      "userId": this.userdetail.user_Id,
       "userName": this.userdetail.userName,
     };
     this.citynameUI = {
@@ -208,7 +208,7 @@ export class UnseizeComponent {
   BindDashBoard(companyCode: string, payPeriod: number, siteCode: string,
     city_Id: number) {
     this.timesheetService.GetUnseizeData(companyCode, payPeriod, siteCode,
-      city_Id, this.userdetail.userId).subscribe({
+      city_Id, this.userdetail.user_Id).subscribe({
         next: res => {
           if (!res.Data || res.Data.length === 0) {
             alert("No data available to display.");
@@ -234,7 +234,7 @@ export class UnseizeComponent {
     const selectedEmpIds = filteredSelected.map(item => item.employeeID);
     this.offerIdJson = JSON.stringify(selectedEmpIds);
     if (this.offerIdJson.length > 0) {
-      this.timesheetService.PostUnseize(this.offerIdJson, this.companyUI.companyId, this.payperiodUI.payfrequencyid, this.sitenameUI.siteCode, this.userdetail.userId).subscribe({
+      this.timesheetService.PostUnseize(this.offerIdJson, this.companyUI.companyId, this.payperiodUI.payfrequencyid, this.sitenameUI.siteCode, this.userdetail.user_Id).subscribe({
         next: res => {
           const errormsg = res.Data[0].result?.toString();
           if (errormsg === 'Records UnSeized Successfully') {

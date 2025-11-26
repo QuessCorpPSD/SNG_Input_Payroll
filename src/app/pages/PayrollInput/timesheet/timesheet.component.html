@@ -188,12 +188,28 @@
             <div style="display: flex; margin-right: 10px;padding-top: 12px; gap:10px; padding-left: 20px;">
                 <input #bulkUploader type="file" style="position:absolute; left:-9999px; width:0; height:0; opacity:0;"
                     (change)="onBulkFilesChosen($event)" />
-                <div style="display: inline-block; margin-right: 10px;padding-top: 12px;" *ngIf="anyRowSelected">
+                <div style="display: inline-block;" *ngIf="anyRowSelected">
                     <button (click)="onBulkAttachmentClick(bulkUploader)" type="button"
                         style="width: 130px; height: 40px; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #008CBA; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex;border: none;">
                         <div
                             style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
                             Bulk Attachment</div>
+                    </button>
+                </div>
+                <div style="display: inline-block;" *ngIf="this.rows && this.rows.length>0 && anyRowSelected">
+                    <button (click)="Saveclick()"
+                        style="width: 100px; height: 40px; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #198754; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex;border: none;">
+                        <div
+                            style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
+                            Save</div>
+                    </button>
+                </div>
+                <div style="display: inline-block;" *ngIf="this.rows &&this.rows.length>0 && anyRowSelected">
+                    <button (click)="Submitclick()"
+                        style="width: 100px; height: 40px; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex;border: none;">
+                        <div
+                            style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
+                            Submit</div>
                     </button>
                 </div>
                 <label style="position: relative; display: inline-block;">
@@ -346,21 +362,21 @@
                                         style="text-align:center;" maxlength="5" />
                                 </td>
                                 <td class="ot">
-                  <input type="text" [(ngModel)]="r.OTWKD" style="text-align: center;" maxlength="6"
-                  (input)="onDecimalInput($event)"/>
-                </td>
-                <td class="ot">
-                  <input type="text" [(ngModel)]="r.OTWND" style="text-align: center;" maxlength="6"
-                  (input)="onDecimalInput($event)"/>
-                </td>
-                <td class="ot">
-                  <input type="text" [(ngModel)]="r.NSOTH" style="text-align: center;" maxlength="6"
-                  (input)="onDecimalInput($event)"/>
-                </td>
-                <td class="ot">
-                  <input type="text" [(ngModel)]="r.POTRS" style="text-align: center;" maxlength="6"
-                  (input)="onDecimalInput($event)"/>
-                </td>
+                                    <input type="text" [(ngModel)]="r.OTWKD" style="text-align: center;" maxlength="6"
+                                        (input)="onDecimalInput($event)" />
+                                </td>
+                                <td class="ot">
+                                    <input type="text" [(ngModel)]="r.OTWND" style="text-align: center;" maxlength="6"
+                                        (input)="onDecimalInput($event)" />
+                                </td>
+                                <td class="ot">
+                                    <input type="text" [(ngModel)]="r.NSOTH" style="text-align: center;" maxlength="6"
+                                        (input)="onDecimalInput($event)" />
+                                </td>
+                                <td class="ot">
+                                    <input type="text" [(ngModel)]="r.POTRS" style="text-align: center;" maxlength="6"
+                                        (input)="onDecimalInput($event)" />
+                                </td>
                             </tr>
                         </tbody>
                     </table>

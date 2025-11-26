@@ -172,7 +172,7 @@ export class AddPOComponent implements OnInit {
         extention: formValue.extention || 0,
         extendedStartDate: formValue.extendedStartDate || '',
         extendedEndDate: formValue.extendedEndDate || '',
-        createdBy: this.userdetail.userId.toString() || '',
+        createdBy: this.userdetail.user_Id.toString() || '',
         billingType: parseInt(formValue.BillingType).toString() || '',
         action: formValue.action || 1,
         po_CategoryID: parseInt(formValue.POCategory) || 0
@@ -197,7 +197,7 @@ export class AddPOComponent implements OnInit {
             // console.log('File name',this.selectedFile.name);
             console.log('File_Path', "File path");
             console.log('PONumber', formValue.POform);
-            console.log('CreatedBy', this.userdetail.userId.toString());
+            console.log('CreatedBy', this.userdetail.user_Id.toString());
 
             if (this.selectedFile) {
               const formData = new FormData();
@@ -205,7 +205,7 @@ export class AddPOComponent implements OnInit {
               formData.append('File_Name', this.selectedFile.name);
               formData.append('File_Path', "File Path");
               formData.append('PONumber', payload.poNumber);
-              formData.append('CreatedBy', this.userdetail.userId.toString());
+              formData.append('CreatedBy', this.userdetail.user_Id.toString());
 
               this.poService.ImportFileUpload(formData).subscribe({
                 next: fileUploadResponse => {
@@ -436,7 +436,7 @@ export class AddPOComponent implements OnInit {
     }
 
     const userInfo = {
-      "userId": this.userdetail.userId,
+      "userId": this.userdetail.user_Id,
       "userName": this.userdetail.userName
     }
 

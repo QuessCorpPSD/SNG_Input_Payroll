@@ -132,7 +132,7 @@ export class POApproveComponent {
     }
 
     const userInfo = {
-      "userId": this.userdetail.userId,
+      "userId": this.userdetail.user_Id,
       "userName": this.userdetail.userName
     }
 
@@ -313,16 +313,47 @@ bulkUpdate(action: 'APPROVED' | 'REJECTED' | 'REVOKE') {
       STATUS: action,
       REMARKS: row.remarks || "No remarks", // Include remarks in the request payload
     })),
-    CreatedBy: this.userId ? this.userId.toString() : '10001426'
+    CreatedBy: this.userdetail.user_Id ? this.userdetail.user_Id.toString() : '10001426'
   };
 
   // console.log("Bulk Update Payload:", payload);
 
   this.poService.BulkApproveReject(payload).subscribe({
     next: (res) => {
-      // console.log("Bulk update response:", res);
-      alert(`${action} successful for ${selectedRows.length} rows`);
-      this.Searchclick(); // Refresh the data to reflect the updated status and remarks
+
+      if (res?.Data?.response?.includes("SUCCESSFULLY  APPROVED")) {
+          this.showPopup = true;
+
+          this.popupMessage = "Successfully Approved";
+          this.isLoading = false;
+          this.Searchclick(); 
+          return;
+        }
+        else if (res?.Data?.response?.includes("PO REJECTED")) {
+          this.showPopup = true;
+
+          this.popupMessage = "PO Rejected";
+          this.isLoading = false;
+          this.Searchclick(); 
+          return;
+        }
+        else if (res?.Data?.response?.includes("PO REVOKED")) {
+          this.showPopup = true;
+
+          this.popupMessage = "PO Revoked";
+          this.isLoading = false;
+          this.Searchclick(); 
+          return;
+        }
+        else
+        {
+            this.showPopup = true;
+          this.popupMessage = 'Failed.';
+          this.isLoading=false;
+          return;
+        }
+
+      
     },
     error: (err) => {
       console.error("Bulk update failed", err);

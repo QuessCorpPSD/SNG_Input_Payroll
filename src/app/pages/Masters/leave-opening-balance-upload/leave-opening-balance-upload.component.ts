@@ -134,7 +134,7 @@ export class LeaveOpeningBalanceUploadComponent {
     }
 
     const userInfo = {
-      "userId": this.userdetail.userId,
+      "userId": this.userdetail.user_Id,
       "userName": this.userdetail.userName,
     };
 
@@ -216,14 +216,14 @@ const formData = new FormData();
 console.log('CompanyId:', this.companyId);
 console.log('Fromdate:', this.fromDateInput);
 console.log('Todate:', this.toDateInput);
-console.log('CreatedBy:', this.userdetail?.userId);
+console.log('CreatedBy:', this.userdetail?.user_Id);
 console.log('File:', file?.name, file?.type, file?.size);
 
 formData.append('file', file);
 formData.append('CompanyId', this.companyId?.toString() || '');
 formData.append('Fromdate', this.fromDateInput?.trim() || '');
 formData.append('Todate', this.toDateInput?.trim() || '');
-formData.append('CreatedBy', this.userdetail?.userId?.toString() || '');
+formData.append('CreatedBy', this.userdetail?.user_Id?.toString() || '');
 
     this.leaveOpeningBalanceService.UploadLeaveOpeningBalance(formData).subscribe({
       next: (res) => {
@@ -231,7 +231,7 @@ formData.append('CreatedBy', this.userdetail?.userId?.toString() || '');
 
         this.UploadedResponse = res;
         console.log('Uploading file:', file.name, file.type, file.size);
-        console.log('User:', this.userdetail?.userId);
+        console.log('User:', this.userdetail?.user_Id);
 
         const { parsed, msg } = this.tryParseResponse(res?.Data?.response);
         const successMsg = 'Leave Opening Balance data uploaded successfully.';

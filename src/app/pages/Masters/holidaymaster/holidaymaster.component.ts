@@ -193,7 +193,7 @@ export class HolidaymasterComponent {
     }
 
     const userInfo = {
-      "userId": this.userdetail.userId,
+      "userId": this.userdetail.user_Id,
       "userName": this.userdetail.userName,
     };
 
@@ -357,7 +357,7 @@ export class HolidaymasterComponent {
 
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('User', this.userdetail.userId);
+    formData.append('User', this.userdetail.user_Id);
 
     this.holidayService.UploadHolidayMaster(formData).subscribe({
       next: (res) => {
@@ -597,7 +597,7 @@ export class HolidaymasterComponent {
       }));
 
     const requestPayload = {
-      Created_By: this.userdetail.userId,
+      Created_By: this.userdetail.user_Id,
       Mode: "Add",  // or UPDATE etc.
       holidaymaster: holidaysPayload
     };
@@ -766,7 +766,7 @@ export class HolidaymasterComponent {
       }));
 
     const requestPayload = {
-      Created_By: this.userdetail.userId,
+      Created_By: this.userdetail.user_Id,
       Mode: "Edit",  // or UPDATE etc.
       holidaymaster: holidaysPayload
     };
@@ -886,7 +886,7 @@ export class HolidaymasterComponent {
     }
 
     const requestPayload = {
-      Created_By: this.userdetail.userId,
+      Created_By: this.userdetail.user_Id,
       Mode: "Delete",  // or Delete.
       holidaymaster: holidaysPayload
     };
