@@ -1,0 +1,122 @@
+<br />
+<div class="page-wrapper">
+
+    <div class="scrollable-content">
+        <div style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; min-width: 960px">
+            Lock Pay Period
+        </div>
+        <form [formGroup]="LockPayPeriodform" novalidate>
+
+            <div class="container py-2">
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-2">
+                        <label class="form-label text-muted small">Month</label>
+                        <select class="form-select form-select-sm" formControlName="Month">
+                            <option value="">--Select--</option>
+                            <option *ngFor="let month of month" [value]="month.pay_Period">
+                                {{month.pay_Period}}</option>
+                        </select>
+                        <!-- <input type="text" class="form-control form-control-sm" formControlName="Month" /> -->
+                        <!-- <select class="form-select form-select-sm" formControlName="CompanyCode">
+                            <option value="">--Select--</option>
+                        </select> -->
+                    </div>
+
+                    <div class="col-md-2 d-flex gap-2">
+                        <button class="btn  btn-sm d-flex align-items-center justify-content-center" matTooltip="Search"
+                            (click)="onsearch()">
+                            <mat-icon>search</mat-icon>
+                        </button>
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                            matTooltip="export to excel" (click)="exportToExcel()">
+                            <mat-icon>table_chart</mat-icon>
+                        </button>
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="import"
+                            (click)="ImportClick(fileInput)">
+                            <mat-icon>cloud_upload</mat-icon>
+                        </button>
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                            matTooltip="download" (click)="downloadTemplate()">
+                            <mat-icon>cloud_download</mat-icon>
+                        </button>
+                        <!-- <button class="btn  btn-sm d-flex align-items-center justify-content-center" matTooltip="Add"
+                            >
+                            <mat-icon>add</mat-icon>
+                        </button> -->
+                    </div>
+                    <input type="file" #fileInput style="display: none;" (click)="fileInput.value=''"
+                        (change)="onFileChange($event)" accept=".xlsx, .xls" />
+
+                </div>
+            </div>
+        </form>
+
+        <br />
+        <div class="table-wrapper1" style="min-width: 960px;" *ngIf="showTable">
+            <div class="table-scroll">
+                <mat-table [dataSource]="dataSource" class="mat-elevation-z8 custom-table">
+
+                    <ng-container matColumnDef="checkbox">
+                        <mat-header-cell *matHeaderCellDef class="slno"></mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="slno">
+                            <mat-checkbox [(ngModel)]="row.selected" (change)="onRowSelectionChange(row)">
+                            </mat-checkbox>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- 🔹 Sl.No -->
+                    <ng-container matColumnDef="slNo">
+                        <mat-header-cell *matHeaderCellDef class="slno"><strong>Sl.No</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="slno">{{ row.SNo }}</mat-cell>
+                    </ng-container>
+
+                    <!-- 🔹 Pay Code -->
+                    <ng-container matColumnDef="companycode">
+                        <mat-header-cell *matHeaderCellDef><strong>Company Code</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Company_Code }}</mat-cell>
+                    </ng-container>
+
+                    <!-- 🔹 Description -->
+                    <ng-container matColumnDef="CompanyName">
+                        <mat-header-cell *matHeaderCellDef><strong>Company Name</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Company_Name }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="PayPeriod">
+                        <mat-header-cell *matHeaderCellDef><strong>Pay Period</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Pay_Period }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="status">
+                        <mat-header-cell *matHeaderCellDef><strong>Status</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.IsLocked }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Header Rows -->
+                    <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+
+                    <!-- <mat-header-row *matHeaderRowDef="uploadFilteredColumns"></mat-header-row> -->
+
+
+                    <!-- Data Rows -->
+                    <mat-row *matRowDef="let row; columns: uploadDisplayedColumns"></mat-row>
+
+                </mat-table>
+            </div>
+
+            <div *ngIf="dataSource.data.length === 0" class="text-center p-4">
+                <p class="text-muted">No data to display</p>
+            </div>
+
+            <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        </div>
+
+    </div>
+</div>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets\Loading.gif" alt="Loading...">
+</div>
+
+<app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+    (close)="showPopup = false">
+</app-alertpopup>

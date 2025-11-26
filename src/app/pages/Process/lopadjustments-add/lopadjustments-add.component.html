@@ -1,0 +1,90 @@
+<form novalidate>
+    <mat-card class="custom-card">
+        <mat-card-header class="sticky-header">
+            <br />
+            <div
+                style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700;  padding-right: 710px;">
+                Add LOP Adjustment</div>
+
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="onClose()" class="no-border-icon">
+                <mat-icon>close</mat-icon>
+
+            </button>
+
+        </mat-card-header>
+
+        <mat-card-content>
+            <div class="row g-3 mb-3">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Company Code</label>
+                    <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Pay Period</label>
+                    <PayPeriod [selectedCompanyId]="selectedCompanyId" [payPeriodType]="payPeriodType"
+                        (payperiodEmit)="handlePayperiodEvent($event)"></PayPeriod>
+                        
+                </div>
+            </div>
+
+
+
+            <div class="table-wrapper1">
+                <div class="col-md-3 d-flex gap-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Add"
+                    (click)="onAddRow()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Delete"
+                    (click)="onDeleteRow(index)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
+                <div class="table-scroll">
+                    <mat-table [dataSource]="uploadedDataSource" matSort
+                        class="custom-table mat-elevation-z8 auto-fit-table">
+                        <ng-container *ngFor="let column of uploadDisplayedColumns" [matColumnDef]="column">
+                            <mat-header-cell *matHeaderCellDef><strong>{{ column }}</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row[column] }}</mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: uploadDisplayedColumns"></mat-row>
+                    </mat-table>
+                </div>
+
+                <div *ngIf="uploadedData.length === 0" class="text-center p-4">
+                    <p class="text-muted">No data to display</p>
+                </div>
+
+                <mat-paginator [length]="uploadedData.length" [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"
+                    showFirstLastButtons aria-label="Select page">
+                </mat-paginator>
+            </div>
+
+
+        </mat-card-content>
+
+        <mat-card-footer class="footer">
+            <div class="d-flex justify-content-end mt-3">
+                <div class="btn-1"
+                    style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
+
+                    <button type="Cancel"
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0;">
+                        Cancel
+                    </button>
+
+                    <button type="submit"
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; ">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </mat-card-footer>
+    </mat-card>
+</form>

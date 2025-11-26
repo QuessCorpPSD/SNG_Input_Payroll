@@ -1,0 +1,117 @@
+<br />
+<div class="page-wrapper">
+
+    <div class="scrollable-content">
+
+
+        <div style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; min-width: 960px">
+            Reimbrusment Calendar
+        </div>
+        <form>
+
+            <div class="container py-2">
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-2">
+                        <label class="form-label text-muted small">Company Code</label>
+                        <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+                        <!-- <input type="text" class="form-control form-control-sm" formControlName="CompanyCode" /> -->
+                        <!-- <select class="form-select form-select-sm" formControlName="CompanyCode">
+                            <option value="">--Select--</option> -->
+                        <!-- <option *ngFor="let pay of paytype" [value]="pay.PayType_Id">{{pay.PayType}}</option> -->
+                        <!-- </select> -->
+                    </div>
+                    <div class="col-md-2 d-flex gap-2">
+                        <button class="btn  btn-sm d-flex align-items-center justify-content-center" matTooltip="Search"
+                            (click)="onsearch()">
+                            <mat-icon>search</mat-icon>
+                        </button>
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                            matTooltip="export to excel">
+                            <mat-icon>table_chart</mat-icon>
+                        </button>
+                        <button class="btn  btn-sm d-flex align-items-center justify-content-center" matTooltip="Add" (click)="AddReimbrusmentCalendar()">
+                            <mat-icon>add</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <br />
+        <div class="table-wrapper1" style="min-width: 960px;" *ngIf="showTable">
+            <div class="table-scroll">
+                <mat-table [dataSource]="uploadedData" class="mat-elevation-z8 custom-table">
+
+                    <!--  Action -->
+                    <ng-container matColumnDef="Action">
+                        <mat-header-cell *matHeaderCellDef><strong>Action</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                            <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                matTooltip="Edit">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                            <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                matTooltip="Delete">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </mat-cell>
+                    </ng-container>
+                    <!-- 🔹 Sl.No -->
+                    <ng-container matColumnDef="slNo">
+                        <mat-header-cell *matHeaderCellDef><strong>Sl.No</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.SNo }}</mat-cell>
+                    </ng-container>
+
+                    <!-- 🔹 Pay Code -->
+                    <ng-container matColumnDef="companycode">
+                        <mat-header-cell *matHeaderCellDef><strong>Company_Code</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.companycode }}</mat-cell>
+                    </ng-container>
+
+                    <!-- 🔹 Description -->
+                    <ng-container matColumnDef="companyname">
+                        <mat-header-cell *matHeaderCellDef><strong>Company_Name</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.companyname }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="carryforward">
+                        <mat-header-cell *matHeaderCellDef><strong>Carry Forward</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.carryforward }}</mat-cell>
+                    </ng-container>
+
+                    <!-- 🔹 Pay Type -->
+                    <ng-container matColumnDef="financialyearname">
+                        <mat-header-cell *matHeaderCellDef><strong>Financial_Year_Name</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.financialyearname }}</mat-cell>
+                    </ng-container>
+
+                    <!-- 🔹 Taxable -->
+                    <ng-container matColumnDef="fromdate">
+                        <mat-header-cell *matHeaderCellDef><strong>From Date</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.fromdate }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="todate">
+                        <mat-header-cell *matHeaderCellDef><strong>To Date</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.todate }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Header Rows -->
+                    <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+
+                    <!-- <mat-header-row *matHeaderRowDef="uploadFilteredColumns"></mat-header-row> -->
+
+                    <!-- Data Rows -->
+                    <mat-row *matRowDef="let row; columns: uploadDisplayedColumns"></mat-row>
+
+                </mat-table>
+            </div>
+
+            <div *ngIf="uploadedData.length === 0" class="text-center p-4">
+                <p class="text-muted">No data to display</p>
+            </div>
+
+            <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        </div>
+    </div>
+</div>

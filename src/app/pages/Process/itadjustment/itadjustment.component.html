@@ -1,0 +1,155 @@
+<!-- Add this somewhere in your Angular template/component -->
+<br />
+<div class="page-wrapper">
+
+    <div class="scrollable-content">
+        <div
+            style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; min-width: 960px; padding-left: 25px;">
+            IT Adjustment
+        </div>
+
+        <div class="container-fluid g-2" style="min-width: 960px;">
+            <div class="card-body g-2">
+                <form [formGroup]="Itadjustmectform" novalidate>
+                    <div class="row align-items-end">
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small">Company Code</label>
+                            <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+                        </div>
+
+
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small">Employee Code</label>
+                            <select class="form-select" formControlName="Employeecode">
+                                <option value="">-- Select --</option>
+                                <option *ngFor="let Emcode of ecode" [value]="Emcode.Employee_Id">{{Emcode.Employee_Code}}</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-3 d-flex gap-2">
+                            <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                matTooltip="Search" (click)="onsearch()">
+                                <mat-icon>search</mat-icon>
+                            </button>
+                            <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Add"
+                                (click)="AddPOOpen()">
+                                <mat-icon>add</mat-icon>
+                            </button> -->
+                            <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                matTooltip="Export to Excel" (click)="exportToExcel()">
+                                <mat-icon>table_chart</mat-icon>
+                            </button>
+
+                            <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                matTooltip="Download Template" (click)=" DownloadTemplate()">
+                                <mat-icon>cloud_download</mat-icon>
+                            </button>
+                            <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                matTooltip="Import" (click)="ImportClick(fileInput)">
+                                <mat-icon>cloud_upload</mat-icon>
+                            </button>
+                            <input type="file" #fileInput style="display: none;" (click)="fileInput.value=''"
+                                (change)="onFileChange($event)" accept=".xlsx, .xls" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="table-wrapper1" *ngIf="isUploadGridVisible" style="min-width: 960px;">
+            <br />
+
+            <div class="table-scroll">
+                <mat-table [dataSource]="dataSource" matSort class="custom-table mat-elevation-z8 auto-fit-table">
+
+                    <!-- ========== ACTION COLUMN ========== -->
+                    <ng-container matColumnDef="Action">
+                        <mat-header-cell *matHeaderCellDef><strong>Action</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                            <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                matTooltip="Delete">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                            <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                matTooltip="Edit">
+                                <mat-icon>edit</mat-icon>
+                            </button> -->
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- ========== SNO COLUMN ========== -->
+                    <ng-container matColumnDef="SNo">
+                        <mat-header-cell *matHeaderCellDef><strong>SNo</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['SNo'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- ========== COMPANY CODE COLUMN ========== -->
+                    <ng-container matColumnDef="CompanyCode">
+                        <mat-header-cell *matHeaderCellDef><strong>Company Code</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Company_Code'] }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Employee Code">
+                        <mat-header-cell *matHeaderCellDef><strong>Employee Code</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Employee_Code'] }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Employee Name">
+                        <mat-header-cell *matHeaderCellDef><strong>Employee Name</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Employee_Name'] }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Pay Category">
+                        <mat-header-cell *matHeaderCellDef><strong>Pay Category</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Pay_Category_Code'] }}</mat-cell>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="Pay Period">
+                        <mat-header-cell *matHeaderCellDef><strong>Pay Period</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Pay_Period'] }}</mat-cell>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="Pay Code">
+                        <mat-header-cell *matHeaderCellDef><strong>Pay Code</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Pay Code'] }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Amount">
+                        <mat-header-cell *matHeaderCellDef><strong>Amount</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Amount'] }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Mode of Entry">
+                        <mat-header-cell *matHeaderCellDef><strong>Mode Of Entry</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Mode_Of_Entry'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- HEADER ROW -->
+                    <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+
+                    <!-- DATA ROWS -->
+                    <mat-row *matRowDef="let row; columns: uploadDisplayedColumns"></mat-row>
+
+                </mat-table>
+            </div>
+
+            <div *ngIf="dataSource.data.length === 0" class="text-center p-4">
+                <p class="text-muted">No data to display</p>
+            </div>
+
+            <mat-paginator [length]="uploadedData.length" [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"
+                showFirstLastButtons aria-label="Select page">
+            </mat-paginator>
+        </div>
+
+
+    </div>
+</div>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>
+
+<app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+    (close)="closePopup()"></app-alertpopup>

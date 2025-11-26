@@ -1,0 +1,40 @@
+<!-- Add this somewhere in your Angular template/component -->
+<br />
+<div class="page-wrapper">
+
+    <div class="scrollable-content">
+        <div
+            style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; min-width: 960px; padding-left: 25px;">
+            AttendanceBatchId-update
+        </div>
+
+        <div class="container-fluid g-2" style="min-width: 960px;">
+            <div class="card-body g-2">
+                <form>
+                    <div class="col-md-3 d-flex gap-2">
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Import"
+                            (click)="ImportClick(fileInput)">
+                            <mat-icon>cloud_upload</mat-icon>
+                        </button>
+
+                        <input type="file" #fileInput style="display: none;" (click)="fileInput.value=''"
+                            (change)="onFileChange($event)" accept=".xlsx, .xls" />
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                            matTooltip="Download Template" (click)="DownloadTemplate()">
+                            <mat-icon>cloud_download</mat-icon>
+                        </button>
+
+                       
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="isLoading" class="loading-overlay">
+  <img src="assets/Loading.gif" alt="Loading...">
+</div>
+
+<app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+  (close)="closePopup()"></app-alertpopup>
+

@@ -1,0 +1,61 @@
+<br />
+<div class="page-wrapper">
+    <div class="scrollable-content">
+        <div style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; min-width: 960px">
+            F&F Process
+        </div>
+
+        <div class="container py-4">
+
+            <div class="row g-3 align-items-end">
+
+                <mat-card-content [formGroup]="form">
+
+                    <div class="row g-3 mb-3">
+
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small">Company code</label>
+                            <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small">PayPeriod</label>
+                            <PayPeriod [selectedCompanyId]="selectedCompanyId" [payPeriodType]="payPeriodType"
+                                (payperiodEmit)="handlePayperiodEvent($event)"></PayPeriod>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small mb-0">Effective Date :<span
+                                    class="text-danger">*</span></label>
+                            <input type="date" class="form-control form-control-sm" formControlName="StartDate" />
+                        </div>
+
+
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small mb-0">Actual/Declared :<span
+                                    class="text-danger">*</span></label>
+                            <input type="text" class="form-control form-control-sm" />
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small mb-0">Month :<span
+                                    class="text-danger">*</span></label>
+                            <input type="text" class="form-control form-control-sm" />
+                        </div>
+                    </div>
+
+                </mat-card-content>
+
+                <mat-card-footer class="footer">
+                    <div class="d-flex justify-content-end mt-3">
+                        <button type="Process" class="btn btn-primary me-2 rounded-pill px-3">Process</button>
+                        <button type="ReProcess" class="btn btn-primary rounded-pill px-3">ReProcess</button>
+                    </div>
+                </mat-card-footer>
+            </div>
+        </div>
+    </div>
+</div>

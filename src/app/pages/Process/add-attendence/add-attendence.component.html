@@ -1,0 +1,154 @@
+<form novalidate>
+    <mat-card class="custom-card">
+        <mat-card-header class="sticky-header">
+            <br />
+            <mat-card-title style="color: #302CB3;"> Add Attendence </mat-card-title>
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="onClose()" class="no-border-icon">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+        <br />
+
+        <mat-card-content>
+            <!-- Form fields stay the same -->
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Company Code</label>
+                    <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Group</label>
+                    <select class="form-select form-select-sm">
+                        <option>Select</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Pay Sequence No</label>
+                    <select class="form-select form-select-sm">
+                        <option>Select</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Company Name</label>
+                    <input type="text" class="form-control form-control-sm" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Location</label>
+                    <input type="text" class="form-control form-control-sm" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Pay Period</label>
+                    <input type="text" class="form-control form-control-sm" />
+                </div>
+            </div>
+        </mat-card-content>
+
+        <!-- Table Wrapper -->
+        <div class="table-wrapper1">
+            <div class="col-md-3 d-flex gap-2">
+                <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Add"
+                    (click)="OnAddRow()">
+                    <mat-icon>add</mat-icon>
+                </button>
+                <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Delete"
+                    (click)="OnDeleteRow(uploadedData.length - 1)">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </div>
+            <div class="table-scroll">
+                <mat-table [dataSource]="uploadedDataSource" matSort
+                    class="custom-table mat-elevation-z8 auto-fit-table">
+                    <!-- Columns go here (as in your previous HTML) -->
+                    <ng-container matColumnDef="SNo">
+                        <mat-header-cell *matHeaderCellDef><strong>SNo</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['SNo'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Employee Id -->
+                    <ng-container matColumnDef="Employee Id">
+                        <mat-header-cell *matHeaderCellDef><strong>Employee Id</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Employee Id'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Employee Name -->
+                    <ng-container matColumnDef="Employee Name">
+                        <mat-header-cell *matHeaderCellDef><strong>Employee Name</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Employee Name'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Month Days -->
+                    <ng-container matColumnDef="Month Days">
+                        <mat-header-cell *matHeaderCellDef><strong>Month Days</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Month Days'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Loss Of Pay Days -->
+                    <ng-container matColumnDef="Loss Of Pay Days">
+                        <mat-header-cell *matHeaderCellDef><strong>Loss Of Pay Days</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Loss Of Pay Days'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Effective Date -->
+                    <ng-container matColumnDef="Effective Date">
+                        <mat-header-cell *matHeaderCellDef><strong>Effective Date</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Effective Date'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Arrear Pay Sequence No -->
+                    <ng-container matColumnDef="Arrear Pay Sequence No">
+                        <mat-header-cell *matHeaderCellDef><strong>Arrear Pay Sequence No</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Arrear Pay Sequence No'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Pay Period -->
+                    <ng-container matColumnDef="Pay Period">
+                        <mat-header-cell *matHeaderCellDef><strong>Pay Period</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Pay Period'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Arrear Month Days -->
+                    <ng-container matColumnDef="Arrear Month Days">
+                        <mat-header-cell *matHeaderCellDef><strong>Arrear Month Days</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Arrear Month Days'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Arrear Working Days -->
+                    <ng-container matColumnDef="Arrear Working Days">
+                        <mat-header-cell *matHeaderCellDef><strong>Arrear Working Days</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Arrear Working Days'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Encashment -->
+                    <ng-container matColumnDef="Encashment">
+                        <mat-header-cell *matHeaderCellDef><strong>Encashment</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Encashment'] }}</mat-cell>
+                    </ng-container>
+
+                    <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: uploadDisplayedColumns;"></mat-row>
+
+
+                </mat-table>
+            </div>
+
+            <div *ngIf="uploadedData.length === 0" class="text-center p-4">
+                <p class="text-muted">No data to display</p>
+            </div>
+
+            <mat-paginator [length]="uploadedData.length" [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"
+                showFirstLastButtons aria-label="Select page">
+            </mat-paginator>
+        </div>
+
+        <mat-card-footer class="footer">
+            <div class="d-flex justify-content-end mt-3">
+                <button type="reset" class="btn btn-primary me-2 rounded-pill px-3">Cancel</button>
+                <button type="button" class="btn btn-primary rounded-pill px-3">Save</button>
+            </div>
+        </mat-card-footer>
+    </mat-card>
+</form>
