@@ -664,7 +664,7 @@ export class TimesheetComponent {
       this.isLoading = false;
       return;
     }
-    fileInputDaily.value='';
+    fileInputDaily.value = '';
     fileInputDaily.click();
   }
 
@@ -699,9 +699,6 @@ export class TimesheetComponent {
             this.popupMessage = 'Import Successfully Done.';
           }
           else if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.Data.response === 'Failed to import.') {
-          else if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.Data.response === 'Failed to import.') {
-
-            const errorArray = JSON.parse(this.UploadedResponse.Data.errors[0]);
             const errorArray = JSON.parse(this.UploadedResponse.Data.errors[0]);
             const exportData = errorArray.map((item: any) => ({
               MESSAGE: item.MESSAGE || item.Message || ''
@@ -723,20 +720,21 @@ export class TimesheetComponent {
           else {
             if (this.UploadedResponse.Data.response != '') {
               alert(this.UploadedResponse.Data.response);
-            if (this.UploadedResponse.Data.response != '') {
-              alert(this.UploadedResponse.Data.response);
-              this.isLoading = false;
-            }
-            else {
-              alert('Error while processing response.');
-              this.isLoading = false;
-            }
+              if (this.UploadedResponse.Data.response != '') {
+                alert(this.UploadedResponse.Data.response);
+                this.isLoading = false;
+              }
+              else {
+                alert('Error while processing response.');
+                this.isLoading = false;
+              }
 
+            }
           }
-        },
-        error: err => {
-          console.error('❌ Upload failed', err);
-          this.isLoading = false;
+          error: err => {
+            console.error('❌ Upload failed', err);
+            this.isLoading = false;
+          }
         }
       });
 
@@ -1114,16 +1112,13 @@ export class TimesheetComponent {
       next: res => {
         this.UploadedResponse = res;
 
-        if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.Data.response === 'Data submitted successfully.') {
+
         if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.Data.response === 'Data submitted successfully.') {
           this.isLoading = false;
           this.showPopup = true;
           this.popupMessage = 'Daily Timesheet Saved Successfully Done.';
         }
         else if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.Data.response === 'Failed to import.') {
-        else if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.Data.response === 'Failed to import.') {
-
-          const errorArray = JSON.parse(this.UploadedResponse.Data.errors[0]);
           const errorArray = JSON.parse(this.UploadedResponse.Data.errors[0]);
           const exportData = errorArray.map((item: any) => ({
             MESSAGE: item.RESULT || item.Result || ''
@@ -1145,20 +1140,21 @@ export class TimesheetComponent {
         else {
           if (this.UploadedResponse.Data.response != '') {
             alert(this.UploadedResponse.Data.response);
-          if (this.UploadedResponse.Data.response != '') {
-            alert(this.UploadedResponse.Data.response);
-            this.isLoading = false;
-          }
-          else {
-            alert('Error while processing response.');
-            this.isLoading = false;
-          }
+            if (this.UploadedResponse.Data.response != '') {
+              alert(this.UploadedResponse.Data.response);
+              this.isLoading = false;
+            }
+            else {
+              alert('Error while processing response.');
+              this.isLoading = false;
+            }
 
+          }
         }
-      },
-      error: err => {
-        console.error("Error:", err);
-        this.isLoading = false;
+        error: err => {
+          console.error("Error:", err);
+          this.isLoading = false;
+        }
       }
     });
   }
@@ -1211,15 +1207,11 @@ export class TimesheetComponent {
         this.UploadedResponse = res;
 
         if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.Data.response === 'Data submitted successfully.') {
-        if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.Data.response === 'Data submitted successfully.') {
           this.isLoading = false;
           this.showPopup = true;
           this.popupMessage = 'Daily Timesheet Successfully Submitted.';
         }
         else if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.Data.response === 'Failed to import.') {
-        else if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.Data.response === 'Failed to import.') {
-
-          const errorArray = JSON.parse(this.UploadedResponse.Data.errors[0]);
           const errorArray = JSON.parse(this.UploadedResponse.Data.errors[0]);
           const exportData = errorArray.map((item: any) => ({
             MESSAGE: item.RESULT || item.Result || ''
@@ -1241,20 +1233,21 @@ export class TimesheetComponent {
         else {
           if (this.UploadedResponse.Data.response != '') {
             alert(this.UploadedResponse.Data.response);
-          if (this.UploadedResponse.Data.response != '') {
-            alert(this.UploadedResponse.Data.response);
-            this.isLoading = false;
-          }
-          else {
-            alert('Error while processing response.');
-            this.isLoading = false;
-          }
+            if (this.UploadedResponse.Data.response != '') {
+              alert(this.UploadedResponse.Data.response);
+              this.isLoading = false;
+            }
+            else {
+              alert('Error while processing response.');
+              this.isLoading = false;
+            }
 
+          }
         }
-      },
-      error: err => {
-        console.error("Error:", err);
-        this.isLoading = false;
+        error: err => {
+          console.error("Error:", err);
+          this.isLoading = false;
+        }
       }
     });
   }
