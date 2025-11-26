@@ -16,7 +16,7 @@ export interface IInvoiceRepository {
     ExportToExcel(val): Observable<APIResponse>;
     InitialSearch(val): Observable<APIResponse>;
     InitiationSearchExport(val): Observable<APIResponse>;
-    UploadReject(formData): Observable<APIResponse>;
+    UploadCancel(formData): Observable<APIResponse>;
     GetGSTInvoice(userId: number): Observable<APIResponse>;
     DownloadInvoice(invoiceId: number): Observable<HttpResponse<Blob>>;
     BulkDownloadInvoice(BulkInvoices: any): Observable<HttpResponse<Blob>>;

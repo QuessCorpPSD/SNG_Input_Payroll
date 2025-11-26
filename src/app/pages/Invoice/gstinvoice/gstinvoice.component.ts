@@ -16,6 +16,8 @@ import { IInvoiceRepository } from '../../../Repository/IInvoiceRepository';
 import { InvoiceRepository } from '../../../Service/InvoiceRepository'; import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { GstInvoiceGrid } from '../../../Models/GSTInvoiceGrid';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 
 export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOKEN');
@@ -23,7 +25,7 @@ export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOK
 @Component({
   selector: 'gstinvoice',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatCheckboxModule, MatPaginatorModule, MatSort, MatSelectModule, MatInputModule, MatFormFieldModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, MatTableModule, MatCheckboxModule, MatPaginatorModule, MatSort, MatSelectModule, MatInputModule, MatFormFieldModule, ReactiveFormsModule, FormsModule, MatDatepickerModule, MatNativeDateModule],
   templateUrl: './gstinvoice.component.html',
   styleUrl: './gstinvoice.component.css',
   providers: [{
@@ -58,8 +60,8 @@ export class GstinvoiceComponent {
     'select'
     , 'pdfdownload'
     , 'invoice_Number'
-    , 'sap_Invoice_Number'
-    , 'sap_Account_Number'
+    //, 'sap_Invoice_Number'
+    //, 'sap_Account_Number'
     , 'invoice_Date'
     , 'company_Code'
     , 'pay_Period'
@@ -68,11 +70,29 @@ export class GstinvoiceComponent {
     , 'invoiceType'
     , 'net_Amount'
     , 'status'
-    , 'sap_Cancel_Document'
-    , 'sap_Credit_Note_Document'
+    //, 'sap_Cancel_Document'
+    //, 'sap_Credit_Note_Document'
     , 'crn_Number'
   ];
 
+  filterDisplayedColumns: string[] = [
+    'filterselect'
+    , 'filterpdfdownload'
+    , 'filterinvoice_Number'
+    //, 'filtersap_Invoice_Number'
+    //, 'filtersap_Account_Number'
+    , 'filterinvoice_Date'
+    , 'filtercompany_Code'
+    , 'filterpay_Period'
+    , 'filtermap_Name'
+    , 'filtergroup_Name'
+    , 'filterinvoiceType'
+    , 'filternet_Amount'
+    , 'filterstatus'
+    //, 'filtersap_Cancel_Document'
+    //, 'filtersap_Credit_Note_Document'
+    , 'filtercrn_Number'
+  ]
   TemplateOptions = [
     { value: 'reject', Text: 'Reject' },
     { value: 'cancel', Text: 'Cancel' },
@@ -131,21 +151,20 @@ export class GstinvoiceComponent {
     this.userdetail = JSON.parse(this._decrypt.decrypt(userdetail!));
     this.BindDashBoard(this.userdetail.user_Id);
   }
-  applyFilter() {
-    this.dataSource.filter = this.searchText.trim().toLowerCase();
+  applyFilter(event: Event, column: string) {
+    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+
+    this.dataSource.filterPredicate = (data: any, filter: string) => {
+      return data[column]?.toString().toLowerCase().includes(filter);
+    };
+
+    this.dataSource.filter = filterValue;
   }
   BindDashBoard(userId: number) {
     this._invoiceService.GetGSTInvoice(userId).subscribe({
       next: res => {
         console.log(res);
-        // if (!res.Data || res.Data.length === 0) {
-        //   alert("No data available to display.");
-        //   this.isLoading = false;
-        //   return;
-        // }
-        //console.log(res.Data);
         this.dataSource = new MatTableDataSource<any>(res.Data);
-        //console.log(this.dataSource);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
         this.isLoading = false;
@@ -170,62 +189,12 @@ export class GstinvoiceComponent {
     FileSaver.saveAs(blob, fileName);
   }
 
-  onTemplateChange(): void {
-
-    if (this.selectedTemplate === "clear") {
-      this.selectedTemplate = "";
-    }
-    if (this.selectedTemplate === "reject" || this.selectedTemplate === "cancel") {
-      const dataToExport = this.templateDataMap[this.selectedTemplate];
-      if (!dataToExport) {
-        console.warn('No data.');
-        return;
-      }
+  TemplateClick(): void {
+      const dataToExport = [
+      { 'Invoice Number': '', 'Remarks': '', 'New Invoice Number': '' },
+    ]
       this.downloadExcel(dataToExport, "Template_" + this.selectedTemplate);
-    }
-    else {
-      alert("Template type not valid!");
-    }
   }
-
-  onRejectClick(fileInput: HTMLInputElement): void {
-    this.isLoading = true;
-    fileInput.click();
-  }
-
-  onFileChange(event: any): void {
-    this.selectedImport = 'Reject';
-    const target: DataTransfer = <DataTransfer>(event.target);
-
-    if (!target.files || target.files.length !== 1) {
-      console.error('Please upload only one Excel file.');
-      this.isLoading = false;
-      return;
-    }
-
-    const file = target.files[0];
-    this.excelFile = target.files[0];
-    const reader: FileReader = new FileReader();
-    reader.onload = (e: any) => {
-      const binaryStr: string = e.target.result;
-      try {
-        const workbook: XLSX.WorkBook = XLSX.read(binaryStr, { type: 'binary' });
-        const sheetName: string = workbook.SheetNames[0];
-        const sheet: XLSX.WorkSheet = workbook.Sheets[sheetName];
-        const jsonData = XLSX.utils.sheet_to_json(sheet);
-        const top100 = jsonData.slice(0, 100);
-        this.excelPreviewData = top100;  // 🔹 Store for popup preview
-        this.showPreviewModal = true;     // 🔹 Trigger modal
-        this.showSearchGrid = false;     // 🔹 Trigger modal
-        this.isLoading = false;
-      } catch (error) {
-        console.error('Error reading Excel file:', error);
-      }
-    };
-
-    reader.readAsBinaryString(file);
-  }
-
 
   onCancelClick(fileInput2: HTMLInputElement): void {
     this.isLoading = true;
@@ -233,7 +202,6 @@ export class GstinvoiceComponent {
   }
 
   onFileChange2(event: any): void {
-    this.selectedImport = 'Cancel';
     const target: DataTransfer = <DataTransfer>(event.target);
 
     if (!target.files || target.files.length !== 1) {
@@ -274,7 +242,6 @@ export class GstinvoiceComponent {
     }
     const formData = new FormData();
     if (this.excelFile) {
-      if (this.selectedImport == 'Reject') {
         formData.append('file', this.excelFile);
         formData.append('companyCode', this.companyUI.companyCode);
         formData.append('companyId', this.companyUI.companyId);
@@ -282,7 +249,7 @@ export class GstinvoiceComponent {
         // formData.append('payPeriod', this.payperiodUI.payPeriod);
         // formData.append('payPeriodId', this.payperiodUI.payfrequencyid);
 
-        this._invoiceService.UploadReject(formData).subscribe({
+        this._invoiceService.UploadCancel(formData).subscribe({
           next: res => {
             this.datatable = res.Data;
             console.table(this.datatable);
@@ -300,38 +267,10 @@ export class GstinvoiceComponent {
             this.isLoading = false;
           }
         });
-      }
-      else if (this.selectedImport = 'Cancel') {
-        formData.append('file', this.excelFile);
-        formData.append('companyCode', this.companyUI.companyCode);
-        formData.append('companyId', this.companyUI.companyId);
-        formData.append('userId', this.userdetail.user_Id);
-        // formData.append('payPeriod', this.payperiodUI.payPeriod);
-        // formData.append('payPeriodId', this.payperiodUI.payfrequencyid);
-
-        this._invoiceService.UploadReject(formData).subscribe({
-          next: res => {
-            this.datatable = res.Data;
-            console.table(this.datatable);
-            if (this.datatable && Array.isArray(this.datatable) && this.datatable.length > 0) {
-              this.downloadExcel(this.datatable, "Reject_Validations");
-              //this.BindDashBoard(this.companyUI.companyCode, this.payperiodUI.payPeriod);
-              this.isLoading = false;
-            } else {
-              alert("No validations returned");
-              this.isLoading = false;
-            }
-          },
-          error: err => {
-            console.error('❌ Upload failed', err);
+    }
+    else {
+        console.error('No Data');
             this.isLoading = false;
-          }
-        });
-      }
-      else {
-        alert("Invalid Import Type!");
-        this.isLoading = false;
-      }
     }
   }
 
@@ -344,7 +283,7 @@ export class GstinvoiceComponent {
     this.isLoading = true;
     this._invoiceService.DownloadInvoice(invoiceId).subscribe(response => {
       const contentDisposition = response.headers.get('Content-Disposition');
-      let fileName = invoice_Number + '_' + this.companyUI.displayName + '.pdf';
+      let fileName = invoice_Number + '.pdf';
 
       // Extract file name from header
       if (contentDisposition) {
@@ -381,7 +320,7 @@ export class GstinvoiceComponent {
     }
     this._invoiceService.BulkDownloadInvoice(BulkInvoices).subscribe(response => {
       const contentDisposition = response.headers.get('Content-Disposition');
-      let fileName = this.companyUI.displayName + '.zip';
+      let fileName = 'invoices.zip';
 
       // Extract file name from header
       if (contentDisposition) {
@@ -403,6 +342,28 @@ export class GstinvoiceComponent {
       this.isLoading = false;
     });
   }
+
+  applyDateFilter(event: any, column: string) {const filterValue = event.target.value.trim().toLowerCase();
+
+  this.dataSource.filterPredicate = (data: any, filter: string) => {
+    if (!filter) return true;
+
+    const rowDate = new Date(data[column]);
+    if (isNaN(rowDate.getTime())) return false;
+
+    // Convert row date → dd MMM yyyy
+    const formattedRowDate = rowDate.toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric'
+    }).replace(',', '').toLowerCase();  
+
+    return formattedRowDate.includes(filter);
+  };
+
+  this.dataSource.filter = filterValue;
+  };
+
 }
 
 

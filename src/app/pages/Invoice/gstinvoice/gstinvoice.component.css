@@ -5,19 +5,33 @@
   box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.1);
   z-index: 100;
 }
+  .page-wrapper {
+      display: flex;
+      align-items: flex-start;
+      height: auto;
+
+  }
+
+  .scrollable-content {
+      flex: 1 1 auto;
+      overflow-x: auto;
+      overflow-y: auto;
+      padding-left: 10px;
+  }
 .right-align {
     display: flex;
     justify-content: flex-end;
     padding-right: 20px;
     width: 100%;
 } 
+.custom-mat-table {
+  border: 1px solid #ddd;
+}
 
-
-.table-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding-top: 20px;
+.custom-mat-table th,
+.custom-mat-table td {
+  padding: 3px 5px;
+  white-space: nowrap;
 }
 
 .fixed-width-column {
@@ -27,28 +41,6 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  
-}
-
-.auto-width-column {
-  width: auto;
-  min-width: 250px;
-  word-wrap: break-word;
-}
-
-/* .custom-table {
-  background: white;
-  overflow: auto;
-  border: 1px solid #ddd;
-} */
-
-.custom-table {
-  background: white;
-  overflow-x: auto;
-  overflow-y: auto;
-  border: 1px solid #ddd;
-  max-height: 400px;   /* required for vertical scroll */
-  width: 100%;         /* or set a fixed width */
 }
 
 ::ng-deep .mat-elevation-z8 {
@@ -56,25 +48,25 @@
 }
 
 ::ng-deep .mat-mdc-header-cell {
+  position: sticky !important;
+  top: 0;
+  z-index: 10;
+  background: white;
   color: #A0A0A0;
   font-size: 12px;
   font-family: "Nunito Sans";
-  font-weight: 600;
+  font-weight: 500;
   line-height: 19.40px;
   word-wrap: break-word;
   border-right: 1px solid #ddd;
-  position: sticky;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   text-align: center;
-}
+} 
 
 ::ng-deep .mat-mdc-cell {
   font-family: "Nunito Sans";
   font-size: 12px;
   font-style: normal;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 22.4px;
   letter-spacing: 0.24px;
   color: #222;
@@ -85,19 +77,35 @@
   text-align: center;
   word-wrap: break-word;
 
-}
+} 
 
-.table-scroll {
-  max-height: 450px;
-  overflow-y: auto;
-  overflow-x: auto;
-}
-
-::ng-deep .mat-header-row {
-  position: sticky;
-  top: 0;
+.table-container {
+  width: 100%;
+  border: 1px solid #ddd;
   background: white;
-  z-index: 10;
+}
+
+/* This is your scroll window */
+.table-scroll-window {
+  max-height: 450px;     /* Set your desired height */
+  overflow-x: auto;       /* Horizontal scroll */
+  overflow-y: auto;       /* Vertical scroll */
+  width: 100%;
+  position: relative;
+}
+
+ .filter-row {
+  position: sticky;
+  top: 56px;
+  z-index: 9;
+  background: white;
+}
+
+ .header-row {
+  position: sticky !important;
+  top: 0;
+  background: white !important;
+  z-index: 100;
 }
 
 .offer-style {

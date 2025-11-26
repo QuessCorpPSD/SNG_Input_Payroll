@@ -112,14 +112,14 @@ export class InvoiceRepository implements IInvoiceRepository {
         return this.http.get<APIResponse>(url);
     }
 
-    UploadReject(formData): Observable<APIResponse> {
-        const url = `${this.environment.apiUrl}Onboarding/PostUploadReject`;
-        //console.log(url)
-        return this.http.post<APIResponse>(url, formData);
-    }
+    // UploadReject(formData): Observable<APIResponse> {
+    //     const url = `${this.environment.apiUrl}Onboarding/PostUploadReject`;
+    //     //console.log(url)
+    //     return this.http.post<APIResponse>(url, formData);
+    // }
 
     UploadCancel(formData): Observable<APIResponse> {
-        const url = `${this.environment.apiUrl}Onboarding/PostCancelReject`;
+        const url = `${this.environment.apiUrl}GSTInvoice/PostCancelReject`;
         //console.log(url)
         return this.http.post<APIResponse>(url, formData);
     }
@@ -128,14 +128,14 @@ export class InvoiceRepository implements IInvoiceRepository {
         //console.log(url);
         return this.http.get<APIResponse>(url);
     }
-    DownloadInvoice(invoiceId: number): Observable<HttpResponse<Blob>> {
-        const url = `${this.environment.apiUrl}GSTInvoice/Download/${invoiceId}`;
-        return this.http.get(url, { responseType: 'blob', observe: 'response' });
-    }
-    BulkDownloadInvoice(BulkInvoices: any): Observable<HttpResponse<Blob>> {
-        const url = `${this.environment.apiUrl}GSTInvoice/BulkDownload`;
-        console.log(url);
-        console.table(BulkInvoices);
-        return this.http.post(url, BulkInvoices, { responseType: 'blob', observe: 'response' });
-    }
+      DownloadInvoice(invoiceId: number): Observable<HttpResponse<Blob>> {
+    const url = `${this.environment.apiUrl}GSTInvoice/Download/${invoiceId}`;
+    return this.http.get(url, { responseType: 'blob', observe: 'response' });
+  }
+  BulkDownloadInvoice(BulkInvoices: any): Observable<HttpResponse<Blob>> {
+    const url = `${this.environment.apiUrl}GSTInvoice/BulkDownload`;
+    console.log(url);
+    console.table(BulkInvoices);
+    return this.http.post(url, BulkInvoices, { responseType: 'blob', observe: 'response' });
+  }
 }
