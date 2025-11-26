@@ -110,16 +110,23 @@
                 d="M14 4.577v6.846L8 15l-6-3.577V4.577L8 1zM8.5.134a1 1 0 0 0-1 0l-6 3.577a1 1 0 0 0-.5.866v6.846a1 1 0 0 0 .5.866l6 3.577a1 1 0 0 0 1 0l6-3.577a1 1 0 0 0 .5-.866V4.577a1 1 0 0 0-.5-.866z" />
             </svg>
           </i><span style="font-family: Nunito Sans;">Global Master</span> </a>
-
-        <a [routerLink]="['/Master/invoicenavigation']" class="nav-link" routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }"
-          [ngClass]="{ 'inactive-link': !isActive('/Master/invoicenavigation') }"><i>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person"
+        <a [routerLink]="['/Master/customer']" class="nav-link" routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }" [ngClass]="{ 'inactive-link': !isActive('/Master/customer') }"><i>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hexagon"
               viewBox="0 0 16 16">
               <path
-                d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z" />
+                d="M14 4.577v6.846L8 15l-6-3.577V4.577L8 1zM8.5.134a1 1 0 0 0-1 0l-6 3.577a1 1 0 0 0-.5.866v6.846a1 1 0 0 0 .5.866l6 3.577a1 1 0 0 0 1 0l6-3.577a1 1 0 0 0 .5-.866V4.577a1 1 0 0 0-.5-.866z" />
             </svg>
-          </i><span style="font-family: Nunito Sans;">Invoice</span> </a>
+          </i><span style="font-family: Nunito Sans;">Customer</span> </a>
+        <a [routerLink]="['/Master/process']" class="nav-link" routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          [ngClass]="{ 'inactive-link': !isActive('/Master/app-revok') }"><i>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hexagon"
+              viewBox="0 0 16 16">
+              <path
+                d="M14 4.577v6.846L8 15l-6-3.577V4.577L8 1zM8.5.134a1 1 0 0 0-1 0l-6 3.577a1 1 0 0 0-.5.866v6.846a1 1 0 0 0 .5.866l6 3.577a1 1 0 0 0 1 0l6-3.577a1 1 0 0 0 .5-.866V4.577a1 1 0 0 0-.5-.866z" />
+            </svg>
+          </i><span style="font-family: Nunito Sans;">Process</span> </a>
 
         <a [routerLink]="['/Master/ponavigation']" class="nav-link" routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
@@ -137,15 +144,17 @@
 
 
           </i><span style="font-family: Nunito Sans;">PO Process</span> </a>
-        <a [routerLink]="['/Master/process']" class="nav-link" routerLinkActive="active"
+
+        <a [routerLink]="['/Master/invoicenavigation']" class="nav-link" routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
-          [ngClass]="{ 'inactive-link': !isActive('/Master/app-revok') }"><i>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hexagon"
+          [ngClass]="{ 'inactive-link': !isActive('/Master/invoicenavigation') }"><i>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person"
               viewBox="0 0 16 16">
               <path
-                d="M14 4.577v6.846L8 15l-6-3.577V4.577L8 1zM8.5.134a1 1 0 0 0-1 0l-6 3.577a1 1 0 0 0-.5.866v6.846a1 1 0 0 0 .5.866l6 3.577a1 1 0 0 0 1 0l6-3.577a1 1 0 0 0 .5-.866V4.577a1 1 0 0 0-.5-.866z" />
+                d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z" />
             </svg>
-          </i><span style="font-family: Nunito Sans;">Process</span> </a>
+          </i><span style="font-family: Nunito Sans;">Invoice</span> </a>
+
 
         <a [routerLink]="['/Master/SalaryRelease']" class="nav-link" routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
@@ -173,27 +182,19 @@
 
           </i><span style="font-family: Nunito Sans;">Salary Advance Module</span> </a>
 
-        <a [routerLink]="['/Master/process']" class="nav-link" routerLinkActive="active"
+        <!-- <a [routerLink]="['/Master/process']" class="nav-link" routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }" [ngClass]="{ 'inactive-link': !isActive('/Master/process') }"><i>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none"
               stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <!-- Document shape with folded corner -->
+              
               <path d="M5 3h9l5 5v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z" />
               <path d="M14 3v5h5" />
 
-              <!-- Text lines -->
               <path d="M7 11h7" />
               <path d="M7 14h5" />
             </svg>
-          </i><span style="font-family: Nunito Sans;">Process</span> </a>
-        <a [routerLink]="['/Master/customer']" class="nav-link" routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }" [ngClass]="{ 'inactive-link': !isActive('/Master/customer') }"><i>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hexagon"
-              viewBox="0 0 16 16">
-              <path
-                d="M14 4.577v6.846L8 15l-6-3.577V4.577L8 1zM8.5.134a1 1 0 0 0-1 0l-6 3.577a1 1 0 0 0-.5.866v6.846a1 1 0 0 0 .5.866l6 3.577a1 1 0 0 0 1 0l6-3.577a1 1 0 0 0 .5-.866V4.577a1 1 0 0 0-.5-.866z" />
-            </svg>
-          </i><span style="font-family: Nunito Sans;">Customer</span> </a>
+          </i><span style="font-family: Nunito Sans;">Process</span> </a> -->
+
 
         <a [routerLink]="['/Master/reports']" class="nav-link" routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }" [ngClass]="{ 'inactive-link': !isActive('/Master/reports') }"><i>
