@@ -1,0 +1,250 @@
+<br />
+<form [formGroup]="Cpfform" novalidate>
+    <div class="page-wrapper">
+        <div class="scrollable-content">
+
+            <div style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; min-width: 960px">
+                CPF Slab Details
+            </div>
+
+            <div class="container py-4">
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-3">
+                        <label class="form-label">Category<span class="text-danger">*</span></label>
+                        <select class="form-select form-select-sm" formControlName="Category">
+                            <option value="">-- Select --</option>
+                            <option *ngFor="let cat of categories" [value]="cat.spr_status_id">
+                                {{ cat.spr_status }}
+                            </option>
+                        </select>
+                    </div>
+
+
+
+                    <div class="col-md-3 d-flex gap-2">
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Search"
+                            (click)="onSearchClick()">
+                            <mat-icon>search</mat-icon>
+                        </button>
+
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                            matTooltip="Export to Excel" (click)="exportToExcel()">
+                            <mat-icon>table_chart</mat-icon>
+                        </button>
+
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Add"
+                            (click)="AddPOOpen()">
+                            <mat-icon>add</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-wrapper1" style="min-width: 960px;" *ngIf="showTable">
+                <div class="table-scroll">
+
+                    <mat-table [dataSource]="uploadedDataSource" matSort
+                        class="custom-table mat-elevation-z8 auto-fit-table">
+
+                        <!-- ✅ FIXED ACTION COLUMN -->
+                        <ng-container matColumnDef="Action">
+                            <mat-header-cell *matHeaderCellDef><strong>Action</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                    matTooltip="Delete">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+
+                                <!-- If you want edit later, uncomment:
+                            <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Edit">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                            -->
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="SNo">
+                            <mat-header-cell *matHeaderCellDef><strong>SNo</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row['SNo'] }}</mat-cell>
+                        </ng-container>
+
+                        <!-- PayCodeId -->
+                        <ng-container matColumnDef="PayCodeId">
+                            <mat-header-cell *matHeaderCellDef><strong>PayCodeId</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row['PayCodeId'] }}</mat-cell>
+                        </ng-container>
+
+                        <!-- PayCode -->
+                        <ng-container matColumnDef="PayCode">
+                            <mat-header-cell *matHeaderCellDef><strong>PayCode</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row['PayCode'] }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Description -->
+                        <ng-container matColumnDef="Description">
+                            <mat-header-cell *matHeaderCellDef><strong>Description</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row['Description'] }}</mat-cell>
+                        </ng-container>
+
+                        <!-- CopyType -->
+                        <ng-container matColumnDef="CopyType">
+                            <mat-header-cell *matHeaderCellDef><strong>CopyType</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row['CopyType'] }}</mat-cell>
+                        </ng-container>
+
+                        <!-- From_Age -->
+                        <ng-container matColumnDef="From_Age">
+                            <mat-header-cell *matHeaderCellDef><strong>From Age</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row['From_Age'] }}</mat-cell>
+                        </ng-container>
+
+                        <!-- To_Age -->
+                        <ng-container matColumnDef="To_Age">
+                            <mat-header-cell *matHeaderCellDef><strong>To Age</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row['To_Age'] }}</mat-cell>
+                        </ng-container>
+
+                        <!-- From_Value -->
+                        <ng-container matColumnDef="From_Value">
+                            <mat-header-cell *matHeaderCellDef><strong>From Value</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row['From_Value'] }}</mat-cell>
+                        </ng-container>
+
+                        <!-- To_Value -->
+                        <ng-container matColumnDef="To_Value">
+                            <mat-header-cell *matHeaderCellDef><strong>To Value</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row['To_Value'] }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Criteria_Type_Name -->
+                        <ng-container matColumnDef="Criteria_Type_Name">
+                            <mat-header-cell *matHeaderCellDef><strong>Criteria Type Name</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row['Criteria_Type_Name'] }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Criteria -->
+                        <ng-container matColumnDef="Criteria">
+                            <mat-header-cell *matHeaderCellDef><strong>Criteria</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row['Criteria'] }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Formula -->
+                        <ng-container matColumnDef="Formula">
+                            <mat-header-cell *matHeaderCellDef><strong>Formula</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row['Formula'] }}</mat-cell>
+                        </ng-container>
+
+                        <!-- EffectiveDate -->
+                        <ng-container matColumnDef="EffectiveDate">
+                            <mat-header-cell *matHeaderCellDef><strong>Effective Date</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row['EffectiveDate'] }}</mat-cell>
+                        </ng-container>
+
+                        <!-- =================== FILTER ROWS =================== -->
+
+                        <ng-container matColumnDef="filter_Action">
+                            <mat-header-cell *matHeaderCellDef class="filter-cell"></mat-header-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="filter_SNo">
+                            <mat-header-cell *matHeaderCellDef class="filter-cell"></mat-header-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="filter_PayCodeId">
+                            <mat-header-cell *matHeaderCellDef class="filter-cell">
+                                <input matInput placeholder="Search PayCodeId"
+                                    (keyup)="applyFilter($event, 'PayCodeId')">
+                            </mat-header-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="filter_PayCode">
+                            <mat-header-cell *matHeaderCellDef class="filter-cell">
+                                <input matInput placeholder="Search PayCode" (keyup)="applyFilter($event, 'PayCode')">
+                            </mat-header-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="filter_Description">
+                            <mat-header-cell *matHeaderCellDef class="filter-cell">
+                                <input matInput placeholder="Search Description"
+                                    (keyup)="applyFilter($event, 'Description')">
+                            </mat-header-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="filter_CopyType">
+                            <mat-header-cell *matHeaderCellDef class="filter-cell">
+                                <input matInput placeholder="Search CopyType" (keyup)="applyFilter($event, 'CopyType')">
+                            </mat-header-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="filter_From_Age">
+                            <mat-header-cell *matHeaderCellDef class="filter-cell">
+                                <input matInput placeholder="Search From Age" (keyup)="applyFilter($event, 'From_Age')">
+                            </mat-header-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="filter_To_Age">
+                            <mat-header-cell *matHeaderCellDef class="filter-cell">
+                                <input matInput placeholder="Search To Age" (keyup)="applyFilter($event, 'To_Age')">
+                            </mat-header-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="filter_From_Value">
+                            <mat-header-cell *matHeaderCellDef class="filter-cell">
+                                <input matInput placeholder="Search From Value"
+                                    (keyup)="applyFilter($event, 'From_Value')">
+                            </mat-header-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="filter_To_Value">
+                            <mat-header-cell *matHeaderCellDef class="filter-cell">
+                                <input matInput placeholder="Search To Value" (keyup)="applyFilter($event, 'To_Value')">
+                            </mat-header-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="filter_Criteria_Type_Name">
+                            <mat-header-cell *matHeaderCellDef class="filter-cell">
+                                <input matInput placeholder="Search Criteria Type Name"
+                                    (keyup)="applyFilter($event, 'Criteria_Type_Name')">
+                            </mat-header-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="filter_Criteria">
+                            <mat-header-cell *matHeaderCellDef class="filter-cell">
+                                <input matInput placeholder="Search Criteria" (keyup)="applyFilter($event, 'Criteria')">
+                            </mat-header-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="filter_Formula">
+                            <mat-header-cell *matHeaderCellDef class="filter-cell">
+                                <input matInput placeholder="Search Formula" (keyup)="applyFilter($event, 'Formula')">
+                            </mat-header-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="filter_EffectiveDate">
+                            <mat-header-cell *matHeaderCellDef class="filter-cell">
+                                <input matInput placeholder="Search Effective Date"
+                                    (keyup)="applyFilter($event, 'EffectiveDate')">
+                            </mat-header-cell>
+                        </ng-container>
+
+
+                        <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+                        <mat-header-row *matHeaderRowDef="filterDisplayedColumns" class="filter-row"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: uploadDisplayedColumns;"></mat-row>
+
+                    </mat-table>
+
+                    <div *ngIf="uploadedData.length === 0" class="text-center p-4">
+                        <p class="text-muted">No data to display</p>
+                    </div>
+
+                </div>
+
+                <mat-paginator [length]="uploadedData.length" [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"
+                    showFirstLastButtons>
+                </mat-paginator>
+            </div>
+        </div>
+    </div>
+
+</form>
