@@ -1,0 +1,261 @@
+<div style="padding-top:25px;">
+    <payrollinput [visibleDropdowns]="[1, 2]" [showSearchButton]="true"
+        [payPeriodTypefromParent]="payPeriodTypefromParentall" (companyUI)="handleCompanyEvent($event)"
+        (payperiodUI)="handlePayperiodEvent($event)" (searchClicked)="searchClick()">
+    </payrollinput>
+</div>
+<div style="float:right;padding-top: 25px;">
+    <div
+        style="display: inline-block; margin-right: 10px; align-items: center; border-radius: 10px; border: 1px solid #e9e9e9; width: 180px; height: 35px; background-color: white; padding: 5px 10px 0px 10px; box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.12);">
+        <i style="margin-right: 6px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 12 12" fill="none">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M8.30883 9.01596C7.539 9.63177 6.5625 10 5.5 10C3.01472 10 1 7.98528 1 5.5C1 3.01472 3.01472 1 5.5 1C7.98528 1 10 3.01472 10 5.5C10 6.56251 9.63176.53901 9.01594 8.30885L10.8535 10.1465C11.0488 10.3417 11.0488 10.6583 10.8535 10.8536C10.6583 11.0488 10.3417 11.0488 10.1464 10.8536L8.30883 9.01596ZM2 5.5C2 3.567 3.567 2 5.5 2C7.433 2 9 3.567 9 5.5C9 6.44299 8.62707 7.29888 8.02066 7.92823C8.00355 7.94139 7.98711 7.95579 7.97144 7.97146C7.95578 7.98712 7.94137 8.00357 7.92822 8.02067C7.29887 8.62708 6.44299 9 5.5 9C3.567 9 2 7.433 2 5.5Z"
+                    fill="#7E7E7E" />
+            </svg>
+        </i>
+
+        <input type="text" [(ngModel)]="searchText" (input)="applyFilter()" placeholder="Search"
+            style="border: none; outline: none; width: 80%; font-size: 12px; background-color: transparent;" />
+    </div>
+    <!-- <div style="display: inline-block; margin-right: 10px;">
+                <label style="position: relative; display: inline-block;">
+                    <button class="select-drop">
+                        Export
+                    </button>
+                    <i
+                        style="position: absolute; top: 50%; right: 15px; transform: translateY(-50%); pointer-events: none;">
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M2 2.5C2.27614 2.5 2.5 2.72386 2.5 3C2.5 3.27614 2.27614 3.5 2 3.5H1.5C1.22386 3.5 1 3.27614 1 3C1 2.72386 1.22386 2.5 1.5 2.5H2Z"
+                                fill="#7E7E7E" />
+                            <path
+                                d="M4 2.5C3.72386 2.5 3.5 2.72386 3.5 3C3.5 3.27614 3.72386 3.5 4 3.5H10.5C10.7761 3.5 11 3.27614 11 3C11 2.72386 10.7761 2.5 10.5 2.5H4Z"
+                                fill="#7E7E7E" />
+                            <path
+                                d="M4 5.5C3.72386 5.5 3.5 5.72386 3.5 6C3.5 6.27614 3.72386 6.5 4 6.5H10.5C10.7761 6.5 11 6.27614 11 6C11 5.72386 10.7761 5.5 10.5 5.5H4Z"
+                                fill="#7E7E7E" />
+                            <path
+                                d="M3.5 9C3.5 8.72386 3.72386 8.5 4 8.5H10.5C10.7761 8.5 11 8.72386 11 9C11 9.27614 10.7761 9.5 10.5 9.5H4C3.72386 9.5 3.5 9.27614 3.5 9Z"
+                                fill="#7E7E7E" />
+                            <path
+                                d="M2.5 6C2.5 5.72386 2.27614 5.5 2 5.5H1.5C1.22386 5.5 1 5.72386 1 6C1 6.27614 1.22386 6.5 1.5 6.5H2C2.27614 6.5 2.5 6.27614 2.5 6Z"
+                                fill="#7E7E7E" />
+                            <path
+                                d="M2 8.5C2.27614 8.5 2.5 8.72386 2.5 9C2.5 9.27614 2.27614 9.5 2 9.5H1.5C1.22386 9.5 1 9.27614 1 9C1 8.72386 1.22386 8.5 1.5 8.5H2Z"
+                                fill="#7E7E7E" />
+                        </svg>
+
+                    </i>
+                </label>
+            </div> -->
+    <!-- <div *ngIf="selectedRowsCount > 1" style="display: inline-block; margin-right: 10px;">
+                <label style="position: relative; display: inline-block;">
+                    <button class="select-drop" (click)="Mergeclick()">
+                        Merge
+                    </button>
+                    <i
+                        style="position: absolute; top: 50%; right: 15px; transform: translateY(-50%); pointer-events: none;">
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M5.77652 0.552786C5.91728 0.482405 6.08296 0.482405 6.22373 0.552786L11.2237 3.05279C11.3931 3.13748 11.5001 3.31061 11.5001 3.5C11.5001 3.68939 11.3931 3.86252 11.2237 3.94721L6.22373 6.44721C6.08296 6.5176 5.91728 6.5176 5.77652 6.44721L0.776515 3.94721C0.607123 3.86252 0.500122 3.68939 0.500122 3.5C0.500122 3.31061 0.607123 3.13748 0.776515 3.05279L5.77652 0.552786ZM2.11816 3.5L6.00012 5.44098L9.88209 3.5L6.00012 1.55902L2.11816 3.5Z"
+                                fill="#7E7E7E" />
+                            <path
+                                d="M0.552896 8.27638C0.676391 8.02939 0.976727 7.92928 1.22372 8.05277L6.00011 10.441L10.7765 8.05277C11.0235 7.92928 11.3238 8.02939 11.4473 8.27638C11.5708 8.52337 11.4707 8.82371 11.2237 8.9472L6.22372 11.4472C6.08295 11.5176 5.91727 11.5176 5.7765 11.4472L0.776503 8.9472C0.529513 8.82371 0.429401 8.52337 0.552896 8.27638Z"
+                                fill="#7E7E7E" />
+                            <path
+                                d="M1.22372 5.55277C0.976727 5.42928 0.676391 5.52939 0.552896 5.77638C0.429401 6.02337 0.529513 6.32371 0.776503 6.4472L5.7765 8.9472C5.91727 9.01758 6.08295 9.01758 6.22372 8.9472L11.2237 6.4472C11.4707 6.32371 11.5708 6.02337 11.4473 5.77638C11.3238 5.52939 11.0235 5.42928 10.7765 5.55277L6.00011 7.94097L1.22372 5.55277Z"
+                                fill="#7E7E7E" />
+                        </svg>
+
+                    </i>
+                </label>
+            </div> -->
+    <!-- <div style="display: inline-block; margin-right: 10px;">
+                <label style="position: relative; display: inline-block;">
+                    <button class="select-drop" (click)="downloadExcel()">
+                        Split
+                    </button>
+                    <i
+                        style="position: absolute; top: 50%; right: 15px; transform: translateY(-50%); pointer-events: none;">
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M7 1.5C7 1.22386 7.22386 1 7.5 1H10C10.2761 1 10.5 1.22386 10.5 1.5V4C10.5 4.27614 10.2761 4.5 10 4.5C9.72386 4.5 9.5 4.27614 9.5 4V2.70711L1.85355 10.3536C1.65829 10.5488 1.34171 10.5488 1.14645 10.3536C0.951184 10.1583 0.951184 9.84171 1.14645 9.64645L8.79289 2H7.5C7.22386 2 7 1.77614 7 1.5Z"
+                                fill="#7E7E7E" />
+                            <path
+                                d="M10.5 8C10.5 7.72386 10.2761 7.5 10 7.5C9.72386 7.5 9.5 7.72386 9.5 8V9.29289L7.35355 7.14645C7.15829 6.95118 6.84171 6.95118 6.64645 7.14645C6.45118 7.34171 6.45118 7.65829 6.64645 7.85355L8.79289 10H7.5C7.22386 10 7 10.2239 7 10.5C7 10.7761 7.22386 11 7.5 11H10C10.2761 11 10.5 10.7761 10.5 10.5V8Z"
+                                fill="#7E7E7E" />
+                            <path
+                                d="M1.85355 1.64645C1.65829 1.45118 1.34171 1.45118 1.14645 1.64645C0.951184 1.84171 0.951184 2.15829 1.14645 2.35355L3.64645 4.85355C3.84171 5.04882 4.15829 5.04882 4.35355 4.85355C4.54882 4.65829 4.54882 4.34171 4.35355 4.14645L1.85355 1.64645Z"
+                                fill="#7E7E7E" />
+                        </svg>
+
+                    </i>
+                </label>
+            </div>
+            <div style="display: inline-block; margin-right: 10px;">
+                <label style="position: relative; display: inline-block;">
+                    <button class="select-drop" (click)="onImportClick(fileInput)"> 
+                        Import
+                    </button>
+                    <i
+                        style="position: absolute; top: 50%; right: 15px; transform: translateY(-50%); pointer-events: none;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                            <path
+                                d="M5.64645 0.646447C5.84171 0.451184 6.15829 0.451184 6.35355 0.646447L8.35355 2.64645C8.54882 2.84171 8.54882 3.15829 8.35355 3.35355C8.15829 3.54882 7.84171 3.54882 7.64645 3.35355L6.5 2.20711V8C6.5 8.27614 6.27614 8.5 6 8.5C5.72386 8.5 5.5 8.27614 5.5 8V2.20711L4.35355 3.35355C4.15829 3.54882 3.84171 3.54882 3.64645 3.35355C3.45118 3.15829 3.45118 2.84171 3.64645 2.64645L5.64645 0.646447Z"
+                                fill="#7E7E7E" />
+                            <path
+                                d="M1.5 8C1.77614 8 2 8.22386 2 8.5V10C2 10.2761 2.22386 10.5 2.5 10.5H9.5C9.77614 10.5 10 10.2761 10 10V8.5C10 8.22386 10.2239 8 10.5 8C10.7761 8 11 8.22386 11 8.5V10C11 10.8284 10.3284 11.5 9.5 11.5H2.5C1.67157 11.5 1 10.8284 1 10V8.5C1 8.22386 1.22386 8 1.5 8Z"
+                                fill="#7E7E7E" />
+                        </svg>
+                    </i>
+                </label>
+                <input type="file" #fileInput style="display: none;" accept=".xlsx, .xls"
+                                    (change)="onFileChange($event)" /> 
+            </div> -->
+    <div style="display: inline-block; margin-right: 10px;">
+        <button (click)="InvoiceInitiateClick()"
+            style="width: 130px; height: 40px; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex;border: none;">
+            <div
+                style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
+                Invoice Request</div>
+        </button>
+    </div>
+</div>
+<div class="table-wrap">
+    <div class="table-scroll">
+        <table class="ts">
+            <!-- HEADER ROW 1: fixed cols + date numbers -->
+            <thead>
+                <tr class="head-1">
+                    <th class="sel"></th>
+                    <th class="sl">Lot No</th>
+                    <th class="sl">Input No</th>
+                    <th style="display: none;">Map_Name_Id</th>
+                    <th class="Map">Map Name</th>
+                    <th class="hc">Head Count</th>
+                    <th class="net">Net Pay</th>
+                    <th class="sub">CTC</th>
+                    <th style="display: none;">Invoice_Category_Id</th>
+                    <th style="display: none;" class="ic">Invoice Culture</th>
+                    <th style="display: none;">Data From</th>
+                    <!-- <th class="sel">Revoke</th>
+                            <th class="remarks">Remark</th> -->
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let r of filteredRows; trackBy: trackRow">
+                    <td class="sel">
+                        <!-- <mat-checkbox [(ngModel)]="r.selected" (change)="onCheckboxChange(r, $event)">
+                                </mat-checkbox> -->
+                        <mat-checkbox [(ngModel)]="r.selected">
+                        </mat-checkbox>
+                    </td>
+                    <td class="sl">{{ r.LotNo }}</td>
+                    <td class="sl">{{ r.Input_No }}</td>
+                    <td style="display: none;">{{ r.Map_Name_Id }} /td>
+                    <td class="Map">{{ r.Map_name }}</td>
+                    <td class="hc">
+                        <span class="box-green">{{ r.Employee_Head_Count }}</span>
+                    </td>
+                    <td class="net">{{ r.NetPay }}</td>
+                    <td class="net">{{ r.Net_CTC }}</td>
+                    <td style="display: none;">{{ r.Invoice_Category_Id }} </td>
+                    <td style="display: none;" class="ic">{{ r.Invoice_Category }}</td>
+                    <td style="display: none;">{{ r.Data_From }} </td>
+                    <!-- <td class="sel"><img src="../../../../assets/Icons/hand_revoke.svg" alt="Revoke"></td>
+                            <td class="remarks"></td> -->
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div *ngIf="showPopup" class="overlay"></div>
+<app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+    (close)="showPopup = false"></app-alertpopup>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>
+
+<div class="overlaymerge" *ngIf="ismerge">
+    <div style="width: 490px; background: white; border-radius: 10px; 
+              border: 1px #D6D6D6 solid; display: flex; flex-direction: column; position: relative;">
+
+        <!-- Header -->
+        <div style="height: 60px; padding: 10px 20px; border-bottom: 1px #D6D6D6 solid; 
+                display: flex; align-items: center; justify-content: center; position: relative;">
+
+            <div style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; 
+                  font-weight: 700;">
+                Merge Assignment
+            </div>
+
+            <!-- Close button -->
+            <button (click)="ismerge = false" style="position: absolute; top: 15px; right: 15px; background: transparent; 
+                     border: none; font-size: 25px; font-weight: 700; cursor: pointer; color: #888;">
+                &times;
+            </button>
+        </div>
+        <!-- Body -->
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 10px;">
+            <div style="display: flex; justify-content: center; width: 100%;">
+                <img style="width: 100px; height: 100px;" src="/assets/Merge.gif" />
+            </div>
+            <div style="padding: 8px 16px; background: white; border-radius: 6px; 
+                  outline: 1px #DEDDE0 solid; display: flex; flex-wrap: wrap; 
+                  align-items: center; gap: 10px;">
+                <div style="color: #222222; font-size: 12px; font-family: Nunito Sans; 
+                    font-weight: 600; line-height: 20px;">
+                    Lot Number :
+                </div>
+                <div *ngFor="let num of assignments"
+                    style="color: #222222; font-size: 12px; font-family: Nunito Sans; font-weight: 600;">
+                    {{ num }}
+                </div>
+            </div>
+            <div style="width: 431px; display: flex; flex-direction: column; gap: 10px;">
+                <label style="font-size: 14px; font-family: Nunito Sans; font-weight: 600; color: #1F2937;">
+                    Remarks
+                </label>
+                <input type="text" maxlength="100" [(ngModel)]="MergeRemarks" style="width: 431px; padding: 8px; border: none; border-radius: 8px; 
+                 outline: 1px #E5E7EB solid; background: white; font-size: 14px;
+                 box-shadow: 0px 1px 2px rgba(0,0,0,0.05);" />
+            </div>
+        </div>
+        <!-- Footer -->
+        <div style="padding: 14px 20px; background: #F9F9F9; border-top: 1px #D6D6D6 solid; 
+                border-radius: 0 0 10px 10px; display: flex; justify-content: center;">
+            <button style="height: 32px; padding: 0px 16px; background: #302CB3; 
+                     color: white; font-size: 12px; font-family: Nunito Sans; 
+                     font-weight: 600; border: none; border-radius: 6px; cursor: pointer;">
+                <!-- (click)="MergeSubmit()"> -->
+                Submit
+            </button>
+        </div>
+    </div>
+</div>
+<div class="overlaymerge" *ngIf="isattributes">
+    <!-- attributes.component.html -->
+    <div class="attributes-modal">
+        <div class="header">
+            <div class="title">Attributes</div>
+            <button (click)="isattributes = false" class="close-btn">&times;</button>
+        </div>
+
+        <div class="body">
+            <div class="attributes-grid">
+                <div class="attr-item" *ngFor="let attr of attributes">
+                    <label class="checkbox-label">
+                        <input type="checkbox" [(ngModel)]="attr.selected" />
+                        <span>{{ attr.name }}</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <button class="template-btn" (click)="AttributesTemplateclick()">Template</button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,187 @@
+<mat-card class="custom-card">
+    <div class="scrollable-content">
+        <mat-card-header class="sticky-header">
+            <br />
+            <div
+                style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700;  padding-right: 580px; padding-bottom:10px ;">
+                Copy Company Paycode Mapping</div>
+
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="onClose()" class="no-border-icon">
+                <mat-icon>close</mat-icon>
+            </button>
+
+        </mat-card-header>
+
+        <mat-card-content>
+            <div class="row align-items-end">
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Company Code <span style="color:red">*</span></label>
+                    <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+
+
+                    <!-- <small
+                    *ngIf="companypaycodeform.get('companycode')?.invalid && companypaycodeform.get('companycode')?.touched"
+                    style="color:red;">
+                    Company code is required
+                </small> -->
+                </div>
+                <div class="col-md-3 d-flex gap-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Add"
+                        (click)="AddPOOpen()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Insert"
+                        (click)="insertRow()">
+                        <mat-icon>post_add</mat-icon>
+                    </button>
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Delete"
+                        (click)="deleteSelectedRow()">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+
+                </div>
+            </div>
+            <div class="table-wrapper1" style="padding-right: 60px;">
+                <br />
+                <div class="table-scroll">
+                    <mat-table [dataSource]="uploadedDataSource" matSort
+                        class="custom-table mat-elevation-z8 auto-fit-table">
+                        <ng-container matColumnDef="SNo">
+                            <mat-header-cell *matHeaderCellDef class="col-sno"><strong>SNo</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row;let i = index" class="col-sno">{{i+1}}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Paycode">
+                            <mat-header-cell *matHeaderCellDef><strong>Paycode</strong></mat-header-cell>
+
+                            <mat-cell *matCellDef="let row; let i = index">
+                                <select class="form-select form-select-sm" style="width:130px; padding:2px 4px;"
+                                    [(ngModel)]="row.Paycode_Id" (ngModelChange)="onPaycodeSelect($event, i)">
+                                    <option *ngFor="let pc of paycodeList" [ngValue]="pc.Paycode_Id">
+                                        {{ pc.Paycode_Code }}
+                                    </option>
+                                </select>
+
+                            </mat-cell>
+                        </ng-container>
+
+
+                        <ng-container matColumnDef="Description">
+                            <mat-header-cell *matHeaderCellDef><strong>Description</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.Description }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Paytype">
+                            <mat-header-cell *matHeaderCellDef><strong>Pay Type</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.PayType }}</mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="formula">
+                            <mat-header-cell *matHeaderCellDef><strong>Formula</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row"><input style="border: none;" /></mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="taxable">
+                            <mat-header-cell *matHeaderCellDef><strong>Taxable</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                {{ row.Taxable}}
+                            </mat-cell>
+
+                        </ng-container>
+
+
+                        <ng-container matColumnDef="LopApplicable">
+                            <mat-header-cell *matHeaderCellDef><strong>LOP Applicable</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                {{ row.LOP_Applicable}}
+                            </mat-cell>
+
+                        </ng-container>
+
+                        <ng-container matColumnDef="PfApplicable">
+                            <mat-header-cell *matHeaderCellDef><strong>PF Applicable</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                {{ row.PF_Applicable}}
+                            </mat-cell>
+
+                        </ng-container>
+
+                        <ng-container matColumnDef="ESIApplicable">
+                            <mat-header-cell *matHeaderCellDef><strong>ESI Applicable</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                {{ row.ESI_Applicable}}
+                            </mat-cell>
+
+                        </ng-container>
+
+
+                        <ng-container matColumnDef="PTApplicable">
+                            <mat-header-cell *matHeaderCellDef><strong>PT Applicable</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                {{ row.PT_Applicable}}
+                            </mat-cell>
+
+                        </ng-container>
+
+
+                        <ng-container matColumnDef="Earnedpaycode">
+                            <mat-header-cell *matHeaderCellDef><strong>Earned Paycode</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row.EarnedPaycode_Code }}</mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="Pickfrom">
+                            <mat-header-cell *matHeaderCellDef><strong>Pick From</strong></mat-header-cell>
+
+                            <mat-cell *matCellDef="let row; let i = index">
+
+                                <select class="form-select form-select-sm" style="width:130px; padding:2px 4px;"
+                                    [(ngModel)]="row.Company_Paycode_Pick_From_Id"
+                                    (ngModelChange)="onPickFromSelect($event, i)">
+                                    <option *ngFor="let pf of pickfromlist" [ngValue]="pf.Company_Paycode_Pick_From_Id">
+                                        {{ pf.Company_Paycode_Pick_From_Value }}
+                                    </option>
+                                </select>
+                            </mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; let i = index; columns: uploadDisplayedColumns"
+                            (click)="selectRow(i)" [class.selected-row]="selectedRowIndex === i">
+                        </mat-row>
+
+                    </mat-table>
+                </div>
+
+                <div *ngIf="uploadedDataSource.data.length === 0" class="text-center p-4">
+                    <p class="text-muted">No data to display</p>
+                </div>
+
+                <mat-paginator [length]="uploadedDataSource.data.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
+                    showFirstLastButtons aria-label="Select page">
+                </mat-paginator>
+            </div>
+        </mat-card-content>
+
+        <mat-card-footer class="footer">
+            <div class="d-flex justify-content-end mt-3">
+                <div class="btn-1"
+                    style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
+
+                    <button type="Cancel"
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0;"
+                        (click)="onClose()">
+                        Cancel
+                    </button>
+
+                    <button type="submit"
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white; ">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </mat-card-footer>
+    </div>
+</mat-card>
+
+<app-alertpopup *ngIf="showPopup" [message]="popupMessage" class="centered-popup"
+    (close)="closePopup()">
+</app-alertpopup>

@@ -100,6 +100,8 @@ import { DepartmentComponent } from './pages/customers/department/department.com
 import { DesignationComponent } from './pages/customers/designation/designation.component';
 import { BandDetailsComponent } from './pages/customers/band-details/band-details.component';
 import { CostCenterMappingComponent } from './pages/customers/cost-center-mapping/cost-center-mapping.component';
+import { CompanypaycodemappingComponent } from './pages/customers/companypaycodemapping/companypaycodemapping.component';
+import { ProvisionalinvoiceComponent } from './pages/Invoice/provisionalinvoice/provisionalinvoice.component';
 
 
 
@@ -208,6 +210,7 @@ export const routes: Routes = [
         component: InvoicenavigationComponent,
         children: [
           { path: 'initiate', component: InitiateComponent },
+          { path: 'provisionalinvoice', component: ProvisionalinvoiceComponent },
           { path: 'perfomainvoice', component: PerfomainvoiceComponent },
           { path: 'billabledays', component: BillableDaysComponent },
           { path: 'gstinvoice', component: GstinvoiceComponent }
@@ -231,6 +234,7 @@ export const routes: Routes = [
           { path: "designation", component: DesignationComponent, },
           { path: "BandDetails", component: BandDetailsComponent, },
           { path: "CostCenterMapping", component: CostCenterMappingComponent, },
+          { path: 'companypaycodemapping', component: CompanypaycodemappingComponent },
         ]
       },
       {

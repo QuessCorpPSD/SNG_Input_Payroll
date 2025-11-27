@@ -1,0 +1,121 @@
+<mat-card class="custom-card">
+    <div class="scrollable-content">
+
+        <mat-card-header class="sticky-header">
+            <br />
+            <div style="color:#302CB3; font-size:22px; font-family:Nunito Sans; font-weight:700; padding-right:500px;">
+                Add
+            </div>
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="onClose()" class="no-border-icon">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+
+        <mat-card-content>
+            <div class="table-wrapper1">
+                <div class="table-scroll">
+                    <mat-table [dataSource]="uploadedDataSource" matSort
+                        class="custom-table mat-elevation-z8 auto-fit-table" style="padding-right: 50px;">
+
+                        <!-- Select All Checkbox in Header -->
+                        <ng-container matColumnDef="Checkbox">
+                            <mat-header-cell *matHeaderCellDef class="col-sno">
+                                <mat-checkbox (change)="onSelectAllChange($event)"></mat-checkbox>
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let row" class="col-sno">
+                                <mat-checkbox [checked]="isChecked(row)"
+                                    (change)="onCheckboxChange($event, row)"></mat-checkbox>
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Other Columns -->
+                        <ng-container matColumnDef="Paycode">
+                            <mat-header-cell *matHeaderCellDef
+                                style="min-width: 100px!important;"><strong>Paycode</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row;" style="min-width: 100px!important;">{{ row.Paycode_Code
+                                }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Description">
+                            <mat-header-cell *matHeaderCellDef
+                                style="min-width: 280px!important;"><strong>Description</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row;" style="min-width: 280px!important;">{{ row.Description
+                                }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Paytype">
+                            <mat-header-cell *matHeaderCellDef style="min-width: 100px!important;"><strong>Pay
+                                    Type</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row" style="min-width: 100px!important;">{{ row.PayType
+                                }}</mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="FilterCheckbox">
+                            <mat-header-cell *matHeaderCellDef class="col-sno"></mat-header-cell>
+                        </ng-container>
+
+                        <!-- Other Columns -->
+                        <ng-container matColumnDef="FilterPaycode">
+                            <mat-header-cell *matHeaderCellDef style="min-width: 100px!important;"> <input matInput
+                                    placeholder="Search"  (keyup)="applyFilter($event, 'Paycode')"></mat-header-cell>
+
+                        </ng-container>
+
+                        <ng-container matColumnDef="FilterDescription">
+                            <mat-header-cell *matHeaderCellDef style="min-width: 270px!important;">
+                                <input matInput placeholder="Search" style="min-width: 270px!important;"
+                                    (keyup)="applyFilter($event, 'Description')"></mat-header-cell>
+
+                        </ng-container>
+
+                        <ng-container matColumnDef="FilterPaytype">
+                            <mat-header-cell *matHeaderCellDef style="min-width: 100px!important;"> <input matInput
+                                    placeholder="Search" style="min-width: 100px!important;" (keyup)="applyFilter($event, 'Paytype')"></mat-header-cell>
+
+                        </ng-container>
+
+                        <!-- Table Header and Row -->
+                        <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+                        <mat-header-row *matHeaderRowDef="filterDisplayedColumns" class="filter-row"></mat-header-row>
+
+                        <mat-row *matRowDef="let row; columns: uploadDisplayedColumns;"></mat-row>
+
+                    </mat-table>
+
+                </div>
+
+                <div *ngIf="uploadedDataSource.data.length === 0" class="text-center p-4">
+                    <p class="text-muted">No data to display</p>
+                </div>
+
+                <!-- <mat-paginator [length]="uploadedDataSource.data.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
+                    showFirstLastButtons aria-label="Select page">
+                </mat-paginator> -->
+            </div>
+        </mat-card-content>
+
+        <mat-card-footer class="footer">
+            <div class="d-flex justify-content-end mt-3">
+                <div class="btn-1"
+                    style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
+                    <button type="button"
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0;"
+                        (click)="onCancel()">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white;"
+                        (click)="onSave()">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </mat-card-footer>
+    </div>
+</mat-card>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>
+
+<app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+    (close)="closePopup()"></app-alertpopup>

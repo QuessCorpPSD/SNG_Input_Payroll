@@ -6,17 +6,20 @@
         <div style="width: 100%;">
                 <div class="Categorylist">
                         <ul class="horizontal-list">
-                                <li><a [routerLink]="['/Master/invoicenavigation/perfomainvoice']" class="nav-link"
+                                <!-- <li><a [routerLink]="['/Master/invoicenavigation/perfomainvoice']" class="nav-link"
                                                 routerLinkActive="selectedInput"
-                                                [routerLinkActiveOptions]="{ exact: true }">Invoice Request</a></li>
+                                                [routerLinkActiveOptions]="{ exact: true }">Invoice Request</a></li>  -->
+                                <li><a [routerLink]="['/Master/invoicenavigation/provisionalinvoice']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Provisional Invoice</a></li>
 
                                 <li><a [routerLink]="['/Master/invoicenavigation/billabledays']" class="nav-link"
                                                 routerLinkActive="selectedInput"
                                                 [routerLinkActiveOptions]="{ exact: true }">Billable days</a></li>
-                                                
+
                                 <li><a [routerLink]="['/Master/invoicenavigation/initiate']" class="nav-link"
                                                 routerLinkActive="selectedInput"
-                                                [routerLinkActiveOptions]="{ exact: true }">Invoice Initiate</a></li>
+                                                [routerLinkActiveOptions]="{ exact: true }">Draft Invoice</a></li>
 
                                 <li><a [routerLink]="['/Master/invoicenavigation/gstinvoice']" class="nav-link"
                                                 routerLinkActive="selectedInput"
