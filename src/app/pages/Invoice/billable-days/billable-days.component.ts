@@ -159,6 +159,18 @@ export class BillableDaysComponent implements OnInit {
 
   }
   BillableSearch() {
+    if (!this.selectedCompanyId)
+    {
+      alert("Please select Company Code");
+      return;
+    }
+
+    if (!this.payPeriod)
+    {
+      alert("Please select PayPeriod");
+      return;
+    }
+
     this.issearch=1;
     const request = {
       "Company_Id": this.selectedCompanyId,

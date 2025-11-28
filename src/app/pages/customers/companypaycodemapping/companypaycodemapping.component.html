@@ -1,0 +1,161 @@
+<!-- Add this somewhere in your Angular template/component -->
+<br />
+<div class="page-wrapper">
+
+    <div class="scrollable-content">
+        <div
+            style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; min-width: 960px; padding-left: 25px;">
+            Company PayCode Mapping
+        </div>
+
+        <div class="container-fluid g-2" style="min-width: 960px;">
+            <div class="card-body g-2">
+                <div class="row align-items-end">
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Company Code</label>
+                        <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+                    </div>
+                    <div class="col-md-3 d-flex gap-2">
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Search"
+                            (click)="onsearch()">
+                            <mat-icon>search</mat-icon>
+                        </button>
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Create"
+                            (click)="AddPOOpen()">
+                            <mat-icon>add</mat-icon>
+                        </button>
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                            matTooltip="Export to Excel" (click)="exportToExcel()">
+                            <mat-icon>table_chart</mat-icon>
+                        </button>
+
+                        <button class="btn btn-sm" matTooltip="Edit" (click)="EditOpen()">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <button class="btn btn-sm" matTooltip="Copy" (click)="CopyOpen()">
+                            <mat-icon>content_copy</mat-icon>
+                        </button>
+
+                        <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                matTooltip="Download Template">
+                                <mat-icon>cloud_download</mat-icon>
+                            </button>
+                            <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                matTooltip="Import">
+                                <mat-icon>cloud_upload</mat-icon>
+                            </button>
+                            <input type="file" #fileInput style="display: none;" (click)="fileInput.value=''"
+                                accept=".xlsx, .xls" /> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-wrapper1" *ngIf="isuploadgridvisible" style="min-width: 960px;">
+            <br />
+            <div class="col-md-3 d-flex gap-2">
+
+            </div>
+
+            <div class="table-scroll">
+                <mat-table [dataSource]="dataSource" matSort class="custom-table mat-elevation-z8 auto-fit-table">
+
+                    <!-- SNo -->
+                    <ng-container matColumnDef="SNo">
+                        <mat-header-cell *matHeaderCellDef class="col-sno"><strong>SNo</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="col-sno">{{ row.SNo }}</mat-cell>
+                    </ng-container>
+
+                    <!-- CompanyCode -->
+                    <ng-container matColumnDef="CompanyCode">
+                        <mat-header-cell *matHeaderCellDef><strong>Company Code</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Company_Code }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Paycode -->
+                    <ng-container matColumnDef="Paycode">
+                        <mat-header-cell *matHeaderCellDef><strong>Paycode</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Paycode_Code }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Description -->
+                    <ng-container matColumnDef="Description">
+                        <mat-header-cell *matHeaderCellDef><strong>Description</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Description }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Paytype -->
+                    <ng-container matColumnDef="Paytype">
+                        <mat-header-cell *matHeaderCellDef><strong>Pay Type</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.PayType }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Taxable -->
+                    <ng-container matColumnDef="taxable">
+                        <mat-header-cell *matHeaderCellDef><strong>Taxable</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Taxable }}</mat-cell>
+                    </ng-container>
+
+                    <!-- LopApplicable -->
+                    <ng-container matColumnDef="LopApplicable">
+                        <mat-header-cell *matHeaderCellDef><strong>LOP Applicable</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.LOP_Applicable }}</mat-cell>
+                    </ng-container>
+
+                    <!-- PfApplicable -->
+                    <ng-container matColumnDef="PfApplicable">
+                        <mat-header-cell *matHeaderCellDef><strong>PF Applicable</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.PF_Applicable }}</mat-cell>
+                    </ng-container>
+
+                    <!-- ESIApplicable -->
+                    <ng-container matColumnDef="ESIApplicable">
+                        <mat-header-cell *matHeaderCellDef><strong>ESI Applicable</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.ESI_Applicable }}</mat-cell>
+                    </ng-container>
+
+                    <!-- PTApplicable -->
+                    <ng-container matColumnDef="PTApplicable">
+                        <mat-header-cell *matHeaderCellDef><strong>PT Applicable</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.PT_Applicable }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Earnedpaycode -->
+                    <ng-container matColumnDef="Earnedpaycode">
+                        <mat-header-cell *matHeaderCellDef><strong>Earned Paycode</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.EarnedPaycode_Code }}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="Pickfrom">
+                        <mat-header-cell *matHeaderCellDef><strong>Pick From</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Pick_From }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Header and Row -->
+                    <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: uploadDisplayedColumns" (click)="onRowClick(row)"
+                        [class.selected-row]="row === selectedRow">
+                    </mat-row>
+
+                </mat-table>
+            </div>
+
+            <!-- No data message -->
+            <div *ngIf="dataSource.data.length === 0" class="text-center p-4">
+                <p class="text-muted">No data to display</p>
+            </div>
+
+            <mat-paginator [length]="dataSource.data.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
+                showFirstLastButtons aria-label="Select page">
+            </mat-paginator>
+        </div>
+
+
+
+    </div>
+</div>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>
+<app-alertpopup *ngIf="showAlert" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+    (close)="closePopup()">
+</app-alertpopup>
