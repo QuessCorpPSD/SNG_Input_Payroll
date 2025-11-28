@@ -168,6 +168,10 @@
     }
 }
 
+.col-sno{
+    width: 15px;
+}
+
 
 .loading-overlay {
   position: fixed;

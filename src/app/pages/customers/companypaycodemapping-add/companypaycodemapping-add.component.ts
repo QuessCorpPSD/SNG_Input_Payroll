@@ -34,7 +34,7 @@ export class CompanypaycodemappingAddComponent {
   paycodeList: any[] = [];   // ← NEW
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  uploadDisplayedColumns: string[] = ['SNo', 'Paycode', 'Description', 'Paytype', 'taxable', 'LopApplicable', 'PfApplicable', 'ESIApplicable', 'PTApplicable', 'Earnedpaycode', 'Pickfrom'];
+  uploadDisplayedColumns: string[] = ['SNo', 'Paycode', 'Description', 'Paytype', 'taxable', 'LopApplicable', 'PfApplicable', 'ESIApplicable', 'PTApplicable', 'Earnedpaycode', 'Pickfrom', 'formula'];
   uploadedData: any[] = [];
   uploadedDataSource = new MatTableDataSource(this.uploadedData);
   selectedRowIndex: number | null = null;
@@ -241,6 +241,13 @@ export class CompanypaycodemappingAddComponent {
 
     // Move selection to new empty row
     this.selectedRowIndex = null;
+  }
+
+  onFormulaChange(value: string, rowIndex: number) {
+    this.uploadedData[rowIndex].Formula = value;
+    this.uploadedDataSource.data = [...this.uploadedData];
+
+    console.log("Formula updated for row:", rowIndex, "Value:", value);
   }
 
   savePaycodeDetails() {

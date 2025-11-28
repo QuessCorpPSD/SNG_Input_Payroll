@@ -154,6 +154,14 @@
                                 </select>
                             </mat-cell>
                         </ng-container>
+                        <ng-container matColumnDef="formula">
+                            <mat-header-cell *matHeaderCellDef><strong>Formula</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row; let i = index">
+                                <input type="text" [(ngModel)]="uploadedData[i].Formula"
+                                    (ngModelChange)="onFormulaChange($event, i)" rows="3" placeholder="Enter Formula"
+                                    class="form-control"/>
+                            </mat-cell>
+                        </ng-container>
 
                         <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
                         <mat-row *matRowDef="let row; let i = index; columns: uploadDisplayedColumns"

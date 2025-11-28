@@ -129,6 +129,10 @@
                         <mat-header-cell *matHeaderCellDef><strong>Pick From</strong></mat-header-cell>
                         <mat-cell *matCellDef="let row">{{ row.Pick_From }}</mat-cell>
                     </ng-container>
+                    <ng-container matColumnDef="formula">
+                        <mat-header-cell *matHeaderCellDef ><strong>Formula</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Formula }}</mat-cell>
+                    </ng-container>
 
                     <!-- Header and Row -->
                     <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>

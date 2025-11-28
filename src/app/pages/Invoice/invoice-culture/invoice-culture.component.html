@@ -1,0 +1,116 @@
+<div class="container py-4">
+  <div class="row g-3 align-items-end">
+
+    <div class="col-md-3">
+      <label class="form-label text-muted small">Company Code</label>
+      <CompanyPicker (companyEmit)="handleCompanyEvent($event)"></CompanyPicker>
+    </div>
+
+    <div class="col-md-3 d-flex gap-2">
+      <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Search"
+        (click)="SearchClick()">
+        <mat-icon>search</mat-icon>
+      </button>
+
+      <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Add"
+        (click)="AddPOOpen()">
+        <mat-icon>add</mat-icon>
+      </button>
+      <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="export to excel">
+        <mat-icon>table_chart</mat-icon>
+      </button>
+
+      <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Import">
+        <mat-icon>cloud_upload</mat-icon>
+      </button>
+
+      <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Template">
+        <mat-icon>cloud_download</mat-icon>
+      </button>
+
+    </div> 
+
+  </div>
+</div>
+
+
+<div class="table-wrapper1" *ngIf="isTableVisible">
+  <div class="table-scroll">
+
+    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+      <!-- serial_No -->
+      <ng-container matColumnDef="serial_No">
+        <mat-header-cell *matHeaderCellDef>S.No</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.serial_No }}</mat-cell>
+      </ng-container>
+
+      <!-- company_Code -->
+      <ng-container matColumnDef="company_Code">
+        <mat-header-cell *matHeaderCellDef>Company Code</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.company_Code }}</mat-cell>
+      </ng-container>
+
+      <!-- company_Name -->
+      <ng-container matColumnDef="company_Name">
+        <mat-header-cell *matHeaderCellDef>Company Name</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.company_Name }}</mat-cell>
+      </ng-container>
+
+      <!-- invoiceCul_Ref_No -->
+      <ng-container matColumnDef="invoiceCul_Ref_No">
+        <mat-header-cell *matHeaderCellDef>Ref No</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.invoiceCul_Ref_No }}</mat-cell>
+      </ng-container>
+
+      <!-- invoiceType -->
+      <ng-container matColumnDef="invoiceType">
+        <mat-header-cell *matHeaderCellDef>Invoice Type</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.invoiceType }}</mat-cell>
+      </ng-container>
+
+      <!-- map_Name -->
+      <ng-container matColumnDef="map_Name">
+        <mat-header-cell *matHeaderCellDef>Map Name</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.map_Name }}</mat-cell>
+      </ng-container>
+
+      <!-- type_Of_Invoice -->
+      <ng-container matColumnDef="type_Of_Invoice">
+        <mat-header-cell *matHeaderCellDef>Type Of Invoice</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.type_Of_Invoice }}</mat-cell>
+      </ng-container>
+
+      <!-- city_Name -->
+      <ng-container matColumnDef="city_Name">
+        <mat-header-cell *matHeaderCellDef>City</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.city_Name }}</mat-cell>
+      </ng-container>
+
+      <!-- invoice_Category_Name -->
+      <ng-container matColumnDef="invoice_Category_Name">
+        <mat-header-cell *matHeaderCellDef>Invoice Category</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.invoice_Category_Name }}</mat-cell>
+      </ng-container>
+
+      <!-- state_Name -->
+      <ng-container matColumnDef="state_Name">
+        <mat-header-cell *matHeaderCellDef>State</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.state_Name }}</mat-cell>
+      </ng-container>
+
+      <!-- header + row -->
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+    </table>
+
+  </div>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+
+</div>
+
+<app-alertpopup *ngIf="showPopup" [message]="popupMessage" class="centered-popup"
+    (close)="closePopup()"></app-alertpopup>
+

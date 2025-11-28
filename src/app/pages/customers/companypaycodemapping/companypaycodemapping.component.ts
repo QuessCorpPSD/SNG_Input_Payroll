@@ -36,7 +36,7 @@ export class CompanypaycodemappingComponent {
   uploadDisplayedColumns: string[] = [
     'SNo', 'CompanyCode', 'Paycode', 'Description', 'Paytype',
     'taxable', 'LopApplicable', 'PfApplicable', 'ESIApplicable',
-    'PTApplicable', 'Earnedpaycode', 'Pickfrom'
+    'PTApplicable', 'Earnedpaycode', 'Pickfrom', 'formula'
   ];
   uploadedData: any[] = [];
   dataSource = new MatTableDataSource<any>();
@@ -148,11 +148,6 @@ export class CompanypaycodemappingComponent {
           this.dataSource = new MatTableDataSource(this.Companypaycode);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
-          this.uploadDisplayedColumns = [
-            'SNo', 'CompanyCode', 'Paycode', 'Description', 'Paytype',
-            'taxable', 'LopApplicable', 'PfApplicable', 'ESIApplicable',
-            'PTApplicable', 'Earnedpaycode', 'Pickfrom'
-          ];
         } else {
           this.isLoading = false;
           this.dataSource.data = [];
