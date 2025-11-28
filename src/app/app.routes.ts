@@ -102,6 +102,7 @@ import { BandDetailsComponent } from './pages/customers/band-details/band-detail
 import { CostCenterMappingComponent } from './pages/customers/cost-center-mapping/cost-center-mapping.component';
 import { CompanypaycodemappingComponent } from './pages/customers/companypaycodemapping/companypaycodemapping.component';
 import { ProvisionalinvoiceComponent } from './pages/Invoice/provisionalinvoice/provisionalinvoice.component';
+import { POInitiateComponent } from './pages/Invoice/poinitiate/poinitiate.component';
 
 
 
@@ -213,7 +214,8 @@ export const routes: Routes = [
           { path: 'provisionalinvoice', component: ProvisionalinvoiceComponent },
           { path: 'perfomainvoice', component: PerfomainvoiceComponent },
           { path: 'billabledays', component: BillableDaysComponent },
-          { path: 'gstinvoice', component: GstinvoiceComponent }
+          { path: 'gstinvoice', component: GstinvoiceComponent },
+          { path: 'poinitiate', component: POInitiateComponent },
         ]
       },
 
