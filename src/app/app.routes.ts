@@ -102,6 +102,7 @@ import { BandDetailsComponent } from './pages/customers/band-details/band-detail
 import { CostCenterMappingComponent } from './pages/customers/cost-center-mapping/cost-center-mapping.component';
 import { SDLslabDetailComponent } from './pages/GlobalMasters/sdlslab-detail/sdlslab-detail.component';
 import { CPFslabDetailsComponent } from './pages/GlobalMasters/cpfslab-details/cpfslab-details.component';
+import { GSTComponent } from './pages/GlobalMasters/gst/gst.component';
 
 
 
@@ -288,6 +289,7 @@ export const routes: Routes = [
           { path: "shgslabdetail", component: ShgslabdetailComponent },
           { path: "SDLslabDetail", component: SDLslabDetailComponent },
           { path: "CPFslabDetails", component: CPFslabDetailsComponent },
+          { path: "gst", component: GSTComponent },
         ]
 
       },

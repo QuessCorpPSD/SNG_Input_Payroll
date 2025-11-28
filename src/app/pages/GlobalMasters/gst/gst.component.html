@@ -1,0 +1,121 @@
+<br />
+<div class="page-wrapper">
+
+    <div class="scrollable-content">
+        <div
+            style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; min-width: 960px; padding-left: 25px;">
+            GST List
+        </div>
+        <br />
+
+        <div class="table-wrapper1" style="min-width: 960px;">
+            <div class="col-md-3 d-flex gap-2">
+                <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Create"
+                    (click)="AddPOOpen()">
+                    <mat-icon>add</mat-icon>
+                </button>
+
+                <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Export">
+                    <mat-icon>table_chart</mat-icon>
+                </button>
+            </div>
+            <br />
+
+            <div class="table-scroll">
+                <mat-table [dataSource]="uploadedDataSource" matSort
+                    class="custom-table mat-elevation-z8 auto-fit-table">
+
+                    <!-- Action Column -->
+                    <!-- <ng-container matColumnDef="Action">
+                        <mat-header-cell *matHeaderCellDef><strong>Action</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                            <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                matTooltip="Details">
+                                <mat-icon>information</mat-icon>
+                            </button>
+                            <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                matTooltip="edit" (click)="editopen()">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                        </mat-cell>
+                    </ng-container> -->
+
+                    <!-- GST Master Id -->
+                    <ng-container matColumnDef="GST Master Id">
+                        <mat-header-cell *matHeaderCellDef><strong>GST Master Id</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['GstMasterId'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Effective Date -->
+                    <ng-container matColumnDef="Effective Date">
+                        <mat-header-cell *matHeaderCellDef><strong>Effective Date</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['EffectiveDate'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Quess Legal Entity -->
+                    <ng-container matColumnDef="Quess Legal Entity">
+                        <mat-header-cell *matHeaderCellDef><strong>Quess Legal Entity</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Quess Legal Entity'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Gst Type -->
+                    <ng-container matColumnDef="Gst Type">
+                        <mat-header-cell *matHeaderCellDef><strong>Gst Type</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Gst Type'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- State Name -->
+                    <ng-container matColumnDef="State Name">
+                        <mat-header-cell *matHeaderCellDef><strong>State Name</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['State Name'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- GST Number -->
+                    <ng-container matColumnDef="GST Number">
+                        <mat-header-cell *matHeaderCellDef><strong>GST Number</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['GstNumber'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- PAN Number -->
+                    <ng-container matColumnDef="PAN Number">
+                        <mat-header-cell *matHeaderCellDef><strong>PAN Number</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['PAN Number'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- TAN Number -->
+                    <ng-container matColumnDef="TAN Number">
+                        <mat-header-cell *matHeaderCellDef><strong>TAN Number</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['TAN Number'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Company Name -->
+                    <ng-container matColumnDef="Company Name">
+                        <mat-header-cell *matHeaderCellDef><strong>Company Name</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['CompanyName'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Company Address -->
+                    <ng-container matColumnDef="Company Address">
+                        <mat-header-cell *matHeaderCellDef><strong>Company Address</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['CompanyAddress'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Table Header & Row Definitions -->
+                    <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: uploadDisplayedColumns"></mat-row>
+                </mat-table>
+            </div>
+
+            <!-- No Data Message -->
+            <div *ngIf="uploadedData.length === 0" class="text-center p-4">
+                <p class="text-muted">No data to display</p>
+            </div>
+
+            <!-- Paginator -->
+            <mat-paginator [length]="uploadedData.length" [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"
+                showFirstLastButtons aria-label="Select page">
+            </mat-paginator>
+        </div>
+
+    </div>
+</div>

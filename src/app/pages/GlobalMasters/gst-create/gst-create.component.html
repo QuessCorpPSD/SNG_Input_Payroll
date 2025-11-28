@@ -1,0 +1,179 @@
+<form novalidate>
+    <mat-card class="custom-card">
+        <mat-card-header class="sticky-header">
+            <div
+                style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; padding-right: 600px;">
+                Create GST Master
+            </div>
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="onClose()" class="no-border-icon">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+
+        <mat-card-content>
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">GST Master Id</label>
+                    <span style="color: red;">*</span>
+                    <input class="form-control form-control-sm" value="0" readonly />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Effective Date</label>
+                    <span style="color: red;">*</span>
+                    <input type="date" class="form-control form-control-sm" [(ngModel)]="EffectiveDate"
+                        name="EffectiveDate" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">GST Number</label>
+                    <span style="color: red;">*</span>
+                    <input class="form-control form-control-sm" [(ngModel)]="GSTNumber"
+                        name="GSTNumber" />
+                </div>
+                <!-- <div class="col-md-4">
+                    <label class="form-label text-muted small">GST Type*</label>
+                    <select class="form-select form-select-sm">
+                        <option>-Select-</option>
+
+                    </select>
+                </div> -->
+                <!-- <div class="col-md-4">
+                    <label class="form-label text-muted small">Quess Legal Entity*</label>
+                    <input class="form-control form-control-sm" placeholder="QUESS" />
+                </div> -->
+            </div>
+
+            <div class="row g-3 mb-3">
+
+                <!-- <div class="col-md-4">
+                    <label class="form-label text-muted small">State Name*</label>
+                    <select class="form-select form-select-sm">
+                        <option>-Select-</option>
+                    </select>
+                </div> -->
+
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Company Name</label>
+                    <span style="color: red;">*</span>
+                    <input class="form-control form-control-sm" [(ngModel)]="CompanyName"
+                        name="CompanyName"/>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Company Address</label>
+                    <span style="color: red;">*</span>
+                    <input class="form-control form-control-sm" [(ngModel)]="CompanyAddress"
+                        name="CompanyAddress"/>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Pin Code</label>
+                    <span style="color: red;">*</span>
+                    <input class="form-control form-control-sm" [(ngModel)]="PinCode"
+                        name="PinCode"/>
+                </div>
+            </div>
+
+            <div style="display: none;" class="row g-3 mb-3">
+                <!-- <div class="col-md-4">
+                    <label class="form-label text-muted small">PAN Number*</label>
+                    <input class="form-control form-control-sm" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">TAN Number*</label>
+                    <input class="form-control form-control-sm" />
+                </div> -->
+
+            </div>
+
+            <div class="row g-3 mb-3">
+                <!-- <div class="col-md-4">
+                    <label class="form-label text-muted small">Location*</label>
+                    <input class="form-control form-control-sm" />
+                </div> -->
+
+                <div class="col-md-4 d-flex flex-column align-items-start">
+                    <div class="d-flex align-items-center mb-1">
+                        <label for="cgstCheck" class="form-label text-muted small mb-0">GST Percentage</label>
+                        <span style="color: red;">*</span>
+                    </div>
+                    <input type="number" class="form-control form-control-sm w-100" [(ngModel)]="cgstPercentage"
+                        name="cgstPercentage" />
+                </div>
+            </div>
+
+            <div style="display: none;" class="row g-3 mb-3">
+
+                <!-- CGST -->
+                <!-- <div class="col-md-4 d-flex flex-column align-items-start">
+                    <div class="d-flex align-items-center mb-1">
+                        <input type="checkbox" id="cgstCheck" class="me-2" [(ngModel)]="cgstApplicable"
+                            name="cgstApplicable" (change)="toggleField('cgst')" />
+                        <label for="cgstCheck" class="form-label text-muted small mb-0">CGST Percentage</label>
+                    </div>
+                    <input type="number" class="form-control form-control-sm w-100" [(ngModel)]="cgstPercentage"
+                        name="cgstPercentage" [disabled]="!cgstApplicable" />
+                </div> -->
+
+                <!-- SGST -->
+                <!-- <div class="col-md-4 d-flex flex-column align-items-start">
+                    <div class="d-flex align-items-center mb-1">
+                        <input type="checkbox" id="sgstCheck" class="me-2" [(ngModel)]="sgstApplicable"
+                            name="sgstApplicable" (change)="toggleField('sgst')" />
+                        <label for="sgstCheck" class="form-label text-muted small mb-0">SGST Percentage</label>
+                    </div>
+                    <input type="number" class="form-control form-control-sm w-100" [(ngModel)]="sgstPercentage"
+                        name="sgstPercentage" [disabled]="!sgstApplicable" />
+                </div> -->
+                <!-- UTGST -->
+                <!-- <div class="col-md-4 d-flex flex-column align-items-start">
+                    <div class="d-flex align-items-center mb-1">
+                        <input type="checkbox" id="utgstCheck" class="me-2" [(ngModel)]="utgstApplicable"
+                            name="utgstApplicable" (change)="toggleField('utgst')" />
+                        <label for="utgstCheck" class="form-label text-muted small mb-0">UTGST Percentage</label>
+                    </div>
+                    <input type="number" class="form-control form-control-sm w-100" [(ngModel)]="utgstPercentage"
+                        name="utgstPercentage" [disabled]="!utgstApplicable" />
+                </div> -->
+
+
+            </div>
+
+            <!-- Cess -->
+
+
+            <!-- ✅ Cess Effective Dates -->
+            <!-- <div class="row g-3 mb-3">
+                <div class="col-md-4 ">
+                    <label class="form-label text-muted small">Cess Percentage</label>
+                    <input type="number" class="form-control form-control-sm" [(ngModel)]="cessPercentage"
+                        name="cessPercentage" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Cess Effective From Date</label>
+                    <input type="date" class="form-control form-control-sm" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Cess Effective To Date</label>
+                    <input type="date" class="form-control form-control-sm" />
+                </div>
+            </div> -->
+        </mat-card-content>
+
+        <mat-card-footer class="footer">
+            <div class="d-flex justify-content-end mt-3">
+                <div class="btn-1"
+                    style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
+
+                    <button type="cancel"
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0;">
+                        Cancel
+                    </button>
+
+                    <button type="submit" (click)="SaveClick()"
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue;color: white; ">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </mat-card-footer>
+    </mat-card>
+</form>

@@ -10,6 +10,8 @@ import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { SDLslabDetailsService } from '../../../Service/GlobalMasters/sdlslab-details.service';
 import { AlertpopupComponent } from '../../../common/alertpopup/alertpopup.component';
+import { EncryptionService } from '../../../Shared/encryption.service';
+import { SessionStorageService } from '../../../Shared/SessionStorageService';
 
 @Component({
   selector: 'app-addsdlslab-detail',
@@ -38,6 +40,7 @@ export class ADDSDLslabDetailComponent {
   dataSource = new MatTableDataSource<any>([]);
   uploadedData: any[] = [];
   uploadedDataSource = new MatTableDataSource(this.uploadedData);
+  userdetail: any;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -45,10 +48,20 @@ export class ADDSDLslabDetailComponent {
   constructor(
     private dialogRef: MatDialogRef<ADDSDLslabDetailComponent>,
     private fb: FormBuilder,
-    private sdlService: SDLslabDetailsService
+    private sdlService: SDLslabDetailsService,
+    private decry: EncryptionService,
+    private _sessionStoreage: SessionStorageService
   ) { }
 
   ngOnInit(): void {
+
+    const json = this._sessionStoreage.getItem('UserProfile');
+    if (json) {
+      this.userdetail = JSON.parse(this.decry.decrypt(json));
+    }
+    else {
+      console.warn('UserProfile not found in the session Storage');
+    }
     this.Addslab = this.fb.group({
       PayCodeId: ['', Validators.required],
 
@@ -151,7 +164,7 @@ export class ADDSDLslabDetailComponent {
     const payload = {
       strXmlDetails: xmlDetails,
       mode: 'Add',
-      userId: 3
+      userId: this.userdetail.user_Id
     };
 
     this.sdlService.CreateSDL(payload).subscribe({

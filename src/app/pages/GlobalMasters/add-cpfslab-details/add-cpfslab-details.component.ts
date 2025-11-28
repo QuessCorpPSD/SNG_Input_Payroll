@@ -6,6 +6,8 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CPFslabDetailsService } from '../../../Service/GlobalMasters/cpfslab-details.service';
+import { EncryptionService } from '../../../Shared/encryption.service';
+import { SessionStorageService } from '../../../Shared/SessionStorageService';
 
 @Component({
   selector: 'app-add-cpfslab-details',
@@ -28,14 +30,26 @@ export class AddCPFslabDetailsComponent {
   payCodeList: any[] = [];
   criteriaList: any[] = [];
   isLoading = false;
+  userdetail: any;
 
   constructor(
     private dialogRef: MatDialogRef<AddCPFslabDetailsComponent>,
     private fb: FormBuilder,
-    private cpfService: CPFslabDetailsService
+    private cpfService: CPFslabDetailsService,
+    private decry: EncryptionService,
+    private _sessionStoreage: SessionStorageService
+        
   ) { }
 
   ngOnInit(): void {
+
+    const json = this._sessionStoreage.getItem('UserProfile');
+    if (json) {
+      this.userdetail = JSON.parse(this.decry.decrypt(json));
+    }
+    else {
+      console.warn('UserProfile not found in the session Storage');
+    }
 
     this.Cpfform = this.fb.group({
       Category: ['', Validators.required],
@@ -140,7 +154,7 @@ export class AddCPFslabDetailsComponent {
     const payload = {
       strXmlDetails: xmlDetails,
       mode: 'Add',
-      userId: 3
+      userId: this.userdetail.user_Id
     };
 
     this.cpfService.CreateCPF(payload).subscribe({
