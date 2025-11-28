@@ -122,10 +122,11 @@ export class CompanypaycodemappingComponent {
 
   onsearch() {
     this.isLoading = true;
-    this.isuploadgridvisible = true;
+    
     if (!this.selectedCompanyId) {
       alert('Please Select Company')
       this.isLoading = false;
+      this.isuploadgridvisible=false;
       return;
     }
 
@@ -143,6 +144,7 @@ export class CompanypaycodemappingComponent {
         }
         if (this.Companypaycode && this.Companypaycode.length > 0) {
           this.isLoading = false;
+          this.isuploadgridvisible = true;
           this.dataSource = new MatTableDataSource(this.Companypaycode);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
