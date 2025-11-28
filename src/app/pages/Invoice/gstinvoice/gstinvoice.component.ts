@@ -180,8 +180,8 @@ export class GstinvoiceComponent {
     //console.log("export");
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
     const workbook: XLSX.WorkBook = {
-      Sheets: { 'Sheet1': worksheet },
-      SheetNames: ['Sheet1']
+      Sheets: { 'GstInvoice': worksheet },
+      SheetNames: ['GstInvoice']
     };
     const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
     const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
@@ -191,7 +191,7 @@ export class GstinvoiceComponent {
 
   TemplateClick(): void {
       const dataToExport = [
-      { 'Invoice Number': '', 'Remarks': '', 'New Invoice Number': '' },
+      { 'Invoice_Number': '', 'Remarks': '', 'NewInvoiceNumber': '' },
     ]
       this.downloadExcel(dataToExport, "Template_" + this.selectedTemplate);
   }
@@ -240,22 +240,19 @@ export class GstinvoiceComponent {
       console.error("⚠️ No file selected.");
       return;
     }
+
     const formData = new FormData();
     if (this.excelFile) {
         formData.append('file', this.excelFile);
-        formData.append('companyCode', this.companyUI.companyCode);
-        formData.append('companyId', this.companyUI.companyId);
         formData.append('userId', this.userdetail.user_Id);
-        // formData.append('payPeriod', this.payperiodUI.payPeriod);
-        // formData.append('payPeriodId', this.payperiodUI.payfrequencyid);
 
         this._invoiceService.UploadCancel(formData).subscribe({
-          next: res => {
-            this.datatable = res.Data;
-            console.table(this.datatable);
-            if (this.datatable && Array.isArray(this.datatable) && this.datatable.length > 0) {
-              this.downloadExcel(this.datatable, "Reject_Validations");
-              //this.BindDashBoard(this.companyUI.companyCode, this.payperiodUI.payPeriod);
+          next: (res: string) => {
+            const error_msg = res ;
+            console.table(error_msg);
+            if (error_msg) {
+              alert(error_msg);
+              this.BindDashBoard(this.userdetail.user_Id);
               this.isLoading = false;
             } else {
               alert("No validations returned");

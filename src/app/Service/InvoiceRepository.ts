@@ -118,24 +118,40 @@ export class InvoiceRepository implements IInvoiceRepository {
     //     return this.http.post<APIResponse>(url, formData);
     // }
 
-    UploadCancel(formData): Observable<APIResponse> {
+    UploadCancel(formData): Observable<string> {
         const url = `${this.environment.apiUrl}GSTInvoice/PostCancelReject`;
-        //console.log(url)
-        return this.http.post<APIResponse>(url, formData);
+        return this.http.post(url, formData, {responseType: 'text'});
     }
+
     GetGSTInvoice(userId: number): Observable<APIResponse> {
         const url = `${this.environment.apiUrl}GSTInvoice/GetGSTInvoice/${userId}`;
         //console.log(url);
         return this.http.get<APIResponse>(url);
     }
-      DownloadInvoice(invoiceId: number): Observable<HttpResponse<Blob>> {
-    const url = `${this.environment.apiUrl}GSTInvoice/Download/${invoiceId}`;
-    return this.http.get(url, { responseType: 'blob', observe: 'response' });
-  }
-  BulkDownloadInvoice(BulkInvoices: any): Observable<HttpResponse<Blob>> {
-    const url = `${this.environment.apiUrl}GSTInvoice/BulkDownload`;
-    console.log(url);
-    console.table(BulkInvoices);
-    return this.http.post(url, BulkInvoices, { responseType: 'blob', observe: 'response' });
-  }
+    
+    DownloadInvoice(invoiceId: number): Observable<HttpResponse<Blob>> {
+        const url = `${this.environment.apiUrl}GSTInvoice/Download/${invoiceId}`;
+        return this.http.get(url, { responseType: 'blob', observe: 'response' });
+    }
+    BulkDownloadInvoice(BulkInvoices: any): Observable<HttpResponse<Blob>> {
+        const url = `${this.environment.apiUrl}GSTInvoice/BulkDownload`;
+        console.log(url);
+        console.table(BulkInvoices);
+        return this.http.post(url, BulkInvoices, { responseType: 'blob', observe: 'response' });
+    }
+
+    POSearch(companyId: number, payPeriodId: number): Observable<APIResponse> {
+        const url = `${this.environment.apiUrl}POInvoiceInitiate/Search/${companyId}/${payPeriodId}`;
+        //console.log(url);
+        return this.http.get<APIResponse>(url);
+    }
+
+    POInvoiceInitiate(payload: any): Observable<APIResponse> {
+        return this.http.post<APIResponse>(this.environment.apiUrl + 'POInvoiceInitiate/POInvoiceInitiate', payload);
+    }
+
+    ExportPOInvoice(companyId: number, payPeriodId: number): Observable<any> {
+        return this.http.get<APIResponse>(
+            environment.apiUrl + `POInvoiceInitiate/POInvoiceInitiateExport/${companyId}/${payPeriodId}`);
+    }
 }

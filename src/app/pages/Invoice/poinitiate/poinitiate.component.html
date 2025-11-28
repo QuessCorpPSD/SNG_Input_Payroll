@@ -1,0 +1,177 @@
+<div class="container-fluid">
+    <!-- <div class="row">
+                    <h2>Draft Invoice</h2>
+                </div> -->
+    <div class="row p-1">
+        <div class="col-4">
+            <label class="form-label text-muted small">Company Code</label>
+            <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+        </div>
+        <div class="col-3">
+            <label class="form-label text-muted small">Pay Period</label>
+            <PayPeriod [selectedCompanyId]="selectedCompanyId" [payPeriodType]="payPeriodType"
+                (payperiodEmit)="handlePayperiodEvent($event)"></PayPeriod>
+        </div>
+        <div class="col-12 col-md-1 gap-2 d-flex align-items-center">
+
+            <button (click)="InvoiceSearch()" [disabled]="issearch"
+                style="width: 120px; height: 30px;color:#ffffff; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
+                search
+            </button>
+            <button (click)="Invoiceintiate()" [disabled]="isdisabled"
+                style="width: 130px; height: 30px; color:#ffffff;padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
+                Initiate
+            </button>
+            <button (click)="InitiationSearchExport()"
+                style="width: 130px; height: 30px;color:#ffffff; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
+                Export
+            </button>
+        </div>
+
+    </div>
+
+    <div class="table-container">
+        <div class="card-body rounded-2">
+            <table mat-table [dataSource]="dataSource" class="custom-table mat-elevation-z8 custom-table">
+
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>
+                        <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue()"
+                            [indeterminate]="selection.hasValue() && !isAllSelected()">
+                        </mat-checkbox>
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        <mat-checkbox (click)="$event.stopPropagation()"
+                            (change)="$event ? selection.toggle(element) : null"
+                            [checked]="selection.isSelected(element)">
+                        </mat-checkbox>
+                    </td>
+                </ng-container>
+l
+                <ng-container matColumnDef="serial_No">
+                    <th mat-header-cell *matHeaderCellDef style="width: 100px;">Sl No</th>
+                    <td mat-cell *matCellDef="let element" style="width: 100px;">{{ element.serial_No }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="map_name">
+                    <th mat-header-cell *matHeaderCellDef style="width: 200px;">Map Name</th>
+                    <td mat-cell *matCellDef="let element" style="width: 200px;">{{ element.map_Name }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="map_Name_Id">
+                    <th mat-header-cell *matHeaderCellDef style="width: 200px;">map_Name_Id</th>
+                    <td mat-cell *matCellDef="let element" style="width: 200px;">{{ element.map_Name_Id }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="state_Id">
+                    <th mat-header-cell *matHeaderCellDef style="width: 200px;">state_Id</th>
+                    <td mat-cell *matCellDef="let element" style="width: 200px;">{{ element.state_Id }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="state_Name">
+                    <th mat-header-cell *matHeaderCellDef style="width: 200px;">state_Name</th>
+                    <td mat-cell *matCellDef="let element" style="width: 200px;">{{ element.state_Name }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="pO_Number">
+                    <th mat-header-cell *matHeaderCellDef>PO Number</th>
+                    <td mat-cell *matCellDef="let element">{{ element.pO_Number }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="CTC">
+                    <th mat-header-cell *matHeaderCellDef>CTC</th>
+                    <td mat-cell *matCellDef="let element">{{ element.ctc }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="head_Count">
+                    <th mat-header-cell *matHeaderCellDef>Head Count</th>
+                    <td mat-cell *matCellDef="let element">{{ element.head_Count }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="input_Number">
+                    <th mat-header-cell *matHeaderCellDef>Input No.</th>
+                    <td mat-cell *matCellDef="let element">{{ element.input_Number }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="group_Name">
+                    <th mat-header-cell *matHeaderCellDef>Group Name</th>
+                    <td mat-cell *matCellDef="let element">{{ element.group_Name }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="group_Detail_Id">
+                    <th mat-header-cell *matHeaderCellDef>group_Detail_Id</th>
+                    <td mat-cell *matCellDef="let element">{{ element.group_Detail_Id }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="service_Charge_Type">
+                    <th mat-header-cell *matHeaderCellDef>Service Charge Type</th>
+                    <td mat-cell *matCellDef="let element">{{ element.service_Charge_Type }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="service_Charge_Type_Id">
+                    <th mat-header-cell *matHeaderCellDef style="width: 200px;">service_Charge_Type_Id</th>
+                    <td mat-cell *matCellDef="let element" style="width: 200px;">{{ element.service_Charge_Type_Id }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="address_Code">
+                    <th mat-header-cell *matHeaderCellDef>Address Code</th>
+                    <td mat-cell *matCellDef="let element">{{ element.address_Code }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="msP_Amount">
+                    <th mat-header-cell *matHeaderCellDef>MSP Amount</th>
+                    <td mat-cell *matCellDef="let element">{{ element.msP_Amount }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="company_Id">
+                    <th mat-header-cell *matHeaderCellDef style="width: 200px;">company_Id</th>
+                    <td mat-cell *matCellDef="let element" style="width: 200px;">{{ element.company_Id }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="company_Code">
+                    <th mat-header-cell *matHeaderCellDef style="width: 200px;">company_Code</th>
+                    <td mat-cell *matCellDef="let element" style="width: 200px;">{{ element.company_Code }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="invoiceType_Id">
+                    <th mat-header-cell *matHeaderCellDef style="width: 200px;">invoiceType_Id</th>
+                    <td mat-cell *matCellDef="let element" style="width: 200px;">{{ element.invoiceType_Id }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="pay_Period_Id">
+                    <th mat-header-cell *matHeaderCellDef style="width: 200px;">pay_Period_Id</th>
+                    <td mat-cell *matCellDef="let element" style="width: 200px;">{{ element.pay_Period_Id }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="pay_Period">
+                    <th mat-header-cell *matHeaderCellDef style="width: 200px;">pay_Period</th>
+                    <td mat-cell *matCellDef="let element" style="width: 200px;">{{ element.pay_Period }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="invoiceCulture_id">
+                    <th mat-header-cell *matHeaderCellDef style="width: 200px;">invoiceCulture_id</th>
+                    <td mat-cell *matCellDef="let element" style="width: 200px;">{{ element.invoiceCulture_id }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="invoiceCul_Ref_No">
+                    <th mat-header-cell *matHeaderCellDef style="width: 200px;">invoiceCul_Ref_No</th>
+                    <td mat-cell *matCellDef="let element" style="width: 200px;">{{ element.invoiceCul_Ref_No }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="category_Id">
+                    <th mat-header-cell *matHeaderCellDef style="width: 200px;">category_Id</th>
+                    <td mat-cell *matCellDef="let element" style="width: 200px;">{{ element.category_Id }}</td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayColumns;"></tr>
+            </table>
+            <mat-paginator class="mat-footer-paginator" #PeningLotPaginator [pageSizeOptions]="[5,10, 25, 100]"
+                showFirstLastButtons></mat-paginator>
+        </div>
+    </div>
+    <div *ngIf="isLoading" class="loader-overlay">
+        <img src="../../../assets/Loading.gif">
+    </div>
+</div>
