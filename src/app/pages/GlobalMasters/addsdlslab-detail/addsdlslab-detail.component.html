@@ -1,0 +1,145 @@
+<form [formGroup]="Addslab" novalidate>
+    <mat-card class="custom-card">
+        <mat-card-header class="sticky-header">
+            <br />
+            <mat-card-title style="color: #302CB3;">Add SDL Slab Details</mat-card-title>
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="onClose()" class="no-border-icon">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+        <br />
+
+        <mat-card-content>
+            <div style="
+                display: grid;
+                grid-template-columns: 150px 1fr;
+                row-gap: 15px;
+                align-items: center;
+            ">
+
+                <!-- PAY CODE -->
+                <label class="form-label text-muted small mb-0" style="white-space: nowrap;">
+                    Pay Code:<span class="text-danger">*</span>
+                </label>
+                <div>
+                    <select class="form-select form-select-sm" formControlName="PayCodeId" style="width: 250px;">
+                        <option value="">Select</option>
+                        <option *ngFor="let pay of payCodeList" [value]="pay.Paycode_Id">
+                            {{ pay.Paycode_Code }}
+                        </option>
+                    </select>
+                    <small class="text-danger"
+                        *ngIf="Addslab.get('PayCodeId')?.touched && Addslab.get('PayCodeId')?.invalid">
+                        Pay Code is required.
+                    </small>
+                </div>
+
+                <!-- DESCRIPTION (NO VALIDATION) -->
+                <label class="form-label text-muted small mb-0" style="white-space: nowrap;">
+                    Description:
+                </label>
+                <input type="text" class="form-control form-control-sm" style="width: 250px;"
+                    formControlName="Description" />
+
+                <!-- FROM VALUE -->
+                <label class="form-label text-muted small mb-0" style="white-space: nowrap;">
+                    From Value:<span class="text-danger">*</span>
+                </label>
+                <div>
+                    <input type="text" class="form-control form-control-sm" style="width: 250px;"
+                        formControlName="From_Value" />
+                    <small class="text-danger"
+                        *ngIf="Addslab.get('From_Value')?.touched && Addslab.get('From_Value')?.invalid">
+                        From Value is required.
+                    </small>
+                </div>
+
+                <!-- TO VALUE -->
+                <label class="form-label text-muted small mb-0" style="white-space: nowrap;">
+                    To Value:<span class="text-danger">*</span>
+                </label>
+                <div>
+                    <input type="text" class="form-control form-control-sm" style="width: 250px;"
+                        formControlName="To_Value" />
+                    <small class="text-danger"
+                        *ngIf="Addslab.get('To_Value')?.touched && Addslab.get('To_Value')?.invalid">
+                        To Value is required.
+                    </small>
+                </div>
+
+                <!-- CRITERIA TYPE -->
+                <label class="form-label text-muted small mb-0" style="white-space: nowrap;">
+                    Criteria Type:<span class="text-danger">*</span>
+                </label>
+                <div>
+                    <select class="form-select form-select-sm" style="width: 250px;" formControlName="Criteria_Type_Id">
+                        <option value="">Select</option>
+                        <option *ngFor="let c of CriteriaList" [value]="c.Criteria_Type_Id">
+                            {{ c.Criteria_Type_Name }}
+                        </option>
+                    </select>
+                    <small class="text-danger"
+                        *ngIf="Addslab.get('Criteria_Type_Id')?.touched && Addslab.get('Criteria_Type_Id')?.invalid">
+                        Criteria Type is required.
+                    </small>
+                </div>
+
+                <!-- CRITERIA -->
+                <label class="form-label text-muted small mb-0" style="white-space: nowrap;">
+                    Criteria:<span class="text-danger">*</span>
+                </label>
+                <div>
+                    <input type="text" class="form-control form-control-sm" style="width: 250px;"
+                        formControlName="Criteria" />
+                    <small class="text-danger"
+                        *ngIf="Addslab.get('Criteria')?.touched && Addslab.get('Criteria')?.invalid">
+                        Criteria is required.
+                    </small>
+                </div>
+
+                <!-- MIN VALUE -->
+                <label class="form-label text-muted small mb-0" style="white-space: nowrap;">
+                    Min Value:<span class="text-danger">*</span>
+                </label>
+                <div>
+                    <input type="text" class="form-control form-control-sm" style="width: 250px;"
+                        formControlName="Min_Value" />
+                    <small class="text-danger"
+                        *ngIf="Addslab.get('Min_Value')?.touched && Addslab.get('Min_Value')?.invalid">
+                        Min Value is required.
+                    </small>
+                </div>
+
+                <!-- MAX VALUE -->
+                <label class="form-label text-muted small mb-0" style="white-space: nowrap;">
+                    Max Value:<span class="text-danger">*</span>
+                </label>
+                <div>
+                    <input type="text" class="form-control form-control-sm" style="width: 250px;"
+                        formControlName="Max_Value" />
+                    <small class="text-danger"
+                        *ngIf="Addslab.get('Max_Value')?.touched && Addslab.get('Max_Value')?.invalid">
+                        Max Value is required.
+                    </small>
+                </div>
+
+            </div>
+        </mat-card-content>
+
+        <div class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">
+
+            <button type="button" (click)="onClose()" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+            cursor: pointer; background-color: #f0f0f0; color: black;">
+                Cancel
+            </button>
+
+            <button type="button" (click)="onSave()" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+            cursor: pointer; background-color: blue; color: white;">
+                Save
+            </button>
+
+        </div>
+
+    </mat-card>
+</form>

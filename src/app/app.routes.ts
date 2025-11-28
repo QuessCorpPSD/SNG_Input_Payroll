@@ -100,6 +100,8 @@ import { DepartmentComponent } from './pages/customers/department/department.com
 import { DesignationComponent } from './pages/customers/designation/designation.component';
 import { BandDetailsComponent } from './pages/customers/band-details/band-details.component';
 import { CostCenterMappingComponent } from './pages/customers/cost-center-mapping/cost-center-mapping.component';
+import { SDLslabDetailComponent } from './pages/GlobalMasters/sdlslab-detail/sdlslab-detail.component';
+import { CPFslabDetailsComponent } from './pages/GlobalMasters/cpfslab-details/cpfslab-details.component';
 
 
 
@@ -284,6 +286,8 @@ export const routes: Routes = [
         children: [
           { path: "paycodes", component: PaycodesComponent },
           { path: "shgslabdetail", component: ShgslabdetailComponent },
+          { path: "SDLslabDetail", component: SDLslabDetailComponent },
+          { path: "CPFslabDetails", component: CPFslabDetailsComponent },
         ]
 
       },

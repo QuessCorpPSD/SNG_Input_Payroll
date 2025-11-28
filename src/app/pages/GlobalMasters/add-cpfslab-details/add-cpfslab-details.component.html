@@ -1,0 +1,166 @@
+<form [formGroup]="Cpfform" novalidate>
+    <mat-card class="custom-card">
+
+        <mat-card-header class="sticky-header">
+            <br />
+            <mat-card-title style="color: #302CB3;">Add CDF Slab Details</mat-card-title>
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="onClose()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+
+        <mat-card-content>
+
+            <!-- ROW 1 -->
+            <div class="row g-3 mb-3">
+
+                <!-- Category -->
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Category <span class="text-danger">*</span></label>
+                    <select class="form-select form-select-sm" formControlName="Category">
+                        <option value="">Select</option>
+                        <option *ngFor="let cat of categories" [value]="cat.spr_status_id">
+                            {{ cat.spr_status }}
+                        </option>
+                    </select>
+                    <small class="text-danger"
+                        *ngIf="Cpfform.get('Category')?.touched && Cpfform.get('Category')?.invalid">
+                        Category is required.
+                    </small>
+                </div>
+
+                <!-- Pay Code -->
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Pay Code <span class="text-danger">*</span></label>
+                    <select class="form-select form-select-sm" formControlName="PayCodeId">
+                        <option value="">Select</option>
+                        <option *ngFor="let pay of payCodeList" [value]="pay.Paycode_Id">
+                            {{ pay.Paycode_Code }}
+                        </option>
+                    </select>
+                    <small class="text-danger"
+                        *ngIf="Cpfform.get('PayCodeId')?.touched && Cpfform.get('PayCodeId')?.invalid">
+                        Pay Code is required.
+                    </small>
+                </div>
+
+                <!-- Description -->
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Description <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control form-control-sm" formControlName="Description">
+                    <small class="text-danger"
+                        *ngIf="Cpfform.get('Description')?.touched && Cpfform.get('Description')?.invalid">
+                        Description is required.
+                    </small>
+                </div>
+            </div>
+
+            <!-- ROW 2 -->
+            <div class="row g-3 mb-3">
+
+                <div class="col-md-4">
+                    <label class="form-label">Effective Date <span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" formControlName="StartDate" />
+                    <small class="text-danger"
+                        *ngIf="Cpfform.get('StartDate')?.touched && Cpfform.get('StartDate')?.invalid">
+                        Effective Date is required.
+                    </small>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">From Age <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control form-control-sm" formControlName="FromAge" />
+                    <small class="text-danger"
+                        *ngIf="Cpfform.get('FromAge')?.touched && Cpfform.get('FromAge')?.invalid">
+                        Enter a valid From Age.
+                    </small>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">To Age <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control form-control-sm" formControlName="ToAge" />
+                    <small class="text-danger" *ngIf="Cpfform.get('ToAge')?.touched && Cpfform.get('ToAge')?.invalid">
+                        Enter a valid To Age.
+                    </small>
+                </div>
+            </div>
+
+            <!-- ROW 3 -->
+            <div class="row g-3 mb-3">
+
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">From Value <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control form-control-sm" formControlName="FromValue" />
+                    <small class="text-danger"
+                        *ngIf="Cpfform.get('FromValue')?.touched && Cpfform.get('FromValue')?.invalid">
+                        Enter a valid From Value.
+                    </small>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">To Value <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control form-control-sm" formControlName="ToValue" />
+                    <small class="text-danger"
+                        *ngIf="Cpfform.get('ToValue')?.touched && Cpfform.get('ToValue')?.invalid">
+                        Enter a valid To Value.
+                    </small>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Criteria Type <span class="text-danger">*</span></label>
+                    <select class="form-select form-select-sm" formControlName="CriteriaType">
+                        <option value="">-- Select --</option>
+                        <option *ngFor="let c of criteriaList" [value]="c.Criteria_Type_Id">
+                            {{ c.Criteria_Type_Name }}
+                        </option>
+                    </select>
+                    <small class="text-danger"
+                        *ngIf="Cpfform.get('CriteriaType')?.touched && Cpfform.get('CriteriaType')?.invalid">
+                        Criteria Type is required.
+                    </small>
+                </div>
+            </div>
+
+            <!-- ROW 4 -->
+            <div class="row g-3 mb-3">
+
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Criteria <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control form-control-sm" formControlName="Criteria" />
+                    <small class="text-danger"
+                        *ngIf="Cpfform.get('Criteria')?.touched && Cpfform.get('Criteria')?.invalid">
+                        Criteria is required.
+                    </small>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Formula <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control form-control-sm" formControlName="Formula" />
+                    <small class="text-danger"
+                        *ngIf="Cpfform.get('Formula')?.touched && Cpfform.get('Formula')?.invalid">
+                        Formula is required.
+                    </small>
+                </div>
+
+            </div>
+
+        </mat-card-content>
+
+        <div class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">
+
+            <button type="button" (click)="onClose()" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+            cursor: pointer; background-color: #f0f0f0; color: black;">
+                Cancel
+            </button>
+
+            <button type="button" (click)="onSave()" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+            cursor: pointer; background-color: blue; color: white;">
+                Save
+            </button>
+
+        </div>
+
+
+    </mat-card>
+</form>
