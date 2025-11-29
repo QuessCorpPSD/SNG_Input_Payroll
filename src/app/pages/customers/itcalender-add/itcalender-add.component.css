@@ -1,0 +1,78 @@
+.custom-card {
+    overflow: hidden;
+    /* prevent full scroll */
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 10px;
+}
+
+.scroll-content {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.sticky-header {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: left;
+}
+
+/* mat-card-footer.footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+
+} */
+.no-border-icon {
+    border: none;
+    background-color: white;
+}
+
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    flex-direction: column;
+}
+
+.loading-overlay .spinner-border {
+    width: 3rem;
+    height: 3rem;
+}
+
+.loading-overlay span {
+    margin-top: 10px;
+    font-weight: bold;
+    color: #302CB3;
+}
+
+.centered-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2200;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 2100;
+}
+

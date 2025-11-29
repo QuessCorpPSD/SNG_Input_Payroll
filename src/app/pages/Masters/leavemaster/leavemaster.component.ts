@@ -228,28 +228,28 @@ export class LeavemasterComponent {
         companyId: 0,
         companyCode: ''
       }
-    }    
+    }
     if (!this.sitenameUI) {
       this.sitenameUI = {
         siteCode: 0,
         siteName: ''
       }
     }
-      this.leavemaster.LeaveMasterExport(this.companyUI.companyId, this.sitenameUI.siteCode).subscribe({
-        next: res => {
-          //console.log(res);
-          if (res.StatusCode == 200) {
-            const data = res.Data;
-            var base64 = data.file;
-            this.downloadExcelFromBase64(base64, data.fileName)
-            this.companyUI = {};
-            this.sitenameUI = {};
-            this.isLoading = false;
+    this.leavemaster.LeaveMasterExport(this.companyUI.companyId, this.sitenameUI.siteCode).subscribe({
+      next: res => {
+        //console.log(res);
+        if (res.StatusCode == 200) {
+          const data = res.Data;
+          var base64 = data.file;
+          this.downloadExcelFromBase64(base64, data.fileName)
+          this.companyUI = {};
+          this.sitenameUI = {};
+          this.isLoading = false;
 
-          }
-        },
-        error: error => console.error('Error:', error)
-      })
+        }
+      },
+      error: error => console.error('Error:', error)
+    })
     this.isLoading = false;
     return;
   }
@@ -268,14 +268,16 @@ export class LeavemasterComponent {
     }
     const formValue = this.leaveaMasterform.value;
     const leaveMasterAdd = {
-      companyId: this.companyUI?.companyId,
-      companyCode: this.companyUI?.companyCode,
-      siteId: this.sitenameUI?.siteCode,
-      siteName: this.sitenameUI?.siteName,
-      leavetype: formValue.leavetype,
-      userId: this.userdetail.user_Id
+      "leavemasteradd": {
+        companyId: this.companyUI?.companyId,
+        companyCode: this.companyUI?.companyCode,
+        siteId: this.sitenameUI?.siteCode,
+        siteName: this.sitenameUI?.siteName,
+        leavetype: formValue.leavetype,
+        userId: this.userdetail.user_Id
+      }
     };
-    //console.log(leaveMasterAdd);
+    console.log(JSON.stringify(leaveMasterAdd));
     this.leavemaster.PostAddLeaveMaster(leaveMasterAdd).subscribe({
       next: (res) => {
         const errormsg = res.Data[0].msg;

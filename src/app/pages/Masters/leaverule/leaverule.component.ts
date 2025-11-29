@@ -1196,9 +1196,10 @@ export class LeaveruleComponent {
   }
 
   GetLeavetypeDetails(CompanyId: any, done?: () => void): void {
+    
     this.leaveruleService.GetLeaveType(CompanyId).subscribe({
       next: (res: any) => {
-        this.leavetypedetails = (res?.data ?? [])
+        this.leavetypedetails = (res?.Data ?? [])
           .map((r: any) => ({ leavetype: (r.leavetype ?? r.LeaveType ?? '').toString().trim() }))
           .filter((x: any) => !!x.leavetype);
         done?.();

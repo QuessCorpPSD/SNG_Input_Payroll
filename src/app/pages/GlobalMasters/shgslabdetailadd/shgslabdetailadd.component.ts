@@ -94,9 +94,7 @@ export class ShgslabdetailaddComponent {
       userId: 3
     };
 
-    console.log('Final Payload:', JSON.stringify(payload, null, 2));
-
-    //  Step 5: Call API
+        //  Step 5: Call API
     this.shg.createShg(payload).subscribe({
       next: (res: any) => {
         if (res?.StatusCode === 200 && res?.Data?.statusCode === '200') {
