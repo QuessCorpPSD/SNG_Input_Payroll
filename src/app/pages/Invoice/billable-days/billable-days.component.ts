@@ -139,7 +139,6 @@ export class BillableDaysComponent implements OnInit {
     }
     fileInput.click();
   }
-
   onFileChange(event: any): void {
     const target: DataTransfer = <DataTransfer>(event.target);
 
