@@ -14,7 +14,7 @@ import { BillingpayfrequencyService } from '../../../Service/invoice/billingpayf
 @Component({
   selector: 'app-payfrequency-edit',
   standalone: true,
-  imports: [MatCardModule, MatPaginatorModule, MatTableModule, MatIconModule, CompanyallComponent, CommonModule, FormsModule, ReactiveFormsModule, MatTooltipModule],
+  imports: [MatCardModule, MatPaginatorModule, MatTableModule, MatIconModule, CommonModule, FormsModule, ReactiveFormsModule, MatTooltipModule],
   templateUrl: './payfrequency-edit.component.html',
   styleUrl: './payfrequency-edit.component.css'
 })
