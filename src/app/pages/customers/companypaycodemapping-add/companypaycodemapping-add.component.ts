@@ -11,7 +11,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { CompanypaycodemappingAddAddComponent } from '../companypaycodemapping-add-add/companypaycodemapping-add-add.component';
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatSelectModule } from "@angular/material/select";
-import { CompanypaycodemappingService } from '../../../Service/customersserv/companypaycodemapping.service';
+import { CompanypaycodemappingService } from '../../../Service/CUSTOMER/companypaycodemapping.service';
 import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.component";
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';

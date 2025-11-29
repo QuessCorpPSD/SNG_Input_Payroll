@@ -10,7 +10,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CompanyallComponent } from '../../../common/CompanyAll/companyall.component';
 import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { CompanypaycodemappingService } from '../../../Service/customersserv/companypaycodemapping.service';
+import { CompanypaycodemappingService } from '../../../Service/CUSTOMER/companypaycodemapping.service';
 import { CompanypaycodemappingAddAddComponent } from '../companypaycodemapping-add-add/companypaycodemapping-add-add.component';
 import { CompanypaycodemappingAddComponent } from '../companypaycodemapping-add/companypaycodemapping-add.component';
 import { EncryptionService } from '../../../Shared/encryption.service';

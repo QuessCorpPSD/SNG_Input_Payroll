@@ -8,7 +8,7 @@ import { MatCardModule } from "@angular/material/card";
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CommonModule } from '@angular/common';
 import { MatCheckbox } from "@angular/material/checkbox";
-import { CompanypaycodemappingService } from '../../../Service/customersserv/companypaycodemapping.service';
+import { CompanypaycodemappingService } from '../../../Service/CUSTOMER/companypaycodemapping.service';
 import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.component";
 
 @Component({

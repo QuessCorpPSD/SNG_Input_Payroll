@@ -10,7 +10,7 @@ import { CompanyallComponent } from "../../../common/CompanyAll/companyall.compo
 import { CommonModule } from '@angular/common';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSort } from '@angular/material/sort';
-import { CompanypaycodemappingService } from '../../../Service/customersserv/companypaycodemapping.service';
+import { CompanypaycodemappingService } from '../../../Service/CUSTOMER/companypaycodemapping.service';
 import * as XLSX from 'xlsx';
 import FileSaver from 'file-saver';
 import { IdletimeoutService } from '../../../Service/idletimeout.service';
