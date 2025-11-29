@@ -1,0 +1,104 @@
+<form [formGroup]="CorporateBankAddForm" novalidate>
+    <mat-card class="custom-card">
+        <mat-card-header class="sticky-header">
+
+            <mat-card-title style="color: #302CB3;">Add Corporate Bank</mat-card-title>
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="onClose()" class="no-border-icon">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+        <mat-card-content class="scroll-content">
+            <br />
+            <!-- Row 1 -->
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">Bank Name <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" formControlName="BankName">
+                    <div class="text-danger small" *ngIf="CorporateBankAddForm.get('BankName')?.touched 
+             && CorporateBankAddForm.get('BankName')?.hasError('required')">
+                        BankName is required
+                    </div>
+                    <!-- <select class="form-control" formControlName="BankName">
+                        <option value="">---Select---</option>
+                    </select> -->
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Branch <span class="text-danger"></span></label>
+                    <input type="text" class="form-control" formControlName="Branch">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Branch Code <span class="text-danger"></span></label>
+                    <input type="text" class="form-control" formControlName="BranchCode"
+                        placeholder="Enter Branch Code">
+
+                    <!-- <select class="form-select" formControlName="POform">
+                        <option value="">-- Select --</option>
+                        <option *ngFor="let PONo of PONumber" [value]="PONo.poid">{{PONo.ponumber}}</option>
+                    </select> -->
+                </div>
+            </div>
+            <!-- Row 2 -->
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">Bank Code <span class="text-danger"></span></label>
+                    <input type="text" class="form-control" formControlName="BankCode" placeholder="Enter Bank Code">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Swift Code <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" formControlName="SwiftCode" placeholder="Enter Swift Code">
+                    <div class="text-danger small" *ngIf="CorporateBankAddForm.get('SwiftCode')?.touched 
+             && CorporateBankAddForm.get('SwiftCode')?.hasError('required')">
+                        SwiftCode is required
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Account No <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" formControlName="AccountNo">
+                    <div class="text-danger small" *ngIf="CorporateBankAddForm.get('AccountNo')?.touched 
+             && CorporateBankAddForm.get('AccountNo')?.hasError('required')">
+                        AccountNo is required
+                    </div>
+                </div>
+
+            </div>
+            <!-- Row 3 -->
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">Address <span class="text-danger">*</span></label>
+                    <textarea class="form-control" formControlName="BankAddress" style="height: 80px;"
+                        placeholder="Enter Bank Address"></textarea>
+                    <div class="text-danger small" *ngIf="CorporateBankAddForm.get('BankAddress')?.touched 
+             && CorporateBankAddForm.get('BankAddress')?.hasError('required')">
+                        BankAddress is required
+                    </div>
+                </div>
+            </div>
+        </mat-card-content>
+        <mat-card-footer class="footer">
+            <div class="d-flex justify-content-end mt-3">
+                <div class="btn-1"
+                    style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
+
+                    <button type="Cancel"
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;">
+                        Cancel
+                    </button>
+
+                    <button type="submit"
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white;"
+                        (click)="Save()">
+                        {{ buttonText }}
+                    </button>
+                </div>
+            </div>
+        </mat-card-footer>
+    </mat-card>
+</form>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>
+<div *ngIf="showPopup" class="overlay">
+    <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+        (close)="showPopup = false"></app-alertpopup>
+</div>

@@ -106,6 +106,8 @@ import { POInitiateComponent } from './pages/Invoice/poinitiate/poinitiate.compo
 import { SDLslabDetailComponent } from './pages/GlobalMasters/sdlslab-detail/sdlslab-detail.component';
 import { CPFslabDetailsComponent } from './pages/GlobalMasters/cpfslab-details/cpfslab-details.component';
 import { GSTComponent } from './pages/GlobalMasters/gst/gst.component';
+import { CorporatebankComponent } from './pages/customers/corporatebank/corporatebank.component';
+import { ITcalenderComponent } from './pages/customers/itcalender/itcalender.component';
 
 
 
@@ -239,6 +241,8 @@ export const routes: Routes = [
           { path: "designation", component: DesignationComponent, },
           { path: "BandDetails", component: BandDetailsComponent, },
           { path: "CostCenterMapping", component: CostCenterMappingComponent, },
+          { path: "corporatebank", component: CorporatebankComponent, },
+          { path: "itcalender", component: ITcalenderComponent, },
           { path: 'companypaycodemapping', component: CompanypaycodemappingComponent },
         ]
       },
