@@ -24,7 +24,7 @@ myControl = new FormControl<ImportTypeUI | string>('');   // <-- typed control
   options: ImportTypeUI[] = [
     { value: 0, Text: "Billable Days" },
     { value: 1, Text: "Arrear Billable Days" },
-    { value: 2, Text: "Billable Report" }
+    // { value: 2, Text: "Billable Report" }
   ];
 
   filteredOptions$!: Observable<ImportTypeUI[]>;

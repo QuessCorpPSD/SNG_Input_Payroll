@@ -35,15 +35,16 @@ export class InvoiceRepository implements IInvoiceRepository {
             .set('Accept', 'application/json')
         return this.http.post<APIResponse>(this.environment.apiUrl + "BillableDays/ExportToExcel", inputval, { headers: config })
     }
-    BillableUpload(val): Observable<APIResponse> {
-        var inputval = JSON.stringify(val);
+    BillableUpload(request: any): Observable<APIResponse> {
+        var billableDaysModelRequest = JSON.stringify(request);
         const config = new HttpHeaders({
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
             'Expires': '0'
         }).set('Content-Type', 'application/json')
             .set('Accept', 'application/json')
-        return this.http.post<APIResponse>(this.environment.apiUrl + "BillableDays/BillableDaysUpload", inputval, { headers: config })
+            console.log(billableDaysModelRequest);
+        return this.http.post<APIResponse>(this.environment.apiUrl + "BillableDays/BillableDaysUpload", billableDaysModelRequest, { headers: config })
     }
     BillableTemplateDownload(importtype): Observable<APIResponse> {
         return this.http.get<APIResponse>(this.environment.apiUrl + 'BillableDays/DownloadTemplate/' + importtype);

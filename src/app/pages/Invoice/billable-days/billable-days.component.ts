@@ -114,13 +114,13 @@ export class BillableDaysComponent implements OnInit {
           "size": element.size,
           "content": res
         };
-        const request = {
+        const billableDaysModelRequest = {
           "CreatedBy": this.userdetail.user_Id,
           "File": files_docs,
           "importType": this.importType.value
         };
 
-        this._invoiceService.BillableUpload(request).subscribe({
+        this._invoiceService.BillableUpload(billableDaysModelRequest).subscribe({
           next: res => { console.log(res) },
           error: err => { console.log(err) }
         })
@@ -207,6 +207,10 @@ export class BillableDaysComponent implements OnInit {
     console.log(this.importType);
   }
   TemplateDownload() {
+    if (this.importType == undefined) {
+      alert('Please select Import Type');
+      return;
+    }
 
     this._invoiceService.BillableTemplateDownload(this.importType.value).subscribe({
       next: res => {
