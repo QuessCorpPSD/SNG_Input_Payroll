@@ -289,21 +289,33 @@
                                 <th class="CO">CO</th>
                                 <th class="WO">WO</th>
 
-                                <th *ngFor="let d of dayCols; trackBy: trackDay" class="day-col">
+
+                                <th *ngFor="let d of dayCols" colspan="2" class="day-col">
                                     {{ d.dayNum }}
                                 </th>
-                                <th class="ot">OTWKD</th>
+
+                                <!-- <th *ngFor="let d of dayCols; trackBy: trackDay" class="day-col">
+                                    {{ d.dayNum }}
+                                </th> -->
+                                <!-- <th class="ot">OTWKD</th>
                                 <th class="ot">OTWND</th>
                                 <th class="ot">NSOTH</th>
-                                <th class="ot">POTRS</th>
+                                <th class="ot">POTRS</th> -->
                             </tr>
 
                             <!-- HEADER ROW 2: day initials (S M T …) -->
-                            <tr class="head-2">
+                            <!-- <tr class="head-2">
                                 <th colspan="18"></th>
                                 <th *ngFor="let d of dayCols; trackBy: trackDay" class="day-col">
                                     {{ d.dowShort }}
                                 </th>
+                            </tr> -->
+                            <tr class="head-2">
+                                <th colspan="18"></th>
+                                <ng-container *ngFor="let d of dayCols">
+                                    <th class="day-col">{{ d.dowShort }}</th>
+                                    <th class="day-col">OT</th>
+                                </ng-container>
                             </tr>
                         </thead>
 
@@ -355,13 +367,30 @@
                                 <td class="WO">{{ r.WO }}</td>
 
                                 <!-- dynamic day cells -->
-                                <td *ngFor="let d of dayCols; let i = index; trackBy: trackDay" class="day-col"
+                                <!-- <td *ngFor="let d of dayCols; let i = index; trackBy: trackDay" class="day-col"
                                     [class.weekend]="d.isWeekend">
                                     <input #cellInput type="text" [(ngModel)]="r.dayValues[i]"
                                         (ngModelChange)="onType(r, i, $event)" (blur)="onBlur(r, i,cellInput)"
                                         style="text-align:center;" maxlength="5" />
-                                </td>
-                                <td class="ot">
+                                </td> -->
+                                <ng-container *ngFor="let d of dayCols; let i = index">
+                                    <!-- OT -->
+                                    <td class="day-col" [class.weekend]="d.isWeekend">
+                                        <input #cellInput1  type="text" [(ngModel)]="r.dayValues[i].OT"
+                                            (ngModelChange)="onType(r, i, 'OT', $event)" 
+                                            (blur)="onBlur(r, i, 'OT', cellInput1)"
+                                            maxlength="10" />
+                                    </td>
+
+                                    <!-- HOT -->
+                                    <td class="day-col" [class.weekend]="d.isWeekend">
+                                        <input #cellInput2  type="text" [(ngModel)]="r.dayValues[i].HOT"
+                                            (ngModelChange)="onType(r, i, 'HOT', $event)" 
+                                            (blur)="onBlur(r, i, 'HOT', cellInput2)"
+                                            maxlength="10" (keypress)="allowDecimalOnly($event)"/>
+                                    </td>
+                                </ng-container>
+                                <!-- <td class="ot">
                                     <input type="text" [(ngModel)]="r.OTWKD" style="text-align: center;" maxlength="6"
                                         (input)="onDecimalInput($event)" />
                                 </td>
@@ -376,7 +405,7 @@
                                 <td class="ot">
                                     <input type="text" [(ngModel)]="r.POTRS" style="text-align: center;" maxlength="6"
                                         (input)="onDecimalInput($event)" />
-                                </td>
+                                </td> -->
                             </tr>
                         </tbody>
                     </table>
