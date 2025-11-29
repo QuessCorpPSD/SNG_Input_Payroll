@@ -47,7 +47,7 @@ export class BillableDaysComponent implements OnInit {
   files: File[] = [];
   filebase64: any = [];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  displayedColumns = ['company_Id', 'company_Name', 'employee_Code', 'employee_Name', 'pay_Period', 'billable_Days', 'iqN_REF_NO', 'iqN_ID', 'reF_DATE', 'froM_DATE', 'tO_DATE', 'wO_NUMBER', 'grN_NUMBER', 'recruiteR_NAME', 'clienT_BILLING_PERCENTAGE', 'locatioN_NAME', 'oT_AMOUNT', 'otheR_ALLOWANCE', 'reimB_AMOUNT', 'discounT_TYPE', 'discount_Amount']
+  displayedColumns = ['employee_Code', 'employee_Name','billable_Days', 'wO_NUMBER', 'grN_NUMBER',  'oT_AMOUNT', 'otheR_ALLOWANCE', 'reimB_AMOUNT']
   dataSource = new MatTableDataSource<any>([]);
   userdetail!: any;
   issearch = -1;

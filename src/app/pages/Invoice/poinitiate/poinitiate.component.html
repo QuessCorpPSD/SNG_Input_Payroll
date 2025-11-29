@@ -12,7 +12,7 @@
             <PayPeriod [selectedCompanyId]="selectedCompanyId" [payPeriodType]="payPeriodType"
                 (payperiodEmit)="handlePayperiodEvent($event)"></PayPeriod>
         </div>
-        <div class="col-12 col-md-1 gap-2 d-flex align-items-center">
+        <div class="col-12 col-md-1 gap-2 d-flex align-items-center" style="padding-top: 20px;">
 
             <button (click)="InvoiceSearch()" [disabled]="issearch"
                 style="width: 120px; height: 30px;color:#ffffff; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
@@ -30,8 +30,8 @@
 
     </div>
 
-    <div class="table-container">
-        <div class="card-body rounded-2">
+    <div class="table-container py-2">
+        <div >
             <table mat-table [dataSource]="dataSource" class="custom-table mat-elevation-z8 custom-table">
 
                 <ng-container matColumnDef="action">

@@ -16,7 +16,7 @@
             <label class="form-label text-muted small">Invoice Type</label>
             <invoicetype (invoicetypeEmit)="onOptionSelected($event)"></invoicetype>
         </div>
-        <div class="col-12 col-md-1 gap-2 d-flex align-items-center">
+        <div class="col-12 col-md-1 gap-2 d-flex align-items-center"  style="padding-top: 20px;">
 
             <button (click)="InvoiceSearch()" [disabled]="issearch"
                 style="width: 120px; height: 30px;color:#ffffff; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
