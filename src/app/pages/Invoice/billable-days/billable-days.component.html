@@ -12,18 +12,19 @@
       </div>
       <div class="col-md-3">
         <label class="form-label text-muted small bold">Employee Code</label>
-        <input type="text"   >
+        <input type="text">
       </div>
       <div class="col-12 col-md-1 gap-2 d-flex align-items-center">
         <button (click)="BillableSearch()"
-         style="width: 130px; height: 30px; color:#ffffff;padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
+          style="width: 130px; height: 30px; color:#ffffff;padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
           Search
         </button>
-        <button (click)="export()" style="width: 130px; height: 30px; color:#ffffff;padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
-           Export
+        <button (click)="export()"
+          style="width: 130px; height: 30px; color:#ffffff;padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
+          Export
         </button>
       </div>
-      
+
     </div>
 
     <div class="row g-3 align-items-end">
@@ -33,132 +34,175 @@
       </div>
 
 
-      <div class="col-12 col-md-3">
+      <!-- <div class="col-12 col-md-3">
         <label for="internalExternal" class="form-label text-muted small mb-1">Choose File</label>
         <br>
         <input type="file" #fileInput formControlName="Document" (change)="onFileSelected($event)" hidden />
         <img src="assets/Icons/Upload_enabled.svg" type="button" (click)="fileInput.click()" />
-      </div>
+      </div> -->
       <div class="col-12 col-md-5">
         <div class="d-flex justify-content-start gap-2">
-          <button style="width: 80px; height: 30px; color:#ffffff;background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;"
-            (click)="FileUpload()">
+          <input type="file" #fileInput style="display: none;" (change)="onFileChange($event)"
+                        accept=".xlsx, .xls" />
+          <button
+            style="width: 80px; height: 30px; color:#ffffff;background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;"
+            (click)="FileUpload(fileInput)">
             Import
           </button>
-          <button style="width: 80px; height: 30px; color:#ffffff; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 1px; display: inline-flex; border: none;"
+          <button
+            style="width: 80px; height: 30px; color:#ffffff; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 1px; display: inline-flex; border: none;"
             (click)="TemplateDownload()">
-             Template
+            Template
           </button>
         </div>
       </div>
     </div>
-   
+  </div>
+  <div *ngIf="showPreviewModal" class="modal-overlay">
+    <div class="modal-content">
+      <div
+        style="font-family: nunito-sans;font-size: 18px; font-weight: 600; color: #302CB3; text-align: center; vertical-align: bottom; ">
+        <h3>Preview Excel Data</h3>
+      </div>
+      <div class="table-wrapper">
+        <div style="  max-height: auto; overflow-y: auto; overflow-x: auto;">
+          <table class="previewtable" style="border:1px solid #E8E8E8; padding: 5px 5px 5px 5px;">
+            <thead>
+              <tr>
+                <th *ngFor="let col of getTableColumns()">{{ col }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of excelPreviewData">
+                <td *ngFor="let col of getTableColumns()">{{ row[col] }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-actions">
+          <button (click)="submitExcelData()"
+            style="display: inline-block; margin-right: 10px;width: 130px; height: 30px; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
+            <div
+              style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
+              Submit</div>
+          </button>
+          <button (click)="showPreviewModal=false"
+            style="display: inline-block; margin-right: 10px;width: 130px; height: 30px; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
+            <div
+              style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
+              Cancel</div>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
   <br>
   <div class="table-container">
-  <div class="card-body">
-     <div class="row g-3 align-items-end">
-      <div class="col-12">
- 
-     
-      <table mat-table [dataSource]="dataSource">
-        <!-- <ng-container matColumnDef="SLNO">
+    <div class="card-body">
+      <div class="row g-3 align-items-end">
+        <div class="col-12">
+
+
+          <table mat-table [dataSource]="dataSource">
+            <!-- <ng-container matColumnDef="SLNO">
                 <th mat-header-cell *matHeaderCellDef> SNo</th>
                 <td mat-cell *matCellDef="let element">{{ element.employeeID }}</td>
               </ng-container> -->
-        <ng-container matColumnDef="company_Id">
-          <th mat-header-cell *matHeaderCellDef> Company Code </th>
-          <td mat-cell *matCellDef="let element">{{ element.company_Id }}</td>
-        </ng-container>
-        <ng-container matColumnDef="company_Name">
-          <th mat-header-cell *matHeaderCellDef> Company Name</th>
-          <td mat-cell *matCellDef="let element">{{ element.company_Name }}</td>
-        </ng-container>
-        <ng-container matColumnDef="employee_Code">
-          <th mat-header-cell *matHeaderCellDef> Employee Code </th>
-          <td mat-cell *matCellDef="let element">{{ element.employee_Code }}</td>
-        </ng-container>
-        <ng-container matColumnDef="employee_Name">
-          <th mat-header-cell *matHeaderCellDef> Employee Name </th>
-          <td mat-cell *matCellDef="let element">{{ element.employee_Name }}</td>
-        </ng-container>
-        <ng-container matColumnDef="pay_Period">
-          <th mat-header-cell *matHeaderCellDef> Pay Period </th>
-          <td mat-cell *matCellDef="let element">{{ element.pay_Period }}</td>
-        </ng-container>
-        <ng-container matColumnDef="billable_Days">
-          <th mat-header-cell *matHeaderCellDef> Billable_Days </th>
-          <td mat-cell *matCellDef="let element">{{ element.billable_Days }}</td>
-        </ng-container>
-        <ng-container matColumnDef="iqN_REF_NO">
-          <th mat-header-cell *matHeaderCellDef> IQN_Ref_No </th>
-          <td mat-cell *matCellDef="let element">{{ element.iqN_REF_NO }}</td>
-        </ng-container>
-        <ng-container matColumnDef="iqN_ID">
-          <th mat-header-cell *matHeaderCellDef> IQN_ID </th>
-          <td mat-cell *matCellDef="let element">{{ element.iqN_ID }}</td>
-        </ng-container>
-        <ng-container matColumnDef="reF_DATE">
-          <th mat-header-cell *matHeaderCellDef> REF_Date </th>
-          <td mat-cell *matCellDef="let element">{{ element.reF_DATE }}</td>
-        </ng-container>
-        <ng-container matColumnDef="froM_DATE">
-          <th mat-header-cell *matHeaderCellDef> From_Date </th>
-          <td mat-cell *matCellDef="let element">{{ element.froM_DATE }}</td>
-        </ng-container>
-        <ng-container matColumnDef="tO_DATE">
-          <th mat-header-cell *matHeaderCellDef> To_Date </th>
-          <td mat-cell *matCellDef="let element">{{ element.tO_DATE }}</td>
-        </ng-container>
-        <ng-container matColumnDef="wO_NUMBER">
-          <th mat-header-cell *matHeaderCellDef> WO_Number </th>
-          <td mat-cell *matCellDef="let element">{{ element.wO_NUMBER }}</td>
-        </ng-container>
-        <ng-container matColumnDef="grN_NUMBER">
-          <th mat-header-cell *matHeaderCellDef> GRN_Number </th>
-          <td mat-cell *matCellDef="let element">{{ element.grN_NUMBER }}</td>
-        </ng-container>
-        <ng-container matColumnDef="recruiteR_NAME">
-          <th mat-header-cell *matHeaderCellDef> Recruiter... </th>
-          <td mat-cell *matCellDef="let element">{{ element.recruiteR_NAME }}</td>
-        </ng-container>
-        <ng-container matColumnDef="clienT_BILLING_PERCENTAGE">
-          <th mat-header-cell *matHeaderCellDef> Client_Billi... </th>
-          <td mat-cell *matCellDef="let element">{{ element.clienT_BILLING_PERCENTAGE }}</td>
-        </ng-container>
-        <ng-container matColumnDef="locatioN_NAME">
-          <th mat-header-cell *matHeaderCellDef> Location_N </th>
-          <td mat-cell *matCellDef="let element">{{ element.locatioN_NAME }}</td>
-        </ng-container>
-        <ng-container matColumnDef="oT_AMOUNT">
-          <th mat-header-cell *matHeaderCellDef> OT_Amount </th>
-          <td mat-cell *matCellDef="let element">{{ element.oT_AMOUNT }}</td>
-        </ng-container>
-        <ng-container matColumnDef="otheR_ALLOWANCE">
-          <th mat-header-cell *matHeaderCellDef> Other_All.. </th>
-          <td mat-cell *matCellDef="let element">{{ element.otheR_ALLOWANCE }}</td>
-        </ng-container>
-        <ng-container matColumnDef="reimB_AMOUNT">
-          <th mat-header-cell *matHeaderCellDef> Reimb_Amo.. </th>
-          <td mat-cell *matCellDef="let element">{{ element.reimB_AMOUNT }}</td>
-        </ng-container>
-        <ng-container matColumnDef="discounT_TYPE">
-          <th mat-header-cell *matHeaderCellDef> Discount_T... </th>
-          <td mat-cell *matCellDef="let element">{{ element.discounT_TYPE }}</td>
-        </ng-container>
-        <ng-container matColumnDef="discount_Amount">
-          <th mat-header-cell *matHeaderCellDef> Discount_Am </th>
-          <td mat-cell *matCellDef="let element">{{ element.discount_Amount }}</td>
-        </ng-container>
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>
-       </div>
-  <mat-paginator [pageSize]="5"
-               [pageSizeOptions]="[5, 10, 25, 100]"
-               showFirstLastButtons>
-</mat-paginator>
-    </div>
+            <ng-container matColumnDef="company_Id">
+              <th mat-header-cell *matHeaderCellDef> Company Code </th>
+              <td mat-cell *matCellDef="let element">{{ element.company_Id }}</td>
+            </ng-container>
+            <ng-container matColumnDef="company_Name">
+              <th mat-header-cell *matHeaderCellDef> Company Name</th>
+              <td mat-cell *matCellDef="let element">{{ element.company_Name }}</td>
+            </ng-container>
+            <ng-container matColumnDef="employee_Code">
+              <th mat-header-cell *matHeaderCellDef> Employee Code </th>
+              <td mat-cell *matCellDef="let element">{{ element.employee_Code }}</td>
+            </ng-container>
+            <ng-container matColumnDef="employee_Name">
+              <th mat-header-cell *matHeaderCellDef> Employee Name </th>
+              <td mat-cell *matCellDef="let element">{{ element.employee_Name }}</td>
+            </ng-container>
+            <ng-container matColumnDef="pay_Period">
+              <th mat-header-cell *matHeaderCellDef> Pay Period </th>
+              <td mat-cell *matCellDef="let element">{{ element.pay_Period }}</td>
+            </ng-container>
+            <ng-container matColumnDef="billable_Days">
+              <th mat-header-cell *matHeaderCellDef> Billable_Days </th>
+              <td mat-cell *matCellDef="let element">{{ element.billable_Days }}</td>
+            </ng-container>
+            <ng-container matColumnDef="iqN_REF_NO">
+              <th mat-header-cell *matHeaderCellDef> IQN_Ref_No </th>
+              <td mat-cell *matCellDef="let element">{{ element.iqN_REF_NO }}</td>
+            </ng-container>
+            <ng-container matColumnDef="iqN_ID">
+              <th mat-header-cell *matHeaderCellDef> IQN_ID </th>
+              <td mat-cell *matCellDef="let element">{{ element.iqN_ID }}</td>
+            </ng-container>
+            <ng-container matColumnDef="reF_DATE">
+              <th mat-header-cell *matHeaderCellDef> REF_Date </th>
+              <td mat-cell *matCellDef="let element">{{ element.reF_DATE }}</td>
+            </ng-container>
+            <ng-container matColumnDef="froM_DATE">
+              <th mat-header-cell *matHeaderCellDef> From_Date </th>
+              <td mat-cell *matCellDef="let element">{{ element.froM_DATE }}</td>
+            </ng-container>
+            <ng-container matColumnDef="tO_DATE">
+              <th mat-header-cell *matHeaderCellDef> To_Date </th>
+              <td mat-cell *matCellDef="let element">{{ element.tO_DATE }}</td>
+            </ng-container>
+            <ng-container matColumnDef="wO_NUMBER">
+              <th mat-header-cell *matHeaderCellDef> WO_Number </th>
+              <td mat-cell *matCellDef="let element">{{ element.wO_NUMBER }}</td>
+            </ng-container>
+            <ng-container matColumnDef="grN_NUMBER">
+              <th mat-header-cell *matHeaderCellDef> GRN_Number </th>
+              <td mat-cell *matCellDef="let element">{{ element.grN_NUMBER }}</td>
+            </ng-container>
+            <ng-container matColumnDef="recruiteR_NAME">
+              <th mat-header-cell *matHeaderCellDef> Recruiter... </th>
+              <td mat-cell *matCellDef="let element">{{ element.recruiteR_NAME }}</td>
+            </ng-container>
+            <ng-container matColumnDef="clienT_BILLING_PERCENTAGE">
+              <th mat-header-cell *matHeaderCellDef> Client_Billi... </th>
+              <td mat-cell *matCellDef="let element">{{ element.clienT_BILLING_PERCENTAGE }}</td>
+            </ng-container>
+            <ng-container matColumnDef="locatioN_NAME">
+              <th mat-header-cell *matHeaderCellDef> Location_N </th>
+              <td mat-cell *matCellDef="let element">{{ element.locatioN_NAME }}</td>
+            </ng-container>
+            <ng-container matColumnDef="oT_AMOUNT">
+              <th mat-header-cell *matHeaderCellDef> OT_Amount </th>
+              <td mat-cell *matCellDef="let element">{{ element.oT_AMOUNT }}</td>
+            </ng-container>
+            <ng-container matColumnDef="otheR_ALLOWANCE">
+              <th mat-header-cell *matHeaderCellDef> Other_All.. </th>
+              <td mat-cell *matCellDef="let element">{{ element.otheR_ALLOWANCE }}</td>
+            </ng-container>
+            <ng-container matColumnDef="reimB_AMOUNT">
+              <th mat-header-cell *matHeaderCellDef> Reimb_Amo.. </th>
+              <td mat-cell *matCellDef="let element">{{ element.reimB_AMOUNT }}</td>
+            </ng-container>
+            <ng-container matColumnDef="discounT_TYPE">
+              <th mat-header-cell *matHeaderCellDef> Discount_T... </th>
+              <td mat-cell *matCellDef="let element">{{ element.discounT_TYPE }}</td>
+            </ng-container>
+            <ng-container matColumnDef="discount_Amount">
+              <th mat-header-cell *matHeaderCellDef> Discount_Am </th>
+              <td mat-cell *matCellDef="let element">{{ element.discount_Amount }}</td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </div>
+        <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons>
+        </mat-paginator>
+      </div>
     </div>
   </div>
 </div>
+<br><br><br><br><br>
+            <div *ngIf="isLoading" class="loading-overlay">
+                <img src="assets/Loading.gif" alt="Loading...">
+            </div>
