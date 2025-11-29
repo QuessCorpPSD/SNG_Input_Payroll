@@ -24,8 +24,6 @@ import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { BillImportTypeComponent } from '../../../common/bill-import-type/bill-import-type.component';
 import { IInvoiceRepository } from '../../../Repository/IInvoiceRepository';
 import { InvoiceRepository } from '../../../Service/InvoiceRepository';
-
-
 export const Bill_Token = new InjectionToken<IInvoiceRepository>('Bill_Token');
 
 @Component({
@@ -59,7 +57,6 @@ export class BillableDaysComponent implements OnInit {
   excelFile: File | null = null;
   showSearchGrid: any;
   datatable: any;
-
   ngOnInit(): void {
     this.payPeriodType = "All";
     const json = this._sessionservice.getItem('UserProfile');
