@@ -1,0 +1,108 @@
+<div class="page-wrapper">
+
+    <div class="scrollable-content">
+        <!-- <div
+            style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; min-width: 960px; padding-left: 25px;">
+            Dynamic Upload
+        </div> -->
+
+        <div class="container-fluid g-2" style="min-width: 960px;">
+            <div class="card-body g-2">
+                <div class="row align-items-end">
+                    <div class="col-md-6  d-flex align-items-center">
+                        <label class="form-label text-muted form-label-md"
+                            style="white-space: nowrap; margin-right: 5px; align-items: center;">Upload Type</label>
+                        <select class="form-select form-select-sm" formControlName="Group"
+                            (change)="onUploadTypeChange($event)">
+                            <option value="">Select</option>
+                            <option *ngFor="let ut of Uploadtype" [value]="ut.Upload_Type_Id">
+                                {{ ut.Upload_Type_Name }}
+                            </option>
+                        </select>
+
+                    </div>
+
+                    <div class="col-md-2 d-flex gap-2">
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                            (click)="downloadTemplate()" [disabled]="!canDownload()" matTooltip="DownloadTemplate">
+                            <mat-icon>cloud_download</mat-icon>
+                        </button>
+
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Import"
+                            (click)="ImportClick(fileInput)">
+                            <mat-icon>cloud_upload</mat-icon>
+                        </button>
+                        <input type="file" #fileInput style="display: none;" (click)="fileInput.value=''"
+                            (change)="onFileChange($event)" accept=".xlsx, .xls" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-wrapper1" *ngIf="showTable">
+            <div class="table-scroll">
+                <mat-table [dataSource]="uploadedDataSource" matSort
+                    class="custom-table mat-elevation-z8 auto-fit-table">
+
+                    <ng-container matColumnDef="Checkbox">
+                        <mat-header-cell *matHeaderCellDef class="col-sno"
+                            style="width: 50px !important; min-width: 50px !important; max-width: 50px !important;  display: flex; align-items: center; justify-content: center;">
+                            <mat-checkbox (change)="toggleAllRows()" [checked]="isAllSelected()"
+                                [indeterminate]="selection.hasValue() && !isAllSelected()">
+                            </mat-checkbox>
+
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let row;let i = index" class="col-sno"
+                            style="width: 50px !important; min-width: 50px !important; max-width: 50px !important;  display: flex; align-items: center; justify-content: center;">
+                            <mat-checkbox (change)="toggleRow(row)" [checked]="selection.isSelected(row)"
+                                [disabled]="row.Upload_Type_Column_Id === mandatoryColumnId">
+                            </mat-checkbox>
+
+
+                        </mat-cell>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="Columns">
+                        <mat-header-cell *matHeaderCellDef><strong>Columns</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Upload_Type_Column_Name }}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="FilterCheckbox">
+                        <mat-header-cell *matHeaderCellDef class="col-sno"
+                            style="width: 50px !important; min-width: 50px !important; max-width: 50px !important;  display: flex; align-items: center; justify-content: center;">
+                        </mat-header-cell>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="FilterColumns">
+                        <mat-header-cell *matHeaderCellDef>
+                            <input matInput placeholder="Search" class="form-control form-control-sm"
+                                (keyup)="applyFilter($event, 'Upload_Type_Column_Name')">
+                        </mat-header-cell>
+                    </ng-container>
+
+
+                    <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+                    <mat-header-row *matHeaderRowDef="filterDisplayedColumns" class="filter-row"></mat-header-row>
+
+                    <mat-row *matRowDef="let row; let i = index; columns: uploadDisplayedColumns">
+                    </mat-row>
+
+                </mat-table>
+            </div>
+
+            <div *ngIf="uploadedDataSource.data.length === 0" class="text-center p-4">
+                <p class="text-muted">No data to display</p>
+            </div>
+            <mat-paginator [length]="uploadedDataSource.data.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
+                showFirstLastButtons aria-label="Select page">
+            </mat-paginator>
+        </div>
+
+
+
+    </div>
+</div>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>

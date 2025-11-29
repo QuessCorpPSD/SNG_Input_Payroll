@@ -1,0 +1,175 @@
+<!-- Add this somewhere in your Angular template/component -->
+<br />
+<div class="page-wrapper">
+
+    <div class="scrollable-content">
+        <div
+            style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; min-width: 900px; padding-left: 25px;">
+            Pay Frequency
+        </div>
+
+        <div class="container-fluid g-2" style="min-width: 960px;">
+            <div class="card-body g-2">
+                <div class="row align-items-end">
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Company Code</label>
+                        <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Start Date</label>
+                        <input class="form-control form-control-sm" type="date" formControlName="startdate">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">End Date</label>
+                        <input class="form-control form-control-sm" type="date" formControlName="Enddate">
+                    </div>
+                    <div class="col-md-2 d-flex gap-1">
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Search"
+                            (click)="onsearch()">
+                            <mat-icon>search</mat-icon>
+                        </button>
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Create"
+                            (click)="AddOpen()">
+                            <mat-icon>add</mat-icon>
+                        </button>
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Edit"
+                            (click)="EditOpen()">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                            matTooltip="Export to Excel" (click)="exportToExcel()">
+                            <mat-icon>table_chart</mat-icon>
+                        </button>
+                        <!-- <button class="btn btn-sm" matTooltip="Copy" >
+                            <mat-icon>content_copy</mat-icon>
+                        </button> -->
+
+                        <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                            matTooltip="Download Template">
+                            <mat-icon>cloud_download</mat-icon>
+                        </button>
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Import">
+                            <mat-icon>cloud_upload</mat-icon>
+                        </button>
+                        <input type="file" #fileInput style="display: none;" (click)="fileInput.value=''"
+                            accept=".xlsx, .xls" /> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-wrapper1" *ngIf="isuploadgridvisible" style="min-width: 960px;">
+            <br />
+            <div class="col-md-3 d-flex gap-2">
+
+            </div>
+
+            <div class="table-scroll">
+                <mat-table [dataSource]="dataSource" matSort class="custom-table mat-elevation-z8 auto-fit-table">
+
+                    <!-- SNo -->
+                    <ng-container matColumnDef="SNo">
+                        <mat-header-cell *matHeaderCellDef class="col-sno"
+                            style="width: 50px !important; min-width: 50px !important; max-width: 50px !important;  display: flex; align-items: center; justify-content: center;">
+                            <strong>SNo</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row;let i = index" class="col-sno"
+                            style="width: 50px !important; min-width: 50px !important; max-width: 50px !important;  display: flex; align-items: center; justify-content: center;">
+                            {{row.SNo}}</mat-cell>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="Companycode">
+                        <mat-header-cell *matHeaderCellDef><strong>Companycode</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.Company_Code}}</mat-cell>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="Group">
+                        <mat-header-cell *matHeaderCellDef><strong>Group</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{row.Group}}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Startingdate">
+                        <mat-header-cell *matHeaderCellDef><strong>Starting Date</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Starting_Date }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Endingdate">
+                        <mat-header-cell *matHeaderCellDef><strong>Ending Date</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Ending_Date }}</mat-cell>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="Paysequenceno">
+                        <mat-header-cell *matHeaderCellDef><strong>Pay Sequence No</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Pay_Sequence_Number }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Payperiod">
+                        <mat-header-cell *matHeaderCellDef><strong>Payperiod</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Pay_Period }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Startat">
+                        <mat-header-cell *matHeaderCellDef><strong>Start At</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Start_At }}</mat-cell>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="Endat">
+                        <mat-header-cell *matHeaderCellDef><strong>End At</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.End_At }}</mat-cell>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="Salarydate">
+                        <mat-header-cell *matHeaderCellDef><strong>Salary Date</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Salary_Date }}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="Payperioddays">
+                        <mat-header-cell *matHeaderCellDef><strong>Pay Period Days</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Pay_Period_Days }}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="Weeklyholidays">
+                        <mat-header-cell *matHeaderCellDef><strong>Weekly Holidays</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Weekly_Holidays }}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="Monthlyholidays">
+                        <mat-header-cell *matHeaderCellDef><strong>Monthly Holidays</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Monthly_Holidays }}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="otherholidays">
+                        <mat-header-cell *matHeaderCellDef><strong>Other Holidays</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Other_Holidays }}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="WorkingHolidays">
+                        <mat-header-cell *matHeaderCellDef><strong>Working Holidays</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Working_Days }}</mat-cell>
+                    </ng-container>
+
+                    <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: uploadDisplayedColumns" (click)="onRowClick(row)"
+                        [class.selected-row]="row === selectedRow">
+                    </mat-row>
+
+
+                </mat-table>
+            </div>
+
+            <div *ngIf="dataSource.data.length === 0" class="text-center p-4">
+                <p class="text-muted">No data to display</p>
+            </div>
+
+
+            <mat-paginator [length]="dataSource.data.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
+                showFirstLastButtons aria-label="Select page">
+            </mat-paginator>
+        </div>
+
+
+
+    </div>
+</div>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>

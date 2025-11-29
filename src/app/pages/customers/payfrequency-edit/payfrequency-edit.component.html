@@ -1,0 +1,171 @@
+<mat-card class="custom-card">
+    <form [formGroup]="BillingpayeditForm" novalidate>
+        <div class="scrollable-content">
+            <mat-card-header class="sticky-header">
+                <br />
+                <div
+                    style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; padding-right: 80%; white-space: nowrap;">
+                    Edit Pay Frequency</div>
+
+                <span class="spacer"></span>
+                <button mat-icon-button (click)="onClose()" class="no-border-icon">
+                    <mat-icon>close</mat-icon>
+                </button>
+
+            </mat-card-header>
+
+            <mat-card-content>
+                <div class="row align-items-end">
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">
+                            Company Code <span style="color:red">*</span>
+                        </label>
+                        <input class="form-control form-control-sm" formControlName="Companycode" />
+
+                        <!-- <companyall (companyEmit)="handleCompanyEvent($event)" formControlName="companycode">
+                        </companyall> -->
+
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Group</label>
+                        <input class="form-control form-control-sm" formControlName="Group" />
+                        <!-- <select class="form-select form-select-sm" formControlName="Group">
+                            <option value="">Select</option>
+                            <option *ngFor="let Group of Grouptype" [value]="Group.City_Id">
+                                {{ Group.City_Name }}
+                            </option>
+                        </select> -->
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Start Date</label>
+                        <input class="form-control form-control-sm" formControlName="startdate">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">End Date</label>
+                        <input class="form-control form-control-sm" formControlName="Enddate">
+                    </div>
+                </div>
+                <div class="row align-items-end" style="padding-top: 2%;">
+
+                    <div class="col-md-2 d-flex gap-2">
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Add"
+                            (click)="AddPOOpen()">
+                            <mat-icon>add</mat-icon>
+                        </button>
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Delete"
+                            (click)="deleteSelectedRow()">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+                </div>
+                <div class="table-wrapper1" style="padding-right: 60px; padding-top: 2%;">
+                    <div class="table-scroll">
+                        <mat-table [dataSource]="dataSource" matSort
+                            class="custom-table mat-elevation-z8 auto-fit-table">
+
+                            <!-- SNo -->
+                            <ng-container matColumnDef="SNo">
+                                <mat-header-cell *matHeaderCellDef class="col-sno"
+                                    style="width: 50px !important; min-width: 50px !important; max-width: 50px !important;  display: flex; align-items: center; justify-content: center;">
+                                    <strong>SNo</strong></mat-header-cell>
+                                <mat-cell *matCellDef="let row;let i = index" class="col-sno"
+                                    style="width: 50px !important; min-width: 50px !important; max-width: 50px !important;  display: flex; align-items: center; justify-content: center;">
+                                    {{i+1}}</mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Paysequenceno">
+                                <mat-header-cell *matHeaderCellDef><strong>Pay Sequence No</strong></mat-header-cell>
+                                <mat-cell *matCellDef="let row">{{ row.Pay_Sequence_Number }}</mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Payperiod">
+                                <mat-header-cell *matHeaderCellDef><strong>Payperiod</strong></mat-header-cell>
+                                <mat-cell *matCellDef="let row">{{ row.Pay_Period }}</mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Startat">
+                                <mat-header-cell *matHeaderCellDef><strong>Start At</strong></mat-header-cell>
+                                <mat-cell *matCellDef="let row">{{ row.Start_At }}</mat-cell>
+                            </ng-container>
+
+
+                            <ng-container matColumnDef="Endat">
+                                <mat-header-cell *matHeaderCellDef><strong>End At</strong></mat-header-cell>
+                                <mat-cell *matCellDef="let row">{{ row.End_At }}</mat-cell>
+                            </ng-container>
+
+
+                            <ng-container matColumnDef="Salarydate">
+                                <mat-header-cell *matHeaderCellDef><strong>Salary Date</strong></mat-header-cell>
+                                <mat-cell *matCellDef="let row">{{ row.Salary_Date }}</mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="Payperioddays">
+                                <mat-header-cell *matHeaderCellDef><strong>Pay Period Days</strong></mat-header-cell>
+                                <mat-cell *matCellDef="let row">{{ row.Pay_Period_Days }}</mat-cell>
+                            </ng-container>
+                            <!-- <ng-container matColumnDef="Weeklyholidays">
+                                <mat-header-cell *matHeaderCellDef><strong>Weekly Holidays</strong></mat-header-cell>
+                                <mat-cell *matCellDef="let row">{{ row.Weekly_Holidays }}</mat-cell>
+                            </ng-container> -->
+                            <ng-container matColumnDef="Weeklyholidays">
+                                <mat-header-cell *matHeaderCellDef><strong>Weekly Holidays</strong></mat-header-cell>
+                                <mat-cell *matCellDef="let row; let i = index">
+                                    <input class="form-control form-control-sm" [value]="row.Weekly_Holidays"
+                                        (input)="onWeeklyHolidayChange($event, row)">
+                                </mat-cell>
+                            </ng-container>
+
+
+                            <ng-container matColumnDef="Monthlyholidays">
+                                <mat-header-cell *matHeaderCellDef><strong>Monthly Holidays</strong></mat-header-cell>
+                                <mat-cell *matCellDef="let row">{{ row.Monthly_Holidays }}</mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="WorkingHolidays">
+                                <mat-header-cell *matHeaderCellDef><strong>Working Days</strong></mat-header-cell>
+                                <mat-cell *matCellDef="let row">
+                                    {{ row.Working_Days }}
+                                </mat-cell>
+                            </ng-container>
+                            <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+                            <mat-row *matRowDef="let row; let i = index; columns: uploadDisplayedColumns">
+                            </mat-row>
+
+                        </mat-table>
+                    </div>
+
+                    <div *ngIf="dataSource.data.length === 0" class="text-center p-4">
+                        <p class="text-muted">No data to display</p>
+                    </div>
+
+                    <mat-paginator [length]="dataSource.data.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
+                        showFirstLastButtons aria-label="Select page">
+                    </mat-paginator>
+                </div>
+            </mat-card-content>
+
+            <mat-card-footer class="footer">
+                <div class="d-flex justify-content-end mt-3">
+                    <div class="btn-1"
+                        style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
+
+                        <button type="Cancel"
+                            style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0;">
+                            Cancel
+                        </button>
+
+                        <button type="submit"
+                            style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white; ">
+                            Save
+                        </button>
+                    </div>
+                </div>
+            </mat-card-footer>
+
+        </div>
+    </form>
+</mat-card>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>

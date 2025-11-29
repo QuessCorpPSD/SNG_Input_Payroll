@@ -134,10 +134,7 @@
                         <mat-cell *matCellDef="let row">{{ row['No of Installments'] }}</mat-cell>
                     </ng-container>
 
-                    <!-- HEADER ROW -->
                     <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
-
-                    <!-- DATA ROWS -->
                     <mat-row *matRowDef="let row; columns: uploadDisplayedColumns"></mat-row>
 
                 </mat-table>
