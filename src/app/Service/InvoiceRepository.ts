@@ -121,7 +121,7 @@ export class InvoiceRepository implements IInvoiceRepository {
 
     UploadCancel(formData): Observable<string> {
         const url = `${this.environment.apiUrl}GSTInvoice/PostCancelReject`;
-        return this.http.post(url, formData, {responseType: 'text'});
+        return this.http.post(url, formData, { responseType: 'text' });
     }
 
     GetGSTInvoice(userId: number): Observable<APIResponse> {
@@ -129,7 +129,7 @@ export class InvoiceRepository implements IInvoiceRepository {
         //console.log(url);
         return this.http.get<APIResponse>(url);
     }
-    
+
     DownloadInvoice(invoiceId: number): Observable<HttpResponse<Blob>> {
         const url = `${this.environment.apiUrl}GSTInvoice/Download/${invoiceId}`;
         return this.http.get(url, { responseType: 'blob', observe: 'response' });
@@ -155,4 +155,11 @@ export class InvoiceRepository implements IInvoiceRepository {
         return this.http.get<APIResponse>(
             environment.apiUrl + `POInvoiceInitiate/POInvoiceInitiateExport/${companyId}/${payPeriodId}`);
     }
+
+    UploadBillable(formData: FormData): Observable<APIResponse> {
+        const url = `${this.environment.apiUrl}BillableDays/BillableDaysUpload`;
+        console.log(url);
+        return this.http.post<APIResponse>(url, formData);
+    }
+
 }

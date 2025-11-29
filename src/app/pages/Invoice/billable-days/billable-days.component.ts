@@ -32,7 +32,7 @@ export const Bill_Token = new InjectionToken<IInvoiceRepository>('Bill_Token');
   selector: 'app-billable-days',
   standalone: true,
   imports: [CommonModule, CompanyallComponent, PayPeriodComponent, MatIconModule, MatFormFieldModule,
-    MatSelectModule,MatTableModule,MatPaginatorModule, TextFieldModule, MatInputModule, BillImportTypeComponent],
+    MatSelectModule, MatTableModule, MatPaginatorModule, TextFieldModule, MatInputModule, BillImportTypeComponent],
   templateUrl: './billable-days.component.html',
   styleUrl: './billable-days.component.css',
   providers: [{
@@ -49,10 +49,17 @@ export class BillableDaysComponent implements OnInit {
   files: File[] = [];
   filebase64: any = [];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  displayedColumns = ['company_Id','company_Name','employee_Code','employee_Name','pay_Period','billable_Days','iqN_REF_NO','iqN_ID','reF_DATE','froM_DATE','tO_DATE','wO_NUMBER', 'grN_NUMBER', 'recruiteR_NAME','clienT_BILLING_PERCENTAGE','locatioN_NAME','oT_AMOUNT','otheR_ALLOWANCE','reimB_AMOUNT','discounT_TYPE','discount_Amount']
+  displayedColumns = ['company_Id', 'company_Name', 'employee_Code', 'employee_Name', 'pay_Period', 'billable_Days', 'iqN_REF_NO', 'iqN_ID', 'reF_DATE', 'froM_DATE', 'tO_DATE', 'wO_NUMBER', 'grN_NUMBER', 'recruiteR_NAME', 'clienT_BILLING_PERCENTAGE', 'locatioN_NAME', 'oT_AMOUNT', 'otheR_ALLOWANCE', 'reimB_AMOUNT', 'discounT_TYPE', 'discount_Amount']
   dataSource = new MatTableDataSource<any>([]);
   userdetail!: any;
-  issearch=-1;
+  issearch = -1;
+  showPreviewModal = false;
+  excelPreviewData: any[] = [];
+  isLoading = false;
+  excelFile: File | null = null;
+  showSearchGrid: any;
+  datatable: any;
+
   ngOnInit(): void {
     this.payPeriodType = "All";
     const json = this._sessionservice.getItem('UserProfile');
@@ -72,73 +79,110 @@ export class BillableDaysComponent implements OnInit {
   handlePayperiodEvent(payperiod: Payperiodclass) {
     this.payPeriod = payperiod;
   }
-  ConvertFile(file: File): Observable<string> {
-    const result = new ReplaySubject<string>(1);
-    const reader = new FileReader();
-
-    reader.readAsDataURL(file);
-
-    reader.onload = () => {
-      // Already base64 encoded
-      const base64 = reader.result as string;
-
-      // If you only need the pure base64 (without the data:... prefix)
-      const pureBase64 = base64.split(',')[1];
-
-      result.next(pureBase64);
-      result.complete();
-    };
-
-    reader.onerror = (error) => {
-      result.error(error);
-    };
-
-    return result.asObservable();
+  getTableColumns(): string[] {
+    return this.excelPreviewData?.length ? Object.keys(this.excelPreviewData[0]) : [];
   }
-  FileUpload() {
-    console.log(this.userdetail);
-    if (this.importType == undefined) {
-      alert('Please select Import Type');
-      return;
-    }
-    if (this.files.length == 0) {
-      alert('Please choose file');
+
+  submitExcelData(): void {
+    this.showPreviewModal = false;
+    this.isLoading = true;
+    if (!this.excelFile) {
+      console.error("⚠️ No file selected.");
       return;
     }
 
-    this.files.forEach(element => {
-      this.ConvertFile(element).subscribe((res) => {
-        var files_docs = {
-          "name": element.name,
-          "type": element.type,
-          "size": element.size,
-          "content": res
-        };
-        const billableDaysModelRequest = {
-          "CreatedBy": this.userdetail.user_Id,
-          "File": files_docs,
-          "importType": this.importType.value
-        };
+    const formData = new FormData();
+    if (this.excelFile) {
+      formData.append('file', this.excelFile);
+      formData.append('userId', this.userdetail.user_Id);
+      formData.append('importType', this.importType.value);
 
-        this._invoiceService.BillableUpload(billableDaysModelRequest).subscribe({
-          next: res => { console.log(res) },
-          error: err => { console.log(err) }
-        })
+
+      this._invoiceService.UploadBillable(formData).subscribe({
+        next: (res) => {
+          console.log(res);
+          this.datatable = res.Data;
+          console.table(this.datatable);
+          if (this.datatable && Array.isArray(this.datatable) && this.datatable.length > 0) {
+            this.downloadExcel(this.datatable, "Billable_Days_Validations");
+            this.isLoading = false;
+          } else {
+            alert("No validations returned");
+            this.isLoading = false;
+          }
+        },
+        error: err => {
+          console.error('❌ Upload failed', err);
+          this.isLoading = false;
+        }
       });
-    });
+    }
+  }
+  downloadExcel(data: any[], templateId: string): void {
+    //console.log("export");
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
+    const workbook: XLSX.WorkBook = {
+      Sheets: { 'Sheet1': worksheet },
+      SheetNames: ['Sheet1']
+    };
+
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+    const fileName = `${templateId}.xlsx`;
+    FileSaver.saveAs(blob, fileName);
+  }
+
+   FileUpload(fileInput: HTMLInputElement): void {
+    if (!this.importType) {
+      alert("Please select Import Type");
+      return;
+    }
+    fileInput.click();
+  }
+
+  onFileChange(event: any): void {
+    const target: DataTransfer = <DataTransfer>(event.target);
+
+    if (!target.files || target.files.length !== 1) {
+      console.error('Please upload only one Excel file.');
+      this.isLoading = false;
+      return;
+    }
+
+    const file = target.files[0];
+    this.excelFile = target.files[0];
+    const reader: FileReader = new FileReader();
+    reader.onload = (e: any) => {
+      const binaryStr: string = e.target.result;
+      try {
+        const workbook: XLSX.WorkBook = XLSX.read(binaryStr, { type: 'binary' });
+        const sheetName: string = workbook.SheetNames[0];
+        const sheet: XLSX.WorkSheet = workbook.Sheets[sheetName];
+        const jsonData = XLSX.utils.sheet_to_json(sheet);
+        const top100 = jsonData.slice(0, 100);
+        this.excelPreviewData = top100;  // 🔹 Store for popup preview
+        this.showPreviewModal = true;     // 🔹 Trigger modal
+        this.showSearchGrid = false;     // 🔹 Trigger modal
+        this.isLoading = false;
+      } catch (error) {
+        console.error('Error reading Excel file:', error);
+      }
+    };
+
+    reader.readAsBinaryString(file);
   }
 
 
 
   export(): void {
-    const request={
-      "Param":this.issearch,
-      "Company_Id":this.selectedCompanyId,
-      "Pay_Period_Id":this.payPeriod.payfrequencyid,
-      "Employee_Code":this.EmployeeCode,
+    const request = {
+      "Param": this.issearch,
+      "Company_Id": this.selectedCompanyId,
+      "Pay_Period_Id": this.payPeriod.payfrequencyid,
+      "Employee_Code": this.EmployeeCode,
     }
 
-     this._invoiceService.BillableDaysSearchExport(request).subscribe({
+    this._invoiceService.BillableDaysSearchExport(request).subscribe({
       next: res => {
         this.downloadExcelFromBase64(res.Data.file, res.Data.fileName)
       },
@@ -159,19 +203,17 @@ export class BillableDaysComponent implements OnInit {
 
   }
   BillableSearch() {
-    if (!this.selectedCompanyId)
-    {
+    if (!this.selectedCompanyId) {
       alert("Please select Company Code");
       return;
     }
 
-    if (!this.payPeriod)
-    {
+    if (!this.payPeriod) {
       alert("Please select PayPeriod");
       return;
     }
 
-    this.issearch=1;
+    this.issearch = 1;
     const request = {
       "Company_Id": this.selectedCompanyId,
       "Pay_Period_Id": this.payPeriod.payfrequencyid,
@@ -179,8 +221,10 @@ export class BillableDaysComponent implements OnInit {
     }
     console.log(request)
     this._invoiceService.BillableSearch(request).subscribe({
-      next: res => {  this.dataSource = new MatTableDataSource<any>(Array.isArray(res.Data) ? res.Data : []);
-        this.dataSource.paginator = this.paginator;  },
+      next: res => {
+        this.dataSource = new MatTableDataSource<any>(Array.isArray(res.Data) ? res.Data : []);
+        this.dataSource.paginator = this.paginator;
+      },
       error: err => { console.log(err) }
     })
 
