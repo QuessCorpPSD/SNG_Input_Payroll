@@ -37,6 +37,8 @@ interface DayCol {
   dayNum: number;         // e.g. 1
   dowShort: string;       // S M T W T F S
   isWeekend: boolean;
+  OTKey: string | null;
+  HOTKey: string | null;
 }
 
 interface ViewRow {
@@ -58,11 +60,12 @@ interface ViewRow {
   Approver: string | null;
   OT: string | null;
   // one value per dynamic day column (same index order as dayCols)
-  dayValues: (string | null)[];
-  OTWKD: string | null;
-  OTWND: string | null;
-  NSOTH: string | null;
-  POTRS: string | null;
+  //dayValues: (string | null)[];
+  dayValues: { OT: string | null; HOT: string | null }[];
+  // OTWKD: string | null;
+  // OTWND: string | null;
+  // NSOTH: string | null;
+  // POTRS: string | null;
   selected: boolean;
 }
 
@@ -118,6 +121,7 @@ export class TimesheetComponent {
   Switchpage: string = '';
   apiResponseDaily: any;
   apiResponseDailyTemplate: any;
+  attendancevalid: any;
   dayCols: DayCol[] = [];
   rows: ViewRow[] = [];
   statusOptions = ['Assigned', 'UnAssigned', 'Saparated', 'Seized'];
@@ -313,7 +317,7 @@ export class TimesheetComponent {
       this.isLoading = false;
       return;
     }
-    fileInput.value='';
+    fileInput.value = '';
     fileInput.click();
   }
 
@@ -484,27 +488,58 @@ export class TimesheetComponent {
 
         this.apiResponseDaily = res.Data;
 
+        this.attendancevalid = this.apiResponseDaily?.data?.Table5[0].LeaveType;
+
         const table: RawRow[] = this.apiResponseDaily?.data?.Table0 ?? [];
         if (!table.length) return;
 
         // 1) detect & sort date columns (…OT)
         const allKeys = Object.keys(table[0]);
-        this.dayCols = allKeys
-          .filter(k => /^\d{4}-\d{2}-\d{2}OT$/.test(k))
-          .sort((a, b) => a.localeCompare(b))
-          .map(k => {
-            const date = k.substring(0, 10); // "YYYY-MM-DD"
-            const d = new Date(date + 'T00:00:00');
-            const dow = d.getDay(); // 0=Sun … 6=Sat
-            const initials = ['S', 'M', 'T', 'W', 'T', 'F', 'S'][dow];
-            return {
-              key: k,
-              date,
-              dayNum: d.getDate(),
-              dowShort: initials,
-              isWeekend: dow === 0 || dow === 6
-            } as DayCol;
+        const dateGroups = new Map<string, any>();
+
+        allKeys
+          .filter(k => /^\d{4}-\d{2}-\d{2}(OT|HOT)$/.test(k))
+          .forEach(k => {
+            const date = k.substring(0, 10);
+            const type = k.endsWith("HOT") ? "HOT" : "OT";
+
+            if (!dateGroups.has(date)) {
+              const d = new Date(date + 'T00:00:00');
+              const dow = d.getDay();
+              const initials = ['S', 'M', 'T', 'W', 'T', 'F', 'S'][dow];
+
+              dateGroups.set(date, {
+                date,
+                dayNum: d.getDate(),
+                dowShort: initials,
+                isWeekend: dow === 0 || dow === 6,
+                OTKey: null,
+                HOTKey: null
+              });
+            }
+
+            dateGroups.get(date)[type + "Key"] = k;
           });
+
+        this.dayCols = Array.from(dateGroups.values())
+          .sort((a, b) => a.date.localeCompare(b.date));
+
+        // this.dayCols = allKeys
+        //   .filter(k => /^\d{4}-\d{2}-\d{2}(OT|HOT)$/.test(k))
+        //   .sort((a, b) => a.localeCompare(b))
+        //   .map(k => {
+        //     const date = k.substring(0, 10); // "YYYY-MM-DD"
+        //     const d = new Date(date + 'T00:00:00');
+        //     const dow = d.getDay(); // 0=Sun … 6=Sat
+        //     const initials = ['S', 'M', 'T', 'W', 'T', 'F', 'S'][dow];
+        //     return {
+        //       key: k,
+        //       date,
+        //       dayNum: d.getDate(),
+        //       dowShort: initials,
+        //       isWeekend: dow === 0 || dow === 6
+        //     } as DayCol;
+        //   });
 
         // 2) normalize table rows to view rows
         this.rows = table.map((r: RawRow): ViewRow => {
@@ -526,16 +561,20 @@ export class TimesheetComponent {
             Remarks: r['Remarks'] ?? null,
             Approver: r['Approver'] ?? null,
             OT: r['OT'] ?? null,
-            dayValues: this.dayCols.map(dc => (r[dc.key] ?? null)),
-            OTWKD: r['OTWKD'] ?? null,
-            OTWND: r['OTWND'] ?? null,
-            NSOTH: r['NSOTH'] ?? null,
-            POTRS: r['POTRS'] ?? null,
+            dayValues: this.dayCols.map(dc => ({
+              OT: dc.OTKey ? (r[dc.OTKey] ?? null) : null,
+              HOT: dc.HOTKey ? (r[dc.HOTKey] ?? null) : null
+            })),
+            //dayValues: this.dayCols.map(dc => (r[dc.key] ?? null)),
+            // OTWKD: r['OTWKD'] ?? null,
+            // OTWND: r['OTWND'] ?? null,
+            // NSOTH: r['NSOTH'] ?? null,
+            // POTRS: r['POTRS'] ?? null,
             selected: false
           };
 
           // 🔥 recalc only if at least one dayValue is not null/empty
-          if (row.dayValues.some(v => v !== null && v !== '')) {
+          if (row.dayValues.some(v => (v.OT && v.OT !== '') || (v.HOT && v.HOT !== ''))) {
             this.recalculateSummary(row);
           }
 
@@ -921,12 +960,18 @@ export class TimesheetComponent {
     return idx >= 0 ? name.slice(idx + 1).toUpperCase() : '';
   }
 
-  onType(row: any, idx: number, value: string) {
-    const v = (value ?? '').toString().toUpperCase().trim();
-    row.dayValues[idx] = v;
+  // onType(row: any, idx: number, value: string, valuae1: string) {
+  //   const v = (value ?? '').toString().toUpperCase().trim();
+  //   row.dayValues[idx] = v;
 
+  //   this.recalculateSummary(row);
+  // }
+
+  onType(row: ViewRow, i: number, field: 'OT' | 'HOT', value: string) {
+    row.dayValues[i][field] = value;   // ✅ update only the specific textbox
     this.recalculateSummary(row);
   }
+
 
   recalculateSummary(row: any) {
     // reset counters
@@ -980,83 +1025,179 @@ export class TimesheetComponent {
     row.DEHE = `${row.DEHE}-${totalHours}`;
   }
 
-  onBlur(row: any, index: number, inputEl?: HTMLInputElement): void {
-    const raw = (row.dayValues[index] ?? '').toString().toUpperCase().trim();
+  // onBlur(row: any, index: number, field: 'OT' | 'HOT', inputEl?: HTMLInputElement): void {
+  //   const raw = (row.dayValues[index] ?? '').toString().toUpperCase().trim();
 
-    const allowedCodes = ['PL', 'SL', 'CL', 'WO', 'H', 'CO'];
-    const isCode = allowedCodes.includes(raw);
+  //   const allowedCodes = ['PL', 'SL', 'CL', 'WO', 'H', 'CO'];
+  //   const isCode = allowedCodes.includes(raw);
 
-    // integer or decimal, 0–24
+  //   // integer or decimal, 0–24
+  //   const isNumber = /^(\d{1,2}(\.\d{1,2})?|24(\.0{1,2})?)$/.test(raw);
+
+  //   if (raw === '') { row.dayValues[index][field] = ''; return; }
+
+  //   if (isCode) {
+
+  //     if (this.allowedCodesSet.has(raw)) {
+
+  //       if (raw != 'H' && raw != 'WO' && raw != 'CO') {
+  //         if (this.apiResponseDaily?.data?.Table5[0]?.LeaveType.includes(raw) == false) {
+  //           alert(raw + ' is not applicable for this company.');
+  //           row.dayValues[index][field] = '';
+  //           inputEl?.focus();
+  //           return;
+  //         }
+  //         if (this.apiResponseDaily?.data?.Table8[0]?.LeaveRoles.includes(raw) == false) {
+  //           alert(raw + ' leave rule is not updated for this company/site.');
+  //           row.dayValues[index][field] = '';
+  //           inputEl?.focus();
+  //           return;
+  //         }
+  //         row.dayValues[index] = raw;
+  //         return;
+
+  //       }
+  //       else {
+  //         row.dayValues[index] = raw;
+  //         return;
+  //       }
+  //     }
+  //     else {
+  //       alert('Please enter valid data');
+  //       row.dayValues[index][field] = '';
+  //       inputEl?.focus();
+  //       return;
+  //     }
+  //   } else if (isNumber) {
+
+  //     if (this.hourRegex.test(raw)) {
+  //       const n = parseFloat(raw);
+  //       const hfd = parseFloat(this.apiResponseDaily?.data?.Table6[0]?.HalfDay_Working_Hour);
+  //       if (n >= 0 && n <= 24) {
+
+  //         if (n < hfd && n != 0) {
+  //           alert('Hours should not less then ' + hfd + ' Hrs');
+  //           row.dayValues[index][field] = '';
+  //           inputEl?.focus();
+  //           return;
+  //         }
+  //         row.dayValues[index] = this.formatHours(raw);
+  //         return;
+  //       }
+  //       else {
+  //         alert('Hours should be less than or equal to 24Hrs');
+  //         row.dayValues[index][field] = '';
+  //         inputEl?.focus();
+  //         return;
+  //       }
+  //     }
+  //     else {
+  //       alert('Hours should be less than or equal to 24Hrs');
+  //       row.dayValues[index][field] = '';
+  //       inputEl?.focus();
+  //       return;
+  //     }
+  //   } else {
+  //     alert('Please enter valid data');
+  //     row.dayValues[index][field] = '';
+  //     inputEl?.focus();
+  //     return;
+  //   }
+  // }
+
+  onBlur(row: any, index: number, field: 'OT' | 'HOT', inputEl?: HTMLInputElement): void {
+
+    const raw = (row.dayValues[index][field] ?? '').toString().toUpperCase().trim();
+
+    //const allowedCodes = ['PL', 'SL', 'CL', 'WO', 'H', 'CO'];
+    this.allowedCodes = this.attendancevalid
+      .split(',')          // split by comma
+      .map(s => s.trim())  // remove spaces
+      .filter(s => s);     // remove empty entries
+    this.allowedCodesSet = new Set(this.allowedCodes);
+
+    const isCode = this.allowedCodesSet.has(raw);
+
     const isNumber = /^(\d{1,2}(\.\d{1,2})?|24(\.0{1,2})?)$/.test(raw);
 
-    if (raw === '') { row.dayValues[index] = ''; return; }
+    // If empty → clear ONLY the specific field
+    if (raw === '') {
+      row.dayValues[index][field] = '';   // ✔ FIX
+      return;
+    }
 
     if (isCode) {
       if (this.allowedCodesSet.has(raw)) {
 
         if (raw != 'H' && raw != 'WO' && raw != 'CO') {
+
           if (this.apiResponseDaily?.data?.Table5[0]?.LeaveType.includes(raw) == false) {
             alert(raw + ' is not applicable for this company.');
-            row.dayValues[index] = '';
+            row.dayValues[index][field] = '';   // ✔ FIX
             inputEl?.focus();
             return;
           }
-          if (this.apiResponseDaily?.data?.Table8[0]?.LeaveRoles.includes(raw) == false) {
-            alert(raw + ' leave rule is not updated for this company/site.');
-            row.dayValues[index] = '';
-            inputEl?.focus();
-            return;
-          }
-          row.dayValues[index] = raw;
+
+          // if (this.apiResponseDaily?.data?.Table8[0]?.LeaveRoles.includes(raw) == false) {
+          //   alert(raw + ' leave rule is not updated for this company/site.');
+          //   row.dayValues[index][field] = '';   // ✔ FIX
+          //   inputEl?.focus();
+          //   return;
+          // }
+
+          row.dayValues[index][field] = raw;   // ✔ FIX
           return;
 
-        }
-        else {
-          row.dayValues[index] = raw;
+        } else {
+          row.dayValues[index][field] = raw;   // ✔ FIX
           return;
         }
-      }
-      else {
+      } else {
         alert('Please enter valid data');
-        row.dayValues[index] = '';
+        row.dayValues[index][field] = '';   // ✔ FIX
         inputEl?.focus();
         return;
       }
-    } else if (isNumber) {
+    }
+    else if (isNumber) {
+
       if (this.hourRegex.test(raw)) {
         const n = parseFloat(raw);
         const hfd = parseFloat(this.apiResponseDaily?.data?.Table6[0]?.HalfDay_Working_Hour);
+
         if (n >= 0 && n <= 24) {
 
-          if (n < hfd && n != 0) {
+          if (n < hfd && n != 0 && field=='OT') {
             alert('Hours should not less then ' + hfd + ' Hrs');
-            row.dayValues[index] = '';
+            row.dayValues[index][field] = '';   // ✔ FIX
             inputEl?.focus();
             return;
           }
-          row.dayValues[index] = this.formatHours(raw);
+
+          row.dayValues[index][field] = this.formatHours(raw);   // ✔ FIX
           return;
-        }
-        else {
-          alert('Hours should be less than or equal to 24Hrs');
-          row.dayValues[index] = '';
+
+        } else {
+          alert('Hours should be <= 24Hrs');
+          row.dayValues[index][field] = '';   // ✔ FIX
           inputEl?.focus();
           return;
         }
-      }
-      else {
-        alert('Hours should be less than or equal to 24Hrs');
-        row.dayValues[index] = '';
+      } else {
+        alert('Hours should be <= 24Hrs');
+        row.dayValues[index][field] = '';   // ✔ FIX
         inputEl?.focus();
         return;
       }
-    } else {
+    }
+    else {
       alert('Please enter valid data');
-      row.dayValues[index] = '';
+      row.dayValues[index][field] = '';   // ✔ FIX
       inputEl?.focus();
       return;
     }
   }
+
 
   private formatHours(s: string): string {
     let [i, d] = s.split('.');
@@ -1096,14 +1237,19 @@ export class TimesheetComponent {
         Remarks: row.Remarks || '',
         Approver: row.Approver || '',
         OT: row.OT || '',
-        OTWKD: row.OTWKD || '',
-        OTWND: row.OTWND || '',
-        NSOTH: row.NSOTH || '',
-        POTRS: row.POTRS || '',
-        dayEntries: row.dayValues.map((val, i) => ({
-          date: this.dayCols[i].date,
-          value: val || '0'
-        }))
+        // OTWKD: row.OTWKD || '',
+        // OTWND: row.OTWND || '',
+        // NSOTH: row.NSOTH || '',
+        // POTRS: row.POTRS || '',
+       dayEntries: row.dayValues.map((val, i) => {
+  const dayVal = val ?? { OT: null, HOT: null };  // fallback object if val is null
+
+  return {
+    date: this.dayCols[i].date,
+    OT: (dayVal.OT !== null && dayVal.OT !== '') ? dayVal.OT : '0',
+    HOT: (dayVal.HOT !== null && dayVal.HOT !== '') ? dayVal.HOT : '0'
+  };
+})
       }))
     };
 
@@ -1190,14 +1336,19 @@ export class TimesheetComponent {
         Remarks: row.Remarks || '',
         Approver: row.Approver || '',
         OT: row.OT || '',
-        OTWKD: row.OTWKD || '',
-        OTWND: row.OTWND || '',
-        NSOTH: row.NSOTH || '',
-        POTRS: row.POTRS || '',
-        dayEntries: row.dayValues.map((val, i) => ({
-          date: this.dayCols[i].date,
-          value: val || '0'
-        }))
+        // OTWKD: row.OTWKD || '',
+        // OTWND: row.OTWND || '',
+        // NSOTH: row.NSOTH || '',
+        // POTRS: row.POTRS || '',
+        dayEntries: row.dayValues.map((val, i) => {
+  const dayVal = val ?? { OT: null, HOT: null };  // fallback object if val is null
+
+  return {
+    date: this.dayCols[i].date,
+    OT: (dayVal.OT !== null && dayVal.OT !== '') ? dayVal.OT : '0',
+    HOT: (dayVal.HOT !== null && dayVal.HOT !== '') ? dayVal.HOT : '0'
+  };
+})
       }))
     };
 
@@ -1287,6 +1438,18 @@ export class TimesheetComponent {
     event.target.value = value;
   }
 
+  allowDecimalOnly(event: KeyboardEvent) {
+  const allowedChars = /[0-9.]/;
 
+  // Allow: numbers and dot
+  if (!allowedChars.test(event.key)) {
+    event.preventDefault();
+  }
 
+  // Prevent more than one dot
+  const input = event.target as HTMLInputElement;
+  if (event.key === '.' && input.value.includes('.')) {
+    event.preventDefault();
+  }
+}
 }
