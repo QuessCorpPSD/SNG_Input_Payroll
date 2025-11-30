@@ -25,6 +25,7 @@ export class GSTService implements IGstRepository {
   }
   
   Create(payload: any): Observable<APIResponse> {
+    
     return this.http.post<APIResponse>(
       this.env.apiUrl + 'Gst/Create',
       payload
