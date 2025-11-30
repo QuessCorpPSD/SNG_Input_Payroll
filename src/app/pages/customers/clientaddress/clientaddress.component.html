@@ -1,0 +1,134 @@
+<br />
+<div class="page-wrapper">
+
+    <div class="scrollable-content">
+        <div
+            style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; min-width: 960px; padding-left: 25px;">
+            Cilent Address List
+        </div>
+        <br />
+
+        <div class="table-wrapper1" style="padding-top: 2%;">
+            <div class="col-md-3 d-flex gap-2">
+                <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Create"
+                    (click)="AddPOOpen()">
+                    <mat-icon>add</mat-icon>
+                </button>
+
+                <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Export"
+                (click)="exportToExcel()">
+                    <mat-icon>table_chart</mat-icon>
+                </button>
+                <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Import"
+                (click)="ImportOpen()">
+                    <mat-icon>cloud_upload</mat-icon>
+                </button> -->
+            </div>
+
+            <div class="table-scroll">
+                <mat-table [dataSource]="dataSource" matSort
+                    class="custom-table mat-elevation-z8 auto-fit-table">
+                    <!-- Data Rows -->
+                    <!-- <ng-container matColumnDef="Action">
+                        <mat-header-cell *matHeaderCellDef style="width: 120px!important;min-width: 90px!important;"><strong>Action</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row"  style="width: 120px!important;min-width: 90px!important;">
+                            <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                matTooltip="Details" style="display: none;">
+                                <mat-icon>information</mat-icon>
+                            </button>
+                            <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                matTooltip="edit" (click)="editOpen()" style="display: none;">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                        </mat-cell>
+                    </ng-container> -->
+
+                    <ng-container matColumnDef="Client_Address_Id">
+                        <mat-header-cell *matHeaderCellDef><strong>Client Address Id</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['clientAddressId'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Effective Date -->
+                    <ng-container matColumnDef="Companycode">
+                        <mat-header-cell *matHeaderCellDef><strong>Company Code</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['company_Code'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Quess Legal Entity -->
+                    <ng-container matColumnDef="MapName">
+                        <mat-header-cell *matHeaderCellDef><strong>Map Name</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['map_Name'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Gst Type -->
+                    <ng-container matColumnDef="SAPCustomercode">
+                        <mat-header-cell *matHeaderCellDef><strong>SAP Customer Code</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['saC_Code'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- State Name -->
+                    <ng-container matColumnDef="Billing_Client_Name">
+                        <mat-header-cell *matHeaderCellDef><strong>BillingClient Name</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['billingClientName'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- GST Number -->
+                    <ng-container matColumnDef="billingaddress">
+                        <mat-header-cell *matHeaderCellDef><strong>Billing Address</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['billingAddress'] }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Shippingaddresssameasbilling">
+                        <mat-header-cell *matHeaderCellDef style="width: 240px!important;min-width: 240px!important;"><strong>Shipping Address same as Billing</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row"style="width: 240px!important;min-width: 240px!important;">{{ row['isShippingAddressSameAsBilling'] }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Shippingclientname">
+                        <mat-header-cell *matHeaderCellDef><strong>Shipping Client Name</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['shippingClientName'] }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Shippingaddress">
+                        <mat-header-cell *matHeaderCellDef><strong>Shipping Address</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['shippingAddress'] }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Effectivedate">
+                        <mat-header-cell *matHeaderCellDef><strong>Effective Date</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['effectiveDate'] }}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="gstnumber">
+                        <mat-header-cell *matHeaderCellDef><strong>GST Number</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['gstNumber'] }}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="gstapplicable">
+                        <mat-header-cell *matHeaderCellDef><strong>GST applicable</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row[''] }}</mat-cell>
+                    </ng-container>
+
+
+                    <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+
+                    <mat-row *matRowDef="let row; columns: uploadDisplayedColumns"></mat-row>
+                </mat-table>
+            </div>
+
+            <!-- No Data Message -->
+            <div *ngIf="dataSource.data.length === 0" class="text-center p-4">
+                <p class="text-muted">No data to display</p>
+            </div>
+
+            <!-- Paginator -->
+            <mat-paginator [length]="dataSource.data.length" [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"
+                showFirstLastButtons aria-label="Select page">
+            </mat-paginator>
+        </div>
+
+    </div>
+</div>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>
+<app-alertpopup *ngIf="showAlert" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+    (close)="closePopup()">
+</app-alertpopup>

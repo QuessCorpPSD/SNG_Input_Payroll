@@ -1,0 +1,154 @@
+<form [formGroup]="clientaddress" novalidate>
+  <mat-card class="custom-card">
+    <mat-card-header class="sticky-header">
+      <div style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; padding-right: 440px;">
+        Create Client Address
+      </div>
+      <span class="spacer"></span>
+      <button mat-icon-button (click)="onClose()" class="no-border-icon">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-card-header>
+
+    <mat-card-content>
+
+      <!-- Row 1 -->
+      <div class="row g-3 mb-3">
+
+        <!-- Company -->
+        <div class="col-md-6">
+          <label class="form-label small">Company <span style="color:red">*</span></label>
+
+          <companyall formControlName="company" (companyEmit)="handleCompanyEvent($event)"
+            (blur)="markFieldTouched('company')">
+          </companyall>
+
+          <small *ngIf="clientaddress.get('company')?.invalid && clientaddress.get('company')?.touched"
+            style="color:red">Company is required</small>
+        </div>
+
+        <!-- Cost Center -->
+        <div class="col-md-6">
+          <label class="form-label small">Cost Center Mapping</label>
+          <select class="form-select form-select-sm" formControlName="Costcentermapping">
+            <option value="" disabled>Select</option>
+            <option *ngFor="let cc of Costcenter " [value]="cc.cost_Center_Mapping_Id">{{cc.cost_Center_Name}}</option>
+
+          </select>
+        </div>
+
+      </div>
+
+      <!-- Row 2 -->
+      <div class="row g-3 mb-3">
+
+        <!-- Sub Customer Code -->
+        <div class="col-md-6">
+          <label class="form-label small">Sub Customer Code <span style="color:red">*</span></label>
+
+          <input class="form-control form-control-sm" formControlName="subCustomerCode"
+            (blur)="markFieldTouched('subCustomerCode')">
+
+          <small *ngIf="clientaddress.get('subCustomerCode')?.invalid && clientaddress.get('subCustomerCode')?.touched"
+            style="color:red">Sub Customer Code is required</small>
+        </div>
+
+        <!-- GST No -->
+        <div class="col-md-6">
+          <label class="form-label small">GST Number</label>
+          <input class="form-control form-control-sm" formControlName="gstNumber">
+        </div>
+
+      </div>
+
+      <!-- Billing & Shipping Section -->
+      <div class="row g-3 mb-3">
+
+        <!-- Billing -->
+        <div class="col-md-6" style="background:#e0e0e0; padding:15px; border-radius:5px;">
+
+          <label class="form-label small">Billing Client Name <span style="color:red">*</span></label>
+
+          <input class="form-control form-control-sm" formControlName="billingClientName"
+            (blur)="markFieldTouched('billingClientName')">
+
+          <small
+            *ngIf="clientaddress.get('billingClientName')?.invalid && clientaddress.get('billingClientName')?.touched"
+            style="color:red">Billing Client Name is required</small>
+
+          <label class="form-label small mt-3">Billing Address <span style="color:red">*</span></label>
+
+          <textarea class="form-control form-control-sm" rows="4" formControlName="billingAddress"
+            (blur)="markFieldTouched('billingAddress')"></textarea>
+
+          <small *ngIf="clientaddress.get('billingAddress')?.invalid && clientaddress.get('billingAddress')?.touched"
+            style="color:red">Billing Address is required</small>
+        </div>
+
+        <!-- Shipping -->
+        <div class="col-md-6">
+
+          <div class="mb-2">
+            <input type="checkbox" (change)="onSameAsBillingChange($event)" [checked]="sameAsBilling">
+            <label class="form-label ms-2">Shipping Address same as Billing</label>
+          </div>
+
+          <div style="background:#e0e0e0; padding:15px; border-radius:5px;">
+
+            <label class="form-label small">Shipping Client Name <span style="color:red">*</span></label>
+
+            <input class="form-control form-control-sm" formControlName="shippingClientName" [readonly]="sameAsBilling"
+              (blur)="markFieldTouched('shippingClientName')">
+
+            <small *ngIf="!sameAsBilling &&
+                          clientaddress.get('shippingClientName')?.invalid &&
+                          clientaddress.get('shippingClientName')?.touched" style="color:red">Shipping Client Name is
+              required</small>
+
+            <label class="form-label small mt-3">Shipping Address <span style="color:red">*</span></label>
+
+            <textarea class="form-control form-control-sm" rows="4" formControlName="shippingAddress"
+              [readonly]="sameAsBilling" (blur)="markFieldTouched('shippingAddress')"></textarea>
+
+            <small *ngIf="!sameAsBilling &&
+                          clientaddress.get('shippingAddress')?.invalid &&
+                          clientaddress.get('shippingAddress')?.touched" style="color:red">Shipping Address is
+              required</small>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 4 -->
+      <div class="row g-3 mb-3">
+        <div class="col-md-4">
+          <label class="form-label small">Effective Date</label>
+          <input type="date" class="form-control form-control-sm" formControlName="effectiveDate">
+        </div>
+
+        <div class="col-md-4 d-flex align-items-center" style="margin-top:32px;">
+          <input type="checkbox" formControlName="gstApplicable">
+          <label class="form-label ms-2">GST Applicable</label>
+        </div>
+      </div>
+
+    </mat-card-content>
+
+    <!-- Footer -->
+    <mat-card-footer class="footer">
+      <div class="d-flex justify-content-end mt-3">
+        <div class="btn-1" style="display:flex; justify-content:end; gap:10px; width:100%; padding-right:7px;">
+          <button type="button" style="border:none; border-radius:7px; width:80px; height:30px; background:#f0f0f0;">
+            Cancel
+          </button>
+
+          <button type="submit"
+            style="border:none; border-radius:7px; width:80px; height:30px; background:blue; color:white;"
+            (click)="ValidatedSubmit()">
+            Save
+          </button>
+        </div>
+      </div>
+    </mat-card-footer>
+  </mat-card>
+</form>
