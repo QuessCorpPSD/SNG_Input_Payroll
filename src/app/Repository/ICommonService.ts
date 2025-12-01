@@ -28,5 +28,6 @@ export interface ICommonService {
     GetPOStatus(): Observable<APIResponse>;
     GetPOItemType(): Observable<APIResponse>;
     GetInvoiceType(): Observable<APIResponse>;
+    GetPayCodes(): Observable<APIResponse>;
 
 }

@@ -262,7 +262,7 @@ export class CostCenterMappingComponent {
   DownloadTemplate() {
 
     const templateData = [
-      { Map_Name: "", companyCode: "", costCenter: "" }
+      { Map_Name: "", Company_Code: "", Cost_Center: "" }
     ];
 
     const ws = XLSX.utils.json_to_sheet(templateData);

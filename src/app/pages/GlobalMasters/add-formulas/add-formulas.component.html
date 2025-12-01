@@ -1,0 +1,69 @@
+<form novalidate>
+    <mat-card class="custom-card">
+        <mat-card-header class="sticky-header">
+            <br />
+            <mat-card-title style="color: #302CB3;"> Add Formula </mat-card-title>
+
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="onClose()" class="no-border-icon">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+        <br />
+
+        <mat-card-content>
+            <!-- FORM TABLE FOR PERFECT ALIGNMENT -->
+            <div style="display: grid; grid-template-columns: 150px 1fr; row-gap: 15px; align-items: center;">
+
+                <label class="form-label text-muted small mb-0" style="white-space: nowrap;">
+                    Company Code:
+                </label>
+                <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+                <label class="form-label text-muted small mb-0" style="white-space: nowrap;">
+                    Pay Category:
+                </label>
+                <select class="form-select form-select-sm" style="width:250px; padding:2px 4px;"
+                    name="payCategory" [(ngModel)]="selectedPayCategory" (ngModelChange)="ChangepayCategory($event)">
+                    <option value="">Select Pay Category</option>
+                    <option *ngFor="let pf of payCategory" [value]="pf.Band_Id">
+                        {{ pf.Band_Name }}
+                    </option>
+                </select>
+                <label class="form-label text-muted small mb-0" style="white-space: nowrap;">
+                    Formula Name:
+                </label>
+                <select class="form-select form-select-sm" style="width:250px; padding:2px 4px;"
+                    name="payCode" [(ngModel)]="selectedPayCode" (ngModelChange)="ChangepayCode($event)">
+                    <option value="">Select Pay Code</option>
+                    <option *ngFor="let pf of payCode" [value]="pf.paycode_Id">
+                        {{ pf.paycode_Code }}
+                    </option>
+                </select>
+
+                <!-- <label class="form-label text-muted small mb-0" style="white-space: nowrap;">
+                    State Name:
+                </label>
+                <input type="text" class="form-control form-control-sm" style="width: 250px;" /> -->
+
+                <label class="form-label text-muted small mb-0" style="white-space: nowrap;">
+                    Description:
+                </label>
+                <input type="text" class="form-control form-control-sm" style="width: 250px;" [(ngModel)]="Description"
+                        name="description" />
+
+                <label class="form-label text-muted small mb-0" style="white-space: nowrap;">
+                    Formula :
+                </label>
+                <input type="text" class="form-control form-control-sm" style="width: 250px;" [(ngModel)]="Formula"
+                        name="formula" />
+            </div>
+        </mat-card-content>
+
+        <mat-card-footer class="footer">
+            <div class="d-flex justify-content-end mt-3">
+                <button type="reset" class="btn btn-primary me-2 rounded-pill px-3">Cancel</button>
+                <button type="button" class="btn btn-primary rounded-pill px-3" (click)="SaveClick()">Save</button>
+            </div>
+        </mat-card-footer>
+    </mat-card>
+</form>

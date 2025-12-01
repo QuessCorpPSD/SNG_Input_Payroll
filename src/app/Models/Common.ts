@@ -39,3 +39,9 @@ export interface State {
   state_Id: number
   state_Name: string
 }
+
+export interface Paycodelist {
+  paycode_Id: number
+  paycode_Code: string	
+  description: string
+}

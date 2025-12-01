@@ -106,6 +106,7 @@ import { POInitiateComponent } from './pages/Invoice/poinitiate/poinitiate.compo
 import { SDLslabDetailComponent } from './pages/GlobalMasters/sdlslab-detail/sdlslab-detail.component';
 import { CPFslabDetailsComponent } from './pages/GlobalMasters/cpfslab-details/cpfslab-details.component';
 import { GSTComponent } from './pages/GlobalMasters/gst/gst.component';
+import { FormulaComponent } from './pages/GlobalMasters/formula/formula.component';
 
 
 
@@ -296,6 +297,7 @@ export const routes: Routes = [
           { path: "SDLslabDetail", component: SDLslabDetailComponent },
           { path: "CPFslabDetails", component: CPFslabDetailsComponent },
           { path: "gst", component: GSTComponent },
+          { path: "app-formula", component: FormulaComponent },
         ]
 
       },
