@@ -11,9 +11,6 @@ import { CompanyallComponent } from '../../../common/CompanyAll/companyall.compo
 import { PayfrequencyAddComponent } from '../payfrequency-add/payfrequency-add.component';
 import { PayfrequencyEditComponent } from '../payfrequency-edit/payfrequency-edit.component';
 import * as XLSX from 'xlsx';
-import { BillingpayfrequencyService } from '../../../Service/invoice/billingpayfrequency.service';
-import { BillingpayfrequencyAddComponent } from '../../Invoice/billingpayfrequency-add/billingpayfrequency-add.component';
-import { BillingpayfrequencyEditComponent } from '../../Invoice/billingpayfrequency-edit/billingpayfrequency-edit.component';
 import { PayfrequencyService } from '../../../Service/CUSTOMER/payfrequency.service';
 
 @Component({

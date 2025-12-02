@@ -24,4 +24,11 @@ export class BillingpayfrequencyService {
   GetAdddata(Startdate: Date, enddate: Date): Observable<APIResponse> {
     return this.http.get<APIResponse>(this.env.apiUrl + 'BillingPayFrequency/GetData/' + Startdate + '/' + enddate);
   }
+   Addsave(BillingPayFrequencyRequest: any): Observable<APIResponse> {
+    return this
+      .http.post<APIResponse>(
+        this.env.apiUrl + 'BillingPayFrequency/Create',
+        BillingPayFrequencyRequest
+      );
+  }
 }

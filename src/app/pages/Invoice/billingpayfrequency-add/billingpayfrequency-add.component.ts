@@ -23,7 +23,7 @@ import { MatSort } from '@angular/material/sort';
 export class BillingpayfrequencyAddComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   BillingpayaddForm!: FormGroup;
-  uploadDisplayedColumns: string[] = ['SNo','Paysequenceno', 'Payperiod', 'Startat', 'Endat', 'Salarydate', 'Payperioddays', 'Weeklyholidays', 'Monthlyholidays', 'WorkingHolidays'];
+  uploadDisplayedColumns: string[] = ['SNo', 'Paysequenceno', 'Payperiod', 'Startat', 'Endat', 'Salarydate', 'Payperioddays', 'Weeklyholidays', 'Monthlyholidays', 'WorkingHolidays'];
   uploadedData: any[] = [];
   uploadedDataSource = new MatTableDataSource(this.uploadedData);
   selectedCompanyId: any;
@@ -122,6 +122,7 @@ export class BillingpayfrequencyAddComponent {
     this.BillingpayaddForm = this.fb.group({
       startdate: ['', Validators.required],
       Enddate: ['', Validators.required],
+      Group:['']
     })
   }
 
@@ -132,6 +133,72 @@ export class BillingpayfrequencyAddComponent {
         this.Grouptype = res.Data.data.Table0;
       }
     });
+  }
+  onSave() {
+
+    if (!this.selectedCompanyId) {
+      alert("Please select company.");
+      return;
+    }
+
+    if (this.BillingpayaddForm.invalid) {
+      alert("Please fill Start and End dates.");
+      return;
+    }
+
+    if (this.dataSource.data.length === 0) {
+      alert("No rows available to save.");
+      return;
+    }
+
+    const startdate = this.BillingpayaddForm.get('startdate')?.value;
+    const enddate = this.BillingpayaddForm.get('Enddate')?.value;
+    const groupId = this.BillingpayaddForm.get('Group')?.value;
+
+    const payload = {
+      createdBy: this.userdetail?.User_Id ?? 0,
+      mode: "Add",
+
+      parentDetail: {
+        Pay_Frequency_Id: 0,
+        Group_Id: groupId,
+        Company_Id: this.selectedCompanyId,
+        Starting_Date: startdate,
+        Ending_Date: enddate
+      },
+
+      ChildDetail: this.dataSource.data.map((row: any) => ({
+        Pay_Frequency_Detail_Id: 0,
+        Pay_Frequency_Id: 0,
+        Pay_Sequence_Number: row.Pay_Sequence_Number,
+        Pay_Period: row.Pay_Period,
+        Start_At: row.FirstDay,
+        End_At: row.LastDay,
+        Salary_Date: row.SalaryDate,
+        Pay_Period_Days: row.Pay_Period_Days,
+        Weekly_Holidays: row.Weekly_Holyday,
+        Monthly_Holidays: row.Monthly_Holyday,
+        Other_Holidays: 0,
+        Working_Days: row.Working_Days
+      }))
+    };
+
+    console.log(payload);
+
+    this.isLoading = true;
+
+    this.service.Addsave(payload).subscribe({
+      next: res => {
+        this.isLoading = false;
+        alert(res?.Data?.message);
+      },
+      error: err => {
+        this.isLoading = false;
+        alert("Failed to save!");
+        console.error(err);
+      }
+    });
+
   }
 
 }

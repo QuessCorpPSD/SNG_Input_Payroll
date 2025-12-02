@@ -30,6 +30,7 @@
                     <div class="col-md-3">
                         <label class="form-label text-muted small">Group</label>
                         <input class="form-control form-control-sm" formControlName="Group" />
+                        <input class="form-control form-control-sm" formControlName="GroupId"  style="display: none;"/>
                         <!-- <select class="form-select form-select-sm" formControlName="Group">
                             <option value="">Select</option>
                             <option *ngFor="let Group of Grouptype" [value]="Group.City_Id">
@@ -151,12 +152,14 @@
                         style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
 
                         <button type="Cancel"
-                            style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0;">
+                            style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0;"
+                            (click)="onClose()">
                             Cancel
                         </button>
 
                         <button type="submit"
-                            style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white; ">
+                            style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white; "
+                            (click)="onSave()">
                             Save
                         </button>
                     </div>
