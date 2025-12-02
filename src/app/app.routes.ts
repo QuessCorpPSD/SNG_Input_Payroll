@@ -108,6 +108,7 @@ import { CPFslabDetailsComponent } from './pages/GlobalMasters/cpfslab-details/c
 import { GSTComponent } from './pages/GlobalMasters/gst/gst.component';
 import { CorporatebankComponent } from './pages/customers/corporatebank/corporatebank.component';
 import { ITcalenderComponent } from './pages/customers/itcalender/itcalender.component';
+import { ClientaddressComponent } from './pages/customers/clientaddress/clientaddress.component';
 
 
 
@@ -244,6 +245,7 @@ export const routes: Routes = [
           { path: "corporatebank", component: CorporatebankComponent, },
           { path: "itcalender", component: ITcalenderComponent, },
           { path: 'companypaycodemapping', component: CompanypaycodemappingComponent },
+          { path: 'clientaddress', component: ClientaddressComponent },
         ]
       },
       {
