@@ -491,7 +491,10 @@ export class TimesheetComponent {
         this.attendancevalid = this.apiResponseDaily?.data?.Table5[0].LeaveType;
 
         const table: RawRow[] = this.apiResponseDaily?.data?.Table0 ?? [];
-        if (!table.length) return;
+        if (!table.length) {
+          this.isLoading = false;
+          return;
+        }
 
         // 1) detect & sort date columns (…OT)
         const allKeys = Object.keys(table[0]);
@@ -1167,7 +1170,7 @@ export class TimesheetComponent {
 
         if (n >= 0 && n <= 24) {
 
-          if (n < hfd && n != 0 && field=='OT') {
+          if (n < hfd && n != 0 && field == 'OT') {
             alert('Hours should not less then ' + hfd + ' Hrs');
             row.dayValues[index][field] = '';   // ✔ FIX
             inputEl?.focus();
@@ -1241,15 +1244,15 @@ export class TimesheetComponent {
         // OTWND: row.OTWND || '',
         // NSOTH: row.NSOTH || '',
         // POTRS: row.POTRS || '',
-       dayEntries: row.dayValues.map((val, i) => {
-  const dayVal = val ?? { OT: null, HOT: null };  // fallback object if val is null
+        dayEntries: row.dayValues.map((val, i) => {
+          const dayVal = val ?? { OT: null, HOT: null };  // fallback object if val is null
 
-  return {
-    date: this.dayCols[i].date,
-    OT: (dayVal.OT !== null && dayVal.OT !== '') ? dayVal.OT : '0',
-    HOT: (dayVal.HOT !== null && dayVal.HOT !== '') ? dayVal.HOT : '0'
-  };
-})
+          return {
+            date: this.dayCols[i].date,
+            OT: (dayVal.OT !== null && dayVal.OT !== '') ? dayVal.OT : '0',
+            HOT: (dayVal.HOT !== null && dayVal.HOT !== '') ? dayVal.HOT : '0'
+          };
+        })
       }))
     };
 
@@ -1341,14 +1344,14 @@ export class TimesheetComponent {
         // NSOTH: row.NSOTH || '',
         // POTRS: row.POTRS || '',
         dayEntries: row.dayValues.map((val, i) => {
-  const dayVal = val ?? { OT: null, HOT: null };  // fallback object if val is null
+          const dayVal = val ?? { OT: null, HOT: null };  // fallback object if val is null
 
-  return {
-    date: this.dayCols[i].date,
-    OT: (dayVal.OT !== null && dayVal.OT !== '') ? dayVal.OT : '0',
-    HOT: (dayVal.HOT !== null && dayVal.HOT !== '') ? dayVal.HOT : '0'
-  };
-})
+          return {
+            date: this.dayCols[i].date,
+            OT: (dayVal.OT !== null && dayVal.OT !== '') ? dayVal.OT : '0',
+            HOT: (dayVal.HOT !== null && dayVal.HOT !== '') ? dayVal.HOT : '0'
+          };
+        })
       }))
     };
 
@@ -1439,17 +1442,17 @@ export class TimesheetComponent {
   }
 
   allowDecimalOnly(event: KeyboardEvent) {
-  const allowedChars = /[0-9.]/;
+    const allowedChars = /[0-9.]/;
 
-  // Allow: numbers and dot
-  if (!allowedChars.test(event.key)) {
-    event.preventDefault();
-  }
+    // Allow: numbers and dot
+    if (!allowedChars.test(event.key)) {
+      event.preventDefault();
+    }
 
-  // Prevent more than one dot
-  const input = event.target as HTMLInputElement;
-  if (event.key === '.' && input.value.includes('.')) {
-    event.preventDefault();
+    // Prevent more than one dot
+    const input = event.target as HTMLInputElement;
+    if (event.key === '.' && input.value.includes('.')) {
+      event.preventDefault();
+    }
   }
-}
 }
