@@ -285,7 +285,7 @@ export class LeavemasterComponent {
         if (errormsg === 'false') {
           this.isAddclicked = false;
           this.showPopup = true;
-          this.popupMessage = "Invoice Rule Added Successfully";
+          this.popupMessage = "Leave Master Added Successfully";
           this.BindDashBoard(this.companyUI.companyId, this.sitenameUI.siteCode)
         }
         else {
