@@ -18,6 +18,7 @@ import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { BandADDComponent } from '../band-add/band-add.component';
 import { BandDeatialsService } from '../../../Service/CUSTOMER/band-deatials.service';
 import { AlertpopupComponent } from '../../../common/alertpopup/alertpopup.component';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-band-details',
@@ -82,50 +83,74 @@ export class BandDetailsComponent {
     this.popupSubMessage = '';
   }
 
+ 
   onSearchClick() {
 
-    if (!this.selectedCompanyId) {
-      alert("Please select company");   
-      return;
-    }
-
+    this.showTable = true;
     this.isLoading = true;
 
-    this.bandService.GetAllBandDetails(this.selectedCompanyId).subscribe({
+    this.bandService.GetAllBandDetails(this.selectedCompanyId || 0).subscribe({
       next: (res) => {
 
         this.isLoading = false;
 
-        if (res.StatusCode === 200 && res.Data.length > 0) {
-
-          this.uploadedData = res.Data.map((item, index) => ({
-            SNo: index + 1,
-            'Company Code': item.company_Code,
-            'Band Code': item.band_Code,
-            'Band Name': item.band_Name
-          }));
-
-          this.uploadedDataSource = new MatTableDataSource(this.uploadedData);
-          this.uploadedDataSource.paginator = this.paginator;
-          this.uploadedDataSource.sort = this.sort;
-          this.showTable = true;
-
-          
-          
-        }
-        else {
+        if (res.StatusCode !== 200 || !res.Data || res.Data.length === 0) {
           this.uploadedData = [];
-          this.showTable = true;
-          alert("No records found");
+          this.uploadedDataSource.data = [];
+          return;
         }
+
+        let table = res.Data;
+
+        // ⭐ APPLY FILTER LIKE ENTITY MASTER (NO ALERT)
+        if (this.selectedCompanyCode && this.selectedCompanyCode !== "") {
+          const keyword = String(this.selectedCompanyCode).trim().toLowerCase();
+
+          table = table.filter((row: any) =>
+            row.company_Code?.toLowerCase().includes(keyword)
+          );
+        }
+
+        // ⭐ FINAL MAPPING (same as your current logic)
+        this.uploadedData = table.map((item, index) => ({
+          SNo: index + 1,
+          'Company Code': item.company_Code,
+          'Band Code': item.band_Code,
+          'Band Name': item.band_Name
+        }));
+
+        this.uploadedDataSource = new MatTableDataSource(this.uploadedData);
+        this.uploadedDataSource.paginator = this.paginator;
+        this.uploadedDataSource.sort = this.sort;
+
       },
+
       error: (err) => {
         this.isLoading = false;
         console.error(err);
-        alert("Failed to fetch band details");
       }
     });
 
+  }
+
+  exportToExcel() {
+
+    if (!this.uploadedData || this.uploadedData.length === 0) {
+      this.showAlertPopup("No data available to export");
+      return;
+    }
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.uploadedData);
+
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "BandDetails");
+
+    const today = new Date().toISOString().split('T')[0];
+    const fileName = `Band_Details_${today}.xlsx`;
+
+    XLSX.writeFile(wb, fileName);
+
+    this.showAlertPopup("Excel exported successfully!");
   }
 
   ngOnInit(): void {
@@ -162,3 +187,4 @@ export class BandDetailsComponent {
     this.selectedCompanyCode = company.companyId;
   }
 }
+

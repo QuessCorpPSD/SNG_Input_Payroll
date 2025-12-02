@@ -1,39 +1,57 @@
 <div class="headerSOP">
-    <div style="width: 50%;"> <img src="../../../assets/Forward File 1.svg" /><b class="customer-sop">Reports
-        </b></div>
+        <div style="width: 50%;"> <img src="../../../assets/Forward File 1.svg" /><b class="customer-sop">Reports
+                </b></div>
 </div>
 <div class="contentCategory">
-    <div style="width: 100%;">
-        <div class="Categorylist">
-            <ul class="horizontal-list">
-                <li><a [routerLink]="['/Master/reports/payregisterunprocessed']" class="nav-link"
-                        routerLinkActive="selectedInput" [routerLinkActiveOptions]="{ exact: true }">PayRegister</a>
-                </li>
-                <li><a [routerLink]="['/Master/reports/payslip']" class="nav-link" routerLinkActive="selectedInput"
-                        [routerLinkActiveOptions]="{ exact: true }">Payslip</a></li>
-                <li><a [routerLink]="['/Master/reports/app-invoice-leave-balance-report']" class="nav-link"
-                        routerLinkActive="selectedInput" [routerLinkActiveOptions]="{ exact: true }">Invoice Leave
-                        Balance Report</a></li>
-                <li><a [routerLink]="['/Master/reports/app-leave-balance-report']" class="nav-link"
-                        routerLinkActive="selectedInput" [routerLinkActiveOptions]="{ exact: true }">Leave Balance
-                        Report</a></li>
-                <li><a [routerLink]="['/Master/reports/poactiveinactivereport']" class="nav-link"
-                        routerLinkActive="selectedInput" [routerLinkActiveOptions]="{ exact: true }">PO Employee
-                        Active/Inactive Report</a></li>
-                <li><a [routerLink]="['/Master/reports/poemployeereport']" class="nav-link"
-                        routerLinkActive="selectedInput" [routerLinkActiveOptions]="{ exact: true }">PO EmployeeWise
-                        Report</a></li>
-                <li><a [routerLink]="['/Master/reports/pomonthwisereport']" class="nav-link"
-                        routerLinkActive="selectedInput" [routerLinkActiveOptions]="{ exact: true }">PO MonthWise
-                        Active Report</a></li>
-                <li><a [routerLink]="['/Master/reports/app-qits-billing-report']" class="nav-link"
-                        routerLinkActive="selectedInput" [routerLinkActiveOptions]="{ exact: true }">Billing
-                        Report</a></li>
-                <li><a [routerLink]="['/Master/reports/app-timesheet-report']" class="nav-link"
-                        routerLinkActive="selectedInput" [routerLinkActiveOptions]="{ exact: true }">Timesheet Summary
-                        Active/Inactive Report</a></li>
-            </ul>
+        <div style="width: 100%;">
+                <div class="Categorylist">
+                        <ul class="horizontal-list">
+                                <li><a [routerLink]="['/Master/reports/payregisterunprocessed']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">PayRegister</a>
+                                </li>
+                                <li><a [routerLink]="['/Master/reports/payslip']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Payslip</a></li>
+                                <li><a [routerLink]="['/Master/reports/app-invoice-leave-balance-report']"
+                                                class="nav-link" routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Invoice Leave
+                                                Balance Report</a></li>
+                                <li><a [routerLink]="['/Master/reports/app-leave-balance-report']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Leave Balance
+                                                Report</a></li>
+                                <li><a [routerLink]="['/Master/reports/poactiveinactivereport']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">PO Employee
+                                                Active/Inactive Report</a></li>
+                                <li><a [routerLink]="['/Master/reports/poemployeereport']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">PO EmployeeWise
+                                                Report</a></li>
+                                <li><a [routerLink]="['/Master/reports/pomonthwisereport']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">PO MonthWise
+                                                Active Report</a></li>
+                                <li><a [routerLink]="['/Master/reports/app-qits-billing-report']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Billing
+                                                Report</a></li>
+                                <li><a [routerLink]="['/Master/reports/app-timesheet-report']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Timesheet Summary
+                                                Active/Inactive Report</a></li>
+                                <li><a [routerLink]="['/Master/reports/app-invoice-report']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Invoice Summary Report</a>
+                                </li>
+                                <li><a [routerLink]="['/Master/reports/app-netpayreport']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Netpay Summary Report</a>
+                                </li>
+
+                        </ul>
+                </div>
         </div>
-    </div>
 </div>
 <router-outlet></router-outlet>

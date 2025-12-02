@@ -1,0 +1,64 @@
+<form [formGroup]="entityForm" novalidate>
+    <mat-card class="custom-card">
+        <mat-card-header class="sticky-header">
+            <br />
+            <mat-card-title style="color: #302CB3;"> Add Invoice Legal Entity</mat-card-title>
+            <span class="spacer"></span>
+
+            <button mat-icon-button (click)="onClose()" class="no-border-icon">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+
+        <br />
+
+        <mat-card-content>
+
+            <!-- FIXED BLOCK -->
+            <div class="mb-3" style="width: 100%;">
+                <label class="form-label text-muted small me-2 mb-1" style="white-space: nowrap;">
+                    Entity Name
+                </label>
+
+                <!-- Input -->
+                <input type="text" class="form-control form-control-sm" placeholder="Enter Entity Name"
+                    formControlName="EntityName" style="width: 250px;" />
+
+                <!-- Validation - Now directly BELOW input -->
+                <div *ngIf="entityForm.get('EntityName')?.touched && entityForm.get('EntityName')?.invalid"
+                    class="text-danger small mt-1">
+                    Entity Name is required.
+                </div>
+            </div>
+
+        </mat-card-content>
+
+        <div class="d-flex justify-content-end mt-3">
+            <div class="btn-1"
+                style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
+
+                <button type="button" (click)="onClose()" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+                    cursor: pointer; background-color: #f0f0f0; color: black;">
+                    Cancel
+                </button>
+
+                <button type="button" (click)="onSave()" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+                    cursor: pointer; background-color: blue; color: white;">
+                    Save
+                </button>
+
+            </div>
+        </div>
+        <div *ngIf="isLoading" class="loading-overlay">
+            <img src="assets/Loading.gif" alt="Loading...">
+        </div>
+
+
+        <div *ngIf="showPopup" class="overlay"></div>
+        <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+            (close)="closePopup()">
+        </app-alertpopup>
+
+
+    </mat-card>
+</form>

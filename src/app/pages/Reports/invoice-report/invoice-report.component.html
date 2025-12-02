@@ -1,0 +1,54 @@
+<div class="page-wrapper">
+    <div class="scrollable-content">
+
+        <div style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; min-width: 960px">
+            Invoice Summary Report
+        </div>
+
+        <form [formGroup]="invoiceForm">
+            <div class="container py-4">
+                <div class="row g-3 align-items-end">
+
+                    <!-- Company Code -->
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Company Code</label>
+                        <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+                    </div>
+
+                    <!-- From Date -->
+                    <div class="col-md-3">
+                        <label class="form-label">From Date: <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" formControlName="startDate" />
+                    </div>
+
+                    <!-- To Date -->
+                    <div class="col-md-3">
+                        <label class="form-label">To Date: <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" formControlName="endDate" />
+                    </div>
+
+                    <!-- Report Type -->
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Report Type</label>
+                        <select class="form-select form-select-sm" formControlName="reportType">
+                            <option value="">Select</option>
+                            <option *ngFor="let type of reportTypes" [value]="type.GEN_iID">
+                                {{ type.GEN_vDescription }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Export -->
+                    <div class="col-md-3 d-flex gap-2">
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                            matTooltip="Export to Excel"(click)="exportToExcel()">
+                            <mat-icon>table_chart</mat-icon>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
