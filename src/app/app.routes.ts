@@ -100,6 +100,10 @@ import { DepartmentComponent } from './pages/customers/department/department.com
 import { DesignationComponent } from './pages/customers/designation/designation.component';
 import { BandDetailsComponent } from './pages/customers/band-details/band-details.component';
 import { CostCenterMappingComponent } from './pages/customers/cost-center-mapping/cost-center-mapping.component';
+import { BillingpayfrequencyComponent } from './pages/Invoice/billingpayfrequency/billingpayfrequency.component';
+import { PayfrequencyComponent } from './pages/customers/payfrequency/payfrequency.component';
+import { DynamicuploadComponent } from './pages/tools/dynamicupload/dynamicupload.component';
+import { ToolsnavigationComponent } from './pages/tools/toolsnavigation/toolsnavigation.component';
 import { CompanypaycodemappingComponent } from './pages/customers/companypaycodemapping/companypaycodemapping.component';
 import { ProvisionalinvoiceComponent } from './pages/Invoice/provisionalinvoice/provisionalinvoice.component';
 import { POInitiateComponent } from './pages/Invoice/poinitiate/poinitiate.component';
@@ -226,6 +230,8 @@ export const routes: Routes = [
           { path: 'perfomainvoice', component: PerfomainvoiceComponent },
           { path: 'billabledays', component: BillableDaysComponent },
           { path: 'gstinvoice', component: GstinvoiceComponent },
+          { path: 'billingpayfrequency', component: BillingpayfrequencyComponent }
+          { path: 'gstinvoice', component: GstinvoiceComponent },
           { path: 'poinitiate', component: POInitiateComponent },
         ]
       },
@@ -247,6 +253,13 @@ export const routes: Routes = [
           { path: "designation", component: DesignationComponent, },
           { path: "BandDetails", component: BandDetailsComponent, },
           { path: "CostCenterMapping", component: CostCenterMappingComponent, },
+          { path: "payfrequency", component: PayfrequencyComponent }
+        ]
+      },
+       {
+        path: 'tools', component: ToolsnavigationComponent,
+        children: [
+          { path: "dynamiupload", component: DynamicuploadComponent},     
           { path: "corporatebank", component: CorporatebankComponent, },
           { path: "itcalender", component: ITcalenderComponent, },
           { path: 'companypaycodemapping', component: CompanypaycodemappingComponent },

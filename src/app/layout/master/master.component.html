@@ -118,6 +118,18 @@
                 d="M14 4.577v6.846L8 15l-6-3.577V4.577L8 1zM8.5.134a1 1 0 0 0-1 0l-6 3.577a1 1 0 0 0-.5.866v6.846a1 1 0 0 0 .5.866l6 3.577a1 1 0 0 0 1 0l6-3.577a1 1 0 0 0 .5-.866V4.577a1 1 0 0 0-.5-.866z" />
             </svg>
           </i><span style="font-family: Nunito Sans;">Customer</span> </a>
+        <a [routerLink]="['/Master/tools']" class="nav-link" routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }" [ngClass]="{ 'inactive-link': !isActive('/Master/tools') }">
+          <i>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear"
+              viewBox="0 0 16 16">
+              <path
+                d="M8 4a4 4 0 1 1 0 8 4 4 0 0 1 0-8zM1.707 4.293a1 1 0 0 1 1.414 0l1.146 1.146a5.978 5.978 0 0 0 1.3-.541l.322-1.82a1 1 0 0 1 1.17-.814l1.688.425a5.98 5.98 0 0 0 .648-.648l-.425-1.688a1 1 0 0 1 .814-1.17l1.82.322a5.978 5.978 0 0 0 .541-1.3l-1.146-1.146a1 1 0 0 1 0-1.414l1.146-1.146a5.978 5.978 0 0 0-.541-1.3l-.322-1.82a1 1 0 0 1-1.17-.814l-1.688.425a5.98 5.98 0 0 0-.648-.648l.425-1.688a1 1 0 0 1-.814-1.17l-1.82.322a5.978 5.978 0 0 0-.541 1.3l-1.146 1.146a1 1 0 0 1-1.414 0l-1.146-1.146a5.978 5.978 0 0 0-1.3.541l-.322 1.82a1 1 0 0 1-1.17.814l-1.688-.425a5.98 5.98 0 0 0-.648.648l.425 1.688a1 1 0 0 1-.814 1.17l-1.82-.322a5.978 5.978 0 0 0-.541 1.3z" />
+            </svg>
+          </i>
+          <span style="font-family: Nunito Sans;">Tools</span>
+        </a>
+
         <a [routerLink]="['/Master/process']" class="nav-link" routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
           [ngClass]="{ 'inactive-link': !isActive('/Master/app-revok') }"><i>
