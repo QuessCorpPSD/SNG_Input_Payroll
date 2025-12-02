@@ -7,7 +7,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog } from '@angular/material/dialog';
 import { AddEntityMasterComponent } from '../add-entity-master/add-entity-master.component';
-import { EntityMasterService } from '../../../Service/GlobalMaster/entity-master.service';
+import { EntityMasterService } from '../../../Service/GlobalMasters/entity-master.service';
 import { FormBuilder, FormsModule } from '@angular/forms';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';

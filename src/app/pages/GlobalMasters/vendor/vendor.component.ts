@@ -10,7 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
 import * as XLSX from 'xlsx';
 import { FormsModule } from '@angular/forms';
 import { AlertpopupComponent } from '../../../common/alertpopup/alertpopup.component';
-import { VendorMasterService } from '../../../Service/GlobalMaster/vendor-master.service';
+import { VendorMasterService } from '../../../Service/GlobalMasters/vendor-master.service';
 
 @Component({
   selector: 'app-vendor',

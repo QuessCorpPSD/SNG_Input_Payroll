@@ -9,7 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { FormBuilder, FormsModule } from '@angular/forms';
 
 import { AddInvoiceLegalEntityComponent } from '../add-invoice-legal-entity/add-invoice-legal-entity.component';
-import { InvoiceLegalEntityService } from '../../../Service/GlobalMaster/invoice-legal-entity.service';
+import { InvoiceLegalEntityService } from '../../../Service/GlobalMasters/invoice-legal-entity.service';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import * as XLSX from 'xlsx';

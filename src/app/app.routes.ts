@@ -111,6 +111,9 @@ import { ITcalenderComponent } from './pages/customers/itcalender/itcalender.com
 import { InvoiceReportComponent } from './pages/Reports/invoice-report/invoice-report.component';
 import { NetpayreportComponent } from './pages/Reports/netpayreport/netpayreport.component';
 import { ClientaddressComponent } from './pages/customers/clientaddress/clientaddress.component';
+import { EntityMasterComponent } from './pages/GlobalMasters/entity-master/entity-master.component';
+import { InvoiceLegalEntityComponent } from './pages/GlobalMasters/invoice-legal-entity/invoice-legal-entity.component';
+import { VendorComponent } from './pages/GlobalMasters/vendor/vendor.component';
 
 
 
@@ -305,7 +308,11 @@ export const routes: Routes = [
           { path: "shgslabdetail", component: ShgslabdetailComponent },
           { path: "SDLslabDetail", component: SDLslabDetailComponent },
           { path: "CPFslabDetails", component: CPFslabDetailsComponent },
-          { path: "gst", component: GSTComponent },
+          { path: "EntityMaster", component: EntityMasterComponent },
+          { path: "InvoiceLegalEntity", component: InvoiceLegalEntityComponent },
+          { path: "Vendor", component: VendorComponent },
+          { path: "gst", component: GSTComponent }
+
         ]
 
       },
