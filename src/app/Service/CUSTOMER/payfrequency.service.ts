@@ -8,7 +8,7 @@ import { APIResponse } from '../../Models/apiresponse';
   providedIn: 'root'
 })
 export class PayfrequencyService {
- env = environment;
+  env = environment;
   constructor(private http: HttpClient) { }
 
 
@@ -23,5 +23,12 @@ export class PayfrequencyService {
   }
   GetAdddata(Startdate: Date, enddate: Date): Observable<APIResponse> {
     return this.http.get<APIResponse>(this.env.apiUrl + 'PayFrequency/GetData/' + Startdate + '/' + enddate);
+  }
+  Addsave(payload: any): Observable<APIResponse> {
+    return this
+      .http.post<APIResponse>(
+        this.env.apiUrl + 'PayFrequency/Create',
+        payload
+      );
   }
 }

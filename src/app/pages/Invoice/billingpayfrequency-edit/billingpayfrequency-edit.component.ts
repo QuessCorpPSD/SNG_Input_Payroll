@@ -42,6 +42,8 @@ export class BillingpayfrequencyEditComponent {
     private dialogRef: MatDialogRef<BillingpayfrequencyEditComponent>,
     @Inject(MAT_DIALOG_DATA) public editData: any,
     private service: BillingpayfrequencyService,
+    private decry: EncryptionService,
+    private _sessionStoreage: SessionStorageService
   ) { }
 
 
@@ -95,9 +97,16 @@ export class BillingpayfrequencyEditComponent {
 
 
   ngOnInit(): void {
+    const json = this._sessionStoreage.getItem('UserProfile');
+    if (json) {
+      this.userdetail = JSON.parse(this.decry.decrypt(json));
+    } else {
+      console.warn('UserProfile not found in session storage');
+    }
     this.BillingpayeditForm = this.fb.group({
       Companycode: [{ value: '', disabled: true }, Validators.required],
       Group: [{ value: '', disabled: true }],
+      GroupId: [''],
       startdate: [{ value: '', disabled: true }, Validators.required],
       Enddate: [{ value: '', disabled: true }, Validators.required]
     });
@@ -108,6 +117,7 @@ export class BillingpayfrequencyEditComponent {
       this.BillingpayeditForm.patchValue({
         Companycode: this.editData.Company_Code,
         Group: this.editData.Group,
+        GroupId: this.editData.Group_Id,
         startdate: this.editData.Starting_Date,
         Enddate: this.editData.Ending_Date
       });
@@ -138,7 +148,103 @@ export class BillingpayfrequencyEditComponent {
       }
     });
   }
+  onSave() {
+    this.isLoading = true;
+
+    if (!this.selectedCompanyId) {
+      this.isLoading = false;
+      alert("Please select company.");
+      return;
+    }
+
+    if (this.BillingpayeditForm.invalid) {
+      this.isLoading = false;
+      alert("Please fill Start and End dates.");
+      return;
+    }
+
+    if (this.dataSource.data.length === 0) {
+      this.isLoading = false;
+      alert("No rows available to save.");
+      return;
+    }
+
+    const startdate = this.BillingpayeditForm.get('startdate')?.value;
+    const enddate = this.BillingpayeditForm.get('Enddate')?.value;
+    const groupId = this.BillingpayeditForm.get('GroupId')?.value;
+    // const payload = {
+    //   CreatedBy: this.userdetail?.user_Id ?? 0,
+    //   Mode: "Add",
+
+    //   ParentDetail: {
+    //     Pay_Frequency_Id: 0,
+    //     Group_Id: groupId.toString(),
+    //     Company_Id: this.selectedCompanyId,
+    //     Starting_Date: startdate,
+    //     Ending_Date: enddate
+    //   },
+
+    //   ChildDetail: this.dataSource.data.map((row: any) => ({
+    //     Pay_Frequency_Detail_Id: 0,
+    //     Pay_Frequency_Id: 0,
+    //     Pay_Sequence_Number: Number(row.Pay_Sequence_Number),
+    //     Pay_Period: row.Pay_Period,
+    //     Start_At: row.Start_At,
+    //     End_At: row.End_At,
+    //     Salary_Date: row.Salary_Date,
+    //     Pay_Period_Days: Number(row.Pay_Period_Days),
+    //     Weekly_Holidays: Number(row.Weekly_Holidays),
+    //     Monthly_Holidays: Number(row.Monthly_Holidays),
+    //     Other_Holidays: Number(row.Other_Holidays),
+    //     Working_Days: Number(row.Working_Days)
+    //   }))
+    // };
+    const row = this.dataSource.data[0];
+
+    const BillingPayFrequencyRequest = {
+      createdBy: this.userdetail?.user_Id ?? 0,
+      mode: "Edit",
+
+      parentDetail: {
+        Pay_Frequency_Id: row.Pay_Frequency_Id,
+        Group_Id: groupId,
+        Company_Id: this.selectedCompanyId,
+        Starting_Date: startdate,
+        Ending_Date: enddate
+      },
+
+      ChildDetail:this.dataSource.data.map((row: any) => ({
+        Pay_Frequency_Detail_Id: row.Pay_Frequency_Detail_Id,
+        Pay_Frequency_Id: row.Pay_Frequency_Id,
+        Pay_Sequence_Number: row.Pay_Sequence_Number,
+        Pay_Period: row.Pay_Period,
+        Start_At: row.Start_At,
+        End_At: row.End_At,
+        Salary_Date: row.Salary_Date,
+        Pay_Period_Days: row.Pay_Period_Days,
+        Weekly_Holidays: row.Weekly_Holidays,
+        Monthly_Holidays: row.Monthly_Holidays,
+        Other_Holidays: row.Other_Holidays,
+        Working_Days: row.Working_Days
+      }))
+    };
+
+    console.log("SENDING PAYLOAD:", JSON.stringify(BillingPayFrequencyRequest));
+  //  console.log(BillingPayFrequencyRequest);
 
 
+    this.service.Addsave(BillingPayFrequencyRequest).subscribe({
+      next: res => {
+        this.isLoading = false;
+        alert(res.Data.message);
+        this.dialogRef.close(true);
+      },
+      error: err => {
+        this.isLoading = false;
+        alert("Failed to save!");
+        console.error(err);
+      }
+    });
 
+  }
 }
