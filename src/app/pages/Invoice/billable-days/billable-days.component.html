@@ -64,22 +64,20 @@
         <h3>Preview Excel Data</h3>
       </div>
       <div class="table-wrapper">
-        <!-- <div style="  max-height: auto; overflow-y: auto; overflow-x: auto;">
+        <div style="  max-height: auto; overflow-y: auto; overflow-x: auto;">
           <table class="previewtable" style="border:1px solid #E8E8E8; padding: 5px 5px 5px 5px;">
             <thead>
               <tr>
-                 *ngFor="let col of getTableColumns()">{{ col }}
+                <th *ngFor="let col of getTableColumns()">{{ col }}</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let row of excelPreviewData">
-                 *ngFor="let col of getTableColumns()">{{ row[col] }}
+                <td *ngFor="let col of getTableColumns()">{{ row[col] }}</td>
               </tr>
             </tbody>
           </table>
-        </div> -->
-         <!-- Header Rows -->
-                   
+        </div>
         <div class="modal-actions">
           <button (click)="submitExcelData()"
             style="display: inline-block; margin-right: 10px;width: 130px; height: 30px; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
@@ -98,62 +96,78 @@
     </div>
   </div>
   <br>
-  </div>
-
-  <div class="table-wrapper1" style="min-width: 960px;">
-    <div class="table-scroll">
-      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 custom-table">
-        <!-- <ng-container matColumnDef="SLNO">
-                 mat-header-cell *matHeaderCellDef> SNo
-                 mat-cell *matCellDef="let element">{{ element.employeeID }}
-              </ng-container> -->
-
-        <ng-container matColumnDef="employee_Code">
-           <mat-header-cell *matHeaderCellDef> Employee Code </mat-header-cell>
-           <mat-cell *matCellDef="let element">{{ element.employee_Code }}</mat-cell>
-        </ng-container>
-        <ng-container matColumnDef="employee_Name">
-           <mat-header-cell *matHeaderCellDef> Employee Name </mat-header-cell>
-           <mat-cell *matCellDef="let element">{{ element.employee_Name }}</mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="billable_Days">
-          <mat-header-cell *matHeaderCellDef> Billable Days </mat-header-cell>
-           <mat-cell *matCellDef="let element">{{ element.billable_Days }} </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="wO_NUMBER">
-           <mat-header-cell *matHeaderCellDef> WO Number  </mat-header-cell>
-           <mat-cell *matCellDef="let element">{{ element.wO_NUMBER }}</mat-cell>
-        </ng-container>
-        <ng-container matColumnDef="grN_NUMBER">
-           <mat-header-cell *matHeaderCellDef> GRN Number </mat-header-cell>
-           <mat-cell *matCellDef="let element">{{ element.grN_NUMBER }}</mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="oT_AMOUNT">
-           <mat-header-cell *matHeaderCellDef> OT Amount </mat-header-cell>
-           <mat-cell *matCellDef="let element">{{ element.oT_AMOUNT }}</mat-cell>
-        </ng-container>
-        <ng-container matColumnDef="otheR_ALLOWANCE">
-           <mat-header-cell *matHeaderCellDef> Other Allownce  </mat-header-cell>
-           <mat-cell *matCellDef="let element">{{ element.otheR_ALLOWANCE }}</mat-cell>
-        </ng-container>
-        <ng-container matColumnDef="reimB_AMOUNT">
-           <mat-header-cell *matHeaderCellDef> Reimb Amount </mat-header-cell>
-           <mat-cell *matCellDef="let element">{{ element.reimB_AMOUNT }}</mat-cell>
-        </ng-container>
-
-        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-
-      </table>
-    </div>
-    <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons>
-    </mat-paginator>
-  
-
-<br><br><br><br><br>
-<div *ngIf="isLoading" class="loading-overlay">
-  <img src="assets/Loading.gif" alt="Loading...">
 </div>
+
+<div class="table-wrapper1" style="min-width: 960px;">
+  <div class="table-scroll">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 custom-table">
+
+      <ng-container matColumnDef="Company_Id">
+        <mat-header-cell *matHeaderCellDef>Company_Id</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.company_Id }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="Company_Code">
+        <mat-header-cell *matHeaderCellDef>Company Code</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.company_Code }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="Company_Name">
+        <mat-header-cell *matHeaderCellDef>Company Name</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.company_Name }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="Pay_Period">
+        <mat-header-cell *matHeaderCellDef>Pay Period</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.pay_Period }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="employee_Code">
+        <mat-header-cell *matHeaderCellDef> Employee Code </mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.employee_Code }}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="employee_Name">
+        <mat-header-cell *matHeaderCellDef> Employee Name </mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.employee_Name }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="billable_Days">
+        <mat-header-cell *matHeaderCellDef> Billable Days </mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.billable_Days }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="wO_NUMBER">
+        <mat-header-cell *matHeaderCellDef> WO Number </mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.wO_NUMBER }}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="grN_NUMBER">
+        <mat-header-cell *matHeaderCellDef> GRN Number </mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.grN_NUMBER }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="oT_AMOUNT">
+        <mat-header-cell *matHeaderCellDef> OT Amount </mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.oT_AMOUNT }}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="otheR_ALLOWANCE">
+        <mat-header-cell *matHeaderCellDef> Other Allownce </mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.otheR_ALLOWANCE }}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="reimB_AMOUNT">
+        <mat-header-cell *matHeaderCellDef> Reimb Amount </mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.reimB_AMOUNT }}</mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+    </table>
+  </div>
+  <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons>
+  </mat-paginator>
+
+
+  <br><br><br><br><br>
+  <div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+  </div>
