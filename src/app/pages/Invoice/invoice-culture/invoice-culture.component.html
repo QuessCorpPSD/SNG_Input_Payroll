@@ -1,0 +1,127 @@
+<div class="container py-4">
+  <div class="row g-3 align-items-end">
+
+    <div class="col-md-3">
+      <label class="form-label text-muted small">Company Code</label>
+      <CompanyPicker (companyEmit)="handleCompanyEvent($event)"></CompanyPicker>
+    </div>
+
+    <div class="col-md-3 d-flex gap-2">
+      <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Search"
+        (click)="SearchClick()">
+        <mat-icon>search</mat-icon>
+      </button>
+
+      <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Add"
+        (click)="AddPOOpen()">
+        <mat-icon>add</mat-icon>
+      </button>
+      <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="export to excel">
+        <mat-icon>table_chart</mat-icon>
+      </button>
+
+      <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Import">
+        <mat-icon>cloud_upload</mat-icon>
+      </button>
+
+      <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Template">
+        <mat-icon>cloud_download</mat-icon>
+      </button>
+
+    </div>
+
+  </div>
+</div>
+
+
+<div class="table-wrapper1" *ngIf="isTableVisible">
+  <div class="table-scroll">
+
+    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+      <ng-container matColumnDef="company_Id">
+        <mat-header-cell *matHeaderCellDef>company_Id</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.company_Id }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="company_Code">
+        <mat-header-cell *matHeaderCellDef>company_Code</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.company_Code }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="company_Name">
+        <mat-header-cell *matHeaderCellDef>Company Name</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.company_Name }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="cost_Center_Mapping_Id">
+        <mat-header-cell *matHeaderCellDef>cost_Center_Mapping_Id</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.cost_Center_Mapping_Id }}</mat-cell>
+      </ng-container>
+      
+      <ng-container matColumnDef="invoiceCul_Ref_No">
+        <mat-header-cell *matHeaderCellDef>invoiceCul Ref No</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.invoiceCul_Ref_No }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="invoiceCulture_id">
+        <mat-header-cell *matHeaderCellDef>invoiceCulture_id</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.invoiceCulture_id }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="invoiceType">
+        <mat-header-cell *matHeaderCellDef>Invoice Type</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.invoiceType }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="invoiceType_Id">
+        <mat-header-cell *matHeaderCellDef>invoiceType_Id</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.invoiceType_Id }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="invoice_Category_Id">
+        <mat-header-cell *matHeaderCellDef>invoice_Category_Id</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.invoice_Category_Id }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="map_Name">
+        <mat-header-cell *matHeaderCellDef>Map Name</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.map_Name }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="map_Name_Id">
+        <mat-header-cell *matHeaderCellDef>map_Name_Id</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.map_Name_Id }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="service_Charge_Master_Id">
+        <mat-header-cell *matHeaderCellDef>service_Charge_Master_Id</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.service_Charge_Master_Id}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="service_Charge_Slab_Inner_Item_Id">
+        <mat-header-cell *matHeaderCellDef>service_Charge_Slab_Inner_Item_Id</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.service_Charge_Slab_Inner_Item_Id }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="service_Charge_Slab_Item_Id">
+        <mat-header-cell *matHeaderCellDef>service_Charge_Slab_Item_Id</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.service_Charge_Slab_Item_Id }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="service_Charge_Type_Id">
+        <mat-header-cell *matHeaderCellDef>service_Charge_Type_Id</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{ element.service_Charge_Type_Id }}</mat-cell>
+      </ng-container>
+
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+    </table>
+
+  </div>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+
+</div>
