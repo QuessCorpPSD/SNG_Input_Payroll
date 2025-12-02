@@ -107,7 +107,7 @@ export class AllowReProcessComponent {
   onSearchClick() {
 
     if (!this.selectedCompanyId) {
-      this.showAlertPopup('Validation Error', 'Please select Company Code');
+      this.showAlertPopup('Please select Company Code');
       return;
     }
 
@@ -137,13 +137,13 @@ export class AllowReProcessComponent {
 
       error: err => {
         this.isLoading = false;
-        this.showAlertPopup('Error', 'Failed to load data');
+        this.showAlertPopup('Failed to load data');
       }
     });
   }
   exportToExcel(): void {
     if (!this.selectedCompanyId) {
-      this.showAlertPopup('Validation Error', 'Please select Company');
+      this.showAlertPopup('Please select Company');
       return;
     }
 
@@ -159,7 +159,7 @@ export class AllowReProcessComponent {
         const jsonData = res?.Data?.data?.Table0 || [];
 
         if (jsonData.length === 0) {
-          this.showAlertPopup('Info', 'No Records Found');
+          this.showAlertPopup('No Records Found');
           return;
         }
 
@@ -174,7 +174,7 @@ export class AllowReProcessComponent {
 
       error: err => {
         this.isLoading = false;
-        this.showAlertPopup('Error', 'Failed to Export');
+        this.showAlertPopup( 'Failed to Export');
       }
     });
   }
@@ -199,13 +199,13 @@ export class AllowReProcessComponent {
   saveAllowReprocess() {
 
     if (!this.selectedCompanyId) {
-      this.showAlertPopup('Validation Error', 'Please select Company');
+      this.showAlertPopup('Please select Company');
       return;
     }
 
 
     if (!this.selectedRows || this.selectedRows.length === 0) {
-      this.showAlertPopup("Validation Error", "Please select at least one row");
+      this.showAlertPopup("Please select at least one row");
       return;
     }
 
@@ -242,7 +242,7 @@ export class AllowReProcessComponent {
 
       error: err => {
         this.isLoading = false;
-        this.showAlertPopup('Error', 'Error Saving Data');
+        this.showAlertPopup( 'Error Saving Data');
       }
     });
 

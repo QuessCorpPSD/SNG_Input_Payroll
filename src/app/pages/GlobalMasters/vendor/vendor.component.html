@@ -1,0 +1,107 @@
+<br />
+<div class="page-wrapper">
+    <div class="scrollable-content">
+
+        <div style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700;">
+            Vendor Master
+        </div>
+
+
+        <div class="container py-4">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3 small-input">
+                    <label class="form-label text-muted small">Vendor Name</label>
+                    <input type="text" class="form-control form-control-sm" placeholder="Enter Vendor Name"
+                        [(ngModel)]="VendorName">
+                </div>
+
+
+                <div class="col-md-3 d-flex gap-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Search"
+                        (click)="onSearchClick()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="Export to Excel" (click)="exportToExcel()">
+                        <mat-icon>table_chart</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Add"
+                        (click)="AddPOOpen()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <br>
+
+        <!-- TABLE -->
+        <div class="table-wrapper1" *ngIf="showTable">
+            <div class="table-scroll">
+
+                <mat-table [dataSource]="dataSource" matSort class="custom-table mat-elevation-z8 auto-fit-table">
+
+                    <!-- Action -->
+                    <ng-container matColumnDef="Action">
+                        <mat-header-cell *matHeaderCellDef><strong>Action</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                            <button class="btn btn-sm" matTooltip="Edit">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- ✔ FIX: Reduced width -->
+                    <ng-container matColumnDef="SI No">
+                        <mat-header-cell *matHeaderCellDef style="width: 70px; min-width: 70px;"><strong>SI
+                                No</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row" style="width: 70px; min-width: 70px;">{{ row['Serial_No']
+                            }}</mat-cell>
+                    </ng-container>
+
+                    <!-- ✔ FIX: Reduced width -->
+                    <ng-container matColumnDef="Vendor Code">
+                        <mat-header-cell *matHeaderCellDef style="width: 120px; min-width: 120px;"><strong>Vendor
+                                Code</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row" style="width: 120px; min-width: 120px;">{{ row['Client_Code']
+                            }}</mat-cell>
+                    </ng-container>
+
+                    <!-- ✔ FIX: Increased width -->
+                    <ng-container matColumnDef="Vendor Name">
+                        <mat-header-cell *matHeaderCellDef style="width: 300px; min-width: 300px;"><strong>Vendor
+                                Name</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row" style="width: 300px; min-width: 300px;">{{ row['Client_Name']
+                            }}</mat-cell>
+                    </ng-container>
+
+                    <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: uploadDisplayedColumns;"></mat-row>
+
+                </mat-table>
+
+                <div *ngIf="dataSource.data.length === 0" class="text-center p-4">
+                    <p class="text-muted">No data to display</p>
+                </div>
+
+            </div>
+
+            <mat-paginator [length]="dataSource.data.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
+                showFirstLastButtons>
+            </mat-paginator>
+
+        </div>
+        <div *ngIf="isLoading" class="loading-overlay">
+            <img src="assets/Loading.gif" alt="Loading...">
+        </div>
+
+
+        <div *ngIf="showPopup" class="overlay"></div>
+        <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+            (close)="closePopup()">
+        </app-alertpopup>
+
+    </div>
+</div>

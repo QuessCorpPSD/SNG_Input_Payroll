@@ -4,9 +4,22 @@
         <div style="width: 100%;">
                 <div class="Categorylist">
                         <ul class="horizontal-list">
+                                <li><a [routerLink]="['/Master/GlobalMasterNavigation/EntityMaster']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Entity Master</a>
+                                </li>
+                                <li><a [routerLink]="['/Master/GlobalMasterNavigation/InvoiceLegalEntity']"
+                                                class="nav-link" routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Invoice Legal
+                                                Entity</a>
+                                </li>
                                 <li><a [routerLink]="['/Master/navigationglobal/paycodes']" class="nav-link"
                                                 routerLinkActive="selectedInput"
                                                 [routerLinkActiveOptions]="{ exact: true }">Pay code</a>
+                                </li>
+                                <li><a [routerLink]="['/Master/GlobalMasterNavigation/Vendor']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Vendor Master</a>
                                 </li>
                                 <li><a [routerLink]="['/Master/navigationglobal/shgslabdetail']" class="nav-link"
                                                 routerLinkActive="selectedInput"

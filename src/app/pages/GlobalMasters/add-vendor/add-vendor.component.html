@@ -1,0 +1,66 @@
+<form [formGroup]="VendorForm" novalidate>
+    <mat-card class="custom-card">
+        <mat-card-header class="sticky-header">
+            <br />
+            <mat-card-title style="color: #302CB3;"> Add Vendor</mat-card-title>
+
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="onClose()" class="no-border-icon">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+        <br />
+
+        <mat-card-content>
+            <div style="display: grid; grid-template-columns: 150px 1fr; row-gap: 15px; align-items: center;">
+
+                <label class="form-label text-muted small mb-0" style="white-space: nowrap;">
+                    Vendor Code :
+                </label>
+                <input type="text" class="form-control form-control-sm" formControlName="VendorCode"
+                    style="width: 250px;" />
+
+                <label class="form-label text-muted small mb-0" style="white-space: nowrap;">
+                    Vendor Name :
+                </label>
+                <div>
+                    <input type="text" class="form-control form-control-sm" formControlName="VendorName"
+                        style="width: 250px;" />
+
+                    <div *ngIf="showErrors && VendorForm.get('VendorName')?.invalid" class="text-danger small mt-1">
+                        Vendor Name is required.
+                    </div>
+
+                </div>
+            </div>
+        </mat-card-content>
+
+        <!-- FIXED FOOTER -->
+
+
+        <div class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">
+
+            <button type="button" (click)="onClose()" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+            cursor: pointer; background-color: #f0f0f0; color: black;">
+                Cancel
+            </button>
+
+            <!-- ✔ FIXED — removed extra space -->
+            <button type="button" (click)="onSave()" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+            cursor: pointer; background-color: blue; color: white;">
+                Save
+            </button>
+
+        </div>
+        <div *ngIf="isLoading" class="loading-overlay">
+            <img src="assets/Loading.gif" alt="Loading...">
+        </div>
+
+        <div *ngIf="showPopup" class="overlay"></div>
+        <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+            (close)="closePopup()">
+        </app-alertpopup>
+
+
+    </mat-card>
+</form>

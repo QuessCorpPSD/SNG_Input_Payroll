@@ -12,8 +12,8 @@ import FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 import { CompanyallComponent } from '../../../common/CompanyAll/companyall.component';
 import { PayPeriodComponent } from '../../../common/payperiod/payperiod.component';
-import { AlertpopupComponent } from '../../../common/alertpopup/alertpopup.component';
 import { FNFRevokeService } from '../../../Service/Process/fnfrevoke.service';
+import { AlertpopupComponent } from '../../../common/alertpopup/alertpopup.component';
 
 @Component({
   selector: 'app-fnfrevoke',
@@ -73,7 +73,7 @@ export class FNFRevokeComponent {
     const file = input?.files?.[0];
 
     if (!file) {
-      this.showAlertPopup('Validation Error', 'Please upload an Excel file.');
+      this.showAlertPopup('Please upload an Excel file.');
       return;
     }
 
@@ -126,7 +126,7 @@ export class FNFRevokeComponent {
           }));
 
 
-          this.showAlertPopup('Import Failed', response);
+          this.showAlertPopup(response);
 
           const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
           const workbook: XLSX.WorkBook = {
@@ -142,14 +142,14 @@ export class FNFRevokeComponent {
 
         else {
           if (response !== '') this.showAlertPopup('Info', response);
-          else this.showAlertPopup('Error', 'Error while processing response.');
+          else this.showAlertPopup('Error while processing response.');
         }
       },
 
       error: (err) => {
         this.isLoading = false;
         console.error("Upload failed", err);
-        this.showAlertPopup('Error', 'Upload Failed');
+        this.showAlertPopup('Upload Failed');
       }
     });
   }
@@ -174,7 +174,7 @@ export class FNFRevokeComponent {
     const blob = new Blob([buffer], { type: 'application/octet-stream' });
     FileSaver.saveAs(blob, `FNF_Revoke_Template_${Date.now()}.xlsx`);
 
-    this.showAlertPopup('Success', 'Template Downloaded Successfully.');
+    this.showAlertPopup('Downloaded Successfully.');
   }
 
 

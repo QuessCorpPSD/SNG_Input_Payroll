@@ -1,0 +1,121 @@
+<form [formGroup]="entityForm" novalidate>
+    <mat-card class="custom-card">
+        <mat-card-header class="sticky-header">
+            <br />
+            <mat-card-title style="color: #302CB3;"> Add Entity Master</mat-card-title>
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="onClose()" class="no-border-icon">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+
+        <mat-card-content>
+
+            <div class="row g-3 mb-3">
+
+                <!-- ENTITY NAME -->
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Entity Name<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control form-control-sm" formControlName="EntityName"
+                        placeholder="Enter Entity Name">
+
+                    <div *ngIf="entityForm.get('EntityName')?.touched && entityForm.get('EntityName')?.invalid"
+                        class="text-danger small">
+                        Entity Name is required.
+                    </div>
+                </div>
+
+                <!-- FUNCTION CODE -->
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Function Code<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control form-control-sm" formControlName="FunctionCode"
+                        placeholder="Function Code">
+
+                    <div *ngIf="entityForm.get('FunctionCode')?.touched && entityForm.get('FunctionCode')?.invalid"
+                        class="text-danger small">
+                        Function Code is required.
+                    </div>
+                </div>
+
+                <!-- JV WBS -->
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">JV WBS</label>
+                    <input type="text" class="form-control form-control-sm" formControlName="WBS">
+                </div>
+
+            </div>
+
+
+            <div class="row g-3 mb-3">
+
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">JV Profit Center</label>
+                    <input type="text" class="form-control form-control-sm" formControlName="ProfitCenter">
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Account Number</label>
+                    <input type="text" class="form-control form-control-sm" formControlName="AccountNumber">
+                </div>
+
+                <!-- QUESS LEGAL ENTITY -->
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Quess Legal Entity<span
+                            class="text-danger">*</span></label>
+
+                    <select class="form-select" formControlName="QuessLegalEntityId">
+                        <option value="">Select</option>
+                        <option *ngFor="let x of quessLegalEntityList" [value]="x.id">
+                            {{ x.name }}
+                        </option>
+                    </select>
+
+                    <div *ngIf="entityForm.get('QuessLegalEntityId')?.touched 
+                                && entityForm.get('QuessLegalEntityId')?.invalid" class="text-danger small">
+                        Quess Legal Entity is required.
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Establishment Code</label>
+                    <input type="text" class="form-control form-control-sm" formControlName="EstablishmentCode">
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Profit Center</label>
+                    <input type="text" class="form-control form-control-sm" formControlName="ProfitCenter">
+                </div>
+            </div>
+
+
+            <div class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">
+
+                <button type="button" (click)="onClose()" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+            cursor: pointer; background-color: #f0f0f0; color: black;">
+                    Cancel
+                </button>
+
+                <!-- ✔ FIXED — removed extra space -->
+                <button type="button" (click)="onSave()" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+            cursor: pointer; background-color: blue; color: white;">
+                    Save
+                </button>
+
+            </div>
+
+        </mat-card-content>
+        <div *ngIf="isLoading" class="loading-overlay">
+            <img src="assets/Loading.gif" alt="Loading...">
+        </div>
+
+        <div *ngIf="showPopup" class="overlay"></div>
+        <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+            (close)="closePopup()">
+        </app-alertpopup>
+
+    </mat-card>
+</form>

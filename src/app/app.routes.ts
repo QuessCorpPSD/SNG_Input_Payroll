@@ -108,6 +108,8 @@ import { CPFslabDetailsComponent } from './pages/GlobalMasters/cpfslab-details/c
 import { GSTComponent } from './pages/GlobalMasters/gst/gst.component';
 import { CorporatebankComponent } from './pages/customers/corporatebank/corporatebank.component';
 import { ITcalenderComponent } from './pages/customers/itcalender/itcalender.component';
+import { InvoiceReportComponent } from './pages/Reports/invoice-report/invoice-report.component';
+import { NetpayreportComponent } from './pages/Reports/netpayreport/netpayreport.component';
 import { ClientaddressComponent } from './pages/customers/clientaddress/clientaddress.component';
 
 
@@ -261,7 +263,9 @@ export const routes: Routes = [
           { path: 'pomonthwisereport', component: PomonthwisereportComponent },
           { path: 'app-qits-billing-report', component: QITSBillingReportComponent },
           { path: 'app-timesheet-report', component: TimesheetReportComponent },
-          { path: 'poactiveinactivereport', component: PoactiveinactivereportComponent }
+          { path: 'poactiveinactivereport', component: PoactiveinactivereportComponent },
+          { path: 'app-invoice-report', component: InvoiceReportComponent },
+          { path: 'app-netpayreport', component: NetpayreportComponent }
         ]
       },
       {
@@ -276,8 +280,8 @@ export const routes: Routes = [
           { path: 'payprocess', component: PayProcessComponent },
           { path: 'ITAdjustment', component: ITAdjustmentComponent },
           { path: 'otherincome', component: OtherincomeComponent },
-          { path: 'OneTimeReplacement', component: OneTimeReplacementComponent },
-          { path: 'FNFRevoke', component: FNFRevokeComponent },
+          { path: 'app-one-time-replacement', component: OneTimeReplacementComponent },
+          { path: 'app-fnfrevoke', component: FNFRevokeComponent },
           { path: 'FFprocess', component: FFprocessComponent },
           { path: 'AllowReProcess', component: AllowReProcessComponent },
           { path: "paytransaction", component: PaytransactionComponent, },

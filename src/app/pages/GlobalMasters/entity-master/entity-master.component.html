@@ -1,0 +1,131 @@
+<br />
+<div class="page-wrapper">
+    <div class="scrollable-content">
+
+        <div style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; min-width: 960px">
+            Entity Master
+        </div>
+
+        <div class="container py-4">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3 small-input">
+                    <label class="form-label text-muted small">Entity Name</label>
+                    <input type="text" class="form-control form-control-sm" placeholder="Enter Entity Name"
+                        [(ngModel)]="entityName" />
+                </div>
+
+
+                <div class="col-md-3 d-flex gap-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Search"
+                        (click)="onSearchClick()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="Export to Excel" (click)="exportToExcelLocal()">
+                        <mat-icon>table_chart</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Add"
+                        (click)="AddPOOpen()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-wrapper1" style="min-width: 960px;" *ngIf="showTable">
+            <div class="table-scroll">
+
+
+                <mat-table [dataSource]="uploadedDataSource" matSort
+                    class="custom-table mat-elevation-z8 auto-fit-table">
+
+
+                    <ng-container matColumnDef="Action">
+                        <mat-header-cell *matHeaderCellDef><strong>Action</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                            <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                matTooltip="Delete">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                            <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                matTooltip="edit">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="SI No">
+                        <mat-header-cell *matHeaderCellDef style="width: 70px;"><strong>SI No</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row" style="width: 70px;">{{ row['SI No'] }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Entity">
+                        <mat-header-cell *matHeaderCellDef
+                            style="width: 400px;"><strong>Entity</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row" style="width: 400px;">{{ row['Entity'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- <ng-container matColumnDef="City">
+                        <mat-header-cell *matHeaderCellDef><strong>City</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['City'] }}</mat-cell>
+                    </ng-container> -->
+
+                    <ng-container matColumnDef="Profit Center">
+                        <mat-header-cell *matHeaderCellDef><strong>Profit Center</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Profit Center'] }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Function Code">
+                        <mat-header-cell *matHeaderCellDef><strong>Function Code</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Function Code'] }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="JV WBS">
+                        <mat-header-cell *matHeaderCellDef><strong>JV WBS</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['JV WBS'] }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="JV Profit Center">
+                        <mat-header-cell *matHeaderCellDef><strong>JV Profit Center</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['JV Profit Center'] }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Account Number">
+                        <mat-header-cell *matHeaderCellDef><strong>Account Number</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Account Number'] }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Invoice Legal Entity">
+                        <mat-header-cell *matHeaderCellDef><strong>Invoice Legal Entity</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Invoice Legal Entity'] }}</mat-cell>
+                    </ng-container>
+
+
+                    <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+
+                    <mat-row *matRowDef="let row; columns: uploadDisplayedColumns;"></mat-row>
+
+                </mat-table>
+                <div *ngIf="uploadedData.length === 0" class="text-center p-4">
+                    <p class="text-muted">No data to display</p>
+                </div>
+            </div>
+
+
+            <mat-paginator [length]="uploadedData.length" [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"
+                showFirstLastButtons>
+            </mat-paginator>
+        </div>
+        <div *ngIf="isLoading" class="loading-overlay">
+            <img src="assets/Loading.gif" alt="Loading...">
+        </div>
+
+
+        <div *ngIf="showPopup" class="overlay"></div>
+        <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+            (close)="closePopup()">
+        </app-alertpopup>
+    </div>
+</div>

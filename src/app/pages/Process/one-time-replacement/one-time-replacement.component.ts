@@ -14,11 +14,11 @@ import { PayPeriodComponent } from '../../../common/payperiod/payperiod.componen
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { OneTimeReplacementService } from '../../../Service/Process/one-time-replacement.service';
 import FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 import { AlertpopupComponent } from '../../../common/alertpopup/alertpopup.component';
 import { AddOneTimeReplacementComponent } from '../add-one-time-replacement/add-one-time-replacement.component';
-import { OneTimeReplacementService } from '../../../Service/Process/one-time-replacement.service';
 
 @Component({
   selector: 'app-one-time-replacement',
@@ -47,8 +47,8 @@ export class OneTimeReplacementComponent {
   popupMessage: string = '';
   popupSubMessage: string = '';
 
-  EmployeeList: any[] = [];
-  employeeCode: string = "";
+  EmployeeList: any[] = [];      
+  employeeCode: string = "";      
   onetimeform!: FormGroup;
   constructor(
     private dialog: MatDialog,
@@ -103,22 +103,21 @@ export class OneTimeReplacementComponent {
   }
   onSearchClick() {
     if (!this.selectedCompanyId) {
-      this.showAlertPopup('Validation Error', 'Please select Company Code');
+      this.showAlertPopup('Please select Company');
       return;
     }
 
     if (!this.payPeriodId) {
-      this.showAlertPopup('Validation Error', 'Please select PayPeriod');
+      this.showAlertPopup('Please select PayPeriod');
       return;
     }
 
     this.isLoading = true;
-    const formvalue = this.onetimeform.getRawValue()
 
     const payload = {
       Company_id: this.selectedCompanyId.toString(),
       Pay_Frequency_Id: this.payPeriodId.toString(),
-      Employee_Code: formvalue.Employeecode?.toString() || ''
+      Employee_Code: this.employeeCode || ""
     };
 
     this.showTable = true;
@@ -126,16 +125,15 @@ export class OneTimeReplacementComponent {
     this.leave.OneTimeSearch(payload).subscribe({
       next: (res) => {
         this.isLoading = false;
-        const search = res?.Data?.data?.Table0;
 
-        if (!search && search === 0) {
+        if (res?.Data?.statusCode === 400) {
           this.uploadedDataSource.data = [];
-          this.showAlertPopup(res.Data.message);
+          this.showAlertPopup('No Records Found');
           return;
         }
 
-        if (Array.isArray(search)) {
-          this.uploadedData = search;
+        if (Array.isArray(res?.Data)) {
+          this.uploadedData = res.Data;
           this.uploadedDataSource.data = this.uploadedData;
           this.uploadedDataSource.paginator = this.paginator;
           this.uploadedDataSource.sort = this.sort;
@@ -150,23 +148,21 @@ export class OneTimeReplacementComponent {
 
   exportToExcel(): void {
     if (!this.selectedCompanyId) {
-      this.showAlertPopup('Validation Error', 'Please select Company');
+      this.showAlertPopup('Please select Company');
       return;
     }
 
     if (!this.payPeriodId) {
-      this.showAlertPopup('Validation Error', 'Please select Payperiod');
+      this.showAlertPopup('Please select Payperiod');
       return;
     }
 
     this.isLoading = true;
 
-    const formvalue = this.onetimeform.getRawValue()
-
     const exportPayload = {
-      Company_id: this.selectedCompanyId?.toString(),
-      Pay_Frequency_Id: this.payPeriodId?.toString(),
-      Employee_Code: formvalue.Employeecode?.toString() || ''
+      Company_id: this.selectedCompanyId.toString(),
+      Pay_Frequency_Id: this.payPeriodId.toString(),
+      Employee_Code: this.employeeCode || ""
     };
 
     this.leave.downloadExcel(exportPayload).subscribe({
@@ -178,10 +174,10 @@ export class OneTimeReplacementComponent {
           return;
         }
 
-        const jsonData = res?.Data?.data?.Table0;
+        const jsonData = Array.isArray(res?.Data) ? res.Data : [];
 
         if (!jsonData.length) {
-          this.showAlertPopup(res.Data.message);
+          this.showAlertPopup( 'No Records Found');
           return;
         }
 
@@ -193,11 +189,11 @@ export class OneTimeReplacementComponent {
 
         XLSX.writeFile(wb, fileName);
 
-        this.showAlertPopup('Success', 'Excel exported successfully!');
+        this.showAlertPopup('Excel exported successfully!');
       },
       error: () => {
         this.isLoading = false;
-        this.showAlertPopup('Error', 'Failed to load data for export');
+        this.showAlertPopup('Failed to load data for export');
       }
     });
   }
@@ -205,147 +201,76 @@ export class OneTimeReplacementComponent {
   ImportClick(fileInput: HTMLInputElement): void {
     fileInput.click();
   }
-  onFileChange(event: Event): void {
-    this.isLoading = true;
 
+  onFileChange(event: Event): void {
     const input = event.target as HTMLInputElement;
     const file = input?.files?.[0];
 
     if (!file) {
-      console.error('Please upload only one Excel file.');
+      this.showAlertPopup('Please upload an Excel file.');
       return;
     }
 
     const formData = new FormData();
-    formData.append('file', file);
-    formData.append('User', this.userdetail.user_Id);
+    formData.append("file", file);
+    formData.append("User", this.userdetail.user_Id);
 
+    this.isLoading = true;
 
     this.leave.UploadOneTime(formData).subscribe({
-      next: (res) => {
-
-
-        // ✅ handle case when Data is null
-        if (!res || !res.Data) {
-          this.showAlertPopup('Upload request processed. Server did not return any data.');
-          this.isLoading = false;
-
-          return;
-        }
-
-
-        if (res?.Data?.response?.includes("Row(s) Uploaded Successfully.")) {
-          this.isLoading = false;
-
-          return;
-        }
-
-        // --- parse response defensively ---
-        const { parsed, msg } = this.tryParseResponse(res?.Data?.response);
-
-        // CASE 1: Success message inside parsed JSON array/object
-        const successMsg = 'Row(s) Uploaded Successfully.';
-        const successMatch =
-          (Array.isArray(parsed) && parsed[0]?.Error_Message?.trim() === successMsg) ||
-          (parsed && typeof parsed === 'object' && parsed?.Error_Message?.trim() === successMsg);
-
-        if (res?.StatusCode === 200 && successMatch) {
-          this.isLoading = false;
-
-
-          return;
-        }
-
-        // CASE 2: Plain failure string
-        if (res?.StatusCode === 200 && msg?.trim() === 'Failed to import.') {
-
-          this.showAlertPopup('Failed to import');
-          const rawErr = res?.Data?.errors?.[0];
-          let errorArray: any[] = [];
-          try {
-            if (typeof rawErr === 'string') {
-              const tryJson = JSON.parse(rawErr);
-              errorArray = Array.isArray(tryJson) ? tryJson : [tryJson];
-            } else if (Array.isArray(rawErr)) {
-              errorArray = rawErr;
-            } else if (rawErr) {
-              errorArray = [rawErr];
-            }
-          } catch {
-            errorArray = rawErr ? [{ Error_Message: String(rawErr) }] : [];
-          }
-
-          const exportData = errorArray.map((item: any) => ({
-            Error_Message: item?.Error_Message || item?.Error_Message || item?.Error_Message || ''
-          }));
-
-          const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
-          const workbook: XLSX.WorkBook = {
-            Sheets: { ErrorMessages: worksheet },
-            SheetNames: ['ErrorMessages']
-          };
-          XLSX.writeFile(workbook, 'ErrorMessages_onetimereplacement.xlsx');
-          this.isLoading = false;
-
-          return;
-        }
-
-        // ✅ Fallback if no specific case matched
-        const fallback =
-          msg ||
-          (Array.isArray(parsed) ? JSON.stringify(parsed) :
-            (parsed && typeof parsed === 'object' && parsed.Error_Message) ? parsed.Error_Message :
-              (parsed ? JSON.stringify(parsed) : ''));
-
-        if (fallback) {
-          this.showAlertPopup(fallback);
-        } else {
-          // ⚙️ Handle case where API returns message but no data (your current case)
-          if (res?.Message) {
-            this.showAlertPopup(`ℹ️ ${res.Message}`);
-          } else {
-            this.showAlertPopup('Error while processing response.');
-          }
-        }
+      next: (res: any) => {
         this.isLoading = false;
+
+        if (res?.Data?.status === 400 && res?.Data?.errors) {
+          this.showAlertPopup('Import Failed');
+
+          const errors = res.Data.errors;
+          const errorList: any[] = [];
+
+          if (errors.file) errorList.push({ Error_Message: errors.file[0] });
+          if (errors.User) errorList.push({ Error_Message: errors.User[0] });
+
+          const ws = XLSX.utils.json_to_sheet(errorList);
+          const wb = { Sheets: { Errors: ws }, SheetNames: ['Errors'] };
+          XLSX.writeFile(wb, 'OneTimeReplacement_Errors.xlsx');
+
+          return;
+        }
+
+        const successMsg = "Row(s) Uploaded Successfully.";
+        const raw = res?.Data?.response || res?.Data || "";
+
+        if (raw.includes(successMsg)) {
+          this.showAlertPopup('Success');
+          return;
+        }
+
+        if (Array.isArray(res?.Data)) {
+          const ws = XLSX.utils.json_to_sheet(res.Data);
+          const wb = { Sheets: { Errors: ws }, SheetNames: ['Errors'] };
+          XLSX.writeFile(wb, 'OneTimeReplacement_Errors.xlsx');
+          this.showAlertPopup('Import Failed');
+          return;
+        }
+
+        this.showAlertPopup('No Rows to Upload');
       },
-      error: (err) => {
-        this.isLoading = false;
 
-        console.error('❌ Upload failed', err);
-        this.showAlertPopup('Upload failed due to a network or server error.');
+      error: () => {
+        this.isLoading = false;
+        this.showAlertPopup('Upload Failed');
       }
     });
-    this.isLoading = false;
-  }
-
-  tryParseResponse(r: any): { parsed: any; msg: string } {
-    if (r == null) return { parsed: null, msg: '' };
-
-    if (Array.isArray(r)) return { parsed: r, msg: '' };
-    if (typeof r === 'object') return { parsed: r, msg: '' };
-
-    // string
-    if (typeof r === 'string') {
-      try {
-        const p = JSON.parse(r);
-        return { parsed: p, msg: '' };
-      } catch {
-        return { parsed: null, msg: r };
-      }
-    }
-
-    return { parsed: null, msg: String(r) };
   }
 
   DownloadTemplate() {
     if (!this.selectedCompanyId) {
-      this.showAlertPopup('Validation Error', 'Please select Company');
+      this.showAlertPopup('Please select Company');
       return;
     }
 
     if (!this.payPeriodId) {
-      this.showAlertPopup('Validation Error', 'Please select Payperiod');
+      this.showAlertPopup('Please select Payperiod');
       return;
     }
 
@@ -362,7 +287,7 @@ export class OneTimeReplacementComponent {
     const blob = new Blob([buffer], { type: 'application/octet-stream' });
     FileSaver.saveAs(blob, `onetimereplacement_Template_${Date.now()}.xlsx`);
 
-    this.showAlertPopup('Success', 'Template downloaded.');
+    this.showAlertPopup('Template downloaded.');
     this.isLoading = false;
   }
 
@@ -395,6 +320,7 @@ export class OneTimeReplacementComponent {
   // }
 
   view(row: any) {
+    console.log('View clicked:', row);
   }
 
   handleCompanyEvent(company) {

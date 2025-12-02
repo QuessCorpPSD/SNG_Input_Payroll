@@ -21,7 +21,6 @@ import { BandDeatialsService } from '../../../Service/CUSTOMER/band-deatials.ser
     MatIconModule,
     MatTooltipModule,
     MatTableModule,
-    MatPaginator,
     MatCardModule,
     CompanyallComponent,
     ReactiveFormsModule

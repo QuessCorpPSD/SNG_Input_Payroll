@@ -29,7 +29,7 @@ import { SessionStorageService } from '../../../Shared/SessionStorageService';
     MatPaginatorModule,
     FormsModule,
     MatCardModule,
-    CompanyallComponent,
+    CompanyallComponent
   ],
   templateUrl: './add-one-time-replacement.component.html',
   styleUrls: ['./add-one-time-replacement.component.css']
@@ -80,6 +80,7 @@ export class AddOneTimeReplacementComponent implements AfterViewInit {
   handleCompanyEvent(company) {
     this.selectedCompanyId = company.companyId;
     this.selectedCompanyCode = company.companyId;
+    console.log(this.selectedCompanyCode)
   }
 
   ngOnInit(): void {
