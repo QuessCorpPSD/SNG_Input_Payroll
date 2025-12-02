@@ -7,7 +7,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { AlertpopupComponent } from '../../../common/alertpopup/alertpopup.component';
-import { InvoiceLegalEntityService } from '../../../Service/GlobalMaster/invoice-legal-entity.service';
+import { InvoiceLegalEntityService } from '../../../Service/GlobalMasters/invoice-legal-entity.service';
+
 
 @Component({
   selector: 'app-add-invoice-legal-entity',

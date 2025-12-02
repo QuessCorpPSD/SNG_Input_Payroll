@@ -6,7 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { VendorMasterService } from '../../../Service/GlobalMaster/vendor-master.service';
+import { VendorMasterService } from '../../../Service/GlobalMasters/vendor-master.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { AlertpopupComponent } from '../../../common/alertpopup/alertpopup.component';
@@ -24,7 +24,8 @@ import { AlertpopupComponent } from '../../../common/alertpopup/alertpopup.compo
     AlertpopupComponent
   ],
   templateUrl: './add-vendor.component.html',
-  styleUrl: './add-vendor.component.css'
+  styleUrl: './add-vendor.component.css',
+
 })
 export class AddVendorComponent {
 
