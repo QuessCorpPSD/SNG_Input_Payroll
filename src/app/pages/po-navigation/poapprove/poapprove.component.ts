@@ -394,10 +394,10 @@ bulkUpdate(action: 'APPROVED' | 'REJECTED' | 'REVOKE') {
             let jsonData = JSON.parse(text);
 
             // Log the parsed JSON for debugging
-            // console.log("Parsed JSON:", jsonData);
+             //console.log("Parsed JSON:", jsonData);
 
             // Extract tables from the response
-            const tables = jsonData.data.data;
+            const tables = jsonData.Data.data;
             const tableNames: string[] = [
 
             ];

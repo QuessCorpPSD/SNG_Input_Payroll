@@ -10,7 +10,7 @@
             <div class="container py-4">
                 <div class="row g-3 align-items-end">
                     <div class="col-md-3">
-                        <label class="form-label">Category<span class="text-danger">*</span></label>
+                        <label class="form-label">Category </label>
                         <select class="form-select form-select-sm" formControlName="Category">
                             <option value="">-- Select --</option>
                             <option *ngFor="let cat of categories" [value]="cat.spr_status_id">
@@ -65,7 +65,7 @@
 
                         <ng-container matColumnDef="SNo">
                             <mat-header-cell *matHeaderCellDef><strong>SNo</strong></mat-header-cell>
-                            <mat-cell *matCellDef="let row">{{ row['SNo'] }}</mat-cell>
+                            <mat-cell *matCellDef="let row">{{ row['Serial_No'] }}</mat-cell>
                         </ng-container>
 
                         <!-- PayCodeId -->
@@ -240,8 +240,8 @@
 
                 </div>
 
-                <mat-paginator [length]="uploadedData.length" [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"
-                    showFirstLastButtons>
+                <mat-paginator [length]="uploadedData.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
+                    showFirstLastButtons aria-label="select page">
                 </mat-paginator>
             </div>
         </div>

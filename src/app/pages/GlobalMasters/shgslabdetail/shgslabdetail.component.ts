@@ -89,11 +89,11 @@ export class ShgslabdetailComponent implements AfterViewInit {
   }
 
   onsearch() {
-    if (!this.Selecteddate)
-    {
-      alert("Please select Effective Date");
-      return;
-    }
+    // if (!this.Selecteddate)
+    // {
+    //   alert("Please select Effective Date");
+    //   return;
+    // }
     this.showTable = true;
 
     const date = this.Selecteddate;

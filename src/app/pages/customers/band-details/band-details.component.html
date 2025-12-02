@@ -51,7 +51,7 @@
                     <mat-table [dataSource]="uploadedDataSource" matSort
                         class="custom-table mat-elevation-z8 auto-fit-table">
 
-                        <ng-container matColumnDef="Action">
+                        <ng-container matColumnDef="Action" style="display: none;">
                             <mat-header-cell *matHeaderCellDef class="Action"><strong>Action</strong></mat-header-cell>
                             <mat-cell *matCellDef="let row" class="Action">
                                 <button class="btn btn-sm d-flex align-items-center justify-content-center"
@@ -97,7 +97,7 @@
 
                 </div>
 
-                <mat-paginator [length]="uploadedData.length" [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"
+                <mat-paginator [length]="uploadedData.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
                     showFirstLastButtons>
                 </mat-paginator>
 

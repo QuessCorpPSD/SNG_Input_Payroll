@@ -51,7 +51,7 @@ export class PoCreateComponent {
   comapnyId: number = 0;
   PONumbber: string = '';
   ponumber: any;
-  PricingType: any;
+  PricingType: string='';
   IActive: any; // Could be typed if you know the type
   message: string = '';
   popupMessage: string = '';
@@ -68,7 +68,7 @@ export class PoCreateComponent {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(PotypeComponent) potypeComponent!: PotypeComponent;
   selectedCompanyCode: any;
-  selectedPONumbber: any;
+  selectedPONumbber: string='';
   userdetail: any;
   @ViewChild(MatPaginator) paginator0!: MatPaginator;
   @ViewChild(MatSort) sort0!: MatSort;
@@ -124,24 +124,30 @@ export class PoCreateComponent {
     'UTILIZED AMOUNT': 'PO Utilized :'
   };
   MainPOSearch() {
-    const companyidstr = this.comapnyId === 0 ? '""' : this.comapnyId;
-    const pricingtypestr = this.PricingType === '' ? '""' : this.PricingType;
-    const ponumberstr = this.selectedPONumbber === '' ? '""' : this.selectedPONumbber;
-    const ponumberstr1 = ponumberstr.replace('/', '_');
 
-
-    if (companyidstr === 0) {
+     if (this.comapnyId  === 0) {
       alert('Please select a valid Company');
       return;
     }
-    if (!pricingtypestr) {
-      alert('Please select a Pricing Type');
-      return;
-    }
-    if (!ponumberstr1) {
+    if (this.selectedPONumbber==='') {
       alert('Please enter a PO Number');
       return;
     }
+    if (this.PricingType==='') {
+      alert('Please select a Pricing Type');
+      return;
+    }
+    
+    var ponumberstr1="";
+    const companyidstr = this.comapnyId === 0 ? '""' : this.comapnyId;
+    const pricingtypestr = this.PricingType === '' ? '""' : this.PricingType;
+    const ponumberstr = this.selectedPONumbber === '' ? '""' : this.selectedPONumbber;
+  
+    if(ponumberstr!="undefined" && ponumberstr!="")
+    {
+      ponumberstr1 = ponumberstr.replace('/', '_');
+    }
+   
 
     this.poRespository
       .Mainposearch(

@@ -19,8 +19,7 @@ export class ClientaddressService {
     const params = new HttpParams({ fromObject: payload });
 
     return this.http.get<APIResponse>(
-      this.env.apiUrl + 'ClientAddress/GetAllClientAddressDetails',
-      { params }
+      this.env.apiUrl + 'ClientAddress/GetAllClientAddressDetails/'+payload
     );
   }
 

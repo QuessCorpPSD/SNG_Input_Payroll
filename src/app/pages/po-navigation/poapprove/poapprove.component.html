@@ -4,7 +4,7 @@
 
             <!-- Company Code -->
             <div class="col-md-3">
-                <label class="form-label text-muted small">Company Code</label>
+                <label class="form-label text-muted small">Company Code<span style="color: red;">*</span> </label>
                 <CompanyPicker (companyEmit)="handleCompanyEvent($event)"></CompanyPicker>
             </div>
 
@@ -17,14 +17,14 @@
 
             <!-- Client Employee Id -->
             <div class="col-md-2">
-                <label class="form-label text-muted small">Client Employee Id</label>
+                <label class="form-label text-muted small">Employee Id</label>
                 <input type="text" [(ngModel)]="clientEmployeeId" class="form-control form-control-sm"
-                    placeholder="Enter Client Employee ID">
+                    placeholder="Employee ID">
             </div>
 
             <!-- Status -->
             <div class="col-md-2">
-                <label class="form-label text-muted small">Status</label>
+                <label class="form-label text-muted small">Status <span style="color: red;">*</span></label>
                 <app-po-status (postatusEmit)="PostatusEvent($event)" [(ngModel)]="statusId"></app-po-status>
             </div>
 

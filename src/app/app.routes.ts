@@ -230,7 +230,7 @@ export const routes: Routes = [
           { path: 'perfomainvoice', component: PerfomainvoiceComponent },
           { path: 'billabledays', component: BillableDaysComponent },
           { path: 'gstinvoice', component: GstinvoiceComponent },
-          { path: 'billingpayfrequency', component: BillingpayfrequencyComponent }
+          { path: 'billingpayfrequency', component: BillingpayfrequencyComponent },
           { path: 'gstinvoice', component: GstinvoiceComponent },
           { path: 'poinitiate', component: POInitiateComponent },
         ]
@@ -253,7 +253,12 @@ export const routes: Routes = [
           { path: "designation", component: DesignationComponent, },
           { path: "BandDetails", component: BandDetailsComponent, },
           { path: "CostCenterMapping", component: CostCenterMappingComponent, },
-          { path: "payfrequency", component: PayfrequencyComponent }
+          { path: "payfrequency", component: PayfrequencyComponent },
+          { path: "corporatebank", component: CorporatebankComponent },
+          { path: "clientaddress", component: ClientaddressComponent },
+          { path: "itcalender", component: ITcalenderComponent },
+          { path: "companypaycodemapping", component: CompanypaycodemappingComponent },
+
         ]
       },
        {

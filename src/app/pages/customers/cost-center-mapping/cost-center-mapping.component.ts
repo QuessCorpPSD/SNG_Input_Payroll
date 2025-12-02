@@ -84,6 +84,11 @@ export class CostCenterMappingComponent {
     this.showPopup = false;
   }
 
+    ngAfterViewInit() {
+    this.uploadedDataSource.paginator = this.paginator;
+    this.uploadedDataSource.sort = this.sort;
+  }
+
   // -----------------------------------------------------------
   // SEARCH
   // -----------------------------------------------------------

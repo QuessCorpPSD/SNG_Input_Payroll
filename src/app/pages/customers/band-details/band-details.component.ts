@@ -88,7 +88,6 @@ export class BandDetailsComponent {
 
     this.showTable = true;
     this.isLoading = true;
-
     this.bandService.GetAllBandDetails(this.selectedCompanyId || 0).subscribe({
       next: (res) => {
 

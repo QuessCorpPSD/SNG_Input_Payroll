@@ -21,7 +21,7 @@ import * as XLSX from 'xlsx';
     MatIconModule,
     MatTooltipModule,
     MatTableModule,
-    MatPaginatorModule,
+    MatPaginator,
     MatSortModule,
     FormsModule,
     ReactiveFormsModule
@@ -121,6 +121,8 @@ export class CPFslabDetailsComponent {
           if (Array.isArray(data) && data.length > 0) {
             this.uploadedData = data;
             this.uploadedDataSource.data = this.uploadedData;
+            this.uploadedDataSource.paginator=this.paginator;
+            this.uploadedDataSource.sort=this.sort;
           } else if (res?.Data?.errors) {
             const validationErrors = res.Data.errors;
             const messages: string[] = [];
