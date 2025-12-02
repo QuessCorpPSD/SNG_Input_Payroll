@@ -69,16 +69,18 @@ body {
   }
 
   .content {
-    height: 100%;
+    padding-bottom: 25px;
+    height: calc(100vh - 60px);   /* adjust based on header */
     width: 95%;
-    margin-left:10.7em;   
-    margin-top: 3.9em;   
+    margin-left:10.7em;  
+    margin-top: 3.9em;  
     background: #ffffff;
-    font-family: Nunito Sans; 
+    font-family: Nunito Sans;
     color: #302CB3;
     overflow-y: auto;
-    padding-bottom: 20px;
+   
    }
+
    .footer {
     background-color: #343a40;
     color: white;
