@@ -11,6 +11,7 @@ import { ItcalenderService } from '../../../Service/CUSTOMER/itcalender.service'
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { AlertpopupComponent } from '../../../common/alertpopup/alertpopup.component';
+import { Console } from 'node:console';
 
 export const Pay_TOKEN = new InjectionToken<IItcalender>('Pay_TOKEN');
 
@@ -153,15 +154,14 @@ export class ITcalenderAddComponent {
         "Company_Code": String(this.selectedCompanyCode),
         "Financial_Year_Id": this.selectedfinacialyearId,
         "Financial_Year_Name": String(this.selectedfinacialyear),
-        "Declaration_CutOff_Date": String(formValue.declarationdate),
-        "Submission_CutOff_Date": String(formValue.submisiondate),
+        "Declaration_CutOff_Date": String(this.formatDate(formValue.declarationdate)),
+        "Submission_CutOff_Date": String(this.formatDate(formValue.submisiondate)),
         "IsActive": true,
         "Error_Message": "",
         "Serial_No": 0
       }
     };
 
-    
 
     this.itcalenderService.Create(payload).subscribe({
       next: (res: any) => {
@@ -200,5 +200,12 @@ export class ITcalenderAddComponent {
       }
     });
   }
+
+ formatDate = (dateString: string) => {
+  if (!dateString) return '';
+  
+  const [year, month, day] = dateString.split('-');
+  return `${day}/${month}/${year}`;
+}
 
 }

@@ -88,20 +88,18 @@ export class ITcalenderEditComponent {
       "createdBy": this.userdetail.user_Id,
       "mode": "Edit",
       "parentDetail": {
-        "IT_Calender_Id": 0,
-        "Company_Id": this.editData.company_ID,
-        "Company_Code": String(this.editData.company_Code),
+        "IT_Calender_Id": this.editData.IT_Calender_Id,
+        "Company_Id": this.editData.Company_Id,
+        "Company_Code": String(this.editData.Company_Code),
         "Financial_Year_Id": this.editData.Financial_Year_Id,
         "Financial_Year_Name": String(this.editData.Financial_Year_Name),
-        "Declaration_CutOff_Date": String(formValue.declarationdate),
-        "Submission_CutOff_Date": String(formValue.submisiondate),
-        "IsActive": true,
+        "Declaration_CutOff_Date": String(this.formatDate(formValue.declarationdate)),
+        "Submission_CutOff_Date": String(this.formatDate(formValue.submisiondate)),
         "Error_Message": "",
         "Serial_No": 0
       }
     };
 
-    console.log('payload', JSON.stringify(payload));
 
 
     this.itcalenderService.Create(payload).subscribe({
@@ -146,6 +144,13 @@ export class ITcalenderEditComponent {
     this.showPopup = false;
     this.popupMessage = '';
     this.popupSubMessage = '';
+  }
+
+  formatDate = (dateString: string) => {
+    if (!dateString) return '';
+
+    const [year, month, day] = dateString.split('-');
+    return `${day}/${month}/${year}`;
   }
 
 
