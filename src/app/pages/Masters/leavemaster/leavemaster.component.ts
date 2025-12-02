@@ -268,16 +268,14 @@ export class LeavemasterComponent {
     }
     const formValue = this.leaveaMasterform.value;
     const leaveMasterAdd = {
-      "leavemasteradd": {
-        companyId: this.companyUI?.companyId,
-        companyCode: this.companyUI?.companyCode,
-        siteId: this.sitenameUI?.siteCode,
-        siteName: this.sitenameUI?.siteName,
-        leavetype: formValue.leavetype,
-        userId: this.userdetail.user_Id
-      }
+        CompanyId: this.companyUI?.companyId,
+        CompanyCode: this.companyUI?.companyCode,
+        SiteId: this.sitenameUI?.siteCode,
+        SiteName: this.sitenameUI?.siteName,
+        Leavetype: formValue.leavetype,
+        UserId: String(this.userdetail.user_Id)
     };
-    console.log(JSON.stringify(leaveMasterAdd));
+    
     this.leavemaster.PostAddLeaveMaster(leaveMasterAdd).subscribe({
       next: (res) => {
         const errormsg = res.Data[0].msg;
