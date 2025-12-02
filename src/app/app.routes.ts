@@ -308,7 +308,7 @@ export const routes: Routes = [
           { path: "shgslabdetail", component: ShgslabdetailComponent },
           { path: "SDLslabDetail", component: SDLslabDetailComponent },
           { path: "CPFslabDetails", component: CPFslabDetailsComponent },
-          { path: "EntityMaster", component: EntityMasterComponent },
+          { path: "app-entity-master", component: EntityMasterComponent },
           { path: "InvoiceLegalEntity", component: InvoiceLegalEntityComponent },
           { path: "Vendor", component: VendorComponent },
           { path: "gst", component: GSTComponent }

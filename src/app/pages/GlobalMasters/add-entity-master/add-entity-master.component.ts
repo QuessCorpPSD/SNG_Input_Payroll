@@ -5,7 +5,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { EntityMasterService } from '../../../Service/GlobalMaster/entity-master.service';
+import { EntityMasterService } from '../../../Service/GlobalMasters/entity-master.service';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
