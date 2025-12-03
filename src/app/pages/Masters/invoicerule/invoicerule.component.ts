@@ -434,9 +434,10 @@ export class InvoiceruleComponent {
       rebates: formValue.rebates.text,
       discounts: formValue.discounts.text,
       billabledaysformula: formValue.billabledaysformula,
-      userId: this.userdetail.user_Id
+      userId: String(this.userdetail.user_Id)
     };
 
+    
     this.invoicerule.PostAddInvoiceRule(InvoiceRuleAdd).subscribe({
       next: (res) => {
         const errormsg = res.Data[0].msg;

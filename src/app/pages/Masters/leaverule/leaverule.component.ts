@@ -741,10 +741,12 @@ export class LeaveruleComponent {
       }));
 
     const requestPayload = {
-      Created_By: this.userdetail.user_Id,
+      Created_By: String(this.userdetail.user_Id),
       Mode: 'Add', // or 'UPDATE'
       leaverulemaster: leaverulePayload
     };
+
+    
 
     this.leaveruleService.SaveUpdateDeleteLeaveRule(requestPayload).subscribe({
       next: res => {
