@@ -441,7 +441,12 @@ export class TimesheetComponent {
   }
 
   MonthClick() {
-    this.Switchpage = "Daily";
+     this.Switchpage = "Daily";
+    this.payperiodUI = {
+      payPeriod: "",
+      payfrequencyid: 0,
+      paySequenceNo: ""
+    }
   }
 
   DailyClick() {

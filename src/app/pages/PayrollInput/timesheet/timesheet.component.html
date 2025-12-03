@@ -378,7 +378,7 @@
                                     <td class="day-col" [class.weekend]="d.isWeekend">
                                         <input #cellInput1  type="text" [(ngModel)]="r.dayValues[i].OT"
                                             (ngModelChange)="onType(r, i, 'OT', $event)" 
-                                            (blur)="onBlur(r, i, 'OT', cellInput1)"
+                                            (blur)="onBlur(r, i, 'OT', cellInput1)" style="text-align: center;"
                                             maxlength="10" />
                                     </td>
 
@@ -386,7 +386,7 @@
                                     <td class="day-col" [class.weekend]="d.isWeekend">
                                         <input #cellInput2  type="text" [(ngModel)]="r.dayValues[i].HOT"
                                             (ngModelChange)="onType(r, i, 'HOT', $event)" 
-                                            (blur)="onBlur(r, i, 'HOT', cellInput2)"
+                                            (blur)="onBlur(r, i, 'HOT', cellInput2)" style="text-align: center;"
                                             maxlength="10" (keypress)="allowDecimalOnly($event)"/>
                                     </td>
                                 </ng-container>
