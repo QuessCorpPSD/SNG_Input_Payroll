@@ -28,7 +28,7 @@ export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOK
 @Component({
   selector: 'gstinvoice',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatCheckboxModule, MatPaginatorModule, MatSort, MatSelectModule, MatInputModule, MatFormFieldModule, ReactiveFormsModule, FormsModule, MatDatepickerModule, MatNativeDateModule, MatIcon],
+  imports: [CommonModule, MatTableModule, MatCheckboxModule, MatPaginatorModule, MatSort, MatSelectModule, MatInputModule, MatFormFieldModule, ReactiveFormsModule, FormsModule, MatDatepickerModule, MatNativeDateModule],
   templateUrl: './gstinvoice.component.html',
   styleUrl: './gstinvoice.component.css',
   providers: [{
@@ -246,33 +246,9 @@ export class GstinvoiceComponent {
 
     const formData = new FormData();
     if (this.excelFile) {
-      formData.append('file', this.excelFile);
-      formData.append('companyCode', this.companyUI.companyCode);
-      formData.append('companyId', this.companyUI.companyId);
-      formData.append('userId', this.userdetail.user_Id);
-      // formData.append('payPeriod', this.payperiodUI.payPeriod);
-      // formData.append('payPeriodId', this.payperiodUI.payfrequencyid);
         formData.append('file', this.excelFile);
         formData.append('userId', this.userdetail.user_Id);
 
-      this._invoiceService.UploadCancel(formData).subscribe({
-        next: res => {
-          this.datatable = res.Data;
-          console.table(this.datatable);
-          if (this.datatable && Array.isArray(this.datatable) && this.datatable.length > 0) {
-            this.downloadExcel(this.datatable, "Reject_Validations");
-            //this.BindDashBoard(this.companyUI.companyCode, this.payperiodUI.payPeriod);
-            this.isLoading = false;
-          } else {
-            alert("No validations returned");
-            this.isLoading = false;
-          }
-        },
-        error: err => {
-          console.error('❌ Upload failed', err);
-          this.isLoading = false;
-        }
-      });
         this._invoiceService.UploadCancel(formData).subscribe({
           next: (res: string) => {
             const error_msg = res ;
