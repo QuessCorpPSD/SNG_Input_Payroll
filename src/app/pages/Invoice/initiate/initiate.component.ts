@@ -94,6 +94,7 @@ export class InitiateComponent implements OnInit {
       const request={
         "invoiceInitiations":this.selection.selected,
         "TaxTypeId":this.invoiceType.geN_iID,
+        "payPeriod_Id":this.payPeriod.payfrequencyid,
         "CreatedBy":this.userdetail.user_Id,
       }
       this._invoiceService.InvoiceInitiate(request).subscribe({
@@ -240,6 +241,7 @@ export class InitiateComponent implements OnInit {
       const request = {
         "Company_Id": this.selectedCompanyId,
         "PayPeriod_Id": this.payPeriod.payfrequencyid,
+        "PayPeriod": this.payPeriod.payPeriod,
         "ActionType": "Search",
         "Invoice_Billing_Type": this.companyUI.invoice_Billing_Type,
         "CreatedBy": this.userdetail.user_Id
