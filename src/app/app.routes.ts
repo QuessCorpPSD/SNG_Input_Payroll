@@ -100,6 +100,7 @@ import { DepartmentComponent } from './pages/customers/department/department.com
 import { DesignationComponent } from './pages/customers/designation/designation.component';
 import { BandDetailsComponent } from './pages/customers/band-details/band-details.component';
 import { CostCenterMappingComponent } from './pages/customers/cost-center-mapping/cost-center-mapping.component';
+import { PEclientmappingComponent } from './pages/Masters/peclientmapping/peclientmapping.component';
 import { BillingpayfrequencyComponent } from './pages/Invoice/billingpayfrequency/billingpayfrequency.component';
 import { PayfrequencyComponent } from './pages/customers/payfrequency/payfrequency.component';
 import { DynamicuploadComponent } from './pages/tools/dynamicupload/dynamicupload.component';
@@ -151,6 +152,7 @@ export const routes: Routes = [
         path: 'masternavigation',
         component: MasternavigationComponent,
         children: [
+          { path: 'peclientmapping', component: PEclientmappingComponent },
           { path: 'holidaymaster', component: HolidaymasterComponent },
           { path: 'invoicerule', component: InvoiceruleComponent },
           { path: 'leavemaster', component: LeavemasterComponent },

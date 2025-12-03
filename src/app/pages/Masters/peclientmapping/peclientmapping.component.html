@@ -1,0 +1,56 @@
+<div class="page-wrapper">
+    <div class="scrollable-content">
+
+        <form [formGroup]="clentmapping" novalidate>
+            <div class="container py-2">
+
+                <!-- Row 1 -->
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">PE User</label>
+                        <select class="form-select form-select-sm" formControlName="peUser"
+                            (change)="onUserChange($event)">
+                            <option value="">--Select--</option>
+                            <option *ngFor="let u of mockData" [value]="u.userId">
+                                {{ u.userId }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">Email Id</label>
+                        <input type="text" class="form-control form-control-sm" readonly formControlName="emailId">
+                    </div>
+                </div>
+
+                <!-- Row 2 -->
+                <div class="row g-4 mt-2">
+                    <div class="col-md-12">
+                        <label class="form-label text-muted small">Mapped Company Code</label>
+                        <textarea class="form-control custom-textarea" rows="4" formControlName="MappedCompanyCode"
+                            (input)="onCompanyCodeInput()"></textarea>
+                    </div>
+                </div>
+
+                <div class="row g-2 mt-2">
+                    <div class="col-md-12">
+                        <label
+                            style="color: green;display: flex;justify-content: center;align-items: center;font-size: 12px;">
+                            Please provide company code with comma separated for example PSL000001,PSL000002
+                        </label>
+                    </div>
+                </div>
+
+                <div class="row g-2 mt-2">
+                    <div class="btn-1" style="display: flex; justify-content: center; gap: 10px; width: 100%; ">
+                        <button type="submit"
+                            style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white; ">
+                            Save
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,66 @@
+  .page-wrapper {
+      display: flex;
+      align-items: flex-start;
+
+  }
+
+  /* Left fixed icon area */
+  .left-icon {
+      flex: 0 0 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #f0f0f0;
+      border-right: 1px solid #ddd;
+  }
+
+  /* Scrollable main content */
+  .scrollable-content {
+      flex: 1 1 auto;
+      overflow-x: auto;
+      overflow-y: auto;
+      padding-left: 10px;
+  }
+
+  .custom-dropdown {
+      height: 200px;
+      /* height of the select box */
+      overflow-y: auto;
+      /* enable scroll */
+  }
+
+  .custom-dropdown option {
+      padding: 5px;
+  }
+
+  .page-title {
+      color: #302CB3;
+      font-size: 22px;
+      font-family: Nunito Sans;
+      font-weight: 700;
+      min-width: 960px;
+      margin-bottom: 15px;
+  }
+
+  /* For PE User dropdown */
+  .custom-select {
+      height: 35px;
+      font-size: 14px;
+  }
+
+  /* Mapped Company Code textarea */
+  .custom-textarea {
+      width: 100%;
+      min-height: 80px;
+      border: 1px solid #4a90e2;
+  }
+
+  /* Scrollable dropdown when opened */
+  .custom-select option {
+      padding: 5px;
+  }
+
+  .custom-select {
+      max-height: 35px;
+      overflow-y: auto;
+  }
