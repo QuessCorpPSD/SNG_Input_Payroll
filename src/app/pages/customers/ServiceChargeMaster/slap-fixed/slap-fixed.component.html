@@ -1,0 +1,32 @@
+<!-- ROW: SLAB FIXED TYPE DROPDOWN -->
+<div class="row g-3 align-items-end">
+
+    <!-- LEFT: FIXED TYPE DROPDOWN -->
+    <div class="col-md-3 col-sm-6 same-col">
+        <label class="form-label text-muted small">Slab Fixed</label>
+
+        <select class="form-select form-select-sm" [(ngModel)]="selectedFixed" (change)="onFixedTypeChange()">
+
+            <option value="">Select</option>
+            <option value="ctc">CTC</option>
+            <option value="headcount">Headcount</option>
+        </select>
+    </div>
+
+</div>
+
+
+<!-- SHOW FIXED → CTC -->
+<div class="row mt-3" *ngIf="showCTC">
+    <div class="col-12">
+        <app-slab-fixed-ctc></app-slab-fixed-ctc>
+    </div>
+</div>
+
+
+<!-- SHOW FIXED → HEADCOUNT -->
+<div class="row mt-3" *ngIf="showHeadcount">
+    <div class="col-12">
+        <app-slab-fix-head-count></app-slab-fix-head-count>
+    </div>
+</div>

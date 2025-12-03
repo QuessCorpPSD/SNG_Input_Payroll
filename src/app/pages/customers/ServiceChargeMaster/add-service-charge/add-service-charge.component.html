@@ -1,0 +1,78 @@
+<mat-card class="custom-card">
+  <mat-card-header class="sticky-header">
+      <br />
+      <mat-card-title style="color: #302CB3;"> Add Service Charge</mat-card-title>
+      <span class="spacer"></span>
+      <button mat-icon-button (click)="onClose()" class="no-border-icon">
+          <mat-icon>close</mat-icon>
+      </button>
+  </mat-card-header>
+
+  <mat-card-content>
+
+      <!-- SERVICE MASTER DROPDOWN -->
+      <div class="row g-3 mb-3">
+          <div class="col-md-5 same-col">
+              <label class="form-label text-muted small">Service Charge</label>
+
+              <select class="form-select form-select-sm"
+                      [(ngModel)]="selectedMasterId"
+                      (change)="onMasterSelected()">
+
+                  <option value="">Select</option>
+
+                  <option *ngFor="let item of serviceChargeMasterList"
+                          [value]="item.Service_Charge_Master_Id">
+                      {{ item.Service_Charge_Master_Name }}
+                  </option>
+
+              </select>
+          </div>
+
+          <!-- SERVICE FEE DROPDOWN -->
+          <div class="col-md-4 same-col" *ngIf="showServiceFeeSection">
+              <app-add-servicefee
+                (fixedSelected)="showFixedSection()"
+                (percentageSelected)="showPercentageSection()"
+                (billSelected)="showBillToRateSection()"
+                (slabSelected)="showSlabSection()">
+              </app-add-servicefee>
+          </div>
+
+          <!-- SUPPLEMENTARY DROPDOWN -->
+          <div class="col-md-4 same-col" *ngIf="showSupplementSection">
+              <app-supplementary-fee
+                (fixedSelected)="selectSupplementType('fixed')"
+                (percentageSelected)="selectSupplementType('percentage')">
+              </app-supplementary-fee>
+          </div>
+      </div>
+
+      <!-- SERVICE FEE BODY -->
+      <div class="col-12" *ngIf="showFixed">
+          <app-service-fixed [selectedCompanyId]="selectedCompanyId"></app-service-fixed>
+      </div>
+
+      <div class="col-12" *ngIf="showPercentage">
+          <app-service-percentage [selectedCompanyId]="selectedCompanyId"></app-service-percentage>
+      </div>
+
+      <div class="col-12" *ngIf="showBill">
+          <app-service-bill-to-rate></app-service-bill-to-rate>
+      </div>
+
+      <div class="col-12" *ngIf="showSlab">
+          <app-service-slab></app-service-slab>
+      </div>
+
+      <!-- SUPPLEMENTARY BODY -->
+      <div class="col-12" *ngIf="showSuppFixed">
+          <app-supplementary-fixed></app-supplementary-fixed>
+      </div>
+
+      <div class="col-12" *ngIf="showSuppPercentage">
+          <app-supplementary-percentage></app-supplementary-percentage>
+      </div>
+
+  </mat-card-content>
+</mat-card>

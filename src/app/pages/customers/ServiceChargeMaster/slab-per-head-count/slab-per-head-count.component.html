@@ -1,0 +1,89 @@
+<form [formGroup]="slabPerHeadForm">
+
+    <br><br>
+
+    <mat-card-content>
+
+        <!-- ROW 1 -->
+        <div class="row g-3 mb-3">
+
+            <!-- Map Name -->
+            <div class="col-md-4">
+                <label class="form-label text-muted small">Map Name <span class="text-danger">*</span></label>
+                <select class="form-select form-select-sm" formControlName="mapName">
+                    <option value="">Select</option>
+                </select>
+                <small class="text-danger" *ngIf="showErrors && slabPerHeadForm.get('mapName')?.invalid">
+                    Map Name is required
+                </small>
+            </div>
+
+            <!-- Is Map Name Require -->
+            <div class="col-md-4">
+                <label class="form-label text-muted small">Is Map Name Required <span
+                        class="text-danger">*</span></label>
+                <select class="form-select form-select-sm" formControlName="isMapNameRequired">
+                    <option value="">Select</option>
+                </select>
+                <small class="text-danger" *ngIf="showErrors && slabPerHeadForm.get('isMapNameRequired')?.invalid">
+                    This field is required
+                </small>
+            </div>
+
+            <!-- Slab -->
+            <div class="col-md-4">
+                <label class="form-label text-muted small">Slab <span class="text-danger">*</span></label>
+                <input type="text" class="form-control form-control-sm" formControlName="slab">
+                <small class="text-danger" *ngIf="showErrors && slabPerHeadForm.get('slab')?.invalid">
+                    Slab is required
+                </small>
+            </div>
+
+        </div>
+
+        <!-- ROW 2 -->
+        <div class="row g-3 mb-3">
+
+            <!-- Value -->
+            <div class="col-md-4">
+                <label class="form-label text-muted small">Value<span class="text-danger">*</span></label>
+                <input type="text" class="form-control form-control-sm" formControlName="value">
+                <small class="text-danger" *ngIf="showErrors && slabPerHeadForm.get('value')?.invalid">
+                    Value is required
+                </small>
+            </div>
+
+            <!-- Date -->
+            <div class="col-md-4">
+                <label class="form-label text-muted small">Effective Date <span class="text-danger">*</span></label>
+                <input type="date" class="form-control form-control-sm" formControlName="startDate">
+                <small class="text-danger" *ngIf="showErrors && slabPerHeadForm.get('startDate')?.invalid">
+                    Effective Date is required
+                </small>
+            </div>
+
+        </div>
+
+    </mat-card-content>
+
+    <!-- FOOTER -->
+    <div class="d-flex justify-content-end mt-3">
+
+        <div class="btn-1"
+            style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
+
+            <button type="button" (click)="onReset()"y
+                style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;">
+                Cancel
+            </button>
+
+
+            <button type="button" (click)="onSubmit()"
+                style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white;">
+                Save
+            </button>
+
+        </div>
+
+    </div>
+</form>

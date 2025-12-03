@@ -1,0 +1,82 @@
+<form [formGroup]="suppFixForm">
+
+    <div class="component-box">
+        <mat-card-content>
+            <div class="supplementary-inner">
+
+                <!-- ROW 1 -->
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Map Name <span class="text-danger">*</span></label>
+                        <select class="form-select form-select-sm" formControlName="mapName">
+                            <option value="">Select</option>
+                            <option *ngFor="let item of mapNameList" [value]="item.cost_Center_Mapping_Id">
+                                {{ item.map_Name }}
+                            </option>
+                        </select>
+                        <small class="text-danger" *ngIf="showErrors && suppFixForm.get('mapName')?.invalid">
+                            Map Name is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Paycode <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control form-control-sm" formControlName="paycode"
+                            (input)="allowNumbersOnly($event)">
+                        <small class="text-danger" *ngIf="showErrors && suppFixForm.get('paycode')?.invalid">
+                            Paycode is required
+                        </small>
+                    </div>
+
+                    <!-- <div class="col-md-4">
+                        <label class="form-label text-muted small">Slab <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control form-control-sm" formControlName="slab"
+                            (input)="allowNumbersOnly($event)">
+                        <small class="text-danger" *ngIf="showErrors && suppFixForm.get('slab')?.invalid">
+                            Slab is required
+                        </small>
+                    </div> -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Value <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control form-control-sm" formControlName="value"
+                            (input)="allowNumbersOnly($event)">
+                        <small class="text-danger" *ngIf="showErrors && suppFixForm.get('value')?.invalid">
+                            Value is required
+                        </small>
+                    </div>
+                </div>
+
+                <!-- ROW 2 -->
+                <div class="row g-3 mb-3">
+
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Effective Date <span
+                                class="text-danger">*</span></label>
+                        <input type="date" class="form-control form-control-sm" formControlName="startDate">
+                        <small class="text-danger" *ngIf="showErrors && suppFixForm.get('startDate')?.invalid">
+                            Effective Date is required
+                        </small>
+                    </div>
+                </div>
+
+                <!-- BUTTONS -->
+                <div class="d-flex justify-content-end mt-3">
+                    <div class="btn-1"
+                        style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
+                        <button type="button" (click)="onReset()"
+                            style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;">
+                            Cancel
+                        </button>
+                        <button type="button" (click)="onSubmit()"
+                            style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white;">
+                            Save
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </mat-card-content>
+    </div>
+
+</form>

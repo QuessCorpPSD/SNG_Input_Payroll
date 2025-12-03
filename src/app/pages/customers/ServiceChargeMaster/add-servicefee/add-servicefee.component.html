@@ -1,0 +1,11 @@
+<div class="col-md-4 same-col">
+    <label class="form-label text-muted small">Service Fee</label>
+
+    <select class="form-select form-select-sm" [(ngModel)]="selectedService" (change)="onServiceFeeChange()">
+        <option value="">Select</option>
+
+        <option *ngFor="let type of serviceFeeTypes" [value]="type.Service_Charge_Type_Id">
+            {{ type.Service_Charge_Type_Name }}
+        </option>
+    </select>
+</div>

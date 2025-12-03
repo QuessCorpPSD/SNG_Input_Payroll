@@ -1,0 +1,85 @@
+<form [formGroup]="headCountForm">
+    <br/>
+
+
+    <!-- BODY -->
+    <mat-card-content>
+
+        <div class="form-grid">
+
+            <!-- Map Name -->
+            <div>
+                <label class="form-label text-muted small mb-0">
+                    Map Name <span class="text-danger">*</span>
+                </label>
+                <input type="text" class="form-control form-control-sm" formControlName="mapName">
+                <small class="text-danger" *ngIf="showErrors && headCountForm.get('mapName')?.invalid">
+                    Map Name is required
+                </small>
+            </div>
+
+            <!-- Is Map Name Required -->
+            <div>
+                <label class="form-label text-muted small mb-0">
+                    Is Map Name Required <span class="text-danger">*</span>
+                </label>
+                <input type="text" class="form-control form-control-sm" formControlName="isMapNameRequired">
+                <small class="text-danger" *ngIf="showErrors && headCountForm.get('isMapNameRequired')?.invalid">
+                    This field is required
+                </small>
+            </div>
+
+            <!-- Slab -->
+            <div>
+                <label class="form-label text-muted small mb-0">
+                    Slab <span class="text-danger">*</span>
+                </label>
+                <input type="text" class="form-control form-control-sm" formControlName="slab">
+                <small class="text-danger" *ngIf="showErrors && headCountForm.get('slab')?.invalid">
+                    Slab is required
+                </small>
+            </div>
+
+            <!-- Value -->
+            <div>
+                <label class="form-label text-muted small mb-0">
+                    Value <span class="text-danger">*</span>
+                </label>
+                <input type="text" class="form-control form-control-sm" formControlName="value">
+                <small class="text-danger" *ngIf="showErrors && headCountForm.get('value')?.invalid">
+                    Value is required
+                </small>
+            </div>
+
+            <!-- Effective Date -->
+            <div>
+                <label class="form-label text-muted small mb-0">
+                    Effective Date <span class="text-danger">*</span>
+                </label>
+                <input type="date" class="form-control form-control-sm" formControlName="startDate">
+                <small class="text-danger" *ngIf="showErrors && headCountForm.get('startDate')?.invalid">
+                    Effective Date is required
+                </small>
+            </div>
+
+        </div>
+
+    </mat-card-content>
+    <br/>
+
+    <!-- FOOTER BUTTONS -->
+    <div class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">
+
+        <button type="button" (click)="onReset()" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+            cursor: pointer; background-color: #f0f0f0; color: black;">
+            Cancel
+        </button>
+
+        <button type="button" (click)="onSubmit()" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+            cursor: pointer; background-color: blue; color: white;">
+            Save
+        </button>
+
+    </div>
+
+</form>

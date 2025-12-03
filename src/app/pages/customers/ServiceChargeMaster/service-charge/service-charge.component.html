@@ -1,0 +1,155 @@
+<br />
+<div class="page-wrapper">
+    <div class="scrollable-content">
+
+        <div style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; min-width: 960px">
+            Service Charge
+        </div>
+
+        <div class="container py-4">
+
+            <!-- ⭐ NOW EVERYTHING IS IN ONE SINGLE ROW ⭐ -->
+            <div class="row g-3 align-items-end">
+
+                <!-- Company Code -->
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Company code</label>
+                    <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Service Charge Master</label>
+                    <select class="form-select form-select-sm" (change)="onServiceChargeChange($event)">
+                        <option value="">Select</option>
+                        <option *ngFor="let servicecharge of servicechargedata"
+                            [value]="servicecharge.Service_Charge_Master_Id">
+                            {{servicecharge.Service_Charge_Master_Name}}
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Service Charge Type</label>
+                    <select class="form-select form-select-sm" (change)="onServiceChargeTypeChange($event)">
+                        <option value="">Select</option>
+                        <option *ngFor="let servicechargetype of servicechargetypedata"
+                            [value]="servicechargetype.Service_Charge_Type_Id">
+                            {{servicechargetype.Service_Charge_Type_Name}}
+                        </option>
+                    </select>
+
+                </div>
+
+                <br />
+                <br />
+                <!-- Buttons Section -->
+                <div class="col-md-9 d-flex gap-2">
+                    <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Search"
+                        (click)="onSearchClick()">
+                        <mat-icon>search</mat-icon>
+                    </button> -->
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Search"
+                    (click)="onSearchClick()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="export to excel">
+                        <mat-icon>table_chart</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Import"
+                        (click)="ImportClick(fileInput)">
+                        <mat-icon>cloud_upload</mat-icon>
+                    </button>
+
+                    <input type="file" #fileInput style="display: none;" (click)="fileInput.value=''"
+                        (change)="onFileChange($event)" accept=".xlsx, .xls" />
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Template">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Add"
+                        (click)="AddPOOpen()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+   <div *ngIf="showPopup" class="overlay">
+        <app-alertpopup *ngIf="showPopup" [message]="popupMessage" class="centered-popup"
+            (close)="showPopup = false"></app-alertpopup>
+    </div>
+<br />
+
+<!-- TABLE SECTION -->
+<!-- <div class="table-wrapper1" style="min-width: 960px;" *ngIf="showTable">
+    <div class="table-scroll">
+
+        <mat-table [dataSource]="uploadedDataSource" matSort class="custom-table mat-elevation-z8 auto-fit-table">
+
+            <ng-container matColumnDef="Action">
+                <mat-header-cell *matHeaderCellDef><strong>Action</strong></mat-header-cell>
+                <mat-cell *matCellDef="let row">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Delete">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Edit">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="SI No">
+                <mat-header-cell *matHeaderCellDef><strong>SI No</strong></mat-header-cell>
+                <mat-cell *matCellDef="let row">{{ row['SI No'] }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Entity">
+                <mat-header-cell *matHeaderCellDef><strong>Entity</strong></mat-header-cell>
+                <mat-cell *matCellDef="let row">{{ row['Entity'] }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Culture Type">
+                <mat-header-cell *matHeaderCellDef><strong>Culture Type</strong></mat-header-cell>
+                <mat-cell *matCellDef="let row">{{ row['Culture Type'] }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="PF Code">
+                <mat-header-cell *matHeaderCellDef><strong>PF Code</strong></mat-header-cell>
+                <mat-cell *matCellDef="let row">{{ row['PF Code'] }}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="Company Code">
+                <mat-header-cell *matHeaderCellDef><strong>Company Code</strong></mat-header-cell>
+                <mat-cell *matCellDef="let row">{{ row['Company Code'] }}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="Company Name">
+                <mat-header-cell *matHeaderCellDef><strong>Company Name</strong></mat-header-cell>
+                <mat-cell *matCellDef="let row">{{ row['Company Name'] }}</mat-cell>
+            </ng-container>
+
+
+            <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: uploadDisplayedColumns;"></mat-row>
+
+        </mat-table>
+
+        <div *ngIf="uploadedData.length === 0" class="text-center p-4">
+            <p class="text-muted">No data to display</p>
+        </div>
+
+    </div>
+
+    <mat-paginator [length]="uploadedData.length" [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+    </mat-paginator>
+
+</div>
+
+</div>
+</div> -->

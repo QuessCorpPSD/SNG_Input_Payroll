@@ -1,0 +1,33 @@
+<!-- ROW: SLAB PERCENTAGE TYPE DROPDOWN -->
+<div class="row g-3 align-items-end">
+
+    <!-- LEFT: PERCENTAGE TYPE DROPDOWN -->
+    <div class="col-md-3 col-sm-6 same-col">
+        <label class="form-label text-muted small">Slab Percentage</label>
+
+        <select class="form-select form-select-sm" [(ngModel)]="selectedPercentage" (change)="onPercentageTypeChange()">
+
+            <option value="">Select</option>
+            <option value="ctc">CTC</option>
+            <option value="headcount">Headcount</option>
+
+        </select>
+    </div>
+
+</div>
+
+
+<!-- SHOW PERCENTAGE → CTC -->
+<div class="row mt-3" *ngIf="showCtc">
+    <div class="col-12">
+        <app-slab-per-ctc></app-slab-per-ctc>
+    </div>
+</div>
+
+
+<!-- SHOW PERCENTAGE → HEADCOUNT -->
+<div class="row mt-3" *ngIf="showHeadcount">
+    <div class="col-12">
+        <app-slab-per-head-count></app-slab-per-head-count>
+    </div>
+</div>

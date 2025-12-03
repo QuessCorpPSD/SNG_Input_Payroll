@@ -1,0 +1,194 @@
+<br />
+<br />
+
+<form [formGroup]="invoiceForm">
+
+
+    <div class="row g-3 mb-3">
+        <div class="col-md-4">
+            <label class="form-label text-muted small">Map Name <span class="text-danger">*</span></label>
+
+            <!-- <select class="form-select form-select-sm" formControlName="mapName">
+                <option value="">Select</option>
+                <option *ngFor="let item of mapNameList" [ngValue]="item">
+                    {{ item.map_Name }}
+                </option>
+            </select> -->
+
+            <mapname  [selectedCompanyId]="selectedCompanyId"
+                (mapnameEmit)="handleMapNameEvent($event)"> </mapname>
+        </div>
+
+
+        <div class="col-md-4">
+            <label class="form-label text-muted small">Value <span class="text-danger">*</span></label>
+            <input type="number" class="form-control form-control-sm" formControlName="value">
+            <small class="text-danger" *ngIf="showErrors && invoiceForm.get('value')?.invalid">Required</small>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label text-muted small">Prorate <span class="text-danger">*</span></label>
+            <select class="form-select form-select-sm" formControlName="prorate">
+                <option value="">Select</option>
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+            </select>
+            <small class="text-danger" *ngIf="showErrors && invoiceForm.get('prorate')?.invalid">Required</small>
+        </div>
+    </div>
+
+
+    <div class="row g-3 mb-3">
+        <div class="col-md-4">
+            <label class="form-label text-muted small">FAndF Prorate <span class="text-danger">*</span></label>
+            <select class="form-select form-select-sm" formControlName="ffProrate">
+                <option value="">Select</option>
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+            </select>
+            <small class="text-danger" *ngIf="showErrors && invoiceForm.get('ffProrate')?.invalid">Required</small>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label text-muted small">FAndF Arrear Prorate <span class="text-danger">*</span></label>
+            <select class="form-select form-select-sm" formControlName="ffArrearprorate">
+                <option value="">Select</option>
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+            </select>
+            <small class="text-danger"
+                *ngIf="showErrors && invoiceForm.get('ffArrearprorate')?.invalid">Required</small>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label text-muted small">New Joinee Prorate <span class="text-danger">*</span></label>
+            <select class="form-select form-select-sm" formControlName="newJoineeProrate">
+                <option value="">Select</option>
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+            </select>
+            <small class="text-danger"
+                *ngIf="showErrors && invoiceForm.get('newJoineeProrate')?.invalid">Required</small>
+        </div>
+    </div>
+
+
+    <div class="row g-3 mb-3">
+        <div class="col-md-4">
+            <label class="form-label text-muted small">New Joinee Arrear Prorate <span
+                    class="text-danger">*</span></label>
+            <select class="form-select form-select-sm" formControlName="newJoineeArrearprorate">
+                <option value="">Select</option>
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+            </select>
+            <small class="text-danger"
+                *ngIf="showErrors && invoiceForm.get('newJoineeArrearprorate')?.invalid">Required</small>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label text-muted small">Effective Date <span class="text-danger">*</span></label>
+            <input type="date" class="form-control form-control-sm" formControlName="startDate">
+            <small class="text-danger" *ngIf="showErrors && invoiceForm.get('startDate')?.invalid">Required</small>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label text-muted small">Compliance Fee <span class="text-danger">*</span></label>
+            <input type="number" class="form-control form-control-sm" formControlName="complianceFee">
+
+            <small class="text-danger" *ngIf="showErrors && invoiceForm.get('complianceFee')?.invalid">Required</small>
+        </div>
+    </div>
+
+
+    <div class="row g-3 mb-3">
+        <div class="col-md-4">
+            <label class="form-label text-muted small">Randstad Fee <span class="text-danger">*</span></label>
+            <input type="number" class="form-control form-control-sm" formControlName="randstadFee">
+
+            <small class="text-danger" *ngIf="showErrors && invoiceForm.get('randstadFee')?.invalid">Required</small>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label text-muted small">Upfront Fee Type <span class="text-danger">*</span></label>
+            <select class="form-select form-select-sm" formControlName="upfrontFeeType">
+                <option value="">Select</option>
+                <option value="0">Fixed</option>
+                <option value="1">Percentage</option>
+            </select>
+            <small class="text-danger" *ngIf="showErrors && invoiceForm.get('upfrontFeeType')?.invalid">Required</small>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label text-muted small">Upfront Fee <span class="text-danger">*</span></label>
+            <input type="number" class="form-control form-control-sm" formControlName="upfrontFee">
+            <small class="text-danger" *ngIf="showErrors && invoiceForm.get('upfrontFee')?.invalid">Required</small>
+        </div>
+    </div>
+
+
+    <div class="row g-3 mb-3">
+        <div class="col-md-4">
+            <label class="form-label text-muted small">Upfront Pay Code <span class="text-danger">*</span></label>
+            <input type="text" class="form-control form-control-sm" formControlName="upfrontPayCode">
+            <small class="text-danger" *ngIf="showErrors && invoiceForm.get('upfrontPayCode')?.invalid">Required</small>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label text-muted small">Insurance Amount <span class="text-danger">*</span></label>
+            <input type="text" class="form-control form-control-sm" formControlName="insuranceAmount">
+            <small class="text-danger"
+                *ngIf="showErrors && invoiceForm.get('insuranceAmount')?.invalid">Required</small>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label text-muted small">QDemy Fee Type <span class="text-danger">*</span></label>
+            <select class="form-select form-select-sm" formControlName="qdemyFeeType">
+                <option value="">Select</option>
+                <option value="0">Fixed</option>
+                <option value="1">Percentage</option>
+            </select>
+            <small class="text-danger" *ngIf="showErrors && invoiceForm.get('qdemyFeeType')?.invalid">Required</small>
+        </div>
+    </div>
+
+
+    <div class="row g-3 mb-3">
+        <div class="col-md-4">
+            <label class="form-label text-muted small">QDemy Charge <span class="text-danger">*</span></label>
+            <input type="number" class="form-control form-control-sm" formControlName="qdemyCharge">
+            <small class="text-danger" *ngIf="showErrors && invoiceForm.get('qdemyCharge')?.invalid">Required</small>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label text-muted small">InEdge Fee Type <span class="text-danger">*</span></label>
+            <select class="form-select form-select-sm" formControlName="inedgeFeeType">
+                <option value="">Select</option>
+                <option value="0">Fixed</option>
+                <option value="1">Percentage</option>
+            </select>
+            <small class="text-danger" *ngIf="showErrors && invoiceForm.get('inedgeFeeType')?.invalid">Required</small>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label text-muted small">InEdge Charge <span class="text-danger">*</span></label>
+            <input type="number" class="form-control form-control-sm" formControlName="inedgeCharge">
+            <small class="text-danger" *ngIf="showErrors && invoiceForm.get('inedgeCharge')?.invalid">Required</small>
+        </div>
+    </div>
+
+</form>
+
+
+<div class="d-flex justify-content-end mt-3">
+    <div class="btn-1" style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
+        <button type="button" (click)="onReset()"
+            style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;">
+            Cancel
+        </button>
+        <button type="button" (click)="onSave()"
+            style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white;">
+            Save
+        </button>
+    </div>
+</div>

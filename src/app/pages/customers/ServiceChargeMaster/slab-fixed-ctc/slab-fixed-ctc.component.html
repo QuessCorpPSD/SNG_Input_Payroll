@@ -1,0 +1,133 @@
+<form [formGroup]="ctcForm">
+
+    <br />
+
+    <mat-card-content>
+
+        <!-- ROW 1 -->
+        <div class="row g-3 mb-3">
+
+            <div class="col-md-4">
+                <label class="form-label text-muted small">Map Name <span class="text-danger">*</span></label>
+                <select class="form-select form-select-sm" formControlName="mapName">
+                    <option value="">Select</option>
+                </select>
+                <small class="text-danger" *ngIf="showErrors && ctcForm.get('mapName')?.invalid">
+                    Map Name is required
+                </small>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label text-muted small">Type <span class="text-danger">*</span></label>
+                <select class="form-select form-select-sm" formControlName="type">
+                    <option value="">Select</option>
+                </select>
+                <small class="text-danger" *ngIf="showErrors && ctcForm.get('type')?.invalid">
+                    Type is required
+                </small>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label text-muted small">Paycode <span class="text-danger">*</span></label>
+                <select class="form-select form-select-sm" formControlName="paycode">
+                    <option value="">Select</option>
+                </select>
+                <small class="text-danger" *ngIf="showErrors && ctcForm.get('paycode')?.invalid">
+                    Paycode is required
+                </small>
+            </div>
+
+        </div>
+
+        <!-- ROW 2 -->
+        <div class="row g-3 mb-3">
+
+            <div class="col-md-4">
+                <label class="form-label text-muted small">From <span class="text-danger">*</span></label>
+                <input type="text" class="form-control form-control-sm" formControlName="fromValue" />
+                <small class="text-danger" *ngIf="showErrors && ctcForm.get('fromValue')?.invalid">
+                    From value is required
+                </small>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label text-muted small">To <span class="text-danger">*</span></label>
+                <input type="text" class="form-control form-control-sm" formControlName="toValue" />
+                <small class="text-danger" *ngIf="showErrors && ctcForm.get('toValue')?.invalid">
+                    To value is required
+                </small>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label text-muted small">Value <span class="text-danger">*</span></label>
+                <input type="text" class="form-control form-control-sm" formControlName="value" />
+                <small class="text-danger" *ngIf="showErrors && ctcForm.get('value')?.invalid">
+                    Value is required
+                </small>
+            </div>
+
+        </div>
+
+        <!-- ROW 3 -->
+        <div class="row g-3 mb-3">
+
+            <div class="col-md-4">
+                <label class="form-label text-muted small">Cap Value <span class="text-danger">*</span></label>
+                <input type="text" class="form-control form-control-sm" formControlName="capValue" />
+                <small class="text-danger" *ngIf="showErrors && ctcForm.get('capValue')?.invalid">
+                    Cap Value is required
+                </small>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label text-muted small">Prorate <span class="text-danger">*</span></label>
+                <select class="form-select form-select-sm" formControlName="prorate">
+                    <option value="">Select</option>
+                </select>
+                <small class="text-danger" *ngIf="showErrors && ctcForm.get('prorate')?.invalid">
+                    Prorate is required
+                </small>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label text-muted small">Effective Date <span class="text-danger">*</span></label>
+                <input type="date" class="form-control form-control-sm" formControlName="startDate" />
+                <small class="text-danger" *ngIf="showErrors && ctcForm.get('startDate')?.invalid">
+                    Effective Date is required
+                </small>
+            </div>
+
+        </div>
+
+        <!-- ROW 4 -->
+        <div class="row g-3 mb-4">
+            <div class="col-md-4">
+                <label class="form-label text-muted small">Slab Calculation Type <span
+                        class="text-danger">*</span></label>
+                <select class="form-select form-select-sm" formControlName="slabCalcType">
+                    <option value="">Select</option>
+                </select>
+                <small class="text-danger" *ngIf="showErrors && ctcForm.get('slabCalcType')?.invalid">
+                    Slab Calculation Type is required
+                </small>
+            </div>
+        </div>
+
+    </mat-card-content>
+
+    <!-- FOOTER -->
+    <div class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">
+
+        <button type="button" (click)="onReset()" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+            cursor: pointer; background-color: #f0f0f0; color: black;">
+            Cancel
+        </button>
+
+        <button type="button" (click)="onSubmit()" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+            cursor: pointer; background-color: blue; color: white;">
+            Save
+        </button>
+
+    </div>
+
+</form>
