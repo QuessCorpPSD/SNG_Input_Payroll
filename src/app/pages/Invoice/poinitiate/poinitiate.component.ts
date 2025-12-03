@@ -20,12 +20,13 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { AlertpopupComponent } from '../../../common/alertpopup/alertpopup.component';
 
 export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOKEN');
 @Component({
   selector: 'poinitiate',
   standalone: true,
-  imports: [CommonModule, MatTabsModule, MatPaginatorModule, FormsModule, MatFormFieldModule, MatCardModule, MatCheckboxModule, CompanyallComponent, PayPeriodComponent, MatIconModule, MatTableModule],
+  imports: [CommonModule, MatTabsModule, MatPaginatorModule, FormsModule, MatFormFieldModule, MatCardModule, MatCheckboxModule, CompanyallComponent, PayPeriodComponent, MatIconModule, MatTableModule, AlertpopupComponent],
   templateUrl: './poinitiate.component.html',
   styleUrl: './poinitiate.component.css',
   providers: [

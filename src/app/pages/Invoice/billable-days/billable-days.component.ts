@@ -129,8 +129,7 @@ export class BillableDaysComponent implements OnInit {
     FileSaver.saveAs(blob, fileName);
   }
 
-  FileUpload(fileInput: HTMLInputElement): void {
-    this.isLoading=true;  
+  FileUpload(fileInput: HTMLInputElement): void { 
     if (!this.importType) {
       alert("Please select Import Type");
       return;
@@ -139,6 +138,7 @@ export class BillableDaysComponent implements OnInit {
   }
 
   onFileChange(event: any): void {
+        this.isLoading=true; 
     const target: DataTransfer = <DataTransfer>(event.target);
 
     if (!target.files || target.files.length !== 1) {
