@@ -4,7 +4,10 @@
         <div style="width: 100%;">
                 <div class="Categorylist">
                         <ul class="horizontal-list">
-                                
+                                 </li> <li><a [routerLink]="['/Master/customer/employee']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Employee</a>
+                                </li>
                                 <li><a [routerLink]="['/Master/customer/department']" class="nav-link"
                                                 routerLinkActive="selectedInput"
                                                 [routerLinkActiveOptions]="{ exact: true }">Department</a>
@@ -40,7 +43,7 @@
                                 <li><a [routerLink]="['/Master/customer/payfrequency']" class="nav-link"
                                                 routerLinkActive="selectedInput"
                                                 [routerLinkActiveOptions]="{ exact: true }">Pay Frequency</a>
-                                </li>
+                               
                         </ul>
                 </div>
         </div>

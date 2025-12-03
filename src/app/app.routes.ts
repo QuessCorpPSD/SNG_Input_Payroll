@@ -120,6 +120,7 @@ import { InvoiceLegalEntityComponent } from './pages/GlobalMasters/invoice-legal
 import { VendorComponent } from './pages/GlobalMasters/vendor/vendor.component';
 import { InvoiceCultureComponent } from './pages/Invoice/invoice-culture/invoice-culture.component';
 import { SiteMasterComponent } from './pages/GlobalMasters/site-master/site-master.component';
+import { EmployeeComponent } from './pages/customers/employee/employee.component';
 
 
 
@@ -261,6 +262,7 @@ export const routes: Routes = [
           { path: "clientaddress", component: ClientaddressComponent },
           { path: "itcalender", component: ITcalenderComponent },
           { path: "companypaycodemapping", component: CompanypaycodemappingComponent },
+          { path: "employee", component: EmployeeComponent },
 
         ]
       },

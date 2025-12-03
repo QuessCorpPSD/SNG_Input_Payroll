@@ -1,0 +1,181 @@
+<form [formGroup]="bankForm" novalidate>
+
+    <mat-card class="custom-card">
+        <mat-card-header class="sticky-header">
+            <mat-card-title style="color:#302CB3;">Bank Details</mat-card-title>
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="onClose()" class="no-border-icon">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+
+        <mat-card-content>
+
+            <div class="row g-3 mb-3">
+
+                <!-- BANK NAME -->
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Bank Name <span style="color:red">*</span></label>
+                    <select class="form-select form-select-sm" formControlName="bankname">
+                        <option value="">Select</option>
+                        <option *ngFor="let bank of bankname " [value]="bank.Bank_Id">
+                            {{bank.Bank_Name}}</option>
+                    </select>
+                    <small *ngIf="bankForm.get('bankname')?.invalid &&
+                                  (bankForm.get('bankname')?.touched || submitted)" style="color:red">Bank Name is
+                        required</small>
+                </div>
+
+                <!-- BRANCH NAME -->
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Branch Name <span style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" formControlName="Branchname">
+
+                    <small *ngIf="bankForm.get('Branchname')?.invalid &&
+                                  (bankForm.get('Branchname')?.touched || submitted)" style="color:red">Branch Name is
+                        required</small>
+                </div>
+
+                <!-- ACCOUNT NO -->
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Bank A/c No <span style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" formControlName="bankacno"
+                        onkeypress="return event.charCode>=48 && event.charCode<=57">
+
+                    <small *ngIf="bankForm.get('bankacno')?.errors?.['required'] &&
+                                  (bankForm.get('bankacno')?.touched || submitted)" style="color:red">Account Number is
+                        required</small>
+
+                    <small *ngIf="bankForm.get('bankacno')?.errors?.['pattern'] &&
+                                  (bankForm.get('bankacno')?.touched || submitted)" style="color:red">Enter valid
+                        numeric account number</small>
+                </div>
+
+            </div>
+
+
+            <div class="row g-3 mb-3">
+
+                <!-- SWIFT CODE -->
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Swift Code <span style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" formControlName="swiftcode">
+
+                    <small *ngIf="bankForm.get('swiftcode')?.invalid &&
+                                  (bankForm.get('swiftcode')?.touched || submitted)" style="color:red">Swift Code is
+                        required</small>
+                </div>
+
+                <!-- BANK CODE -->
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Bank Code <span style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" formControlName="Backcode">
+                    <!-- <select class="form-select form-select-sm" formControlName="Backcode">
+
+                        <option value="">Select</option>
+                    </select> -->
+
+                    <small *ngIf="bankForm.get('Backcode')?.invalid &&
+                                  (bankForm.get('Backcode')?.touched || submitted)" style="color:red">Bank Code is
+                        required</small>
+                </div>
+
+                <!-- BRANCH CODE -->
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Branch Code <span style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" formControlName="Branchcode">
+
+                    <small *ngIf="bankForm.get('Branchcode')?.invalid &&
+                                  (bankForm.get('Branchcode')?.touched || submitted)" style="color:red">Branch Code is
+                        required</small>
+                </div>
+            </div>
+
+            <!-- NOMINEE DETAILS -->
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Nominee Name</label>
+                    <input class="form-control form-control-sm" formControlName="nomineename">
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Nominee Relationship</label>
+                    <input class="form-control form-control-sm" formControlName="nomineerelationship">
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Nominee Age</label>
+                    <input class="form-control form-control-sm" formControlName="nomineeage"
+                        onkeypress="return event.charCode>=48 && event.charCode<=57">
+
+                    <small *ngIf="bankForm.get('nomineeage')?.errors?.['pattern'] &&
+                                  (bankForm.get('nomineeage')?.touched || submitted)" style="color:red">Enter valid
+                        age</small>
+                </div>
+            </div>
+
+            <!-- NOMINEE OTHER BANK DETAILS -->
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Nominee Swift Code</label>
+                    <input class="form-control form-control-sm" formControlName="nomineeswiftcode">
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Nominee Bank Name</label>
+                    <select class="form-select form-select-sm" formControlName="Nomineebankname">
+                        <option value="">Select</option>
+                        <option *ngFor="let nominee of nomineebankname" [value]="nominee.Bank_Id">
+                            {{nominee.Bank_Name}}</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Nominee Account No</label>
+                    <input class="form-control form-control-sm" formControlName="nomineeaccountno"
+                        onkeypress="return event.charCode>=48 && event.charCode<=57">
+
+                    <small *ngIf="bankForm.get('nomineeaccountno')?.errors?.['pattern'] &&
+                                  (bankForm.get('nomineeaccountno')?.touched || submitted)" style="color:red">Only
+                        digits allowed</small>
+                </div>
+            </div>
+
+            <!-- NOMINEE CODE -->
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Nominee Bank Code</label>
+                    <input class="form-control form-control-sm" formControlName="nomineebankcode">
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Nominee Branch Code</label>
+                    <input class="form-control form-control-sm" formControlName="nomineebranchcode">
+                </div>
+            </div>
+
+        </mat-card-content>
+
+        <mat-card-footer class="footer">
+            <div class="d-flex justify-content-end mt-3">
+                <div class="btn-1"
+                    style="display: flex; justify-content:flex-end; gap:10px; width:100%; padding-right:7px;">
+
+                    <button type="button"
+                        style="border:none; border-radius:7px; width:80px; height:30px; background:#f0f0f0;"
+                        (click)="onClose()">
+                        Cancel
+                    </button>
+
+                    <button type="submit"
+                        style="border:none; border-radius:7px; width:80px; height:30px; background:blue; color:white;"
+                        (click)="onSubmit()">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </mat-card-footer>
+
+    </mat-card>
+
+</form>

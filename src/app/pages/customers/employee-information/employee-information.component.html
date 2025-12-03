@@ -1,0 +1,226 @@
+<form [formGroup]="infoForm" novalidate>
+    <mat-card class="custom-card">
+        <mat-card-header class="sticky-header">
+            <br />
+            <!-- <div style="color:#302CB3; font-size:22px; font-weight:700; padding-right:75%; white-space: nowrap;">
+                Information
+            </div> -->
+            <mat-card-title style="color:#302CB3;">Information</mat-card-title>
+
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="onClose()" class="no-border-icon">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+
+        <mat-card-content>
+
+            <!-- Row 1 -->
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label small">PassPort No<span style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" formControlName="passportNo">
+
+                    <small
+                        *ngIf="infoForm.get('passportNo')?.invalid && (infoForm.get('passportNo')?.touched || submitted)"
+                        style="color:red">
+                        Passport Number is required
+                    </small>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label small">PassPort Expiry Date<span style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" type="date" formControlName="passportExpiry">
+
+                    <small
+                        *ngIf="infoForm.get('passportExpiry')?.invalid && (infoForm.get('passportExpiry')?.touched || submitted)"
+                        style="color:red">
+                        Expiry Date is required
+                    </small>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label small">Place Of Issue<span style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" formControlName="placeOfIssue">
+
+                    <small
+                        *ngIf="infoForm.get('placeOfIssue')?.invalid && (infoForm.get('placeOfIssue')?.touched || submitted)"
+                        style="color:red">
+                        Place of Issue is required
+                    </small>
+                </div>
+            </div>
+
+            <!-- Row 2 -->
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label small">Gun License No<span style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" formControlName="gunLicenseNo">
+
+                    <small
+                        *ngIf="infoForm.get('gunLicenseNo')?.invalid && (infoForm.get('gunLicenseNo')?.touched || submitted)"
+                        style="color:red">
+                        Gun License No is required
+                    </small>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label small">Driving License No<span style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" formControlName="drivingLicenseNo">
+
+                    <small
+                        *ngIf="infoForm.get('drivingLicenseNo')?.invalid && (infoForm.get('drivingLicenseNo')?.touched || submitted)"
+                        style="color:red">
+                        Driving License No is required
+                    </small>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label small">NRIC FIN No<span style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" formControlName="nricFinNo">
+
+                    <small
+                        *ngIf="infoForm.get('nricFinNo')?.invalid && (infoForm.get('nricFinNo')?.touched || submitted)"
+                        style="color:red">
+                        NRIC FIN No is required
+                    </small>
+                </div>
+            </div>
+
+            <!-- Row 3 -->
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label small">Fund levy<span style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" formControlName="fundLevy">
+                    <!-- <select class="form-select form-select-sm" formControlName="fundLevy">
+                        <option value="" disabled>Select</option>
+                        <option *ngFor="let fund of fundlevy " [value]="fund.spr_status_id">
+                            {{fund.spr_status}}</option>
+                    </select> -->
+
+                    <small *ngIf="infoForm.get('fundLevy')?.invalid && (infoForm.get('fundLevy')?.touched || submitted)"
+                        style="color:red">
+                        Fund Levy is required
+                    </small>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label small">Spr Status<span style="color:red">*</span></label>
+                    <select class="form-select form-select-sm" formControlName="sprStatus">
+                        <option value="" disabled>Select</option>
+                        <option *ngFor="let spr of sprstatus " [value]="spr.spr_status_id">
+                            {{spr.spr_status}}</option>
+                    </select>
+
+                    <small
+                        *ngIf="infoForm.get('sprStatus')?.invalid && (infoForm.get('sprStatus')?.touched || submitted)"
+                        style="color:red">
+                        Spr Status is required
+                    </small>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label small">Spr Approved Date<span style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" type="date" formControlName="sprApprovedDate">
+
+                    <small
+                        *ngIf="infoForm.get('sprApprovedDate')?.invalid && (infoForm.get('sprApprovedDate')?.touched || submitted)"
+                        style="color:red">
+                        Approved Date is required
+                    </small>
+                </div>
+            </div>
+
+            <!-- Row 4 -->
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label small">VISA Number<span style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" formControlName="visaNumber">
+
+                    <small
+                        *ngIf="infoForm.get('visaNumber')?.invalid && (infoForm.get('visaNumber')?.touched || submitted)"
+                        style="color:red">
+                        VISA Number is required
+                    </small>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label small">Insurance Number<span style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" formControlName="insuranceNumber">
+
+                    <small
+                        *ngIf="infoForm.get('insuranceNumber')?.invalid && (infoForm.get('insuranceNumber')?.touched || submitted)"
+                        style="color:red">
+                        Insurance Number is required
+                    </small>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label small">VISA Start Date<span style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" type="date" formControlName="visaStartDate">
+
+                    <small
+                        *ngIf="infoForm.get('visaStartDate')?.invalid && (infoForm.get('visaStartDate')?.touched || submitted)"
+                        style="color:red">
+                        VISA Start Date is required
+                    </small>
+                </div>
+            </div>
+
+            <!-- Row 5 -->
+            <div class="row g-3 mb-3">
+
+                <div class="col-md-4">
+                    <label class="form-label small">VISA End Date<span style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" type="date" formControlName="visaEndDate">
+
+                    <small
+                        *ngIf="infoForm.get('visaEndDate')?.invalid && (infoForm.get('visaEndDate')?.touched || submitted)"
+                        style="color:red">
+                        VISA End Date is required
+                    </small>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label small">Work Pass Id<span style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" formControlName="workPassId">
+
+                    <small
+                        *ngIf="infoForm.get('workPassId')?.invalid && (infoForm.get('workPassId')?.touched || submitted)"
+                        style="color:red">
+                        Work Pass ID is required
+                    </small>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label small">Religion</label>
+                    <select class="form-select form-select-sm" formControlName="religion">
+                        <option value="" disabled>Select</option>
+                         <option *ngFor="let r of religion " [value]="r">
+                            {{r}}</option>
+                    </select>
+                </div>
+            </div>
+
+        </mat-card-content>
+
+        <mat-card-footer class="footer">
+            <div class="d-flex justify-content-end mt-3">
+                <div class="btn-1" style="display:flex; justify-content:end; gap:10px; width:100%; padding-right:7px;">
+
+                    <button type="button"
+                        style="border:none; border-radius:7px; width:80px; height:30px; background:#f0f0f0;"
+                        (click)="onClose()">
+                        Cancel
+                    </button>
+
+                    <button type="submit" (click)="onSubmit()"
+                        style="border:none; border-radius:7px; width:80px; height:30px; background:blue; color:white;">
+                        Save
+                    </button>
+
+                </div>
+            </div>
+        </mat-card-footer>
+    </mat-card>
+</form>

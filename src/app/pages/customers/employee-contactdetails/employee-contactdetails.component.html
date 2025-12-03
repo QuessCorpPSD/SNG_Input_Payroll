@@ -1,0 +1,128 @@
+<form [formGroup]="contactForm" novalidate>
+    <mat-card class="custom-card">
+
+        <mat-card-header class="sticky-header">
+            <mat-card-title style="color:#302CB3;">Contact Details</mat-card-title>
+
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="onClose()" class="no-border-icon">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+
+        <mat-card-content>
+
+            <!-- ROW 1 -->
+            <div class="row g-3 mb-3">
+
+                <!-- Address -->
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Address <span style="color:red">*</span></label>
+                    <input type="text" class="form-control form-control-sm" formControlName="address">
+
+                    <small *ngIf="contactForm.get('address')?.invalid
+                                  && (contactForm.get('address')?.touched || submitted)" style="color:red">
+                        Address is required
+                    </small>
+                </div>
+
+                <!-- PIN Code -->
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">PIN Code <span style="color:red">*</span></label>
+                    <input type="text" maxlength="6" class="form-control form-control-sm" formControlName="pincode"
+                        onkeypress="return event.charCode>=48 && event.charCode<=57">
+
+                    <small *ngIf="contactForm.get('pincode')?.errors?.['required']
+                                  && (contactForm.get('pincode')?.touched || submitted)" style="color:red">
+                        PIN Code is required
+                    </small>
+
+                    <small *ngIf="contactForm.get('pincode')?.errors?.['pattern']
+                                  && (contactForm.get('pincode')?.touched || submitted)" style="color:red">
+                        Enter valid 6-digit PIN Code
+                    </small>
+                </div>
+
+                <!-- Country -->
+                <div class="col-md-4" style="display: none;">
+                    <label class="form-label text-muted small">Country</label>
+                    <input type="text" class="form-control form-control-sm" formControlName="country" readonly>
+                </div>
+
+                <!-- Mobile -->
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Mobile <span style="color:red">*</span></label>
+                    <input type="text" maxlength="10" class="form-control form-control-sm" formControlName="mobile"
+                        onkeypress="return event.charCode>=48 && event.charCode<=57">
+
+                    <small *ngIf="contactForm.get('mobile')?.errors?.['required']
+                                  && (contactForm.get('mobile')?.touched || submitted)" style="color:red">
+                        Mobile number is required
+                    </small>
+
+                    <small *ngIf="contactForm.get('mobile')?.errors?.['pattern']
+                                  && (contactForm.get('mobile')?.touched || submitted)" style="color:red">
+                        Enter valid 10-digit mobile number
+                    </small>
+                </div>
+            </div>
+
+            <!-- ROW 2 -->
+            <div class="row g-3 mb-3">
+
+                <!-- Email -->
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Email <span style="color:red">*</span></label>
+                    <input type="email" class="form-control form-control-sm" formControlName="email">
+
+                    <small *ngIf="contactForm.get('email')?.errors?.['required']
+                                  && (contactForm.get('email')?.touched || submitted)" style="color:red">
+                        Email is required
+                    </small>
+
+                    <small *ngIf="contactForm.get('email')?.errors?.['email']
+                                  && (contactForm.get('email')?.touched || submitted)" style="color:red">
+                        Enter a valid email
+                    </small>
+                </div>
+
+                <!-- Contact Person -->
+                <div class="col-md-4" >
+                    <label class="form-label text-muted small">Contact Person</label>
+                    <input type="text" class="form-control form-control-sm" formControlName="contactperson">
+                </div>
+
+
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Emergency Contact Person</label>
+                    <input type="text" class="form-control form-control-sm" formControlName="emergencycontact">
+                </div>
+            </div>
+
+            
+        </mat-card-content>
+
+        <!-- FOOTER -->
+        <mat-card-footer class="footer">
+            <div class="d-flex justify-content-end mt-3">
+                <div class="btn-1"
+                    style="display:flex; justify-content:flex-end; gap:10px; width:100%; padding-right:7px;">
+
+                    <button type="button"
+                        style="border:none; border-radius:7px; width:80px; height:30px; background:#f0f0f0;"
+                        (click)="onClose()">
+                        Cancel
+                    </button>
+
+                    <button type="submit"
+                        style="border:none; border-radius:7px; width:80px; height:30px; background:blue; color:white;"
+                        (click)="onSubmit()">
+                        Save
+                    </button>
+
+                </div>
+            </div>
+        </mat-card-footer>
+
+    </mat-card>
+</form>
