@@ -70,9 +70,9 @@ export class EmployeeService {
     return this.http.get<APIResponse>(
       this.env.apiUrl + 'Employee/Bloodgroup');
   }
-  Exporttoexcel(companyid: any,): Observable<APIResponse> {
+  Exporttoexcel(companyid: any): Observable<APIResponse> {
     return this.http.get<APIResponse>(
-      this.env.apiUrl + 'Employee/ExportToExcel/' + companyid + '/');
+      this.env.apiUrl + 'Employee/ExportToExcel/' + companyid);
   }
 
   Getfundlevy(): Observable<APIResponse> {
