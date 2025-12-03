@@ -118,6 +118,7 @@ import { ClientaddressComponent } from './pages/customers/clientaddress/clientad
 import { EntityMasterComponent } from './pages/GlobalMasters/entity-master/entity-master.component';
 import { InvoiceLegalEntityComponent } from './pages/GlobalMasters/invoice-legal-entity/invoice-legal-entity.component';
 import { VendorComponent } from './pages/GlobalMasters/vendor/vendor.component';
+import { InvoiceCultureComponent } from './pages/Invoice/invoice-culture/invoice-culture.component';
 
 
 
@@ -233,6 +234,7 @@ export const routes: Routes = [
           { path: 'billingpayfrequency', component: BillingpayfrequencyComponent },
           { path: 'gstinvoice', component: GstinvoiceComponent },
           { path: 'poinitiate', component: POInitiateComponent },
+          { path: 'app-invoice-culture', component: InvoiceCultureComponent },
         ]
       },
 

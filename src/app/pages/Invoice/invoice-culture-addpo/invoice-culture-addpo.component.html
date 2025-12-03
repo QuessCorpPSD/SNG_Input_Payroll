@@ -1,0 +1,111 @@
+<form [formGroup]="InvoiceCultureForm" novalidate>
+  <mat-card class="custom-card">
+
+    <!-- HEADER FIX -->
+    <mat-card-header class="sticky-header" style="display:flex; justify-content: space-between; align-items:center;">
+      <mat-card-title style="color: #302CB3;"> Add Invoice Culture </mat-card-title>
+      <button mat-icon-button (click)="onClose()" class="no-border-icon">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-card-header>
+
+    <mat-card-content>
+
+      <!-- Company Code -->
+      <div class="row g-3 mb-3">
+        <div class="col-6">
+          <label class="lbl form-label">Company Code <span class="req">*</span></label>
+          <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+          <div *ngIf="isFieldInvalid('CompanyCode')" class="error-message">
+            {{ getFieldError('CompanyCode') }}
+          </div>
+        </div>
+
+        <!-- Service Charge -->
+        <div class="col-md-6">
+          <label class="form-label text-muted small">Service Charge<span class="req">*</span></label>
+          <select class="form-select form-select-sm" formControlName="ServiceCharge" placeholder=>
+            <option value="">Select..</option>
+            <option *ngFor="let sc of ServiceChargeOptions" [value]="sc.service_Charge_Master_Id">
+              {{ sc.service_Charge_Master_Name }}
+            </option>
+          </select>
+          <div *ngIf="isFieldInvalid('ServiceCharge')" class="error-message">
+            {{ getFieldError('ServiceCharge') }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Map Name -->
+      <div class="row g-3 mb-3">
+        <div class="col-6">
+          <label class="lbl form-label">Map Name <span class="req">*</span></label>
+          <mapname [selectedCompanyId]="selectedCC" (mapnameEmit)="handleMapNameEvent($event)"></mapname>
+          <div *ngIf="isFieldInvalid('MapName')" class="error-message">
+            {{ getFieldError('MapName') }}
+          </div>
+        </div>
+
+        <!-- Invoice Type -->
+        <div class="col-md-6">
+          <label class="form-label text-muted small">Invoice Type <span class="req">*</span></label>
+          <select class="form-select form-select-sm" formControlName="InvoiceType">
+            <option value="">Select..</option>
+            <option *ngFor="let t of InvoiceTypeList" [value]="t.invoiceType_Id">{{ t.invoiceType }}</option>
+          </select>
+          <div *ngIf="isFieldInvalid('InvoiceType')" class="error-message">
+            {{ getFieldError('InvoiceType') }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Invoice Category -->
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <label class="form-label text-muted small">Invoice Category <span class="req">*</span></label>
+          <select class="form-select form-select-sm" formControlName="InvoiceCategory">
+            <option value="">Select..</option>
+            <option *ngFor="let c of InvoiceCategoryList" [value]="c.geN_iID">
+              {{ c.geN_vDescription }}
+            </option>
+          </select>
+          <div *ngIf="isFieldInvalid('InvoiceCategory')" class="error-message">
+            {{ getFieldError('InvoiceCategory') }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Type of Invoice -->
+      <div class="row g-3 mb-3">
+        <div class="col full-width" *ngIf="selectedCC > 0">
+          <label class="lbl form-label">Type of Invoice <span class="req">*</span></label>
+          <div class="type-scroll">
+            <div class="checkbox-grid">
+              <mat-checkbox *ngFor="let t of TypeOfInvoiceList" [formControlName]="t.code" class="cb"
+                (change)="onCheckboxChange()">
+                {{ t.code }}
+              </mat-checkbox>
+            </div>
+          </div>
+          <div *ngIf="showInvoiceTypeError && InvoiceCultureForm.touched" class="error-message">
+            Please select at least one invoice type
+          </div>
+        </div>
+      </div>
+
+    </mat-card-content>
+
+    <br />
+    <mat-card-footer class="footer">
+      <div class="d-flex justify-content-end mt-3">
+        <button type="reset" class="btn btn-primary me-2 rounded-pill px-3" (click)="resetForm()">Cancel</button>
+        <button type="button" class="btn btn-primary rounded-pill px-3" (click)="SaveData()">Save</button>
+      </div>
+    </mat-card-footer>
+  </mat-card>
+</form>
+
+<!-- Loading Overlay -->
+<div *ngIf="isLoading" class="loading-overlay">
+  <img src="assets/Loading.gif" alt="Loading...">
+</div>
