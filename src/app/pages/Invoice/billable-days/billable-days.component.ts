@@ -22,8 +22,8 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { BillImportTypeComponent } from '../../../common/bill-import-type/bill-import-type.component';
-import { IInvoiceRepository } from '../../../Repository/IInvoiceRepository';
-import { InvoiceRepository } from '../../../Service/InvoiceRepository';
+import { IInvoiceRepository } from '../../../Repository/invoice/IInvoiceRepository';
+import { InvoiceRepository } from '../../../Service/invoice/InvoiceRepository';
 
 
 export const Bill_Token = new InjectionToken<IInvoiceRepository>('Bill_Token');

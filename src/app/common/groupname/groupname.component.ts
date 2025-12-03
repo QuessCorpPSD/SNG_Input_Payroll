@@ -69,6 +69,7 @@ export class GroupnameComponent {
       },
       error: err => console.error(err.message)
     });
+    console.log
   }
 
   private _filter(value: string): Groupnameclass[] {

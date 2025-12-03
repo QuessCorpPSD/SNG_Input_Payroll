@@ -1,0 +1,259 @@
+.custom-accordion .panel-border {
+    border: 1px solid #d6d6d6;
+    /* border-radius: 6px; */
+    box-shadow: none !important;
+
+}
+
+.panel-header {
+    background: #f7f7f7;
+    border-bottom: 1px solid #d6d6d6;
+    /* min-height: 28px !important; */
+}
+
+.mat-expansion-panel-header.mat-expanded {
+    background: #f7f7f7 !important;
+}
+
+.accordion-content {
+    padding: 16px 20px;
+}
+
+.no-border-icon {
+    box-shadow: none !important;
+    border: none !important;
+    background: transparent !important;
+}
+
+.custom-card .spacer {
+    flex: 1 1 auto;
+}
+
+.custom-card {
+
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 16px;
+
+}
+
+
+.scroll-content {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+/* Make panel compact */
+.custom-accordion .mat-expansion-panel-header {
+    padding: 4px 12px !important;
+    /* Reduce spacing */
+    min-height: 36px !important;
+    /* Compact height */
+    height: 36px !important;
+}
+
+/* Reduce height when expanded */
+.custom-accordion .mat-expansion-panel-header.mat-expanded {
+    min-height: 36px !important;
+    height: 36px !important;
+}
+
+/* Reduce font size */
+.custom-accordion .mat-expansion-panel-header .mat-expansion-panel-header-title {
+    font-size: 14px !important;
+}
+
+/* Make arrow icon smaller */
+.custom-accordion .mat-expansion-indicator::after {
+    transform: scale(0.7) !important;
+}
+
+/* Reduce inside content padding if needed */
+.accordion-content {
+    padding: 12px !important;
+}
+
+.custom-form .form-label {
+    font-size: 0.8rem;
+    letter-spacing: .2px;
+}
+
+.custom-form .form-control,
+.custom-form .form-select {
+    border-radius: .6rem;
+}
+
+/* Make all form inputs and selects take full width of their column */
+/* .form-control,
+.form-select,
+CompanyPicker {
+  width: 100%;
+  box-sizing: border-box;
+} */
+
+.form-control,
+.form-select {
+    height: 30px;
+    padding: 6px 10px;
+    align-items: center;
+    font-size: 0.8rem;
+    /* border-radius: 80px; */
+}
+
+input[type="date"].form-control-sm {
+    padding-top: .375rem;
+    padding-bottom: .375rem;
+}
+
+.mat-expansion-panel-header {
+    display: flex !important;
+}
+
+
+.panel-header {
+    background: #f7f7f7;
+    padding: 4px 12px !important;
+
+    /* IMPORTANT: keep space for icon */
+    min-height: 40px !important;
+    height: auto !important;
+    display: flex;
+    align-items: center;
+}
+
+.mat-expansion-indicator {
+    margin-left: auto !important;
+}
+
+/* Panel Border */
+.custom-accordion .panel-border {
+    border: 1px solid #d6d6d6;
+    box-shadow: none !important;
+}
+
+/* Header Styling */
+.panel-header {
+    background: #f7f7f7;
+    border-bottom: 1px solid #d6d6d6;
+    padding: 4px 12px !important;
+    min-height: 40px !important;
+}
+
+/* Keep Material default layout so icon is visible */
+.mat-expansion-panel-header {
+    padding: 4px 12px !important;
+    min-height: 36px !important;
+}
+
+/* Expanded header */
+.mat-expansion-panel-header.mat-expanded {
+    min-height: 36px !important;
+    background: #f7f7f7 !important;
+}
+
+/* Font size */
+.custom-accordion .mat-expansion-panel-header-title {
+    font-size: 14px !important;
+}
+
+/* Icon size */
+.custom-accordion .mat-expansion-indicator::after {
+    transform: scale(0.8) !important;
+}
+
+/* Content area */
+.accordion-content {
+    padding: 12px 20px !important;
+}
+
+.mat-expansion-indicator {
+    opacity: 1 !important;
+    transition: transform 200ms ease !important;
+}
+
+.mat-expansion-indicator::after {
+    margin-top: 0 !important;
+}
+
+.input-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.prefix-box {
+    background: #f1f1f1;
+    border: 1px solid #ccc;
+    border-right: none;
+    padding: 4px 8px;
+    height: 32px;
+    /* SAME as input height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px 0 0 6px;
+}
+
+.gst-box {
+    /* background: #f1f1f1; */
+    border: 1px solid #ccc;
+    border-right: none;
+    padding: 4px 8px;
+    height: 32px;
+    /* SAME as input height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px 0 0 6px;
+}
+
+.custom-input {
+    border-radius: 0 6px 6px 0;
+    height: 32px;
+    /* SAME height */
+    font-size: 0.85rem;
+}
+
+.small-icon {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+}
+
+.my-accordion mat-expansion-panel {
+    margin-bottom: 16px;
+}
+
+.square-input {
+    width: 50px;
+    /* square width */
+    height: 50px;
+    /* square height */
+    padding: 0;
+    text-align: center;
+    /* center the number */
+    border-radius: 6px;
+    /* optional: slight rounding */
+}
+
+.gst-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.gst-input {
+    width: 60px;
+    /* small input field */
+    height: 35px;
+    border-radius: 6px;
+    text-align: center;
+}
+
+.gst-suffix {
+    background: #f1f1f1;
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-weight: 600;
+}

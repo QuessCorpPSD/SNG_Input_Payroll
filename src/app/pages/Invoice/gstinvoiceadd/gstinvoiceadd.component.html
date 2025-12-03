@@ -1,0 +1,887 @@
+<form [formGroup]="addGstInvoice" novalidate>
+    <mat-card class="custom-card">
+        <mat-card-header class="sticky-header">
+
+            <mat-card-title>Create GST Invoice</mat-card-title>
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="onClose()" class="no-border-icon">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+        <mat-card-content class="scroll-content">
+            <!-- 1st Accordion -->
+            <mat-accordion class="custom-accordion">
+                <div class="my-accordion">
+                    <mat-expansion-panel class="panel-border" [expanded]="true">
+                        <mat-expansion-panel-header class="panel-header">
+                            <mat-panel-title>Basic Details</mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div class="accordion-content">
+                            <div class="row g-3 mb-2">
+                                <div class="col-md-3">
+                                    <label class="form-label">Invoice Number<span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" formControlName="InvoiceNumber">
+                                    <div class="text-danger small" *ngIf="addGstInvoice.get('InvoiceNumber')?.touched 
+             && addGstInvoice.get('InvoiceNumber')?.hasError('required')">
+                                        InvoiceNumber is required
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Company Code<span class="text-danger">*</span></label>
+                                    <companyall (companyEmit)="handleCompanyEvent($event)"
+                                        formControlName="companyCode">
+                                    </companyall>
+                                    <div class="text-danger small" *ngIf="addGstInvoice.get('companyCode')?.touched 
+             && addGstInvoice.get('companyCode')?.hasError('required')">
+                                        companyCode is required
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Company Name<span class="text-danger"></span></label>
+                                    <input type="text" class="form-control" formControlName="CompanyName" readonly>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Group Detail<span class="text-danger"></span></label>
+                                    <groupname [selectedCompanyId]="selectedCompanyId"
+                                        (sitenameEmit)="groupnameEvent($event)" formControlName="GroupDetail">
+                                    </groupname>
+                                </div>
+                            </div>
+                            <div class="row g-3 mb-2">
+                                <div class="col-md-3">
+                                    <label class="form-label">Cost Center Mapping<span
+                                            class="text-danger">*</span></label>
+                                    <mapname [selectedCompanyId]="selectedCompanyId"
+                                        (mapnameEmit)="mapnameEvent($event)" formControlName="CostCenterMapping" >
+                                    </mapname>
+                                    <div class="text-danger small" *ngIf="addGstInvoice.get('CostCenterMapping')?.touched 
+             && addGstInvoice.get('CostCenterMapping')?.hasError('required')">
+                                        CostCenterMapping is required
+                                    </div>
+                                    <!-- <select class="form-select" formControlName="CostCenterMapping">
+                                        <option value="">-- Select --</option>
+                                    </select> -->
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label class="form-label">Financial Year<span class="text-danger">*</span></label>
+                                    <financial-year (financialEmit)="handleFinancialYear($event)"
+                                        formControlName="FinancialYear">
+                                    </financial-year>
+                                    <div class="text-danger small" *ngIf="addGstInvoice.get('FinancialYear')?.touched 
+             && addGstInvoice.get('FinancialYear')?.hasError('required')">
+                                        FinancialYear is required
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Pay Period<span class="text-danger">*</span></label>
+                                    <PayPeriod [selectedCompanyId]="selectedCompanyId" [payPeriodType]="payPeriodType"
+                                        (payperiodEmit)="handlePayperiodEvent($event)" formControlName="PayPeriod">
+                                    </PayPeriod>
+                                    <div class="text-danger small" *ngIf="addGstInvoice.get('PayPeriod')?.touched 
+             && addGstInvoice.get('PayPeriod')?.hasError('required')">
+                                        PayPeriod is required
+                                    </div>
+                                    <!-- <select class="form-select" formControlName="PayPeriod">
+                                        <option value="">-- Select --</option>
+                                    </select> -->
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Invoice Type<span class="text-danger">*</span></label>
+                                    <select class="form-select" formControlName="InvoiceType">
+                                        <option value="">-- Select --</option>
+                                        <option *ngFor="let p of invoiceType " [value]="p.invoice_Type_Id">
+                                            {{p.invoiceType}}
+                                        </option>
+                                    </select>
+                                    <div class="text-danger small" *ngIf="addGstInvoice.get('InvoiceType')?.touched 
+             && addGstInvoice.get('InvoiceType')?.hasError('required')">
+                                        InvoiceType is required
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-3 mb-2">
+                                <div class="col-md-3">
+                                    <label class="form-label">No of Employees<span class="text-danger"></span></label>
+                                    <input type="number" class="form-control" formControlName="NofEmployees">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Invoice Date<span class="text-danger"></span></label>
+                                    <input type="date" class="form-control" formControlName="InvoiceDate">
+                                </div>
+                                <div class="col-md-3" style="display: none;">
+                                    <label class="form-label">Location<span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" formControlName="Location">
+                                </div>
+                                <div class="col-md-3" style="display: none;">
+                                    <label class="form-label">State<span class="text-danger">*</span></label>
+                                    <select class="form-select" formControlName="State">
+                                        <option value="">-- Select --</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-expansion-panel>
+                </div>
+            </mat-accordion>
+            <!-- 2nd Accordion -->
+            <mat-accordion class="custom-accordion">
+                <div class="my-accordion">
+                    <mat-expansion-panel class="panel-border" [expanded]="true">
+                        <mat-expansion-panel-header class="panel-header">
+                            <mat-panel-title>Taxable Amounts</mat-panel-title>
+                            <!-- <label
+                                style="color: brown;display: flex;justify-content: flex-start;align-items: flex-start;">Total</label> -->
+                        </mat-expansion-panel-header>
+
+                        <div class="accordion-content">
+                            <div class="row g-3 mb-2">
+                                <div class="col-md-3">
+                                    <label class="form-label">Amount<span class="text-danger">*</span></label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">₹</span>
+                                        <input type="number" class="form-control custom-input" placeholder="0"
+                                            formControlName="Amount">
+                                    </div>
+                                    <div class="text-danger small" *ngIf="addGstInvoice.get('Amount')?.touched 
+             && addGstInvoice.get('Amount')?.hasError('required')">
+                                        Amount is required
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Particulars</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">
+                                            <mat-icon class="small-icon">edit</mat-icon>
+                                        </span>
+                                        <input type="text" class="form-control custom-input"
+                                            formControlName="Particulars">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Service Charge</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">&#64;</span>
+                                        <input type="number" class="form-control custom-input" placeholder="0"
+                                            formControlName="ServiceCharge">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Service Charge Amount</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">₹</span>
+                                        <input type="number" class="form-control custom-input" placeholder="0"
+                                            formControlName="ServiceChargeAmount">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-3 mb-2">
+                                <div class="col-md-3">
+                                    <label class="form-label">Absorption Fee<span class="text-danger"></span></label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">&#64;</span>
+                                        <input type="number" class="form-control custom-input" placeholder="0"
+                                            formControlName="AbsorptionFee">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Absorption Amt</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">
+                                            <mat-icon class="small-icon">₹</mat-icon>
+                                        </span>
+                                        <input type="number" class="form-control custom-input"
+                                            formControlName="AbsorptionAmt">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Sourcing Fee &#64;</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">&#64;</span>
+                                        <input type="number" class="form-control custom-input" placeholder="0"
+                                            formControlName="SourcingFee">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Service Fee Amount</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">₹</span>
+                                        <input type="number" class="form-control custom-input" placeholder="0"
+                                            formControlName="ServiceFeeAmount">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-3 mb-2">
+                                <div class="col-md-3">
+                                    <label class="form-label">InEdge Charges<span class="text-danger"></span></label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">₹</span>
+                                        <input type="number" class="form-control custom-input" placeholder="0">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">InEdge Charges Note</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">
+                                            <mat-icon class="small-icon">edit</mat-icon>
+                                        </span>
+                                        <input type="number" class="form-control custom-input"
+                                            placeholder="Mobile Application Charges">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">CTC Adjustment Amount(+/-)</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">-</span>
+                                        <input type="number" class="form-control custom-input" placeholder="0"
+                                            formControlName="CTCAdjustmentAmount">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">CTC Deduction Type</label>
+                                    <select class="form-select" formControlName="CTCDeductionType">
+                                        <option value="">-- Select --</option>
+                                        <option *ngFor="let p of  CTCDeductionType" [value]="p.ctc_Deduction_Type_Id">
+                                            {{p.ctc_Deduction_Type}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row g-3 mb-2">
+                                <div class="col-md-3">
+                                    <label class="form-label">CTC Adjustment Note<span
+                                            class="text-danger"></span></label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">
+                                            <mat-icon class="small-icon">edit</mat-icon>
+                                        </span>
+                                        <input type="number" class="form-control custom-input"
+                                            formControlName="CTCAdjustmentNote">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Onboarding Charge</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">₹</span>
+                                        <input type="number" class="form-control custom-input"
+                                            placeholder="Mobile Application Charges" formControlName="OnboardingCharge">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Compliance Fee &#64;</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">&#64;</span>
+                                        <input type="number" class="form-control custom-input" placeholder="0">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Compliance Fee Amount</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">₹</span>
+                                        <input type="number" class="form-control custom-input" placeholder="0">
+                                    </div>
+                                </div>
+                            </div>
+                            <label style="border-bottom: 1px solid #d6d6d6;color: blue;">Extra Taxble Details:</label>
+                            <div class="row g-3 mb-2">
+                                <div class="col-md-3">
+                                    <label class="form-label">Upfront Charges<span class="text-danger"></span></label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">₹</span>
+                                        <input type="number" class="form-control custom-input">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Upfront Charges Note</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">
+                                            <mat-icon class="small-icon">edit</mat-icon>
+                                        </span>
+                                        <input type="number" class="form-control custom-input"
+                                            placeholder="Mobile Application Charges">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Taxable Amount3</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">₹</span>
+                                        <input type="number" class="form-control custom-input" placeholder="0.00">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Taxable Amount3 Note</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">
+                                            <mat-icon class="small-icon">edit</mat-icon>
+                                        </span>
+                                        <input type="number" class="form-control custom-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <label style="border-bottom: 1px solid #d6d6d6;color: blue;">Additional Paycode
+                                Details:</label>
+                            <div class="row g-3 mb-2">
+                                <div class="col-md-3">
+                                    <label class="form-label">BGV Billing<span class="text-danger"></span></label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">₹</span>
+                                        <input type="number" class="form-control custom-input"
+                                            formControlName="BGVBilling">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Assessment Fee</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">
+                                            <mat-icon class="small-icon">edit</mat-icon>
+                                        </span>
+                                        <input type="number" class="form-control custom-input" placeholder="0"
+                                            formControlName="AssessmentFee">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Discount 1</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">₹</span>
+                                        <input type="number" class="form-control custom-input" placeholder="0"
+                                            formControlName="Discount1">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Discount 2</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">
+                                            <mat-icon class="small-icon">edit</mat-icon>
+                                        </span>
+                                        <input type="number" class="form-control custom-input" placeholder="0"
+                                            formControlName="Discount2">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-3 mb-2">
+                                <div class="col-md-3">
+                                    <label class="form-label">ID Card Billing<span class="text-danger"></span></label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">
+                                            <mat-icon class="small-icon">edit</mat-icon>
+                                        </span>
+                                        <input type="number" class="form-control custom-input" placeholder="0"
+                                            formControlName="IDCardBilling">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Email Id</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">
+                                            <mat-icon class="small-icon">edit</mat-icon>
+                                        </span>
+                                        <input type="number" class="form-control custom-input" placeholder="0"
+                                            formControlName="EmailId">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Registartion Fee</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">
+                                            <mat-icon class="small-icon">edit</mat-icon>
+                                        </span>
+                                        <input type="number" class="form-control custom-input" placeholder="0"
+                                            formControlName="RegistartionFee">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Trainer Fee</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">
+                                            <mat-icon class="small-icon">edit</mat-icon>
+                                        </span>
+                                        <input type="number" class="form-control custom-input" placeholder="0"
+                                            formControlName="TrainerFee">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-3 mb-2">
+                                <div class="col-md-3">
+                                    <label class="form-label">GOVT GRANTS_DBT<span class="text-danger"></span></label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">
+                                            <mat-icon class="small-icon">edit</mat-icon>
+                                        </span>
+                                        <input type="number" class="form-control custom-input" placeholder="0"
+                                            formControlName="GOVTGRANTS_DBT">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">PRE KIT</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">
+                                            <mat-icon class="small-icon">edit</mat-icon>
+                                        </span>
+                                        <input type="number" class="form-control custom-input" placeholder="0"
+                                            formControlName="PREKIT">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">VMS FEE</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">₹</span>
+                                        <input type="number" class="form-control custom-input" placeholder="0"
+                                            formControlName="VMSFEE">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Education Fee</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">
+                                            <mat-icon class="small-icon">edit</mat-icon>
+                                        </span>
+                                        <input type="number" class="form-control custom-input" placeholder="0"
+                                            formControlName="EducationFee">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-3 mb-2">
+                                <div class="col-md-3">
+                                    <label class="form-label">Notice Period Recovery</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">
+                                            <mat-icon class="small-icon">edit</mat-icon>
+                                        </span>
+                                        <input type="number" class="form-control custom-input" placeholder="0"
+                                            formControlName="NoticePeriodRecovery">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Laptop Rental</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">
+                                            <mat-icon class="small-icon">edit</mat-icon>
+                                        </span>
+                                        <input type="number" class="form-control custom-input" placeholder="0"
+                                            formControlName="LaptopRental">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">DRA Deduction</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">
+                                            <mat-icon class="small-icon">edit</mat-icon>
+                                        </span>
+                                        <input type="number" class="form-control custom-input" placeholder="0"
+                                            formControlName="DRADeduction">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Other Deduction<span class="text-danger"></span></label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">
+                                            <mat-icon class="small-icon">edit</mat-icon>
+                                        </span>
+                                        <input type="number" class="form-control custom-input" placeholder="0"
+                                            formControlName="OtherDeduction">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-3 mb-2">
+                                <div class="col-md-3">
+                                    <label class="form-label">Call Charges</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">
+                                            <mat-icon class="small-icon">edit</mat-icon>
+                                        </span>
+                                        <input type="number" class="form-control custom-input" placeholder="0"
+                                            formControlName="CallCharges">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Call Rate</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">
+                                            <mat-icon class="small-icon">edit</mat-icon>
+                                        </span>
+                                        <input type="number" class="form-control custom-input" placeholder="0"
+                                            formControlName="CallRate">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-expansion-panel>
+                </div>
+            </mat-accordion>
+
+            <!-- <----3rd Accordiiom-->
+            <mat-accordion class="custom-accordion">
+                <div class="my-accordion">
+                    <mat-expansion-panel class="panel-border" [expanded]="true">
+                        <mat-expansion-panel-header class="panel-header">
+                            <mat-panel-title>GST Details</mat-panel-title>
+                        </mat-expansion-panel-header>
+
+                        <div class="accordion-content">
+                            <div class="row g-3 mb-2">
+                                <div class="col-md-3">
+                                    <label class="form-label">GST%<span class="text-danger">*</span></label>
+                                    <div class="gst-wrapper">
+                                        <input type="number" formControlName="GST" class="gst-input" placeholder="0">
+
+                                        <span class="gst-suffix">%</span>
+                                        <div class="text-danger small" *ngIf="addGstInvoice.get('GST')?.touched 
+             && addGstInvoice.get('GST')?.hasError('required')">
+                                            GST% is required
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">GST Amount</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">
+                                            <mat-icon class="small-icon">edit</mat-icon>
+                                        </span>
+                                        <input type="number" class="form-control custom-input" placeholder="0"
+                                            formControlName="GSTAmount">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-expansion-panel>
+                </div>
+            </mat-accordion>
+
+            <!-- <---4th Accordion--->
+            <mat-accordion class="custom-accordion">
+                <div class="my-accordion">
+                    <mat-expansion-panel class="panel-border" [expanded]="true">
+                        <mat-expansion-panel-header class="panel-header">
+                            <mat-panel-title>Non Taxable Amounts</mat-panel-title>
+                        </mat-expansion-panel-header>
+
+                        <div class="accordion-content">
+                            <label style="border-bottom: 1px solid #d6d6d6;color: blue;">Deduction Details:</label>
+                            <div class="row g-3 mb-2">
+                                <div class="col-md-3">
+                                    <label class="form-label">Mobile recovery Amount<span
+                                            class="text-danger"></span></label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">₹</span>
+                                        <input type="number" class="form-control custom-input" placeholder="0"
+                                            formControlName="MobilerecoveryAmount">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Personal Loan Amount</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">₹</span>
+                                        <input type="number" class="form-control custom-input" placeholder="0"
+                                            formControlName="PersonalLoanAmount">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Other Deduction Amount</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">₹</span>
+                                        <input type="number" class="form-control custom-input" placeholder="0"
+                                            FormControlName="OtherDeductionAmount">
+                                    </div>
+                                </div>
+                            </div>
+                            <label style="border-bottom: 1px solid #d6d6d6;color: blue;">Extra non taxable
+                                details:</label>
+                            <div class="row g-3 mb-2">
+                                <div class="col-md-3">
+                                    <label class="form-label">Non Taxable Amount 1<span
+                                            class="text-danger"></span></label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">₹</span>
+                                        <input type="number" class="form-control custom-input" placeholder="0"
+                                            formControlName="NonTaxableAmount1">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Non Taxable Amount 1 Note</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">
+                                            <mat-icon class="small-icon">edit</mat-icon>
+                                        </span>
+                                        <input type="number" class="form-control custom-input" placeholder="0">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Non Taxable Amount 2</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">₹</span>
+                                        <input type="number" class="form-control custom-input" placeholder="0"
+                                            formControlName="NonTaxableAmount2">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Non Taxable Amount 2 Note</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">
+                                            <mat-icon class="small-icon">edit</mat-icon>
+                                        </span>
+                                        <input type="number" class="form-control custom-input" placeholder="0"
+                                            formControlName="NonTaxableAmount2Note">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-3 mb-2">
+                                <div class="col-md-3">
+                                    <label class="form-label">Non Taxable Amount 3<span
+                                            class="text-danger"></span></label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">₹</span>
+                                        <input type="number" class="form-control custom-input" placeholder="0"
+                                            formControlName="NonTaxableAmount3">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Non Taxable Amount 3 Note</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">
+                                            <mat-icon class="small-icon">edit</mat-icon>
+                                        </span>
+                                        <input type="number" class="form-control custom-input" placeholder="0"
+                                            formControlName="NonTaxableAmount3Note">
+                                    </div>
+                                </div>
+                            </div>
+                            <label style="border-bottom: 1px solid #d6d6d6;color: blue;">Net Amount Adjustment
+                                details:</label>
+                            <div class="row align-items-center mb-3">
+                                <div class="col-md-3">
+                                    <div class="form-check mb-1">
+                                        <input class="form-check-input" type="checkbox" id="netAdj">
+                                        <label class="form-label" for="netAdj">
+                                            Net Adjustment Amount (+ / -)
+                                        </label>
+                                    </div>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">-</span>
+                                        <input type="number" class="form-control" placeholder="0"
+                                            formControlName="NetAdjustmentAmount">
+                                    </div>
+                                </div>
+
+                                <!-- Net Deduction Type -->
+                                <div class="col-md-3">
+                                    <label class="form-label">Net Deduction Type</label>
+                                    <select class="form-select form-select-sm">
+                                        <option>-Select-</option>
+                                        <option *ngFor="let p of NetDeductionType " [value]="p.net_Deduction_Type_Id">
+                                            {{p.net_Deduction_Type}} </option>
+                                    </select>
+                                </div>
+
+                                <!-- Net Adj Note -->
+                                <div class="col-md-3">
+                                    <label class="form-label">Net Adj Note</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">
+                                            <mat-icon class="small-icon">edit</mat-icon>
+                                        </span>
+                                        <input type="text" class="form-control" formControlName="NetAdjNote">
+                                    </div>
+                                </div>
+
+                                <!-- Net Amount -->
+                                <div class="col-md-3">
+                                    <label class="form-label">Net Amount</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">₹</span>
+                                        <input type="text" class="form-control" value="0.00"
+                                            style="background: yellow; font-weight: 600;" formControlName="NetAmount">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </mat-expansion-panel>
+                </div>
+            </mat-accordion>
+
+            <!-- <----5th Accordion---->
+            <mat-accordion class="custom-accordion">
+                <div class="my-accordion">
+                    <mat-expansion-panel class="panel-border" [expanded]="true">
+                        <mat-expansion-panel-header class="panel-header">
+                            <mat-panel-title>Advance Details</mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div class="accordion-content">
+                            <label style="border-bottom: 1px solid #d6d6d6;color: blue;">PF and ESI Details:</label>
+                            <div class="row g-3 mb-2">
+                                <div class="col-md-3">
+                                    <label class="form-label">Employee ESI<span class="text-danger"></span></label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">₹</span>
+                                        <input type="number" class="form-control custom-input" placeholder="0"
+                                            formControlName="EmployeeESI">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Employer ESI</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">₹</span>
+                                        <input type="number" class="form-control custom-input" placeholder="0"
+                                            formControlName="EmployerESI">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Employee PF</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">₹</span>
+                                        <input type="number" class="form-control custom-input" placeholder="0"
+                                            formControlName="EmployeePF">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Employer PF</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">₹</span>
+                                        <input type="number" class="form-control custom-input" placeholder="0"
+                                            formControlName="EmployerPF">
+                                    </div>
+                                </div>
+                            </div>
+                            <label style="border-bottom: 1px solid #d6d6d6;color: blue;">Additional details:</label>
+                            <div class="row g-3 mb-2">
+                                <div class="col-md-3">
+                                    <label class="form-label">PI Id No.<span class="text-danger"></span></label>
+                                    <input type="text" class="form-control" formControlName="PIIdNo">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Employee Name<span class="text-danger"></span></label>
+                                    <input type="text" class="form-control" formControlName="EmployeeName">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Markup<span class="text-danger"></span></label>
+                                    <input type="text" class="form-control" formControlName="Markup" placeholder="0">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Gri Msp<span class="text-danger"></span></label>
+                                    <input type="text" class="form-control" formControlName="GriMsp" placeholder="0">
+                                </div>
+                            </div>
+                            <div class="row g-3 mb-2">
+                                <div class="col-md-3">
+                                    <label class="form-label">DO number<span class="text-danger"></span></label>
+                                    <input type="text" class="form-control" formControlName="DONumber" placeholder="0">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">WO Number</label>
+                                    <input type="text" class="form-control" formControlName="WONumber" placeholder="0">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">WO Date</label>
+                                    <input type="date" class="form-control" formControlName="WODate">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Invoice Notes</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">
+                                            <mat-icon class="small-icon">edit</mat-icon>
+                                        </span>
+                                        <input type="text" class="form-control custom-input"
+                                            formControlName="InvoiceNotes">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-expansion-panel>
+                </div>
+            </mat-accordion>
+
+            <!-- <----6th Accordion-->
+            <mat-accordion class="custom-accordion">
+                <div class="my-accordion">
+                    <mat-expansion-panel class="panel-border" [expanded]="true">
+                        <mat-expansion-panel-header class="panel-header">
+                            <mat-panel-title>Status Details</mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div class="accordion-content">
+                            <div class="row g-3 mb-2">
+                                <div class="col-md-3">
+                                    <label class="form-label">Status<span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" formControlName="Status">
+                                    <div class="text-danger small" *ngIf="addGstInvoice.get('Status')?.touched 
+             && addGstInvoice.get('Status')?.hasError('required')">
+                                        Status is required
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Remarks</label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">
+                                            <mat-icon class="small-icon">edit</mat-icon>
+                                        </span>
+                                        <input type="text" class="form-control custom-input" formControlName="Remarks">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Discrepancy Reason<span
+                                            class="text-danger"></span></label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">
+                                            <mat-icon class="small-icon">edit</mat-icon>
+                                        </span>
+                                        <input type="text" class="form-control custom-input"
+                                            formControlName="DiscrepancyReason">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Discrepancy By<span class="text-danger"></span></label>
+                                    <div class="input-wrapper">
+                                        <span class="prefix-box">
+                                            <mat-icon class="small-icon">edit</mat-icon>
+                                        </span>
+                                        <input type="text" class="form-control custom-input"
+                                            formControlName="DiscrepancyBy">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-3 mb-2">
+                                <div class="col-md-3">
+                                    <label class="form-label">Created Mode<span class="text-danger"></span></label>
+                                    <input type="text" class="form-control" formControlName="CreatedMode">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Billable Type<span class="text-danger">*</span></label>
+                                    <select class="form-select" formControlName="BillableType">
+                                        <option value="">-- Select --</option>
+                                        <option *ngFor="let p of BillingType" [value]="p.billable_Type_Id">
+                                            {{p.billable_Type}}
+                                        </option>
+                                    </select>
+                                    <div class="text-danger small" *ngIf="addGstInvoice.get('BillableType')?.touched 
+             && addGstInvoice.get('BillableType')?.hasError('required')">
+                                        BillableType is required
+                                    </div>
+                                </div>
+                            </div>
+                            <label style="color: blue;">Provisional Invoice
+                                Adjustments:</label>
+                        </div>
+                    </mat-expansion-panel>
+                </div>
+            </mat-accordion>
+        </mat-card-content>
+        <mat-card-footer class="footer">
+            <div class="d-flex justify-content-end mt-3">
+                <div class="btn-1"
+                    style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
+
+                    <button type="Cancel"
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;"
+                        (click)="onClose()">
+                        Cancel
+                    </button>
+
+                    <button type="submit"
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white; "
+                        (click)="CreateGSTInvoice()">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </mat-card-footer>
+    </mat-card>
+</form>
