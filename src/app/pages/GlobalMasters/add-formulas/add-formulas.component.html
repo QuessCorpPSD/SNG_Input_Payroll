@@ -1,0 +1,194 @@
+<form [formGroup]="addformula" novalidate *ngIf="!Edit">
+
+    <mat-card class="custom-card">
+        <mat-card-header class="sticky-header">
+            <br />
+            <mat-card-title style="color: #302CB3;"> Add Formula </mat-card-title>
+
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="onClose()" class="no-border-icon">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+        <br />
+
+        <mat-card-content>
+
+            <!-- FORM TABLE -->
+            <div style="display: grid; grid-template-columns: 150px 1fr; row-gap: 15px; align-items: center;">
+
+                <!-- COMPANY -->
+                <label class="form-label text-muted small mb-0">Company Code:</label>
+
+                <!-- WRAPPER WITH FIXED WIDTH -->
+                <div style="width: 250px;">
+                    <companyall (companyEmit)="handleCompanyEvent($event)" style="display:block;">
+                    </companyall>
+
+                    <div *ngIf="val_company" class="text-danger small mt-1">
+                        Company is required.
+                    </div>
+                </div>
+
+
+                <!-- PAY CATEGORY -->
+                <label class="form-label text-muted small mb-0">Pay Category:</label>
+                <div>
+                    <select class="form-select form-select-sm" style="width:250px; padding:2px 4px;" name="payCategory"
+                        [(ngModel)]="selectedPayCategory" (ngModelChange)="ChangepayCategory($event)">
+
+                        <option value="">Select Pay Category</option>
+                        <option *ngFor="let pf of payCategory" [ngValue]="pf">
+                            {{ pf.Band_Name }}
+                        </option>
+                    </select>
+
+                    <div *ngIf="val_category" class="text-danger small mt-1">
+                        Pay Category is required.
+                    </div>
+                </div>
+
+                <!-- PAY CODE -->
+                <label class="form-label text-muted small mb-0">Formula Name:</label>
+                <div>
+                    <select class="form-select form-select-sm" style="width:250px; padding:2px 4px;" name="payCode"
+                        [(ngModel)]="selectedPayCode" (ngModelChange)="ChangepayCode($event)">
+                        <option value="">Select Pay Code</option>
+                        <option *ngFor="let pf of payCode" [value]="pf.paycode_Id">
+                            {{ pf.paycode_Code }}
+                        </option>
+                    </select>
+
+                    <div *ngIf="val_paycode" class="text-danger small mt-1">
+                        Pay Code is required.
+                    </div>
+                </div>
+
+                <!-- DESCRIPTION (NO VALIDATION AS PER YOUR REQUEST) -->
+                <label class="form-label text-muted small mb-0">Description:</label>
+                <input type="text" class="form-control form-control-sm" style="width:250px;"
+                    formControlName="Description" [(ngModel)]="Description">
+
+
+                <!-- FORMULA -->
+                <label class="form-label text-muted small mb-0">Formula :</label>
+                <div>
+                    <input type="text" class="form-control form-control-sm" style="width:250px;"
+                        formControlName="Formula" [(ngModel)]="Formula">
+
+                    <div *ngIf="addformula.get('Formula')?.touched && addformula.get('Formula')?.invalid"
+                        class="text-danger small mt-1">
+                        Formula is required.
+                    </div>
+                </div>
+            </div>
+        </mat-card-content>
+
+
+        <div class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">
+
+            <button type="button" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+                           cursor: pointer; background-color: #f0f0f0; color: black;">
+                Cancel
+            </button>
+
+            <button type="button" (click)="SaveClick()" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+                           cursor: pointer; background-color: blue; color: white;">
+                Save
+            </button>
+        </div>
+    </mat-card>
+</form>
+<form [formGroup]="editFormula" novalidate *ngIf="Edit">
+
+    <mat-card class="custom-card">
+        <mat-card-header class="sticky-header">
+            <br />
+            <mat-card-title style="color: #302CB3;"> Edit Formula </mat-card-title>
+
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="onClose()" class="no-border-icon">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+        <br />
+
+        <mat-card-content>
+
+            <div style="display: grid; grid-template-columns: 150px 1fr; row-gap: 15px; align-items: center;">
+
+                <label class="form-label text-muted small mb-0">Company Code:</label>
+
+                <div style="width: 250px;">
+                    <input class="form-control form-control-sm" formControlName="CompanyId"
+                        style="width:250px; padding:2px 4px;" readonly />
+
+                    <div *ngIf="val_company" class="text-danger small mt-1">
+                        Company is required.
+                    </div>
+                </div>
+
+
+                <label class="form-label text-muted small mb-0">Pay Category:</label>
+                <div>
+                    <input class="form-control form-control-sm" style="width:250px; padding:2px 4px;"
+                        formControlName="PayCategory" readonly />
+
+
+                </div>
+
+                <label class="form-label text-muted small mb-0">Formula Name:</label>
+                <div>
+                    <input class="form-control form-control-sm" style="width:250px; padding:2px 4px;"
+                        formControlName="PayCode" readonly />
+
+
+                    <div *ngIf="val_paycode" class="text-danger small mt-1">
+                        Pay Code is required.
+                    </div>
+                </div>
+
+                <label class="form-label text-muted small mb-0">Description:</label>
+                <input type="text" class="form-control form-control-sm" style="width:250px;"
+                    formControlName="Description" [(ngModel)]="Description" readonly>
+
+
+                <label class="form-label text-muted small mb-0">Formula :</label>
+                <div>
+                    <input type="text" class="form-control form-control-sm" style="width:250px;"
+                        formControlName="Formula" [(ngModel)]="Formula">
+
+                    <!-- <div *ngIf="editFormula.get('Formula')?.touched && editFormula.get('Formula')?.invalid"
+                        class="text-danger small mt-1">
+                        Formula is required.
+                    </div> -->
+                </div>
+            </div>
+        </mat-card-content>
+
+
+        <div class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">
+
+            <button type="button" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+                           cursor: pointer; background-color: #f0f0f0; color: black;">
+                Cancel
+            </button>
+
+            <button type="button" (click)="Save()" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+                           cursor: pointer; background-color: blue; color: white;">
+                Save
+            </button>
+
+        </div>
+
+    </mat-card>
+</form>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>
+
+
+<div *ngIf="showPopup" class="overlay"></div>
+<app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+    (close)="closePopup()">
+</app-alertpopup>
