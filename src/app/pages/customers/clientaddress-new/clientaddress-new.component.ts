@@ -8,11 +8,12 @@ import { CommonModule } from '@angular/common';
 import { ClientaddressService } from '../../../Service/customersserv/clientaddress.service';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
+import { MapnameComponent } from '../../../common/Mapname/mapname/mapname.component';
 
 @Component({
   selector: 'app-clientaddress-new',
   standalone: true,
-  imports: [MatCardModule, MatIconModule, CompanyallComponent, CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [MatCardModule, MatIconModule, CompanyallComponent, CommonModule, FormsModule, ReactiveFormsModule, MapnameComponent],
   templateUrl: './clientaddress-new.component.html',
   styleUrl: './clientaddress-new.component.css'
 })
@@ -22,7 +23,10 @@ export class ClientaddressNewComponent {
   submitted = false;
   userdetail: any;
   Costcenter: any;
-
+  companyUI: any;
+  mapnameUI: any;
+  selectedCC?: number;
+  selectedMN?: number;
   constructor(
     private dialogRef: MatDialogRef<ClientaddressNewComponent>,
     private fb: FormBuilder, private service: ClientaddressService, private decry: EncryptionService,
@@ -60,9 +64,17 @@ export class ClientaddressNewComponent {
 
   // When company dropdown emits
   handleCompanyEvent(company: any) {
+    this.selectedCC = company.companyId;
+    this.companyUI = company;
     this.clientaddress.patchValue({
       company: company
     });
+  }
+
+  handleMapNameEvent(mapname: any) {
+    this.selectedMN = mapname.mapName;
+    this.mapnameUI=mapname;
+    //console.log(mapname);
   }
 
   // Mark single field touched
@@ -127,7 +139,7 @@ export class ClientaddressNewComponent {
         ClientAddressId: null,
 
         CompanyId: raw.company?.companyId || 0,
-        CostCenterMappingId: raw.Costcentermapping || 0,
+        CostCenterMappingId: this.mapnameUI.mapNameId || 0,
 
         BillingClientName: raw.billingClientName,
         BillingAddress: raw.billingAddress,
@@ -155,10 +167,13 @@ export class ClientaddressNewComponent {
 
       this.service.clientaddressaddsave(payload).subscribe({
         next: (res: string) => {
+          console.log(res);
           const cleanMessage = res.replace(/<br\s*\/?>/gi, '\n');
-
+          console.log(cleanMessage);
           if (cleanMessage.includes('Success')) {
             // success logic
+            alert('Client Address Created Successfully');
+            this.BindCostcenter();
             resolve();
           } else {
             alert(cleanMessage);

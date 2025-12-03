@@ -28,15 +28,24 @@
         </div>
 
         <!-- Cost Center -->
-        <div class="col-md-6">
+        <!-- <div class="col-md-6">
           <label class="form-label small">Cost Center Mapping</label>
           <select class="form-select form-select-sm" formControlName="Costcentermapping">
             <option value="" disabled>Select</option>
             <option *ngFor="let cc of Costcenter " [value]="cc.cost_Center_Mapping_Id">{{cc.cost_Center_Name}}</option>
 
           </select>
-        </div>
+        </div> -->
+        <div class="col-md-6">
+          <label class="form-label small">Map Name <span style="color:red">*</span></label>
 
+          <mapname formControlName="Costcentermapping" [selectedCompanyId]="selectedCC" 
+          (mapnameEmit)="handleMapNameEvent($event)"
+            (blur)="markFieldTouched('Costcentermapping')"> </mapname>
+
+          <small *ngIf="clientaddress.get('Costcentermapping')?.invalid && clientaddress.get('Costcentermapping')?.touched"
+            style="color:red">MapName is required</small>
+        </div>
       </div>
 
       <!-- Row 2 -->
