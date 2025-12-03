@@ -1,0 +1,190 @@
+<div class="page-wrapper">
+    <form [formGroup]="employee" novalidate>
+
+        <div class="scrollable-content">
+            <mat-card-title  style="color: #302CB3; font-size: 22px; font-family: Nunito Sans;  padding-top: 2%; font-weight: 700;">Employee</mat-card-title>
+
+
+            <div class="container-fluid g-2">
+                <div class="card-body g-2">
+                    <div class="row align-items-end g-3">
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small">Company Code</label>
+                            <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+                        </div>
+
+                        <div class="col-md-2">
+                            <label class="form-label text-muted small">Employee Code</label>
+                            <select class="form-select form-select-sm">
+                                <option value="">-- Select --</option>
+                            </select>
+                        </div>
+
+                        <!-- E Active -->
+                        <div class="col-md-2">
+                            <label class="form-label text-muted small">E Active</label>
+                            <select class="form-select form-select-sm" formControlName="EActive">
+                                <option value="-1">-- Select --</option>
+                                <option value="1">yes</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+
+                        <!-- Search / Export -->
+                        <div class="col-auto">
+                            <div class="d-flex align-items-center gap-2">
+                                <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                    matTooltip="Search" (click)="onsearch()">
+                                    <mat-icon>search</mat-icon>
+                                </button>
+
+                                <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                    matTooltip="Export">
+                                    <mat-icon>table_chart</mat-icon>
+                                </button>
+
+                            </div>
+                        </div>
+                        <!-- Salary -->
+                        <div class="col-auto">
+                            <label class="form-label text-muted small d-flex gap-2">Salary</label>
+                            <div class="d-flex align-items-center gap-2">
+                                <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                    matTooltip="Import" (click)="ImportClickSalary(fileInput)">
+                                    <mat-icon>cloud_upload</mat-icon>
+                                </button>
+                                <input type="file" #fileInput style="display: none;" (click)="fileInput.value=''"
+                                    (change)="onFileChangesalary($event)" accept=".xlsx, .xls" />
+
+                                <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                    matTooltip="Download Template">
+                                    <mat-icon>cloud_download</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Employee -->
+                        <div class="col-auto ">
+                            <label class="form-label text-muted small">Employee</label>
+                            <div class="d-flex align-items-center gap-2">
+                                <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                    matTooltip="Import" (click)="ImportClick(fileInput)">
+                                    <mat-icon>cloud_upload</mat-icon>
+                                </button>
+                                <input type="file" #fileInput style="display: none;" (click)="fileInput.value=''"
+                                    (change)="onFileChange($event)" accept=".xlsx, .xls" />
+
+                                <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                    matTooltip="Download Template">
+                                    <mat-icon>cloud_download</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-wrapper1" *ngIf="isUploadGridVisible" style="min-width: 960px;">
+                <br />
+
+                <div class="table-scroll">
+                    <mat-table [dataSource]="dataSource" matSort class="custom-table mat-elevation-z8 auto-fit-table">
+
+                        <!-- ========== ACTION COLUMN ========== -->
+                        <ng-container matColumnDef="Action">
+                            <mat-header-cell *matHeaderCellDef
+                                style="min-width: 80px!important; text-align: center;"><strong>Action</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row" style="min-width: 80px!important; text-align: center;">
+                                <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                    matTooltip="view" (click)="ViewOpen(row)">
+                                    <mat-icon>visibility</mat-icon>
+                                </button>
+                                <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                matTooltip="Edit">
+                                <mat-icon>edit</mat-icon>
+                            </button> -->
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="SNo">
+                            <mat-header-cell *matHeaderCellDef
+                                style="min-width: 80px!important; text-align: center;"><strong>SNo</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row" style="min-width: 80px!important; text-align: center;">{{
+                                row['Serial_No'] }}</mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="EMPNO">
+                            <mat-header-cell *matHeaderCellDef><strong>EMP NO</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row['Employee_Code'] }}</mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="EMPNAME">
+                            <mat-header-cell *matHeaderCellDef><strong>EMP NAME</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row['First_Name'] }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="CompanyCode">
+                            <mat-header-cell *matHeaderCellDef><strong>Company Code</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row['Company_Code'] }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="DOB">
+                            <mat-header-cell *matHeaderCellDef><strong>Date of Birth</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row['Date_Of_Birth'] }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Active">
+                            <mat-header-cell *matHeaderCellDef><strong>Active</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row['EActive'] }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ORIHIREDDATE">
+                            <mat-header-cell *matHeaderCellDef><strong>ORI HIRED DATE</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row['Effective_Date'] }}</mat-cell>
+                        </ng-container>
+
+
+                        <ng-container matColumnDef="SEX">
+                            <mat-header-cell *matHeaderCellDef><strong>SEX</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row['GenderText'] }}</mat-cell>
+                        </ng-container>
+
+
+                        <ng-container matColumnDef="Department">
+                            <mat-header-cell *matHeaderCellDef><strong>Department</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row['Department_Name'] }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="OCCUPATIONCODE">
+                            <mat-header-cell *matHeaderCellDef><strong>OCCUPATION CODE</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{ row['Designation_Name'] }}</mat-cell>
+                        </ng-container>
+
+
+
+                        <!-- HEADER ROW -->
+                        <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+
+                        <!-- DATA ROWS -->
+                        <mat-row *matRowDef="let row; columns: uploadDisplayedColumns"></mat-row>
+
+                    </mat-table>
+                </div>
+
+                <div *ngIf="dataSource.data.length === 0" class="text-center p-4">
+                    <p class="text-muted">No data to display</p>
+                </div>
+
+                <mat-paginator [length]="dataSource.data.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
+                    showFirstLastButtons aria-label="Select page">
+                </mat-paginator>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>
+
+<app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+    (close)="closePopup()"></app-alertpopup>

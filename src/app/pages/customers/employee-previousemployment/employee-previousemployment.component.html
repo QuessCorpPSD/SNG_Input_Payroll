@@ -1,0 +1,113 @@
+<form [formGroup]="prevEmploymentForm" novalidate>
+    <mat-card class="custom-card">
+        <mat-card-header class="sticky-header">
+            <mat-card-title style="color:#302CB3;">Previous Employment</mat-card-title>
+
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="onClose()" class="no-border-icon">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+
+        <mat-card-content>
+
+            <!-- ROW 1 -->
+            <div class="row g-3 mb-3">
+
+                <!-- Company Name -->
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Company Name<span style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" formControlName="companyName">
+
+                    <small *ngIf="prevEmploymentForm.get('companyName')?.invalid &&
+                                  (prevEmploymentForm.get('companyName')?.touched || submitted)" style="color:red">
+                        Company Name is required
+                    </small>
+                </div>
+
+                <!-- Designation -->
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Designation<span style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" formControlName="designation">
+
+                    <small *ngIf="prevEmploymentForm.get('designation')?.invalid &&
+                                  (prevEmploymentForm.get('designation')?.touched || submitted)" style="color:red">
+                        Designation is required
+                    </small>
+                </div>
+
+                <!-- Billing Designation -->
+                <div class="col-md-4" style="display: none;">
+                    <label class="form-label text-muted small">Billing Designation<span
+                            style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" formControlName="billingDesignation">
+
+                    <small *ngIf="prevEmploymentForm.get('billingDesignation')?.invalid &&
+                                  (prevEmploymentForm.get('billingDesignation')?.touched || submitted)"
+                        style="color:red">
+                        Billing Designation is required
+                    </small>
+                </div>
+
+
+
+                <!-- Experience -->
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Experience<span style="color:red">*</span></label>
+
+                    <input class="form-control form-control-sm" formControlName="experience" type="text" maxlength="10"
+                        onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.charCode === 46">
+
+                    <small *ngIf="prevEmploymentForm.get('experience')?.invalid &&
+                                  (prevEmploymentForm.get('experience')?.touched || submitted)" style="color:red">
+                        Experience is required
+                    </small>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Start Date<span style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" type="date" formControlName="startDate">
+
+                    <small *ngIf="prevEmploymentForm.get('startDate')?.invalid &&
+                                  (prevEmploymentForm.get('startDate')?.touched || submitted)" style="color:red">
+                        Start Date is required
+                    </small>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">End Date<span style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" type="date" formControlName="endDate">
+
+                    <small *ngIf="prevEmploymentForm.get('endDate')?.invalid &&
+                                  (prevEmploymentForm.get('endDate')?.touched || submitted)" style="color:red">
+                        End Date is required
+                    </small>
+                </div>
+
+            </div>
+
+        </mat-card-content>
+
+        <mat-card-footer class="footer">
+            <div class="d-flex justify-content-end mt-3">
+                <div class="btn-1"
+                    style="display:flex; justify-content:flex-end; gap:10px; width:100%; padding-right:7px;">
+
+                    <button type="button"
+                        style="border:none; border-radius:7px; width:80px; height:30px; cursor:pointer; background-color:#f0f0f0;"
+                        (click)="onClose()">
+                        Cancel
+                    </button>
+
+                    <button type="submit" (click)="onSubmit()"
+                        style="border:none; border-radius:7px; width:80px; height:30px; cursor:pointer; background-color:blue; color:white;">
+                        Save
+                    </button>
+
+                </div>
+            </div>
+        </mat-card-footer>
+    </mat-card>
+</form>

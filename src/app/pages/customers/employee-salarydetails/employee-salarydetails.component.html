@@ -1,0 +1,200 @@
+<form [formGroup]="employeesalary" novalidate>
+    <mat-card class="custom-card">
+
+        <mat-card-header class="sticky-header">
+            <mat-card-title style="color:#302CB3;">Salary Details</mat-card-title>
+
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="onClose()" class="no-border-icon">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+
+        <mat-card-content>
+
+            <!-- ROW 1 -->
+            <div class="row g-3 mb-3">
+
+                <!-- Company Code -->
+                <div class="col-md-4" style="display: none;">
+                    <label class="form-label text-muted small">Company Code<span style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" formControlName="companycode">
+
+                    <small *ngIf="employeesalary.get('companycode')?.invalid &&
+                                    (employeesalary.get('companycode')?.touched || submitted)" style="color:red">
+                        Company Code is required
+                    </small>
+                </div>
+
+                <!-- Payroll Type -->
+                <div class="col-md-4" style="display: none;">
+                    <label class="form-label text-muted small">Pay Roll Type<span style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" formControlName="payrolltype">
+
+                    <small *ngIf="employeesalary.get('payrolltype')?.invalid &&
+                                    (employeesalary.get('payrolltype')?.touched || submitted)" style="color:red">
+                        Payroll Type is required
+                    </small>
+                </div>
+
+                <!-- Employee Code -->
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Employee Code<span style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" formControlName="empcode">
+
+                    <small *ngIf="employeesalary.get('empcode')?.invalid &&
+                                    (employeesalary.get('empcode')?.touched || submitted)" style="color:red">
+                        Employee Code is required
+                    </small>
+                </div>
+           
+                <div class="col-md-4" style="display: none;">
+                    <label class="form-label text-muted small">Employee Name<span style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" formControlName="Empname">
+
+                    <small *ngIf="employeesalary.get('Empname')?.invalid &&
+                                    (employeesalary.get('Empname')?.touched || submitted)" style="color:red">
+                        Employee Name is required
+                    </small>
+                </div>
+
+                <div class="col-md-4" style="display: none;">
+                    <label class="form-label text-muted small">Pay Category</label>
+                    <input class="form-control form-control-sm" formControlName="paycategory">
+                </div>
+
+                <div class="col-md-4" style="display: none;">
+                    <label class="form-label text-muted small">Total CTC</label>
+                    <input class="form-control form-control-sm" formControlName="totalctc">
+                </div>
+          
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Effective Date<span style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" type="date" formControlName="Effectivedate">
+
+                    <small *ngIf="employeesalary.get('Effectivedate')?.invalid &&
+                                    (employeesalary.get('Effectivedate')?.touched || submitted)" style="color:red">
+                        Effective Date is required
+                    </small>
+                </div>
+
+                <div class="col-md-4" style="display: none;">
+                    <label class="form-label text-muted small">Date of Join<span style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" type="date" formControlName="DOJ">
+
+                    <small *ngIf="employeesalary.get('DOJ')?.invalid &&
+                                    (employeesalary.get('DOJ')?.touched || submitted)" style="color:red">
+                        Date of Join is required
+                    </small>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Applied On</label>
+                    <input class="form-control form-control-sm" formControlName="appliedon">
+                </div>
+           
+                <div class="col-md-4" style="display: none;">
+                    <label class="form-label text-muted small">Per<span style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" formControlName="per">
+
+                    <small *ngIf="employeesalary.get('per')?.invalid &&
+                                    (employeesalary.get('per')?.touched || submitted)" style="color:red">
+                        Per is required
+                    </small>
+                </div>
+            </div>
+            <!-- Table Wrapper -->
+            <div class="table-wrapper1">
+                <div class="col-md-3 d-flex gap-2">
+                    <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Add">
+                            <mat-icon>add</mat-icon>
+                        </button> -->
+
+                    <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Delete">
+                        <mat-icon>delete</mat-icon>
+                    </button> -->
+                </div>
+
+                <!-- Table Display -->
+                <div class="table-scroll">
+                    <mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 custom-table">
+
+                        <!-- SNo Column -->
+                        <ng-container matColumnDef="sno">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>S.No</mat-header-cell>
+                            <mat-cell *matCellDef="let row; let i = index">
+                                {{ i + 1 }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Paycode -->
+                        <ng-container matColumnDef="Paycode">
+                            <mat-header-cell *matHeaderCellDef>PayCode</mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                {{ row.Paycode_Code }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Description -->
+                        <ng-container matColumnDef="Description">
+                            <mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                {{ row.Description }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Amount -->
+                        <ng-container matColumnDef="Amount">
+                            <mat-header-cell *matHeaderCellDef>Amount</mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                {{ row.Amount }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Amount Per Annum -->
+                        <ng-container matColumnDef="AmountperAnnum">
+                            <mat-header-cell *matHeaderCellDef>Amount Per Annum</mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                {{ row.Amount_Per_Annum }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+                    </mat-table>
+
+                </div>
+
+                <!-- No Data Message -->
+                <div *ngIf="dataSource.data.length === 0" class="text-center p-3 text-muted">
+                    No data to display
+                </div>
+
+                <!-- Paginator -->
+                <mat-paginator [length]="dataSource.data.length" [pageSize]="5" showFirstLastButtons></mat-paginator>
+            </div>
+        </mat-card-content>
+
+        <mat-card-footer class="footer">
+            <div class="d-flex justify-content-end mt-3">
+                <div class="btn-1"
+                    style="display:flex; justify-content:flex-end; gap:10px; width:100%; padding-right:7px;">
+
+                    <button type="button"
+                        style="border:none; border-radius:7px; width:80px; height:30px; background:#f0f0f0;"
+                        (click)="onClose()">
+                        Cancel
+                    </button>
+                    <!-- 
+                    <button type="submit"
+                        style="border:none; border-radius:7px; width:80px; height:30px; background:blue; color:white;">
+                        Save
+                    </button> -->
+
+                </div>
+            </div>
+        </mat-card-footer>
+
+    </mat-card>
+</form>

@@ -1,0 +1,148 @@
+<form [formGroup]="personalForm" novalidate>
+    <mat-card class="custom-card">
+        <mat-card-header class="sticky-header">
+            <br />
+            <mat-card-title style="color:#302CB3;">Personal Details</mat-card-title>
+
+
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="onClose()" class="no-border-icon">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+
+        <mat-card-content>
+
+            <!-- Row 1 -->
+            <div class="row g-3 mb-3">
+                <!-- Birth Place -->
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Birth Place<span style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" formControlName="birthPlace">
+
+                    <small *ngIf="personalForm.get('birthPlace')?.invalid && 
+                                  (personalForm.get('birthPlace')?.touched || submitted)" style="color:red">
+                        Birth Place is required
+                    </small>
+                </div>
+
+                <!-- Nominee -->
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Nominee<span style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" formControlName="nominee">
+
+                    <small *ngIf="personalForm.get('nominee')?.invalid && 
+                                  (personalForm.get('nominee')?.touched || submitted)" style="color:red">
+                        Nominee is required
+                    </small>
+                </div>
+
+                <!-- Relationship -->
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Relationship<span style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" formControlName="relationship">
+
+                    <small *ngIf="personalForm.get('relationship')?.invalid && 
+                                  (personalForm.get('relationship')?.touched || submitted)" style="color:red">
+                        Relationship is required
+                    </small>
+                </div>
+            </div>
+
+            <!-- Row 2 -->
+            <div class="row g-3 mb-3">
+
+                <!-- Race Code -->
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Race Code<span style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" formControlName="racecode">
+
+                    <!-- <select class="form-select form-select-sm" formControlName="racecode">
+                        <option value="" disabled>Select</option>
+                    </select> -->
+
+                    <small *ngIf="personalForm.get('racecode')?.invalid && 
+                                  (personalForm.get('racecode')?.touched || submitted)" style="color:red">
+                        Race Code is required
+                    </small>
+                </div>
+
+                <!-- National Code -->
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">National Code<span style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" formControlName="Nationalcode">
+
+                    <!-- <select class="form-select form-select-sm" formControlName="Nationalcode">
+                        <option value="" disabled>Select</option>
+                    </select> -->
+
+                    <small *ngIf="personalForm.get('Nationalcode')?.invalid && 
+                                  (personalForm.get('Nationalcode')?.touched || submitted)" style="color:red">
+                        National Code is required
+                    </small>
+                </div>
+
+                <!-- RFUND Code 1 -->
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">RFUND Code 1<span style="color:red">*</span></label>
+                    <select class="form-select form-select-sm" formControlName="RFUNDCode1">
+                        <option value="" disabled>Select</option>
+                        <option *ngFor="let rf of rfundcode1" [value]="rf.spr_status_id">{{
+                            rf.spr_status }}</option>
+                    </select>
+
+                    <small *ngIf="personalForm.get('RFUNDCode1')?.invalid && 
+                                  (personalForm.get('RFUNDCode1')?.touched || submitted)" style="color:red">
+                        RFUND Code 1 is required
+                    </small>
+                </div>
+            </div>
+
+            <!-- Row 3 -->
+            <div class="row g-3 mb-3">
+
+                <!-- RFUND Code 2 -->
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">RFUND Code 2</label>
+                    <select class="form-select form-select-sm" formControlName="RFUNDCode2">
+                        <option value="" disabled>Select</option>
+                        <option *ngFor="let rf2 of rfundcode2" [value]="rf2.spr_status_id">{{
+                            rf2.spr_status }}</option>
+                    </select>
+                </div>
+
+                <!-- Country of Birth -->
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Country of Birth</label>
+                    <input class="form-control form-control-sm" formControlName="COB">
+
+                    <!-- <select class="form-select form-select-sm" formControlName="COB">
+                        <option value="" disabled>Select</option>
+                    </select> -->
+                </div>
+
+            </div>
+
+        </mat-card-content>
+
+        <mat-card-footer class="footer">
+            <div class="d-flex justify-content-end mt-3">
+                <div class="btn-1"
+                    style="display:flex; justify-content:flex-end; gap:10px; width:100%; padding-right:7px;">
+
+                    <button type="button"
+                        style="border:none; border-radius:7px; width:80px; height:30px; background:#f0f0f0;"
+                        (click)="onClose()">
+                        Cancel
+                    </button>
+
+                    <button type="submit" (click)="onSubmit()"
+                        style="border:none; border-radius:7px; width:80px; height:30px; background:blue; color:white;">
+                        Save
+                    </button>
+
+                </div>
+            </div>
+        </mat-card-footer>
+    </mat-card>
+</form>

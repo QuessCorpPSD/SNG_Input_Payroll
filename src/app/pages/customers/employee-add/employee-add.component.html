@@ -1,0 +1,759 @@
+<form [formGroup]="employeeForm" novalidate>
+    <mat-card class="custom-card">
+        <mat-card-header class="sticky-header">
+            <mat-card-title style="color:#302CB3;">Edit Employee</mat-card-title>
+
+
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="onClose()" class="no-border-icon">
+                <mat-icon>close</mat-icon>
+            </button>
+
+        </mat-card-header>
+
+        <mat-card-content>
+            <div class="row g-3 mb-3">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Employee ID<span style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" formControlName="empid" readonly>
+                    <small *ngIf="employeeForm.get('empid')?.touched && employeeForm.get('empid')?.hasError('required')"
+                        style="color: red;">
+                        Employee ID is required
+                    </small>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Company Code<span style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" formControlName="CompanyCode" readonly>
+                    <small
+                        *ngIf="employeeForm.get('CompanyCode')?.touched && employeeForm.get('CompanyCode')?.hasError('required')"
+                        style="color: red;">
+                        CompanyCode is required
+                    </small>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">SPR Status<span style="color:red">*</span></label>
+                    <select class="form-select form-select-sm" formControlName="sprstatus">
+                        <option value="" disabled>Select</option>
+                        <option *ngFor="let spr of sprstatus " [value]="spr.spr_status_id">
+                            {{spr.spr_status}}</option>
+
+                    </select>
+                    <small
+                        *ngIf="employeeForm.get('sprstatus')?.touched && employeeForm.get('sprstatus')?.hasError('required')"
+                        style="color: red;">
+                        SPR Status is required
+                    </small>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">First Name<span style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" formControlName="firstname" readonly>
+                    <small
+                        *ngIf="employeeForm.get('firstname')?.touched && employeeForm.get('firstname')?.hasError('required')"
+                        style="color: red;">
+                        First Name is required
+                    </small>
+                </div>
+
+            </div>
+            <div class="row g-3 mb-3">
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Middle Name</label>
+                    <input class="form-control form-control-sm" formControlName="middlename" readonly>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Last Name</label>
+                    <input class="form-control form-control-sm" formControlName="lastname" readonly>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Father's Name<span style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" formControlName="fathername">
+                    <small
+                        *ngIf="employeeForm.get('fathername')?.touched && employeeForm.get('fathername')?.hasError('required')"
+                        style="color: red;">
+                        Father's Name is required
+                    </small>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Language Known</label>
+                    <input class="form-control form-control-sm" formControlName="LanguageKnown">
+                </div>
+
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Gender<span style="color:red">*</span></label>
+                    <div class="d-flex gap-3">
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="gender" id="male" [value]="true"
+                                formControlName="gender">
+                            <label class="form-check-label" for="male">Male</label>
+                        </div>
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="gender" id="female" [value]="false"
+                                formControlName="gender">
+                            <label class="form-check-label" for="female">Female</label>
+                        </div>
+
+                    </div>
+
+                    <small *ngIf="employeeForm.get('gender')?.touched &&
+               employeeForm.get('gender')?.hasError('required')" style="color: red;">
+                        Gender is required
+                    </small>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Material Status<span style="color:red">*</span></label>
+                    <select class="form-select form-select-sm" formControlName="materialstatus">
+                        <option value="" disabled>Select</option>
+                        <option *ngFor="let status of materialstatus" [value]="status">{{ status }}</option>
+                    </select>
+                    <small
+                        *ngIf="employeeForm.get('materialstatus')?.touched && employeeForm.get('materialstatus')?.hasError('required')"
+                        style="color: red;">
+                        Material Status is required
+                    </small>
+                </div>
+
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Date of Birth<span style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" type="date" formControlName="DOB">
+                    <small *ngIf="employeeForm.get('DOB')?.touched && employeeForm.get('DOB')?.hasError('required')"
+                        style="color: red;">
+                        Date of Birth is required
+                    </small>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Disability<span style="color:red">*</span></label>
+                    <div class="d-flex gap-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="disability" id="yes" [value]="true"
+                                formControlName="disability">
+                            <label class="form-check-label" for="yes">Yes</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="disability" id="no" [value]="false"
+                                formControlName="disability">
+                            <label class="form-check-label" for="no">No</label>
+                        </div>
+                    </div>
+                    <small
+                        *ngIf="employeeForm.get('disability')?.touched && employeeForm.get('disability')?.hasError('required')"
+                        style="color: red;">
+                        Disability is required
+                    </small>
+                </div>
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Map Name<span style="color:red">*</span></label>
+                    <select class="form-select form-select-sm" formControlName="Mapname">
+                        <option value="" disabled>Select</option>
+                        <option *ngFor="let mapname of Mapname" [value]="mapname.Cost_Center_Mapping_Id">{{
+                            mapname.Map_Name }}</option>
+
+                    </select>
+                    <small
+                        *ngIf="employeeForm.get('Mapname')?.touched && employeeForm.get('Mapname')?.hasError('required')"
+                        style="color: red;">
+                        Mapname is required
+                    </small>
+                </div>
+
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Date of Joining<span style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" type="date" formControlName="DOJ">
+                    <small *ngIf="employeeForm.get('DOJ')?.touched && employeeForm.get('DOJ')?.hasError('required')"
+                        style="color: red;">
+                        Date of Joining is required
+                    </small>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Pay Category<span style="color:red">*</span></label>
+                    <select class="form-select form-select-sm" formControlName="paycategory">
+                        <option value="" disabled>Select</option>
+                        <option *ngFor="let pay of Paycategory" [value]="+pay.Band_Id">
+                            {{ pay.Band_Name }}
+                        </option>
+                    </select>
+                    <small
+                        *ngIf="employeeForm.get('paycategory')?.touched && employeeForm.get('paycategory')?.hasError('required')"
+                        style="color: red;">
+                        Pay Category is required
+                    </small>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Cost Center<span style="color:red">*</span></label>
+                    <select class="form-select form-select-sm" formControlName="Costcenter">
+                        <option value="" disabled>Select</option>
+                        <option *ngFor="let cc of Costcenter" [value]="cc.Cost_Center_Mapping_Id">{{
+                            cc.Cost_Center_Name }}</option>
+                    </select>
+                    <small
+                        *ngIf="employeeForm.get('Costcenter')?.touched && employeeForm.get('Costcenter')?.hasError('required')"
+                        style="color: red;">
+                        Cost Center is required
+                    </small>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Join PayPeriod<span style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" formControlName="joinpayperiod" readonly>
+                    <small
+                        *ngIf="employeeForm.get('joinpayperiod')?.touched && employeeForm.get('joinpayperiod')?.hasError('required')"
+                        style="color: red;">
+                        Join PayPeriod is required
+                    </small>
+                </div>
+
+
+
+                <div class="col-md-3" style="display: none;">
+                    <label class="form-label text-muted small">PT State<span style="color:red">*</span></label>
+                    <select class="form-select form-select-sm" formControlName="PTState">
+                        <option value="" disabled>Select</option>
+                    </select>
+                    <!-- <small *ngIf="employeeForm.get('PTState')?.touched && employeeForm.get('PTState')?.hasError('required')"
+                        style="color: red;">
+                        PTState is required
+                    </small> -->
+
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Business Unit<span style="color:red">*</span></label>
+                    <select class="form-select form-select-sm" formControlName="Businessunit">
+                        <option value="" disabled>Select</option>
+                        <option *ngFor="let bu of Businessunit" [value]="bu.Entity_Id">{{
+                            bu.Entity_Name }}</option>
+                    </select>
+                    <small
+                        *ngIf="employeeForm.get('Businessunit')?.touched && employeeForm.get('Businessunit')?.hasError('required')"
+                        style="color: red;">
+                        Business Unit is required
+                    </small>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Effective Date<span style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" type="date" formControlName="Effectivedate">
+                    <small
+                        *ngIf="employeeForm.get('Effectivedate')?.touched && employeeForm.get('Effectivedate')?.hasError('required')"
+                        style="color: red;">
+                        Effective Date is required
+                    </small>
+                </div>
+                <div class="col-md-3" style="display: none;">
+                    <label class="form-label text-muted small">LWF State<span style="color:red">*</span></label>
+                    <select class="form-select form-select-sm" formControlName="LWFState">
+                        <option value="" disabled>Select</option>
+                    </select>
+                    <!-- <small
+                        *ngIf="employeeForm.get('LWFState')?.touched && employeeForm.get('LWFState')?.hasError('required')"
+                        style="color: red;">
+                        LWFState is required
+                    </small> -->
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Business Units Location<span
+                            style="color:red">*</span></label>
+                    <select class="form-select form-select-sm" formControlName="Businessunitlocation">
+                        <option value="" disabled>Select</option>
+                        <option *ngFor="let bul of Businessunit" [value]="bul.Entity_Id">{{
+                            bul.Location }}</option>
+                    </select>
+                    <small
+                        *ngIf="employeeForm.get('Businessunitlocation')?.touched && employeeForm.get('Businessunitlocation')?.hasError('required')"
+                        style="color: red;">
+                        Business Unit Location is required
+                    </small>
+                </div>
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Department<span style="color:red">*</span></label>
+                    <select class="form-select form-select-sm" formControlName="department">
+                        <option value="" disabled>Select</option>
+                        <option *ngFor="let depart of Department" [value]="depart.Department_Id">{{
+                            depart.Department_Name }}</option>
+
+                    </select>
+                    <small
+                        *ngIf="employeeForm.get('department')?.touched && employeeForm.get('department')?.hasError('required')"
+                        style="color: red;">
+                        Department is required
+                    </small>
+                </div>
+
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Work Location<span style="color:red">*</span></label>
+                    <input class="form-control form-control-sm" formControlName="worklocation">
+                    <small
+                        *ngIf="employeeForm.get('worklocation')?.touched && employeeForm.get('worklocation')?.hasError('required')"
+                        style="color: red;">
+                        Work Location is required
+                    </small>
+                </div>
+
+                <div class="col-md-3" style="display: none;">
+                    <label class="form-label text-muted small">User Group</label>
+                    <select class="form-select form-select-sm" formControlName="usergroup">
+                        <option value="" disabled>Select</option>
+                    </select>
+                    <!-- <small
+                        *ngIf="employeeForm.get('usergroup')?.touched && employeeForm.get('usergroup')?.hasError('required')"
+                        style="color: red;">
+                        usergroup is required
+                    </small> -->
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Designation<span style="color:red">*</span></label>
+                    <select class="form-select form-select-sm" formControlName="designation">
+                        <option value="" disabled>Select</option>
+                        <option *ngFor="let Design of Designation" [value]="Design.Designation_Id">{{
+                            Design.Designation_Name }}</option>
+                    </select>
+                    <small
+                        *ngIf="employeeForm.get('designation')?.touched && employeeForm.get('designation')?.hasError('required')"
+                        style="color: red;">
+                        Designation is required
+                    </small>
+                </div>
+
+                <div class="col-md-3" style="display: none;">
+                    <label class="form-label text-muted small">Ikya Location</label>
+                    <input class="form-control form-control-sm" formControlName="ikyalocation">
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Date of Resignation</label>
+                    <input class="form-control form-control-sm" type="date" formControlName="DateOfResignation">
+                </div>
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">DMS Id</label>
+                    <input class="form-control form-control-sm" formControlName="DMSId">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Billing Designation<span
+                            style="color:red">*</span></label>
+                    <select class="form-select form-select-sm" formControlName="Billingdesignation">
+                        <option value="" disabled>Select</option>
+                        <option *ngFor="let bu of Billingdesignation" [value]="bu.Entity_Id">{{ bu.Location }}</option>
+                    </select>
+                    <small
+                        *ngIf="employeeForm.get('Billingdesignation')?.touched && employeeForm.get('Billingdesignation')?.hasError('required')"
+                        style="color: red;">
+                        Billingdesignation is required
+                    </small>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">F&F Pay Period</label>
+                    <PayPeriod [selectedCompanyId]="selectedCompanyId" [payPeriodType]="payPeriodType"
+                        (payperiodEmit)="handleFFPayperiodEvent($event)" formControlName="FandFPayPeriod"></PayPeriod>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">ETDS Sequence</label>
+                    <input class="form-control form-control-sm" formControlName="ETDSSequence">
+                </div>
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-3" style="display: none;">
+                    <label class="form-label text-muted small">PT<span style="color:red">*</span></label>
+                    <div class="d-flex gap-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="PT" id="yes" [value]="true"
+                                formControlName="PT">
+                            <label class="form-check-label" for="yes">Yes</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="PT" id="no" [value]="false"
+                                formControlName="PT">
+                            <label class="form-check-label" for="no">No</label>
+                        </div>
+                    </div>
+                    <!-- <small *ngIf="employeeForm.get('PT')?.touched && employeeForm.get('PT')?.hasError('required')"
+                        style="color: red;">
+                        PT is required
+                    </small> -->
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Resign Pay Period</label>
+                    <PayPeriod [selectedCompanyId]="selectedCompanyId" [payPeriodType]="payPeriodType"
+                        (payperiodEmit)="handlePayperiodEvent($event)" formControlName="ResignPayPeriod"></PayPeriod>
+
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Contract Expiry Date</label>
+                    <input class="form-control form-control-sm" formControlName="Contractexpirydate">
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Active<span style="color:red">*</span></label>
+                    <div class="d-flex gap-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="Active" id="yes" [value]="true"
+                                formControlName="Active">
+                            <label class="form-check-label" for="yes">Yes</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="Active" id="no" [value]="false"
+                                formControlName="Active">
+                            <label class="form-check-label" for="no">No</label>
+                        </div>
+                        <small
+                            *ngIf="employeeForm.get('Active')?.touched && employeeForm.get('Active')?.hasError('required')"
+                            style="color: red;">
+                            Active is required
+                        </small>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Last Working Days</label>
+                    <input class="form-control form-control-sm" type="date" formControlName="Lastworkingdays">
+
+                </div>
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Group Name</label>
+                    <select class="form-select form-select-sm" formControlName="groupname">
+                        <option value="" disabled>Select</option>
+                        <option *ngFor="let gn of groupname" [value]="gn.Group_Detail_Id">{{
+                            gn.Group_Name }}</option>
+
+                    </select>
+                </div>
+                <div class="col-md-3" style="display: none;">
+                    <label class="form-label text-muted small">Metro City<span style="color:red">*</span></label>
+                    <div class="d-flex gap-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="Metrocity" id="yes" [value]="true"
+                                formControlName="Metrocity">
+                            <label class="form-check-label" for="yes">Yes</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="Metrocity" id="no" [value]="false"
+                                formControlName="Metrocity">
+                            <label class="form-check-label" for="no">No</label>
+                        </div>
+                        <!-- <small
+                            *ngIf="employeeForm.get('Metrocity')?.touched && employeeForm.get('Metrocity')?.hasError('required')"
+                            style="color: red;">
+                            Metrocity is required
+                        </small> -->
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Black Listed</label>
+                    <div class="d-flex gap-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="blacklisted" id="yes" [value]="true"
+                                formControlName="blacklisted">
+                            <label class="form-check-label" for="yes">Yes</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="blacklisted" id="no" [value]="false"
+                                formControlName="blacklisted">
+                            <label class="form-check-label" for="no">No</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Reason of Leaving</label>
+                    <input class="form-control form-control-sm" formControlName="ROL">
+
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Hiring Status<span style="color:red">*</span></label>
+                    <select class="form-select form-select-sm" formControlName="Hiringstatus">
+                        <option value="" disabled>Select</option>
+                        <option *ngFor="let hstatus of Hiringstatus" [value]="hstatus">{{ hstatus }}</option>
+
+                    </select>
+                    <small
+                        *ngIf="employeeForm.get('Hiringstatus')?.touched && employeeForm.get('Hiringstatus')?.hasError('required')"
+                        style="color: red;">
+                        Hiringstatus is required
+                    </small>
+                </div>
+            </div>
+            <div class="row g-3 mb-3">
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">PF<span style="color:red">*</span></label>
+                    <div class="d-flex gap-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="PF" id="yes" [value]="true"
+                                formControlName="PF">
+                            <label class="form-check-label" for="yes">Yes</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="PF" id="no" [value]="false"
+                                formControlName="PF">
+                            <label class="form-check-label" for="no">No</label>
+                        </div>
+                        <small *ngIf="employeeForm.get('PF')?.touched && employeeForm.get('PF')?.hasError('required')"
+                            style="color: red;">
+                            PF is required
+                        </small>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Report Manager</label>
+                    <input class="form-control form-control-sm" formControlName="Reportmanager">
+
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Deputee Id</label>
+                    <input class="form-control form-control-sm" formControlName="Deputeeid">
+                </div>
+
+                <div class="col-md-3" style="display: none;">
+                    <label class="form-label text-muted small">ESI<span style="color:red">*</span></label>
+                    <div class="d-flex gap-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="ESI" id="yes" [value]="true"
+                                formControlName="ESI">
+                            <label class="form-check-label" for="yes">Yes</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="ESI" id="no" [value]="false"
+                                formControlName="ESI">
+                            <label class="form-check-label" for="no">No</label>
+                        </div>
+                        <!-- <small
+                            *ngIf="employeeForm.get('ESI')?.touched && employeeForm.get('ESI')?.hasError('required')"
+                            style="color: red;">
+                            ESI is required
+                        </small> -->
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Report Head Email</label>
+                    <input class="form-control form-control-sm" formControlName="Reportheademail">
+
+                </div>
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">ReJoinee Date</label>
+                    <input class="form-control form-control-sm" type="date" formControlName="Rejoineedate">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Insurance<span style="color:red">*</span></label>
+                    <div class="d-flex gap-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="Insurance" id="yes" [value]="true"
+                                formControlName="Insurance">
+                            <label class="form-check-label" for="yes">Yes</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="Insurance" id="no" [value]="false"
+                                formControlName="Insurance">
+                            <label class="form-check-label" for="no">No</label>
+                        </div>
+                        <small
+                            *ngIf="employeeForm.get('Insurance')?.touched && employeeForm.get('Insurance')?.hasError('required')"
+                            style="color: red;">
+                            Insurance is required
+                        </small>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Business Head</label>
+                    <input class="form-control form-control-sm" formControlName="Businesshead">
+
+                </div>
+
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">ReJoin Month</label>
+                    <input class="form-control form-control-sm" formControlName="Rejoinmonth" readonly>
+                </div>
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Stop Payment<span style="color:red">*</span></label>
+                    <div class="d-flex gap-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="stoppayment" id="yes" [value]="true"
+                                formControlName="stoppayment">
+                            <label class="form-check-label" for="yes">Yes</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="stoppayment" id="no" [value]="false"
+                                formControlName="stoppayment">
+                            <label class="form-check-label" for="no">No</label>
+                        </div>
+                        <small
+                            *ngIf="employeeForm.get('stoppayment')?.touched && employeeForm.get('stoppayment')?.hasError('required')"
+                            style="color: red;">
+                            stoppayment is required
+                        </small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Axpert ID</label>
+                    <input class="form-control form-control-sm" formControlName="axpertid">
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Blood Group</label>
+                    <select class="form-select form-select-sm" formControlName="bloodgroup">
+                        <option value="" disabled>Select</option>
+                        <option *ngFor="let blood of Bloodgroup" [value]="blood">{{ blood }}</option>
+                    </select>
+                </div>
+
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Employment Type</label>
+                    <select class="form-select form-select-sm" formControlName="employmenttype">
+                        <option value="">Select</option>
+                        <option *ngFor="let employy of employmenttype" [value]="employy.ID">
+                            {{ employy.Employment_Type }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="row g-3 mb-3">
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Abscond Reporting Date</label>
+                    <input class="form-control form-control-sm" type="date" formControlName="Abscondreportingdate">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Date of Death</label>
+                    <input class="form-control form-control-sm" type="date" formControlName="DOD">
+                </div>
+
+                <div class="col-md-3" style="display: none;">
+                    <label class="form-label text-muted small">Tax Regime<span style="color:red">*</span></label>
+                    <div class="d-flex gap-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="TaxRegime" id="New" value="New"
+                                formControlName="TaxRegime">
+                            <label class="form-check-label" for="New">New</label>
+                        </div>
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="TaxRegime" id="old" value="old"
+                                formControlName="TaxRegime">
+                            <label class="form-check-label" for="old">old</label>
+                        </div>
+                        <!-- <small
+                            *ngIf="employeeForm.get('TaxRegime')?.touched && employeeForm.get('TaxRegime')?.hasError('required')"
+                            style="color: red;">
+                            TaxRegime is required
+                        </small> -->
+                    </div>
+
+                </div>
+
+                <div class="col-md-3" style="display: none;">
+                    <label class="form-label text-muted small">Vertical</label>
+                    <select class="form-select form-select-sm" formControlName="Vertical">
+                        <option value="" disabled>Select</option>
+                    </select>
+                </div>
+                <div class="col-md-3" style="display: none;">
+                    <label class="form-label text-muted small">Product</label>
+                    <select class="form-select form-select-sm" formControlName="Product">
+                        <option value="" disabled>Select</option>
+                    </select>
+                </div>
+                <div class="col-md-3" style="display: none;">
+                    <label class="form-label text-muted small">Channel</label>
+                    <select class="form-select form-select-sm" formControlName="Channel">
+                        <option value="" disabled>Select</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3" style="display: none;">
+                    <label class="form-label text-muted small">Sub Vertical</label>
+                    <select class="form-select form-select-sm" formControlName="subvertical">
+                        <option value="" disabled>Select</option>
+                    </select>
+                </div>
+            </div>
+        </mat-card-content>
+
+        <mat-card-footer class="footer">
+            <br />
+            <div class="row g-3 mb-3">
+                <div class="col-md-2">
+                    <label class="form-label text-muted big d-block"
+                        style="cursor: pointer; font-size: 15px; text-align: center; color: blue !important; text-decoration: underline;"
+                        (click)="InfoOpen()">Information</label>
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label text-muted big d-block"
+                        style="cursor: pointer; font-size: 15px; text-align: center; color: blue !important; text-decoration: underline;"
+                        (click)="ContactdetailsOpen()">Contact Details</label>
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label text-muted big d-block"
+                        style="cursor: pointer; font-size: 15px; text-align: center; color: blue !important; text-decoration: underline;"
+                        (click)="PersonaldetailsOpen()">Personal Details</label>
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label text-muted big d-block"
+                        style="cursor: pointer; font-size: 15px; text-align: center; color: blue !important; text-decoration: underline;"
+                        (click)="BankdetailsOpen()">Bank Details</label>
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label text-muted big d-block"
+                        style="cursor: pointer; font-size: 15px; text-align: center; color: blue !important; text-decoration: underline; white-space: nowrap;"
+                        (click)="PreviousemployementOpen()">Previous Employment</label>
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label text-muted big d-block"
+                        style="cursor: pointer; font-size: 15px; text-align: center; color: blue !important; text-decoration: underline;"
+                        (click)="SalaryDetailsOpen()">Salary</label>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end mt-3">
+                <div class="btn-1"
+                    style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
+
+                    <button type="Cancel"
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;">
+                        Cancel
+                    </button>
+
+                    <button type="submit"
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white; "
+                        (click)="onsave()">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </mat-card-footer>
+    </mat-card>
+</form>

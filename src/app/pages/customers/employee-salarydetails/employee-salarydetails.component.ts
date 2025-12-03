@@ -1,0 +1,100 @@
+import { Component, Inject, Input, ViewChild } from '@angular/core';
+import { MatTableDataSource, MatTableModule } from "@angular/material/table";
+import { MatIconModule } from "@angular/material/icon";
+import { MatCardModule } from "@angular/material/card";
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { EmployeeService } from '../../../Service/CUSTOMER/employee.service';
+
+@Component({
+  selector: 'app-employee-salarydetails',
+  standalone: true,
+  imports: [MatTableModule, MatIconModule, MatCardModule, MatPaginatorModule, CommonModule, FormsModule, ReactiveFormsModule, MatSortModule],
+  templateUrl: './employee-salarydetails.component.html',
+  styleUrl: './employee-salarydetails.component.css'
+})
+export class EmployeeSalarydetailsComponent {
+  @Input() salaryData: any;  // Input property to receive data
+  employeesalary!: FormGroup;
+
+  displayedColumns: string[] = [
+    'sno',
+    'Paycode',
+    'Description',
+    'Amount',
+    'AmountperAnnum'
+  ];
+
+  dataSource = new MatTableDataSource<any>([]); // For table data
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+  submitted: any;
+  rowData: any;
+
+  constructor(
+    private fb: FormBuilder,
+    private dialogRef: MatDialogRef<EmployeeSalarydetailsComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private service: EmployeeService
+  ) {
+    console.log("Received Salary Data:", data);
+
+    this.rowData = data.rowData;
+  }
+
+
+  ngOnInit(): void {
+    this.initializeForm();
+    this.loadSalaryDetails();
+  }
+
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
+
+  initializeForm() {
+    this.employeesalary = this.fb.group({
+      companycode: ['', Validators.required],
+      payrolltype: ['', Validators.required],
+      empcode: ['', Validators.required],
+      Empname: ['', Validators.required],
+      paycategory: [''],
+      totalctc: [''],
+      Effectivedate: ['', Validators.required],
+      DOJ: ['', Validators.required],
+      appliedon: [''],
+      per: ['', Validators.required]
+    });
+  }
+
+  loadSalaryDetails() {
+    this.service.SalarySearch(this.rowData.Employee_Id).subscribe((res: any) => {
+      let salaryData = res.Data.data.Table0;
+
+      if (!salaryData || salaryData.length === 0) return;
+
+      let first = salaryData[0];
+
+
+      this.employeesalary.patchValue({
+        empcode: first.Employee_Code ?? '',
+        Effectivedate: first.Effective_Date?.substring(0, 10) ?? '',
+        appliedon: first.Applied_On?.substring(0, 10) ?? '',
+      });
+
+      this.dataSource.data = salaryData;
+    });
+  }
+
+
+
+
+  onClose(): void {
+    this.dialogRef.close();
+  }
+}

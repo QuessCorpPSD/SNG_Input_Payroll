@@ -1,0 +1,52 @@
+.custom-card {
+    overflow: hidden;
+    /* prevent full scroll */
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 10px;
+}
+
+.scroll-content {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.sticky-header {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: left;
+}
+
+/* mat-card-footer.footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+
+} */
+.no-border-icon {
+    border: none;
+    background-color: white;
+
+}
+
+.menu-container {
+    display: flex;
+    gap: 20px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.menu-item {
+    padding: 5px 10px;
+    color: #666;
+}
+
+.menu-item.active {
+    color: #302CB3;
+    border-bottom: 2px solid #302CB3;
+}
