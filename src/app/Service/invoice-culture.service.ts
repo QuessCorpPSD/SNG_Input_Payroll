@@ -56,6 +56,17 @@ export class InvoiceCultureService implements Iinvoiceculture {
       environment.apiUrl + `InvoiceCulture/GetAllInvoiceCulture/` + companyId);
 
   }
+
+  UploadInvoiceCulture(formData: FormData): Observable<APIResponse> {
+    const url = `${environment.apiUrl}InvoiceCulture/PostUploadInvoiceCulture`;
+    console.log(url);
+    return this.http.post<APIResponse>(url, formData);
+  }
+
+  ExportToExcel(userId: number) {
+    return this.http.get<APIResponse>(
+      environment.apiUrl + `InvoiceCulture/InvoiceCultureExport/` + userId);
+  }
 }
 
 

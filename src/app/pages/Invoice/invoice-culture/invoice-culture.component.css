@@ -71,24 +71,6 @@
     height: 30px;
   }
 
-  /* Hover effect for rows */
-  ::ng-deep .mat-row:hover {
-    background-color: #f9f9f9 !important;
-    transition: background 0.2s ease-in-out;
-  }
-
-  /* Header Row */
-  ::ng-deep .mat-header-row {
-    height: 32px !important;
-    background-color: #f5f5f5 !important;
-    border-bottom: 1px solid #ddd;
-  }
-
-  /* Row Heights */
-  ::ng-deep .mat-row {
-    height: 32px !important;
-  }
-
   .table-wrapper1 {
     display: flex;
     flex-direction: column;
@@ -137,45 +119,9 @@
   .custom-table {
     width: max-content;
     /* grows to fit all columns */
-    min-width: 100%;
+    /* min-width: 100%; */
     /* ensures full width when few columns */
     table-layout: auto !important;
-  }
-
-  /* ===== Header Cells ===== */
-  ::ng-deep .mat-mdc-header-cell {
-    background-color: #f5f5f5 !important;
-    color: #555 !important;
-    font-size: 13px;
-    font-family: "Nunito Sans", sans-serif;
-    font-weight: 600;
-    border-right: 1px solid #ddd;
-    display: flex;
-    justify-content: left;
-    align-items: center;
-    text-align: center;
-    height: 32px !important;
-    min-width: 140px;
-    /* ensures consistent width for scrolling */
-    white-space: nowrap;
-  }
-
-  /* ===== Body Cells ===== */
-  ::ng-deep .mat-mdc-cell {
-    font-family: "Nunito Sans", sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    color: #222;
-    border-bottom: 1px dashed #E8E8E8 !important;
-    border-right: 1px solid #ddd;
-    display: flex;
-    justify-content: left;
-    align-items: center;
-    text-align: center;
-    padding: 0 10px;
-    height: 30px;
-    min-width: 140px;
-    white-space: nowrap;
   }
 
 
@@ -220,12 +166,12 @@
   /* ===== Responsive ===== */
   @media (max-width: 768px) {
 
-    ::ng-deep .mat-mdc-header-cell,
+    /* ::ng-deep .mat-mdc-header-cell,
     ::ng-deep .mat-mdc-cell {
       font-size: 11px;
       padding: 4px 6px;
       min-width: 100px;
-    }
+    } */
 
     .custom-table {
       min-width: 800px;
@@ -233,5 +179,9 @@
 
     .table-scroll {
       max-width: 100%;
+    }
+
+    .fixed-width-column{
+      width: 15px;
     }
   }

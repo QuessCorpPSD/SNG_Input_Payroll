@@ -9,6 +9,8 @@ export interface Iinvoiceculture {
     InvoiceType(): Observable<APIResponse>
     postInvoiceCulture(payload: any): Observable<APIResponse>
     InvoiceCategory(): Observable<APIResponse>
-
+    InvoiceCategory(): Observable<APIResponse>
+    UploadInvoiceCulture(formData:FormData): Observable<APIResponse>
+    ExportToExcel(userId: number):Observable<APIResponse>
 }
 

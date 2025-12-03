@@ -20,11 +20,14 @@
         <mat-icon>table_chart</mat-icon>
       </button>
 
-      <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Import">
+      <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Import"
+        (click)="FileUpload(fileInput)">
+        <input type="file" #fileInput style="display: none;" (change)="onFileChange($event)" accept=".xlsx, .xls" />
         <mat-icon>cloud_upload</mat-icon>
       </button>
 
-      <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Template">
+      <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Template"
+        (click)="DownloadTemplate()">
         <mat-icon>cloud_download</mat-icon>
       </button>
 
@@ -38,6 +41,13 @@
   <div class="table-scroll">
 
     <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+      <ng-container matColumnDef="delete">
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="fixed-width-column"></mat-header-cell>
+        <mat-cell *matCellDef="let element" class="fixed-width-column">
+          <img src="assets/delete.svg" style="cursor: pointer; width: 24px; height: 22px;"
+            (click)="deleteClick(element.invoiceCulture_id, element.invoiceType)" />
+        </mat-cell>
+      </ng-container>
 
       <ng-container matColumnDef="company_Id">
         <mat-header-cell *matHeaderCellDef>company_Id</mat-header-cell>
@@ -58,7 +68,7 @@
         <mat-header-cell *matHeaderCellDef>cost_Center_Mapping_Id</mat-header-cell>
         <mat-cell *matCellDef="let element">{{ element.cost_Center_Mapping_Id }}</mat-cell>
       </ng-container>
-      
+
       <ng-container matColumnDef="invoiceCul_Ref_No">
         <mat-header-cell *matHeaderCellDef>invoiceCul Ref No</mat-header-cell>
         <mat-cell *matCellDef="let element">{{ element.invoiceCul_Ref_No }}</mat-cell>
