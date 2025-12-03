@@ -1,0 +1,83 @@
+<form [formGroup]="suppPerForm">
+    <br />
+
+    <!-- ROW 1 -->
+    <div class="row g-3 mb-3">
+        <div class="col-md-4">
+            <label class="form-label text-muted small">Map Name *</label>
+            <select class="form-select form-select-sm" formControlName="mapName">
+                <option value="">Select</option>
+                <option *ngFor="let item of mapNameList" [value]="item.cost_Center_Mapping_Id">
+                    {{ item.map_Name }}
+                </option>
+            </select>
+            <small class="text-danger" *ngIf="showErrors && suppPerForm.get('mapName')?.invalid">
+                Map Name is required
+            </small>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label text-muted small">Paycode *</label>
+            <input type="text" class="form-control form-control-sm" formControlName="paycode" />
+            <small class="text-danger" *ngIf="showErrors && suppPerForm.get('paycode')?.invalid">
+                Paycode is required
+            </small>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label text-muted small">Value *</label>
+            <input type="text" class="form-control form-control-sm" formControlName="value"
+                (input)="allowNumbersOnly($event)" />
+            <small class="text-danger" *ngIf="showErrors && suppPerForm.get('value')?.invalid">
+                Value is required
+            </small>
+        </div>
+    </div>
+
+    <!-- ROW 2 -->
+    <div class="row g-3 mb-3">
+        <div class="col-md-4">
+            <label class="form-label text-muted small">Max Amount *</label>
+            <input type="text" class="form-control form-control-sm" formControlName="maxAmount"
+                (input)="allowNumbersOnly($event)" />
+            <small class="text-danger" *ngIf="showErrors && suppPerForm.get('maxAmount')?.invalid">
+                Max Amount is required
+            </small>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label text-muted small">Effective Date *</label>
+            <input type="date" class="form-control form-control-sm" formControlName="startDate" />
+            <small class="text-danger" *ngIf="showErrors && suppPerForm.get('startDate')?.invalid">
+                Effective Date is required
+            </small>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label text-muted small">Marginal Paycode<span class="text-danger">*</span></label>
+            <select class="form-select form-select-sm" formControlName="marginalPaycode">
+                <option value="">Select</option>
+            </select>
+            <small class="text-danger" *ngIf="showErrors && suppPerForm.get('marginalPaycode')?.invalid">
+                Marginal Paycode is required
+            </small>
+        </div>
+    </div>
+    <br />
+
+    <!-- BUTTONS -->
+    <div class="d-flex justify-content-end mt-3">
+        <div class="btn-1"
+            style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
+            <button type="button" (click)="onReset()"
+                style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;">
+                Cancel
+            </button>
+
+            <button type="button" (click)="onSubmit()"
+                style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white;">
+                Save
+            </button>
+        </div>
+    </div>
+</form>

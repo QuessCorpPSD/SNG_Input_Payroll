@@ -1,0 +1,15 @@
+<div class="col-md-12">
+
+    <label class="form-label text-muted small">NAPS Service Fee</label>
+
+    <select class="form-select form-select-sm w-100"
+            [(ngModel)]="selectedNapsType"
+            (change)="onNapsChange()">
+
+        <option value="">Select</option>
+        <option value="fixed">Fixed</option>
+        <option value="percentage">Percentage</option>
+
+    </select>
+
+</div>

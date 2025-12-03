@@ -1,0 +1,149 @@
+<form [formGroup]="sourcingForm">
+    <br />
+
+    <!-- ROW 1 -->
+    <div class="row g-3 mb-3">
+
+        <div class="col-md-4">
+            <label class="form-label text-muted small">Type <span class="text-danger">*</span></label>
+            <select class="form-select form-select-sm" formControlName="type">
+                <option value="">Select</option>
+            </select>
+            <small class="text-danger" *ngIf="showErrors && sourcingForm.get('type')?.invalid">
+                Type is required
+            </small>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label text-muted small">Paycode <span class="text-danger">*</span></label>
+            <input type="text" class="form-control form-control-sm" formControlName="paycode">
+            <small class="text-danger" *ngIf="showErrors && sourcingForm.get('paycode')?.invalid">
+                Paycode is required
+            </small>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label text-muted small">Value<span class="text-danger">*</span></label>
+            <input type="text" class="form-control form-control-sm" formControlName="value">
+            <small class="text-danger" *ngIf="showErrors && sourcingForm.get('value')?.invalid">
+                Value is required
+            </small>
+        </div>
+
+    </div>
+
+    <!-- ROW 2 -->
+    <div class="row g-3 mb-3">
+
+        <div class="col-md-4">
+            <label class="form-label text-muted small">Map Name<span class="text-danger">*</span></label>
+            <select class="form-select form-select-sm" formControlName="mapName">
+                <option value="">Select</option>
+            </select>
+            <small class="text-danger" *ngIf="showErrors && sourcingForm.get('mapName')?.invalid">
+                Map Name is required
+            </small>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label text-muted small">Replacement Clause<span class="text-danger">*</span></label>
+            <select class="form-select form-select-sm" formControlName="replacementClause">
+                <option value="">Select</option>
+            </select>
+            <small class="text-danger" *ngIf="showErrors && sourcingForm.get('replacementClause')?.invalid">
+                Replacement Clause is required
+            </small>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label text-muted small">Replacement<span class="text-danger">*</span></label>
+            <input type="text" class="form-control form-control-sm" formControlName="replacement">
+            <small class="text-danger" *ngIf="showErrors && sourcingForm.get('replacement')?.invalid">
+                Replacement is required
+            </small>
+        </div>
+
+    </div>
+
+    <!-- ROW 3 -->
+    <div class="row g-3 mb-3">
+
+        <div class="col-md-4">
+            <label class="form-label text-muted small">Sourcing Waiting <span class="text-danger">*</span></label>
+            <input type="number" class="form-control form-control-sm" formControlName="sourcingWaiting">
+            <small class="text-danger" *ngIf="showErrors && sourcingForm.get('sourcingWaiting')?.invalid">
+                Sourcing Waiting is required
+            </small>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label text-muted small">Sourcing Value<span class="text-danger">*</span></label>
+            <input type="number" class="form-control form-control-sm" formControlName="sourcingValue">
+            <small class="text-danger" *ngIf="showErrors && sourcingForm.get('sourcingValue')?.invalid">
+                Sourcing Value is required
+            </small>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label text-muted small">Criteria Value <span class="text-danger">*</span></label>
+            <input type="number" class="form-control form-control-sm" formControlName="criteriaValue">
+            <small class="text-danger" *ngIf="showErrors && sourcingForm.get('criteriaValue')?.invalid">
+                Criteria Value is required
+            </small>
+        </div>
+
+    </div>
+
+    <!-- ROW 4 -->
+    <div class="row g-3 mb-3">
+
+        <div class="col-md-4">
+            <label class="form-label text-muted small">TAT Days <span class="text-danger">*</span></label>
+            <input type="number" class="form-control form-control-sm" formControlName="tatDays">
+            <small class="text-danger" *ngIf="showErrors && sourcingForm.get('tatDays')?.invalid">
+                TAT Days are required
+            </small>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Effective Date <span class="text-danger">*</span></label>
+            <input type="date" class="form-control" formControlName="startDate">
+            <small class="text-danger" *ngIf="showErrors && sourcingForm.get('startDate')?.invalid">
+                Effective Date is required
+            </small>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label text-muted small">Category<span class="text-danger">*</span></label>
+            <select class="form-select form-select-sm" formControlName="category">
+                <option value="">Select</option>
+            </select>
+            <small class="text-danger" *ngIf="showErrors && sourcingForm.get('category')?.invalid">
+                Category is required
+            </small>
+        </div>
+
+    </div>
+    <br/>
+
+    <!-- BUTTONS -->
+    <div class="d-flex justify-content-end mt-3">
+
+        <div class="btn-1"
+            style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
+
+            <button type="button" (click)="onReset()"
+                style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;">
+                Cancel
+            </button>
+
+
+            <button type="button"(click)="onSubmit()"
+                style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white;">
+                Save
+            </button>
+
+        </div>
+
+    </div>
+</form>

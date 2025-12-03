@@ -1,0 +1,63 @@
+/* NEW BOX FOR SLAB SECTION */
+.slab-box {
+    width: 100%;
+    max-width: 1500px;
+    /* Same look as service charge boxes */
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 16px;
+    padding: 32px 40px;
+    margin-top: 15px;
+    margin-left: 0;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+/* Prevent center alignment */
+.slab-box-wrapper {
+    width: 100%;
+    display: block;
+}
+
+.slab-box .col-12,
+.slab-box .col-md-6,
+.slab-box .col-md-4 {
+    display: block;
+}
+
+/* Move the dropdown further to the left */
+.same-col {
+    width: 265px;
+    max-width: 265px;
+    padding-left: 0;
+
+    margin-left: -1px;
+    /* Move 30px to the left */
+}
+
+
+/* .shift-right {
+    padding-left: 0;
+    margin-left: -30px;
+
+} */
+
+.shift-right {
+    padding-left: 70px;
+}
+
+.big-box {
+    width: 200px !important;
+    
+}
+
+.fixed-type-wrapper {
+    width: 330px !important;
+    max-width: 330px !important;
+    flex: 0 0 330px !important;
+}
+
+.Percentage-type-wrapper {
+    width: 325px !important;
+    max-width: 325px !important;
+    flex: 0 0 325px !important;
+}

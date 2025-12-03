@@ -1,0 +1,149 @@
+<form [formGroup]="ctcForm">
+
+    <br />
+    <br />
+
+    <mat-card-content>
+
+        <!-- ROW 1 -->
+        <div class="row g-3 mb-3">
+
+            <div class="col-md-4">
+                <label class="form-label text-muted small">Map Name <span class="text-danger">*</span></label>
+                <select class="form-select form-select-sm" formControlName="mapName">
+                    <option value="">Select</option>
+                </select>
+                <small class="text-danger" *ngIf="showErrors && ctcForm.get('mapName')?.invalid">
+                    Map Name is required
+                </small>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label text-muted small">Value <span class="text-danger">*</span></label>
+                <input type="text" class="form-control form-control-sm" formControlName="value" />
+                <small class="text-danger" *ngIf="showErrors && ctcForm.get('value')?.invalid">
+                    Value is required
+                </small>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label text-muted small">Prorate <span class="text-danger">*</span></label>
+                <select class="form-select form-select-sm" formControlName="prorate">
+                    <option value="">Select</option>
+                </select>
+                <small class="text-danger" *ngIf="showErrors && ctcForm.get('prorate')?.invalid">
+                    Prorate is required
+                </small>
+            </div>
+
+        </div>
+
+        <!-- ROW 2 -->
+        <div class="row g-3 mb-3">
+
+            <div class="col-md-4">
+                <label class="form-label text-muted small">FAndF Prorate <span class="text-danger">*</span></label>
+                <select class="form-select form-select-sm" formControlName="ffProrate">
+                    <option value="">Select</option>
+                </select>
+                <small class="text-danger" *ngIf="showErrors && ctcForm.get('ffProrate')?.invalid">
+                    This field is required
+                </small>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label text-muted small">FAndF Arrear Prorate <span
+                        class="text-danger">*</span></label>
+                <select class="form-select form-select-sm" formControlName="ffArrearProrate">
+                    <option value="">Select</option>
+                </select>
+                <small class="text-danger" *ngIf="showErrors && ctcForm.get('ffArrearProrate')?.invalid">
+                    This field is required
+                </small>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label text-muted small">NewJoinee Prorate <span class="text-danger">*</span></label>
+                <select class="form-select form-select-sm" formControlName="newJoineeProrate">
+                    <option value="">Select</option>
+                </select>
+                <small class="text-danger" *ngIf="showErrors && ctcForm.get('newJoineeProrate')?.invalid">
+                    This field is required
+                </small>
+            </div>
+
+        </div>
+
+        <!-- ROW 3 -->
+        <div class="row g-3 mb-3">
+
+            <div class="col-md-4">
+                <label class="form-label text-muted small">NewJoinee Arrear Prorate <span
+                        class="text-danger">*</span></label>
+                <select class="form-select form-select-sm" formControlName="newJoineeArrearProrate">
+                    <option value="">Select</option>
+                </select>
+                <small class="text-danger" *ngIf="showErrors && ctcForm.get('newJoineeArrearProrate')?.invalid">
+                    This field is required
+                </small>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label text-muted small">Effective Date <span class="text-danger">*</span></label>
+                <input type="date" class="form-control form-control-sm" formControlName="startDate" />
+                <small class="text-danger" *ngIf="showErrors && ctcForm.get('startDate')?.invalid">
+                    Effective Date is required
+                </small>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label text-muted small">Compliance Fee <span class="text-danger">*</span></label>
+                <input type="text" class="form-control form-control-sm" formControlName="complianceFee" />
+                <small class="text-danger" *ngIf="showErrors && ctcForm.get('complianceFee')?.invalid">
+                    Compliance Fee is required
+                </small>
+            </div>
+
+        </div>
+
+        <!-- ROW 4 -->
+        <div class="row g-3 mb-3">
+
+            <div class="col-md-4">
+                <label class="form-label text-muted small">Randstad Fee <span class="text-danger">*</span></label>
+                <input type="text" class="form-control form-control-sm" formControlName="randstadFee" />
+                <small class="text-danger" *ngIf="showErrors && ctcForm.get('randstadFee')?.invalid">
+                    Randstad Fee is required
+                </small>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label text-muted small">Upfront Fee Type <span class="text-danger">*</span></label>
+                <select class="form-select form-select-sm" formControlName="upfrontFeeType">
+                    <option value="">Select</option>
+                </select>
+                <small class="text-danger" *ngIf="showErrors && ctcForm.get('upfrontFeeType')?.invalid">
+                    Upfront Fee Type is required
+                </small>
+            </div>
+
+        </div>
+
+    </mat-card-content>
+
+    <!-- FOOTER BUTTONS -->
+    <div class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">
+
+        <button type="button" (click)="onReset()" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+        cursor: pointer; background-color: #f0f0f0; color: black;">
+            Cancel
+        </button>
+
+        <button type="button" (click)="onSubmit()" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+        cursor: pointer; background-color: blue; color: white;">
+            Save
+        </button>
+
+    </div>
+
+</form>

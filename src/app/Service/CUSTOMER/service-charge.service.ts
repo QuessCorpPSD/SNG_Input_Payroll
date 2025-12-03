@@ -22,8 +22,24 @@ export class ServiceChargeService implements IServiceCharge {
   GetServiceCharge(): Observable<APIResponse> {
     return this.http.get<APIResponse>(this.env.apiUrl + 'ServiceCharge/servicechargemaster')
   }
-    GetServicechargetype(companyid:any): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.env.apiUrl + 'ServiceCharge/servicechargetype/'+ companyid)
+  GetServicechargetype(companyid: any): Observable<APIResponse> {
+    return this.http.get<APIResponse>(this.env.apiUrl + 'ServiceCharge/servicechargetype/' + companyid)
   }
 
+  GetSearch(): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      this.env.apiUrl + 'Company/Search'
+    );
+  }
+  GetCostCenterMapping(): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      this.env.apiUrl + 'CostCenterMapping/GetAllCostCentertDetails/1'
+    );
+  }
+  SaveServiceCharge(request: any): Observable<APIResponse> {
+    return this.http.post<APIResponse>(
+      environment.apiUrl + 'ServiceCharge/Create',
+      request
+    );
+  }
 }

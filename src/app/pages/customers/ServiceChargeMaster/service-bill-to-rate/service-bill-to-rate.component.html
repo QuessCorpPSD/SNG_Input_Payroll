@@ -1,0 +1,150 @@
+<form [formGroup]="billRateForm">
+
+    <br />
+
+    <mat-card-content>
+
+        <!-- ROW 1 -->
+        <div class="row g-3 mb-3">
+
+            <div class="col-md-4">
+                <label class="form-label text-muted small">Billing Category <span class="text-danger">*</span></label>
+                <select class="form-select form-select-sm" formControlName="billingCategory">
+                    <option value="">Select</option>
+                    <option *ngFor="let item of mapNameList" [value]="item.cost_Center_Mapping_Id">
+                        {{ item.map_Name }}
+                    </option>
+                </select>
+                <small class="text-danger" *ngIf="showErrors && billRateForm.get('mapName')?.invalid">Map Name is
+                    required</small>
+            </div>
+
+
+            <div class="col-md-4">
+                <label class="form-label text-muted small">Unit Price <span class="text-danger">*</span></label>
+                <input type="text" class="form-control form-control-sm" formControlName="unitPrice"
+                    (input)="allowNumbersOnly($event)">
+                <small class="text-danger" *ngIf="showErrors && billRateForm.get('unitPrice')?.invalid">
+                    Unit Price is required
+                </small>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label text-muted small">Unit Type<span class="text-danger">*</span></label>
+                <select class="form-select form-select-sm" formControlName="unitType">
+                    <option value="">Select</option>
+                </select>
+                <small class="text-danger" *ngIf="showErrors && billRateForm.get('unitType')?.invalid">
+                    Unit Type is required
+                </small>
+            </div>
+
+        </div>
+
+
+        <!-- ROW 2 -->
+        <div class="row g-3 mb-3">
+
+            <div class="col-md-4">
+                <label class="form-label text-muted small">Invoice Category <span class="text-danger">*</span></label>
+                <select class="form-select form-select-sm" formControlName="invoiceCategory">
+                    <option value="">Select</option>
+                    <option value="Single">Single</option>
+                    <option value="Separate">Separate</option>
+                </select>
+                <small class="text-danger" *ngIf="showErrors && billRateForm.get('invoiceCategory')?.invalid">
+                    Invoice Category is required
+                </small>
+            </div>
+
+
+            <div class="col-md-4">
+                <label class="form-label text-muted small">Map Name <span class="text-danger">*</span></label>
+                <select class="form-select form-select-sm" formControlName="mapName">
+                    <option value="">Select</option>
+                    <option *ngFor="let item of mapNameList" [value]="item.cost_Center_Mapping_Id">
+                        {{ item.map_Name }}
+                    </option>
+                </select>
+                <small class="text-danger" *ngIf="showErrors && billRateForm.get('mapName')?.invalid">Map Name is
+                    required</small>
+            </div>
+
+
+
+            <div class="col-md-4">
+                <label class="form-label">Effective Date <span class="text-danger">*</span></label>
+                <input type="date" class="form-control" formControlName="startDate" />
+                <small class="text-danger" *ngIf="showErrors && billRateForm.get('startDate')?.invalid">
+                    Effective Date is required
+                </small>
+            </div>
+
+        </div>
+
+
+        <!-- ROW 3 -->
+        <div class="row g-3 mb-3">
+
+            <div class="col-md-4">
+                <label class="form-label text-muted small">Discount Type <span class="text-danger">*</span></label>
+                <select class="form-select form-select-sm" formControlName="discountType">
+                    <option value="">Select</option>
+                    <option value="Fixed">Fixed</option>
+                    <option value="Percentage">Percentage</option>
+                </select>
+                <small class="text-danger" *ngIf="showErrors && billRateForm.get('discountType')?.invalid">
+                    Discount Type is required
+                </small>
+            </div>
+
+
+            <div class="col-md-4">
+                <label class="form-label text-muted small">Discount Amount<span class="text-danger">*</span></label>
+                <input type="text" class="form-control form-control-sm" formControlName="discountAmount"
+                    (input)="allowNumbersOnly($event)">
+                <small class="text-danger" *ngIf="showErrors && billRateForm.get('discountAmount')?.invalid">
+                    Discount Amount is required
+                </small>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label text-muted small">Prorate <span class="text-danger">*</span></label>
+                <select class="form-select form-select-sm" formControlName="prorate">
+                    <option value="">Select</option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>
+                <small class="text-danger" *ngIf="showErrors && billRateForm.get('prorate')?.invalid">
+                    Prorate is required
+                </small>
+            </div>
+
+
+        </div>
+
+    </mat-card-content>
+
+    <br />
+
+    <div class="d-flex justify-content-end mt-3">
+
+        <div class="btn-1"
+            style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
+
+            <button type="button" (click)="onReset()"
+                style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;">
+                Cancel
+            </button>
+
+
+            <button type="button" (click)="onSubmit()"
+                style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white;">
+                Save
+            </button>
+
+        </div>
+
+    </div>
+
+</form>

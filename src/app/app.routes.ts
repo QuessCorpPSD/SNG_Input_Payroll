@@ -120,6 +120,7 @@ import { EntityMasterComponent } from './pages/GlobalMasters/entity-master/entit
 import { InvoiceLegalEntityComponent } from './pages/GlobalMasters/invoice-legal-entity/invoice-legal-entity.component';
 import { VendorComponent } from './pages/GlobalMasters/vendor/vendor.component';
 import { InvoiceCultureComponent } from './pages/Invoice/invoice-culture/invoice-culture.component';
+import { ServiceChargeComponent } from './pages/customers/ServiceChargeMaster/service-charge/service-charge.component';
 import { SiteMasterComponent } from './pages/GlobalMasters/site-master/site-master.component';
 import { EmployeeComponent } from './pages/customers/employee/employee.component';
 
@@ -264,6 +265,7 @@ export const routes: Routes = [
           { path: "clientaddress", component: ClientaddressComponent },
           { path: "itcalender", component: ITcalenderComponent },
           { path: "companypaycodemapping", component: CompanypaycodemappingComponent },
+          { path: "ServiceCharge", component: ServiceChargeComponent },
           { path: "employee", component: EmployeeComponent },
 
         ]

@@ -5,6 +5,5 @@ export interface IServiceCharge {
     UploadOneTime(formData: FormData): Observable<APIResponse>;
     GetServiceCharge(): Observable<APIResponse>;
     GetServicechargetype(companyid: any): Observable<APIResponse>;
-
-
+    SaveServiceCharge(request: any): Observable<APIResponse>;
 }

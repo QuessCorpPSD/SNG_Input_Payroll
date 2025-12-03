@@ -1,0 +1,56 @@
+<br />
+<div class="row g-3 align-items-end mb-3">
+
+    <!-- LEFT: Slab -->
+    <div class="same-col">
+
+        <label class="form-label text-muted small">Slab</label>
+        <select class="form-select form-select-sm slab-select" [(ngModel)]="selectedSlab" (change)="openSlabSection()">
+            <option value="">Select</option>
+            <option value="fixed">Fixed</option>
+            <option value="percentage">Percentage</option>
+        </select>
+    </div>
+
+    <!-- RIGHT: FIXED TYPE -->
+    <div class="same-col shift-right fixed-type-wrapper" *ngIf="selectedSlab === 'fixed'">
+        <label class="form-label text-muted small">Fixed Type</label>
+        <select class="form-select form-select-sm fixed-type-select" [(ngModel)]="selectedFixedType">
+            <option value="">Select</option>
+            <option value="ctc">CTC</option>
+            <option value="headcount">Headcount</option>
+        </select>
+    </div>
+
+
+    <!-- RIGHT: PERCENTAGE TYPE -->
+    <div class="same-col shift-right Percentage-type-wrapper" *ngIf="selectedSlab === 'percentage'">
+        <label class="form-label text-muted small">Percentage Type</label>
+        <select class="form-select form-select-sm percentage-type-select" [(ngModel)]="selectedPercentageType">
+            <option value="">Select</option>
+            <option value="ctc">CTC</option>
+            <option value="headcount">Headcount</option>
+        </select>
+    </div>
+
+</div>
+
+<!-- FIXED CTC -->
+<div *ngIf="selectedFixedType === 'ctc'">
+    <app-slab-fixed-ctc></app-slab-fixed-ctc>
+</div>
+
+<!-- FIXED HEADCOUNT -->
+<div *ngIf="selectedFixedType === 'headcount'">
+    <app-slab-fix-head-count></app-slab-fix-head-count>
+</div>
+
+<!-- PERCENTAGE CTC -->
+<div *ngIf="selectedPercentageType === 'ctc'">
+    <app-slab-per-ctc></app-slab-per-ctc>
+</div>
+
+<!-- PERCENTAGE HEADCOUNT -->
+<div *ngIf="selectedPercentageType === 'headcount'">
+    <app-slab-per-head-count></app-slab-per-head-count>
+</div>

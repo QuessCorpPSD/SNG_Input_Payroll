@@ -1,0 +1,349 @@
+import { CommonModule } from '@angular/common';
+import { Component, ViewChild } from '@angular/core';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { AlertpopupComponent } from '../../../../common/alertpopup/alertpopup.component';
+import { CompanyComponent } from '../../../../common/company/company.component';
+import { MatDialog } from '@angular/material/dialog';
+import { InvoiceCultureService } from '../../../../Service/invoice-culture.service';
+import { MatTooltipModule } from '@angular/material/tooltip';
+// import { AddPfcodeCultureComponent } from '../../../GlobalMaster/add-pfcode-culture/add-pfcode-culture.component';
+import { MatCardModule } from '@angular/material/card';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { EncryptionService } from '../../../../Shared/encryption.service';
+import { SessionStorageService } from '../../../../Shared/SessionStorageService';
+import { CompanyallComponent } from '../../../../common/CompanyAll/companyall.component';
+import { AddServiceChargeComponent } from '../add-service-charge/add-service-charge.component';
+import FileSaver from 'file-saver';
+import * as XLSX from 'xlsx';
+import { ServiceChargeService } from '../../../../Service/CUSTOMER/service-charge.service';
+
+
+@Component({
+  selector: 'app-service-charge',
+  standalone: true,
+  imports: [CommonModule, MatIconModule, AlertpopupComponent, MatTooltipModule, MatTableModule, MatPaginatorModule, MatCardModule, FormsModule, CompanyallComponent],
+  templateUrl: './service-charge.component.html',
+  styleUrl: './service-charge.component.css'
+})
+export class ServiceChargeComponent {
+  selectedCompanyId!: number;
+  selectedCompanyCode: any;
+  selectedcompanycode: any;
+  uploadedData: any[] = [];
+  showTable: boolean = false;
+  payPeriodId: number = 0;
+  userdetail: any;
+  isLoading: boolean = false;
+  showPopup: boolean = false;
+  popupMessage: string = '';
+  popupSubMessage: string = '';
+  leave: any;
+  UploadedResponse: any;
+  uploadedDataSource: any;
+  serviceChargeService: any;
+  servicechargedata: any;
+  servicechargetypedata: any;
+  selectedMasterId: any = null;
+  selectedTypeId: any = null;
+
+  constructor(
+    private dialog: MatDialog,
+    private servicecharge: ServiceChargeService,
+    private decry: EncryptionService,
+    private _sessionStoreage: SessionStorageService,
+    private snackBar: MatSnackBar,
+    private fb: FormBuilder
+  ) { }
+
+  uploadDisplayedColumns: string[] = [];
+  uploadedDaeavetaSource = new MatTableDataSource<any>(this.uploadedData);
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+
+  // onSearchClick() {
+  //   this.showTable = true;
+  //   this.uploadedDataSource.data = this.uploadedData;
+  // }
+  ngOnInit(): void {
+    const json = this._sessionStoreage.getItem('UserProfile');
+    if (json) {
+      this.userdetail = JSON.parse(this.decry.decrypt(json));
+    }
+    else {
+      console.warn('UserProfile not found in the session Storage');
+    }
+    const userInfo = {
+      userId: this.userdetail.user_Id,
+      userName: this.userdetail.userName,
+    };
+    this.BindserviceCharge()
+
+  }
+  showAlertPopup(message: string, subMessage: string = '') {
+    this.popupMessage = message;
+    this.popupSubMessage = subMessage;
+    this.showPopup = true;
+  }
+
+  closePopup() {
+    this.showPopup = false;
+    this.popupMessage = '';
+    this.popupSubMessage = '';
+  }
+
+  AddPOOpen() {
+    console.log(this.selectedCompanyId);
+    if (!this.selectedCompanyId){
+      alert("Please Select Company for Add");
+      return;
+    }
+    this.dialog.open(AddServiceChargeComponent, {
+      width: '60%',
+      height: '100vh',
+      panelClass: 'full-dialog-scroll',
+      disableClose: true,
+      data: { 
+        companyId: this.selectedCompanyId,
+        companyCode: this.selectedCompanyCode
+      }
+    });
+  }
+  view(row: any) {    
+    console.log('View clicked for:', row);
+  }
+  handleCompanyEvent(company) {
+    this.selectedCompanyId = company.companyId;
+    this.selectedCompanyCode = company.companyId;
+
+  }
+  BindserviceCharge() {
+    this.servicecharge.GetServiceCharge().subscribe({
+      next: res => { this.servicechargedata = res.Data.data.Table0 }
+    });
+
+  }
+  onServiceChargeChange(event: any) {
+    this.selectedMasterId = event.target.value;  // <-- store selected master ID
+    this.BindserviceChargetype(this.selectedMasterId);
+  }
+
+
+  BindserviceChargetype(masterId: any) {
+    this.servicecharge.GetServicechargetype(masterId).subscribe({
+      next: res => {
+        this.servicechargetypedata = res.Data.data.Table0;
+      }
+    });
+  }
+  onServiceChargeTypeChange(event: any) {
+    this.selectedTypeId = event.target.value;   // <-- store selected type ID
+  }
+
+  onSearchClick() {
+
+    if (!this.selectedCompanyId) {
+      alert("Please select Company");
+      return;
+    }
+
+    if (!this.selectedMasterId) {
+      alert("Please select Service Charge Master");
+      return;
+    }
+
+    if (!this.selectedTypeId) {
+      alert("Please select Service Charge Type");
+      return;
+    }
+
+    this.isLoading = true;
+
+    const payload = {
+      Company_Id: this.selectedCompanyId,
+      Service_Charge_Master_Id: this.selectedMasterId,
+      Service_Charge_Type_Id: this.selectedTypeId
+    };
+
+    console.log("Search Payload:", payload);
+    
+    this.servicecharge.GetSearch().subscribe({
+
+      next: (res: any) => {
+        this.isLoading = false;
+
+        console.log("Search Response:", res);
+
+        if (!res?.Data || res.Data.length === 0) {
+          this.uploadedDataSource.data = [];
+          alert("No Records Found");
+          return;
+        }
+
+        // 4️⃣ Bind table
+        this.uploadedData = res.Data;
+        this.uploadedDataSource.data = this.uploadedData;
+
+        this.uploadedDataSource.paginator = this.paginator;
+        this.uploadedDataSource.sort = this.sort;
+
+        this.showTable = true;
+      },
+
+      error: (err) => {
+        this.isLoading = false;
+        console.error("Search failed:", err);
+        alert("Search Failed.");
+      }
+    });
+  }
+
+
+  exportToExcel(): void {
+    if (!this.selectedCompanyId) {
+      alert('Please select Company');
+      return;
+    }
+
+    if (!this.payPeriodId) {
+      alert('Please select Payperiod');
+      return;
+    }
+
+    this.isLoading = true;
+
+    const exportPayload = {
+      Company_id: this.selectedCompanyId.toString(),
+      Pay_Frequency_Id: this.payPeriodId.toString(),
+
+    };
+
+    this.leave.downloadExcel(exportPayload).subscribe({
+      next: (res) => {
+        this.isLoading = false;
+
+        if (res?.Data?.statusCode === 400) {
+          alert('No records found');
+          return;
+        }
+
+        const jsonData = Array.isArray(res?.Data) ? res.Data : [];
+
+        if (!jsonData.length) {
+          alert('No Records Found');
+          return;
+        }
+
+        const ws = XLSX.utils.json_to_sheet(jsonData);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'OneTimeReplacement');
+
+        const fileName = `one_time_replacement_${new Date().toISOString().split('T')[0]}.xlsx`;
+
+        XLSX.writeFile(wb, fileName);
+
+        alert('Excel exported successfully!');
+      },
+      error: () => {
+        this.isLoading = false;
+        alert('Failed to load data for export');
+      }
+    });
+  }
+  ImportClick(fileInput: HTMLInputElement): void {
+    fileInput.click();
+  }
+
+
+  onFileChange(event: Event): void {
+
+    const input = event.target as HTMLInputElement;
+    const file = input?.files?.[0];
+
+    if (!file) {
+      alert('Please upload an Excel file.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("ServiceChargeMaster", String(this.selectedMasterId));
+    formData.append("ServiceChargeType", String(this.selectedTypeId));
+    formData.append("SlabType", "0");
+    formData.append("SlabInnerType", "0");
+    formData.append("CreatedBy", this.userdetail.user_Id);
+
+    this.servicecharge.UploadOneTime(formData).subscribe({
+      next: (res: any) => {
+        const status = res?.StatusCode;
+        const response = res?.Data?.response || "";
+        const errors = res?.Data?.errors || [];
+
+        console.log("Service Charge Upload:", res);
+
+        if (
+          status === 200 &&
+          (response.includes("Import Successfully Done.") ||
+            response.includes("Uploaded successfully") ||
+            response === "Success")
+        ) {
+          alert("Service Charge Imported Successfully!");
+          return;
+        }
+
+        if (status === 200 && response === "Failed to import.") {
+
+          let errorArray: any[] = [];
+
+          try {
+            if (errors?.length > 0) {
+              errorArray = JSON.parse(errors[0]);
+            } else {
+              errorArray = [{ Error_Message: "Unknown error occurred" }];
+            }
+          } catch {
+            errorArray = [{ Error_Message: "Invalid error format from server" }];
+          }
+
+          const exportData = errorArray.map((item: any) => ({
+            Error_Message:
+              item.Error_Message ||
+              item.ERROR_MESSAGE ||
+              item.Message ||
+              item.MESSAGE ||
+              item.message ||
+              "Unknown Error"
+          }));
+
+          alert(response);
+
+          const worksheet = XLSX.utils.json_to_sheet(exportData);
+          const workbook = {
+            Sheets: { 'ErrorMessages': worksheet },
+            SheetNames: ['ErrorMessages']
+          };
+
+          XLSX.writeFile(workbook, 'ServiceCharge_ErrorMessages.xlsx');
+          return;
+        }
+
+        if (response !== "") alert(response);
+        else alert("Unexpected response from server");
+      },
+
+      error: (err) => {
+        console.error("Upload failed", err);
+        alert("Upload Failed.");
+      }
+    });
+  }
+
+
+}
