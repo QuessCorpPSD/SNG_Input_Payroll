@@ -987,8 +987,10 @@ export class TimesheetComponent {
 
     const workingHours = this.apiResponseDaily?.data?.Table6[0]?.WorkingHours ?? 8;
 
-    for (const val of row.dayValues) {
-      if (!val) continue;
+    for (const value of row.dayValues) {
+      if (!value) continue;
+
+       const val = value.OT;
 
       switch (val) {
         case 'PL':
@@ -1262,7 +1264,7 @@ export class TimesheetComponent {
         this.UploadedResponse = res;
 
 
-        if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.Data.response === 'Data submitted successfully.') {
+        if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.Data.response.includes('Data saved successfully')) {
           this.isLoading = false;
           this.showPopup = true;
           this.popupMessage = 'Daily Timesheet Saved Successfully Done.';
@@ -1360,7 +1362,7 @@ export class TimesheetComponent {
       next: res => {
         this.UploadedResponse = res;
 
-        if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.Data.response === 'Data submitted successfully.') {
+        if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.Data.response.includes('Data submitted successfully.')) {
           this.isLoading = false;
           this.showPopup = true;
           this.popupMessage = 'Daily Timesheet Successfully Submitted.';
