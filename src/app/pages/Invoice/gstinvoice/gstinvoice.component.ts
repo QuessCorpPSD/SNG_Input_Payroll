@@ -12,12 +12,15 @@ import { PayrollinputComponent } from '../../PayrollInput/payrollinput.component
 import { SelectionModel } from '@angular/cdk/collections';
 import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
-import { IInvoiceRepository } from '../../../Repository/IInvoiceRepository';
-import { InvoiceRepository } from '../../../Service/InvoiceRepository'; import { EncryptionService } from '../../../Shared/encryption.service';
+import { IInvoiceRepository } from '../../../Repository/invoice/IInvoiceRepository';
+import { InvoiceRepository } from '../../../Service/invoice/InvoiceRepository'; import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { GstInvoiceGrid } from '../../../Models/GSTInvoiceGrid';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { GstinvoiceaddComponent } from '../gstinvoiceadd/gstinvoiceadd.component';
+import { MatDialog } from '@angular/material/dialog';
+import { MatIcon } from "@angular/material/icon";
 
 
 export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOKEN');
@@ -103,7 +106,7 @@ export class GstinvoiceComponent {
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(@Inject(Invoice_TOKEN) private _invoiceService: IInvoiceRepository, private _decrypt: EncryptionService,
-    private _sessionStoreage: SessionStorageService) {
+    private _sessionStoreage: SessionStorageService, private dialog: MatDialog,) {
   }
 
   selection = new SelectionModel<GstInvoiceGrid>(true, []);
@@ -193,7 +196,7 @@ export class GstinvoiceComponent {
       const dataToExport = [
       { 'Invoice_Number': '', 'Remarks': '', 'NewInvoiceNumber': '' },
     ]
-      this.downloadExcel(dataToExport, "Template_" + this.selectedTemplate);
+    this.downloadExcel(dataToExport, "Template_" + this.selectedTemplate);
   }
 
   onCancelClick(fileInput2: HTMLInputElement): void {
@@ -266,8 +269,8 @@ export class GstinvoiceComponent {
         });
     }
     else {
-        console.error('No Data');
-            this.isLoading = false;
+      console.error('No Data');
+      this.isLoading = false;
     }
   }
 
@@ -340,26 +343,36 @@ export class GstinvoiceComponent {
     });
   }
 
-  applyDateFilter(event: any, column: string) {const filterValue = event.target.value.trim().toLowerCase();
+  applyDateFilter(event: any, column: string) {
+    const filterValue = event.target.value.trim().toLowerCase();
 
-  this.dataSource.filterPredicate = (data: any, filter: string) => {
-    if (!filter) return true;
+    this.dataSource.filterPredicate = (data: any, filter: string) => {
+      if (!filter) return true;
 
-    const rowDate = new Date(data[column]);
-    if (isNaN(rowDate.getTime())) return false;
+      const rowDate = new Date(data[column]);
+      if (isNaN(rowDate.getTime())) return false;
 
-    // Convert row date → dd MMM yyyy
-    const formattedRowDate = rowDate.toLocaleDateString('en-GB', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric'
-    }).replace(',', '').toLowerCase();  
+      // Convert row date → dd MMM yyyy
+      const formattedRowDate = rowDate.toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+      }).replace(',', '').toLowerCase();
 
-    return formattedRowDate.includes(filter);
+      return formattedRowDate.includes(filter);
+    };
+
+    this.dataSource.filter = filterValue;
   };
 
-  this.dataSource.filter = filterValue;
-  };
+  AddGstInvoice() {
+    this.dialog.open(GstinvoiceaddComponent, {
+      width: '95%',
+      height: '90vh',
+      disableClose: true,
+      data: { example: 'Hello from parent!' }
+    });
+  }
 
 }
 

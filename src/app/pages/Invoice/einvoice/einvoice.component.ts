@@ -29,7 +29,7 @@ import * as FileSaver from 'file-saver';
 import { Payperiodclass } from '../../../Models/Common';
 import { PayPeriodComponent } from "../../../common/payperiod/payperiod.component";
 import { EInvoiceGrid } from '../../../Models/EInvoiceGrid';
-import { IInvoiceRepository } from '../../../Repository/IInvoiceRepository';
+import { IInvoiceRepository } from '../../../Repository/invoice/IInvoiceRepository';
 
 @Component({
   selector: 'einvoice',

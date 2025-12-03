@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
-import { IInvoiceRepository } from "../Repository/IInvoiceRepository";
+import { IInvoiceRepository } from "../../Repository/invoice/IInvoiceRepository";
 import { Observable } from "rxjs";
-import { APIResponse } from "../Models/apiresponse";
-import { environment } from "../../environments/environment.development";
+import { APIResponse } from "../../Models/apiresponse";
+import { environment } from "../../../environments/environment.development";
 import { HttpClient, HttpHeaders, HttpResponse } from "@angular/common/http";
 
 @Injectable({
@@ -129,7 +129,6 @@ export class InvoiceRepository implements IInvoiceRepository {
         //console.log(url);
         return this.http.get<APIResponse>(url);
     }
-
     DownloadInvoice(invoiceId: number): Observable<HttpResponse<Blob>> {
         const url = `${this.environment.apiUrl}GSTInvoice/Download/${invoiceId}`;
         return this.http.get(url, { responseType: 'blob', observe: 'response' });
@@ -141,6 +140,27 @@ export class InvoiceRepository implements IInvoiceRepository {
         return this.http.post(url, BulkInvoices, { responseType: 'blob', observe: 'response' });
     }
 
+    getGSTInvoiceType(): Observable<APIResponse> {
+        return this.http.get<APIResponse>(this.environment.apiUrl + "GSTInvoice/GetGSTInvoiceType")
+    }
+
+    getCTCDeductionType(): Observable<APIResponse> {
+        return this.http.get<APIResponse>(this.environment.apiUrl + "GSTInvoice/GetGSTCtcDeductionType")
+    }
+
+    getBillingType(): Observable<APIResponse> {
+        return this.http.get<APIResponse>(this.environment.apiUrl + "GSTInvoice/GetGSTBillableType")
+    }
+
+    getNetDeductionType(): Observable<APIResponse> {
+        return this.http.get<APIResponse>(this.environment.apiUrl + "GSTInvoice/GetGSTNetDeductionType")
+    }
+
+    addGstInvoice(payload: any): Observable<string> {
+        return this.http.post(this.environment.apiUrl + 'GSTInvoice/Create', payload, { responseType: 'text' })
+    }
+
+   
     POSearch(companyId: number, payPeriodId: number): Observable<APIResponse> {
         const url = `${this.environment.apiUrl}POInvoiceInitiate/Search/${companyId}/${payPeriodId}`;
         //console.log(url);
