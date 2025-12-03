@@ -145,10 +145,10 @@ export class EmployeeComponent {
           const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(jsonData);
           const wb: XLSX.WorkBook = XLSX.utils.book_new();
 
-          XLSX.utils.book_append_sheet(wb, ws, "payFrequency");
+          XLSX.utils.book_append_sheet(wb, ws, "Employee");
 
           const timestamp = new Date().toISOString().split('T')[0];
-          const fileName = `payFrequency_${timestamp}.xlsx`;
+          const fileName = `Employee_Details${timestamp}.xlsx`;
 
           XLSX.writeFile(wb, fileName);
 
