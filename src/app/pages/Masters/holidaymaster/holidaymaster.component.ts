@@ -340,6 +340,7 @@ export class HolidaymasterComponent {
   }
 
   ImportClick(fileInput: HTMLInputElement): void {
+    fileInput.value='';
     fileInput.click();
   }
 

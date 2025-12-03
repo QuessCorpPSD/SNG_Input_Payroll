@@ -1,0 +1,274 @@
+<br />
+<div class="page-wrapper">
+    <div class="scrollable-content">
+        <div style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; min-width: 960px">
+            Site Master
+        </div>
+
+        <div class="container py-4">
+
+            <div class="row g-3 align-items-end">
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Company code</label>
+                    <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+                </div>
+
+                <div class="col-md-2 d-flex gap-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Search"
+                        (click)=" onSearchClick()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="export to excel" (click)="exportToExcel()">
+                        <mat-icon>table_chart</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Import"
+                        (click)="ImportClick(fileInput)">
+                        <mat-icon>cloud_upload</mat-icon>
+                    </button>
+                    <input type="file" #fileInput style="display:none" (change)="onFileSelected($event)" />
+
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Template"
+                        (click)=" DownloadTemplate()">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button>
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Add"
+                        (click)="AddPOOpen()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Add Button -->
+
+        <!-- TABLE SECTION -->
+        <div class="table-wrapper1" style="min-width: 960px;" *ngIf="showTable">
+            <div class="table-scroll">
+
+                <mat-table [dataSource]="dataSource" matSort class="custom-table mat-elevation-z8 auto-fit-table">
+
+                    <ng-container matColumnDef="Action">
+                        <mat-header-cell *matHeaderCellDef class="Action"><strong>Action</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="Action">
+                            <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                matTooltip="Delete">
+                                <mat-icon>delete</mat-icon>
+                            </button> -->
+                            <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                matTooltip="Edit" (click)="openEdit(row)">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                        </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="SNo">
+                        <mat-header-cell *matHeaderCellDef class="SNo"><strong>SNo</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="SNo">{{ row['Serial_No'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Company Code -->
+                    <ng-container matColumnDef="Company Code">
+                        <mat-header-cell *matHeaderCellDef><strong>Company Code</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Company_Code'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Vendor Name -->
+                    <ng-container matColumnDef="Vendor Name">
+                        <mat-header-cell *matHeaderCellDef><strong>Vendor Name</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Client_Name'] }}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="Group_Id" style="display: none;">
+                        <mat-header-cell *matHeaderCellDef><strong>Group_Id</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Group_Id'] }}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="Group_Detail_Id" style="display: none;">
+                        <mat-header-cell *matHeaderCellDef><strong>Group_Detail_Id</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Group_Detail_Id'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Group Name -->
+                    <ng-container matColumnDef="Group Name">
+                        <mat-header-cell *matHeaderCellDef><strong>Group Name</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Group_Name'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- WBS/Cost center -->
+                    <ng-container matColumnDef="WBS/Cost center">
+                        <mat-header-cell *matHeaderCellDef><strong>WBS/Cost center</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['CostCenter_Id'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- SAP Customer Code -->
+                    <ng-container matColumnDef="SAP Customer Code">
+                        <mat-header-cell *matHeaderCellDef><strong>SAP Customer Code</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['SAP_Cust_Code'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- SAP Customer Name -->
+                    <ng-container matColumnDef="SAP Customer Name">
+                        <mat-header-cell *matHeaderCellDef><strong>SAP Customer Name</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['SAP_Cust_Name'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- WBS2 -->
+                    <ng-container matColumnDef="WBS2">
+                        <mat-header-cell *matHeaderCellDef><strong>WBS2</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['WBS2'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- WBS Name -->
+                    <ng-container matColumnDef="WBS Name">
+                        <mat-header-cell *matHeaderCellDef><strong>WBS Name</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['WBS_Name'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Establishment Name -->
+                    <ng-container matColumnDef="Establishment Name">
+                        <mat-header-cell *matHeaderCellDef><strong>Establishment Name</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Establishment_Name'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Establishment Address1 -->
+                    <ng-container matColumnDef="Establishment Address1">
+                        <mat-header-cell *matHeaderCellDef><strong>Establishment Address1</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Establishment_Adress1'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Establishment Address2 -->
+                    <!-- <ng-container matColumnDef="Establishment Address2">
+                        <mat-header-cell *matHeaderCellDef><strong>Establishment Address2</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Establishment_Adress2'] }}</mat-cell>
+                    </ng-container> -->
+
+                    <!-- Establishment Address3 -->
+                    <!-- <ng-container matColumnDef="Establishment Address3">
+                        <mat-header-cell *matHeaderCellDef><strong>Establishment Address3</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Establishment_Adress3'] }}</mat-cell>
+                    </ng-container> -->
+
+                    <!-- Principal Employer Name -->
+                    <ng-container matColumnDef="Principal Employer Name">
+                        <mat-header-cell *matHeaderCellDef><strong>Principal Employer Name</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Principal_Employer_Name'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Principal Employe Address1 -->
+                    <ng-container matColumnDef="Principal Employe Address1">
+                        <mat-header-cell *matHeaderCellDef><strong>Principal Employer
+                                Address1</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Principal_Employe_Address1'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Principal Employe Address2 -->
+                    <!-- <ng-container matColumnDef="Principal Employe Address2">
+                        <mat-header-cell *matHeaderCellDef><strong>Principal Employer
+                                Address2</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Principal_Employe_Address2'] }}</mat-cell>
+                    </ng-container> -->
+
+                    <!-- Principal Employe Address3 -->
+                    <!-- <ng-container matColumnDef="Principal Employe Address3">
+                        <mat-header-cell *matHeaderCellDef><strong>Principal Employer
+                                Address3</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Principal_Employe_Address3'] }}</mat-cell>
+                    </ng-container> -->
+
+                    <!-- Contractor Name -->
+                    <ng-container matColumnDef="Contractor Name">
+                        <mat-header-cell *matHeaderCellDef><strong>Contractor Name</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Contractor_Name'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Contractor Address1 -->
+                    <ng-container matColumnDef="Contractor Address1">
+                        <mat-header-cell *matHeaderCellDef><strong>Contractor Address1</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Contractor_Address1'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Contractor Address2 -->
+                    <!-- <ng-container matColumnDef="Contractor Address2">
+                        <mat-header-cell *matHeaderCellDef><strong>Contractor Address2</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Contractor_Address2'] }}</mat-cell>
+                    </ng-container> -->
+
+                    <!-- Contractor Address3 -->
+                    <!-- <ng-container matColumnDef="Contractor Address3">
+                        <mat-header-cell *matHeaderCellDef><strong>Contractor Address3</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Contractor_Address3'] }}</mat-cell>
+                    </ng-container> -->
+
+                    <!-- PAYSLIP FORMAT -->
+                    <ng-container matColumnDef="PAYSLIP FORMAT">
+                        <mat-header-cell *matHeaderCellDef><strong>PAYSLIP FORMAT</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['PAYSLIP_FORMAT'] }}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="IsLeaveApplicable">
+                        <mat-header-cell *matHeaderCellDef><strong>IsLeaveApplicable</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Isleave_Applicable'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Active -->
+                    <ng-container matColumnDef="Active">
+                        <mat-header-cell *matHeaderCellDef><strong>Active</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Value'] ? 'Yes' : 'No' }}</mat-cell>
+                    </ng-container>
+
+                    <!-- IsBonusPayThroughFFDisplay -->
+                    <ng-container matColumnDef="IsBonusPayThroughFFDisplay">
+                        <mat-header-cell *matHeaderCellDef><strong>IsBonusPayThroughFFDisplay</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['IsBonusPayThroughFF'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- StartDate -->
+                    <ng-container matColumnDef="StartDate">
+                        <mat-header-cell *matHeaderCellDef><strong>StartDate</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['StartDate'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- SalaryDate -->
+                    <ng-container matColumnDef="SalaryDate">
+                        <mat-header-cell *matHeaderCellDef><strong>SalaryDate</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['SalaryDate'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Portal_Payslip_Format -->
+                    <ng-container matColumnDef="Portal_Payslip_Format">
+                        <mat-header-cell *matHeaderCellDef><strong>Portal Payslip Format</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Portal_Payslip_Format'] }}</mat-cell>
+                    </ng-container>
+
+
+                    <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: uploadDisplayedColumns;"></mat-row>
+
+                </mat-table>
+
+                <div *ngIf="dataSource.data.length === 0" class="text-center p-4">
+                    <p class="text-muted">No data to display</p>
+                </div>
+
+            </div>
+
+            <mat-paginator [length]="dataSource.data.length" [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"
+                showFirstLastButtons>
+            </mat-paginator>
+
+        </div>
+        <div *ngIf="isLoading" class="loading-overlay">
+            <img src="assets/Loading.gif" alt="Loading...">
+        </div>
+
+
+        <div *ngIf="showPopup" class="overlay"></div>
+        <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+            (close)="closePopup()">
+        </app-alertpopup>
+    </div>
+
+
+</div>

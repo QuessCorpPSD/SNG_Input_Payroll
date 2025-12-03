@@ -1,0 +1,615 @@
+<form [formGroup]="siteForm" novalidate *ngIf="!Edit">
+    <mat-card class="custom-card py-1">
+        <mat-card-header class="sticky-header">
+
+            <mat-card-title style="color: #302CB3;"> Add Site Master</mat-card-title>
+
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="onClose()" class="no-border-icon">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+
+        <mat-card-content>
+
+            <div class="row g-3 mb-3">
+
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">
+                        Company Code <span class="text-danger">*</span>
+                    </label>
+
+                    <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+
+                    <small class="text-danger"
+                        *ngIf="siteForm.get('CompanyCode')?.touched && siteForm.get('CompanyCode')?.invalid">
+                        Company Code is required
+                    </small>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Vendor Name<span class="text-danger">*</span></label>
+                    <select class="form-select form-select-sm" formControlName="VendorName">
+                        <option value="">Select</option>
+                        <option *ngFor="let v of vendorList" [value]="v.Client_Id">
+                            {{ v.Client_Name }}
+                        </option>
+                    </select>
+                    <small class="text-danger"
+                        *ngIf="siteForm.get('VendorName')?.touched && siteForm.get('VendorName')?.invalid">
+                        Vendor Name is required
+                    </small>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Group Name<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control form-control-sm" formControlName="GroupName">
+
+                    <small class="text-danger"
+                        *ngIf="siteForm.get('GroupName')?.touched && siteForm.get('GroupName')?.invalid">
+                        Group Name is required
+                    </small>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">WBS/Cost Center<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control form-control-sm" formControlName="WBS">
+
+                    <small class="text-danger" *ngIf="siteForm.get('WBS')?.touched && siteForm.get('WBS')?.invalid">
+                        WBS/Cost Center is required
+                    </small>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">SAP Customer Code<span
+                            class="text-danger">*</span></label>
+                    <input type="text" class="form-control form-control-sm" formControlName="SAPCustomerCode">
+
+                    <small class="text-danger"
+                        *ngIf="siteForm.get('SAPCustomerCode')?.touched && siteForm.get('SAPCustomerCode')?.invalid">
+                        SAP Customer Code is required
+                    </small>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">SAP Customer Name<span
+                            class="text-danger">*</span></label>
+                    <input type="text" class="form-control form-control-sm" formControlName="SAPCustomerName">
+
+                    <small class="text-danger"
+                        *ngIf="siteForm.get('SAPCustomerName')?.touched && siteForm.get('SAPCustomerName')?.invalid">
+                        SAP Customer Name is required
+                    </small>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">WBS2<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control form-control-sm" formControlName="WBS2">
+
+                    <small class="text-danger" *ngIf="siteForm.get('WBS2')?.touched && siteForm.get('WBS2')?.invalid">
+                        WBS2 is required
+                    </small>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">WBS Name<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control form-control-sm" formControlName="WBSName">
+
+                    <small class="text-danger"
+                        *ngIf="siteForm.get('WBSName')?.touched && siteForm.get('WBSName')?.invalid">
+                        WBS Name is required
+                    </small>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Establishment Name<span
+                            class="text-danger">*</span></label>
+                    <input type="text" class="form-control form-control-sm" formControlName="EstablishmentName">
+
+                    <small class="text-danger"
+                        *ngIf="siteForm.get('EstablishmentName')?.touched && siteForm.get('EstablishmentName')?.invalid">
+                        Establishment Name is required
+                    </small>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Establishment Address1<span
+                            class="text-danger">*</span></label>
+                    <input type="text" class="form-control form-control-sm" formControlName="EstablishmentAddress1">
+
+                    <small class="text-danger"
+                        *ngIf="siteForm.get('EstablishmentAddress1')?.touched && siteForm.get('EstablishmentAddress1')?.invalid">
+                        Establishment Address1 is required
+                    </small>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Principal Employer Name<span
+                            class="text-danger">*</span></label>
+                    <input type="text" class="form-control form-control-sm" formControlName="PrincipalEmployerName">
+
+                    <small class="text-danger"
+                        *ngIf="siteForm.get('PrincipalEmployerName')?.touched && siteForm.get('PrincipalEmployerName')?.invalid">
+                        Principal Employer Name is required
+                    </small>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Principal Employe Address1<span
+                            class="text-danger">*</span></label>
+                    <input type="text" class="form-control form-control-sm" formControlName="PrincipalEmployeAddress1">
+
+                    <small class="text-danger"
+                        *ngIf="siteForm.get('PrincipalEmployeAddress1')?.touched && siteForm.get('PrincipalEmployeAddress1')?.invalid">
+                        Principal Employe Address1 is required
+                    </small>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Contractor Name<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control form-control-sm" formControlName="ContractorName">
+
+                    <small class="text-danger"
+                        *ngIf="siteForm.get('ContractorName')?.touched && siteForm.get('ContractorName')?.invalid">
+                        Contractor Name is required
+                    </small>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Contractor Address1<span
+                            class="text-danger">*</span></label>
+                    <input type="text" class="form-control form-control-sm" formControlName="ContractorAddress1">
+
+                    <small class="text-danger"
+                        *ngIf="siteForm.get('ContractorAddress1')?.touched && siteForm.get('ContractorAddress1')?.invalid">
+                        Contractor Address1 is required
+                    </small>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Payslip Format<span class="text-danger">*</span></label>
+                    <select class="form-select form-select-sm" formControlName="PayslipFormat">
+                        <option value="">Select</option>
+                        <option value="1">Format-1</option>
+                        <option value="2">Format-2</option>
+                        <option value="3">Format-3</option>
+                        <option value="4">Format-4</option>
+                    </select>
+
+                    <small class="text-danger"
+                        *ngIf="siteForm.get('PayslipFormat')?.touched && siteForm.get('PayslipFormat')?.invalid">
+                        Payslip Format is required
+                    </small>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">IsLeaveApplicable<span
+                            class="text-danger">*</span></label>
+                    <select class="form-select form-select-sm" formControlName="IsLeaveApplicable">
+                        <option value="">Select</option>
+                        <option value="1">Yes</option>
+                        <option value="2">No</option>
+                    </select>
+                    <small class="text-danger"
+                        *ngIf="siteForm.get('IsLeaveApplicable')?.touched && siteForm.get('IsLeaveApplicable')?.invalid">
+                        IsLeaveApplicable is required
+                    </small>
+                </div>
+            </div>
+
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Active<span class="text-danger">*</span></label>
+                    <select class="form-select form-select-sm" formControlName="Active">
+                        <option value="">Select</option>
+                        <option value="1">Yes</option>
+                        <option value="2">No</option>
+                    </select>
+
+                    <small class="text-danger"
+                        *ngIf="siteForm.get('Active')?.touched && siteForm.get('Active')?.invalid">
+                        Active is required
+                    </small>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">IsBonusPayThroughFFDisplay<span
+                            class="text-danger">*</span></label>
+                    <select class="form-select form-select-sm" formControlName="IsBonusPayThroughFFDisplay">
+                        <option value="">Select</option>
+                        <option value="1">Yes</option>
+                        <option value="2">No</option>
+                    </select>
+
+                    <small class="text-danger"
+                        *ngIf="siteForm.get('IsBonusPayThroughFFDisplay')?.touched && siteForm.get('IsBonusPayThroughFFDisplay')?.invalid">
+                        This field is required
+                    </small>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">StartDate <span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" formControlName="StartDate" />
+
+                    <small class="text-danger"
+                        *ngIf="siteForm.get('StartDate')?.touched && siteForm.get('StartDate')?.invalid">
+                        Start Date is required
+                    </small>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Salary Date <span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" formControlName="SalaryDate" />
+
+                    <small class="text-danger"
+                        *ngIf="siteForm.get('SalaryDate')?.touched && siteForm.get('SalaryDate')?.invalid">
+                        Salary Date is required
+                    </small>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Portal_Payslip_Format<span
+                            class="text-danger">*</span></label>
+                    <select class="form-select form-select-sm" formControlName="PortalPayslipFormat">
+                        <option value="">Select</option>
+                        <option *ngFor="let p of payslipFormatList" [value]="p.portal_Payslip_Format">
+
+                            {{ p.portal_Payslip_Format_Name }}
+                        </option>
+                    </select>
+
+                    <small class="text-danger"
+                        *ngIf="siteForm.get('PortalPayslipFormat')?.touched && siteForm.get('PortalPayslipFormat')?.invalid">
+                        Portal Payslip Format is required
+                    </small>
+                </div>
+            </div>
+
+        </mat-card-content>
+
+        <div class="d-flex justify-content-end mt-3">
+            <div class="btn-1"
+                style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
+
+                <button type="button" (click)="onCancel()"
+                    style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;">
+                    Cancel
+                </button>
+
+                <button type="button" (click)="onSave()"
+                    style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white;">
+                    Save
+                </button>
+
+            </div>
+        </div>
+        <div *ngIf="isLoading" class="loading-overlay">
+            <img src="assets/Loading.gif" alt="Loading...">
+        </div>
+
+
+        <div *ngIf="showPopup" class="overlay"></div>
+        <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+            (close)="closePopup()">
+        </app-alertpopup>
+
+
+    </mat-card>
+</form>
+
+
+<form [formGroup]="SiteEditForm" novalidate *ngIf="Edit">
+    <mat-card class="custom-card py-1">
+        <mat-card-header class="sticky-header">
+
+            <mat-card-title style="color: #302CB3;"> Edit Site Master</mat-card-title>
+
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="onClose()" class="no-border-icon">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+
+        <mat-card-content>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Company Code<span class="text-danger">*</span></label>
+
+                    <input class="form-control form-control-sm" formControlName="CompanyCode" readonly />
+
+                    <!-- <small class="text-danger"
+                        *ngIf="siteForm.get('CompanyCode')?.touched && siteForm.get('CompanyCode')?.invalid">
+                        Company Code is required
+                    </small> -->
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Vendor Name<span class="text-danger">*</span></label>
+                    <select class="form-select form-select-sm" formControlName="VendorName">
+                        <option value="">Select</option>
+                        <option *ngFor="let v of vendorList" [value]="v.Client_Id">
+                            {{ v.Client_Name }}
+                        </option>
+                    </select>
+                    <small class="text-danger"
+                        *ngIf="siteForm.get('VendorName')?.touched && siteForm.get('VendorName')?.invalid">
+                        Vendor Name is required
+                    </small>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Group Name<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control form-control-sm" formControlName="GroupName">
+
+                    <small class="text-danger"
+                        *ngIf="siteForm.get('GroupName')?.touched && siteForm.get('GroupName')?.invalid">
+                        Group Name is required
+                    </small>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">WBS/Cost Center<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control form-control-sm" formControlName="WBS">
+
+                    <small class="text-danger" *ngIf="siteForm.get('WBS')?.touched && siteForm.get('WBS')?.invalid">
+                        WBS/Cost Center is required
+                    </small>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">SAP Customer Code<span
+                            class="text-danger">*</span></label>
+                    <input type="text" class="form-control form-control-sm" formControlName="SAPCustomerCode">
+
+                    <small class="text-danger"
+                        *ngIf="siteForm.get('SAPCustomerCode')?.touched && siteForm.get('SAPCustomerCode')?.invalid">
+                        SAP Customer Code is required
+                    </small>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">SAP Customer Name<span
+                            class="text-danger">*</span></label>
+                    <input type="text" class="form-control form-control-sm" formControlName="SAPCustomerName">
+
+                    <small class="text-danger"
+                        *ngIf="siteForm.get('SAPCustomerName')?.touched && siteForm.get('SAPCustomerName')?.invalid">
+                        SAP Customer Name is required
+                    </small>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">WBS2<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control form-control-sm" formControlName="WBS2">
+
+                    <small class="text-danger" *ngIf="siteForm.get('WBS2')?.touched && siteForm.get('WBS2')?.invalid">
+                        WBS2 is required
+                    </small>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">WBS Name<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control form-control-sm" formControlName="WBSName">
+
+                    <small class="text-danger"
+                        *ngIf="siteForm.get('WBSName')?.touched && siteForm.get('WBSName')?.invalid">
+                        WBS Name is required
+                    </small>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Establishment Name<span
+                            class="text-danger">*</span></label>
+                    <input type="text" class="form-control form-control-sm" formControlName="EstablishmentName">
+
+                    <small class="text-danger"
+                        *ngIf="siteForm.get('EstablishmentName')?.touched && siteForm.get('EstablishmentName')?.invalid">
+                        Establishment Name is required
+                    </small>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Establishment Address1<span
+                            class="text-danger">*</span></label>
+                    <input type="text" class="form-control form-control-sm" formControlName="EstablishmentAddress1">
+
+                    <small class="text-danger"
+                        *ngIf="siteForm.get('EstablishmentAddress1')?.touched && siteForm.get('EstablishmentAddress1')?.invalid">
+                        Establishment Address1 is required
+                    </small>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Principal Employer Name<span
+                            class="text-danger">*</span></label>
+                    <input type="text" class="form-control form-control-sm" formControlName="PrincipalEmployerName">
+
+                    <small class="text-danger"
+                        *ngIf="siteForm.get('PrincipalEmployerName')?.touched && siteForm.get('PrincipalEmployerName')?.invalid">
+                        Principal Employer Name is required
+                    </small>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Principal Employe Address1<span
+                            class="text-danger">*</span></label>
+                    <input type="text" class="form-control form-control-sm" formControlName="PrincipalEmployeAddress1">
+
+                    <small class="text-danger"
+                        *ngIf="siteForm.get('PrincipalEmployeAddress1')?.touched && siteForm.get('PrincipalEmployeAddress1')?.invalid">
+                        Principal Employe Address1 is required
+                    </small>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Contractor Name<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control form-control-sm" formControlName="ContractorName">
+
+                    <small class="text-danger"
+                        *ngIf="siteForm.get('ContractorName')?.touched && siteForm.get('ContractorName')?.invalid">
+                        Contractor Name is required
+                    </small>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Contractor Address1<span
+                            class="text-danger">*</span></label>
+                    <input type="text" class="form-control form-control-sm" formControlName="ContractorAddress1">
+
+                    <small class="text-danger"
+                        *ngIf="siteForm.get('ContractorAddress1')?.touched && siteForm.get('ContractorAddress1')?.invalid">
+                        Contractor Address1 is required
+                    </small>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Payslip Format<span class="text-danger">*</span></label>
+                    <select class="form-select form-select-sm" formControlName="PayslipFormat">
+                        <option value="">Select</option>
+                        <option value="1">Format-1</option>
+                        <option value="2">Format-2</option>
+                        <option value="3">Format-3</option>
+                        <option value="4">Format-4</option>
+                    </select>
+
+                    <small class="text-danger"
+                        *ngIf="siteForm.get('PayslipFormat')?.touched && siteForm.get('PayslipFormat')?.invalid">
+                        Payslip Format is required
+                    </small>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">IsLeaveApplicable<span
+                            class="text-danger">*</span></label>
+
+                    <select class="form-select form-select-sm" formControlName="IsLeaveApplicable">
+                        <option value="">Select</option>
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+
+                    <small class="text-danger"
+                        *ngIf="siteForm.get('IsLeaveApplicable')?.touched && siteForm.get('IsLeaveApplicable')?.invalid">
+                        IsLeaveApplicable is required
+                    </small>
+                </div>
+
+            </div>
+
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Active<span class="text-danger">*</span></label>
+                    <select class="form-select form-select-sm" formControlName="Active">
+                        <option value="">Select</option>
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+
+                    <small class="text-danger"
+                        *ngIf="siteForm.get('Active')?.touched && siteForm.get('Active')?.invalid">
+                        Active is required
+                    </small>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">IsBonusPayThroughFFDisplay<span
+                            class="text-danger">*</span></label>
+                    <select class="form-select form-select-sm" formControlName="IsBonusPayThroughFFDisplay">
+                        <option value="">Select</option>
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+
+                    <small class="text-danger"
+                        *ngIf="siteForm.get('IsBonusPayThroughFFDisplay')?.touched && siteForm.get('IsBonusPayThroughFFDisplay')?.invalid">
+                        This field is required
+                    </small>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">StartDate <span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" formControlName="StartDate" />
+
+                    <small class="text-danger"
+                        *ngIf="siteForm.get('StartDate')?.touched && siteForm.get('StartDate')?.invalid">
+                        Start Date is required
+                    </small>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Salary Date <span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" formControlName="SalaryDate" />
+
+                    <small class="text-danger"
+                        *ngIf="siteForm.get('SalaryDate')?.touched && siteForm.get('SalaryDate')?.invalid">
+                        Salary Date is required
+                    </small>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Portal_Payslip_Format<span
+                            class="text-danger">*</span></label>
+                    <select class="form-select form-select-sm" formControlName="PortalPayslipFormat">
+                        <option value="">Select</option>
+                        <option *ngFor="let p of payslipFormatList" [value]="p.portal_Payslip_Format">
+
+                            {{ p.portal_Payslip_Format_Name }}
+                        </option>
+                    </select>
+
+                    <small class="text-danger"
+                        *ngIf="siteForm.get('PortalPayslipFormat')?.touched && siteForm.get('PortalPayslipFormat')?.invalid">
+                        Portal Payslip Format is required
+                    </small>
+                </div>
+            </div>
+
+        </mat-card-content>
+
+        <div class="d-flex justify-content-end mt-3">
+            <div class="btn-1"
+                style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
+
+                <button type="button" (click)="onCancel()"
+                    style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;">
+                    Cancel
+                </button>
+
+                <button type="button" (click)="onUpdate()"
+                    style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white;">
+                    Update
+                </button>
+
+            </div>
+        </div>
+        <div *ngIf="isLoading" class="loading-overlay">
+            <img src="assets/Loading.gif" alt="Loading...">
+        </div>
+
+
+        <div *ngIf="showPopup" class="overlay"></div>
+        <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+            (close)="closePopup()">
+        </app-alertpopup>
+
+
+    </mat-card>
+</form>

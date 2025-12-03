@@ -120,6 +120,7 @@ import { EntityMasterComponent } from './pages/GlobalMasters/entity-master/entit
 import { InvoiceLegalEntityComponent } from './pages/GlobalMasters/invoice-legal-entity/invoice-legal-entity.component';
 import { VendorComponent } from './pages/GlobalMasters/vendor/vendor.component';
 import { InvoiceCultureComponent } from './pages/Invoice/invoice-culture/invoice-culture.component';
+import { SiteMasterComponent } from './pages/GlobalMasters/site-master/site-master.component';
 
 
 
@@ -333,7 +334,9 @@ export const routes: Routes = [
           { path: "app-entity-master", component: EntityMasterComponent },
           { path: "InvoiceLegalEntity", component: InvoiceLegalEntityComponent },
           { path: "Vendor", component: VendorComponent },
-          { path: "gst", component: GSTComponent }
+          { path: "gst", component: GSTComponent },
+          { path: "sitemaster", component: SiteMasterComponent }
+          
 
         ]
 
