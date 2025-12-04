@@ -93,6 +93,7 @@ export class LockpayperiodaddComponent {
     const payload = {
       "Company_Id": this.data.row.Company_Id?.toString(),
       "Pay_Frequency_Detail_Id": this.data.row.Pay_Frequency_Detail_Id?.toString(),
+      "Pay_Period": this.data.row.Pay_Period?.toString(),
       "CreatedBy": this.userdetail.user_Id?.toString()
     };
 
@@ -106,9 +107,9 @@ export class LockpayperiodaddComponent {
         const responseMsg = res?.Data?.response;
 
         //  CASE 1: API returned "Row(s) Uploaded Successfully."
-        if (responseMsg && responseMsg.includes("Successfully")) {
+        if (responseMsg && responseMsg.includes("Pay Period Locked Successfully")) {
           this.showAlertPopup("Pay Period Locked Successfully");
-          this.dialogRef.close(true);
+          //this.dialogRef.close(true);
           return;
         }
 
