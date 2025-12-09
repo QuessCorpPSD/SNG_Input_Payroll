@@ -1,14 +1,13 @@
-<!-- Add this somewhere in your Angular template/component -->
-<br />
-<div class="page-wrapper">
+
+<div class="page-wrapper" style="padding-top: 2%;">
 
     <div class="scrollable-content">
         <div
-            style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; min-width: 960px; padding-left: 25px;">
+            style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700;">
             IT Calender
         </div>
 
-        <div class="container-fluid g-2" style="min-width: 960px;">
+        <div class="container-fluid g-2">
             <div class="card-body g-2">
                 <div class="row align-items-end">
                     <div class="col-md-3">
@@ -54,8 +53,7 @@
             </div>
         </div>
 
-        <div class="table-wrapper1" *ngIf="isuploadgridvisible" style="min-width: 960px;">
-            <br />
+        <div class="table-wrapper1" *ngIf="isuploadgridvisible" style="padding-top: 2%;">
 
             <div class="table-scroll">
                 <mat-table [dataSource]="uploadedDataSource" matSort

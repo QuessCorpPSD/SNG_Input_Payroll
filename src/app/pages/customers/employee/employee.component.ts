@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog } from '@angular/material/dialog';
-import { EmployeeAddComponent } from '../employee-add/employee-add.component';import { MatSort } from '@angular/material/sort';
+import { EmployeeAddComponent } from '../employee-add/employee-add.component'; import { MatSort } from '@angular/material/sort';
 import * as XLSX from 'xlsx';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
@@ -18,7 +18,7 @@ import { EmployeeService } from '../../../Service/CUSTOMER/employee.service';
 @Component({
   selector: 'app-employee',
   standalone: true,
-  imports: [AlertpopupComponent, MatPaginatorModule, MatTableModule, MatIconModule, CompanyallComponent, CommonModule, FormsModule, ReactiveFormsModule, MatTooltipModule, MatCardModule],
+  imports: [AlertpopupComponent, MatPaginatorModule, MatTableModule, MatIconModule, CompanyallComponent, CommonModule, FormsModule, MatTooltipModule, MatCardModule],
   templateUrl: './employee.component.html',
   styleUrl: './employee.component.css'
 })
@@ -39,17 +39,18 @@ export class EmployeeComponent {
   @ViewChild(MatSort) sort!: MatSort;
   employeeexcel: any;
   userdetail: any;
-
-  constructor(private dialog: MatDialog, private service: EmployeeService, private decry: EncryptionService,
-    private _sessionStoreage: SessionStorageService, private fb: FormBuilder) { }
-
-
+  EmployeeList: any;
   uploadDisplayedColumns: string[] = [
     'Action', 'SNo', 'EMPNO', 'EMPNAME', 'CompanyCode', 'DOB', 'Active', 'ORIHIREDDATE', 'SEX', 'Department', 'OCCUPATIONCODE'];
   uploadedData: any[] = [];
   uploadedDataSource = new MatTableDataSource(this.uploadedData);
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild('paginator') paginator!: MatPaginator;
+  constructor(private dialog: MatDialog, private service: EmployeeService, private decry: EncryptionService,
+    private _sessionStoreage: SessionStorageService, private fb: FormBuilder) { }
+
+
+
 
   ngOnInit(): void {
     const json = this._sessionStoreage.getItem('UserProfile');
@@ -75,10 +76,20 @@ export class EmployeeComponent {
     this.popupMessage = '';
     this.popupSubMessage = '';
   }
+  BindEmployeeCode() {
+    const payload = { CompanyId: this.selectedCompanyId?.toString() };
+
+    this.service.GetEmployeesByCompanyId(payload).subscribe({
+      next: (res: any) => {
+        this.EmployeeList = res.Data.data.Table0;
+      }
+    });
+  }
 
   handleCompanyEvent(company) {
     this.selectedCompanyId = company.companyId;
     this.selectedCompanyCode = company.companyCode;
+    this.BindEmployeeCode();
   }
 
 

@@ -133,7 +133,7 @@ export class EmployeeService {
       payload,
     );
   }
-   AddemployeePrevioussave(payload: any): Observable<APIResponse> {
+  AddemployeePrevioussave(payload: any): Observable<APIResponse> {
     return this.http.post<APIResponse>(
       this.env.apiUrl + 'Employee/PreviousCreate',
       payload,
@@ -142,6 +142,12 @@ export class EmployeeService {
   SalarySearch(Employeeid: any,): Observable<APIResponse> {
     return this.http.get<APIResponse>(
       this.env.apiUrl + 'Employee/SearchSalary/' + Employeeid);
+  }
+  GetEmployeesByCompanyId(payload: any): Observable<any> {
+    return this.http.post<any>(
+      this.env.apiUrl + 'PayTransaction/GetEmployeeDetailsByCompanyID',
+      payload
+    );
   }
 
 }
