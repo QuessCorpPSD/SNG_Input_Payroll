@@ -105,7 +105,7 @@ export class CompanypaycodemappingAddAddComponent {
   onSave(): void {
     const rowsWithSno = this.selectedRows.map((r, index) => ({
       ...r,
-      SNo: this.uploadedData.indexOf(r) + 1   // preserve popup order
+      SNo: this.uploadedData.indexOf(r) + 1   
     }));
 
     this.dialogRef.close(rowsWithSno);

@@ -27,6 +27,7 @@ export const Pay_TOKEN = new InjectionToken<IGstRepository>('Pay_TOKEN');
   ]
 })
 export class GSTCreateComponent {
+  entity: any;
   constructor(private dialogRef: MatDialogRef<GSTCreateComponent>,
     @Inject(Pay_TOKEN) private gstService: IGstRepository,
     private decry: EncryptionService,
@@ -47,7 +48,7 @@ export class GSTCreateComponent {
     else {
       console.warn('UserProfile not found in the session Storage');
     }
-
+    this.LoadEntity();
   }
 
   cgstApplicable: boolean = false;
@@ -63,6 +64,7 @@ export class GSTCreateComponent {
   CompanyName = '';
   CompanyAddress = '';
   PinCode = '';
+  Entity = '';
   isLoading: boolean = false;
   showPopup: boolean = false;
   popupMessage = '';
@@ -81,7 +83,19 @@ export class GSTCreateComponent {
         break;
     }
   }
+  LoadEntity() {
 
+    this.gstService.GetEntity().subscribe({
+      next: (res: any) => {
+        console.log(" Pay Category API Response:", res);
+
+        if (res?.Data?.data?.Table0) {
+          this.entity = res.Data.data.Table0;
+        }
+      },
+      error: err => console.error(" Pay Category API Error:", err)
+    });
+  }
   SaveClick() {
     this.isLoading = true;
     const DEFAULT_DATE = '1900-01-01';
@@ -123,22 +137,21 @@ export class GSTCreateComponent {
     }
     const today = new Date();
     const payload = {
-      
-        "Action": "Add",
-        "UserId": String(this.userdetail.user_Id),
-        "GstMasterId": 0,
-        "EffectiveDate": String(this.EffectiveDate),
-        "GstNumber": String(this.GSTNumber),
-        "CompanyName": String(this.CompanyName),
-        "CompanyAddress": String(this.CompanyAddress),
-        "CreatedBy": this.userdetail.user_Id,
-        "CreatedOn": today,
-        "Gst_Percentage": String(this.cgstPercentage),
-        "EntityId": 0,
-        "Pincode": String(this.PinCode)
-      
-    };
 
+      "Action": "Add",
+      "UserId": String(this.userdetail.user_Id),
+      "GstMasterId": 0,
+      "EffectiveDate": String(this.EffectiveDate),
+      "GstNumber": String(this.GSTNumber),
+      "CompanyName": String(this.CompanyName),
+      "CompanyAddress": String(this.CompanyAddress),
+      "CreatedBy": this.userdetail.user_Id,
+      "Gst_Percentage": String(this.cgstPercentage),
+      "EntityId": Number(this.Entity),
+      "Pincode": String(this.PinCode)
+
+    };
+    console.log('create payload', JSON.stringify(payload));
     this.gstService.Create(payload).subscribe({
       next: (res: any) => {
 
@@ -148,12 +161,16 @@ export class GSTCreateComponent {
         if (isSuccess) {
           this.showPopup = true;
           this.popupMessage = res?.Data?.response;
+          this.dialogRef.close('add')
           this.isLoading = false;
+
 
         } else {
 
           this.isLoading = false;
           alert(res?.Data?.response);
+          this.dialogRef.close('add')
+
         }
 
         // <-- show popup for both cases
@@ -168,4 +185,6 @@ export class GSTCreateComponent {
     });
 
   }
+
+
 }

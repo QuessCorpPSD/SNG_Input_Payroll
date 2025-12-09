@@ -10,6 +10,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { CompanyallComponent } from '../../../common/CompanyAll/companyall.component';
 import { MatSort } from '@angular/material/sort';
 import { BillingpayfrequencyService } from '../../../Service/invoice/billingpayfrequency.service';
+import { EncryptionService } from '../../../Shared/encryption.service';
+import { SessionStorageService } from '../../../Shared/SessionStorageService';
+import { PayfrequencyService } from '../../../Service/CUSTOMER/payfrequency.service';
 
 @Component({
   selector: 'app-payfrequency-edit',
@@ -39,7 +42,9 @@ export class PayfrequencyEditComponent {
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<PayfrequencyEditComponent>,
     @Inject(MAT_DIALOG_DATA) public editData: any,
-    private service: BillingpayfrequencyService,
+    private service: PayfrequencyService,
+    private decry: EncryptionService,
+    private _sessionStoreage: SessionStorageService,
   ) { }
 
 
@@ -93,6 +98,12 @@ export class PayfrequencyEditComponent {
 
 
   ngOnInit(): void {
+    const json = this._sessionStoreage.getItem('UserProfile');
+    if (json) {
+      this.userdetail = JSON.parse(this.decry.decrypt(json));
+    } else {
+      console.warn('UserProfile not found in session storage');
+    }
     this.BillingpayeditForm = this.fb.group({
       Companycode: [{ value: '', disabled: true }, Validators.required],
       Group: [{ value: '', disabled: true }],
@@ -138,6 +149,10 @@ export class PayfrequencyEditComponent {
       }
     });
   }
+  formatDate(date: string): string {
+    const [day, month, year] = date.split('-');
+    return `${year}-${month}-${day}`; // Converts DD-MM-YYYY to YYYY-MM-DD
+  }
   onSave() {
     this.isLoading = true;
 
@@ -165,25 +180,25 @@ export class PayfrequencyEditComponent {
     const row = this.dataSource.data[0];
 
     const payload = {
-      createdBy: this.userdetail?.User_Id ?? 0,
-      mode: "Add",
+      createdBy: this.userdetail?.user_Id,
+      mode: "Edit",
 
       parentDetail: {
         Pay_Frequency_Id: row.Pay_Frequency_Id,
         Group_Id: groupId,
         Company_Id: this.selectedCompanyId,
-        Starting_Date: startdate,
-        Ending_Date: enddate
+        Starting_Date: this.formatDate(startdate),
+        Ending_Date: this.formatDate(enddate)
       },
 
       ChildDetail: this.dataSource.data.map((row: any) => ({
         Pay_Frequency_Detail_Id: row.Pay_Frequency_Detail_Id,
         Pay_Frequency_Id: row.Pay_Frequency_Id,
-        Pay_Sequence_Number: row.Pay_Sequence_Number,
+        Pay_Sequence_Number: (row.Pay_Sequence_Number).toString(),
         Pay_Period: row.Pay_Period,
-        Start_At: row.Start_At,
-        End_At: row.Start_At,
-        Salary_Date: row.Salary_Date,
+        Start_At: this.formatDate(row.Start_At),
+        End_At: this.formatDate(row.Start_At),
+        Salary_Date: this.formatDate(row.Salary_Date),
         Pay_Period_Days: row.Pay_Period_Days,
         Weekly_Holidays: row.Weekly_Holidays,
         Monthly_Holidays: row.Monthly_Holidays,
@@ -197,9 +212,10 @@ export class PayfrequencyEditComponent {
 
     this.service.Addsave(payload).subscribe({
       next: res => {
+        console.log('res',res)
         this.isLoading = false;
-        alert(res.Data.message);
-        this.dialogRef.close(true);
+        alert(res.Data.data.Table0?.[0].Error_Message);
+        this.dialogRef.close('edit');
       },
       error: err => {
         this.isLoading = false;
@@ -207,6 +223,6 @@ export class PayfrequencyEditComponent {
         console.error(err);
       }
     });
-
+    this.isLoading = false;
   }
 }

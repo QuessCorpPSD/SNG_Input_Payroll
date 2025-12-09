@@ -13,7 +13,7 @@
                             <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
                         </div>
 
-                        <div class="col-md-2" style="display: none;">
+                        <div class="col-md-2">
                             <label class="form-label text-muted small">Employee Code</label>
                             <select class="form-select form-select-sm">
                                 <option value="">-- Select --</option>
@@ -21,7 +21,7 @@
                         </div>
 
                         <!-- E Active -->
-                        <div class="col-md-2" style="display: none;">
+                        <div class="col-md-2">
                             <label class="form-label text-muted small">E Active</label>
                             <select class="form-select form-select-sm" formControlName="EActive">
                                 <option value="-1">-- Select --</option>
@@ -39,7 +39,7 @@
                                 </button>
 
                                 <button class="btn btn-sm d-flex align-items-center justify-content-center"
-                                    matTooltip="Export" (click)="exportToExcel()">
+                                    matTooltip="Export">
                                     <mat-icon>table_chart</mat-icon>
                                 </button>
 

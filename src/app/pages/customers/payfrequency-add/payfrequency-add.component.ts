@@ -12,6 +12,7 @@ import { MatSort } from '@angular/material/sort';
 import { BillingpayfrequencyService } from '../../../Service/invoice/billingpayfrequency.service';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
+import { PayfrequencyService } from '../../../Service/CUSTOMER/payfrequency.service';
 
 @Component({
   selector: 'app-payfrequency-add',
@@ -21,9 +22,9 @@ import { SessionStorageService } from '../../../Shared/SessionStorageService';
   styleUrl: './payfrequency-add.component.css'
 })
 export class PayfrequencyAddComponent {
- @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
   BillingpayaddForm!: FormGroup;
-  uploadDisplayedColumns: string[] = ['SNo','Paysequenceno', 'Payperiod', 'Startat', 'Endat', 'Salarydate', 'Payperioddays', 'Weeklyholidays', 'Monthlyholidays', 'WorkingHolidays'];
+  uploadDisplayedColumns: string[] = ['SNo', 'Paysequenceno', 'Payperiod', 'Startat', 'Endat', 'Salarydate', 'Payperioddays', 'Weeklyholidays', 'Monthlyholidays', 'WorkingHolidays'];
   uploadedData: any[] = [];
   uploadedDataSource = new MatTableDataSource(this.uploadedData);
   selectedCompanyId: any;
@@ -40,7 +41,7 @@ export class PayfrequencyAddComponent {
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<PayfrequencyAddComponent>,
-    private dialog: MatDialog, private service: BillingpayfrequencyService,
+    private dialog: MatDialog, private service: PayfrequencyService,
     private decry: EncryptionService,
     private _sessionStoreage: SessionStorageService
   ) { }
@@ -69,7 +70,10 @@ export class PayfrequencyAddComponent {
     this.uploadedDataSource.data = [...this.uploadedData];
     this.selectedRowIndex = null;
   }
-
+  formatDate(date: string): string {
+    const [day, month, year] = date.split('-');
+    return `${year}-${month}-${day}`; // Converts DD-MM-YYYY to YYYY-MM-DD
+  }
   AddPOOpen(): void {
 
     if (!this.selectedCompanyId) {
@@ -155,25 +159,25 @@ export class PayfrequencyAddComponent {
     const groupId = this.BillingpayaddForm.get('Group')?.value;
 
     const payload = {
-      createdBy: this.userdetail?.User_Id ?? 0,
+      createdBy: this.userdetail.user_Id,
       mode: "Add",
 
       parentDetail: {
         Pay_Frequency_Id: 0,
         Group_Id: groupId,
         Company_Id: this.selectedCompanyId,
-        Starting_Date: startdate,
-        Ending_Date: enddate
+        Starting_Date: this.formatDate(startdate),
+        Ending_Date: this.formatDate(enddate)
       },
 
       ChildDetail: this.dataSource.data.map((row: any) => ({
         Pay_Frequency_Detail_Id: 0,
         Pay_Frequency_Id: 0,
-        Pay_Sequence_Number: row.Pay_Sequence_Number,
+        Pay_Sequence_Number: (row.Pay_Sequence_Number).toString(),
         Pay_Period: row.Pay_Period,
-        Start_At: row.FirstDay,
-        End_At: row.LastDay,
-        Salary_Date: row.SalaryDate,
+        Start_At: this.formatDate(row.FirstDay),
+        End_At: this.formatDate(row.LastDay),
+        Salary_Date: this.formatDate(row.SalaryDate),
         Pay_Period_Days: row.Pay_Period_Days,
         Weekly_Holidays: row.Weekly_Holyday,
         Monthly_Holidays: row.Monthly_Holyday,
@@ -189,8 +193,8 @@ export class PayfrequencyAddComponent {
     this.service.Addsave(payload).subscribe({
       next: res => {
         this.isLoading = false;
-        alert(res.Data.message);
-        this.dialogRef.close(true);
+        alert(res.Data.data.Table0?.[0].Error_Message);
+        this.dialogRef.close('add');
       },
       error: err => {
         this.isLoading = false;

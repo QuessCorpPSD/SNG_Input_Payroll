@@ -1,10 +1,11 @@
-<form novalidate>
+<form [formGroup]="Gsteditform" novalidate>
     <mat-card class="custom-card">
         <mat-card-header class="sticky-header">
-            <div
+            <!-- <div
                 style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; padding-right: 600px;">
                 Update GST Master
-            </div>
+            </div> -->
+            <mat-card-title style="color: #302CB3;">Update GST Master</mat-card-title>
             <span class="spacer"></span>
             <button mat-icon-button (click)="onClose()" class="no-border-icon">
                 <mat-icon>close</mat-icon>
@@ -14,72 +15,96 @@
         <mat-card-content>
             <div class="row g-3 mb-3">
                 <div class="col-md-4">
-                    <label class="form-label text-muted small">GST Master Id*</label>
-                    <input class="form-control form-control-sm" value="0" readonly />
+                    <label class="form-label text-muted small">GST Master Id</label>
+                    <span style="color: red;">*</span>
+                    <input class="form-control form-control-sm" formControlName="Gstmasterid" readonly />
                 </div>
                 <div class="col-md-4">
-                    <label class="form-label text-muted small">Effective Date*</label>
-                    <input type="date" class="form-control form-control-sm" />
+                    <label class="form-label text-muted small">Effective Date</label>
+                    <span style="color: red;">*</span>
+                    <input type="date" class="form-control form-control-sm" formControlName="EffectiveDate"
+                        name="EffectiveDate" />
                 </div>
                 <div class="col-md-4">
-                    <label class="form-label text-muted small">Quess Legal Entity*</label>
-                    <input class="form-control form-control-sm" placeholder="QUESS" />
+                    <label class="form-label text-muted small">GST Number</label>
+                    <span style="color: red;">*</span>
+                    <input class="form-control form-control-sm" formControlName="GSTNumber" name="GSTNumber" />
                 </div>
-            </div>
-
-            <div class="row g-3 mb-3">
-                <div class="col-md-4">
+                <!-- <div class="col-md-4">
                     <label class="form-label text-muted small">GST Type*</label>
                     <select class="form-select form-select-sm">
                         <option>-Select-</option>
 
                     </select>
-                </div>
+                </div> -->
                 <div class="col-md-4">
+                    <label class="form-label text-muted small">Quess Legal Entity<span
+                            style="color: red;">*</span></label>
+                    <select class="form-select form-select-sm" formControlName="Entity">
+                        <option>-Select-</option>
+                        <option *ngFor="let pf of entity" [ngValue]="pf.Entity_Id">
+                            {{ pf.Entity_Name }}
+                        </option>
+                    </select>
+                </div>
+
+                <!-- <div class="col-md-4">
                     <label class="form-label text-muted small">State Name*</label>
                     <select class="form-select form-select-sm">
                         <option>-Select-</option>
                     </select>
+                </div> -->
+
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Company Name</label>
+                    <span style="color: red;">*</span>
+                    <input class="form-control form-control-sm" formControlName="CompanyName" name="CompanyName" />
                 </div>
                 <div class="col-md-4">
-                    <label class="form-label text-muted small">GST Number*</label>
-                    <input class="form-control form-control-sm" />
+                    <label class="form-label text-muted small">Company Address</label>
+                    <span style="color: red;">*</span>
+                    <input class="form-control form-control-sm" formControlName="CompanyAddress"
+                        name="CompanyAddress" />
                 </div>
             </div>
 
             <div class="row g-3 mb-3">
+
                 <div class="col-md-4">
+                    <label class="form-label text-muted small">Pin Code</label>
+                    <span style="color: red;">*</span>
+                    <input class="form-control form-control-sm" formControlName="PinCode" name="PinCode" />
+                </div>
+
+                <!-- <div style="display: none;" class="row g-3 mb-3"> -->
+                <!-- <div class="col-md-4">
                     <label class="form-label text-muted small">PAN Number*</label>
                     <input class="form-control form-control-sm" />
                 </div>
                 <div class="col-md-4">
                     <label class="form-label text-muted small">TAN Number*</label>
                     <input class="form-control form-control-sm" />
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label text-muted small">Company Name*</label>
-                    <input class="form-control form-control-sm" />
-                </div>
-            </div>
+                </div> -->
 
-            <div class="row g-3 mb-3">
-                <div class="col-md-4">
-                    <label class="form-label text-muted small">Company Address*</label>
-                    <input class="form-control form-control-sm" />
-                </div>
-                <div class="col-md-4">
+
+                <!-- <div class="col-md-4">
                     <label class="form-label text-muted small">Location*</label>
                     <input class="form-control form-control-sm" />
-                </div>
+                </div> -->
+
                 <div class="col-md-4">
-                    <label class="form-label text-muted small">Pin Code*</label>
-                    <input class="form-control form-control-sm" />
+                    <label for="cgstCheck" class="form-label text-muted small">GST Percentage</label>
+                    <span style="color: red;">*</span>
+                    <input type="text" class="form-control form-control-sm" formControlName="cgstPercentage"
+                        name="cgstPercentage" />
                 </div>
             </div>
 
-            <div class="row g-3 mb-3">
+            <!-- </div> -->
+            <!-- <div style="display: none;" class="row g-3 mb-3"> -->
+
                 <!-- CGST -->
-                <div class="col-md-4 d-flex flex-column align-items-start">
+                <!-- <div class="col-md-4 d-flex flex-column align-items-start">
                     <div class="d-flex align-items-center mb-1">
                         <input type="checkbox" id="cgstCheck" class="me-2" [(ngModel)]="cgstApplicable"
                             name="cgstApplicable" (change)="toggleField('cgst')" />
@@ -87,10 +112,10 @@
                     </div>
                     <input type="number" class="form-control form-control-sm w-100" [(ngModel)]="cgstPercentage"
                         name="cgstPercentage" [disabled]="!cgstApplicable" />
-                </div>
+                </div> -->
 
                 <!-- SGST -->
-                <div class="col-md-4 d-flex flex-column align-items-start">
+                <!-- <div class="col-md-4 d-flex flex-column align-items-start">
                     <div class="d-flex align-items-center mb-1">
                         <input type="checkbox" id="sgstCheck" class="me-2" [(ngModel)]="sgstApplicable"
                             name="sgstApplicable" (change)="toggleField('sgst')" />
@@ -98,10 +123,9 @@
                     </div>
                     <input type="number" class="form-control form-control-sm w-100" [(ngModel)]="sgstPercentage"
                         name="sgstPercentage" [disabled]="!sgstApplicable" />
-                </div>
-
+                </div> -->
                 <!-- UTGST -->
-                <div class="col-md-4 d-flex flex-column align-items-start">
+                <!-- <div class="col-md-4 d-flex flex-column align-items-start">
                     <div class="d-flex align-items-center mb-1">
                         <input type="checkbox" id="utgstCheck" class="me-2" [(ngModel)]="utgstApplicable"
                             name="utgstApplicable" (change)="toggleField('utgst')" />
@@ -109,16 +133,16 @@
                     </div>
                     <input type="number" class="form-control form-control-sm w-100" [(ngModel)]="utgstPercentage"
                         name="utgstPercentage" [disabled]="!utgstApplicable" />
-                </div>
+                </div> -->
 
-                <!-- Cess -->
 
-            </div>
+            <!-- </div> -->
 
+            <!-- Cess -->
 
 
             <!-- ✅ Cess Effective Dates -->
-            <div class="row g-3 mb-3">
+            <!-- <div class="row g-3 mb-3">
                 <div class="col-md-4 ">
                     <label class="form-label text-muted small">Cess Percentage</label>
                     <input type="number" class="form-control form-control-sm" [(ngModel)]="cessPercentage"
@@ -132,8 +156,9 @@
                     <label class="form-label text-muted small">Cess Effective To Date</label>
                     <input type="date" class="form-control form-control-sm" />
                 </div>
-            </div>
+            </div> -->
         </mat-card-content>
+
 
         <mat-card-footer class="footer">
             <div class="d-flex justify-content-end mt-3">
@@ -141,12 +166,14 @@
                     style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
 
                     <button type="cancel"
-                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0;">
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0;"
+                        (click)="onClose()">
                         Cancel
                     </button>
 
                     <button type="submit"
-                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; ">
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue;color: white; "
+                        (click)="SaveClick()">
                         Save
                     </button>
                 </div>
@@ -154,3 +181,10 @@
         </mat-card-footer>
     </mat-card>
 </form>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>
+<div *ngIf="showPopup" class="overlay">
+    <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+        (close)="showPopup = false"></app-alertpopup>
+</div>

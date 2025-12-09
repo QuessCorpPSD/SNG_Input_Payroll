@@ -3,9 +3,8 @@
 
         <mat-card-header class="sticky-header">
             <br />
-            <div style="color:#302CB3; font-size:22px; font-family:Nunito Sans; font-weight:700; padding-right:500px;">
-                Add
-            </div>
+            <mat-card-title style="color:#302CB3;">Add</mat-card-title>
+
             <span class="spacer"></span>
             <button mat-icon-button (click)="onClose()" class="no-border-icon">
                 <mat-icon>close</mat-icon>
@@ -13,10 +12,10 @@
         </mat-card-header>
 
         <mat-card-content>
-            <div class="table-wrapper1">
+            <div class="table-wrapper1" style="padding-right: 50px;">
                 <div class="table-scroll">
                     <mat-table [dataSource]="uploadedDataSource" matSort
-                        class="custom-table mat-elevation-z8 auto-fit-table" style="padding-right: 50px;">
+                        class="custom-table mat-elevation-z8 auto-fit-table">
 
                         <!-- Select All Checkbox in Header -->
                         <ng-container matColumnDef="Checkbox">
@@ -56,21 +55,23 @@
 
                         <!-- Other Columns -->
                         <ng-container matColumnDef="FilterPaycode">
-                            <mat-header-cell *matHeaderCellDef style="min-width: 100px!important;"> <input matInput
-                                    placeholder="Search"  (keyup)="applyFilter($event, 'Paycode')"></mat-header-cell>
+                            <mat-header-cell *matHeaderCellDef style="min-width: 100px!important;"> <input
+                                    class="form-control form-control-sm " matInput placeholder="Search"
+                                    (keyup)="applyFilter($event, 'Paycode')"></mat-header-cell>
 
                         </ng-container>
 
                         <ng-container matColumnDef="FilterDescription">
-                            <mat-header-cell *matHeaderCellDef style="min-width: 270px!important;">
-                                <input matInput placeholder="Search" style="min-width: 270px!important;"
+                            <mat-header-cell *matHeaderCellDef style="min-width: 280px!important;">
+                                <input class="form-control form-control-sm " matInput placeholder="Search"
                                     (keyup)="applyFilter($event, 'Description')"></mat-header-cell>
 
                         </ng-container>
 
                         <ng-container matColumnDef="FilterPaytype">
-                            <mat-header-cell *matHeaderCellDef style="min-width: 100px!important;"> <input matInput
-                                    placeholder="Search" style="min-width: 100px!important;" (keyup)="applyFilter($event, 'Paytype')"></mat-header-cell>
+                            <mat-header-cell *matHeaderCellDef style="min-width: 100px!important;"> <input
+                                    class="form-control form-control-sm " matInput placeholder="Search"
+                                    (keyup)="applyFilter($event, 'Paytype')"></mat-header-cell>
 
                         </ng-container>
 

@@ -142,7 +142,7 @@ export class CompanyComponent {
 
           // Check if Data is not an array or empty
           if (!Array.isArray(jsonData) || jsonData.length === 0) {
-            this.showAlertPopup(res.Data.message);
+            alert(res.Data.message);
             return;
           }
 

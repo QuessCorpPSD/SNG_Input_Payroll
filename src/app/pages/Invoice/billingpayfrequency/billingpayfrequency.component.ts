@@ -12,11 +12,12 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { BillingpayfrequencyEditComponent } from '../billingpayfrequency-edit/billingpayfrequency-edit.component';
 import { BillingpayfrequencyService } from '../../../Service/invoice/billingpayfrequency.service';
 import * as XLSX from 'xlsx';
+import { MatCardModule } from "@angular/material/card";
 
 @Component({
   selector: 'app-billingpayfrequency',
   standalone: true,
-  imports: [MatTableModule, MatIconModule, CompanyallComponent, CommonModule, FormsModule, ReactiveFormsModule, MatTooltipModule, MatPaginator],
+  imports: [MatTableModule, MatIconModule, CompanyallComponent, CommonModule, FormsModule, ReactiveFormsModule, MatTooltipModule, MatPaginator, MatCardModule],
   templateUrl: './billingpayfrequency.component.html',
   styleUrl: './billingpayfrequency.component.css'
 })
@@ -64,10 +65,15 @@ export class BillingpayfrequencyComponent {
   }
 
   AddOpen() {
-    this.dialog.open(BillingpayfrequencyAddComponent, {
+    const dialogRef = this.dialog.open(BillingpayfrequencyAddComponent, {
       width: '80%',
       height: '95vh',
       disableClose: true
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'add') {
+        this.onsearch();
+      }
     });
   }
 
@@ -77,13 +83,20 @@ export class BillingpayfrequencyComponent {
       return;
     }
 
-    this.dialog.open(BillingpayfrequencyEditComponent, {
+    const dialogRef = this.dialog.open(BillingpayfrequencyEditComponent, {
       width: '80%',
       height: '95vh',
       disableClose: true,
-      data: this.selectedRow  
+      data: this.selectedRow
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'edit') {
+        this.onsearch();
+      }
     });
   }
+
 
 
   onsearch() {

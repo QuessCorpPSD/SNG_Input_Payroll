@@ -4,10 +4,10 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { MatCardModule } from "@angular/material/card";
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from "@angular/material/icon";
-import { EmployeeService } from '../../../Service/CUSTOMER/employee.service';
 import { APIResponse } from '../../../Models/apiresponse';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
+import { EmployeeService } from '../../../Service/CUSTOMER/employee.service';
 
 @Component({
   selector: 'app-employee-bankdetails',

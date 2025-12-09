@@ -148,6 +148,10 @@ export class BillingpayfrequencyEditComponent {
       }
     });
   }
+  formatDate(date: string): string {
+    const [day, month, year] = date.split('-');
+    return `${year}-${month}-${day}`; // Converts DD-MM-YYYY to YYYY-MM-DD
+  }
   onSave() {
     this.isLoading = true;
 
@@ -202,25 +206,25 @@ export class BillingpayfrequencyEditComponent {
     const row = this.dataSource.data[0];
 
     const BillingPayFrequencyRequest = {
-      createdBy: this.userdetail?.user_Id ?? 0,
+      createdBy: this.userdetail?.user_Id,
       mode: "Edit",
 
       parentDetail: {
         Pay_Frequency_Id: row.Pay_Frequency_Id,
         Group_Id: groupId,
         Company_Id: this.selectedCompanyId,
-        Starting_Date: startdate,
-        Ending_Date: enddate
+        Starting_Date: this.formatDate(startdate),
+        Ending_Date: this.formatDate(enddate)
       },
 
-      ChildDetail:this.dataSource.data.map((row: any) => ({
+      ChildDetail: this.dataSource.data.map((row: any) => ({
         Pay_Frequency_Detail_Id: row.Pay_Frequency_Detail_Id,
         Pay_Frequency_Id: row.Pay_Frequency_Id,
-        Pay_Sequence_Number: row.Pay_Sequence_Number,
+        Pay_Sequence_Number: (row.Pay_Sequence_Number).toString(),
         Pay_Period: row.Pay_Period,
-        Start_At: row.Start_At,
-        End_At: row.End_At,
-        Salary_Date: row.Salary_Date,
+        Start_At: this.formatDate(row.Start_At),
+        End_At: this.formatDate(row.End_At),
+        Salary_Date: this.formatDate(row.Salary_Date),
         Pay_Period_Days: row.Pay_Period_Days,
         Weekly_Holidays: row.Weekly_Holidays,
         Monthly_Holidays: row.Monthly_Holidays,
@@ -230,14 +234,14 @@ export class BillingpayfrequencyEditComponent {
     };
 
     console.log("SENDING PAYLOAD:", JSON.stringify(BillingPayFrequencyRequest));
-  //  console.log(BillingPayFrequencyRequest);
+    //  console.log(BillingPayFrequencyRequest);
 
 
     this.service.Addsave(BillingPayFrequencyRequest).subscribe({
       next: res => {
         this.isLoading = false;
-        alert(res.Data.message);
-        this.dialogRef.close(true);
+        alert(res.Data.data.Table0?.[0].Error_Message);
+        this.dialogRef.close('edit');
       },
       error: err => {
         this.isLoading = false;

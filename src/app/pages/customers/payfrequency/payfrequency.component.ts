@@ -37,7 +37,7 @@ export class PayfrequencyComponent {
   uploadedDataSource = new MatTableDataSource(this.uploadedData);
 
   @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild('paginator') paginator!: MatPaginator;
 
   selectedCompanyId: any;
   selectedCompanyCode: any;
@@ -64,10 +64,15 @@ export class PayfrequencyComponent {
   }
 
   AddOpen() {
-    this.dialog.open(PayfrequencyAddComponent, {
+    const dialogRef = this.dialog.open(PayfrequencyAddComponent, {
       width: '80%',
       height: '95vh',
       disableClose: true
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'add') {
+        this.onsearch();
+      }
     });
   }
 
@@ -77,11 +82,16 @@ export class PayfrequencyComponent {
       return;
     }
 
-    this.dialog.open(PayfrequencyEditComponent, {
+    const dialogRef = this.dialog.open(PayfrequencyEditComponent, {
       width: '80%',
       height: '95vh',
       disableClose: true,
-      data: this.selectedRow  
+      data: this.selectedRow
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'edit') {
+        this.onsearch();
+      }
     });
   }
 

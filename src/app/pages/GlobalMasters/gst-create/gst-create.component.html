@@ -1,10 +1,11 @@
 <form novalidate>
     <mat-card class="custom-card">
         <mat-card-header class="sticky-header">
-            <div
+            <!-- <div
                 style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; padding-right: 600px;">
                 Create GST Master
-            </div>
+            </div> -->
+            <mat-card-title style="color: #302CB3;">Create GST Master</mat-card-title>
             <span class="spacer"></span>
             <button mat-icon-button (click)="onClose()" class="no-border-icon">
                 <mat-icon>close</mat-icon>
@@ -27,8 +28,7 @@
                 <div class="col-md-4">
                     <label class="form-label text-muted small">GST Number</label>
                     <span style="color: red;">*</span>
-                    <input class="form-control form-control-sm" [(ngModel)]="GSTNumber"
-                        name="GSTNumber" />
+                    <input class="form-control form-control-sm" [(ngModel)]="GSTNumber" name="GSTNumber" />
                 </div>
                 <!-- <div class="col-md-4">
                     <label class="form-label text-muted small">GST Type*</label>
@@ -37,13 +37,17 @@
 
                     </select>
                 </div> -->
-                <!-- <div class="col-md-4">
-                    <label class="form-label text-muted small">Quess Legal Entity*</label>
-                    <input class="form-control form-control-sm" placeholder="QUESS" />
-                </div> -->
-            </div>
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Quess Legal Entity<span
+                            style="color: red;">*</span></label>
+                    <select class="form-select form-select-sm" [(ngModel)]="Entity" name="Entity">
+                        <option>-Select-</option>
+                        <option *ngFor="let pf of entity" [value]="pf.Entity_Id">
+                            {{ pf.Entity_Name }}
+                        </option>
+                    </select>
+                </div>
 
-            <div class="row g-3 mb-3">
 
                 <!-- <div class="col-md-4">
                     <label class="form-label text-muted small">State Name*</label>
@@ -55,25 +59,25 @@
                 <div class="col-md-4">
                     <label class="form-label text-muted small">Company Name</label>
                     <span style="color: red;">*</span>
-                    <input class="form-control form-control-sm" [(ngModel)]="CompanyName"
-                        name="CompanyName"/>
+                    <input class="form-control form-control-sm" [(ngModel)]="CompanyName" name="CompanyName" />
                 </div>
                 <div class="col-md-4">
                     <label class="form-label text-muted small">Company Address</label>
                     <span style="color: red;">*</span>
-                    <input class="form-control form-control-sm" [(ngModel)]="CompanyAddress"
-                        name="CompanyAddress"/>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label text-muted small">Pin Code</label>
-                    <span style="color: red;">*</span>
-                    <input class="form-control form-control-sm" [(ngModel)]="PinCode"
-                        name="PinCode"/>
+                    <input class="form-control form-control-sm" [(ngModel)]="CompanyAddress" name="CompanyAddress" />
                 </div>
             </div>
 
-            <div style="display: none;" class="row g-3 mb-3">
-                <!-- <div class="col-md-4">
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Pin Code</label>
+                    <span style="color: red;">*</span>
+                    <input class="form-control form-control-sm" [(ngModel)]="PinCode" name="PinCode" />
+                </div>
+            <!-- </div> -->
+
+            <!-- <div style="display: none;" class="row g-3 mb-3"> -->
+            <!-- <div class="col-md-4">
                     <label class="form-label text-muted small">PAN Number*</label>
                     <input class="form-control form-control-sm" />
                 </div>
@@ -82,24 +86,20 @@
                     <input class="form-control form-control-sm" />
                 </div> -->
 
-            </div>
 
-            <div class="row g-3 mb-3">
+            <!-- <div class="row g-3 mb-3"> -->
                 <!-- <div class="col-md-4">
                     <label class="form-label text-muted small">Location*</label>
                     <input class="form-control form-control-sm" />
                 </div> -->
 
-                <div class="col-md-4 d-flex flex-column align-items-start">
-                    <div class="d-flex align-items-center mb-1">
-                        <label for="cgstCheck" class="form-label text-muted small mb-0">GST Percentage</label>
-                        <span style="color: red;">*</span>
-                    </div>
+                <div class="col-md-4">
+                    <label for="cgstCheck" class="form-label text-muted small mb-0">GST Percentage</label>
+                    <span style="color: red;">*</span>
                     <input type="number" class="form-control form-control-sm w-100" [(ngModel)]="cgstPercentage"
                         name="cgstPercentage" />
                 </div>
             </div>
-
             <div style="display: none;" class="row g-3 mb-3">
 
                 <!-- CGST -->
@@ -164,7 +164,8 @@
                     style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
 
                     <button type="cancel"
-                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0;">
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0;"
+                        (click)="onClose()">
                         Cancel
                     </button>
 
@@ -182,5 +183,5 @@
 </div>
 <div *ngIf="showPopup" class="overlay">
     <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
-        (close)="showPopup = false"></app-alertpopup>
+        (close)="showPopup = false" ></app-alertpopup>
 </div>

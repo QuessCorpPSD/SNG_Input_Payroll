@@ -4,10 +4,10 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { MatCardModule } from "@angular/material/card";
 import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatIconModule } from "@angular/material/icon";
-import { EmployeeService } from '../../../Service/CUSTOMER/employee.service';
 import { APIResponse } from '../../../Models/apiresponse';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
+import { EmployeeService } from '../../../Service/CUSTOMER/employee.service';
 
 @Component({
   selector: 'app-employee-information',
@@ -37,30 +37,51 @@ export class EmployeeInformationComponent {
 
     this.rowData = data.rowData;
   }
+  formatDate(date: string): string {
+    const [day, month, year] = date.split('-');
+    return `${year}-${month}-${day}`; // Converts DD-MM-YYYY to YYYY-MM-DD
+  }
+
 
   ngOnInit(): void {
     const json = this._sessionStoreage.getItem('UserProfile');
     if (json) {
       this.userdetail = JSON.parse(this.decry.decrypt(json));
-    } else {
-      console.warn('UserProfile not found in session storage');
     }
 
-    // Initialize form with rowData values and validators
     this.infoForm = this.fb.group({
       passportNo: [this.rowData.Passport_Number ?? '', Validators.required],
-      passportExpiry: [this.rowData.Passport_Expiry_Date ?? '', Validators.required],
+
+      passportExpiry: [
+        this.formatDate(this.rowData.Passport_Expiry_Date),
+        Validators.required
+      ],
+
       placeOfIssue: [this.rowData.Place_Of_Issue ?? '', Validators.required],
       gunLicenseNo: [this.rowData.Gun_License_No ?? '', Validators.required],
       drivingLicenseNo: [this.rowData.Driving_License_Number ?? '', Validators.required],
       nricFinNo: [this.rowData.Total_CTC ?? '', Validators.required],
       fundLevy: [this.rowData.FUND_LEVY ?? '', Validators.required],
       sprStatus: [this.rowData.spr_status_id ?? '', Validators.required],
-      sprApprovedDate: [this.rowData.SPR_APPROVE_DATE ?? '', Validators.required],
+
+      sprApprovedDate: [
+        this.formatDate(this.rowData.SPR_APPROVE_DATE),
+        Validators.required
+      ],
+
       visaNumber: [this.rowData.VISA_NUMBER ?? '', Validators.required],
       insuranceNumber: [this.rowData.INSURANCE_NUMBER ?? '', Validators.required],
-      visaStartDate: [this.rowData.VISA_DURATION_START_DATE ?? '', Validators.required],
-      visaEndDate: [this.rowData.VISA_DURATION_END_DATE ?? '', Validators.required],
+
+      visaStartDate: [
+        this.formatDate(this.rowData.VISA_DURATION_START_DATE),
+        Validators.required
+      ],
+
+      visaEndDate: [
+        this.formatDate(this.rowData.VISA_DURATION_END_DATE),
+        Validators.required
+      ],
+
       workPassId: [this.rowData.WORK_PASS_ID ?? '', Validators.required],
       religion: [this.rowData.Religion ?? '']
     });
@@ -68,6 +89,7 @@ export class EmployeeInformationComponent {
     this.BindSprstatus();
     this.BindReligion();
   }
+
 
 
   BindSprstatus() {

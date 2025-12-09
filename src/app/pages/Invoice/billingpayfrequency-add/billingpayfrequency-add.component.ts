@@ -122,7 +122,7 @@ export class BillingpayfrequencyAddComponent {
     this.BillingpayaddForm = this.fb.group({
       startdate: ['', Validators.required],
       Enddate: ['', Validators.required],
-      Group:['']
+      Group: ['']
     })
   }
 
@@ -133,6 +133,10 @@ export class BillingpayfrequencyAddComponent {
         this.Grouptype = res.Data.data.Table0;
       }
     });
+  }
+  formatDate(date: string): string {
+    const [day, month, year] = date.split('-');
+    return `${year}-${month}-${day}`;
   }
   onSave() {
 
@@ -156,7 +160,7 @@ export class BillingpayfrequencyAddComponent {
     const groupId = this.BillingpayaddForm.get('Group')?.value;
 
     const payload = {
-      createdBy: this.userdetail?.User_Id ?? 0,
+      createdBy: this.userdetail?.user_Id,
       mode: "Add",
 
       parentDetail: {
@@ -170,11 +174,11 @@ export class BillingpayfrequencyAddComponent {
       ChildDetail: this.dataSource.data.map((row: any) => ({
         Pay_Frequency_Detail_Id: 0,
         Pay_Frequency_Id: 0,
-        Pay_Sequence_Number: row.Pay_Sequence_Number,
+        Pay_Sequence_Number: (row.Pay_Sequence_Number).toString(),
         Pay_Period: row.Pay_Period,
-        Start_At: row.FirstDay,
-        End_At: row.LastDay,
-        Salary_Date: row.SalaryDate,
+        Start_At: this.formatDate(row.FirstDay),
+        End_At: this.formatDate(row.LastDay),
+        Salary_Date: this.formatDate(row.SalaryDate),
         Pay_Period_Days: row.Pay_Period_Days,
         Weekly_Holidays: row.Weekly_Holyday,
         Monthly_Holidays: row.Monthly_Holyday,
@@ -183,14 +187,21 @@ export class BillingpayfrequencyAddComponent {
       }))
     };
 
-    console.log(payload);
+    console.log('payload', JSON.stringify(payload));
 
     this.isLoading = true;
 
     this.service.Addsave(payload).subscribe({
       next: res => {
         this.isLoading = false;
-        alert(res?.Data?.message);
+        const data = res.Data.data.Table0;
+        if (data.includes('success')) {
+          alert(res.Data.data.Table0?.[0].Error_Message);
+          this.dialogRef.close('add')
+        } else {
+          alert(res.Data.message);
+          this.dialogRef.close('add')
+        }
       },
       error: err => {
         this.isLoading = false;

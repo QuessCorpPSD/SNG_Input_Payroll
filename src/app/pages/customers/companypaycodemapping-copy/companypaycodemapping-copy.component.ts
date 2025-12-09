@@ -13,6 +13,8 @@ import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.component";
+import { EncryptionService } from '../../../Shared/encryption.service';
+import { SessionStorageService } from '../../../Shared/SessionStorageService';
 
 @Component({
   selector: 'app-companypaycodemapping-copy',
@@ -21,72 +23,101 @@ import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.compo
   templateUrl: './companypaycodemapping-copy.component.html',
   styleUrl: './companypaycodemapping-copy.component.css'
 })
-export class CompanypaycodemappingCopyComponent {
 
+export class CompanypaycodemappingCopyComponent {
 
   companypaycodeform!: FormGroup;
   selectedCompanyId: any;
   selectedCompanyCode: any;
 
   isFirstAddClick: boolean = true;
-  paycodeList: any[] = [];   // ← NEW
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  paycodeList: any[] = [];
+  pickfromlist: any[] = [];
 
   uploadDisplayedColumns: string[] = ['SNo', 'Paycode', 'Description', 'Paytype', 'formula', 'taxable', 'LopApplicable', 'PfApplicable', 'ESIApplicable', 'PTApplicable', 'Earnedpaycode', 'Pickfrom'];
   uploadedData: any[] = [];
-  uploadedDataSource = new MatTableDataSource(this.uploadedData);
+  uploadedDataSource = new MatTableDataSource<any>(this.uploadedData);
   selectedRowIndex: number | null = null;
-  pickfromlist: any;
+
   popupMessage: string = '';
-  popupSubMessage: string = '';
   showPopup = false;
   isLoading: boolean = false;
   userdetail!: any;
 
-  selectRow(index: number) {
-    this.selectedRowIndex = index;
-  }
-
-  handleCompanyEvent(company) {
-    this.selectedCompanyId = company.companyId;
-    this.selectedCompanyCode = company.companyCode;
-  }
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  selectedCompanyIdbind: any;
+  selectedCompanyCodebind: any;
 
   constructor(
     private fb: FormBuilder,
-    private dialogRef: MatDialogRef<CompanypaycodemappingAddComponent>,
+    private dialogRef: MatDialogRef<CompanypaycodemappingCopyComponent>,
     private dialog: MatDialog,
     private paycodeService: CompanypaycodemappingService,
-    @Inject(MAT_DIALOG_DATA) public data: any
-
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private decry: EncryptionService,
+    private _sessionStoreage: SessionStorageService,
   ) { }
 
-  onClose(): void {
-    this.dialogRef.close();
+  ngOnInit(): void {
+    const json = this._sessionStoreage.getItem('UserProfile');
+    if (json) {
+      this.userdetail = JSON.parse(this.decry.decrypt(json));
+    } else {
+      console.warn('UserProfile not found in session storage');
+    }
+    this.selectedCompanyId = this.data.companyId;
+    this.selectedCompanyCode = this.data.companyCode;
+
+    this.companypaycodeform = this.fb.group({
+      companycode: [{ value: this.selectedCompanyCode, disabled: true }]
+    });
+
+    this.loadPaycodes();
+    this.loadPickFrom();
+    this.loadMappingTable();
   }
 
-  deleteSelectedRow() {
-    if (this.selectedRowIndex === null) {
-      alert("Please select a row to delete.");
+  ngAfterViewInit(): void {
+    this.uploadedDataSource.paginator = this.paginator;
+  }
+
+  handleCompanyEvent(company: any) {
+    this.selectedCompanyIdbind = company.companyId;
+    this.selectedCompanyCodebind = company.companyCode;
+  }
+
+  selectRow(index: number) {
+    if (this.paginator) {
+      this.selectedRowIndex = index + (this.paginator.pageIndex * this.paginator.pageSize);
+    } else {
+      this.selectedRowIndex = index;
+    }
+  }
+
+
+  AddPOOpen(): void {
+    if (!this.selectedCompanyId) {
+      alert('Please Select Company');
       return;
     }
-
-    this.uploadedData.splice(this.selectedRowIndex, 1);
-
-    // Refresh table
+    this.addEmptyRow();
+  }
+  refreshTable() {
     this.uploadedDataSource.data = [...this.uploadedData];
 
-    // Reset selection
-    this.selectedRowIndex = null;
+    if (this.paginator) {
+      this.uploadedDataSource.paginator = this.paginator;
+    }
   }
 
-
-  addEmptyRow(): void {
-    const emptyRow = {
+  createEmptyRow(): any {
+    return {
+      SNo: null,
       Paycode_Id: null,
       Paycode_Code: '',
       Description: '',
       PayType: '',
+      Formula: '',
       Taxable: '',
       LOP_Applicable: '',
       PF_Applicable: '',
@@ -95,35 +126,91 @@ export class CompanypaycodemappingCopyComponent {
       EarnedPaycode_Code: '',
       Company_Paycode_Pick_From_Id: null,
       Company_Paycode_Pick_From_Value: '',
+      Company_Paycode_Mapping_Detail_Id: 0,
       isEmpty: true
     };
-
-    this.uploadedData.push(emptyRow);
-    this.uploadedDataSource.data = [...this.uploadedData];
   }
 
-  ngOnInit() {
-    this.selectedCompanyId = this.data.companyId;
-    this.selectedCompanyCode = this.data.companyCode;
-
-
-    this.loadPaycodes();
-    this.loadPickFrom();
-    this.loadMappingTable();
-    this.companypaycodeform = this.fb.group({
-      companycode: [{ value: this.selectedCompanyCode, disabled: true }]
+  recalculateSNo(): void {
+    this.uploadedData.forEach((row, index) => {
+      row.SNo = index + 1;
     });
   }
 
-  AddPOOpen(): void {
+  addEmptyRow(): void {
+    const emptyRow = this.createEmptyRow();
 
-    if (!this.selectedCompanyId) {
-      alert('Please Select Company');
+    this.uploadedData.push(emptyRow);
+    this.recalculateSNo();
+
+    this.refreshTable();
+  }
+
+  insertRow(): void {
+    if (this.selectedRowIndex === null) {
+      alert("Please select a row to insert above.");
       return;
     }
 
-    this.addEmptyRow();
+    const emptyRow = this.createEmptyRow();
+
+    this.uploadedData.splice(this.selectedRowIndex, 0, emptyRow);
+    this.recalculateSNo();
+    this.refreshTable();
+    this.selectedRowIndex = null;
   }
+  getAbsoluteIndex(pageRelativeIndex: number): number {
+    return pageRelativeIndex + (this.paginator.pageIndex * this.paginator.pageSize);
+  }
+
+
+  onPaycodeSelect(paycodeId: number, pageRelativeIndex: number) {
+    const rowIndex = this.getAbsoluteIndex(pageRelativeIndex); // absolute index
+    const selectedPaycode = this.paycodeList.find(pc => pc.Paycode_Id === paycodeId);
+
+    if (selectedPaycode) {
+      this.uploadedData[rowIndex] = {
+        ...this.uploadedData[rowIndex],
+        Paycode_Id: selectedPaycode.Paycode_Id,
+        Paycode_Code: selectedPaycode.Paycode_Code,
+        Description: selectedPaycode.Description,
+        PayType: selectedPaycode.PayType,
+        Formula: selectedPaycode.Formula,
+        Taxable: selectedPaycode.Taxable,
+        LOP_Applicable: selectedPaycode.LOP_Applicable,
+        PF_Applicable: selectedPaycode.PF_Applicable,
+        ESI_Applicable: selectedPaycode.ESI_Applicable,
+        PT_Applicable: selectedPaycode.PT_Applicable,
+        EarnedPaycode_Code: selectedPaycode.EarnedPaycode_Code,
+        Company_Paycode_Pick_From_Id: selectedPaycode.Company_Paycode_Pick_From_Id,
+        Company_Paycode_Pick_From_Value: selectedPaycode.Company_Paycode_Pick_From_Value
+      };
+      this.refreshTable();
+    }
+  }
+
+  onPickFromSelect(selectedId: number, pageRelativeIndex: number): void {
+    const rowIndex = this.getAbsoluteIndex(pageRelativeIndex); // absolute index
+    const selected = this.pickfromlist.find(x => x.Company_Paycode_Pick_From_Id == selectedId);
+    this.uploadedData[rowIndex].Company_Paycode_Pick_From_Id = selectedId;
+    this.uploadedData[rowIndex].Company_Paycode_Pick_From_Value = selected?.Company_Paycode_Pick_From_Value || '';
+    this.refreshTable();
+  }
+
+
+
+  deleteSelectedRow(): void {
+    if (this.selectedRowIndex === null) {
+      alert("Please select a row to delete.");
+      return;
+    }
+
+    this.uploadedData.splice(this.selectedRowIndex, 1);
+    this.recalculateSNo();
+    this.refreshTable();
+    this.selectedRowIndex = null;
+  }
+
 
   loadPaycodes() {
     this.paycodeService.companypaycodesearch(this.selectedCompanyId).subscribe({
@@ -132,9 +219,7 @@ export class CompanypaycodemappingCopyComponent {
           this.paycodeList = res.Data.data;
         }
       },
-      error: (err) => {
-        console.error("Paycode API Error", err);
-      }
+      error: (err) => console.error("Paycode API Error", err)
     });
   }
 
@@ -145,160 +230,78 @@ export class CompanypaycodemappingCopyComponent {
           this.pickfromlist = res.Data.data.Table0;
         }
       },
-      error: (err) => {
-        console.error("Pick From API Error", err);
-      }
+      error: (err) => console.error("Pick From API Error", err)
     });
   }
+
   loadMappingTable() {
-    this.paycodeService.companypaycodesearch(this.selectedCompanyId)
-      .subscribe({
-        next: (res: any) => {
-
-          if (res?.Data?.data) {
-
-            // Load API rows into table
-            this.uploadedData = res.Data.data.map((row: any) => ({
-              ...row,
-              isEmpty: false    // mark rows as real rows
-            }));
-
-            this.uploadedDataSource.data = [...this.uploadedData];
-
-            // enable paginator
-            setTimeout(() => {
-              this.uploadedDataSource.paginator = this.paginator;
-            });
-
-          }
-        },
-        error: (err) => {
-          console.error("Mapping table load error", err);
+    this.paycodeService.companypaycodesearch(this.selectedCompanyId).subscribe({
+      next: (res: any) => {
+        if (res?.Data?.data) {
+          this.uploadedData = res.Data.data.map((row: any) => ({
+            ...row,
+            isEmpty: false
+          }));
+          this.refreshTable();
         }
-      });
+      },
+      error: (err) => console.error("Mapping table load error", err)
+    });
   }
 
 
-  addSelectedRow(row: any): void {
-    const existingRowIndex = this.uploadedData.findIndex(
-      item => item.Paycode_Id === row.Paycode_Id
-    );
 
-    if (existingRowIndex === -1) {
-      this.uploadedData.push(row);
-      this.uploadedDataSource.data = [...this.uploadedData];
-      this.uploadedDataSource.paginator = this.paginator;
 
+  onClose(): void {
+    this.dialogRef.close();
+  }
+
+  savePaycodeDetails(): void {
+    if (!this.selectedCompanyIdbind) {
+      alert('Please select company');
+      return
     }
-  }
-
-  onPaycodeSelect(paycodeId: number, rowIndex: number) {
-
-    const selectedPaycode = this.paycodeList.find(pc => pc.Paycode_Id === paycodeId);
-
-    if (selectedPaycode) {
-
-      this.uploadedData[rowIndex] = {
-        ...this.uploadedData[rowIndex],
-        Paycode_Id: selectedPaycode.Paycode_Id,
-        Paycode_Code: selectedPaycode.Paycode_Code,
-        Description: selectedPaycode.Description,
-        PayType: selectedPaycode.PayType,
-        Taxable: selectedPaycode.Taxable,
-        LOP_Applicable: selectedPaycode.LOP_Applicable,
-        PF_Applicable: selectedPaycode.PF_Applicable,
-        ESI_Applicable: selectedPaycode.ESI_Applicable,
-        PT_Applicable: selectedPaycode.PT_Applicable,
-        EarnedPaycode_Code: selectedPaycode.EarnedPaycode_Code,
-        Company_Paycode_Pick_From_Id: selectedPaycode.Company_Paycode_Pick_From_Id,
-      };
-
-      this.uploadedDataSource.data = [...this.uploadedData];
-    }
-  }
-
-
-  insertRow() {
-    if (this.selectedRowIndex === null) {
-      alert("Please select a row to insert above.");
-      return;
-    }
-
-    const emptyRow = {
-      Paycode_Id: null,
-      Paycode_Code: '',
-      Description: '',
-      PayType: '',
-      Taxable: '',
-      LOP_Applicable: '',
-      PF_Applicable: '',
-      ESI_Applicable: '',
-      PT_Applicable: '',
-      EarnedPaycode_Code: '',
-      Company_Paycode_Pick_From_Id: null,
-      Company_Paycode_Pick_From_Value: '',
-      isEmpty: true
-    };
-
-    this.uploadedData.splice(this.selectedRowIndex, 0, emptyRow);
-    this.uploadedDataSource.data = [...this.uploadedData];
-    this.selectedRowIndex = null;
-  }
-
-
-  onPickFromSelect(selectedId: number, rowIndex: number): void {
-
-    const selected = this.pickfromlist.find(x => x.Company_Paycode_Pick_From_Id == selectedId);
-
-    this.uploadedData[rowIndex].Company_Paycode_Pick_From_Id = selectedId;
-    this.uploadedData[rowIndex].Company_Paycode_Pick_From_Value = selected?.Company_Paycode_Pick_From_Value || '';
-
-    this.uploadedDataSource.data = [...this.uploadedData];
-  }
-
-  closePopup(){
-    this.showPopup =false;
-  }
-  
-  savePaycodeDetails() {
     this.isLoading = true;
-    const paycodeDetail = this.uploadedDataSource.data.map(row => ({
-      Paycode_Id: row.Paycode_Id,
+
+    const paycodeDetail = this.uploadedDataSource.data.map((row, index) => ({
+      Paycode_Id: row.Paycode_Id ?? 0,
       EarnedPaycode_Code: row.EarnedPaycode_Code ?? '',
-      Company_Paycode_Pick_From_Id: row.Company_Paycode_Pick_From_Id,
-      SNo: row.SNo
+      Company_Paycode_Pick_From_Id: row.Company_Paycode_Pick_From_Id ?? 0,
+      Company_Paycode_Mapping_Detail_Id: row.Company_Paycode_Mapping_Detail_Id ?? 0,
+      SNo: row.SNo,
+      Formula: row.Formula ?? null
     }));
 
-    const payloadCreate = {
+    const payload = {
       Company_Id: this.selectedCompanyId,
       User_Id: this.userdetail.user_Id,
-      Mode: "Add",
+      Mode: "Copy",
       PaycodeDetail: paycodeDetail
     };
 
-    console.log(payloadCreate);
+    console.log("Final Payload:", JSON.stringify(payload));
 
-    this.paycodeService.PostAddPaycodeMapping(payloadCreate).subscribe({
+    this.paycodeService.PostAddPaycodeMapping(payload).subscribe({
       next: (res) => {
-        console.log(res);
         const parsedData = JSON.parse(res.Data.data);
         const errormsg = parsedData[0].Error_Message;
 
         if (errormsg.toLowerCase().includes("successfully")) {
-          //alert(errormsg);
-          this.showPopup = true;
-          this.popupMessage = "Company Paycode Mapping Copied Successfully";
+          alert("Company Paycode Mapping Created Successfully");
           this.isLoading = false;
         } else {
           alert(errormsg);
           this.isLoading = false;
         }
-        error: (err) => {
-          console.error("Error saving:", err);
-          this.isLoading = false;
-        }
+      },
+      error: (err) => {
+        console.error("Error saving mapping:", err);
+        this.isLoading = false;
       }
     });
+  }
 
+  trackBySNo(index: number, item: any) {
+    return item.SNo ?? index;
   }
 }

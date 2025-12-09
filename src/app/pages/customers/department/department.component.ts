@@ -161,9 +161,9 @@ export class DepartmentComponent {
           console.log('Base64 String Found:', base64String);
           const fileName = res?.Data?.fileName || 'Department';
           this.downloadExcelFromBase64(base64String, fileName, 'xlsx');
-          this.showAlertPopup('Success', 'Template downloaded successfully!');
+          this.showAlertPopup('Template downloaded successfully!');
         } else {
-          alert("Information', 'No template data available.")
+          alert("No template data available.")
         }
         this.isLoading = false;
       },

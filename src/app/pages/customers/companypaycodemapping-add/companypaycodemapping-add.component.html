@@ -2,9 +2,8 @@
     <div class="scrollable-content">
         <mat-card-header class="sticky-header">
             <br />
-            <div
-                style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700;  padding-right: 590px; padding-bottom:10px ;">
-                Add Company Paycode Mapping</div>
+            <mat-card-title style="color:#302CB3;">Add Company Paycode Mapping</mat-card-title>
+
 
             <span class="spacer"></span>
             <button mat-icon-button (click)="onClose()" class="no-border-icon">
@@ -53,8 +52,10 @@
 
                         <!-- SNo -->
                         <ng-container matColumnDef="SNo">
-                            <mat-header-cell *matHeaderCellDef class="col-sno"><strong>SNo</strong></mat-header-cell>
-                            <mat-cell *matCellDef="let row;let i = index" class="col-sno">{{i+1}}</mat-cell>
+                            <mat-header-cell *matHeaderCellDef><strong>SNo</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row; let i = index">
+                                {{ (paginator.pageIndex * paginator.pageSize) + i + 1 }}
+                            </mat-cell>
                         </ng-container>
 
 
@@ -154,10 +155,26 @@
                                 </select>
                             </mat-cell>
                         </ng-container>
+                        <ng-container matColumnDef="Formula">
+                            <mat-header-cell *matHeaderCellDef
+                                style="width: 200px!important; min-width: 200px!important; max-width: 200px!important;">
+                                <strong>Formula</strong>
+                            </mat-header-cell>
+
+                            <mat-cell *matCellDef="let row; let i = index"
+                                style="width: 200px!important; min-width: 200px!important; max-width: 200px!important;">
+
+                                <textarea [(ngModel)]="row.Formula" class="form-control form-control-sm"
+                                    style="height: 60px;"></textarea>
+
+                            </mat-cell>
+                        </ng-container>
+
 
                         <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
                         <mat-row *matRowDef="let row; let i = index; columns: uploadDisplayedColumns"
-                            (click)="selectRow(i)" [class.selected-row]="selectedRowIndex === i">
+                            (click)="selectRow(i)"
+                            [class.selected-row]="selectedRowIndex === (i + (paginator.pageIndex * paginator.pageSize))">
                         </mat-row>
 
                     </mat-table>

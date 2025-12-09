@@ -34,7 +34,7 @@ export class CompanypaycodemappingAddComponent {
   paycodeList: any[] = [];   // ← NEW
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  uploadDisplayedColumns: string[] = ['SNo', 'Paycode', 'Description', 'Paytype', 'taxable', 'LopApplicable', 'PfApplicable', 'ESIApplicable', 'PTApplicable', 'Earnedpaycode', 'Pickfrom'];
+  uploadDisplayedColumns: string[] = ['SNo', 'Paycode', 'Description', 'Paytype', 'taxable', 'LopApplicable', 'PfApplicable', 'ESIApplicable', 'PTApplicable', 'Earnedpaycode', 'Pickfrom', 'Formula'];
   uploadedData: any[] = [];
   uploadedDataSource = new MatTableDataSource(this.uploadedData);
   selectedRowIndex: number | null = null;
@@ -46,9 +46,16 @@ export class CompanypaycodemappingAddComponent {
   isLoading: boolean = false;
   userdetail!: any;
 
+
   selectRow(index: number) {
-    this.selectedRowIndex = index;
+    if (this.paginator) {
+      // Calculate absolute index based on the current page
+      this.selectedRowIndex = index + (this.paginator.pageIndex * this.paginator.pageSize);
+    } else {
+      this.selectedRowIndex = index;
+    }
   }
+
 
   constructor(
     private fb: FormBuilder,
@@ -63,6 +70,10 @@ export class CompanypaycodemappingAddComponent {
   onClose(): void {
     this.dialogRef.close();
 
+  }
+  onFormulaChange(rowIndex: number) {
+    this.uploadedDataSource.data[rowIndex].Formula =
+      this.uploadedDataSource.data[rowIndex].Formula?.trim() || null;
   }
 
   handleCompanyEvent(company: any): void {
@@ -106,6 +117,7 @@ export class CompanypaycodemappingAddComponent {
       Is_ESI_Applicable: "",
       Is_PT_Applicable: "",
       Earnedpaycode: "",
+      Formula: "",
       isEmpty: true   // REQUIRED
     };
 
@@ -139,7 +151,9 @@ export class CompanypaycodemappingAddComponent {
   }
 
 
-
+  getAbsoluteIndex(pageRelativeIndex: number): number {
+    return pageRelativeIndex + (this.paginator.pageIndex * this.paginator.pageSize);
+  }
   loadPaycodes() {
     const payload = {
       paycode_Code: '',
@@ -189,20 +203,23 @@ export class CompanypaycodemappingAddComponent {
     const selectedPaycode = this.paycodeList.find(pc => pc.Paycode_Id === paycodeId);
 
     if (selectedPaycode) {
-      this.uploadedData[rowIndex].Paycode_Id = selectedPaycode.Paycode_Id;
-      this.uploadedData[rowIndex].Paycode_Code = selectedPaycode.Paycode_Code;
-      this.uploadedData[rowIndex].Description = selectedPaycode.Description;
-      this.uploadedData[rowIndex].PayType = selectedPaycode.PayType;
-      this.uploadedData[rowIndex].IsTaxable = selectedPaycode.IsTaxable;
-      this.uploadedData[rowIndex].Is_LOP_Applicable = selectedPaycode.Is_LOP_Applicable;
-      this.uploadedData[rowIndex].Is_PF_Applicable = selectedPaycode.Is_PF_Applicable;
-      this.uploadedData[rowIndex].Is_ESI_Applicable = selectedPaycode.Is_ESI_Applicable;
-      this.uploadedData[rowIndex].Is_PT_Applicable = selectedPaycode.Is_PT_Applicable;
-      this.uploadedData[rowIndex].Earnedpaycode = selectedPaycode.Earnedpaycode;
+      const absoluteIndex = rowIndex + (this.paginator.pageIndex * this.paginator.pageSize);
+
+      this.uploadedData[absoluteIndex].Paycode_Id = selectedPaycode.Paycode_Id;
+      this.uploadedData[absoluteIndex].Paycode_Code = selectedPaycode.Paycode_Code;
+      this.uploadedData[absoluteIndex].Description = selectedPaycode.Description;
+      this.uploadedData[absoluteIndex].PayType = selectedPaycode.PayType;
+      this.uploadedData[absoluteIndex].IsTaxable = selectedPaycode.IsTaxable;
+      this.uploadedData[absoluteIndex].Is_LOP_Applicable = selectedPaycode.Is_LOP_Applicable;
+      this.uploadedData[absoluteIndex].Is_PF_Applicable = selectedPaycode.Is_PF_Applicable;
+      this.uploadedData[absoluteIndex].Is_ESI_Applicable = selectedPaycode.Is_ESI_Applicable;
+      this.uploadedData[absoluteIndex].Is_PT_Applicable = selectedPaycode.Is_PT_Applicable;
+      this.uploadedData[absoluteIndex].Earnedpaycode = selectedPaycode.Earnedpaycode;
 
       this.uploadedDataSource.data = [...this.uploadedData];
     }
   }
+
 
   onPickfromSelect(Company_Paycode_Pick_From_Id: number, rowIndex: number) {
     const selectedPickfrom = this.pickfromlist.find(pc => pc.Company_Paycode_Pick_From_Id === Company_Paycode_Pick_From_Id);
@@ -230,26 +247,35 @@ export class CompanypaycodemappingAddComponent {
       Is_ESI_Applicable: '',
       Is_PT_Applicable: '',
       Earnedpaycode: '',
-      isEmpty: true
+      Formula: '',
+      isEmpty: true,
+      SNo: null 
     };
 
-    // Insert above the selected row
+
     this.uploadedData.splice(this.selectedRowIndex, 0, emptyRow);
+    this.uploadedDataSource.paginator = this.paginator; 
 
-    // Update table datasource
+    this.uploadedData.forEach((row, index) => {
+      row.SNo = index + 1;
+    });
+
     this.uploadedDataSource.data = [...this.uploadedData];
+    this.uploadedDataSource.paginator = this.paginator;
 
-    // Move selection to new empty row
     this.selectedRowIndex = null;
   }
+
+
 
   savePaycodeDetails() {
     this.isLoading = true;
     const paycodeDetail = this.uploadedDataSource.data.map(row => ({
       Paycode_Id: row.Paycode_Id,
-      EarnedPaycode_Code: row.EarnedPaycode_Code ?? '',
+      EarnedPaycode_Code: row.Earnedpaycode ?? '',
       Company_Paycode_Pick_From_Id: row.Company_Paycode_Pick_From_Id,
-      SNo: row.SNo
+      SNo: row.SNo,
+      Formula: row.Formula ?? null
     }));
 
     const payloadCreate = {
@@ -259,7 +285,7 @@ export class CompanypaycodemappingAddComponent {
       PaycodeDetail: paycodeDetail
     };
 
-    console.log(payloadCreate);
+    console.log('payload', JSON.stringify(payloadCreate));
 
     this.paycodeService.PostAddPaycodeMapping(payloadCreate).subscribe({
       next: (res) => {
@@ -268,9 +294,7 @@ export class CompanypaycodemappingAddComponent {
         const errormsg = parsedData[0].Error_Message;
 
         if (errormsg.toLowerCase().includes("successfully")) {
-          //alert(errormsg);
-          this.showPopup = true;
-          this.popupMessage = "Company Paycode Mapping Created Successfully";
+          alert("Company Paycode Mapping Created Successfully");
           this.isLoading = false;
         } else {
           alert(errormsg);

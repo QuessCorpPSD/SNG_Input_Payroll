@@ -8,10 +8,10 @@ import { MatSort } from '@angular/material/sort';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
-import { EmployeeService } from '../../../Service/CUSTOMER/employee.service';
 import { APIResponse } from '../../../Models/apiresponse';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
+import { EmployeeService } from '../../../Service/CUSTOMER/employee.service';
 
 
 @Component({
@@ -37,6 +37,10 @@ export class EmployeePreviousemploymentComponent {
   ) {
     this.rowData = data.rowData;
   }
+  formatDate(date: string): string {
+    const [day, month, year] = date.split('-');
+    return `${year}-${month}-${day}`; // Converts DD-MM-YYYY to YYYY-MM-DD
+  }
 
   ngOnInit(): void {
     const json = this._sessionStoreage.getItem('UserProfile');
@@ -44,15 +48,23 @@ export class EmployeePreviousemploymentComponent {
       this.userdetail = JSON.parse(this.decry.decrypt(json));
     }
 
-    // Only one FormGroup, no date formatting
     this.prevEmploymentForm = this.fb.group({
-      companyName: [ '', Validators.required],
+      companyName: ['', Validators.required],
       designation: ['', Validators.required],
       experience: [this.rowData.Experience_In_Years ?? '', Validators.required],
-      startDate: [this.rowData.Start_Date, Validators.required],
-      endDate: [this.rowData.End_Date, Validators.required]
+
+      startDate: [
+        this.formatDate(this.rowData.Start_Date),
+        Validators.required
+      ],
+
+      endDate: [
+        this.formatDate(this.rowData.End_Date),
+        Validators.required
+      ]
     });
   }
+
 
   onClose(): void {
     this.dialogRef.close();
@@ -62,7 +74,7 @@ export class EmployeePreviousemploymentComponent {
     this.submitted = true;
 
     if (this.prevEmploymentForm.invalid) {
-      this.prevEmploymentForm.markAllAsTouched(); 
+      this.prevEmploymentForm.markAllAsTouched();
       return;
     }
 

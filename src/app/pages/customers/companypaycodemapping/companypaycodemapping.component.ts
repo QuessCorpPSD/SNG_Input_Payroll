@@ -19,7 +19,7 @@ import { CompanypaycodemappingCopyComponent } from '../companypaycodemapping-cop
 @Component({
   selector: 'app-companypaycodemapping',
   standalone: true,
-  imports: [MatTableModule, MatIconModule, MatPaginatorModule, CompanyallComponent, CommonModule, MatTooltipModule, AlertpopupComponent],
+  imports: [MatTableModule, MatIconModule, MatPaginator, CompanyallComponent, CommonModule, MatTooltipModule, AlertpopupComponent],
   templateUrl: './companypaycodemapping.component.html',
   styleUrl: './companypaycodemapping.component.css'
 })
@@ -36,20 +36,20 @@ export class CompanypaycodemappingComponent {
   uploadDisplayedColumns: string[] = [
     'SNo', 'CompanyCode', 'Paycode', 'Description', 'Paytype',
     'taxable', 'LopApplicable', 'PfApplicable', 'ESIApplicable',
-    'PTApplicable', 'Earnedpaycode', 'Pickfrom'
+    'PTApplicable', 'Earnedpaycode', 'Pickfrom', 'Formula'
   ];
   uploadedData: any[] = [];
   dataSource = new MatTableDataSource<any>();
   tableHeaders: string[] = [];
   dynamicColumns: string[] = [];
-  @ViewChild(MatSort) sort!: MatSort;
-
-  uploadedDataSource = new MatTableDataSource(this.uploadedData);
   Companypaycode: any;
-  constructor(private dialog: MatDialog, private service: CompanypaycodemappingService, private idleTimeoutService: IdletimeoutService) { }
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
   selectedCompanyId: any;
   selectedCompanyCode: any;
+  @ViewChild('paginator_Page') paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+  constructor(private dialog: MatDialog, 
+    private service: CompanypaycodemappingService, 
+    private idleTimeoutService: IdletimeoutService) { }
 
 
   handleCompanyEvent(company) {
@@ -68,6 +68,7 @@ export class CompanypaycodemappingComponent {
     this.showAlert = false;
     this.showValidate = false;
   }
+
 
   AddPOOpen() {
     this.dialog.open(CompanypaycodemappingAddComponent, {
@@ -89,7 +90,6 @@ export class CompanypaycodemappingComponent {
       return;
     }
 
-    // Pass selected row data to Edit dialog
     this.dialog.open(CompanypaycodemappingEditComponent, {
       width: '80%',
       height: '95vh',
@@ -119,14 +119,18 @@ export class CompanypaycodemappingComponent {
       }
     });
   }
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
 
   onsearch() {
     this.isLoading = true;
-    
+
     if (!this.selectedCompanyId) {
-      alert('Please Select Company')
+      alert('Please Select Company');
       this.isLoading = false;
-      this.isuploadgridvisible=false;
+      this.isuploadgridvisible = false;
       return;
     }
 
@@ -135,36 +139,35 @@ export class CompanypaycodemappingComponent {
     this.service.companypaycodesearch(Companyid).subscribe({
       next: (res) => {
         this.isLoading = false;
-        console.log('API Response:', res.Data);
+
         this.Companypaycode = res?.Data?.data;
 
-        if (!this.Companypaycode) {
-          this.isLoading = false;
-          alert(res.Data.message)
-        }
-        if (this.Companypaycode && this.Companypaycode.length > 0) {
-          this.isLoading = false;
-          this.isuploadgridvisible = true;
-          this.dataSource = new MatTableDataSource(this.Companypaycode);
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
-          this.uploadDisplayedColumns = [
-            'SNo', 'CompanyCode', 'Paycode', 'Description', 'Paytype',
-            'taxable', 'LopApplicable', 'PfApplicable', 'ESIApplicable',
-            'PTApplicable', 'Earnedpaycode', 'Pickfrom'
-          ];
-        } else {
-          this.isLoading = false;
+        if (!this.Companypaycode || this.Companypaycode.length === 0) {
           this.dataSource.data = [];
+          this.isuploadgridvisible = false;
+          return;
         }
+
+        this.isuploadgridvisible = true;
+
+        this.dataSource.data =this.Companypaycode;
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+
+        this.uploadDisplayedColumns = [
+          'SNo', 'CompanyCode', 'Paycode', 'Description', 'Paytype',
+          'taxable', 'LopApplicable', 'PfApplicable', 'ESIApplicable',
+          'PTApplicable', 'Earnedpaycode', 'Pickfrom', 'Formula'
+        ];
       },
       error: (err) => {
         this.isLoading = false;
         console.error('Error loading Companypaycode release data', err);
       },
     });
-    this.isLoading = false;
   }
+
+
 
 
   exportToExcel(): void {

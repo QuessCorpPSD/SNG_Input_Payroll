@@ -5,7 +5,8 @@
     /* gap: 8px;
     padding: 10px 16px; */
     border-radius: 6px;
-    max-width: 960px;
+    width: 100%;
+    /* max-width: 960px; */
 }
 
 /* ---------- SCROLL CONTAINER ---------- */

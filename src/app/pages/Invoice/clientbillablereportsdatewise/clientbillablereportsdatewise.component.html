@@ -1,0 +1,49 @@
+<div class="page-wrapper" style="padding-top: 2%;">
+
+    <div class="scrollable-content">
+        <!-- <div
+            style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; min-width: 960px; padding-left: 25px;">
+            Billing Pay Frequency
+        </div> -->
+        <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700;"> All
+            Invoices Billable Report</mat-card-title>
+
+        <div class="container-fluid g-2">
+            <form [formGroup]="clientForm" novalidate>
+                <div class="card-body g-2">
+                    <div class="row align-items-end">
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small">Entity</label>
+                            <select class="form-select form-select-sm" formControlName="Entity">
+                                <option *ngFor="let p of entitySearch" [value]="p.Entity_Id">
+                                    {{ p.Entity_Name }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small">From Date</label>
+                            <input class="form-control form-control-sm" type="date" formControlName="startdate"
+                                [max]="today">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small">To Date</label>
+                            <input class="form-control form-control-sm" type="date" formControlName="Enddate"
+                                [max]="today">
+                        </div>
+
+                        <div class="col-md-2 d-flex gap-1">
+                            <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                matTooltip="Export to Excel" (click)="exportToExcel()">
+                                <mat-icon>table_chart</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- <div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div> -->

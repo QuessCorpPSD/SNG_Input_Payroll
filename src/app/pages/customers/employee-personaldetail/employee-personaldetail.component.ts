@@ -5,10 +5,10 @@ import { MatIconModule } from "@angular/material/icon";
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatPaginatorModule } from "@angular/material/paginator";
-import { EmployeeService } from '../../../Service/CUSTOMER/employee.service';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { APIResponse } from '../../../Models/apiresponse';
+import { EmployeeService } from '../../../Service/CUSTOMER/employee.service';
 
 @Component({
   selector: 'app-employee-personaldetail',

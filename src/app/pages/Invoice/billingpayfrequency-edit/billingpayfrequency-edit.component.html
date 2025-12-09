@@ -54,10 +54,10 @@
                             (click)="AddPOOpen()">
                             <mat-icon>add</mat-icon>
                         </button>
-                        <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Delete"
+                        <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Delete"
                             (click)="deleteSelectedRow()">
                             <mat-icon>delete</mat-icon>
-                        </button>
+                        </button> -->
                     </div>
                 </div>
                 <div class="table-wrapper1" style="padding-right: 60px; padding-top: 2%;">
@@ -65,14 +65,13 @@
                         <mat-table [dataSource]="dataSource" matSort
                             class="custom-table mat-elevation-z8 auto-fit-table">
 
-                            <!-- SNo -->
                             <ng-container matColumnDef="SNo">
                                 <mat-header-cell *matHeaderCellDef class="col-sno"
                                     style="width: 50px !important; min-width: 50px !important; max-width: 50px !important;  display: flex; align-items: center; justify-content: center;">
                                     <strong>SNo</strong></mat-header-cell>
                                 <mat-cell *matCellDef="let row;let i = index" class="col-sno"
                                     style="width: 50px !important; min-width: 50px !important; max-width: 50px !important;  display: flex; align-items: center; justify-content: center;">
-                                    {{i+1}}</mat-cell>
+                                    {{row.SNo}}</mat-cell>
                             </ng-container>
 
                             <ng-container matColumnDef="Paysequenceno">

@@ -13,29 +13,42 @@ export class GSTService implements IGstRepository {
   env = environment
   constructor(private http: HttpClient) {
   }
-  Search(val1:any): Observable<APIResponse> {
+  Search(val1: any): Observable<APIResponse> {
     return this.http.get<APIResponse>(
-      this.env.apiUrl + 'Gst/SearchDetails/'+val1,
+      this.env.apiUrl + 'Gst/SearchDetails/' + val1,
     );
   }
-  ExporttoExcel(val1:any): Observable<APIResponse> {
+  ExporttoExcel(val1: any): Observable<APIResponse> {
     return this.http.get<APIResponse>(
-      this.env.apiUrl + 'Gst/ExporttoExcel/'+val1,
+      this.env.apiUrl + 'Gst/ExporttoExcel/' + val1,
     );
   }
-  
+
   Create(payload: any): Observable<APIResponse> {
-    
+
     return this.http.post<APIResponse>(
       this.env.apiUrl + 'Gst/Create',
       payload
     );
   }
 
-   Edit(payload: any): Observable<APIResponse> {
+  Edit(payload: any): Observable<APIResponse> {
     return this.http.post<APIResponse>(
       this.env.apiUrl + 'Gst/Edit',
       payload
+    );
+  }
+  Delete(gstmasterid: any, userid: any): Observable<APIResponse> {
+    return this.http.post<APIResponse>(
+      `${this.env.apiUrl}Gst/Delete/${gstmasterid}/${userid}`,
+      {}  
+    );
+  }
+
+
+  GetEntity(): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      this.env.apiUrl + 'Entity/Search',
     );
   }
 

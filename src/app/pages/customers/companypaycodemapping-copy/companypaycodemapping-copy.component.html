@@ -2,9 +2,8 @@
     <div class="scrollable-content">
         <mat-card-header class="sticky-header">
             <br />
-            <div
-                style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700;  padding-right: 580px; padding-bottom:10px ;">
-                Copy Company Paycode Mapping</div>
+            <mat-card-title style="color:#302CB3;">Copy Company PayCode Mapping</mat-card-title>
+
 
             <span class="spacer"></span>
             <button mat-icon-button (click)="onClose()" class="no-border-icon">
@@ -43,14 +42,16 @@
                 </div>
             </div>
             <div class="table-wrapper1" style="padding-right: 60px;">
-                <br />
                 <div class="table-scroll">
                     <mat-table [dataSource]="uploadedDataSource" matSort
                         class="custom-table mat-elevation-z8 auto-fit-table">
                         <ng-container matColumnDef="SNo">
-                            <mat-header-cell *matHeaderCellDef class="col-sno"><strong>SNo</strong></mat-header-cell>
-                            <mat-cell *matCellDef="let row;let i = index" class="col-sno">{{i+1}}</mat-cell>
+                            <mat-header-cell *matHeaderCellDef><strong>SNo</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row; let i = index">
+                                {{ (paginator.pageIndex * paginator.pageSize) + i + 1 }}
+                            </mat-cell>
                         </ng-container>
+
 
                         <ng-container matColumnDef="Paycode">
                             <mat-header-cell *matHeaderCellDef><strong>Paycode</strong></mat-header-cell>
@@ -77,8 +78,12 @@
                             <mat-cell *matCellDef="let row">{{ row.PayType }}</mat-cell>
                         </ng-container>
                         <ng-container matColumnDef="formula">
-                            <mat-header-cell *matHeaderCellDef><strong>Formula</strong></mat-header-cell>
-                            <mat-cell *matCellDef="let row"><input style="border: none;" /></mat-cell>
+                            <mat-header-cell *matHeaderCellDef class="header"
+                                style="width: 200px!important;  min-width: 200px!important; max-width: 200px!important;"><strong>Formula</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row" class="header"
+                                style="width: 200px!important;  min-width: 200px!important; max-width: 200px!important;"><textarea
+                                    [(ngModel)]="row.Formula"
+                                    class="form-control form-control-sm"></textarea></mat-cell>
                         </ng-container>
 
                         <ng-container matColumnDef="taxable">
@@ -145,7 +150,8 @@
 
                         <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
                         <mat-row *matRowDef="let row; let i = index; columns: uploadDisplayedColumns"
-                            (click)="selectRow(i)" [class.selected-row]="selectedRowIndex === i">
+                            (click)="selectRow(i)"
+                            [class.selected-row]="selectedRowIndex === (i + (paginator.pageIndex * paginator.pageSize))">
                         </mat-row>
 
                     </mat-table>
@@ -173,7 +179,8 @@
                     </button>
 
                     <button type="submit"
-                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white; ">
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white; "
+                        (click)="savePaycodeDetails()">
                         Save
                     </button>
                 </div>
@@ -182,6 +189,5 @@
     </div>
 </mat-card>
 
-<app-alertpopup *ngIf="showPopup" [message]="popupMessage" class="centered-popup"
-    (close)="closePopup()">
+<app-alertpopup *ngIf="showPopup" [message]="popupMessage" class="centered-popup">
 </app-alertpopup>

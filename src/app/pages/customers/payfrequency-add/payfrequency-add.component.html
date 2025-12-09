@@ -2,11 +2,10 @@
     <form [formGroup]="BillingpayaddForm" novalidate>
         <div class="scrollable-content">
             <mat-card-header class="sticky-header">
-                <br />
-                <div style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; padding-right: 80%; white-space: nowrap;">
+                <!-- <div style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; padding-right: 80%; white-space: nowrap;">
                     Add Pay Frequency
-                </div>
-
+                </div> -->     
+            <mat-card-title style="color: #302CB3;">Add Pay Frequency</mat-card-title>
 
                 <span class=" spacer"></span>
                     <button mat-icon-button (click)="onClose()" class="no-border-icon">
@@ -52,10 +51,10 @@
                             (click)="AddPOOpen()">
                             <mat-icon>add</mat-icon>
                         </button>
-                        <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Delete"
+                        <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Delete"
                             (click)="deleteSelectedRow()">
                             <mat-icon>delete</mat-icon>
-                        </button>
+                        </button> -->
                     </div>
                 </div>
                 <div class="table-wrapper1" style="padding-right: 60px; padding-top: 2%;">
@@ -112,7 +111,7 @@
                                 <mat-cell *matCellDef="let row">{{ row.Monthly_Holyday }}</mat-cell>
                             </ng-container>
                             <ng-container matColumnDef="WorkingHolidays">
-                                <mat-header-cell *matHeaderCellDef><strong>Working Holidays</strong></mat-header-cell>
+                                <mat-header-cell *matHeaderCellDef><strong>Working days</strong></mat-header-cell>
                                 <mat-cell *matCellDef="let row">{{ row.Working_Days }}</mat-cell>
                             </ng-container>
 

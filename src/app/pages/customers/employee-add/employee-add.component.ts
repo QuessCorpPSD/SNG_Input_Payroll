@@ -12,12 +12,12 @@ import { MatTabsModule } from "@angular/material/tabs";
 import { EmployeePreviousemploymentComponent } from '../employee-previousemployment/employee-previousemployment.component';
 import { EmployeeBankdetailsComponent } from '../employee-bankdetails/employee-bankdetails.component';
 import { EmployeeSalarydetailsComponent } from '../employee-salarydetails/employee-salarydetails.component';
-import { EmployeeService } from '../../../Service/CUSTOMER/employee.service';
 import { PayPeriodComponent } from "../../../common/payperiod/payperiod.component";
 import { Payperiodclass } from '../../../Models/Common';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { APIResponse } from '../../../Models/apiresponse';
+import { EmployeeService } from '../../../Service/CUSTOMER/employee.service';
 
 
 @Component({
@@ -69,6 +69,11 @@ export class EmployeeAddComponent {
     this.payperiods = payperiod.payPeriod;
     console.log(this.selectedCompanyId)
   }
+  formatDate(date: string): string {
+    const [day, month, year] = date.split('-');
+    return `${year}-${month}-${day}`; // Converts DD-MM-YYYY to YYYY-MM-DD
+  }
+
   ngOnInit(): void {
     const json = this._sessionStoreage.getItem('UserProfile');
     if (json) {
@@ -76,8 +81,11 @@ export class EmployeeAddComponent {
     } else {
       console.warn('UserProfile not found in session storage');
     }
+
     this.selectedCompanyId = this.rowData.Company_Id;
     console.log('company', this.selectedCompanyId);
+
+    // Initialize the form
     this.employeeForm = this.fb.group({
       empid: [this.rowData.Employee_Code, Validators.required],
       CompanyCode: [this.rowData.Company_Code, Validators.required],
@@ -89,16 +97,16 @@ export class EmployeeAddComponent {
       LanguageKnown: [this.rowData.Languages_Known || ''],
       gender: [this.rowData.Gender === true ? true : false, Validators.required],
       materialstatus: [this.rowData.Marital_Status, Validators.required],
-      DOB: [this.rowData.Date_Of_Birth, Validators.required],
+      DOB: [this.rowData.Date_Of_Birth ? this.formatDate(this.rowData.Date_Of_Birth) : '', Validators.required],
       disability: [this.rowData.Disability === true ? true : false, Validators.required],
       Mapname: [this.rowData.Cost_Center_Mapping_Id || ''],
-      DOJ: [this.rowData.Date_Of_Joining, Validators.required],
+      DOJ: [this.rowData.Date_Of_Joining ? this.formatDate(this.rowData.Date_Of_Joining) : '', Validators.required],
       paycategory: [Number(this.rowData.Pay_Category_Id), Validators.required],
       Costcenter: [this.rowData.Cost_Center_Mapping_Id || ''],
       joinpayperiod: [this.rowData.Joining_Pay_Period, Validators.required],
       PTState: [this.rowData.PT_State || ''],
       Businessunit: [this.rowData.Entity_Id, Validators.required],
-      Effectivedate: [this.rowData.Effective_Date, Validators.required],
+      Effectivedate: [this.rowData.Effective_Date ? this.formatDate(this.rowData.Effective_Date) : '', Validators.required],
       LWFState: [this.rowData.LWF_State || ''],
       Businessunitlocation: [this.rowData.Entity_Location_Id || ''],
       department: [this.rowData.Department_Id || '', Validators.required],
@@ -106,14 +114,14 @@ export class EmployeeAddComponent {
       usergroup: [this.rowData.User_Group_Id || ''],
       designation: [this.rowData.Designation_Id || ''],
       ikyalocation: [this.rowData.IKYA_Location || ''],
-      DateOfResignation: [this.rowData.Resignation_Date || ''],
+      DateOfResignation: [this.rowData.Resignation_Date ? this.formatDate(this.rowData.Resignation_Date) : ''],
       DMSId: [this.rowData.DMS_Id || ''],
       Billingdesignation: [this.rowData.Billing_Designation_Name || ''],
       FandFPayPeriod: [this.rowData.F_Resign_Period || ''],
       ETDSSequence: [this.rowData.ETDS_Sequence || ''],
       PT: [this.rowData.PT || ''],
       ResignPayPeriod: [this.rowData.Resign_Period || ''],
-      Contractexpirydate: [this.rowData.Contract_Expiry_Date || ''],
+      Contractexpirydate: [this.rowData.Contract_Expiry_Date ? this.formatDate(this.rowData.Contract_Expiry_Date) : ''],
       Active: [this.rowData.EActive === true ? true : false, Validators.required],
       Lastworkingdays: [this.rowData.Last_Working_Day || ''],
       groupname: [Number(this.rowData.Group_Detail_Id) || 0],
@@ -127,7 +135,7 @@ export class EmployeeAddComponent {
       ESI: [this.rowData.ESI_Number || ''],
       blank: [''],
       Reportheademail: [this.rowData.Reporting_Head_Email || ''],
-      Rejoineedate: [this.rowData.Rejoining_Date || ''],
+      Rejoineedate: [this.rowData.Rejoining_Date ? this.formatDate(this.rowData.Rejoining_Date) : ''],
       Insurance: [this.rowData.Is_Insurance_Applicable === true ? true : false],
       Businesshead: [this.rowData.Business_Head || ''],
       Rejoinmonth: [this.rowData.Rejoin_Month || ''],
@@ -140,9 +148,10 @@ export class EmployeeAddComponent {
       Product: [this.rowData.ProductId || ''],
       Channel: [this.rowData.ChannelId || ''],
       subvertical: [this.rowData.SubVerticalId || ''],
-      Abscondreportingdate: [this.rowData.Abscond_Reporting_Date || ''],
-      DOD: [this.rowData.Date_Of_Death || '']
+      Abscondreportingdate: [this.rowData.Abscond_Reporting_Date ? this.formatDate(this.rowData.Abscond_Reporting_Date)  : ''],
+      DOD: [this.rowData.Date_Of_Death ? this.formatDate(this.rowData.Date_Of_Death) : '']
     });
+
     console.log('Row Data:', this.rowData);
     this.BindSprstatus();
     this.BindMaterialStatus();
@@ -159,6 +168,7 @@ export class EmployeeAddComponent {
     this.BindBloodGroup();
     this.payPeriodType = "All";
   }
+
   BindSprstatus() {
     this.service.Getsprstatus().subscribe({
       next: res => { this.sprstatus = res.Data.data }
@@ -341,7 +351,7 @@ export class EmployeeAddComponent {
           Stop_Payment: raw.stoppayment ?? '??',
           Designation_Id: raw.designation ?? '',
           Work_Location: raw.worklocation ?? '',
-          Is_PF_Applicable:raw.PF ??'',
+          Is_PF_Applicable: raw.PF ?? '',
           Is_Insurance_Applicable: raw.Insurance ?? '',
           Resignation_Date: raw.DateOfResignation ?? '',
           Last_Working_Day: raw.Lastworkingdays ?? '',

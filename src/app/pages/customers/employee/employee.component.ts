@@ -8,8 +8,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog } from '@angular/material/dialog';
-import { EmployeeAddComponent } from '../employee-add/employee-add.component';
-import { MatSort } from '@angular/material/sort';
+import { EmployeeAddComponent } from '../employee-add/employee-add.component';import { MatSort } from '@angular/material/sort';
 import * as XLSX from 'xlsx';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
@@ -145,10 +144,10 @@ export class EmployeeComponent {
           const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(jsonData);
           const wb: XLSX.WorkBook = XLSX.utils.book_new();
 
-          XLSX.utils.book_append_sheet(wb, ws, "Employee");
+          XLSX.utils.book_append_sheet(wb, ws, "payFrequency");
 
           const timestamp = new Date().toISOString().split('T')[0];
-          const fileName = `Employee_Details${timestamp}.xlsx`;
+          const fileName = `payFrequency_${timestamp}.xlsx`;
 
           XLSX.writeFile(wb, fileName);
 

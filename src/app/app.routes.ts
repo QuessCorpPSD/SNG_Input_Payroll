@@ -123,6 +123,7 @@ import { InvoiceCultureComponent } from './pages/Invoice/invoice-culture/invoice
 import { ServiceChargeComponent } from './pages/customers/ServiceChargeMaster/service-charge/service-charge.component';
 import { SiteMasterComponent } from './pages/GlobalMasters/site-master/site-master.component';
 import { EmployeeComponent } from './pages/customers/employee/employee.component';
+import { ClientbillablereportsdatewiseComponent } from './pages/Invoice/clientbillablereportsdatewise/clientbillablereportsdatewise.component';
 
 
 
@@ -240,6 +241,7 @@ export const routes: Routes = [
           { path: 'gstinvoice', component: GstinvoiceComponent },
           { path: 'poinitiate', component: POInitiateComponent },
           { path: 'app-invoice-culture', component: InvoiceCultureComponent },
+          { path: 'ClientBillableReportDatewise', component: ClientbillablereportsdatewiseComponent },
         ]
       },
 
@@ -270,10 +272,10 @@ export const routes: Routes = [
 
         ]
       },
-       {
+      {
         path: 'tools', component: ToolsnavigationComponent,
         children: [
-          { path: "dynamiupload", component: DynamicuploadComponent},     
+          { path: "dynamiupload", component: DynamicuploadComponent },
           { path: "corporatebank", component: CorporatebankComponent, },
           { path: "itcalender", component: ITcalenderComponent, },
           { path: 'companypaycodemapping', component: CompanypaycodemappingComponent },
@@ -340,7 +342,7 @@ export const routes: Routes = [
           { path: "Vendor", component: VendorComponent },
           { path: "gst", component: GSTComponent },
           { path: "sitemaster", component: SiteMasterComponent }
-          
+
 
         ]
 

@@ -70,7 +70,6 @@ export class BandDetailsComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  // ⭐ POPUP FUNCTION
   showAlertPopup(message: string, subMessage: string = '') {
     this.popupMessage = message;
     this.popupSubMessage = subMessage;
@@ -135,7 +134,7 @@ export class BandDetailsComponent {
   exportToExcel() {
 
     if (!this.uploadedData || this.uploadedData.length === 0) {
-      this.showAlertPopup("No data available to export");
+      alert("No data available to export");
       return;
     }
 
