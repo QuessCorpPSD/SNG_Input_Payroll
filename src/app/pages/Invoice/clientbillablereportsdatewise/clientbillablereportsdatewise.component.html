@@ -9,12 +9,11 @@
             Invoices Billable Report</mat-card-title>
 
         <div class="container-fluid g-2">
-            <form [formGroup]="clientForm" novalidate>
                 <div class="card-body g-2">
                     <div class="row align-items-end">
                         <div class="col-md-3">
                             <label class="form-label text-muted small">Entity</label>
-                            <select class="form-select form-select-sm" formControlName="Entity">
+                            <select class="form-select form-select-sm" [(ngModel)]="Entity">
                                 <option *ngFor="let p of entitySearch" [value]="p.Entity_Id">
                                     {{ p.Entity_Name }}
                                 </option>
@@ -22,13 +21,13 @@
                         </div>
                         <div class="col-md-3">
                             <label class="form-label text-muted small">From Date</label>
-                            <input class="form-control form-control-sm" type="date" formControlName="startdate"
+                            <input class="form-control form-control-sm" type="date" [(ngModel)]="Startdate"
                                 [max]="today">
                         </div>
 
                         <div class="col-md-3">
                             <label class="form-label text-muted small">To Date</label>
-                            <input class="form-control form-control-sm" type="date" formControlName="Enddate"
+                            <input class="form-control form-control-sm" type="date" [(ngModel)]="Enddate"
                                 [max]="today">
                         </div>
 
@@ -40,7 +39,6 @@
                         </div>
                     </div>
                 </div>
-            </form>
         </div>
     </div>
 </div>

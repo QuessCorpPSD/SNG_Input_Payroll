@@ -15,7 +15,10 @@ export class ClientBillableReportDatewiseService {
   EntitySearch(): Observable<APIResponse> {
     return this.http.get<APIResponse>(this.env.apiUrl + 'Entity/Search');
   }
-  Exporttoexcel(entityid: any,fromdate:Date,todate:Date): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.env.apiUrl + 'ClientBillableReport/Search/' + entityid+'/'+fromdate+'/'+todate);
-  }
+Exporttoexcel(entityid: any, fromdate: string, todate: string): Observable<APIResponse> {
+  return this.http.get<APIResponse>(
+    `${this.env.apiUrl}ClientBillableReport/Search/${entityid}/${fromdate}/${todate}`
+  );
+}
+
 }

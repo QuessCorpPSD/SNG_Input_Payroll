@@ -12,7 +12,7 @@ export const Pay_TOKEN = new InjectionToken<IClientBillableReport>('Pay_TOKEN');
 @Component({
   selector: 'app-clientbillablereportsdatewise',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatCardModule, FormsModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, MatIconModule, MatCardModule, FormsModule, FormsModule],
   templateUrl: './clientbillablereportsdatewise.component.html',
   styleUrl: './clientbillablereportsdatewise.component.css',
   providers: [
@@ -24,19 +24,17 @@ export const Pay_TOKEN = new InjectionToken<IClientBillableReport>('Pay_TOKEN');
 })
 export class ClientbillablereportsdatewiseComponent {
   entitySearch: any;
-  clientForm!: FormGroup;
   data: any;
   today: string = new Date().toISOString().split('T')[0];
+  Startdate = '';
+  Enddate = '';
+  Entity: any;
 
   constructor(@Inject(Pay_TOKEN) private service: IClientBillableReport, private fb: FormBuilder,) { }
 
   ngOnInit() {
     this.BindEntityName()
-    this.clientForm = this.fb.group({
-      Entity: [''],
-      startdate: [''],
-      Enddate: ['']
-    })
+
   }
 
   BindEntityName() {
@@ -48,11 +46,9 @@ export class ClientbillablereportsdatewiseComponent {
   }
   exportToExcel(): void {
 
-    const formValue = this.clientForm.getRawValue();
-    const Entityid = formValue.Entity;
-    const fromdate = formValue.startdate;
-    const todate = formValue.Enddate;
-
+    const Entityid = this.Entity;
+    const fromdate = this.Startdate;
+    const todate = this.Enddate;
 
     if (!Entityid) {
       alert("Please select Entity");
