@@ -22,13 +22,17 @@ export class ServiceChargeService implements IServiceCharge {
   GetServiceCharge(): Observable<APIResponse> {
     return this.http.get<APIResponse>(this.env.apiUrl + 'ServiceCharge/servicechargemaster')
   }
+
+  GetServiceChargeNew(companyId: number): Observable<APIResponse> {
+    return this.http.get<APIResponse>(this.env.apiUrl + 'ServiceCharge/servicechargemasterNew/' + companyId)
+  }
   GetServicechargetype(companyid: any): Observable<APIResponse> {
     return this.http.get<APIResponse>(this.env.apiUrl + 'ServiceCharge/servicechargetype/' + companyid)
   }
 
-  GetSearch(): Observable<APIResponse> {
+  GetSearch(companyId: number): Observable<APIResponse> {
     return this.http.get<APIResponse>(
-      this.env.apiUrl + 'Company/Search'
+      this.env.apiUrl + 'ServiceCharge/GetAllServiceCharge/' + companyId
     );
   }
   GetCostCenterMapping(): Observable<APIResponse> {

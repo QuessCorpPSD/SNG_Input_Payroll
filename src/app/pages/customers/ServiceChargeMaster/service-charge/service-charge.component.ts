@@ -52,6 +52,9 @@ export class ServiceChargeComponent {
   servicechargetypedata: any;
   selectedMasterId: any = null;
   selectedTypeId: any = null;
+  dataSource = new MatTableDataSource<any>([]);
+  Gridtype: string = "ServiceFeeFixed";
+  gridData: string[]=[];
 
   constructor(
     private dialog: MatDialog,
@@ -67,6 +70,8 @@ export class ServiceChargeComponent {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+
+  displayedColumns: string[] = [];
 
   // onSearchClick() {
   //   this.showTable = true;
@@ -84,9 +89,11 @@ export class ServiceChargeComponent {
       userId: this.userdetail.user_Id,
       userName: this.userdetail.userName,
     };
-    this.BindserviceCharge()
+
+    //this.BindserviceCharge()
 
   }
+
   showAlertPopup(message: string, subMessage: string = '') {
     this.popupMessage = message;
     this.popupSubMessage = subMessage;
@@ -101,7 +108,7 @@ export class ServiceChargeComponent {
 
   AddPOOpen() {
     console.log(this.selectedCompanyId);
-    if (!this.selectedCompanyId){
+    if (!this.selectedCompanyId) {
       alert("Please Select Company for Add");
       return;
     }
@@ -110,42 +117,80 @@ export class ServiceChargeComponent {
       height: '100vh',
       panelClass: 'full-dialog-scroll',
       disableClose: true,
-      data: { 
+      data: {
         companyId: this.selectedCompanyId,
         companyCode: this.selectedCompanyCode
       }
     });
   }
-  view(row: any) {    
+  view(row: any) {
     console.log('View clicked for:', row);
   }
   handleCompanyEvent(company) {
     this.selectedCompanyId = company.companyId;
     this.selectedCompanyCode = company.companyId;
-
+    this.BindserviceChargeNew(this.selectedCompanyId);
   }
-  BindserviceCharge() {
-    this.servicecharge.GetServiceCharge().subscribe({
+  BindserviceChargeNew(companyId: number) {
+    this.servicecharge.GetServiceChargeNew(companyId).subscribe({
       next: res => { this.servicechargedata = res.Data.data.Table0 }
     });
 
   }
-  onServiceChargeChange(event: any) {
-    this.selectedMasterId = event.target.value;  // <-- store selected master ID
-    this.BindserviceChargetype(this.selectedMasterId);
+  onServiceChargeChangeNew(event: any) {
+    this.selectedMasterId = event.target.value;
+    this.dataSource.data= [];
+    console.log('selectedCharge', this.selectedMasterId);
+
+    if (this.selectedMasterId = 'ServiceFeeFixed') {
+      this.gridData = ['SNo', 'Map_Name', 'Value', 'IsAttendanceProrated_Text', 'IsFAndFProrate_Text',
+        'IsFAndFArrearProrate_Text', 'IsNewjoineeProrate_Text', 'IsNewJoineeArrearProrate_Text',
+        'Effective_Date', 'Compliance_Fee', 'RandStad_Fee', 'Upfront_Type', 'Upfront_Charge',
+        'Upfront_PayCode', 'Insurance_Amount','QDemyFee_Type', 'QDemyFee', 'InEdgeFee_Type', 'InEdgeFee'
+       ];
+       this.displayedColumns=this.gridData;
+    }
+    else if (this.selectedMasterId = 'ServiceFeePercentage') {
+      this.gridData = ['SNo', 'Map_Name', 'PayCode_Code', 'Value', 'MaxAmount', 'Effective_Date', 'Compliance_Fee', 'RandStad_Fee',
+        'Effective_Date', 'Compliance_Fee', 'RandStad_Fee', 'Upfront_Type', 'Upfront_Charge',
+        'Upfront_PayCode', 'Insurance_Amount','QDemyFee_Type', 'QDemyFee', 'InEdgeFee_Type', 'InEdgeFee'
+      ];
+    }
+    else if (this.selectedMasterId = 'SuppFeeFixed') {
+      this.gridData = [];
+    }
+    else if (this.selectedMasterId = 'SuppFeePercentage') {
+      
+      this.gridData = [];
+    }
+    else{ 
+      alert("Couldnot find Service Charge Type");
+      return;
+    }
   }
 
+  // BindserviceCharge() {
+  //   this.servicecharge.GetServiceCharge().subscribe({
+  //     next: res => { this.servicechargedata = res.Data.data.Table0 }
+  //   });
 
-  BindserviceChargetype(masterId: any) {
-    this.servicecharge.GetServicechargetype(masterId).subscribe({
-      next: res => {
-        this.servicechargetypedata = res.Data.data.Table0;
-      }
-    });
-  }
-  onServiceChargeTypeChange(event: any) {
-    this.selectedTypeId = event.target.value;   // <-- store selected type ID
-  }
+  // }
+  // onServiceChargeChange(event: any) {
+  //   this.selectedMasterId = event.target.value;  // <-- store selected master ID
+  //   this.BindserviceChargetype(this.selectedMasterId);
+  // }
+
+
+  // BindserviceChargetype(masterId: any) {
+  //   this.servicecharge.GetServicechargetype(masterId).subscribe({
+  //     next: res => {
+  //       this.servicechargetypedata = res.Data.data.Table0;
+  //     }
+  //   });
+  // }
+  // onServiceChargeTypeChange(event: any) {
+  //   this.selectedTypeId = event.target.value;   // <-- store selected type ID
+  // }
 
   onSearchClick() {
 
@@ -159,40 +204,30 @@ export class ServiceChargeComponent {
       return;
     }
 
-    if (!this.selectedTypeId) {
-      alert("Please select Service Charge Type");
-      return;
-    }
+    // if (!this.selectedTypeId) {
+    //   alert("Please select Service Charge Type");
+    //   return;
+    // }
 
     this.isLoading = true;
-
-    const payload = {
-      Company_Id: this.selectedCompanyId,
-      Service_Charge_Master_Id: this.selectedMasterId,
-      Service_Charge_Type_Id: this.selectedTypeId
-    };
-
-    console.log("Search Payload:", payload);
-    
-    this.servicecharge.GetSearch().subscribe({
-
+    const Company_Id = this.selectedCompanyId;
+  
+    this.servicecharge.GetSearch(this.selectedCompanyId).subscribe({
       next: (res: any) => {
         this.isLoading = false;
 
         console.log("Search Response:", res);
 
-        if (!res?.Data || res.Data.length === 0) {
+        if (!res?.Data.data.Table0 || res.Data.data.Table0.length === 0) {
           this.uploadedDataSource.data = [];
           alert("No Records Found");
           return;
         }
-
-        // 4️⃣ Bind table
-        this.uploadedData = res.Data;
-        this.uploadedDataSource.data = this.uploadedData;
-
-        this.uploadedDataSource.paginator = this.paginator;
-        this.uploadedDataSource.sort = this.sort;
+        this.dataSource = new MatTableDataSource<any>(res.Data.data.Table0);
+        console.log("dataSource:", this.dataSource);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        this.isLoading = false;
 
         this.showTable = true;
       },
