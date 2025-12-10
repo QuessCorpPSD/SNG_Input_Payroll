@@ -15,6 +15,7 @@ import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { MatSort } from '@angular/material/sort';
 import * as XLSX from 'xlsx';
+import FileSaver from 'file-saver';
 
 @Component({
   selector: 'app-clientaddress',
@@ -123,7 +124,7 @@ export class ClientaddressComponent {
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
           this.uploadDisplayedColumns = [
-            'Client_Address_Id', 'Companycode', 'MapName', 'SAPCustomercode', 'Billing_Client_Name', 'billingaddress', 'Shippingaddresssameasbilling', 'Shippingclientname', 'Shippingaddress', 'Effectivedate', 'gstnumber', 'gstapplicable'];
+          'Action',  'Client_Address_Id', 'Companycode', 'MapName', 'SAPCustomercode', 'Billing_Client_Name', 'billingaddress', 'Shippingaddresssameasbilling', 'Shippingclientname', 'Shippingaddress', 'Effectivedate', 'gstnumber', 'gstapplicable'];
 
         } else {
           this.isLoading = false;
@@ -194,6 +195,126 @@ export class ClientaddressComponent {
     document.body.removeChild(downloadLink);
   }
 
+  downloadTemplate() {
+    const templateData = [
+      {
+        CompanyCode: "",
+        MapName: "",
+        BillingClientName: "",
+        BillingAddress: "",
+        IsShippingAddressSameAsBilling: "",
+        ShippingClientName: "",
+        ShippingAddress: "",
+        EffectiveDate: "",
+        VATApplicable: "",
+        SAC_Code: "",
+        GstNumber: ""
+      }
+    ];
+
+    const workSheet = XLSX.utils.json_to_sheet(templateData);
+
+    const workbook: XLSX.WorkBook = {
+      Sheets: { 'Table': workSheet },
+      SheetNames: ['Table']
+    };
+
+    const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const blob = new Blob([buffer], { type: 'application/octet-stream' });
+
+    FileSaver.saveAs(blob, `ClientAddress_Template.xlsx`)
+  }
 
 
+  ImportClick(fileInput: HTMLInputElement): void {
+    fileInput.value = '';
+    fileInput.click();
+  }
+
+  onFileChange(event: Event): void {
+    this.isLoading = true;
+    const input = event.target as HTMLInputElement;
+    const file = input?.files?.[0];
+
+    if (!file) {
+      alert("Please upload only one Excel file")
+      this.isLoading = false;
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('userId', this.userdetail.user_Id);
+
+    this.service.PostClientAddressUpload(formData).subscribe({
+      next: (res) => {
+
+        if (!res || !res.Data) {
+          alert("Upload request Processed.Server did not return any data")
+          this.isLoading = false;
+          return;
+        }
+
+        if (res?.Data?.response?.includes("Row(s) Uploaded Successfully.")) {
+          this.isLoading = false;
+          this.showAlertPopup("Row(s) Uploaded Successfully.")
+          return;
+        }
+
+        // CASE 2: Plain failure string
+        if (res?.StatusCode === 200 && res?.Data?.response?.trim() === 'Failed to import.') {
+          // Optional debug
+          // alert('1');
+          this.isLoading = false;
+          alert("Failed to Import")
+          // errors[0] may be a JSON string, an array, or a plain string/object
+          const rawErr = res?.Data?.errors?.[0];
+          let errorArray: any[] = [];
+          try {
+            if (typeof rawErr === 'string') {
+              const tryJson = JSON.parse(rawErr);
+              errorArray = Array.isArray(tryJson) ? tryJson : [tryJson];
+            } else if (Array.isArray(rawErr)) {
+              errorArray = rawErr;
+            } else if (rawErr) {
+              errorArray = [rawErr];
+            }
+          } catch {
+            errorArray = rawErr ? [{ Error_Message: String(rawErr) }] : [];
+          }
+
+          const exportData = errorArray.map((item: any) => ({
+            Error_Message: item?.Error_Message || item?.Error_Message || item?.Error_Message || ''
+          }));
+
+          const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+          const workbook: XLSX.WorkBook = {
+            Sheets: { ErrorMessages: worksheet },
+            SheetNames: ['ErrorMessages']
+          };
+          XLSX.writeFile(workbook, 'ErrorMessages_ClientAddress.xlsx');
+          this.isLoading = false;
+          return;
+        }
+
+        // CASE 3: Anything else → show whatever we have
+        // CASE: Data is array with Error_Message (e.g. "No rows to Upload")
+        if (Array.isArray(res.Data) && res.Data[0]?.Error_Message) {
+          alert(res.Data[0].Error_Message)
+          this.isLoading = false;
+          return;
+        }
+        else {
+          alert('Error while processing response.')
+        }
+
+        this.isLoading = false;
+
+      },
+      error: (err) => {
+        this.isLoading = false;
+        alert("Upload Failed")
+      }
+    });
+  }
 }

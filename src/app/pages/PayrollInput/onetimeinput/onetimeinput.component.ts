@@ -161,6 +161,7 @@ export class OnetimeinputComponent {
       this.isLoading = false;
       return;
     }
+    fileInput.value='';
     fileInput.click();
   }
 
@@ -230,6 +231,7 @@ export class OnetimeinputComponent {
       formData.append('companyId', this.companyUI.companyId);
       formData.append('payPeriod', this.payperiodUI.payPeriod);
       formData.append('payPeriodId', this.payperiodUI.payfrequencyid);
+      formData.append('userId', this.userdetail.user_Id);
 
       this.onboardService.PostOneTimeInputData(formData).subscribe({
         next: res => {

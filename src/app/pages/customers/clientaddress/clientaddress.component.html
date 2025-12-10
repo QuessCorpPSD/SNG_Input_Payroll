@@ -6,9 +6,7 @@
             style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; min-width: 960px; padding-left: 25px;">
             Cilent Address List
         </div>
-        <br />
-
-        <div class="table-wrapper1" style="padding-top: 2%;">
+        <div class="table-wrapper1">
             <div class="col-md-3 d-flex gap-2">
                 <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Create"
                     (click)="AddPOOpen()">
@@ -16,18 +14,23 @@
                 </button>
 
                 <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Export"
-                (click)="exportToExcel()">
+                    (click)="exportToExcel()">
                     <mat-icon>table_chart</mat-icon>
                 </button>
-                <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Import"
-                (click)="ImportOpen()">
+                <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Template"
+                    (click)="downloadTemplate()">
+                    <mat-icon>cloud_download</mat-icon>
+                </button>
+                <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Import"
+                    (click)="ImportClick(fileInput)">
                     <mat-icon>cloud_upload</mat-icon>
-                </button> -->
+                </button>
+                <input type="file" #fileInput style="display: none;" (click)="fileInput.value=''"
+                    (change)="onFileChange($event)" accept=".xlsx, .xls" />
             </div>
 
             <div class="table-scroll">
-                <mat-table [dataSource]="dataSource" matSort
-                    class="custom-table mat-elevation-z8 auto-fit-table">
+                <mat-table [dataSource]="dataSource" matSort class="custom-table mat-elevation-z8 auto-fit-table">
                     <!-- Data Rows -->
                     <!-- <ng-container matColumnDef="Action">
                         <mat-header-cell *matHeaderCellDef style="width: 120px!important;min-width: 90px!important;"><strong>Action</strong></mat-header-cell>
@@ -42,6 +45,19 @@
                             </button>
                         </mat-cell>
                     </ng-container> -->
+                    <ng-container matColumnDef="Action">
+                        <mat-header-cell *matHeaderCellDef><strong>Action</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                            <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                matTooltip="Edit">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                            <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                matTooltip="Delete">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </mat-cell>
+                    </ng-container>
 
                     <ng-container matColumnDef="Client_Address_Id">
                         <mat-header-cell *matHeaderCellDef><strong>Client Address Id</strong></mat-header-cell>
@@ -79,8 +95,11 @@
                     </ng-container>
 
                     <ng-container matColumnDef="Shippingaddresssameasbilling">
-                        <mat-header-cell *matHeaderCellDef style="width: 240px!important;min-width: 240px!important;"><strong>Shipping Address same as Billing</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row"style="width: 240px!important;min-width: 240px!important;">{{ row['isShippingAddressSameAsBilling'] }}</mat-cell>
+                        <mat-header-cell *matHeaderCellDef
+                            style="width: 240px!important;min-width: 240px!important;"><strong>Shipping Address same as
+                                Billing</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row" style="width: 240px!important;min-width: 240px!important;">{{
+                            row['isShippingAddressSameAsBilling'] }}</mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="Shippingclientname">

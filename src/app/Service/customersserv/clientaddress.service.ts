@@ -43,4 +43,9 @@ clientaddressaddsave(payload: any): Observable<string> {
       this.env.apiUrl + 'CostCenterMapping/GetAllCostCentertDetails'
     );
   }
+
+    PostClientAddressUpload(payload: any): Observable<APIResponse> {
+    return this.http.post<APIResponse>(this.env.apiUrl + 'ClientAddress/PostClientAddressUpload', payload)
+  }
+
 }
