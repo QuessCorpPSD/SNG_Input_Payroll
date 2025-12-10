@@ -124,6 +124,9 @@ import { ServiceChargeComponent } from './pages/customers/ServiceChargeMaster/se
 import { SiteMasterComponent } from './pages/GlobalMasters/site-master/site-master.component';
 import { EmployeeComponent } from './pages/customers/employee/employee.component';
 import { ClientbillablereportsdatewiseComponent } from './pages/Invoice/clientbillablereportsdatewise/clientbillablereportsdatewise.component';
+import { CreditnoteComponent } from './pages/Invoice/creditnote/creditnote.component';
+import { CreditnoteapproveComponent } from './pages/Invoice/creditnoteapprove/creditnoteapprove.component';
+import { CreditnoteupdateComponent } from './pages/Invoice/creditnoteupdate/creditnoteupdate.component';
 import { PayregisterentitywiseComponent } from './pages/Reports/payregisterentitywise/payregisterentitywise.component';
 import { BillingubrComponent } from './pages/Reports/billingubr/billingubr.component';
 
@@ -244,6 +247,10 @@ export const routes: Routes = [
           { path: 'poinitiate', component: POInitiateComponent },
           { path: 'app-invoice-culture', component: InvoiceCultureComponent },
           { path: 'ClientBillableReportDatewise', component: ClientbillablereportsdatewiseComponent },
+          { path: 'creditnote', component: CreditnoteComponent },
+          { path: 'creditnoteapprove', component: CreditnoteapproveComponent },
+          { path: 'creditnoteupdate', component: CreditnoteupdateComponent },
+
         ]
       },
 
