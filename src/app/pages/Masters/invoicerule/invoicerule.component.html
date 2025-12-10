@@ -108,6 +108,18 @@
                 <mat-cell *matCellDef="let element">{{ element.invoicingRulesID
                     }}</mat-cell>
             </ng-container>
+            <ng-container matColumnDef="edit">
+                <mat-header-cell *matHeaderCellDef></mat-header-cell>
+
+                <mat-cell *matCellDef="let element">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Edit"
+                        (click)="editClick(element)">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                </mat-cell>
+            </ng-container>
+
+
             <ng-container matColumnDef="delete">
                 <mat-header-cell *matHeaderCellDef mat-sort-header class="fixed-width-column"></mat-header-cell>
                 <mat-cell *matCellDef="let element" class="fixed-width-column">
@@ -160,17 +172,13 @@
     <mat-paginator class="mat-footer-paginator" [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons stickyEnd>
     </mat-paginator>
 </div>
-<div *ngIf="showPopup" class="overlay">
-    <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
-        (close)="showPopup = false"></app-alertpopup>
-</div>
 
 <div *ngIf="isAddclicked" class="popup-overlay" (keydown.escape)="closeclick()">
     <mat-card class="popup-card">
         <mat-card-header style="border-bottom: 1px solid #89898B; gap:570px">
             <mat-card-title>Add Invoice Rule</mat-card-title>
-            <button style="border: none; background: transparent;"><mat-icon
-                    (click)="closeclick()" matTooltip="close">close</mat-icon></button>
+            <button style="border: none; background: transparent;"><mat-icon (click)="closeclick()"
+                    matTooltip="close">close</mat-icon></button>
         </mat-card-header>
         <mat-card-content class="scroll-content">
             <form [formGroup]="invoiceruleform">
@@ -535,4 +543,231 @@
             </button>
         </mat-card-actions>
     </mat-card>
+</div>
+
+
+<div *ngIf="isEditMode" class="popup-overlay" (keydown.escape)="closeclick()">
+    <mat-card class="popup-card">
+
+        <mat-card-header style="border-bottom: 1px solid #89898B; gap:570px">
+            <mat-card-title>Edit Invoice Rule</mat-card-title>
+
+            <button style="border: none; background: transparent;" (click)="closeEditclick()">
+                <mat-icon (click)="closeclick()" matTooltip="close">close</mat-icon>
+            </button>
+        </mat-card-header>
+
+        <mat-card-content class="scroll-content">
+            <form [formGroup]="invoiceruleEditform">
+
+                <div class="row g-3 align-items-end">
+
+                    <!-- Company Code (READ ONLY FOR EDIT) -->
+                    <div class="col-md-12" style="padding-top:10px">
+                        <label class="form-label text-muted small">Company Code</label>
+                        <input type="text" class="form-control" formControlName="company" readonly />
+                    </div>
+
+                    <!-- Site Name (READ ONLY FOR EDIT) -->
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">Site Name</label>
+                        <input type="text" class="form-control" formControlName="group" readonly />
+                    </div>
+
+                    <!-- Billing Type -->
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">Billing Type</label>
+                        <select formControlName="editbillingType" class="form-control">
+                            <option value="">Select</option>
+                            <option *ngFor="let type of billingType" [value]="type.text">{{ type.text }}</option>
+                        </select>
+                    </div>
+
+                    <!-- Days as Per Timesheet -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Days As Per Timesheet</label>
+                        <input type="checkbox" formControlName="editdaysAsPerTimesheet" />
+                    </div>
+
+                    <!-- Days Per Month -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Days Per Month</label>
+                        <input formControlName="editdayspermonth" type="number" class="form-control" />
+                    </div>
+
+                    <!-- Weekends Rule -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Weekends Rule</label>
+                        <select formControlName="editweekendsrule" class="form-control">
+                            <option value="">Select</option>
+                            <option *ngFor="let type of standardSelect" [value]="type.text">{{ type.text }}</option>
+                        </select>
+                    </div>
+
+                    <!-- Holidays Rule -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Holidays Rule</label>
+                        <select formControlName="editholidaysrule" class="form-control">
+                            <option value="">Select</option>
+                            <option *ngFor="let type of standardSelect" [value]="type.text">{{ type.text }}</option>
+                        </select>
+                    </div>
+
+                    <!-- Comp Off Rule -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Comp Off Rule</label>
+                        <select formControlName="editcomppoffrule" class="form-control">
+                            <option value="">Select</option>
+                            <option *ngFor="let type of standardSelect" [value]="type.text">{{ type.text }}</option>
+                        </select>
+                    </div>
+
+                    <!-- Maternity Leave -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Maternity Leave</label>
+                        <select formControlName="editmaternityleave" class="form-control">
+                            <option value="">Select</option>
+                            <option *ngFor="let type of standardSelect" [value]="type.text">{{ type.text }}</option>
+                        </select>
+                    </div>
+
+                    <!-- Leave Types -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Leave Types</label>
+                        <select formControlName="editleavetypes" class="form-control">
+                            <option value="">Select</option>
+                            <option *ngFor="let type of leavetypes" [value]="type.id">{{ type.text }}</option>
+                        </select>
+                    </div>
+
+                    <!-- Leave Credit -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Leave Credit</label>
+                        <input formControlName="editleavecredit" type="number" class="form-control" />
+                    </div>
+
+                    <!-- Leave Rule -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Leave Rule</label>
+                        <select formControlName="editleaverule" class="form-control">
+                            <option value="">Select</option>
+                            <option *ngFor="let type of standardSelect" [value]="type.text">{{ type.text }}</option>
+                        </select>
+                    </div>
+
+                    <!-- Pay Period From -->
+                    <div class="col-md-2">
+                        <label class="form-label text-muted small">Pay Period From</label>
+                        <select formControlName="editpayperiodfrom" class="form-control"
+                            (change)="onMonthChangeedit($event)">
+                            <option value="">Select</option>
+                            <option *ngFor="let type of months" [value]="type.text">{{ type.text }}</option>
+                        </select>
+                    </div>
+
+                    <!-- Pay Period To -->
+                    <div class="col-md-2">
+                        <label class="form-label text-muted small">Pay Period To</label>
+                        <input formControlName="editpayperiodto" type="text" class="form-control" readonly />
+                    </div>
+
+
+
+
+                    <!-- Carry Forward -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Carry Forward</label>
+                        <select formControlName="editcarryforward" class="form-control">
+                            <option value="">Select</option>
+                            <option *ngFor="let type of standardSelect" [value]="type.text">{{ type.text }}</option>
+                        </select>
+                    </div>
+
+                    <!-- No. of Carry Forwards -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">No. of Carry Forwards</label>
+                        <input formControlName="editnoofcarryforwards" type="number" class="form-control" />
+                    </div>
+
+                    <!-- OT Rule -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">OT Rule</label>
+                        <select formControlName="editotrule" class="form-control">
+                            <option value="">Select</option>
+                            <option *ngFor="let type of standardSelect" [value]="type.text">{{ type.text }}</option>
+                        </select>
+                    </div>
+
+                    <!-- Gratuity -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Gratuity</label>
+                        <select formControlName="editgratuity" class="form-control">
+                            <option value="">Select</option>
+                            <option *ngFor="let type of standardSelect" [value]="type.text">{{ type.text }}</option>
+                        </select>
+                    </div>
+
+                    <!-- Reimbursement -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Reimbursement</label>
+                        <select formControlName="editreimbursement" class="form-control">
+                            <option value="">Select</option>
+                            <option *ngFor="let type of standardSelect" [value]="type.text">{{ type.text }}</option>
+                        </select>
+                    </div>
+
+                    <!-- Service Fee on Expenses -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Service Fee on Expenses</label>
+                        <select formControlName="editservicefeeonexpenses" class="form-control">
+                            <option value="">Select</option>
+                            <option *ngFor="let type of standardSelect" [value]="type.text">{{ type.text }}</option>
+                        </select>
+                    </div>
+
+                    <!-- Rebates -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Rebates</label>
+                        <select formControlName="editrebates" class="form-control">
+                            <option value="">Select</option>
+                            <option *ngFor="let type of standardSelect" [value]="type.text">{{ type.text }}</option>
+                        </select>
+                    </div>
+
+                    <!-- Discounts -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Discounts</label>
+                        <select formControlName="editdiscounts" class="form-control">
+                            <option value="">Select</option>
+                            <option *ngFor="let type of standardSelect" [value]="type.text">{{ type.text }}</option>
+                        </select>
+                    </div>
+
+                    <!-- Billable Days Formula -->
+                    <div class="col-md-12">
+                        <label class="form-label text-muted small">Billable Days Formula</label>
+                        <input formControlName="editbillabledaysformula" type="text" class="form-control" />
+                    </div>
+
+                </div>
+
+            </form>
+        </mat-card-content>
+
+        <mat-card-actions
+            style="display: flex; padding: 14px 20px; justify-content: flex-end; align-items: center; gap: 12px; align-self: stretch;border-radius: 0 0 10px 10px; border-top: 1px solid var(--Card-Box-border-color, #D6D6D6); background: var(--Card-card-background, #F9F9F9);">
+            <button (click)="SaveEditData()"
+                style="margin-right: 10px;width: 130px; height: 30px; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
+                <div
+                    style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
+                    Update</div>
+            </button>
+        </mat-card-actions>
+
+    </mat-card>
+</div>
+
+<div *ngIf="showPopup" class="overlay">
+    <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+        (close)="showPopup = false"></app-alertpopup>
 </div>

@@ -1,5 +1,5 @@
 .mat-footer-paginator {
-    position: sticky;
+    position: relative;
     bottom: 0;
     width: 1070px;
     background: white;

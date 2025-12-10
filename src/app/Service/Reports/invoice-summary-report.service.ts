@@ -31,10 +31,30 @@ export class InvoiceSummaryReportService implements IinvoiceSummaryReport {
       userId
     );
   }
+  ExporttoExcelByEntity(
+    EntityId: any,
+    startDate: string,
+    endDate: string,
+    reportType: any,
+    userId: any
+  ): Observable<APIResponse> {
+
+    return this.http.get<APIResponse>(
+      this.env.apiUrl +
+      'InvoiceSummary/ExportToExcel_Entity/' +
+      EntityId + '/' +
+      startDate + '/' +
+      endDate + '/' +
+      reportType + '/' +
+      userId
+    );
+  }
 
 
 
-
+  GetEntityNames(): Observable<APIResponse> {
+    return this.http.get<APIResponse>(this.env.apiUrl + 'Entity/Search')
+  }
   GetTaxTypes(): Observable<APIResponse> {
     return this.http.get<APIResponse>(this.env.apiUrl + 'InvoiceSummary/GetTaxTypes')
   }

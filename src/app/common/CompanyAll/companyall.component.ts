@@ -45,6 +45,7 @@ searchText: string = '';
   filteredOptions$!: Observable<Company[]>;
   selectedOption?: Company;
   userdetail!: any;
+@Input() disabled: boolean = false;
   @Output() companyEmit = new EventEmitter<Company>();
 
   constructor(@Inject(COMM_TOKEN) private _commonService: ICommonService
@@ -70,30 +71,32 @@ searchText: string = '';
   }
 
   setDisabledState?(isDisabled: boolean): void {
-    // optional, in case you need disable support
   }
-
+ ngOnChanges(changes: SimpleChanges): void {
+    if (changes['disabled']) {
+      if (this.disabled) {
+        this.myControl.disable({ emitEvent: false });  
+      } else {
+        this.myControl.enable({ emitEvent: false });  
+      }
+    }
+  }
   ngOnInit(): void {
 
     const json = this._sessionStoreage.getItem('UserProfile');
-    
     if (json) {
       this.userdetail = JSON.parse(this.decry.decrypt(json));
-      console.log(this.userdetail);
+      //console.log(this.userdetail.userId);
     } else {
       console.warn('UserProfile not found in session storage');
     }
     this.BindCompanyCode();
-    const userInfo = {
-      "userId": this.userdetail.user_Id,
-      "userName": this.userdetail.userName,
-    };
   }
 
   BindCompanyCode() {
     this._commonService.GetCompanyCodes(this.userdetail.user_Id).subscribe({
       next: res => {
-        console.log('res',res);
+        //console.log(res);
         this.companyCode = res.Data;
         this.filteredOptions$ = this.myControl.valueChanges.pipe(
           startWith(''),

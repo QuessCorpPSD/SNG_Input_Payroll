@@ -3,11 +3,12 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment.development';
 import { Observable } from 'rxjs';
 import { APIResponse } from '../../Models/apiresponse';
+import { ICompanypaycodemapping } from '../../Repository/customer/ICompanypaycodemapping';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CompanypaycodemappingService {
+export class CompanypaycodemappingService implements ICompanypaycodemapping {
   env = environment;
   httpClient: any;
   constructor(private http: HttpClient) {
@@ -32,7 +33,7 @@ export class CompanypaycodemappingService {
     return this.http.get<APIResponse>(
       this.env.apiUrl + 'CompanyPaycodeMapping/ExportToExcel/' + companyid);
   }
-    PostAddPaycodeMapping(payloadCreate: any): Observable<APIResponse> {
+  PostAddPaycodeMapping(payloadCreate: any): Observable<APIResponse> {
     return this.http.post<APIResponse>(
       this.env.apiUrl + 'CompanyPaycodeMapping/Create',
       payloadCreate

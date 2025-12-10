@@ -1,4 +1,4 @@
-import { Component, Inject, ViewChild } from '@angular/core';
+import { Component, Inject, InjectionToken, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -15,13 +15,21 @@ import { MatSelectModule } from '@angular/material/select';
 import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.component";
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
+import { ICompanypaycodemapping } from '../../../Repository/customer/ICompanypaycodemapping';
+export const Pay_TOKEN = new InjectionToken<ICompanypaycodemapping>('Pay_TOKEN');
 
 @Component({
   selector: 'app-companypaycodemapping-copy',
   standalone: true,
   imports: [MatCardModule, MatIconModule, CommonModule, FormsModule, ReactiveFormsModule, MatPaginatorModule, MatTableModule, MatTooltipModule, MatFormFieldModule, MatSelectModule, CompanyallComponent, AlertpopupComponent],
   templateUrl: './companypaycodemapping-copy.component.html',
-  styleUrl: './companypaycodemapping-copy.component.css'
+  styleUrl: './companypaycodemapping-copy.component.css',
+  providers: [
+    {
+      provide: Pay_TOKEN,
+      useClass: CompanypaycodemappingService,
+    }
+  ]
 })
 
 export class CompanypaycodemappingCopyComponent {
@@ -44,7 +52,7 @@ export class CompanypaycodemappingCopyComponent {
   isLoading: boolean = false;
   userdetail!: any;
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild('paginator') paginator!: MatPaginator;
   selectedCompanyIdbind: any;
   selectedCompanyCodebind: any;
 
@@ -52,7 +60,7 @@ export class CompanypaycodemappingCopyComponent {
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<CompanypaycodemappingCopyComponent>,
     private dialog: MatDialog,
-    private paycodeService: CompanypaycodemappingService,
+    @Inject(Pay_TOKEN) private paycodeService: ICompanypaycodemapping,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private decry: EncryptionService,
     private _sessionStoreage: SessionStorageService,

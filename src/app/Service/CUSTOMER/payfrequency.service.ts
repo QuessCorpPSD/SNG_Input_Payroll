@@ -3,11 +3,12 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
 import { APIResponse } from '../../Models/apiresponse';
+import { IPayfrequencyservice } from '../../Repository/customer/IPayfrequency';
 
 @Injectable({
   providedIn: 'root'
 })
-export class PayfrequencyService {
+export class PayfrequencyService implements IPayfrequencyservice {
   env = environment;
   constructor(private http: HttpClient) { }
 

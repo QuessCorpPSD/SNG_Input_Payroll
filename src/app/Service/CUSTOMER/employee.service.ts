@@ -3,11 +3,12 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
 import { APIResponse } from '../../Models/apiresponse';
+import { IEmployeeservice } from '../../Repository/customer/Iemployee';
 
 @Injectable({
   providedIn: 'root'
 })
-export class EmployeeService {
+export class EmployeeService implements IEmployeeservice {
   env = environment;
   httpClient: any;
   constructor(private http: HttpClient) {

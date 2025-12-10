@@ -29,15 +29,22 @@ export class invoiceRuleService implements IinvoiceRuleService {
     //console.log(url);
     return this.http.post<APIResponse>(url, formData);
   }
-  PostInvoiceRuleUpload(formData:FormData):Observable<APIResponse>{
+  PostInvoiceRuleUpload(formData: FormData): Observable<APIResponse> {
     const url = `${this.environment.apiUrl}InvoiceRule/PostInvoiceRuleUpload`;
     //console.log(url);
     return this.http.post<APIResponse>(url, formData);
   }
-  InvoiceRuleExport(formData:FormData):Observable<APIResponse>{
+
+  InvoiceRuleExport(formData: FormData): Observable<APIResponse> {
     const url = `${this.environment.apiUrl}InvoiceRule/InvoiceRuleExport`;
     //console.log(url);
     return this.http.post<APIResponse>(url, formData);
   }
+  // invoice-rule.service.ts
+  PostUpdateInvoiceRule(invoiceRuleEdit: any): Observable<APIResponse> {
+    const url = `${this.environment.apiUrl}InvoiceRule/PostEditInvoiceRule`;
+    return this.http.post<APIResponse>(url, invoiceRuleEdit);
+  }
+
 }
 

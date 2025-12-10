@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, Inject, InjectionToken, ViewChild } from '@angular/core';
 import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.component";
 import { MatPaginator, MatPaginatorModule } from "@angular/material/paginator";
 import { MatTableDataSource, MatTableModule } from "@angular/material/table";
@@ -14,13 +14,21 @@ import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { MatCardModule } from "@angular/material/card";
 import { EmployeeService } from '../../../Service/CUSTOMER/employee.service';
+import { IEmployeeservice } from '../../../Repository/customer/Iemployee';
+export const Pay_TOKEN = new InjectionToken<IEmployeeservice>('Pay_TOKEN');
 
 @Component({
   selector: 'app-employee',
   standalone: true,
   imports: [AlertpopupComponent, MatPaginatorModule, MatTableModule, MatIconModule, CompanyallComponent, CommonModule, FormsModule, MatTooltipModule, MatCardModule],
   templateUrl: './employee.component.html',
-  styleUrl: './employee.component.css'
+  styleUrl: './employee.component.css',
+  providers: [
+    {
+      provide: Pay_TOKEN,
+      useClass: EmployeeService,
+    }
+  ]
 })
 export class EmployeeComponent {
   selectedCompanyId: any;
@@ -46,7 +54,7 @@ export class EmployeeComponent {
   uploadedDataSource = new MatTableDataSource(this.uploadedData);
 
   @ViewChild('paginator') paginator!: MatPaginator;
-  constructor(private dialog: MatDialog, private service: EmployeeService, private decry: EncryptionService,
+  constructor(private dialog: MatDialog,@Inject(Pay_TOKEN) private service: IEmployeeservice, private decry: EncryptionService,
     private _sessionStoreage: SessionStorageService, private fb: FormBuilder) { }
 
 

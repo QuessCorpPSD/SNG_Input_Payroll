@@ -1,39 +1,63 @@
-<br />
 <div class="page-wrapper">
     <div class="scrollable-content">
-
         <div style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; min-width: 960px">
             Netpay Summary Report
         </div>
 
-        <form [formGroup]="netpayForm">
-            <div class="container py-4">
-                <div class="row g-3 align-items-end">
+        <div class="container py-4">
+            <div class="row g-3 align-items-end">
 
-                    <!-- Company Code -->
-                    <div class="col-md-3">
-                        <label class="form-label text-muted small">Company code</label>
-                        <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
-                    </div>
+                <!-- Entity Name -->
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Entity Name</label>
+                    <select class="form-select form-select-sm" [(ngModel)]="entity" [disabled]="isCompanySelected"
+                        (change)="onEntityChange()">
+                        <option value="">Select</option>
+                        <option *ngFor="let item of entityList" [value]="item.Entity_Id">
+                            {{ item.Entity_Name }}
+                        </option>
+                    </select>
+                </div>
 
-                    <div class="col-md-3">
-                        <label class="form-label text-muted small">PayPeriod</label>
-                        <PayPeriod [selectedCompanyId]="selectedCompanyId" [payPeriodType]="payPeriodType"
-                            (payperiodEmit)="handlePayperiodEvent($event)"></PayPeriod>
-                    </div>
-
-
-                    <!-- Export -->
-                    <div class="col-md-3 d-flex gap-2">
-                        <button class="btn btn-sm d-flex align-items-center justify-content-center"
-                            matTooltip="Export to Excel" (click)="exportToExcel()">
-                            <mat-icon>table_chart</mat-icon>
-                        </button>
-                    </div>
+                <!-- Company Code -->
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Company Code</label>
+                    <companyall (companyEmit)="handleCompanyEvent($event)" (ngModelChange)="handleCompanyEvent($event)"
+                        [disabled]="isEntitySelected" [(ngModel)]="company">
+                    </companyall>
 
                 </div>
-            </div>
-        </form>
 
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Pay Period</label>
+                    <select class="form-select form-select-sm" [(ngModel)]="payperiod"
+                        (change)="onPayPeriodChange($event)">
+                        <option value=""> Select</option>
+                        <option *ngFor="let p of payPeriodList" [value]="p.pay_Frequency_Detail_Id">
+                            {{ p.pay_Period }}
+                        </option>
+                    </select>
+                </div>
+
+
+
+                <div class="col-md-3 d-flex gap-2">
+                    <button type="button" class="btn btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="Export to Excel" (click)="exportToExcel()">
+                        <mat-icon>table_chart</mat-icon>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+        <div *ngIf="isLoading" class="loading-overlay">
+            <img src="assets/Loading.gif" alt="Loading...">
+        </div>
+
+
+        <div *ngIf="showPopup" class="overlay"></div>
+        <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+            (close)="closePopup()">
+        </app-alertpopup>
     </div>
 </div>

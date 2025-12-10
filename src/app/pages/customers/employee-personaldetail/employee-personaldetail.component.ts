@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, InjectionToken } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
@@ -9,13 +9,21 @@ import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { APIResponse } from '../../../Models/apiresponse';
 import { EmployeeService } from '../../../Service/CUSTOMER/employee.service';
+import { IEmployeeservice } from '../../../Repository/customer/Iemployee';
+export const Pay_TOKEN = new InjectionToken<IEmployeeservice>('Pay_TOKEN');
 
 @Component({
   selector: 'app-employee-personaldetail',
   standalone: true,
   imports: [MatCardModule, MatIconModule, CommonModule, FormsModule, ReactiveFormsModule, MatPaginatorModule],
   templateUrl: './employee-personaldetail.component.html',
-  styleUrl: './employee-personaldetail.component.css'
+  styleUrl: './employee-personaldetail.component.css',
+  providers: [
+    {
+      provide: Pay_TOKEN,
+      useClass: EmployeeService,
+    }
+  ]
 })
 export class EmployeePersonaldetailComponent {
 
@@ -31,7 +39,7 @@ export class EmployeePersonaldetailComponent {
     private dialogRef: MatDialogRef<EmployeePersonaldetailComponent>,
     private fb: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private service: EmployeeService,
+    @Inject(Pay_TOKEN) private service: IEmployeeservice,
     private decry: EncryptionService,
     private _sessionStoreage: SessionStorageService,
   ) {

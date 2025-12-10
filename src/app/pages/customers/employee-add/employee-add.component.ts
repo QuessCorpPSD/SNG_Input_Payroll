@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, InjectionToken } from '@angular/core';
 import { MatCardModule } from "@angular/material/card";
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from "@angular/material/icon";
@@ -18,6 +18,8 @@ import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { APIResponse } from '../../../Models/apiresponse';
 import { EmployeeService } from '../../../Service/CUSTOMER/employee.service';
+import { IEmployeeservice } from '../../../Repository/customer/Iemployee';
+export const Pay_TOKEN = new InjectionToken<IEmployeeservice>('Pay_TOKEN');
 
 
 @Component({
@@ -25,7 +27,13 @@ import { EmployeeService } from '../../../Service/CUSTOMER/employee.service';
   standalone: true,
   imports: [MatCardModule, MatIconModule, FormsModule, CommonModule, ReactiveFormsModule, MatRadioModule, MatTabsModule, PayPeriodComponent],
   templateUrl: './employee-add.component.html',
-  styleUrl: './employee-add.component.css'
+  styleUrl: './employee-add.component.css',
+  providers: [
+    {
+      provide: Pay_TOKEN,
+      useClass: EmployeeService,
+    }
+  ]
 })
 export class EmployeeAddComponent {
   employeeForm!: FormGroup
@@ -50,7 +58,7 @@ export class EmployeeAddComponent {
   userdetail: any;
   submitted: boolean = false;
 
-  constructor(private fb: FormBuilder, private service: EmployeeService, private dialogRef: MatDialogRef<EmployeeAddComponent>, private dialog: MatDialog, @Inject(MAT_DIALOG_DATA) public data: any,
+  constructor(private fb: FormBuilder, @Inject(Pay_TOKEN) private service: IEmployeeservice, private dialogRef: MatDialogRef<EmployeeAddComponent>, private dialog: MatDialog, @Inject(MAT_DIALOG_DATA) public data: any,
     private decry: EncryptionService,
     private _sessionStoreage: SessionStorageService,) {
     this.rowData = data.rowData;
@@ -148,7 +156,7 @@ export class EmployeeAddComponent {
       Product: [this.rowData.ProductId || ''],
       Channel: [this.rowData.ChannelId || ''],
       subvertical: [this.rowData.SubVerticalId || ''],
-      Abscondreportingdate: [this.rowData.Abscond_Reporting_Date ? this.formatDate(this.rowData.Abscond_Reporting_Date)  : ''],
+      Abscondreportingdate: [this.rowData.Abscond_Reporting_Date ? this.formatDate(this.rowData.Abscond_Reporting_Date) : ''],
       DOD: [this.rowData.Date_Of_Death ? this.formatDate(this.rowData.Date_Of_Death) : '']
     });
 

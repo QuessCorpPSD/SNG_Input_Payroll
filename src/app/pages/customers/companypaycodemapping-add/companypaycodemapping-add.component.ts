@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, InjectionToken, ViewChild } from '@angular/core';
 import { CompanyallComponent } from "../../../common/CompanyAll/companyall.component";
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
@@ -15,14 +15,21 @@ import { CompanypaycodemappingService } from '../../../Service/customersserv/com
 import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.component";
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
-import { error } from 'console';
+import { ICompanypaycodemapping } from '../../../Repository/customer/ICompanypaycodemapping';
+export const Pay_TOKEN = new InjectionToken<ICompanypaycodemapping>('Pay_TOKEN');
 
 @Component({
   selector: 'app-companypaycodemapping-add',
   standalone: true,
   imports: [CompanyallComponent, MatCardModule, MatIconModule, CommonModule, FormsModule, ReactiveFormsModule, MatPaginatorModule, MatTableModule, MatTooltipModule, MatFormFieldModule, MatSelectModule, AlertpopupComponent],
   templateUrl: './companypaycodemapping-add.component.html',
-  styleUrl: './companypaycodemapping-add.component.css'
+  styleUrl: './companypaycodemapping-add.component.css',
+  providers: [
+    {
+      provide: Pay_TOKEN,
+      useClass: CompanypaycodemappingService,
+    }
+  ]
 })
 export class CompanypaycodemappingAddComponent {
 
@@ -31,8 +38,8 @@ export class CompanypaycodemappingAddComponent {
   selectedCompanyCode: any;
 
   isFirstAddClick: boolean = true;
-  paycodeList: any[] = [];   // ← NEW
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  paycodeList: any[] = [];   
+  @ViewChild('paginator') paginator!: MatPaginator;
 
   uploadDisplayedColumns: string[] = ['SNo', 'Paycode', 'Description', 'Paytype', 'taxable', 'LopApplicable', 'PfApplicable', 'ESIApplicable', 'PTApplicable', 'Earnedpaycode', 'Pickfrom', 'Formula'];
   uploadedData: any[] = [];

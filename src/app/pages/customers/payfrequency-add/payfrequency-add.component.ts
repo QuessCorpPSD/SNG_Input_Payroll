@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
+import { Component, Inject, InjectionToken, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialogRef, MatDialog } from '@angular/material/dialog';
@@ -13,13 +13,21 @@ import { BillingpayfrequencyService } from '../../../Service/invoice/billingpayf
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { PayfrequencyService } from '../../../Service/CUSTOMER/payfrequency.service';
+import { IPayfrequencyservice } from '../../../Repository/customer/IPayfrequency';
+export const Pay_TOKEN = new InjectionToken<IPayfrequencyservice>('Pay_TOKEN');
 
 @Component({
   selector: 'app-payfrequency-add',
   standalone: true,
   imports: [MatCardModule, MatPaginatorModule, MatTableModule, MatIconModule, CompanyallComponent, CommonModule, FormsModule, ReactiveFormsModule, MatTooltipModule],
   templateUrl: './payfrequency-add.component.html',
-  styleUrl: './payfrequency-add.component.css'
+  styleUrl: './payfrequency-add.component.css',
+  providers: [
+    {
+      provide: Pay_TOKEN,
+      useClass: PayfrequencyService,
+    }
+  ]
 })
 export class PayfrequencyAddComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -41,7 +49,7 @@ export class PayfrequencyAddComponent {
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<PayfrequencyAddComponent>,
-    private dialog: MatDialog, private service: PayfrequencyService,
+    private dialog: MatDialog, @Inject(Pay_TOKEN) private service:IPayfrequencyservice,
     private decry: EncryptionService,
     private _sessionStoreage: SessionStorageService
   ) { }

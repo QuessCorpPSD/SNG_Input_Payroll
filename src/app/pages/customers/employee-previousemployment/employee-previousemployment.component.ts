@@ -1,4 +1,4 @@
-import { Component, Inject, ViewChild } from '@angular/core';
+import { Component, Inject, InjectionToken, ViewChild } from '@angular/core';
 import { MatPaginator, MatPaginatorModule } from "@angular/material/paginator";
 import { MatCardModule } from "@angular/material/card";
 import { MatTableModule } from "@angular/material/table";
@@ -12,6 +12,8 @@ import { APIResponse } from '../../../Models/apiresponse';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { EmployeeService } from '../../../Service/CUSTOMER/employee.service';
+import { IEmployeeservice } from '../../../Repository/customer/Iemployee';
+export const Pay_TOKEN = new InjectionToken<IEmployeeservice>('Pay_TOKEN');
 
 
 @Component({
@@ -19,7 +21,13 @@ import { EmployeeService } from '../../../Service/CUSTOMER/employee.service';
   standalone: true,
   imports: [MatPaginatorModule, MatCardModule, MatTableModule, MatIconModule, CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './employee-previousemployment.component.html',
-  styleUrl: './employee-previousemployment.component.css'
+  styleUrl: './employee-previousemployment.component.css',
+  providers: [
+    {
+      provide: Pay_TOKEN,
+      useClass: EmployeeService,
+    }
+  ]
 })
 export class EmployeePreviousemploymentComponent {
   prevEmploymentForm!: FormGroup;
@@ -31,7 +39,7 @@ export class EmployeePreviousemploymentComponent {
     private dialogRef: MatDialogRef<EmployeePreviousemploymentComponent>,
     private fb: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private service: EmployeeService,
+    @Inject(Pay_TOKEN) private service: IEmployeeservice,
     private decry: EncryptionService,
     private _sessionStoreage: SessionStorageService
   ) {
