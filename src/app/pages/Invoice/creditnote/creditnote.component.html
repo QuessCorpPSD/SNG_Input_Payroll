@@ -1,0 +1,205 @@
+<div class="container py-4">
+    <div class="row g-3 align-items-end">
+
+        <div class="col-md-3">
+            <label class="form-label text-muted small">Company Code</label>
+            <CompanyPicker (companyEmit)="handleCompanyEvent($event)"></CompanyPicker>
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label text-muted small">Purpose</label>
+            <select class="w-100 custom-height rounded-1 select-drop" appearance="outline"
+                style="background-color: white;height:30px;" (change)="onPurposeChange($event)">
+                <option value="">Select</option>
+                <option *ngFor="let purpose of CreditNotePurpose" [ngValue]="purpose.credit_Note_Type_Id">
+                    {{ purpose.credit_Note_Type }}
+                </option>
+            </select>
+        </div>
+
+        <div class="col-md-3" *ngIf="isPayPeriod">
+            <label class="form-label text-muted small">Pay Period</label>
+            <PayPeriod [selectedCompanyId]="comapnyId" [payPeriodType]="payPeriodType"
+                (payperiodEmit)="handlePayperiodEvent($event)"></PayPeriod>
+        </div>
+
+        <div class="col-md-3" *ngIf="isRefId">
+            <label class="form-label text-muted small">Ref Id</label>
+            <input type="text" class="w-100 custom-height rounded-1 select-drop" appearance="outline"
+                style="background-color: white;height:30px;" (change)="onRefIdChange($event)" />
+        </div>
+
+        <div class="col-md-3 d-flex gap-2">
+            <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Search"
+                (click)="SearchClick()">
+                <mat-icon>search</mat-icon>
+            </button>
+
+            <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Export to Excel"
+            (click)="Export()">
+                <mat-icon>table_chart</mat-icon>
+            </button>
+
+            <button class="btn btn-sm d-flex align-items-center justify
+      -content-center" matTooltip="Import" (click)="FileUpload(fileInput)">
+                <input type="file" #fileInput style="display: none;" accept=".xlsx, .xls"
+                    (change)="onFileChange($event)" />
+                <mat-icon>cloud_upload</mat-icon>
+            </button>
+
+            <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Template"
+                (click)="DownloadTemplate()">
+                <mat-icon>cloud_download</mat-icon>
+            </button>
+
+        </div>
+
+    </div>
+</div>
+
+
+<div class="table-container">
+    <div class="example-container mat-elevation-z8">
+        <table mat-table #searchgrid [dataSource]="dataSource" matSort class="custom-table table-scroll">
+         <ng-container matColumnDef="delete">
+                <mat-header-cell *matHeaderCellDef mat-sort-header class="fixed-width-column"></mat-header-cell>
+                <mat-cell *matCellDef="let element" class="fixed-width-column">
+                    <img src="assets/delete.svg" style="cursor: pointer; width: 24px; height: 22px;"
+                        (click)="deleteClick()" />
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="SNo">
+                <mat-header-cell *matHeaderCellDef>SNo</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.sNo }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="CreditNote_Id">
+                <mat-header-cell *matHeaderCellDef>CreditNote_Id</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.creditNote_Id }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Company_Code">
+                <mat-header-cell *matHeaderCellDef>Company Code</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.company_Code }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Company_name">
+                <mat-header-cell *matHeaderCellDef>Company Name</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.company_Name }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Company_Id">
+                <mat-header-cell *matHeaderCellDef>Company_Id</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.company_Id }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Invoice_Number">
+                <mat-header-cell *matHeaderCellDef>Invoice Number</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.invoice_Number }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Employee_Code">
+                <mat-header-cell *matHeaderCellDef>Employee Code</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.employee_Code }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="First_Name">
+                <mat-header-cell *matHeaderCellDef>Employee Name</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.first_Name }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Pay_Period">
+                <mat-header-cell *matHeaderCellDef>Pay_Period</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.pay_Period }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Pay_Period_Id">
+                <mat-header-cell *matHeaderCellDef>Pay_Period_Id</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.pay_Period_Id }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Invoice_Id">
+                <mat-header-cell *matHeaderCellDef>Invoice_Id</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.invoice_Id }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Ref_Id">
+                <mat-header-cell *matHeaderCellDef>Ref_Id</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.ref_Id}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Credit_Note_Amount">
+                <mat-header-cell *matHeaderCellDef>Credit Note Amount</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.credit_Note_Amount }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Credit_Note_Type_Text">
+                <mat-header-cell *matHeaderCellDef>Credit Note Type</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.credit_Note_Type_Text }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Credit_Note_Type">
+                <mat-header-cell *matHeaderCellDef>Purpose</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.credit_Note_Type }}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="Credit_Note_Status">
+                <mat-header-cell *matHeaderCellDef>Credit Note Status</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.credit_Note_Status }}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="CreditNote_No">
+                <mat-header-cell *matHeaderCellDef>Credit Note No</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.creditNote_No }}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="Is_GST_Applicable">
+                <mat-header-cell *matHeaderCellDef>Is_GST_Applicable</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.is_GST_Applicable }}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="Is_GST_Applicable_Type">
+                <mat-header-cell *matHeaderCellDef>Is_GST_Applicable_Type</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.is_GST_Applicable_Type }}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="Remarks">
+                <mat-header-cell *matHeaderCellDef>Remarks</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.remarks }}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="SAPRef_Number">
+                <mat-header-cell *matHeaderCellDef>SAPRef_Number</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.sAPRef_Number }}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="Billing_Address">
+                <mat-header-cell *matHeaderCellDef>Billing Address</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.billing_Address }}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="Shipping_Address">
+                <mat-header-cell *matHeaderCellDef>Shipping Address</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.shipping_Address }}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="GSTN_Number">
+                <mat-header-cell *matHeaderCellDef>GSTN Number</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.gSTN_Number }}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="User_Name">
+                <mat-header-cell *matHeaderCellDef>User Name</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.user_Name }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Posted_Date">
+                <mat-header-cell *matHeaderCellDef>Posted Date</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.posted_Date }}</mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+        </table>
+
+    </div>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+
+</div>
+<br><br><br><br><br><br><br><br>
+
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>
