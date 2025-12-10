@@ -16,11 +16,12 @@ import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { MatSort } from '@angular/material/sort';
 import * as XLSX from 'xlsx';
 import FileSaver from 'file-saver';
+import { MatCardModule } from "@angular/material/card";
 
 @Component({
   selector: 'app-clientaddress',
   standalone: true,
-  imports: [MatPaginatorModule, MatTableModule, MatIconModule, CommonModule, FormsModule, ReactiveFormsModule, MatTooltipModule, AlertpopupComponent],
+  imports: [MatPaginatorModule, MatTableModule, MatIconModule, CommonModule, FormsModule, ReactiveFormsModule, MatTooltipModule, AlertpopupComponent, MatCardModule],
   templateUrl: './clientaddress.component.html',
   styleUrl: './clientaddress.component.css'
 })
@@ -95,12 +96,12 @@ export class ClientaddressComponent {
       data: { example: 'Hello from parent!' }
     });
   }
-  editOpen() {
+  editOpen(row: any) {
     this.dialog.open(ClientaddressEditComponent, {
       width: '60%',
       height: '85vh',
       disableClose: true,
-      data: { example: 'Hello from parent!' }
+      data: { rowData: row }
     });
   }
 
@@ -124,7 +125,7 @@ export class ClientaddressComponent {
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
           this.uploadDisplayedColumns = [
-          'Action',  'Client_Address_Id', 'Companycode', 'MapName', 'SAPCustomercode', 'Billing_Client_Name', 'billingaddress', 'Shippingaddresssameasbilling', 'Shippingclientname', 'Shippingaddress', 'Effectivedate', 'gstnumber', 'gstapplicable'];
+            'Action', 'Client_Address_Id', 'Companycode', 'MapName', 'SAPCustomercode', 'Billing_Client_Name', 'billingaddress', 'Shippingaddresssameasbilling', 'Shippingclientname', 'Shippingaddress', 'Effectivedate', 'gstnumber', 'gstapplicable'];
 
         } else {
           this.isLoading = false;

@@ -1,9 +1,11 @@
-<form [formGroup]="clientaddress" novalidate (ngSubmit)="onSubmit()">
+<form [formGroup]="clientaddress" novalidate>
   <mat-card class="custom-card">
     <mat-card-header class="sticky-header">
-      <div style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700;padding-right: 440px;">
+      <!-- <div style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700;padding-right: 440px;">
         Edit Client Address
-      </div>
+      </div> -->
+      <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700;">Edit Client
+        Address</mat-card-title>
       <span class="spacer"></span>
       <button mat-icon-button (click)="onClose()" class="no-border-icon">
         <mat-icon>close</mat-icon>
@@ -18,10 +20,10 @@
         <!-- Company -->
         <div class="col-md-6">
           <label class="form-label small">Company <span style="color:red">*</span></label>
-
-          <companyall formControlName="company" (companyEmit)="handleCompanyEvent($event)"
+          <input class="form-control form-control-sm" formControlName="company" readonly />
+          <!-- <companyall formControlName="company" (companyEmit)="handleCompanyEvent($event)"
             (blur)="markFieldTouched('company')">
-          </companyall>
+          </companyall> -->
 
           <small *ngIf="clientaddress.get('company')?.invalid && clientaddress.get('company')?.touched"
             style="color:red">Company is required</small>
@@ -30,9 +32,11 @@
         <!-- Cost Center -->
         <div class="col-md-6">
           <label class="form-label small">Cost Center Mapping</label>
-          <select class="form-select form-select-sm" formControlName="Costcentermapping">
+          <!-- <select class="form-select form-select-sm" formControlName="Costcentermapping">
             <option value="" disabled>Select</option>
-          </select>
+          </select> -->
+          <input class="form-control form-control-sm" formControlName="Costcentermapping" readonly />
+
         </div>
 
       </div>
@@ -58,11 +62,15 @@
         </div>
 
       </div>
+      <div class="row mb-2">
+        <div class="col-12" style="padding-left: 52%;">
+          <input type="checkbox" formControlName="shippingsameasbilling" (change)="onSameAsBillingChange($event)">
+          <label class="ms-2">Shipping Address same as Billing</label>
+        </div>
+      </div>
 
-      <!-- Billing & Shipping Section -->
       <div class="row g-3 mb-3">
 
-        <!-- Billing -->
         <div class="col-md-6" style="background:#e0e0e0; padding:15px; border-radius:5px;">
 
           <label class="form-label small">Billing Client Name <span style="color:red">*</span></label>
@@ -85,11 +93,6 @@
 
         <!-- Shipping -->
         <div class="col-md-6">
-
-          <div class="mb-2">
-            <input type="checkbox" (change)="onSameAsBillingChange($event)" [checked]="sameAsBilling">
-            <label class="form-label ms-2">Shipping Address same as Billing</label>
-          </div>
 
           <div style="background:#e0e0e0; padding:15px; border-radius:5px;">
 

@@ -39,11 +39,11 @@
         <div class="col-md-6">
           <label class="form-label small">Map Name <span style="color:red">*</span></label>
 
-          <mapname formControlName="Costcentermapping" [selectedCompanyId]="selectedCC" 
-          (mapnameEmit)="handleMapNameEvent($event)"
-            (blur)="markFieldTouched('Costcentermapping')"> </mapname>
+          <mapname formControlName="Costcentermapping" [selectedCompanyId]="selectedCC"
+            (mapnameEmit)="handleMapNameEvent($event)" (blur)="markFieldTouched('Costcentermapping')"> </mapname>
 
-          <small *ngIf="clientaddress.get('Costcentermapping')?.invalid && clientaddress.get('Costcentermapping')?.touched"
+          <small
+            *ngIf="clientaddress.get('Costcentermapping')?.invalid && clientaddress.get('Costcentermapping')?.touched"
             style="color:red">MapName is required</small>
         </div>
       </div>
@@ -70,10 +70,15 @@
 
       </div>
 
-      <!-- Billing & Shipping Section -->
+      <div class="row mb-2">
+        <div class="col-12" style="padding-left: 52%;">
+          <input type="checkbox" formControlName="shippingsameasbilling" (change)="onSameAsBillingChange($event)">
+          <label class="ms-2">Shipping Address same as Billing</label>
+        </div>
+      </div>
+
       <div class="row g-3 mb-3">
 
-        <!-- Billing -->
         <div class="col-md-6" style="background:#e0e0e0; padding:15px; border-radius:5px;">
 
           <label class="form-label small">Billing Client Name <span style="color:red">*</span></label>
@@ -96,11 +101,6 @@
 
         <!-- Shipping -->
         <div class="col-md-6">
-
-          <div class="mb-2">
-            <input type="checkbox" (change)="onSameAsBillingChange($event)" [checked]="sameAsBilling">
-            <label class="form-label ms-2">Shipping Address same as Billing</label>
-          </div>
 
           <div style="background:#e0e0e0; padding:15px; border-radius:5px;">
 
@@ -127,7 +127,6 @@
           </div>
         </div>
       </div>
-
       <!-- Row 4 -->
       <div class="row g-3 mb-3">
         <div class="col-md-4">

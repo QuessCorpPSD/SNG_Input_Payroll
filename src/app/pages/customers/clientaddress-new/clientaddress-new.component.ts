@@ -73,7 +73,7 @@ export class ClientaddressNewComponent {
 
   handleMapNameEvent(mapname: any) {
     this.selectedMN = mapname.mapName;
-    this.mapnameUI=mapname;
+    this.mapnameUI = mapname;
     //console.log(mapname);
   }
 
@@ -82,32 +82,31 @@ export class ClientaddressNewComponent {
     this.clientaddress.get(field)?.markAsTouched();
   }
 
+
   onSameAsBillingChange(event: any) {
-    this.sameAsBilling = event.target.checked;
+    const value = event.target.checked;  // true or false
+    this.sameAsBilling = value;          // update local variable
 
-    this.clientaddress.patchValue({
-      IsShippingAddressSameAsBilling: this.sameAsBilling
-    });
-
-    if (this.sameAsBilling) {
+    if (value) {
       this.clientaddress.patchValue({
-        shippingClientName: this.clientaddress.get('billingClientName')?.value,
-        shippingAddress: this.clientaddress.get('billingAddress')?.value
+        shippingClientName: this.clientaddress.value.billingClientName,
+        shippingAddress: this.clientaddress.value.billingAddress
       });
 
       this.clientaddress.get('shippingClientName')?.disable();
       this.clientaddress.get('shippingAddress')?.disable();
-    }
-    else {
+
+    } else {
       this.clientaddress.get('shippingClientName')?.enable();
       this.clientaddress.get('shippingAddress')?.enable();
 
       this.clientaddress.patchValue({
-        shippingClientName: '',
-        shippingAddress: ''
+        shippingClientName: this.clientaddress.value.billingClientName ?? '',
+        shippingAddress: this.clientaddress.value.billingAddress ?? ''
       });
     }
   }
+ 
 
   BindCostcenter() {
     this.service.getcostcenter().subscribe({
