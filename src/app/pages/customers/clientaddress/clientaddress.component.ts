@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, Inject, InjectionToken, ViewChild } from '@angular/core';
 import { MatPaginator, MatPaginatorModule } from "@angular/material/paginator";
 import { MatTableDataSource, MatTableModule } from "@angular/material/table";
 import { ClientaddressNewComponent } from '../clientaddress-new/clientaddress-new.component';
@@ -17,18 +17,27 @@ import { MatSort } from '@angular/material/sort';
 import * as XLSX from 'xlsx';
 import FileSaver from 'file-saver';
 import { MatCardModule } from "@angular/material/card";
+import { IClientaddress } from '../../../Repository/customer/IClientaddress';
+import { APIResponse } from '../../../Models/apiresponse';
+export const Pay_TOKEN = new InjectionToken<IClientaddress>('Pay_TOKEN');
 
 @Component({
   selector: 'app-clientaddress',
   standalone: true,
   imports: [MatPaginatorModule, MatTableModule, MatIconModule, CommonModule, FormsModule, ReactiveFormsModule, MatTooltipModule, AlertpopupComponent, MatCardModule],
   templateUrl: './clientaddress.component.html',
-  styleUrl: './clientaddress.component.css'
+  styleUrl: './clientaddress.component.css',
+  providers: [
+    {
+      provide: Pay_TOKEN,
+      useClass: ClientaddressService,
+    }
+  ]
 })
 export class ClientaddressComponent {
   Clientaddress: any;
   userdetail: any;
-  constructor(private dialog: MatDialog, private service: ClientaddressService, private decry: EncryptionService,
+  constructor(private dialog: MatDialog, @Inject(Pay_TOKEN) private service: IClientaddress, private decry: EncryptionService,
     private _sessionStoreage: SessionStorageService) { }
   message: string = '';
   popupMessage: string = '';
@@ -80,30 +89,60 @@ export class ClientaddressComponent {
 
 
   AddPOOpen() {
-    this.dialog.open(ClientaddressNewComponent, {
+    const dialogRef = this.dialog.open(ClientaddressNewComponent, {
       width: '60%',
       height: '85vh',
       disableClose: true,
       data: { example: 'Hello from parent!' }
     });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'refresh') {
+        this.onsearch();
+      }
+    });
   }
 
   ImportOpen() {
-    this.dialog.open(ClientaddressImportComponent, {
+    const dialogRef = this.dialog.open(ClientaddressImportComponent, {
       width: '60%',
       height: '78vh',
       disableClose: true,
       data: { example: 'Hello from parent!' }
     });
+
   }
   editOpen(row: any) {
-    this.dialog.open(ClientaddressEditComponent, {
+    const dialogRef = this.dialog.open(ClientaddressEditComponent, {
       width: '60%',
       height: '85vh',
       disableClose: true,
       data: { rowData: row }
     });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'refresh') {
+        this.onsearch();
+      }
+    });
   }
+  deleteClientAddress(row: any): void {
+
+    const userId = this.userdetail.user_Id;
+
+    this.service.PostClientAddressDelete(row.clientAddressId, userId)
+      .subscribe(
+        (res: string) => {
+          alert(res);
+          this.onsearch();
+        },
+        (err) => {
+          alert('Error deleting Client Address.');
+          console.error(err);
+        }
+      );
+  }
+
+
+
 
   onsearch() {
     this.isLoading = true;

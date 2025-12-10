@@ -4,8 +4,8 @@
         <!-- <div style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700;">
             Cilent Address List
         </div> -->
-        <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700;"
-        >Cilent Address List</mat-card-title>
+        <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700;">Cilent
+            Address List</mat-card-title>
 
         <div class="container py-2">
             <div class="row g-3 align-items-end">
@@ -36,20 +36,7 @@
         <div class="table-wrapper1" style="padding-top: 2%;">
             <div class="table-scroll">
                 <mat-table [dataSource]="dataSource" matSort class="custom-table mat-elevation-z8 auto-fit-table">
-                    <!-- Data Rows -->
-                    <!-- <ng-container matColumnDef="Action">
-                        <mat-header-cell *matHeaderCellDef style="width: 120px!important;min-width: 90px!important;"><strong>Action</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row"  style="width: 120px!important;min-width: 90px!important;">
-                            <button class="btn btn-sm d-flex align-items-center justify-content-center"
-                                matTooltip="Details" style="display: none;">
-                                <mat-icon>information</mat-icon>
-                            </button>
-                            <button class="btn btn-sm d-flex align-items-center justify-content-center"
-                                matTooltip="edit" (click)="editOpen()" style="display: none;">
-                                <mat-icon>edit</mat-icon>
-                            </button>
-                        </mat-cell>
-                    </ng-container> -->
+
 
                     <ng-container matColumnDef="Action">
                         <mat-header-cell *matHeaderCellDef><strong>Action</strong></mat-header-cell>
@@ -59,7 +46,7 @@
                                 <mat-icon>edit</mat-icon>
                             </button>
                             <button class="btn btn-sm d-flex align-items-center justify-content-center"
-                                matTooltip="Delete">
+                                matTooltip="Delete" (click)="deleteClientAddress(row)">
                                 <mat-icon>delete</mat-icon>
                             </button>
                         </mat-cell>
@@ -146,7 +133,7 @@
             </div>
 
             <!-- Paginator -->
-            <mat-paginator [length]="dataSource.data.length" [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"
+            <mat-paginator [length]="dataSource.data.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
                 showFirstLastButtons aria-label="Select page">
             </mat-paginator>
         </div>

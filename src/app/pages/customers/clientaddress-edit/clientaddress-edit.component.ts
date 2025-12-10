@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, InjectionToken } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCardModule } from "@angular/material/card";
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -9,13 +9,21 @@ import { CompanyallComponent } from "../../../common/CompanyAll/companyall.compo
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { ClientaddressService } from '../../../Service/customersserv/clientaddress.service';
+import { IClientaddress } from '../../../Repository/customer/IClientaddress';
+export const Pay_TOKEN = new InjectionToken<IClientaddress>('Pay_TOKEN');
 
 @Component({
   selector: 'app-clientaddress-edit',
   standalone: true,
   imports: [MatCardModule, MatIconModule, CommonModule, FormsModule, ReactiveFormsModule, MatTooltipModule, CompanyallComponent],
   templateUrl: './clientaddress-edit.component.html',
-  styleUrl: './clientaddress-edit.component.css'
+  styleUrl: './clientaddress-edit.component.css',
+  providers: [
+    {
+      provide: Pay_TOKEN,
+      useClass: ClientaddressService,
+    }
+  ]
 })
 export class ClientaddressEditComponent {
   clientaddress!: FormGroup;
@@ -30,14 +38,13 @@ export class ClientaddressEditComponent {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private decry: EncryptionService,
     private _sessionStoreage: SessionStorageService,
-    private service: ClientaddressService
+   @Inject(Pay_TOKEN) private service: IClientaddress,
   ) {
     this.rowData = data.rowData;
     console.log('rowdata', this.rowData)
   }
   formatDate(dateStr: string): string {
     const date = new Date(dateStr);
-    // Convert to yyyy-mm-dd for input[type=date]
     return date.toISOString().split('T')[0];
   }
 
@@ -123,7 +130,7 @@ export class ClientaddressEditComponent {
         BillingClientName: raw.billingClientName,
         BillingAddress: raw.billingAddress,
 
-        IsShippingAddressSameAsBilling: raw.IsShippingAddressSameAsBilling,
+        IsShippingAddressSameAsBilling: raw.shippingsameasbilling,
 
         ShippingClientName: raw.shippingClientName,
 
@@ -146,11 +153,13 @@ export class ClientaddressEditComponent {
           const cleanMessage = res.replace(/<br\s*\/?>/gi, '\n');
           console.log(cleanMessage);
           if (cleanMessage.includes('Success')) {
-            alert('Client Address Created Successfully');
+            alert('Client Address updated Successfully');
             resolve();
+            this.dialogRef.close('refresh');
           } else {
-            alert(cleanMessage);
+            alert(cleanMessage)
             reject('API returned failure');
+            this.dialogRef.close('refresh');
           }
         },
         error: (err) => {

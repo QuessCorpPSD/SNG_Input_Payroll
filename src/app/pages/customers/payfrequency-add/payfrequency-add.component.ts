@@ -67,7 +67,7 @@ export class PayfrequencyAddComponent {
   selectRow(index: number) {
     this.selectedRowIndex = index;
   }
-
+  
   deleteSelectedRow() {
     if (this.selectedRowIndex === null) {
       alert("Please select a row to delete.");

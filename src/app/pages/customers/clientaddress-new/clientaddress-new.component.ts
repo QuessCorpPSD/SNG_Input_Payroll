@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Inject, InjectionToken } from '@angular/core';
 import { MatCardModule } from "@angular/material/card";
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from "@angular/material/icon";
@@ -9,13 +9,21 @@ import { ClientaddressService } from '../../../Service/customersserv/clientaddre
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { MapnameComponent } from '../../../common/Mapname/mapname/mapname.component';
+import { IClientaddress } from '../../../Repository/customer/IClientaddress';
+export const Pay_TOKEN = new InjectionToken<IClientaddress>('Pay_TOKEN');
 
 @Component({
   selector: 'app-clientaddress-new',
   standalone: true,
   imports: [MatCardModule, MatIconModule, CompanyallComponent, CommonModule, FormsModule, ReactiveFormsModule, MapnameComponent],
   templateUrl: './clientaddress-new.component.html',
-  styleUrl: './clientaddress-new.component.css'
+  styleUrl: './clientaddress-new.component.css',
+  providers: [
+    {
+      provide: Pay_TOKEN,
+      useClass: ClientaddressService,
+    }
+  ]
 })
 export class ClientaddressNewComponent {
   clientaddress!: FormGroup;
@@ -29,7 +37,7 @@ export class ClientaddressNewComponent {
   selectedMN?: number;
   constructor(
     private dialogRef: MatDialogRef<ClientaddressNewComponent>,
-    private fb: FormBuilder, private service: ClientaddressService, private decry: EncryptionService,
+    private fb: FormBuilder, @Inject(Pay_TOKEN) private service: IClientaddress, private decry: EncryptionService,
     private _sessionStoreage: SessionStorageService
   ) { }
 
@@ -106,7 +114,7 @@ export class ClientaddressNewComponent {
       });
     }
   }
- 
+
 
   BindCostcenter() {
     this.service.getcostcenter().subscribe({
@@ -170,13 +178,13 @@ export class ClientaddressNewComponent {
           const cleanMessage = res.replace(/<br\s*\/?>/gi, '\n');
           console.log(cleanMessage);
           if (cleanMessage.includes('Success')) {
-            // success logic
             alert('Client Address Created Successfully');
-            this.BindCostcenter();
             resolve();
+            this.dialogRef.close('refresh');
           } else {
             alert(cleanMessage);
             reject('API returned failure');
+            this.dialogRef.close('refresh');
           }
         },
         error: (err) => {

@@ -3,11 +3,12 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
 import { APIResponse } from '../../Models/apiresponse';
+import { IClientaddress } from '../../Repository/customer/IClientaddress';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ClientaddressService {
+export class ClientaddressService implements IClientaddress {
 
   env = environment;
   httpClient: any;
@@ -19,7 +20,7 @@ export class ClientaddressService {
     const params = new HttpParams({ fromObject: payload });
 
     return this.http.get<APIResponse>(
-      this.env.apiUrl + 'ClientAddress/GetAllClientAddressDetails/'+payload
+      this.env.apiUrl + 'ClientAddress/GetAllClientAddressDetails/' + payload
     );
   }
 
@@ -29,13 +30,13 @@ export class ClientaddressService {
     );
   }
 
-clientaddressaddsave(payload: any): Observable<string> {
-  return this.http.post(
-    this.env.apiUrl + 'ClientAddress/PostAddClientAddress',
-    payload,
-    { responseType: 'text' } 
-  );
-}
+  clientaddressaddsave(payload: any): Observable<string> {
+    return this.http.post(
+      this.env.apiUrl + 'ClientAddress/PostAddClientAddress',
+      payload,
+      { responseType: 'text' }
+    );
+  }
 
 
   getcostcenter(): Observable<APIResponse> {
@@ -44,8 +45,15 @@ clientaddressaddsave(payload: any): Observable<string> {
     );
   }
 
-    PostClientAddressUpload(payload: any): Observable<APIResponse> {
+  PostClientAddressUpload(payload: any): Observable<APIResponse> {
     return this.http.post<APIResponse>(this.env.apiUrl + 'ClientAddress/PostClientAddressUpload', payload)
   }
+  PostClientAddressDelete(clientaddressid: any, userid: any): Observable<string> {
+    return this.http.get<string>(
+      this.env.apiUrl + 'ClientAddress/PostDeleteClientAddress/' + clientaddressid + '/' + userid,
+      { responseType: 'text' as 'json' }
+    );
+  }
+
 
 }
