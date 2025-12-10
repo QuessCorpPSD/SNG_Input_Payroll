@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, Inject, InjectionToken, ViewChild } from '@angular/core';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatCardModule } from "@angular/material/card";
@@ -12,13 +12,21 @@ import { BillingpayfrequencyService } from '../../../Service/invoice/billingpayf
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { MatSort } from '@angular/material/sort';
+import { IBillingpayfrequency } from '../../../Repository/invoice/IBillingpayfrequency';
+export const Pay_TOKEN = new InjectionToken<IBillingpayfrequency>('Pay_TOKEN');
 
 @Component({
   selector: 'app-billingpayfrequency-add',
   standalone: true,
   imports: [MatCardModule, MatPaginatorModule, MatTableModule, MatIconModule, CompanyallComponent, CommonModule, FormsModule, ReactiveFormsModule, MatTooltipModule],
   templateUrl: './billingpayfrequency-add.component.html',
-  styleUrl: './billingpayfrequency-add.component.css'
+  styleUrl: './billingpayfrequency-add.component.css',
+  providers: [
+    {
+      provide: Pay_TOKEN,
+      useClass: BillingpayfrequencyService,
+    }
+  ]
 })
 export class BillingpayfrequencyAddComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -40,7 +48,7 @@ export class BillingpayfrequencyAddComponent {
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<BillingpayfrequencyAddComponent>,
-    private dialog: MatDialog, private service: BillingpayfrequencyService,
+    private dialog: MatDialog, @Inject(Pay_TOKEN) private service: IBillingpayfrequency,
     private decry: EncryptionService,
     private _sessionStoreage: SessionStorageService
   ) { }

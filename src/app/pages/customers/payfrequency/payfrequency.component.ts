@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, Inject, InjectionToken, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -12,13 +12,21 @@ import { PayfrequencyAddComponent } from '../payfrequency-add/payfrequency-add.c
 import { PayfrequencyEditComponent } from '../payfrequency-edit/payfrequency-edit.component';
 import * as XLSX from 'xlsx';
 import { PayfrequencyService } from '../../../Service/CUSTOMER/payfrequency.service';
+import { IPayfrequencyservice } from '../../../Repository/customer/IPayfrequency';
+export const Pay_TOKEN = new InjectionToken<IPayfrequencyservice>('Pay_TOKEN');
 
 @Component({
   selector: 'app-payfrequency',
   standalone: true,
   imports: [MatTableModule, MatIconModule, CompanyallComponent, CommonModule, FormsModule, ReactiveFormsModule, MatTooltipModule, MatPaginator],
   templateUrl: './payfrequency.component.html',
-  styleUrl: './payfrequency.component.css'
+  styleUrl: './payfrequency.component.css',
+  providers: [
+    {
+      provide: Pay_TOKEN,
+      useClass: PayfrequencyService,
+    }
+  ]
 })
 export class PayfrequencyComponent {
   isuploadgridvisible = false;
@@ -47,7 +55,7 @@ export class PayfrequencyComponent {
 
   constructor(
     private dialog: MatDialog,
-    private service: PayfrequencyService
+    @Inject(Pay_TOKEN) private service: IPayfrequencyservice,
   ) { }
 
   handleCompanyEvent(company) {

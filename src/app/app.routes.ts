@@ -124,6 +124,7 @@ import { ServiceChargeComponent } from './pages/customers/ServiceChargeMaster/se
 import { SiteMasterComponent } from './pages/GlobalMasters/site-master/site-master.component';
 import { EmployeeComponent } from './pages/customers/employee/employee.component';
 import { ClientbillablereportsdatewiseComponent } from './pages/Invoice/clientbillablereportsdatewise/clientbillablereportsdatewise.component';
+import { PayregisterentitywiseComponent } from './pages/Reports/payregisterentitywise/payregisterentitywise.component';
 
 
 
@@ -297,7 +298,8 @@ export const routes: Routes = [
           { path: 'app-timesheet-report', component: TimesheetReportComponent },
           { path: 'poactiveinactivereport', component: PoactiveinactivereportComponent },
           { path: 'app-invoice-report', component: InvoiceReportComponent },
-          { path: 'app-netpayreport', component: NetpayreportComponent }
+          { path: 'app-netpayreport', component: NetpayreportComponent },
+          { path: 'payregisterentitywise', component: PayregisterentitywiseComponent }
         ]
       },
       {

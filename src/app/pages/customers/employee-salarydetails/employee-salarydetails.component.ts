@@ -1,4 +1,4 @@
-import { Component, Inject, Input, ViewChild } from '@angular/core';
+import { Component, Inject, InjectionToken, Input, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from "@angular/material/table";
 import { MatIconModule } from "@angular/material/icon";
 import { MatCardModule } from "@angular/material/card";
@@ -8,13 +8,21 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { EmployeeService } from '../../../Service/CUSTOMER/employee.service';
+import { IEmployeeservice } from '../../../Repository/customer/Iemployee';
+export const Pay_TOKEN = new InjectionToken<IEmployeeservice>('Pay_TOKEN');
 
 @Component({
   selector: 'app-employee-salarydetails',
   standalone: true,
   imports: [MatTableModule, MatIconModule, MatCardModule, MatPaginatorModule, CommonModule, FormsModule, ReactiveFormsModule, MatSortModule],
   templateUrl: './employee-salarydetails.component.html',
-  styleUrl: './employee-salarydetails.component.css'
+  styleUrl: './employee-salarydetails.component.css',
+  providers: [
+    {
+      provide: Pay_TOKEN,
+      useClass: EmployeeService,
+    }
+  ]
 })
 export class EmployeeSalarydetailsComponent {
   @Input() salaryData: any;  // Input property to receive data
@@ -39,7 +47,7 @@ export class EmployeeSalarydetailsComponent {
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<EmployeeSalarydetailsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private service: EmployeeService
+    @Inject(Pay_TOKEN) private service: IEmployeeservice,
   ) {
     console.log("Received Salary Data:", data);
 
@@ -71,7 +79,7 @@ export class EmployeeSalarydetailsComponent {
       per: ['', Validators.required]
     });
   }
-    formatDate(date: string): string {
+  formatDate(date: string): string {
     const [day, month, year] = date.split('-');
     return `${year}-${month}-${day}`; // Converts DD-MM-YYYY to YYYY-MM-DD
   }
@@ -88,7 +96,7 @@ export class EmployeeSalarydetailsComponent {
       this.employeesalary.patchValue({
         empcode: first.Employee_Code ?? '',
         Effectivedate: this.formatDate(first.Effective_Date)?.substring(0, 10) ?? '',
-        appliedon: first.Applied_On ??this.formatDate(first.Applied_On)?.substring(0, 10) ?? '',
+        appliedon: first.Applied_On ?? this.formatDate(first.Applied_On)?.substring(0, 10) ?? '',
       });
 
       this.dataSource.data = salaryData;

@@ -9,6 +9,14 @@ export interface IinvoiceSummaryReport {
         reportType: any,
         userId: any
     ): Observable<APIResponse>;
+    ExporttoExcelByEntity(
+        EntityId: any,
+        startDate: string,
+        endDate: string,
+        reportType: any,
+        userId: any
+    ): Observable<APIResponse>;
     GetTaxTypes(): Observable<APIResponse>;
+    GetEntityNames(): Observable<APIResponse>;
 
 }

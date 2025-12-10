@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, Inject, InjectionToken, ViewChild } from '@angular/core';
 import { CompanypaycodemappingEditComponent } from '../companypaycodemapping-edit/companypaycodemapping-edit.component';
 import { CompanypaycodemappingAddComponent } from '../companypaycodemapping-add/companypaycodemapping-add.component';
 import { FormGroup } from '@angular/forms';
@@ -12,16 +12,24 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSort } from '@angular/material/sort';
 import { CompanypaycodemappingService } from '../../../Service/customersserv/companypaycodemapping.service';
 import * as XLSX from 'xlsx';
-import FileSaver from 'file-saver';
 import { IdletimeoutService } from '../../../Service/idletimeout.service';
 import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.component";
 import { CompanypaycodemappingCopyComponent } from '../companypaycodemapping-copy/companypaycodemapping-copy.component';
+import { ICompanypaycodemapping } from '../../../Repository/customer/ICompanypaycodemapping';
+export const Pay_TOKEN = new InjectionToken<ICompanypaycodemapping>('Pay_TOKEN');
+
 @Component({
   selector: 'app-companypaycodemapping',
   standalone: true,
   imports: [MatTableModule, MatIconModule, MatPaginator, CompanyallComponent, CommonModule, MatTooltipModule, AlertpopupComponent],
   templateUrl: './companypaycodemapping.component.html',
-  styleUrl: './companypaycodemapping.component.css'
+  styleUrl: './companypaycodemapping.component.css',
+  providers: [
+    {
+      provide: Pay_TOKEN,
+      useClass: CompanypaycodemappingService,
+    }
+  ]
 })
 export class CompanypaycodemappingComponent {
   message: string = '';
@@ -47,8 +55,8 @@ export class CompanypaycodemappingComponent {
   selectedCompanyCode: any;
   @ViewChild('paginator_Page') paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  constructor(private dialog: MatDialog, 
-    private service: CompanypaycodemappingService, 
+  constructor(private dialog: MatDialog,
+    @Inject(Pay_TOKEN) private service: ICompanypaycodemapping,
     private idleTimeoutService: IdletimeoutService) { }
 
 
@@ -150,7 +158,7 @@ export class CompanypaycodemappingComponent {
 
         this.isuploadgridvisible = true;
 
-        this.dataSource.data =this.Companypaycode;
+        this.dataSource.data = this.Companypaycode;
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
 

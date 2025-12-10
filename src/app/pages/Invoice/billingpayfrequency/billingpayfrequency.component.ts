@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, Inject, InjectionToken, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from "@angular/material/table";
 import { MatIconModule } from "@angular/material/icon";
 import { CompanyallComponent } from "../../../common/CompanyAll/companyall.component";
@@ -13,13 +13,21 @@ import { BillingpayfrequencyEditComponent } from '../billingpayfrequency-edit/bi
 import { BillingpayfrequencyService } from '../../../Service/invoice/billingpayfrequency.service';
 import * as XLSX from 'xlsx';
 import { MatCardModule } from "@angular/material/card";
+import { IBillingpayfrequency } from '../../../Repository/invoice/IBillingpayfrequency';
+export const Pay_TOKEN = new InjectionToken<IBillingpayfrequency>('Pay_TOKEN');
 
 @Component({
   selector: 'app-billingpayfrequency',
   standalone: true,
   imports: [MatTableModule, MatIconModule, CompanyallComponent, CommonModule, FormsModule, ReactiveFormsModule, MatTooltipModule, MatPaginator, MatCardModule],
   templateUrl: './billingpayfrequency.component.html',
-  styleUrl: './billingpayfrequency.component.css'
+  styleUrl: './billingpayfrequency.component.css',
+  providers: [
+    {
+      provide: Pay_TOKEN,
+      useClass: BillingpayfrequencyService,
+    }
+  ]
 })
 export class BillingpayfrequencyComponent {
   isuploadgridvisible = false;
@@ -48,7 +56,7 @@ export class BillingpayfrequencyComponent {
 
   constructor(
     private dialog: MatDialog,
-    private service: BillingpayfrequencyService
+   @Inject(Pay_TOKEN) private service: IBillingpayfrequency,
   ) { }
 
   handleCompanyEvent(company) {

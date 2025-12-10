@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Inject, InjectionToken, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { MatPaginator, MatPaginatorModule } from "@angular/material/paginator";
@@ -10,13 +10,21 @@ import { CommonModule } from '@angular/common';
 import { MatCheckbox } from "@angular/material/checkbox";
 import { CompanypaycodemappingService } from '../../../Service/customersserv/companypaycodemapping.service';
 import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.component";
+import { ICompanypaycodemapping } from '../../../Repository/customer/ICompanypaycodemapping';
+export const Pay_TOKEN = new InjectionToken<ICompanypaycodemapping>('Pay_TOKEN');
 
 @Component({
   selector: 'app-companypaycodemapping-add-add',
   standalone: true,
   imports: [MatTableModule, MatIconModule, MatCardModule, MatTooltipModule, CommonModule, MatCheckbox, FormsModule, ReactiveFormsModule, MatPaginatorModule, AlertpopupComponent],
   templateUrl: './companypaycodemapping-add-add.component.html',
-  styleUrl: './companypaycodemapping-add-add.component.css'
+  styleUrl: './companypaycodemapping-add-add.component.css',
+  providers: [
+    {
+      provide: Pay_TOKEN,
+      useClass: CompanypaycodemappingService,
+    }
+  ]
 })
 export class CompanypaycodemappingAddAddComponent {
   @Output() selectedData = new EventEmitter<any>();  // Emit selected rows to parent
@@ -35,7 +43,7 @@ export class CompanypaycodemappingAddAddComponent {
 
   constructor(
     private dialogRef: MatDialogRef<CompanypaycodemappingAddAddComponent>,
-    private companypaycodemappingService: CompanypaycodemappingService
+    @Inject(Pay_TOKEN) private companypaycodemappingService: ICompanypaycodemapping,
   ) { }
   showAlertPopup(message: string, subMessage: string = '') {
     this.popupMessage = message;
@@ -105,7 +113,7 @@ export class CompanypaycodemappingAddAddComponent {
   onSave(): void {
     const rowsWithSno = this.selectedRows.map((r, index) => ({
       ...r,
-      SNo: this.uploadedData.indexOf(r) + 1   
+      SNo: this.uploadedData.indexOf(r) + 1
     }));
 
     this.dialogRef.close(rowsWithSno);

@@ -1,24 +1,31 @@
 import { CommonModule } from '@angular/common';
-import { Component, Inject, ViewChild } from '@angular/core';
+import { Component, Inject, InjectionToken, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { CompanyallComponent } from '../../../common/CompanyAll/companyall.component';
 import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSort } from '@angular/material/sort';
 import { BillingpayfrequencyService } from '../../../Service/invoice/billingpayfrequency.service';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
+import { IBillingpayfrequency } from '../../../Repository/invoice/IBillingpayfrequency';
+export const Pay_TOKEN = new InjectionToken<IBillingpayfrequency>('Pay_TOKEN');
 
 @Component({
   selector: 'app-billingpayfrequency-edit',
   standalone: true,
   imports: [MatCardModule, MatPaginatorModule, MatTableModule, MatIconModule, CommonModule, FormsModule, ReactiveFormsModule, MatTooltipModule],
   templateUrl: './billingpayfrequency-edit.component.html',
-  styleUrl: './billingpayfrequency-edit.component.css'
+  styleUrl: './billingpayfrequency-edit.component.css',
+  providers: [
+    {
+      provide: Pay_TOKEN,
+      useClass: BillingpayfrequencyService,
+    }
+  ]
 })
 export class BillingpayfrequencyEditComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -41,7 +48,7 @@ export class BillingpayfrequencyEditComponent {
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<BillingpayfrequencyEditComponent>,
     @Inject(MAT_DIALOG_DATA) public editData: any,
-    private service: BillingpayfrequencyService,
+    @Inject(Pay_TOKEN) private service: IBillingpayfrequency,
     private decry: EncryptionService,
     private _sessionStoreage: SessionStorageService
   ) { }

@@ -3,11 +3,12 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
 import { APIResponse } from '../../Models/apiresponse';
+import { IpayregisterentitywiseService } from '../../Repository/Reports/Ipayregisterentitywise';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ClientBillableReportDatewiseService {
+export class PayregisterentitywiseService implements IpayregisterentitywiseService {
   env = environment;
   constructor(private http: HttpClient) { }
 
@@ -15,10 +16,12 @@ export class ClientBillableReportDatewiseService {
   EntitySearch(): Observable<APIResponse> {
     return this.http.get<APIResponse>(this.env.apiUrl + 'Entity/Search');
   }
-  Exporttoexcel(entityid: any, fromdate: string, todate: string): Observable<APIResponse> {
+  GetPayPeriod(): Observable<APIResponse> {
+    return this.http.get<APIResponse>(this.env.apiUrl + 'Common/GetPayPeriod');
+  }
+  Exporttoexcel(entityid: any, payPeriodId: any): Observable<APIResponse> {
     return this.http.get<APIResponse>(
-      `${this.env.apiUrl}ClientBillableReport/Search/${entityid}/${fromdate}/${todate}`
+      `${this.env.apiUrl}PayregisterEntitywise/ExportToExcel/${entityid}/${payPeriodId}`
     );
   }
-
 }

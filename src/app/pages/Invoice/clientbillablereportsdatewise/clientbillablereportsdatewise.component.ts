@@ -85,10 +85,10 @@ export class ClientbillablereportsdatewiseComponent {
           const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(jsonData);
           const wb: XLSX.WorkBook = XLSX.utils.book_new();
 
-          XLSX.utils.book_append_sheet(wb, ws, "BillingpayFrequency");
+          XLSX.utils.book_append_sheet(wb, ws, "ClientBillablereportsentitywise");
 
           const timestamp = new Date().toISOString().split('T')[0];
-          const fileName = `BillingpayFrequency_${timestamp}.xlsx`;
+          const fileName = `ClientBillablereportsentitywise_${timestamp}.xlsx`;
 
           XLSX.writeFile(wb, fileName);
 

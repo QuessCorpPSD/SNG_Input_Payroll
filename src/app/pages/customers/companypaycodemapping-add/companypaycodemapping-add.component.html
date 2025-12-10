@@ -1,8 +1,7 @@
 <mat-card class="custom-card">
     <div class="scrollable-content">
         <mat-card-header class="sticky-header">
-            <br />
-            <mat-card-title style="color:#302CB3;">Add Company Paycode Mapping</mat-card-title>
+            <mat-card-title style="color:#302CB3; padding-top: 2%;">Add Company Paycode Mapping</mat-card-title>
 
 
             <span class="spacer"></span>
@@ -184,7 +183,7 @@
                     <p class="text-muted">No data to display</p>
                 </div>
 
-                <mat-paginator [length]="uploadedDataSource.data.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
+                <mat-paginator #paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
                     showFirstLastButtons aria-label="Select page">
                 </mat-paginator>
             </div>

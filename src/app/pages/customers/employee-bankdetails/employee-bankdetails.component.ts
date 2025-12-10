@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, InjectionToken } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCardModule } from "@angular/material/card";
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -8,13 +8,21 @@ import { APIResponse } from '../../../Models/apiresponse';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { EmployeeService } from '../../../Service/CUSTOMER/employee.service';
+import { IEmployeeservice } from '../../../Repository/customer/Iemployee';
+export const Pay_TOKEN = new InjectionToken<IEmployeeservice>('Pay_TOKEN');
 
 @Component({
   selector: 'app-employee-bankdetails',
   standalone: true,
   imports: [MatCardModule, MatIconModule, CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './employee-bankdetails.component.html',
-  styleUrl: './employee-bankdetails.component.css'
+  styleUrl: './employee-bankdetails.component.css',
+  providers: [
+    {
+      provide: Pay_TOKEN,
+      useClass: EmployeeService,
+    }
+  ]
 })
 export class EmployeeBankdetailsComponent {
   submitted = false;
@@ -29,7 +37,7 @@ export class EmployeeBankdetailsComponent {
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<EmployeeBankdetailsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private service: EmployeeService,
+    @Inject(Pay_TOKEN) private service: IEmployeeservice,
     private decry: EncryptionService,
     private _sessionStoreage: SessionStorageService,
   ) {

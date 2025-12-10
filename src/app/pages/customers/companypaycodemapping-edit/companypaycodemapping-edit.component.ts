@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Inject, ViewChild } from '@angular/core';
+import { Component, Inject, InjectionToken, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -8,21 +8,26 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { CompanyallComponent } from '../../../common/CompanyAll/companyall.component';
 import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CompanypaycodemappingService } from '../../../Service/customersserv/companypaycodemapping.service';
-import { CompanypaycodemappingAddAddComponent } from '../companypaycodemapping-add-add/companypaycodemapping-add-add.component';
-import { CompanypaycodemappingAddComponent } from '../companypaycodemapping-add/companypaycodemapping-add.component';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.component";
+import { ICompanypaycodemapping } from '../../../Repository/customer/ICompanypaycodemapping';
+export const Pay_TOKEN = new InjectionToken<ICompanypaycodemapping>('Pay_TOKEN');
 
 @Component({
   selector: 'app-companypaycodemapping-edit',
   standalone: true,
   imports: [MatCardModule, MatIconModule, CommonModule, FormsModule, ReactiveFormsModule, MatPaginatorModule, MatTableModule, MatTooltipModule, MatFormFieldModule, MatSelectModule, AlertpopupComponent],
   templateUrl: './companypaycodemapping-edit.component.html',
-  styleUrl: './companypaycodemapping-edit.component.css'
+  styleUrl: './companypaycodemapping-edit.component.css',
+  providers: [
+    {
+      provide: Pay_TOKEN,
+      useClass: CompanypaycodemappingService,
+    }
+  ]
 })
 export class CompanypaycodemappingEditComponent {
 
@@ -44,13 +49,13 @@ export class CompanypaycodemappingEditComponent {
   isLoading: boolean = false;
   userdetail!: any;
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild('paginator') paginator!: MatPaginator;
 
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<CompanypaycodemappingEditComponent>,
     private dialog: MatDialog,
-    private paycodeService: CompanypaycodemappingService,
+    @Inject(Pay_TOKEN) private paycodeService: ICompanypaycodemapping,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private decry: EncryptionService,
     private _sessionStoreage: SessionStorageService,

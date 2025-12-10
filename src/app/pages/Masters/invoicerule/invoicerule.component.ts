@@ -26,6 +26,7 @@ import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.compo
 import { IinvoiceRuleService } from '../../../Repository/Master/IinvoiceRuleService';
 import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
+import { Console } from 'node:console';
 
 @Component({
   selector: 'invoicerule',
@@ -53,6 +54,7 @@ export class InvoiceruleComponent {
   isCarryForward = false;
   previousMonthText: string = '';
   isEditMode = false;
+  editInvoiceRuleId: number | null = null;
   popupMessage: string = '';
   popupSubMessage: string = '';
   showPopup = false;
@@ -62,6 +64,8 @@ export class InvoiceruleComponent {
   excelFile: File | null = null;
   showPreviewModal: boolean = false;
   showSearchGrid: boolean = true;
+  editRow: any = null;
+
   months = [
     { id: 1, text: 'January' },
     { id: 2, text: 'February' },
@@ -95,13 +99,13 @@ export class InvoiceruleComponent {
   ]
   dataSource = new MatTableDataSource<InvoiceRuleGrid>([]);
   invoiceruleform!: FormGroup;
-
+  invoiceruleEditform!: FormGroup;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   displayedColumns: string[] = [
     'companyCode', 'siteName', 'daysPerMonth', 'weekends',
-    'holidays', 'compOff','delete'
+    'holidays', 'compOff', 'edit', 'delete'
   ];
 
   constructor(@Inject(IR_TOKEN) private invoicerule: IinvoiceRuleService, private _sessionStoreage: SessionStorageService,
@@ -113,6 +117,17 @@ export class InvoiceruleComponent {
     this.selectedCC = company.companyId;
 
   }
+  onEditMonthChange(): void {
+    const selected = this.invoiceruleEditform.get('editpayperiodfrom')?.value;
+    if (selected && selected.id > 0) {
+      // 12 months difference from fromMonth
+      const toIndex = (selected.id + 11) % 12; // ensures circular month
+      this.invoiceruleEditform.get('editpayperiodto')?.setValue(this.months[toIndex].text);
+    } else {
+      this.invoiceruleEditform.get('editpayperiodto')?.setValue('');
+    }
+  }
+
 
   handleGroupNameEvent(sitename: any) {
     this.sitenameUI = sitename
@@ -139,7 +154,7 @@ export class InvoiceruleComponent {
       this.BindDashBoard(this.companyUI.companyId, this.sitenameUI.siteCode)
     }
   }
-  
+
   selection = new SelectionModel<InvoiceRuleGrid>(true, []);
   isAnyFilteredRowSelected(): boolean {
     return this.selection.selected.some(sel =>
@@ -202,9 +217,42 @@ export class InvoiceruleComponent {
       discounts: ['', Validators.required],
       billabledaysformula: ['', Validators.required]
     });
+    this.invoiceruleEditform = this.fb.group({
+      company: [''],
+      group: [''],
+      editbillingType: ['', Validators.required],
+      editdaysAsPerTimesheet: [false],
+      editdayspermonth: ['', Validators.required],
+      editweekendsrule: ['', Validators.required],
+      editholidaysrule: ['', Validators.required],
+      editcomppoffrule: ['', Validators.required],
+      editmaternityleave: ['', Validators.required],
+      editleavetypes: ['', Validators.required],
+      editleavecredit: ['', Validators.required],
+      editleaverule: ['', Validators.required],
+      editpayperiodfrom: ['', Validators.required],
+      editpayperiodto: ['', Validators.required],
+      editcarryforward: ['', Validators.required],
+      editnoofcarryforwards: [{ value: '', disabled: true }],
+      editotrule: ['', Validators.required],
+      editgratuity: ['', Validators.required],
+      editreimbursement: ['', Validators.required],
+      editservicefeeonexpenses: ['', Validators.required],
+      editrebates: ['', Validators.required],
+      editdiscounts: ['', Validators.required],
+      editbillabledaysformula: ['', Validators.required]
+    });
 
     this.invoiceruleform.get('daysAsPerTimesheet')?.valueChanges.subscribe((checked: boolean) => {
       const daysControl = this.invoiceruleform.get('dayspermonth');
+      if (checked) {
+        daysControl?.disable();
+      } else {
+        daysControl?.enable();
+      }
+    });
+    this.invoiceruleEditform.get('editdaysAsPerTimesheet')?.valueChanges.subscribe((checked: boolean) => {
+      const daysControl = this.invoiceruleEditform.get('editdayspermonth');
       if (checked) {
         daysControl?.disable();
       } else {
@@ -221,6 +269,17 @@ export class InvoiceruleComponent {
       }
     });
     //this.invoiceruleform.get('payperiodto')?.disable();
+    this.invoiceruleEditform.get('editcarryforward')?.valueChanges.subscribe((value: string) => {
+      const noOfCarryCtrl = this.invoiceruleEditform.get('editnoofcarryforwards');
+
+      if (value === 'Yes') {
+        noOfCarryCtrl?.enable();
+      } else {
+        noOfCarryCtrl?.disable();
+        noOfCarryCtrl?.reset();
+      }
+    });
+
   }
   BindDashBoard(companyId: number, siteId: string) {
     this.invoicerule.GetAllInvoiceRule(companyId, siteId).subscribe({
@@ -253,6 +312,10 @@ export class InvoiceruleComponent {
           alert(errormsg);
           this.isLoading = true;
           this.BindDashBoard(this.companyUI.companyId, this.sitenameUI.siteCode)
+          this.companyUI = null;
+          this.sitenameUI = null;
+          this.searchClick();
+          
         }
       });
     } else {
@@ -286,7 +349,36 @@ export class InvoiceruleComponent {
       billabledaysformula: ''
     });
     this.isAddclicked = false;
+
   }
+  closeEditclick() {
+    this.invoiceruleEditform.reset({
+      billingType: '',
+      daysAsPerTimesheet: false,
+      dayspermonth: '',
+      weekendsrule: '',
+      holidaysrule: '',
+      comppoffrule: '',
+      maternityleave: '',
+      leavetypes: '',
+      leavecredit: '',
+      leaverule: '',
+      payperiodfrom: '',
+      payperiodto: '',
+      carryforward: '',
+      noofcarryforwards: '',
+      otrule: '',
+      gratuity: '',
+      reimbursement: '',
+      servicefeeonexpenses: '',
+      rebates: '',
+      discounts: '',
+      billabledaysformula: ''
+    });
+    this.isEditMode = false;
+
+  }
+
 
   TemplateClick(): void {
     this.isLoading = true;
@@ -330,44 +422,53 @@ export class InvoiceruleComponent {
   }
 
   ExportClick(): void {
-    this.isLoading=true;
+    this.isLoading = true;
     this.InvoiceRuleExport();
   }
 
   InvoiceRuleExport() {
     const formData = new FormData();
-      if (!this.companyUI) {
-        this.companyUI = {
-          companyId: 0,
-          companyCode: ''
-        }
-      }
-      formData.append('companyId', this.companyUI.companyId);
-      formData.append('companyCode', this.companyUI.companyCode);
-      if (!this.sitenameUI) {
-        this.sitenameUI = {
-          siteCode: 0,
-          siteName: ''
-        }
-      formData.append('siteCode', this.sitenameUI.siteCode);
-      this.invoicerule.InvoiceRuleExport(formData).subscribe({
-        next: res => {
-          if (res.StatusCode == 200) {
-            const data = res.Data;
-            var base64 = data.file;
-            this.downloadExcelFromBase64(base64, data.fileName)
-            this.companyUI = {};
-            this.sitenameUI = {};
-            this.isLoading = false;
-            
-          }
-        },
-        error: error => console.error('Error:', error)
-      })
+
+    if (!this.companyUI) {
+      this.companyUI = {
+        companyId: 0,
+        companyCode: ''
+      };
     }
-    this.isLoading = false;
-    return;
+
+    formData.append('companyId', this.companyUI.companyId);
+    formData.append('companyCode', this.companyUI.companyCode);
+
+    if (!this.sitenameUI) {
+      this.sitenameUI = {
+        siteCode: 0,
+        siteName: ''
+      };
+    }
+
+    formData.append('siteCode', this.sitenameUI.siteCode);
+
+    this.invoicerule.InvoiceRuleExport(formData).subscribe({
+      next: res => {
+        if (res.StatusCode == 200) {
+          const data = res.Data;
+          var base64 = data.file;
+          this.downloadExcelFromBase64(base64, data.fileName);
+
+          this.companyUI = {};
+          this.sitenameUI = {};
+        }
+
+        this.isLoading = false;
+      },
+      error: error => {
+        console.error('Error:', error);
+        this.isLoading = false;
+      }
+    });
   }
+
+
 
   downloadExcelFromBase64(base64: string, filename: string) {
     const source = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${base64}`;
@@ -402,6 +503,9 @@ export class InvoiceruleComponent {
     this.isChecked = input.checked;
   }
 
+
+
+
   SaveData() {
     if (this.invoiceruleform.invalid) {
       this.invoiceruleform.markAllAsTouched();
@@ -409,6 +513,7 @@ export class InvoiceruleComponent {
     }
     const formValue = this.invoiceruleform.value;
     const InvoiceRuleAdd = {
+
       companyId: this.companyUI?.companyId,
       companyCode: this.companyUI?.companyCode,
       siteId: this.sitenameUI?.siteCode,
@@ -427,7 +532,7 @@ export class InvoiceruleComponent {
       payperiodto: formValue.payperiodto,
       carryforward: formValue.carryforward.text,
       noofcarryforwards: formValue.noofcarryforwards,
-      otrule: formValue.otrule.text,
+      otrule: formValue.otrule,
       gratuity: formValue.gratuity.text,
       reimbursement: formValue.reimbursement.text,
       servicefeeonexpenses: formValue.servicefeeonexpenses.text,
@@ -436,13 +541,14 @@ export class InvoiceruleComponent {
       billabledaysformula: formValue.billabledaysformula,
       userId: String(this.userdetail.user_Id)
     };
+    console.log('PALOAD', InvoiceRuleAdd);
 
-    
+
     this.invoicerule.PostAddInvoiceRule(InvoiceRuleAdd).subscribe({
       next: (res) => {
         const errormsg = res.Data[0].msg;
 
-        if (errormsg === 'true') {
+        if (errormsg === 'false') {
           this.isAddclicked = false;
           this.showPopup = true;
           this.popupMessage = "Invoice Rule Added Successfully";
@@ -482,6 +588,143 @@ export class InvoiceruleComponent {
       }
     });
   }
+  editClick(row: any) {
+    this.isEditMode = true;
+    this.isAddclicked = false;
+    this.editRow = row;
+
+
+    this.editInvoiceRuleId = row.invoicingRulesID;
+    console.log("Invoice Rule ID:", this.editInvoiceRuleId);
+
+    this.companyUI = {
+      companyId: row.companyId,
+      companyCode: row.companyCode,
+      companyName: row.companyName ?? ''
+    };
+
+    this.sitenameUI = {
+      siteCode: row.siteId,
+      siteName: row.siteName
+    };
+
+    console.log("EDIT ROW:", row);
+
+    const [fromMonth, toMonth] = row.leavePeriod.split('-');
+
+    this.invoiceruleEditform.patchValue({
+      company: this.editRow.companyCode,
+      group: this.editRow.siteName,
+      editbillingType: row.billingType,
+      editdaysAsPerTimesheet: row.asPerTimesheet == 1 ? true : false,
+      editdayspermonth: row.daysPerMonth,
+      editweekendsrule: row.weekends,
+      editholidaysrule: row.holidays,
+      editcomppoffrule: row.compOff,
+      editmaternityleave: row.maternity,
+      editleavetypes: row.leavetypes,
+      editleavecredit: row.leaveAddition,
+      editleaverule: row.leaveRule,
+      editpayperiodfrom: fromMonth.trim(),
+      editpayperiodto: toMonth.trim(),
+      editcarryforward: row.carryfarward,
+      editnoofcarryforwards: row.noOfCarryForwards,
+      editotrule: row.ot,
+      editgratuity: row.gratuity,
+      editreimbursement: row.reimbursement,
+      editservicefeeonexpenses: row.serviceFee,
+      editrebates: row.rebates,
+      editdiscounts: row.discounts,
+      editbillabledaysformula: row.billableDaysFormula
+    });
+
+    this.onMonthChangeedit(fromMonth);
+  }
+
+
+  onMonthChangeedit(event: Event) {
+    const selectElement = event.target as HTMLSelectElement;
+    const fromMonth = selectElement.value;
+
+    const fromMonthIndex = this.months.findIndex(month => month.text.toLowerCase() === fromMonth.toLowerCase());
+
+    if (fromMonthIndex >= 0) {
+      const toIndex = (fromMonthIndex + 11) % 12; // Ensures circular calculation
+      const toMonthText = this.months[toIndex].text;
+
+      this.invoiceruleEditform.get('editpayperiodto')?.setValue(toMonthText);  // Set value for "Pay Period To"
+    } else {
+      this.invoiceruleEditform.get('editpayperiodto')?.setValue('');  // Reset "Pay Period To" if no valid month selected
+    }
+  }
+
+
+  SaveEditData() {
+    // if (this.invoiceruleform.invalid) {
+    //   this.invoiceruleform.markAllAsTouched();
+    //   return;
+    // // }
+    // console.log("companyUI:", this.companyUI);
+    // console.log("sitenameUI:", this.sitenameUI);
+    const formValue = this.invoiceruleEditform.value;
+    const invoiceRuleEdit = {
+      InvoicingRulesID: String(this.editRow.invoicingRulesID),
+      companyId: this.editRow.companyId,
+      companyCode: this.editRow.companyCode,
+      siteId: this.editRow.siteId,
+      siteName: this.editRow.siteName,
+      billingtype: formValue.editbillingType,
+      daysAsPerTimesheet: formValue.editdaysAsPerTimesheet,
+      dayspermonth: formValue.editdayspermonth ?? null,
+      weekendsrule: formValue.editweekendsrule,
+      holidaysrule: formValue.editholidaysrule,
+      comppoffrule: formValue.editcomppoffrule,
+      maternityleave: formValue.editmaternityleave,
+      leavetypes: formValue.editleavetypes,
+      leavecredit: formValue.editleavecredit,
+      leaverule: formValue.editleaverule,
+      payperiodfrom: formValue.editpayperiodfrom,
+      payperiodto: formValue.editpayperiodto,
+      carryforward: formValue.editcarryforward,
+      noofcarryforwards: formValue.editnoofcarryforwards ?? null,
+      otrule: formValue.editotrule,
+      gratuity: formValue.editgratuity,
+      reimbursement: formValue.editreimbursement,
+      servicefeeonexpenses: formValue.editservicefeeonexpenses,
+      rebates: formValue.editrebates,
+      discounts: formValue.editdiscounts,
+      billabledaysformula: formValue.editbillabledaysformula,
+      userId: String(this.userdetail.user_Id)
+    };
+
+    console.log("FORM VALUE:", JSON.stringify(invoiceRuleEdit));
+
+    this.invoicerule.PostUpdateInvoiceRule(invoiceRuleEdit).subscribe({
+      next: (res) => {
+        const errormsg = res.Data[0].msg;
+        console.log('console', errormsg)
+        if (errormsg.includes('false')) {
+          this.isAddclicked = false;
+          this.showPopup = true;
+          alert("Invoice Updated Successfully")
+          this.closeEditclick();
+          this.invoiceruleEditform.reset();
+          this.companyUI = null;
+          this.sitenameUI = null;
+          this.searchClick();
+          this.popupMessage = "Invoice Updated Successfully";
+        } else {
+          alert("Invoice Rule already available for this company");
+          this.isLoading = false;
+        }
+      },
+      error: (err) => {
+        console.error("Error saving:", err);
+        this.isLoading = false;
+      }
+    });
+
+  }
   onImportClick(fileInput: HTMLInputElement): void {
     fileInput.click();
   }
@@ -507,9 +750,9 @@ export class InvoiceruleComponent {
         const sheet: XLSX.WorkSheet = workbook.Sheets[sheetName];
         const jsonData = XLSX.utils.sheet_to_json(sheet);
         const top100 = jsonData.slice(0, 100);
-        this.excelPreviewData = top100;  // 🔹 Store for popup preview
-        this.showPreviewModal = true;     // 🔹 Trigger modal
-        this.showSearchGrid = false;     // 🔹 Trigger modal
+        this.excelPreviewData = top100;
+        this.showPreviewModal = true;
+        this.showSearchGrid = false;
         this.isLoading = false;
       } catch (error) {
         console.error('Error reading Excel file:', error);
@@ -563,7 +806,7 @@ export class InvoiceruleComponent {
           }
         },
         error: err => {
-          console.error('❌ Upload failed', err);
+          console.error(' Upload failed', err);
           this.isLoading = false;
         }
       });
