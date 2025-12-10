@@ -15,7 +15,7 @@ export const Pay_TOKEN = new InjectionToken<IClientaddress>('Pay_TOKEN');
 @Component({
   selector: 'app-clientaddress-edit',
   standalone: true,
-  imports: [MatCardModule, MatIconModule, CommonModule, FormsModule, ReactiveFormsModule, MatTooltipModule, CompanyallComponent],
+  imports: [MatCardModule, MatIconModule, CommonModule, FormsModule, ReactiveFormsModule, MatTooltipModule],
   templateUrl: './clientaddress-edit.component.html',
   styleUrl: './clientaddress-edit.component.css',
   providers: [

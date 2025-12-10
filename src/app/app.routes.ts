@@ -125,6 +125,7 @@ import { SiteMasterComponent } from './pages/GlobalMasters/site-master/site-mast
 import { EmployeeComponent } from './pages/customers/employee/employee.component';
 import { ClientbillablereportsdatewiseComponent } from './pages/Invoice/clientbillablereportsdatewise/clientbillablereportsdatewise.component';
 import { PayregisterentitywiseComponent } from './pages/Reports/payregisterentitywise/payregisterentitywise.component';
+import { BillingubrComponent } from './pages/Reports/billingubr/billingubr.component';
 
 
 
@@ -299,7 +300,9 @@ export const routes: Routes = [
           { path: 'poactiveinactivereport', component: PoactiveinactivereportComponent },
           { path: 'app-invoice-report', component: InvoiceReportComponent },
           { path: 'app-netpayreport', component: NetpayreportComponent },
-          { path: 'payregisterentitywise', component: PayregisterentitywiseComponent }
+          { path: 'payregisterentitywise', component: PayregisterentitywiseComponent },
+          { path: 'billingubr', component: BillingubrComponent }
+
         ]
       },
       {

@@ -5,9 +5,7 @@ import { PayregisterentitywiseService } from '../../../Service/Reports/payregist
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
-import { APIResponse } from '../../../Models/apiresponse';
 export const Pay_TOKEN = new InjectionToken<IpayregisterentitywiseService>('Pay_TOKEN');
 
 @Component({
