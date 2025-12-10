@@ -8,7 +8,7 @@
                     <div class="col-md-3">
                         <label class="form-label text-muted small">Pay Period</label>
                         <select class="form-select form-select-sm" [(ngModel)]="PayPeriod">
-                            <option *ngFor="let pp of Payperiod" [value]="pp.pay_Frequency_Detail_Id">
+                            <option *ngFor="let pp of Payperiod" [value]="pp.pay_Period">
                                 {{ pp.pay_Period }}
                             </option>
                         </select>
