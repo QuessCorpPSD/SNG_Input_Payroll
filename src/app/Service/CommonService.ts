@@ -122,5 +122,9 @@ export class CommonService implements ICommonService {
     console.log(url);
     return this.http.get<APIResponse>(url);
   }
+  GetPayCodes(): Observable<APIResponse> {
+    //console.log(this.environment.apiUrl + "Common/GetAllInputType");
+    return this.http.get<APIResponse>(this.environment.apiUrl + "Common/GetPaycodes")
+  }
 
 }

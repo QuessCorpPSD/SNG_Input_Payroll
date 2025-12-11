@@ -129,6 +129,8 @@ import { CreditnoteapproveComponent } from './pages/Invoice/creditnoteapprove/cr
 import { CreditnoteupdateComponent } from './pages/Invoice/creditnoteupdate/creditnoteupdate.component';
 import { PayregisterentitywiseComponent } from './pages/Reports/payregisterentitywise/payregisterentitywise.component';
 import { BillingubrComponent } from './pages/Reports/billingubr/billingubr.component';
+import { BankmasterComponent } from './pages/GlobalMasters/bankmaster/bankmaster.component';
+import { FormulaComponent } from './pages/GlobalMasters/formula/formula.component';
 
 
 
@@ -353,7 +355,10 @@ export const routes: Routes = [
           { path: "InvoiceLegalEntity", component: InvoiceLegalEntityComponent },
           { path: "Vendor", component: VendorComponent },
           { path: "gst", component: GSTComponent },
-          { path: "sitemaster", component: SiteMasterComponent }
+          { path: "sitemaster", component: SiteMasterComponent },
+          { path: 'BankMaster', component: BankmasterComponent },
+          { path: 'Formula', component: FormulaComponent }
+
 
 
         ]

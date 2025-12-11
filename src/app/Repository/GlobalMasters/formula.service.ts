@@ -1,0 +1,38 @@
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { env } from 'process';
+import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment.development';
+import { APIResponse } from '../../Models/apiresponse';
+import { IFormulaRepository } from './IFormulaRepository';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class FormualService implements IFormulaRepository {
+  env = environment
+  constructor(private http: HttpClient) {
+  }
+  GetFormulaSearch(paycode_Id: number): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      this.env.apiUrl + 'Formula/Search/' + paycode_Id,
+    );
+  }
+
+  payCategory(selectedCompanyId: number): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      this.env.apiUrl + 'Formula/GetPayCategory/' + selectedCompanyId,
+    );
+  }
+  payCode(): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      this.env.apiUrl + 'Common/GetPaycodes',
+    );
+  }
+  CreateFormula(payload: any): Observable<APIResponse> {
+    return this.http.post<APIResponse>(
+      this.env.apiUrl + 'Formula/Create',
+      payload
+    );
+  }
+}

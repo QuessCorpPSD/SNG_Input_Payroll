@@ -2,22 +2,20 @@ export interface Company {
   company_Id: number
   companyCode: string
   companyName: string
-  invoice_Billing_Type: number
   displayName: string
+  invoice_Billing_Type: number
 }
 
 export interface Payperiodclass {
   payfrequencyid: number
   paySequenceNo: string
   payPeriod: string
-  end_At:string
-  displayName:string
-
 }
 
 export interface Mapnameclass {
+  [x: string]: number
   mapNameId: number
-  mapName: string
+  mapName: any
 }
 
 export interface InputTypeclass{
@@ -38,4 +36,10 @@ export interface Cityclass{
 export interface State {
   state_Id: number
   state_Name: string
+}
+
+export interface Paycodelist {
+  paycode_Id: number
+  paycode_Code: string	
+  description: string
 }

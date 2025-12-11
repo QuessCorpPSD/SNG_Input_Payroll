@@ -10,9 +10,10 @@ import { CompanyallComponent } from "../../../common/CompanyAll/companyall.compo
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+
+import { AlertpopupComponent } from '../../../common/alertpopup/alertpopup.component';
 import { IFormulaRepository } from '../../../Repository/GlobalMasters/IFormulaRepository';
 import { FormualService } from '../../../Service/GlobalMasters/formula.service';
-import { AlertpopupComponent } from '../../../common/alertpopup/alertpopup.component';
 
 export const Formula_TOKEN = new InjectionToken<IFormulaRepository>('Formula_TOKEN');
 
@@ -260,8 +261,6 @@ export class AddFormulasComponent {
   }
 
   Save() {
-
-
     const row = this.editData.row;
     const formvalue = this.editFormula.getRawValue();
 
@@ -287,7 +286,7 @@ export class AddFormulasComponent {
       next: (res: any) => {
         if (res?.StatusCode === 200) {
           alert(res?.Data?.message || "Formula saved successfully");
-          this.dialogRef.close('updated');   
+          this.dialogRef.close('updated');
           return;
         } else {
           alert("Save failed");
@@ -298,7 +297,7 @@ export class AddFormulasComponent {
   }
 
   onClose() {
-    this.dialogRef.close('updated'); 
+    this.dialogRef.close('updated');
   }
 
 
