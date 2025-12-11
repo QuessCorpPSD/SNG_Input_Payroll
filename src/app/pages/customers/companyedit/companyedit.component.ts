@@ -14,7 +14,6 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatTableModule } from '@angular/material/table';
 import { CompanyserviceService } from '../../../Service/company/companyservice.service';
 import { CompanyaddComponent } from '../companyadd/companyadd.component';
-import { ContactdetailsComponent } from '../contactdetails/contactdetails.component';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.component";
@@ -501,14 +500,14 @@ export class CompanyeditComponent {
     }
   }
 
-  AddContactDetails() {
-    this.dialog.open(ContactdetailsComponent, {
-      width: '65%',
-      height: '47vh',
-      disableClose: true,
-      data: { example: 'Hello from parent!' }
-    });
-  }
+  // AddContactDetails() {
+  //   this.dialog.open(ContactdetailsComponent, {
+  //     width: '65%',
+  //     height: '47vh',
+  //     disableClose: true,
+  //     data: { example: 'Hello from parent!' }
+  //   });
+  // }
 
   showAlertPopup(message: string, subMessage: string = '') {
     this.popupMessage = message;

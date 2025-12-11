@@ -12,7 +12,6 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatCheckbox, MatCheckboxModule } from '@angular/material/checkbox';
-import { ContactdetailsComponent } from '../contactdetails/contactdetails.component';
 import { CompanyserviceService } from '../../../Service/company/companyservice.service';
 import { from } from 'rxjs';
 import { json } from 'node:stream/consumers';
@@ -526,14 +525,14 @@ export class CompanyaddComponent {
     this.isLoading = false;
   }
 
-  AddContactDetails() {
-    this.dialog.open(ContactdetailsComponent, {
-      width: '65%',
-      height: '47vh',
-      disableClose: true,
-      data: { example: 'Hello from parent!' }
-    });
-  }
+  // AddContactDetails() {
+  //   this.dialog.open(ContactdetailsComponent, {
+  //     width: '65%',
+  //     height: '47vh',
+  //     disableClose: true,
+  //     data: { example: 'Hello from parent!' }
+  //   });
+  // }
 
   onClose() {
     this.dialogRef.close();
