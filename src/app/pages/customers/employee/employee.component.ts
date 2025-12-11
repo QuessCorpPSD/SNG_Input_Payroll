@@ -15,6 +15,7 @@ import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { MatCardModule } from "@angular/material/card";
 import { EmployeeService } from '../../../Service/CUSTOMER/employee.service';
 import { IEmployeeservice } from '../../../Repository/customer/Iemployee';
+import FileSaver from 'file-saver';
 export const Pay_TOKEN = new InjectionToken<IEmployeeservice>('Pay_TOKEN');
 
 @Component({
@@ -54,7 +55,7 @@ export class EmployeeComponent {
   uploadedDataSource = new MatTableDataSource(this.uploadedData);
 
   @ViewChild('paginator') paginator!: MatPaginator;
-  constructor(private dialog: MatDialog,@Inject(Pay_TOKEN) private service: IEmployeeservice, private decry: EncryptionService,
+  constructor(private dialog: MatDialog, @Inject(Pay_TOKEN) private service: IEmployeeservice, private decry: EncryptionService,
     private _sessionStoreage: SessionStorageService, private fb: FormBuilder) { }
 
 
@@ -180,8 +181,8 @@ export class EmployeeComponent {
     });
   }
 
-  ImportClick(fileInput: HTMLInputElement): void {
-    fileInput.click();
+  ImportClick(fileInpute: HTMLInputElement): void {
+    fileInpute.click();
   }
   onFileChange(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -431,6 +432,99 @@ export class EmployeeComponent {
       disableClose: true,
       data: { rowData: row }
     });
+  }
+
+  downloadEmployeeTemplate() {
+    const templateData = [
+      {
+        "COMPID": "",
+        "NAME": "",
+        "FATHERNAME": "",
+        "GENDER": "",
+        "DOJ": "",
+        "DOB": "",
+        "MARITAL": "",
+        "DEPARTMENT": "",
+        "DESIGNATION": "",
+        "OLDEMPLOYEECODE": "",
+        "PAY CATEGORY": "",
+        "BANK NAME": "",
+        "A/C NO": "",
+        "EMAIL": "",
+        "DATE OF JOIN PAY PERIOD": "",
+        "SWIFTCODE": "",
+        "BRANCH": "",
+        "BRANCHCODE": "",
+        "BANKCODE": "",
+        "HIRING STATUS": "",
+        "MAP NAME": "",
+        "RECRUITER'S NAME": "",
+        "MOBNO": "",
+        "ENTITY LOCATION": "",
+        "COST CENTRE": "",
+        "GROUP NAME": "",
+        "EMPLOYMENT_TYPE": "",
+        "OMS_ID": "",
+        "DMS_ID": "",
+        "NRIC_FIN_NUMBER": "",
+        "FUND_LEVY": "",
+        "RACE_CODE": "",
+        "NATIONAL_CODE": "",
+        "LEAVE_SCHEME": "",
+        "RELIGION": "",
+        "WORK_PASS": "",
+        "SPR_STATUS": "",
+        "SPR_APPROVE_DATE": "",
+        "VISA_NUMBER": "",
+        "VISA_DURATION_START_DATE": "",
+        "VISA_DURATION_END_DATE": "",
+        "RFUND_CODE1": "",
+        "RFUND_CODE2": "",
+        "COUNTRY_OF_BIRTH": "",
+        "PASSPORT_NUMBER": "",
+        "PASSPORT_EXPIRY_DATE": "",
+        "ADDRESS": "",
+        "PIN_CODE": ""
+
+      }
+    ];
+
+    const workSheet = XLSX.utils.json_to_sheet(templateData);
+
+    const workbook: XLSX.WorkBook = {
+      Sheets: { 'Table': workSheet },
+      SheetNames: ['Table']
+    };
+
+    const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const blob = new Blob([buffer], { type: 'application/octet-stream' });
+
+    FileSaver.saveAs(blob, `Employee_Master_Template.xlsx`)
+  }
+
+  downloadSalaryTemplate() {
+    const templateData = [
+      {
+        "COMPCODE":"",
+        "EMPCODE":"",
+        "BAND":"",
+        "PAYCODE":"",
+        "AMOUNT":"",
+        "PAYSEQUENCENO":""
+      }
+    ];
+
+    const workSheet = XLSX.utils.json_to_sheet(templateData);
+
+    const workbook: XLSX.WorkBook = {
+      Sheets: { 'Table': workSheet },
+      SheetNames: ['Table']
+    };
+
+    const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const blob = new Blob([buffer], { type: 'application/octet-stream' });
+
+    FileSaver.saveAs(blob, `New_Joinee_Salary_Template.xlsx`)
   }
 
 }
