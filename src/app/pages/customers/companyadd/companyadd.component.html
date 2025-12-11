@@ -1,0 +1,1008 @@
+<form [formGroup]="CompanyAddForm" novalidate>
+    <mat-card class="custom-card">
+        <mat-card-header class="sticky-header">
+            <mat-card-title style="color:#302CB3">Add Company Master</mat-card-title>
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="onClose()" class="no-border-icon">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+
+        <mat-card-content class="scroll-content" style="padding-top: 10px;">
+            <!-- Row 1 -->
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">Company Code<span class="text-danger"></span></label>
+                    <input type="text" class="form-control" formControlName="CompanyCode" />
+                    <!-- <select class="form-select" formControlName="CompanyName">
+                        <option value="">-- Select --</option>
+                    </select> -->
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Comapny Name<span class="text-danger">*</span></label>
+                    <!-- <input type="date" class="form-control" formControlName="EffectiveDate" />-->
+                    <select class="form-select" formControlName="ComapnyName">
+                        <option *ngFor="let p of companyName" [value]="p.Client_Id">{{p.Client_Name}} </option>
+                    </select>
+                    <div class="text-danger small" *ngIf="CompanyAddForm.get('ComapnyName')?.touched 
+             && CompanyAddForm.get('ComapnyName')?.hasError('required')">
+                        Company Name is required
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">MIS Name<span class="text-danger"></span></label>
+                    <!-- <select class="form-select" formControlName="MISName">
+                        <option value="">-- Select --</option>
+                    </select> -->
+                    <input type="text" class="form-control" formControlName="MISName" />
+                </div>
+            </div>
+            <!-- Row 2 -->
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">Business Unit Name/Entity<span class="text-danger">*</span></label>
+                    <select class="form-select" formControlName="BusinessUnitName" (change)="OnEntitychange($event)">
+                        <option *ngFor="let p of entityName" [value]="p.value">{{p.name}} </option>
+                    </select>
+                    <div class="text-danger small" *ngIf="CompanyAddForm.get('BusinessUnitName')?.touched 
+             && CompanyAddForm.get('BusinessUnitName')?.hasError('required')">
+                        BusinessUnitNameis required
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Business Unit Location<span class="text-danger"></span></label>
+                    <select class="form-select" formControlName="BusinessUnitLocation">
+                        <option *ngFor="let p of BusinessUnitLocation" [value]="p.CITY_ID">{{p.CITY_NAME}} </option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Zone<span class="text-danger"></span></label>
+                    <input type="text" class="form-control" formControlName="Zone" />
+                    <!-- <select class="form-select" formControlName="Zone">
+                        <option value="">-- Select --</option>
+                    </select> -->
+                </div>
+            </div>
+            <!-- row3 -->
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">Company Group Code<span class="text-danger">*</span></label>
+                    <select class="form-select" formControlName="CompanyGroupCode">
+                        <option *ngFor="let p of groupCode" [value]="p.value">{{p.name}} </option>
+                    </select>
+                    <div class="text-danger small" *ngIf="CompanyAddForm.get('CompanyGroupCode')?.touched 
+             && CompanyAddForm.get('CompanyGroupCode')?.hasError('required')">
+                        CompanyGroupCode is required
+                    </div>
+                </div>
+                <!-- disable -->
+                <div class="col-md-4" style="display: none;">
+                    <label class="form-label">Company Group Name<span class="text-danger"></span></label>
+                    <select class="form-select" formControlName="CompanyGroupName">
+                        <option value="">-- Select --</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label d-block">
+                        Payroll Type<span class="text-danger">*</span>
+                    </label>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="PayrollType" value="1"
+                            formControlName="PayrollType" id="payTypeFlexi">
+                        <label class="form-check-label" for="payTypeFlexi">
+                            Flexi
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="PayrollType" value="0"
+                            formControlName="PayrollType" id="payTypeFlat">
+                        <label class="form-check-label" for="payTypeFlat">
+                            Flat
+                        </label>
+                    </div>
+                    <div class="text-danger small" *ngIf="CompanyAddForm.get('PayrollType')?.touched 
+             && CompanyAddForm.get('PayrollType')?.hasError('required')">
+                        PayrollType is required
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">WBS Code<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" formControlName="WBSCode" />
+                    <div class="text-danger small" *ngIf="CompanyAddForm.get('WBSCode')?.touched 
+             && CompanyAddForm.get('WBSCode')?.hasError('required')">
+                        WBSCode is required
+                    </div>
+                </div>
+
+            </div>
+            <!-- row 4 -->
+            <div class="row g-3 mb-3">
+
+                <div class="col-md-4">
+                    <label class="form-label">Client Since<span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" formControlName="ClientSince" />
+                    <div class="text-danger small" *ngIf="CompanyAddForm.get('ClientSince')?.touched 
+             && CompanyAddForm.get('ClientSince')?.hasError('required')">
+                        ClientSince is required
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Contract Start Type<span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" formControlName="ContractStartType" />
+                    <div class="text-danger small" *ngIf="CompanyAddForm.get('ContractStartType')?.touched 
+             && CompanyAddForm.get('ContractStartType')?.hasError('required')">
+                        ContractStartType is required
+                    </div>
+                </div>
+            </div>
+            <!-- row 5 -->
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">Contract Expiry Type<span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" formControlName="ContractExpiryType" />
+                    <div class="text-danger small" *ngIf="CompanyAddForm.get('ContractExpiryType')?.touched 
+             && CompanyAddForm.get('ContractExpiryType')?.hasError('required')">
+                        ContractExpiryType is required
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Active<span class="text-danger"></span></label>
+                    <select class="form-select" formControlName="Active">
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">F&F PayMode<span class="text-danger"></span></label>
+                    <select class="form-select" formControlName="FPayMode">
+                        <option value="1">Cheque</option>
+                        <option value="2">E-Transfer</option>
+                    </select>
+                </div>
+            </div>
+            <!-- row 6 -->
+            <div class="row g-3 mb-3">
+                <div class="col-md-4" style="display: none;">
+                    <label class="form-label d-block">Invoice Type<span class="text-danger">*</span></label>
+                    <!-- <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="InvoiceType" value="Single"
+                            formControlName="InvoiceType">
+                        <label class="form-check-label" for="InvoiceTypeSingle">
+                            Single
+                        </label>
+                    </div> -->
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="InvoiceType" value="1"
+                            formControlName="InvoiceType">
+                        <label class="form-check-label" for="InvoiceTypeMultiple">
+                            Multiple
+                        </label>
+                    </div>
+                    <div class="text-danger small" *ngIf="CompanyAddForm.get('InvoiceType')?.touched 
+             && CompanyAddForm.get('InvoiceType')?.hasError('required')">
+                        InvoiceType is required
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Upload Contract Details<span class="text-danger"></span></label>
+                    <!-- <select class="form-select" formControlName="F&UploadContractDetails">
+                        <option value="1">Cheque</option>
+                        <option value="2">E-Transfer</option>
+                    </select> -->
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label d-block">Is Insurance Applicable<span class="text-danger"></span></label>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="InsuranceApplicable" value="1"
+                            formControlName="InsuranceApplicable" id="InsuranceApplicableYes">
+                        <label class="form-check-label" for="InsuranceApplicableyes">
+                            Yes
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="InsuranceApplicable" value="0"
+                            formControlName="InsuranceApplicable" id="InsuranceApplicableNo">
+                        <label class="form-check-label" for="InsuranceApplicableNo">
+                            No
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="CompanyAddForm.get('InvoiceType')?.value === 'Single'" class="border p-3 mt-3"
+                style="display: none;">
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">City<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" formControlName="City" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">State<span class="text-danger"></span></label>
+                        <input type="date" class="form-control" formControlName="State" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Pin Code<span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" formControlName="PinCode" />
+                    </div>
+                </div>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Phone No<span class="text-danger"></span></label>
+                        <input type="number" class="form-control" formControlName="PhoneNo" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">PT Code<span class="text-danger"></span></label>
+                        <input type="text" class="form-control" formControlName="PTCode" />
+                    </div>
+                    <div class="col-md-4">
+                    </div>
+                </div>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Service Tax<span class="text-danger"></span></label>
+                        <input type="text" class="form-control" formControlName="ServiceTax" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Email Id<span class="text-danger"></span></label>
+                        <input type="text" class="form-control" formControlName="EmailId" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Certificate No<span class="text-danger"></span></label>
+                        <input type="text" class="form-control" formControlName="CertificateNo" />
+                    </div>
+                </div>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Fax No<span class="text-danger"></span></label>
+                        <input type="text" class="form-control" formControlName="FaxNo" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Website<span class="text-danger"></span></label>
+                        <input type="text" class="form-control" formControlName="Website" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Address<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" formControlName="Address" />
+                    </div>
+                </div>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">ESI Code<span class="text-danger"></span></label>
+                        <input type="text" class="form-control" formControlName="ESICode" />
+                    </div>
+                </div>
+            </div>
+            <!-- row 7 -->
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label d-block">Month Days<span class="text-danger"></span></label>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="MonthDays" value="1"
+                            formControlName="MonthDays" id="MonthDaysYes">
+                        <label class="form-check-label" for="MonthDaysyes">
+                            Yes
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="MonthDays" value="0"
+                            formControlName="MonthDays" id="MonthDaysNo">
+                        <label class="form-check-label" for="MonthDaysNo">
+                            No
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Attendance Cycle Form<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" formControlName="AttendanceCycleForm" />
+                    <div class="text-danger small" *ngIf="CompanyAddForm.get('AttendanceCycleForm')?.touched 
+             && CompanyAddForm.get('AttendanceCycleForm')?.hasError('required')">
+                        AttendanceCycleForm is required
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Attendance Cycle To<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" formControlName="AttendanceCycleTo" />
+                    <div class="text-danger small" *ngIf="CompanyAddForm.get('AttendanceCycleTo')?.touched 
+             && CompanyAddForm.get('AttendanceCycleTo')?.hasError('required')">
+                        AttendanceCycleTo is required
+                    </div>
+                </div>
+            </div>
+            <!-- ROW 1: Work Days + CTC -->
+            <div class="row g-3 mb-3 position-relative">
+                <div class="col-md-4">
+                    <label class="form-label d-block">Work Days based on<span class="text-danger"></span></label>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="WorkDaysbased" value="1"
+                            formControlName="WorkDaysbased" id="attendance">
+                        <label class="form-check-label" for="attendance">
+                            Attendance
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="WorkDaysbased" value="0"
+                            formControlName="WorkDaysbased" id="lop">
+                        <label class="form-check-label" for="lop">
+                            LOP
+                        </label>
+                    </div>
+                </div>
+
+                <div class="col-md-4" [formGroup]="CompanyAddForm">
+                    <label class="form-label d-block">CTC</label>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" id="annum" name="CTC" value="1"
+                            formControlName="CTC">
+                        <label class="form-check-label" for="annum">Annum</label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" id="monthly" name="CTC" value="0"
+                            formControlName="CTC">
+                        <label class="form-check-label" for="monthly">Monthly</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="bank-box">
+                        <div class="border p-3 rounded">
+                            <h5 class="fw-bold mb-3">Bank Details</h5>
+
+                            <!-- Bank Name -->
+                            <div class="mb-3">
+                                <label class="form-label">Bank Name <span class="text-danger">*</span></label>
+                                <select class="form-control" formControlName="BankName" (change)="onBankChange($event)">
+                                    <option value="">---Select---</option>
+                                    <option *ngFor="let p of BankName" [value]="p.Bank_Id">{{p.Bank_Name}} </option>
+                                </select>
+                                <div class="text-danger small" *ngIf="CompanyAddForm.get('BankName')?.touched 
+             && CompanyAddForm.get('BankName')?.hasError('required')">
+                                    BankName is required
+                                </div>
+                            </div>
+
+                            <!-- A/C No -->
+                            <div class="mb-3">
+                                <label class="form-label">A/C No <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" formControlName="AccountNo">
+                                <div class="text-danger small" *ngIf="CompanyAddForm.get('AccountNo')?.touched 
+             && CompanyAddForm.get('AccountNo')?.hasError('required')">
+                                    AccountNo is required
+                                </div>
+                            </div>
+
+                            <!-- Swift Code -->
+                            <div class="mb-3">
+                                <label class="form-label">Swift Code <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" formControlName="SwiftCode"
+                                    placeholder="Enter Swift Code">
+                                <div class="text-danger small" *ngIf="CompanyAddForm.get('SwiftCode')?.touched 
+             && CompanyAddForm.get('SwiftCode')?.hasError('required')">
+                                    SwiftCode is required
+                                </div>
+                            </div>
+
+                            <!-- Branch -->
+                            <div class="mb-3">
+                                <label class="form-label">Branch <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" formControlName="Branch">
+                                <div class="text-danger small" *ngIf="CompanyAddForm.get('Branch')?.touched 
+             && CompanyAddForm.get('Branch')?.hasError('required')">
+                                    Branch is required
+                                </div>
+                            </div>
+
+                            <!-- Branch Code -->
+                            <div class="mb-3">
+                                <label class="form-label">Branch Code <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" formControlName="BranchCode"
+                                    placeholder="Enter Branch Code">
+                                <div class="text-danger small" *ngIf="CompanyAddForm.get('BranchCode')?.touched 
+             && CompanyAddForm.get('BranchCode')?.hasError('required')">
+                                    BranchCode is required
+                                </div>
+                            </div>
+
+                            <!-- Bank Code -->
+                            <div class="mb-3">
+                                <label class="form-label">Bank Code <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" formControlName="BankCode"
+                                    placeholder="Enter Bank Code">
+                                <div class="text-danger small" *ngIf="CompanyAddForm.get('BankCode')?.touched 
+             && CompanyAddForm.get('BankCode')?.hasError('required')">
+                                    BankCode is required
+                                </div>
+                            </div>
+
+                            <!-- Bank Address -->
+                            <div class="mb-3">
+                                <label class="form-label">Bank Address <span class="text-danger">*</span></label>
+                                <textarea class="form-control" formControlName="BankAddress" style="height: 80px;"
+                                    placeholder="Enter Bank Address"></textarea>
+                                <div class="text-danger small" *ngIf="CompanyAddForm.get('BankAddress')?.touched 
+             && CompanyAddForm.get('BankAddress')?.hasError('required')">
+                                    BankAddress is required
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">Onboarding Category</label>
+                    <select class="form-select" formControlName="OnboardingCategory">
+                        <option value="">--select---</option>
+                        <option value="1064">Single</option>
+                        <option value="1065">Separate</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Onboarding Charges</label>
+                    <div class="d-flex">
+                        <select class="form-select me-2" style="width:40%" formControlName="OnboardingChargesValue">
+                            <option value="">Select</option>
+                            <option value="1">%</option>
+                            <option value="0">Rs.</option>
+                        </select>
+                        <input type="text" class="form-control" formControlName="OnboardingCharges">
+                    </div>
+                </div>
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">Inedge Category<span class="text-danger"></span></label>
+                    <select class="form-select" formControlName="InedgeCategory">
+                        <option value="">--select---</option>
+                        <option value="1064">Single</option>
+                        <option value="1065s">Separate</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Inedge/WorQ Charges<span class="text-danger"></span></label>
+                    <div class="d-flex">
+                        <select class="form-select me-2" style="width: 40%;" formControlName="InedgeChargesValue">
+                            <option value="">Select</option>
+                            <option value="1">%</option>
+                            <option value="0">Rs.</option>
+                        </select>
+                        <input type="text" class="form-control" formControlName="InedgeCharges" />
+                    </div>
+                </div>
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-4" style="display: none;">
+                    <label class="form-label">Incentive Type<span class="text-danger"></span></label>
+                    <select class="form-select" formControlName="IncentiveType">
+                        <option value="">-- Select --</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Qdemy Charges<span class="text-danger"></span></label>
+                    <div class="d-flex">
+                        <select class="form-select me-2" style="width: 40%;" formControlName="QdemyChargesValue">
+                            <option value="">Select</option>
+                            <option value="1">%</option>
+                            <option value="0">Rs.</option>
+                        </select>
+                        <input type="text" class="form-control" formControlName="QdemyCharges" />
+                    </div>
+                </div>
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label d-block">PO Applicable<span class="text-danger"></span></label>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="POApplicable" value="1"
+                            formControlName="POApplicable" id="POApplicableyes">
+                        <label class="form-check-label" for="POApplicableyes">
+                            Yes
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="POApplicable" value="0"
+                            formControlName="POApplicable" id="POApplicableno">
+                        <label class="form-check-label" for="POApplicableno">
+                            No
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Tech Subscription Charges<span class="text-danger"></span></label>
+                    <div class="d-flex">
+                        <select class="form-select me-2" style="width: 40%;"
+                            formControlName="TechSubscriptionChargesvalue">
+                            <option value="">Select</option>
+                            <option value="1">%</option>
+                            <option value="0">Rs.</option>
+                        </select>
+                        <input type="text" class="form-control" formControlName="TechSubscriptionCharges" />
+                    </div>
+                </div>
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label d-block">PO Wise Batch<span class="text-danger"></span></label>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="POWiseBatch" value="1"
+                            formControlName="POWiseBatch" id="POWiseBatchyes">
+                        <label class="form-check-label" for="POWiseBatchyes">
+                            Yes
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="POWiseBatch" value="0"
+                            formControlName="POWiseBatch" id="POWiseBatchno">
+                        <label class="form-check-label" for="POWiseBatchno">
+                            No
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <mat-checkbox formControlName="IsNewJoinee">
+                        Is New Joinee
+                    </mat-checkbox>
+                </div>
+
+                <!-- <div class="col-md-4">
+                    <label class="form-label">Is New Joinee</label>
+                    <input type="checkbox" class="form-control" formControlName="IsNewJoinee"
+                        style="width: 18px; height: 18px;" />
+                </div> -->
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">Dues Based on<span class="text-danger"></span></label>
+                    <select class="form-select" formControlName="FDuesBasedon">
+                        <option value="">--select---</option>
+                        <option value="1">SD</option>
+                        <option value="2">DR</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Sourcing/OB Applicable<span class="text-danger"></span></label>
+                    <select class="form-select" formControlName="SourcingOBApplicable">
+                        <option value="">--select---</option>
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-4" style="display: none;">
+                    <label class="form-label">Insurance<span class="text-danger"></span></label>
+                    <select class="form-select" formControlName="Insurance">
+                        <option value="">--select---</option>
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">Segment<span class="text-danger">*</span></label>
+                    <select class="form-select" formControlName="Segment">
+                        <option value="">--select---</option>
+                        <option *ngFor="let p of segmentName" [value]="p.value">{{p.name}} </option>
+                    </select>
+                    <div class="text-danger small" *ngIf="CompanyAddForm.get('Segment')?.touched 
+             && CompanyAddForm.get('Segment')?.hasError('required')">
+                        Segment is required
+                    </div>
+                </div>
+                <div class="col-md-4" style="display: none;">
+                    <label class="form-label">Reimb Invoice Format<span class="text-danger"></span></label>
+                    <select class="form-select" formControlName="ReimbInvoiceFormat">
+                        <option value="">--select---</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Sub Segment<span class="text-danger"></span></label>
+                    <select class="form-select" formControlName="SubSegment">
+                        <option value="">--select---</option>
+                        <option *ngFor="let p of subSegmentName" [value]="p.value">{{p.name}} </option>
+                    </select>
+                </div>
+            </div>
+            <div class="row g-3 mb-3">
+
+                <div class="col-md-4" style="display: none;">
+                    <label class="form-label">PaySlip Formats<span class="text-danger"></span></label>
+                    <select class="form-select" formControlName="PaySlipFormats">
+                        <option value="">--select---</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">Mode of payment<span class="text-danger"></span></label>
+                    <select class="form-select" formControlName="Modeofpayment">
+                        <option value="">--select---</option>
+                        <option value="0">Collections</option>
+                        <option value="1">Upfront</option>
+                    </select>
+                </div>
+                <div class="col-md-4" style="display: none;">
+                    <label class="form-label">Portal PaySlip Format<span class="text-danger"></span></label>
+                    <select class="form-select" formControlName="PortalPaySlipFormat">
+                        <option value="">--select---</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Incharge<span class="text-danger"></span></label>
+                    <input type="text" class="form-control" formControlName="Incharge" />
+                </div>
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">Round Off Applicable<span class="text-danger"></span></label>
+                    <select class="form-select" formControlName="RoundOffApplicable">
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">TAT(In Days)<span class="text-danger"></span></label>
+                    <input type="text" class="form-control" formControlName="TAT" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Valid Date<span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" formControlName="ValidDate" />
+                    <div class="text-danger small" *ngIf="CompanyAddForm.get('ValidDate')?.touched 
+             && CompanyAddForm.get('ValidDate')?.hasError('required')">
+                        ValidDate is required
+                    </div>
+                </div>
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">Incentive Date<span class="text-danger"></span></label>
+                    <input type="text" class="form-control" formControlName="IncentiveDate" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Deviation<span class="text-danger"></span></label>
+                    <select class="form-select" formControlName="Deviation">
+                        <option value="">--select---</option>
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Upload Service Tax Details<span class="text-danger"></span></label>
+                    <!-- <input type="date" class="form-control" formControlName="ValidDate" /> -->
+                </div>
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-4" style="display: none;">
+                    <label class="form-label">Reimbursement Type<span class="text-danger"></span></label>
+                    <select class="form-select" formControlName="ReimbursementType">
+                        <option value="">Select</option>
+                    </select>
+                </div>
+                <div class="col-md-4" style="display: none;">
+                    <label class="form-label">Salary SMS<span class="text-danger"></span></label>
+                    <!-- <input type="text" class="form-control" formControlName="SalarySMS" /> -->
+                    <select class="form-select" formControlName="SalarySMS">
+                        <option value="">--select---</option>
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Effective Date<span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" formControlName="EffectiveDate" />
+                    <div class="text-danger small" *ngIf="CompanyAddForm.get('EffectiveDate')?.touched 
+             && CompanyAddForm.get('EffectiveDate')?.hasError('required')">
+                        EffectiveDate is required
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Sales Person<span class="text-danger"></span></label>
+                    <input type="text" class="form-control" formControlName="SalesPerson" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Branch Location<span class="text-danger"></span></label>
+                    <input type="text" class="form-control" formControlName="BranchLocation" />
+                </div>
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-4" style="display: none;">
+                    <label class="form-label">Reimbrusement Date<span class="text-danger"></span></label>
+                    <input type="date" class="form-control" formControlName="ReimbrusementDate" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Profit Center Code<span class="text-danger"></span></label>
+                    <input type="text" class="form-control" formControlName="ProfitCenterCode" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Particulars<span class="text-danger"></span></label>
+                    <input type="text" class="form-control" formControlName="Particulars" />
+                </div>
+            </div>
+            <div class="row g-3 mb-3">
+
+                <div class="col-md-4">
+                    <label class="form-label">Sap Customer Code<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" formControlName="SapCustomerCode" />
+                    <div class="text-danger small" *ngIf="CompanyAddForm.get('SapCustomerCode')?.touched 
+             && CompanyAddForm.get('SapCustomerCode')?.hasError('required')">
+                        SapCustomerCode is required
+                    </div>
+                </div>
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label d-block">Is NonInvoice</label>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" id="noninvoice" name="IsNonInvoice" value="1"
+                            formControlName="IsNonInvoice">
+                        <label class="form-check-label" for="noninvoice">Non Invoice</label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" id="invoice" name="IsNonInvoice" value="0"
+                            formControlName="IsNonInvoice">
+                        <label class="form-check-label" for="invoice">Invoice</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <!-- <label class="form-label">Header & Footer</label> -->
+                    <mat-checkbox formControlName="HeaderFooter">
+                        Header & Footer
+                    </mat-checkbox>
+                </div>
+                <div class="col-md-4">
+                    <!-- <label class="form-label">Minimum Wages Applicability</label> -->
+                    <mat-checkbox formControlName="MinimumWagesApplicability">
+                        Minimum Wages Applicability
+                    </mat-checkbox>
+                </div>
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <!-- <label class="form-label">Is Extra Working Days Service Fee</label> -->
+                    <mat-checkbox formControlName="WorkingDaysServiceFee">
+                        Is Extra Working Days Service Fee
+                    </mat-checkbox>
+                </div>
+                <div class="col-md-4">
+                    <!-- <label class="form-label">Is Bonus Pay Through FF</label> -->
+                    <mat-checkbox formControlName="IsBonusPayThroughFF">
+                        Is Bonus Pay Through FF
+                    </mat-checkbox>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Reimbursement Format Type</label>
+                    <!-- <input type="checkbox" class="form-control" formControlName="Minimum Wages Applicability"
+                        style="width: 18px; height: 18px;" /> -->
+                </div>
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <!-- <label class="form-label">Attendance Input with Leave</label> -->
+                    <mat-checkbox formControlName="AttendanceInputwithLeave">
+                        Attendance Input with Leave
+                    </mat-checkbox>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Management MIS</label>
+                    <input type="date" class="form-control" formControlName="ManagementMIS" />
+                </div>
+                <!-- <div class="col-md-4">
+                    <label class="form-label">Pf Code<span class="text-danger">*</span></label>
+                    <select class="form-select" formControlName="PfCode">
+                        <option value="">--select---</option>
+                    </select>
+                </div> -->
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">Payroll With Decimal<span class="text-danger">*</span></label>
+                    <select class="form-select" formControlName="PayrollWithDecimal">
+                        <option value="">--select---</option>
+                        <option *ngFor="let p of paywithDeciamal" [value]="p.value">{{p.name}} </option>
+                    </select>
+                    <div class="text-danger small" *ngIf="CompanyAddForm.get('PayrollWithDecimal')?.touched 
+             && CompanyAddForm.get('PayrollWithDecimal')?.hasError('required')">
+                        PayrollWithDecimal is required
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <!-- <label class="form-label">Is Decimal</label> -->
+                    <mat-checkbox formControlName="IsDecimal">
+                        Is Decimal
+                    </mat-checkbox>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Company Type<span class="text-danger">*</span></label>
+                    <select class="form-select" formControlName="CompanyType">
+                        <option *ngFor="let p of companyType" [value]="p.value">{{p.name}} </option>
+                    </select>
+                    <div class="text-danger small" *ngIf="CompanyAddForm.get('CompanyType')?.touched 
+             && CompanyAddForm.get('CompanyType')?.hasError('required')">
+                        CompanyType is required
+                    </div>
+                </div>
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">Service Fee With Decimal<span class="text-danger">*</span></label>
+                    <select class="form-select" formControlName="ServiceFeeWithDecimal">
+                        <option *ngFor="let p of servicefee" [value]="p.value">{{p.name}} </option>
+                    </select>
+                    <div class="text-danger small" *ngIf="CompanyAddForm.get('ServiceFeeWithDecimal')?.touched 
+             && CompanyAddForm.get('ServiceFeeWithDecimal')?.hasError('required')">
+                        ServiceFeeWithDecimal is required
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <!-- <label class="form-label">Manual New Joinee</label> -->
+                    <mat-checkbox formControlName="ManualNewJoinee">
+                        Manual New Joinee
+                    </mat-checkbox>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Reimb Payment<span class="text-danger">*</span></label>
+                    <select class="form-select" formControlName="ReimbPayment">
+                        <option *ngFor="let p of reimPayment" [value]="p.value">{{p.name}} </option>
+                    </select>
+                    <div class="text-danger small" *ngIf="CompanyAddForm.get('ReimbPayment')?.touched 
+             && CompanyAddForm.get('ReimbPayment')?.hasError('required')">
+                        ReimbPayment is required
+                    </div>
+                </div>
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-4" style="display: none;">
+                    <label class="form-label">Vertial</label>
+                    <select class="form-select" formControlName="Vertial">
+                        <option value="">--select---</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Digital Platform Consent<span class="text-danger">*</span></label>
+                    <select class="form-select" formControlName="DigitalPlatformConsent">
+                        <option value="">--select---</option>
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                    <div class="text-danger small" *ngIf="CompanyAddForm.get('DigitalPlatformConsent')?.touched 
+             && CompanyAddForm.get('DigitalPlatformConsent')?.hasError('required')">
+                        DigitalPlatformConsent is required
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <!-- <label class="form-label">Is Proforma</label> -->
+                    <mat-checkbox formControlName="IsProforma">
+                        Is Proforma
+                    </mat-checkbox>
+                </div>
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">IsOneTouchInvoicing</label>
+                    <select class="form-select" formControlName="IsOneTouchInvoicing">
+                        <option value="">--select---</option>
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Working Hours<span class="text-danger"></span></label>
+                    <input type="texct" class="form-control" formControlName="WorkingHours" />
+                </div>
+                <div class="col-md-4">
+                    <!-- <label class="form-label">Is Signature</label> -->
+                    <mat-checkbox formControlName="IsSignature">
+                        Is Signature
+                    </mat-checkbox>
+                </div>
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">IsInovicePoBased</label>
+                    <select class="form-select" formControlName="IsInovicePoBased">
+                        <option value="">--select---</option>
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <!-- <label class="form-label">Is 40 Billing Model<span class="text-danger"></span></label> -->
+                    <mat-checkbox formControlName="Is40BillingModel">
+                        Is 40 Billing Model
+                    </mat-checkbox>
+                </div>
+                <div class="col-md-4">
+                    <!-- <label class="form-label">Is Currency Conversion</label> -->
+                    <mat-checkbox formControlName="IsCurrencyConversion">
+                        Is Currency Conversion
+                    </mat-checkbox>
+                </div>
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">60% Billing Model</label>
+                    <select class="form-select" formControlName="BillingModel">
+                        <option *ngFor="let p of billingModel" [value]="p.value">{{p.name}} </option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Bank Advice<span class="text-danger">*</span></label>
+                    <select class="form-select" formControlName="BankAdvice">
+                        <option *ngFor="let p of bankAdvice" [value]="p.value">{{p.name}} </option>
+                    </select>
+                    <div class="text-danger small" *ngIf="CompanyAddForm.get('BankAdvice')?.touched 
+             && CompanyAddForm.get('BankAdvice')?.hasError('required')">
+                        BankAdvice is required
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">ServiceCharge Clubbing</label>
+                    <select class="form-select" formControlName="ServiceChargeClubbing">
+                        <option *ngFor="let p of serviceClubbing" [value]="p.value">{{p.name}} </option>
+                    </select>
+                </div>
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">DGPSF<span class="text-danger">*</span></label>
+                    <select class="form-select" formControlName="DGPSF">
+                        <option value="">--select---</option>
+                        <option value="1">Billing</option>
+                        <option value="2">Deduction</option>
+                    </select>
+                    <div class="text-danger small" *ngIf="CompanyAddForm.get('DGPSF')?.touched 
+             && CompanyAddForm.get('DGPSF')?.hasError('required')">
+                        DGPSF is required
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Sector<span class="text-danger">*</span></label>
+                    <select class="form-select" formControlName="Sector">
+                        <option value="">--select Sector---</option>
+                        <option value="Public Sector">Public Sector</option>
+                        <option value="Private Sector">Private Sector</option>
+                    </select>
+                    <div class="text-danger small" *ngIf="CompanyAddForm.get('Sector')?.touched 
+             && CompanyAddForm.get('Sector')?.hasError('required')">
+                        Sector is required
+                    </div>
+                </div>
+            </div>
+        </mat-card-content>
+        <mat-card-footer class="footer">
+            <div class="col g-3 mb-3" style="display:none">
+                <h4 class="form-label"
+                    style="color: blue; border-bottom: 1px solid blue; display: inline-block;cursor: pointer;"
+                    (click)="AddContactDetails()">
+                    Contact Details
+                </h4>
+            </div>
+            <div class="d-flex justify-content-end mt-3">
+                <div class="btn-1"
+                    style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
+
+                    <button type="Cancel"
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;"
+                        (click)="onClose()">
+                        Cancel
+                    </button>
+
+                    <button type="submit"
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white; "
+                        (click)="AddCompany()">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </mat-card-footer>
+    </mat-card>
+</form>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets\Loading.gif" alt="Loading...">
+</div>
+<app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+    (close)="showPopup = false">
+</app-alertpopup>

@@ -95,7 +95,7 @@ import { PaytransactionComponent } from './pages/Process/paytransaction/paytrans
 import { ReimbrusmentcalenderComponent } from './pages/Process/reimbrusmentcalender/reimbrusmentcalender.component';
 import { PayProcessComponent } from './pages/Process/pay-process/pay-process.component';
 import { CustomernavigationComponent } from './pages/customers/customernavigation/customernavigation.component';
-import { CompanyComponent } from './common/company/company.component';
+import { CompanyComponent } from './pages/customers/company/company.component'
 import { DepartmentComponent } from './pages/customers/department/department.component';
 import { DesignationComponent } from './pages/customers/designation/designation.component';
 import { BandDetailsComponent } from './pages/customers/band-details/band-details.component';
@@ -233,6 +233,7 @@ export const routes: Routes = [
           { path: "designation", component: DesignationComponent, },
           { path: "BandDetails", component: BandDetailsComponent, },
           { path: "CostCenterMapping", component: CostCenterMappingComponent, },
+          { path: "company", component: CompanyComponent, },
         ]
       },
       {
