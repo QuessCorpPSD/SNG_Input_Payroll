@@ -69,10 +69,10 @@
                         <label class="form-label text-muted small">Employee</label>
                         <div class="d-flex align-items-center gap-2">
                             <button class="btn btn-sm d-flex align-items-center justify-content-center"
-                                matTooltip="Import" (click)="ImportClick(fileInput)">
+                                matTooltip="Import" (click)="ImportClick(fileInpute)">
                                 <mat-icon>cloud_upload</mat-icon>
                             </button>
-                            <input type="file" #fileInput style="display: none;" (click)="fileInput.value=''"
+                            <input type="file" #fileInpute style="display: none;" (click)="fileInpute.value=''"
                                 (change)="onFileChange($event)" accept=".xlsx, .xls" />
 
                             <button class="btn btn-sm d-flex align-items-center justify-content-center"

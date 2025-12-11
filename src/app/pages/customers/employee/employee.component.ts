@@ -180,8 +180,8 @@ export class EmployeeComponent {
     });
   }
 
-  ImportClick(fileInput: HTMLInputElement): void {
-    fileInput.click();
+  ImportClick(fileInpute: HTMLInputElement): void {
+    fileInpute.click();
   }
   onFileChange(event: Event): void {
     const input = event.target as HTMLInputElement;
