@@ -332,8 +332,7 @@ export const routes: Routes = [
           { path: 'creditnotbalancereport', component: CreditnotebalancereportComponent },
           { path: 'pobalancereport', component: PobalancereportComponent },
           { path: "otherincomereport", component: OtherincomereportComponent },
-          { path: 'otherincomereportentitywise', component: OtherincomeentitywisereportComponent }
-
+          { path: 'otherincomereportentitywise', component: OtherincomeentitywisereportComponent },
           { path: 'billingubr', component: BillingubrComponent },
           { path: 'otherIncomeProcessReport', component: OtherIncomeProcessReportComponent },
           { path: 'employeReportProcess', component: EmployeeReportProcessComponent },
