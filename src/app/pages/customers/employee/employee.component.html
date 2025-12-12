@@ -58,7 +58,7 @@
                                 (change)="onFileChangesalary($event)" accept=".xlsx, .xls" />
 
                             <button class="btn btn-sm d-flex align-items-center justify-content-center"
-                                matTooltip="Download Template">
+                                matTooltip="Download Template" (click)="downloadSalaryTemplate()">
                                 <mat-icon>cloud_download</mat-icon>
                             </button>
                         </div>
@@ -76,7 +76,7 @@
                                 (change)="onFileChange($event)" accept=".xlsx, .xls" />
 
                             <button class="btn btn-sm d-flex align-items-center justify-content-center"
-                                matTooltip="Download Template">
+                                matTooltip="Download Template"  (click)="downloadEmployeeTemplate()">
                                 <mat-icon>cloud_download</mat-icon>
                             </button>
                         </div>

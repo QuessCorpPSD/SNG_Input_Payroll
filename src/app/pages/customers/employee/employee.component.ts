@@ -15,6 +15,7 @@ import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { MatCardModule } from "@angular/material/card";
 import { EmployeeService } from '../../../Service/CUSTOMER/employee.service';
 import { IEmployeeservice } from '../../../Repository/customer/Iemployee';
+import FileSaver from 'file-saver';
 export const Pay_TOKEN = new InjectionToken<IEmployeeservice>('Pay_TOKEN');
 
 @Component({
@@ -52,9 +53,11 @@ export class EmployeeComponent {
     'Action', 'SNo', 'EMPNO', 'EMPNAME', 'CompanyCode', 'DOB', 'Active', 'ORIHIREDDATE', 'SEX', 'Department', 'OCCUPATIONCODE'];
   uploadedData: any[] = [];
   uploadedDataSource = new MatTableDataSource(this.uploadedData);
+  UploadedResponse: any;
+  UploadedResponseSalary: any;
 
   @ViewChild('paginator') paginator!: MatPaginator;
-  constructor(private dialog: MatDialog,@Inject(Pay_TOKEN) private service: IEmployeeservice, private decry: EncryptionService,
+  constructor(private dialog: MatDialog, @Inject(Pay_TOKEN) private service: IEmployeeservice, private decry: EncryptionService,
     private _sessionStoreage: SessionStorageService, private fb: FormBuilder) { }
 
 
@@ -199,80 +202,45 @@ export class EmployeeComponent {
 
     this.service.BulkPOUpload(formData).subscribe({
       next: (res) => {
-        console.log('📥 API Response:', res);
+        this.UploadedResponse = res;
 
-        if (!res || !res.Data) {
-          console.warn('ℹ️ No data returned from server yet.');
-          alert('Upload request processed. Server did not return any data.');
-          return;
+        if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.Data.response.includes('Successfully')) {
+          this.isLoading = false;
+          this.showPopup = true;
+          this.popupMessage = this.UploadedResponse.Data.response;
         }
+        else if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.Data.response === 'Failed to import.') {
 
-        const response = res.Data?.[0]?.Error_Message;
-
-        if (response && response.includes("Row(s) Uploaded Successfully.")) {
-          alert('✅ Rows uploaded successfully.');
-          return;
-        }
-
-        const { parsed, msg } = this.tryParseResponse(response);
-
-        const successMsg = 'Data uploaded successfully.';
-        const successMatch =
-          (Array.isArray(parsed) && parsed[0]?.Message?.trim() === successMsg) ||
-          (parsed && typeof parsed === 'object' && parsed?.Message?.trim() === successMsg);
-
-        if (res?.StatusCode === 200 && successMatch) {
-          alert('✅ Data uploaded successfully.');
-          return;
-        }
-
-        if (res?.StatusCode === 200 && msg?.trim() === 'Failed to import.') {
-          const rawErr = res.Data.errors?.[0];
-          let errorArray: any[] = [];
-
-          try {
-            if (typeof rawErr === 'string') {
-              const tryJson = JSON.parse(rawErr);
-              errorArray = Array.isArray(tryJson) ? tryJson : [tryJson];
-            } else if (Array.isArray(rawErr)) {
-              errorArray = rawErr;
-            } else if (rawErr) {
-              errorArray = [rawErr];
-            }
-          } catch {
-            errorArray = rawErr ? [{ Error_Message: String(rawErr) }] : [];
-          }
-
+          const errorArray = JSON.parse(this.UploadedResponse.Data.errors[0]);
           const exportData = errorArray.map((item: any) => ({
-            Error_Message: item?.Error_Message || ''
+            Error_Message: item.Error_Message || item.Error_Message || ''
+              || item.Message || item.MESSAGE || item.message
           }));
 
           const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
           const workbook: XLSX.WorkBook = {
-            Sheets: { ErrorMessages: worksheet },
+            Sheets: { 'ErrorMessages': worksheet },
             SheetNames: ['ErrorMessages']
           };
-          XLSX.writeFile(workbook, 'ErrorMessages_salaryadvancerelease.xlsx');
 
+          // Export the file
+          XLSX.writeFile(workbook, 'ErrorMessages_SiteMaster.xlsx');
+          this.isLoading = false;
+          alert(this.UploadedResponse.Data.response);
           return;
         }
-
-        // ✅ Fallback if no specific case matched
-        const fallback =
-          msg ||
-          (Array.isArray(parsed) ? JSON.stringify(parsed) :
-            (parsed && typeof parsed === 'object' && parsed.Error_Message) ? parsed.Error_Message :
-              (parsed ? JSON.stringify(parsed) : ''));
-
-        if (fallback) {
-          alert(fallback);
-        } else {
-          // ⚙️ Handle case where API returns message but no data (your current case)
-          if (res?.Message) {
-            alert(`ℹ️ ${res.Message}`);
-          } else {
-            alert('Error while processing response.');
+        else {
+          if (this.UploadedResponse.Data.response != '') {
+            alert(this.UploadedResponse.Data.response);
+            this.isLoading = false;
+            return;
           }
+          else {
+            alert('Error while processing response.');
+            this.isLoading = false;
+            return;
+          }
+
         }
 
       },
@@ -322,78 +290,45 @@ export class EmployeeComponent {
 
     this.service.Upload(formData).subscribe({
       next: (res) => {
-        console.log('📥 API Response:', res);
+        this.UploadedResponseSalary = res;
 
-        if (!res || !res.Data) {
-          console.warn('ℹ️ No data returned from server yet.');
-          alert('Upload request processed. Server did not return any data.');
-          return;
+        if (this.UploadedResponseSalary.StatusCode === 200 && this.UploadedResponseSalary.Data.response.includes('Successfully')) {
+          this.isLoading = false;
+          this.showPopup = true;
+          this.popupMessage = this.UploadedResponseSalary.Data.response;
         }
+        else if (this.UploadedResponseSalary.StatusCode === 200 && this.UploadedResponseSalary.Data.response === 'Failed to import.') {
 
-        const response = res.Data?.[0]?.Error_Message;
-
-        if (response && response.includes("Row(s) Uploaded Successfully.")) {
-          alert('✅ Rows uploaded successfully.');
-          return;
-        }
-
-        const { parsed, msg } = this.tryParseResponses(response);
-
-        const successMsg = 'Data uploaded successfully.';
-        const successMatch =
-          (Array.isArray(parsed) && parsed[0]?.Message?.trim() === successMsg) ||
-          (parsed && typeof parsed === 'object' && parsed?.Message?.trim() === successMsg);
-
-        if (res?.StatusCode === 200 && successMatch) {
-          alert('✅ Data uploaded successfully.');
-          return;
-        }
-
-        if (res?.StatusCode === 200 && msg?.trim() === 'Failed to import.') {
-          const rawErr = res.Data.errors?.[0];
-          let errorArray: any[] = [];
-
-          try {
-            if (typeof rawErr === 'string') {
-              const tryJson = JSON.parse(rawErr);
-              errorArray = Array.isArray(tryJson) ? tryJson : [tryJson];
-            } else if (Array.isArray(rawErr)) {
-              errorArray = rawErr;
-            } else if (rawErr) {
-              errorArray = [rawErr];
-            }
-          } catch {
-            errorArray = rawErr ? [{ Error_Message: String(rawErr) }] : [];
-          }
-
+          const errorArray = JSON.parse(this.UploadedResponseSalary.Data.errors[0]);
           const exportData = errorArray.map((item: any) => ({
-            Error_Message: item?.Error_Message || ''
+            Error_Message: item.Error_Message || item.Error_Message || ''
+              || item.Message || item.MESSAGE || item.message
           }));
 
           const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
           const workbook: XLSX.WorkBook = {
-            Sheets: { ErrorMessages: worksheet },
+            Sheets: { 'ErrorMessages': worksheet },
             SheetNames: ['ErrorMessages']
           };
-          XLSX.writeFile(workbook, 'ErrorMessages_salaryadvancerelease.xlsx');
 
+          // Export the file
+          XLSX.writeFile(workbook, 'ErrorMessages_SiteMaster.xlsx');
+          this.isLoading = false;
+          alert(this.UploadedResponseSalary.Data.response);
           return;
         }
-
-        const fallback =
-          msg ||
-          (Array.isArray(parsed) ? JSON.stringify(parsed) :
-            (parsed && typeof parsed === 'object' && parsed.Error_Message) ? parsed.Error_Message :
-              (parsed ? JSON.stringify(parsed) : ''));
-
-        if (fallback) {
-          alert(fallback);
-        } else {
-          if (res?.Message) {
-            alert(`ℹ️ ${res.Message}`);
-          } else {
-            alert('Error while processing response.');
+        else {
+          if (this.UploadedResponseSalary.Data.response != '') {
+            alert(this.UploadedResponseSalary.Data.response);
+            this.isLoading = false;
+            return;
           }
+          else {
+            alert('Error while processing response.');
+            this.isLoading = false;
+            return;
+          }
+
         }
 
       },
@@ -431,6 +366,100 @@ export class EmployeeComponent {
       disableClose: true,
       data: { rowData: row }
     });
+  }
+
+  downloadEmployeeTemplate() {
+    const templateData = [
+      {
+        "COMPID": "",
+        "NAME": "",
+        "FATHERNAME": "",
+        "GENDER": "",
+        "DOJ": "",
+        "DOB": "",
+        "MARITAL": "",
+        "DEPARTMENT": "",
+        "DESIGNATION": "",
+        "OLDEMPLOYEECODE": "",
+        "PAY CATEGORY": "",
+        "BANK NAME": "",
+        "A/C NO": "",
+        "EMAIL": "",
+        "DATE OF JOIN PAY PERIOD": "",
+        "SWIFTCODE": "",
+        "BRANCH": "",
+        "BRANCHCODE": "",
+        "BANKCODE": "",
+        "HIRING STATUS": "",
+        "MAP NAME": "",
+        "RECRUITER'S NAME": "",
+        "MOBNO": "",
+        "ENTITY LOCATION": "",
+        "COST CENTRE": "",
+        "GROUP NAME": "",
+        "EMPLOYMENT_TYPE": "",
+        "OMS_ID": "",
+        "DMS_ID": "",
+        "NRIC_FIN_NUMBER": "",
+        "FUND_LEVY": "",
+        "RACE_CODE": "",
+        "NATIONAL_CODE": "",
+        "LEAVE_SCHEME": "",
+        "RELIGION": "",
+        "WORK_PASS": "",
+        "SPR_STATUS": "",
+        "SPR_APPROVE_DATE": "",
+        "VISA_NUMBER": "",
+        "VISA_DURATION_START_DATE": "",
+        "VISA_DURATION_END_DATE": "",
+        "RFUND_CODE1": "",
+        "RFUND_CODE2": "",
+        "COUNTRY_OF_BIRTH": "",
+        "PASSPORT_NUMBER": "",
+        "PASSPORT_EXPIRY_DATE": "",
+        "ADDRESS": "",
+        "PIN_CODE": "",
+        "INVOICE_LEGAL_ENTITY": ""
+
+      }
+    ];
+
+    const workSheet = XLSX.utils.json_to_sheet(templateData);
+
+    const workbook: XLSX.WorkBook = {
+      Sheets: { 'Table': workSheet },
+      SheetNames: ['Table']
+    };
+
+    const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const blob = new Blob([buffer], { type: 'application/octet-stream' });
+
+    FileSaver.saveAs(blob, `Employee_Master_Template.xlsx`)
+  }
+
+  downloadSalaryTemplate() {
+    const templateData = [
+      {
+        "COMPCODE": "",
+        "EMPCODE": "",
+        "BAND": "",
+        "PAYCODE": "",
+        "AMOUNT": "",
+        "PAYSEQUENCENO": ""
+      }
+    ];
+
+    const workSheet = XLSX.utils.json_to_sheet(templateData);
+
+    const workbook: XLSX.WorkBook = {
+      Sheets: { 'Table': workSheet },
+      SheetNames: ['Table']
+    };
+
+    const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const blob = new Blob([buffer], { type: 'application/octet-stream' });
+
+    FileSaver.saveAs(blob, `New_Joinee_Salary_Template.xlsx`)
   }
 
 }

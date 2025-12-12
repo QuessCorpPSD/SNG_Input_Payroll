@@ -646,6 +646,18 @@
                     <label class="form-label text-muted small">Date of Death</label>
                     <input class="form-control form-control-sm" type="date" formControlName="DOD">
                 </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Invoice Legal Entity<span style="color:red">*</span></label>
+                    <select class="form-select form-select-sm" formControlName="invoicelegalentity">
+                        <option value="" disabled>Select</option>
+                        <option *ngFor="let legalentity of invoicelegalentity" [value]="legalentity.legalEntityId">{{ legalentity.legalEntityName }}</option>
+                    </select>
+                    <small
+                        *ngIf="employeeForm.get('invoicelegalentity')?.touched && employeeForm.get('invoicelegalentity')?.hasError('required')"
+                        style="color: red;">
+                        Invoice Legal Entity is required
+                    </small>
+                </div>
 
                 <div class="col-md-3" style="display: none;">
                     <label class="form-label text-muted small">Tax Regime<span style="color:red">*</span></label>

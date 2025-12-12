@@ -330,7 +330,7 @@ export class SiteMasterComponent {
     ];
 
     const ws = XLSX.utils.json_to_sheet(templateData);
-    const wb = { Sheets: { 'Site_Master': ws }, SheetNames: ['Site_Master'] };
+    const wb = { Sheets: { 'Table': ws }, SheetNames: ['Table'] };
 
     const buffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
     const blob = new Blob([buffer], { type: 'application/octet-stream' });
