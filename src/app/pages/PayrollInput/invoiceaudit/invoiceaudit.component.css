@@ -40,7 +40,7 @@
   flex-direction: column;
   width: 100%;
   gap: 8px;
-  font-family: "Nunito Sans";
+  font-family: "Montserrat";
   font-size: 12px;
   max-height: 350px;
   overflow: hidden; 
@@ -80,7 +80,7 @@
 ::ng-deep .mat-mdc-header-cell {
     color: #A0A0A0;
     font-size: 12px;
-    font-family: "Nunito Sans";
+    font-family: "Montserrat";
     font-weight: 600;
     line-height: 19.40px;
     word-wrap: break-word;
@@ -93,7 +93,7 @@
 }
 
 ::ng-deep .mat-mdc-cell {
-    font-family: "Nunito Sans";
+    font-family: "Montserrat";
     font-size: 12px;
     font-style: normal;
     font-weight: 600;
@@ -126,7 +126,7 @@
 }
 
 .select-drop {
-    font-family: "Nunito Sans";
+    font-family: "Montserrat";
     font-size: 12px;
     font-weight: 500;
     line-height: 22.4px;
@@ -149,7 +149,7 @@
     width: auto;
     table-layout: auto;
     border-collapse: collapse;
-    font-family: "Nunito Sans";
+    font-family: "Montserrat";
     font-size: 12px;
     font-weight: 600;
     line-height: 22.4px;
@@ -161,7 +161,7 @@
 
 .previewtable th,
 .previewtable td {
-    font-family: "Nunito Sans";
+    font-family: "Montserrat";
     font-size: 12px;
     font-weight: 600;
     line-height: 22.4px;
@@ -174,7 +174,7 @@
 }
 
 .previewtable th {
-    font-family: "Nunito Sans";
+    font-family: "Montserrat";
     font-size: 12px;
     font-weight: 600;
     line-height: 22.4px;
@@ -207,7 +207,7 @@
   } */
 
 .select-drop1 {
-    font-family: "Nunito Sans";
+    font-family: "Montserrat";
     font-size: 12px;
     font-style: normal;
     font-weight: 500;
@@ -232,7 +232,7 @@
     flex-direction: column;
     width: 100%;
     gap: 8px;
-    font-family: "Nunito Sans";
+    font-family: "Montserrat";
     font-size: 12px;
     max-height: 500px;
     overflow: hidden;
@@ -246,7 +246,7 @@
     border-spacing: 0;
     width: max-content;
     min-width: 100%;
-    font-family: Nunito Sans, sans-serif;
+    font-family: Montserrat, sans-serif;
 }
 
 .ts th,
@@ -266,7 +266,7 @@
     color: #A0A0A0;
     font-size: 12px;
     /* or any size you prefer */
-    font-family: "Nunito Sans";
+    font-family: "Montserrat";
     font-weight: 600;
     line-height: 35.33px;
     word-wrap: break-word;

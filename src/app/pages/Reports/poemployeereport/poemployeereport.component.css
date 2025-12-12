@@ -29,7 +29,7 @@
 ::ng-deep .mat-mdc-header-cell {
     color: #A0A0A0;
     font-size: 12px;
-    font-family: "Nunito Sans";
+    font-family: "Montserrat";
     font-weight: 600;
     line-height: 19.40px;
     word-wrap: break-word;
@@ -63,7 +63,7 @@
 }
 
 ::ng-deep .mat-mdc-cell {
-    font-family: "Nunito Sans";
+    font-family: "Montserrat";
     font-size: 12px;
     font-style: normal;
     font-weight: 600;
@@ -101,7 +101,7 @@ select {
   border-radius: 4px;
   border: 1px solid #A0A0A0;
   font-size: 12px;
-  font-family: "Nunito Sans";
+  font-family: "Montserrat";
   color: #222; 
   appearance: outline;
 }
@@ -111,7 +111,7 @@ input {
   border-radius: 4px;
   border: 1px solid #A0A0A0;
   font-size: 12px;
-  font-family: "Nunito Sans";
+  font-family: "Montserrat";
   color: #222; 
   appearance: outline;
 }
@@ -121,7 +121,7 @@ option {
   background-color: #fff;     /* default background */
   color: #222;   
   font-size: 12px;
-  font-family: "Nunito Sans";   /* text color */
+  font-family: "Montserrat";   /* text color */
 }
 
 option:hover {
@@ -144,7 +144,7 @@ option:checked {
   width: auto;
   table-layout: auto;
   border-collapse: collapse;
-  font-family: "Nunito Sans";
+  font-family: "Montserrat";
   font-size: 12px;
   font-weight: 600;
   line-height: 22.4px;
@@ -156,7 +156,7 @@ option:checked {
 
 .previewtable th,
 .previewtable td {
-  font-family: "Nunito Sans";
+  font-family: "Montserrat";
   font-size: 12px;
   font-weight: 600;
   line-height: 22.4px;
@@ -169,7 +169,7 @@ option:checked {
 }
 
 .previewtable th {
-  font-family: "Nunito Sans";
+  font-family: "Montserrat";
   font-size: 12px;
   font-weight: 600;
   line-height: 22.4px;
@@ -227,7 +227,7 @@ option:checked {
   width: 300px;
   height: 42px;
   font-size: 12px;
-  font-family: 'Nunito Sans', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-weight: 500;
   color: var(--text-field-heading-, #89898B);
   text-align: end;

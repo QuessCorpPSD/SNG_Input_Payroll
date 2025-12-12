@@ -1,5 +1,5 @@
   .selectedInput {
-    font-family: 'Nunito Sans', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-weight: 600;
     color: #222222;
     border-bottom: 1px solid #222222;
@@ -57,7 +57,7 @@
     text-align: left;
     font-size: 14px;
     color: #a59999;
-    font-family: 'Nunito Sans';
+    font-family: 'Montserrat';
     overflow-y: auto;
     scrollbar-width: none;
     border-bottom: 1px solid #ddd;
@@ -66,7 +66,7 @@
   li {
     font-size: 16px;
     padding: 8px 0;
-    font-family: 'Nunito Sans';
+    font-family: 'Montserrat';
     font-size: 14px;
     color: #A59999;
     transition: background-color 0.3s;
@@ -80,7 +80,7 @@
   .selected {
     background-color: none;
     background-color: #f0f0f0;
-    font-family: 'Nunito Sans', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-weight: 700;
     color: #222222;
     font-size: 15px;
@@ -89,7 +89,7 @@
   .selectedGreen {
     background-color: none;
     background-color: #EBFFEF;
-    font-family: 'Nunito Sans', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-weight: 700;
     color: #222222;
     font-size: 15px;

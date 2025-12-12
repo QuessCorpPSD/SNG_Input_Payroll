@@ -4,7 +4,7 @@
         flex-direction: column;
         color: white;
         font-size: 0.8em;
-        font-family: Nunito Sans;
+        font-family: Montserrat;
         font-weight: 600;
         line-height: 1em;
         padding: 0.3em;
@@ -12,10 +12,10 @@
     }
 .span-header{
   font-size: 0.7em;
-  font-family: Nunito Sans;
+  font-family: Montserrat;
 }
 p {
-  font-family: Nunito Sans;
+  font-family: Montserrat;
 }
 .progress-bar{
   transition: 1s;
@@ -24,7 +24,7 @@ p {
       align-self: stretch; 
       color: #5D7177; 
       font-size: 0.5em; 
-      font-family: Nunito Sans; 
+      font-family: Montserrat; 
       font-weight: 600;
       word-wrap: break-word
     }

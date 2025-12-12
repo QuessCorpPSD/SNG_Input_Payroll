@@ -7,7 +7,7 @@
 <div style="margin-top: 5px;">
     <div style="justify-content: flex-start; align-items: flex-start;">
         <!-- <div
-            style="left: 5px; top: 25px; color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; word-wrap: break-word">
+            style="left: 5px; top: 25px; color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700; word-wrap: break-word">
             Performa Invoice
 </div> -->
             <div style="float:left;padding-top: 25px;">
@@ -94,7 +94,7 @@
                     <button (click)="InvoiceInitiateClick()"
                         style="width: 120px; height: 40px; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex;border: none;">
                         <div
-                            style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
+                            style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Montserrat; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
                             Invoice Initiate</div>
                     </button>
                 </div>
@@ -163,7 +163,7 @@
         <div style="height: 60px; padding: 10px 20px; border-bottom: 1px #D6D6D6 solid; 
                 display: flex; align-items: center; justify-content: center; position: relative;">
 
-            <div style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; 
+            <div style="color: #302CB3; font-size: 22px; font-family: Montserrat; 
                   font-weight: 700;">
                 Merge Assignment
             </div>
@@ -183,17 +183,17 @@
             <div style="padding: 8px 16px; background: white; border-radius: 6px; 
                   outline: 1px #DEDDE0 solid; display: flex; flex-wrap: wrap; 
                   align-items: center; gap: 10px;">
-                <div style="color: #222222; font-size: 12px; font-family: Nunito Sans; 
+                <div style="color: #222222; font-size: 12px; font-family: Montserrat; 
                     font-weight: 600; line-height: 20px;">
                     Assignment number :
                 </div>
                 <div *ngFor="let num of assignments"
-                    style="color: #222222; font-size: 12px; font-family: Nunito Sans; font-weight: 600;">
+                    style="color: #222222; font-size: 12px; font-family: Montserrat; font-weight: 600;">
                     {{ num }}
                 </div>
             </div>
             <div style="width: 431px; display: flex; flex-direction: column; gap: 10px;">
-                <label style="font-size: 14px; font-family: Nunito Sans; font-weight: 600; color: #1F2937;">
+                <label style="font-size: 14px; font-family: Montserrat; font-weight: 600; color: #1F2937;">
                     Remarks
                 </label>
                 <input type="text" maxlength="100" [(ngModel)]="MergeRemarks" style="width: 431px; padding: 8px; border: none; border-radius: 8px; 
@@ -206,7 +206,7 @@
         <div style="padding: 14px 20px; background: #F9F9F9; border-top: 1px #D6D6D6 solid; 
                 border-radius: 0 0 10px 10px; display: flex; justify-content: center;">
             <button style="height: 32px; padding: 0px 16px; background: #302CB3; 
-                     color: white; font-size: 12px; font-family: Nunito Sans; 
+                     color: white; font-size: 12px; font-family: Montserrat; 
                      font-weight: 600; border: none; border-radius: 6px; cursor: pointer;" (click)="MergeSubmit()">
                 Submit
             </button>

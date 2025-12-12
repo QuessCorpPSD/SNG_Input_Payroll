@@ -3,14 +3,14 @@
     border-spacing: 0;
     border-radius: 12px;
     overflow: hidden;
-     font-family: Nunito Sans; 
+     font-family: Montserrat; 
 
 }
 
 .table-custom tr {
     
     border: 1px solid #dcdedf;
-     font-family: Nunito Sans; 
+     font-family: Montserrat; 
    
 }
 .table.table-bordered td {
@@ -21,7 +21,7 @@
 .table-custom th,
 .table-custom td {
     
-     font-family: Nunito Sans; 
+     font-family: Montserrat; 
     border-left:  none ;
     border-right:  none ;
     vertical-align: middle;
@@ -56,7 +56,7 @@
     color: #9E9DE2;
 }
 .span-text-header{
-    font-family: Nunito Sans; 
+    font-family: Montserrat; 
     font-size: 0.7em;
     display: inline-block;
     padding: 0px;
@@ -67,10 +67,10 @@
     width: 200px;
     text-align: center;
     cursor: pointer;
-    font-family: Nunito Sans; 
+    font-family: Montserrat; 
   }
 .span-text-detail{
-    font-family: Nunito Sans; 
+    font-family: Montserrat; 
     font-size: 0.5em;
 }
 #companyCode {

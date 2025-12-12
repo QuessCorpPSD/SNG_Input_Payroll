@@ -49,7 +49,7 @@ mat-footer-paginator {
 ::ng-deep .mat-mdc-header-cell {
   color: #A0A0A0;
   font-size: 12px;
-  font-family: "Nunito Sans";
+  font-family: "Montserrat";
   font-weight: 600;
   line-height: 19.40px;
   word-wrap: break-word;
@@ -62,7 +62,7 @@ mat-footer-paginator {
 }
 
 ::ng-deep .mat-mdc-cell {
-  font-family: "Nunito Sans";
+  font-family: "Montserrat";
   font-size: 12px;
   font-style: normal;
   font-weight: 600;
@@ -101,7 +101,7 @@ mat-footer-paginator {
 }
 
 .select-drop {
-  font-family: "Nunito Sans";
+  font-family: "Montserrat";
   font-size: 12px;
   font-weight: 500;
   line-height: 22.4px;
@@ -124,7 +124,7 @@ mat-footer-paginator {
   width: auto;
   table-layout: auto;
   border-collapse: collapse;
-  font-family: "Nunito Sans";
+  font-family: "Montserrat";
   font-size: 12px;
   font-weight: 600;
   line-height: 22.4px;
@@ -136,7 +136,7 @@ mat-footer-paginator {
 
 .previewtable th,
 .previewtable td {
-  font-family: "Nunito Sans";
+  font-family: "Montserrat";
   font-size: 12px;
   font-weight: 600;
   line-height: 22.4px;
@@ -149,7 +149,7 @@ mat-footer-paginator {
 }
 
 .previewtable th {
-  font-family: "Nunito Sans";
+  font-family: "Montserrat";
   font-size: 12px;
   font-weight: 600;
   line-height: 22.4px;

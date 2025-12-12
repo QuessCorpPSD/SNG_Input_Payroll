@@ -30,7 +30,7 @@
 .assignment-number {
     font-size: 10px;
     color:black;
-    font-family: Nunito Sans; 
+    font-family: Montserrat; 
     margin: 10px 0;
 }
 
@@ -40,13 +40,13 @@
     gap: 10px;
     font-size: 14px;
     color: #666;
-    font-family: Nunito Sans; 
+    font-family: Montserrat; 
 }
 
 .assignment-meta .revise {
     background: #ffcc80;
     padding: 5px 8px;
-    font-family: Nunito Sans; 
+    font-family: Montserrat; 
     border-radius: 5px;
 }
 
@@ -57,7 +57,7 @@
     background: #d4edda;
     padding: 5px;
     border-radius: 5px;
-    font-family: Nunito Sans; 
+    font-family: Montserrat; 
 }
 
 i {
@@ -75,7 +75,7 @@ i {
     border: none;
     cursor: pointer;
     border-radius: 5px;
-    font-family: Nunito Sans; 
+    font-family: Montserrat; 
 }
 .dropdown-content {
     display: block;
@@ -85,21 +85,21 @@ i {
     box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.2);
     border-radius: 1px;
     z-index: 1;
-    font-family: Nunito Sans; 
+    font-family: Montserrat; 
 }
 .dropdown-content a {
     color: black;
     padding: 10px;
     text-decoration: none;
     display: block;
-    font-family: Nunito Sans; 
+    font-family: Montserrat; 
 }
 .dropdown-content a:hover {
     background-color: #f1f1f1;
 }
 
 card-body {
-    font-family: Nunito Sans; 
+    font-family: Montserrat; 
     display: flex;
     justify-content: center;
     align-items: center;
@@ -107,7 +107,7 @@ card-body {
     background-color: #f4f4f4;
 }
 .card {
-    font-family: Nunito Sans; 
+    font-family: Montserrat; 
     background: white;
     padding: 10px;
     border-radius: 10px;
@@ -117,13 +117,13 @@ card-body {
     font-size: 0.6em;
     font-weight: bold;
     color: #3a3a8c;
-    font-family: Nunito Sans;
+    font-family: Montserrat;
 }
 
 .visible {
     height: 3em;
     width: 10em;
-    font-family: Nunito Sans;
+    font-family: Montserrat;
     background: rgb(169, 169, 166);
     color: #302CB3;
   }
@@ -134,11 +134,11 @@ card-body {
     margin: 3px 0;
     vertical-align: top;
     font-size: 0.6em;
-     font-family: Nunito Sans; 
+     font-family: Montserrat; 
 }
 .info i {
     color: #777;
-    font-family: Nunito Sans; 
+    font-family: Montserrat; 
 }
 .tag {
     font-size: 0.6em;
@@ -146,7 +146,7 @@ card-body {
     padding: 2px 3px;
     border-radius: 5px;
     color: #fff;
-    font-family: Nunito Sans; 
+    font-family: Montserrat; 
 }
 
   #hc {
@@ -156,7 +156,7 @@ card-body {
     width: 100px;
     height: 10px;  
     font-size: 0.6em;
-    font-family: Nunito Sans; 
+    font-family: Montserrat; 
   }
   #ptag {
     border-radius: 25px;
@@ -169,7 +169,7 @@ card-body {
     height: 10px;  
     font-size: 0.6em;
     color: #9E9DE2;
-    font-family: Nunito Sans; 
+    font-family: Montserrat; 
   }
   #companyCode {
     border-radius: 25px;
@@ -183,7 +183,7 @@ card-body {
     font-size: 0.6em;
     color: #9E9DE2;
     vertical-align: top;
-    font-family: Nunito Sans; 
+    font-family: Montserrat; 
   }
   #hc1 {
     border-radius: 15px;
@@ -194,7 +194,7 @@ card-body {
     font-size: 10px;
     color:#f4c542;
     font-weight: bold;
-    font-family: Nunito Sans; 
+    font-family: Montserrat; 
   }
   #hc2 {
     border-radius: 5px;
@@ -206,7 +206,7 @@ card-body {
     font-weight: bold;   
     vertical-align: middle;
     margin-left: 10px;
-    font-family: Nunito Sans; 
+    font-family: Montserrat; 
   }
  
   
