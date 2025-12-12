@@ -1,0 +1,37 @@
+<div class="page-wrapper">
+    <div class="scrollable-content">
+        <div style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; min-width: 960px">
+            Increament Report
+        </div>
+
+        <div class="container py-3">
+            <div class="row g-3 align-items-end all-inline-row">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Company code</label>
+                    <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+                </div>                
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">PayPeriod</label>
+                    <PayPeriod [selectedCompanyId]="selectedCompanyId" [payPeriodType]="payPeriodType"
+                        (payperiodEmit)="handlePayperiodEvent($event)">
+                    </PayPeriod>
+                </div>
+                <div class="col-md-3">
+                    <label class=" form-label text-muted small">Employee Code</label>
+                    <select class="form-select" [(ngModel)]="employeeCode" name="employeeCode">
+                        <option value="">Select</option>
+                        <option *ngFor="let cat of EmployeeList" [value]="cat.Employee_Id">
+                            {{ cat.Employee_Code }}
+                        </option>
+                    </select>
+                </div>
+                <div class="col-md-3 d-flex gap-2 button-group">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                        matTooltip="ExportToExcel" (click)="exportToExcel()">
+                        <mat-icon>download</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

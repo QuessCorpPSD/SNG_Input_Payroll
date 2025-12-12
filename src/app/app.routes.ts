@@ -129,6 +129,11 @@ import { CreditnoteapproveComponent } from './pages/Invoice/creditnoteapprove/cr
 import { CreditnoteupdateComponent } from './pages/Invoice/creditnoteupdate/creditnoteupdate.component';
 import { PayregisterentitywiseComponent } from './pages/Reports/payregisterentitywise/payregisterentitywise.component';
 import { BillingubrComponent } from './pages/Reports/billingubr/billingubr.component';
+import { BankmasterComponent } from './pages/GlobalMasters/bankmaster/bankmaster.component';
+import { FormulaComponent } from './pages/GlobalMasters/formula/formula.component';
+import { OtherIncomeProcessReportComponent } from './pages/Reports/other-income-process-report/other-income-process-report.component';
+import { EmployeeReportProcessComponent } from './pages/Reports/employee-report-process/employee-report-process.component';
+import { IncrementReportComponent } from './pages/Reports/increment-report/increment-report.component';
 import { AdminnavigationComponent } from './pages/admin/adminnavigation/adminnavigation.component';
 import { CompanypermissionComponent } from './pages/admin/companypermission/companypermission.component';
 import { CompanyinvoiceformatComponent } from './pages/Invoice/companyinvoiceformat/companyinvoiceformat.component';
@@ -320,8 +325,10 @@ export const routes: Routes = [
           { path: 'app-invoice-report', component: InvoiceReportComponent },
           { path: 'app-netpayreport', component: NetpayreportComponent },
           { path: 'payregisterentitywise', component: PayregisterentitywiseComponent },
-          { path: 'billingubr', component: BillingubrComponent }
-
+          { path: 'billingubr', component: BillingubrComponent },
+          { path: 'otherIncomeProcessReport', component: OtherIncomeProcessReportComponent },
+          { path: 'employeReportProcess', component: EmployeeReportProcessComponent },
+          { path: 'IncreamnetReport', component: IncrementReportComponent }
         ]
       },
       {
@@ -365,7 +372,10 @@ export const routes: Routes = [
           { path: "InvoiceLegalEntity", component: InvoiceLegalEntityComponent },
           { path: "Vendor", component: VendorComponent },
           { path: "gst", component: GSTComponent },
-          { path: "sitemaster", component: SiteMasterComponent }
+          { path: "sitemaster", component: SiteMasterComponent },
+          { path: 'BankMaster', component: BankmasterComponent },
+          { path: 'Formula', component: FormulaComponent }
+
 
 
         ]

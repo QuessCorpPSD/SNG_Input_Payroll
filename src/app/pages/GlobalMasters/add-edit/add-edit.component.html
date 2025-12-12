@@ -1,0 +1,114 @@
+<form [formGroup]="EditbankForm" novalidate>
+    <mat-card class="custom-card">
+        <mat-card-header class="sticky-header">
+            <mat-card-title>Edit Bank</mat-card-title>
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="onClose()" class="no-border-icon">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+
+        <mat-card-content class="scroll-content">
+            <br />
+            <!-- Row 1 -->
+            <div class="row g-2 mb-2">
+                <div class="col-md-6">
+                    <label class="form-label">Bank Name<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" formControlName="Bank_Name" />
+                    <div class="text-danger small" *ngIf="EditbankForm.get('Bank_Name')?.touched 
+             && EditbankForm.get('Bank_Name')?.hasError('required')">
+                        BankName is required
+                    </div>
+                    <!-- <select class="form-select" formControlName="POCategory">
+                        <option value="">-- Select --</option>
+                    </select> -->
+                </div>
+
+                <!-- <div class="col-md-4">
+                    <label class="form-label">Bank A/C Digit<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" formControlName="BankA/CDigit" />
+                    <select class="form-select" formControlName="POCategory">
+                        <option value="">-- Select --</option>
+                    </select>
+                </div> -->
+                <!-- <div class="col-md-4">
+                    <label class="form-label">IFSC Code Applicable<span class="text-danger"></span></label>
+                    <input type="text" class="form-control" formControlName="CriteriaType" />
+
+                    <select class="form-select" formControlName="IFSCCodeApplicable">
+                        <option value="">-- Select --</option>
+                    </select>
+                </div> -->
+            </div>
+            <!-- Row 2 -->
+            <div class="row g-2 mb-2">
+                <div class="col-md-6" style="display: none;">
+                    <label class="form-label">Bank Name<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" formControlName="Bank_Id" />
+
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">
+                        Bank A/C Digit<span class="text-danger">*</span>
+                    </label>
+                    <div class="d-flex">
+                        <select class="form-select me-2" style="width: 40%;" formControlName="Digit_Length_Condition">
+                            <option value="">Select</option>
+                            <option value=">">&gt;</option>
+                            <option value="<">&lt;</option>
+                            <option value="=">=</option>
+                            <option value=">=">&ge;</option>
+                            <option value="<=">&le;</option>
+                        </select>
+                        <input type="text" class="form-control" formControlName="Bank_Account_Number_Digits" />
+                    </div>
+                    <div class="text-danger small" *ngIf="EditbankForm.get('Digit_Length_Condition')?.touched 
+             && EditbankForm.get('Digit_Length_Condition')?.hasError('required')">
+                        Digit length is required
+                    </div>
+                </div>
+                <!-- <div class="col-md-4">
+                    <label class="form-label">No.of Digit IFSC Code<span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" formControlName="IFSCCode" />
+                    <div class="text-danger small" *ngIf="EditbankForm.get('IFSCCode')?.touched 
+             && EditbankForm.get('IFSCCode')?.hasError('required')">
+                        IFSCCode is required
+                    </div>
+                     <select class="form-select" formControlName="POCategory">
+                        <option value="">-- Select --</option>
+                    </select> 
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">IFSC Treatment<span class="text-danger"></span></label>
+                    <input type="text" class="form-control" formControlName="IFSCTreatment" />
+                    <select class="form-select" formControlName="POCategory">
+                        <option value="">-- Select --</option>
+                    </select> 
+                </div> -->
+            </div>
+        </mat-card-content>
+        <mat-card-actions style="float:right;">
+            <div class="d-flex justify-content-end mt-3">
+                <div class="btn-1"
+                    style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
+
+                    <button type="Cancel"
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;">
+                        Cancel
+                    </button>
+
+                    <button type="submit"
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white; "
+                        (click)="Save()">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </mat-card-actions>
+    </mat-card>
+</form>
+<br><br><br><br><br>
+<div *ngIf="showPopup" class="overlay">
+    <app-alertpopup *ngIf="showPopup" [message]="popupMessage" class="centered-popup"
+        (close)="showPopup = false"></app-alertpopup>
+</div>
