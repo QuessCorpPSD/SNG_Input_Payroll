@@ -95,7 +95,6 @@ import { PaytransactionComponent } from './pages/Process/paytransaction/paytrans
 import { ReimbrusmentcalenderComponent } from './pages/Process/reimbrusmentcalender/reimbrusmentcalender.component';
 import { PayProcessComponent } from './pages/Process/pay-process/pay-process.component';
 import { CustomernavigationComponent } from './pages/customers/customernavigation/customernavigation.component';
-import { CompanyComponent } from './common/company/company.component';
 import { DepartmentComponent } from './pages/customers/department/department.component';
 import { DesignationComponent } from './pages/customers/designation/designation.component';
 import { BandDetailsComponent } from './pages/customers/band-details/band-details.component';
@@ -129,6 +128,10 @@ import { CreditnoteapproveComponent } from './pages/Invoice/creditnoteapprove/cr
 import { CreditnoteupdateComponent } from './pages/Invoice/creditnoteupdate/creditnoteupdate.component';
 import { PayregisterentitywiseComponent } from './pages/Reports/payregisterentitywise/payregisterentitywise.component';
 import { BillingubrComponent } from './pages/Reports/billingubr/billingubr.component';
+import { CreditnotebalancereportComponent } from './pages/Reports/creditnotebalancereport/creditnotebalancereport.component';
+import { PobalancereportComponent } from './pages/Reports/pobalancereport/pobalancereport.component';
+import { OtherincomereportComponent } from './pages/Reports/otherincomereport/otherincomereport.component';
+import { OtherincomeentitywisereportComponent } from './pages/Reports/otherincomeentitywisereport/otherincomeentitywisereport.component';
 
 
 
@@ -308,7 +311,11 @@ export const routes: Routes = [
           { path: 'app-invoice-report', component: InvoiceReportComponent },
           { path: 'app-netpayreport', component: NetpayreportComponent },
           { path: 'payregisterentitywise', component: PayregisterentitywiseComponent },
-          { path: 'billingubr', component: BillingubrComponent }
+          { path: 'billingubr', component: BillingubrComponent },
+          { path: 'creditnotbalancereport', component: CreditnotebalancereportComponent },
+          { path: 'pobalancereport', component: PobalancereportComponent },
+          { path: "otherincomereport", component: OtherincomereportComponent },
+          { path: 'otherincomereportentitywise', component: OtherincomeentitywisereportComponent }
 
         ]
       },
