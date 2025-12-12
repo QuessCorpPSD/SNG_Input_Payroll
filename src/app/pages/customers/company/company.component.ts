@@ -1,31 +1,31 @@
 import { CommonModule } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CompanyaddComponent } from '../companyadd/companyadd.component';
-import { CompanyserviceService } from '../../../Service/company/companyservice.service';
+import { CompanyserviceService } from '../../../Service/CUSTOMER/companyservice.service';
 import { MatSort } from '@angular/material/sort';
-import { CompanyallComponent } from "../../../common/CompanyAll/companyall.component";
+import { CompanyallComponent } from '../../../common/CompanyAll/companyall.component';
 import * as XLSX from 'xlsx';
 import { CompanyeditComponent } from "../companyedit/companyedit.component";
+import { EncryptionService } from '../../../Shared/encryption.service';
+import { SessionStorageService } from '../../../Shared/SessionStorageService';
+import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.component";
 
 @Component({
   selector: 'app-company',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatTooltipModule, MatTableModule, MatPaginatorModule, FormsModule, ReactiveFormsModule, CompanyallComponent],
+  imports: [CommonModule, MatIconModule, MatTooltipModule, MatTableModule, MatPaginatorModule, FormsModule, AlertpopupComponent],
   templateUrl: './company.component.html',
   styleUrl: './company.component.css'
 })
 export class CompanyComponent {
   selectedCompanyId: any;
   companySearch: any;
-
-  constructor(private dialog: MatDialog, private company: CompanyserviceService,) { }
-
   showTable = false;
   companyForm!: FormGroup;
   message: string = '';
@@ -38,12 +38,17 @@ export class CompanyComponent {
   dynamicColumns: string[] = [];
   tableHeaders: string[] = [];
   @ViewChild(MatSort) sort!: MatSort;
+  CompanyCodeName: any;
+  userdetail: any;
+  CompanyCode: any;
+
+  constructor(private dialog: MatDialog, private company: CompanyserviceService, private _decrypt: EncryptionService, private _sessionStoreage: SessionStorageService) { }
 
   uploadDisplayedColumns: string[] = [
     'Action', 'slNo', 'vendorCode', 'companyName', 'companyCode', 'inputDate', 'outputDate', 'active', 'segment', 'subSegment', 'businessUnitName', 'businessUnitLocation', 'sapCustomerCode', 'profitCenterCode', 'workingHours'
   ];
 
-  uploadedData: any[] = []; // 🧾 No mock data
+  uploadedData: any[] = []; // s No mock data
 
   uploadedDataSource = new MatTableDataSource<any>(this.uploadedData);
 
@@ -109,13 +114,11 @@ export class CompanyComponent {
     this.isLoading = true;
     this.showTable = true;
 
-    const companyCode = this.selectedCompanyId;
+    const companyCode = this.CompanyCode;
     this.company.searchCompany(companyCode).subscribe({
       next: (res) => {
         this.isLoading = false;
-        console.log(res.Data?.data);
         this.companySearch = res.Data?.data;
-        console.log(this.companySearch);
         if (this.companySearch && this.companySearch.length > 0) {
           this.dataSource = new MatTableDataSource(this.companySearch);
           this.dataSource.paginator = this.paginator;
@@ -136,13 +139,10 @@ export class CompanyComponent {
     this.company.exportCompany().subscribe({
       next: (res) => {
         try {
-
           const jsonData = res?.Data?.data?.Table0;
-          console.log(jsonData)
-
           // Check if Data is not an array or empty
           if (!Array.isArray(jsonData) || jsonData.length === 0) {
-            alert(res.Data.message);
+            this.showAlertPopup(res.Data.message);
             return;
           }
 
@@ -156,6 +156,8 @@ export class CompanyComponent {
           const fileName = `Company_${timestamp}.xlsx`;
 
           XLSX.writeFile(wb, fileName);
+          this.showAlertPopup(res.Data?.message || "File downloaded successfully!");
+
         } catch (err) {
           alert('An error occurred while exporting data.')
         }
@@ -167,6 +169,8 @@ export class CompanyComponent {
   }
 
   ngOnInit(): void {
+    const userdetail = this._sessionStoreage.getItem('UserProfile');
+    this.userdetail = JSON.parse(this._decrypt.decrypt(userdetail!));
     this.companyForm = new FormGroup({
       CompanyCode: new FormControl(''),
       CompanyCodeName: new FormControl(''),
@@ -174,21 +178,44 @@ export class CompanyComponent {
   }
 
   AddCompanyMasterOpen() {
-    this.dialog.open(CompanyaddComponent, {
+    const dialogRef = this.dialog.open(CompanyaddComponent, {
       width: '95%',
       height: '90vh',
       disableClose: true,
       data: { example: 'Hello from parent!' }
     });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'refresh') {
+        this.onsearch();
+      }
+    });
   }
 
-  EditCompanyMasterOpen() {
+  EditCompanyMasterOpen(row: any) {
     this.dialog.open(CompanyeditComponent, {
       width: '95%',
       height: '90vh',
       disableClose: true,
-      data: { example: 'Hello from parent!' }
+      data: { CompanyID: row.Company_ID, companyCode: row.Auto_Company_code }
     });
+  }
+
+  deleteCompany(row: any) {
+    const payload = {
+      mode: "Delete",
+      CreatedBy: this.userdetail.user_Id?.toString(),
+      Company_Id: row.Company_ID
+
+    }
+    this.company.deleteCompany(payload).subscribe({
+      next: res => {
+        const msg1 = res.Data.data.Table0[0].Message;
+        this.showAlertPopup(msg1);
+        this.isLoading = false;
+      },
+      error: err => console.error(err)
+    });
+
   }
 
 }

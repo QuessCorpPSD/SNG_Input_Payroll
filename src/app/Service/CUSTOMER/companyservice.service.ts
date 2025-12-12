@@ -28,4 +28,28 @@ export class CompanyserviceService {
   getBusinessUnitLoation(entityId: any): Observable<APIResponse> {
     return this.http.get<APIResponse>(this.env.apiUrl + "Company/GetBussinessunitLocation/" + entityId)
   }
+
+  createCompany(payload: any): Observable<APIResponse> {
+    return this.http.post<APIResponse>(this.env.apiUrl + 'Company/Create', payload)
+  }
+
+  getBankName(): Observable<APIResponse> {
+    return this.http.get<APIResponse>(this.env.apiUrl + 'CorporateBank/Search')
+  }
+
+  getCompanySearch(): Observable<APIResponse> {
+    return this.http.get<APIResponse>(this.env.apiUrl + 'VendorMaster/Search')
+  }
+
+  viewCompanyDetails(companyId: any): Observable<APIResponse> {
+    return this.http.get<APIResponse>(this.env.apiUrl + 'Company/View/' + companyId)
+  }
+
+  updateCompany(payload: any): Observable<APIResponse> {
+    return this.http.post<APIResponse>(this.env.apiUrl + 'Company/Update', payload)
+  }
+
+  deleteCompany(payload: any): Observable<APIResponse> {
+    return this.http.post<APIResponse>(this.env.apiUrl + 'Company/DeleteCompany', payload)
+  }
 }

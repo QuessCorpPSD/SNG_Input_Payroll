@@ -22,7 +22,7 @@
                     <label class="form-label">Comapny Name<span class="text-danger">*</span></label>
                     <!-- <input type="date" class="form-control" formControlName="EffectiveDate" />-->
                     <select class="form-select" formControlName="ComapnyName">
-                        <option *ngFor="let p of companyName" [value]="p.value">{{p.name}} </option>
+                        <option *ngFor="let p of companyName" [value]="p.Client_Id">{{p.Client_Name}} </option>
                     </select>
                     <div class="text-danger small" *ngIf="CompanyAddForm.get('ComapnyName')?.touched 
              && CompanyAddForm.get('ComapnyName')?.hasError('required')">
@@ -88,14 +88,14 @@
                     </label>
 
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="PayrollType" value="flexi"
+                        <input class="form-check-input" type="radio" name="PayrollType" value="1"
                             formControlName="PayrollType" id="payTypeFlexi">
                         <label class="form-check-label" for="payTypeFlexi">
                             Flexi
                         </label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="PayrollType" value="flat"
+                        <input class="form-check-input" type="radio" name="PayrollType" value="0"
                             formControlName="PayrollType" id="payTypeFlat">
                         <label class="form-check-label" for="payTypeFlat">
                             Flat
@@ -173,7 +173,7 @@
                         </label>
                     </div> -->
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="InvoiceType" value="Multiple"
+                        <input class="form-check-input" type="radio" name="InvoiceType" value="1"
                             formControlName="InvoiceType">
                         <label class="form-check-label" for="InvoiceTypeMultiple">
                             Multiple
@@ -194,14 +194,14 @@
                 <div class="col-md-4">
                     <label class="form-label d-block">Is Insurance Applicable<span class="text-danger"></span></label>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="InsuranceApplicable" value="yes"
+                        <input class="form-check-input" type="radio" name="InsuranceApplicable" value="1"
                             formControlName="InsuranceApplicable" id="InsuranceApplicableYes">
                         <label class="form-check-label" for="InsuranceApplicableyes">
                             Yes
                         </label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="InsuranceApplicable" value="no"
+                        <input class="form-check-input" type="radio" name="InsuranceApplicable" value="0"
                             formControlName="InsuranceApplicable" id="InsuranceApplicableNo">
                         <label class="form-check-label" for="InsuranceApplicableNo">
                             No
@@ -277,14 +277,14 @@
                 <div class="col-md-4">
                     <label class="form-label d-block">Month Days<span class="text-danger"></span></label>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="MonthDays" value="yes"
+                        <input class="form-check-input" type="radio" name="MonthDays" value="1"
                             formControlName="MonthDays" id="MonthDaysYes">
                         <label class="form-check-label" for="MonthDaysyes">
                             Yes
                         </label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="MonthDays" value="no"
+                        <input class="form-check-input" type="radio" name="MonthDays" value="0"
                             formControlName="MonthDays" id="MonthDaysNo">
                         <label class="form-check-label" for="MonthDaysNo">
                             No
@@ -313,14 +313,14 @@
                 <div class="col-md-4">
                     <label class="form-label d-block">Work Days based on<span class="text-danger"></span></label>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="WorkDaysbased" value="Attendance"
+                        <input class="form-check-input" type="radio" name="WorkDaysbased" value="1"
                             formControlName="WorkDaysbased" id="attendance">
                         <label class="form-check-label" for="attendance">
                             Attendance
                         </label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="WorkDaysbased" value="lop"
+                        <input class="form-check-input" type="radio" name="WorkDaysbased" value="0"
                             formControlName="WorkDaysbased" id="lop">
                         <label class="form-check-label" for="lop">
                             LOP
@@ -332,13 +332,13 @@
                     <label class="form-label d-block">CTC</label>
 
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="annum" name="CTC" value="Annum"
+                        <input class="form-check-input" type="radio" id="annum" name="CTC" value="1"
                             formControlName="CTC">
                         <label class="form-check-label" for="annum">Annum</label>
                     </div>
 
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="monthly" name="CTC" value="Monthly"
+                        <input class="form-check-input" type="radio" id="monthly" name="CTC" value="0"
                             formControlName="CTC">
                         <label class="form-check-label" for="monthly">Monthly</label>
                     </div>
@@ -351,9 +351,9 @@
                             <!-- Bank Name -->
                             <div class="mb-3">
                                 <label class="form-label">Bank Name <span class="text-danger">*</span></label>
-                                <select class="form-control" formControlName="BankName">
+                                <select class="form-control" formControlName="BankName" (change)="onBankChange($event)">
                                     <option value="">---Select---</option>
-                                    <option *ngFor="let p of BankName" [value]="p.value">{{p.name}} </option>
+                                    <option *ngFor="let p of BankName" [value]="p.Bank_Id">{{p.Bank_Name}} </option>
                                 </select>
                                 <div class="text-danger small" *ngIf="CompanyAddForm.get('BankName')?.touched 
              && CompanyAddForm.get('BankName')?.hasError('required')">
@@ -493,17 +493,17 @@
                 <div class="col-md-4">
                     <label class="form-label d-block">PO Applicable<span class="text-danger"></span></label>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="POApplicable" value="yes"
+                        <input class="form-check-input" type="radio" name="POApplicable" value="1"
                             formControlName="POApplicable" id="POApplicableyes">
                         <label class="form-check-label" for="POApplicableyes">
-                            Annum
+                            Yes
                         </label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="POApplicable" value="no"
+                        <input class="form-check-input" type="radio" name="POApplicable" value="0"
                             formControlName="POApplicable" id="POApplicableno">
                         <label class="form-check-label" for="POApplicableno">
-                            Monthly
+                            No
                         </label>
                     </div>
                 </div>
@@ -524,14 +524,14 @@
                 <div class="col-md-4">
                     <label class="form-label d-block">PO Wise Batch<span class="text-danger"></span></label>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="POWiseBatch" value="yes"
+                        <input class="form-check-input" type="radio" name="POWiseBatch" value="1"
                             formControlName="POWiseBatch" id="POWiseBatchyes">
                         <label class="form-check-label" for="POWiseBatchyes">
                             Yes
                         </label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="POWiseBatch" value="no"
+                        <input class="form-check-input" type="radio" name="POWiseBatch" value="0"
                             formControlName="POWiseBatch" id="POWiseBatchno">
                         <label class="form-check-label" for="POWiseBatchno">
                             No
@@ -646,8 +646,12 @@
                     <input type="text" class="form-control" formControlName="TAT" />
                 </div>
                 <div class="col-md-4">
-                    <label class="form-label">Valid Date<span class="text-danger"></span></label>
+                    <label class="form-label">Valid Date<span class="text-danger">*</span></label>
                     <input type="date" class="form-control" formControlName="ValidDate" />
+                    <div class="text-danger small" *ngIf="CompanyAddForm.get('ValidDate')?.touched 
+             && CompanyAddForm.get('ValidDate')?.hasError('required')">
+                        ValidDate is required
+                    </div>
                 </div>
             </div>
             <div class="row g-3 mb-3">
@@ -702,7 +706,7 @@
                 </div>
             </div>
             <div class="row g-3 mb-3">
-                <div class="col-md-4">
+                <div class="col-md-4" style="display: none;">
                     <label class="form-label">Reimbrusement Date<span class="text-danger"></span></label>
                     <input type="date" class="form-control" formControlName="ReimbrusementDate" />
                 </div>
@@ -731,13 +735,13 @@
                     <label class="form-label d-block">Is NonInvoice</label>
 
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="noninvoice" name="IsNonInvoice"
-                            value="NonInvoice" formControlName="IsNonInvoice">
+                        <input class="form-check-input" type="radio" id="noninvoice" name="IsNonInvoice" value="1"
+                            formControlName="IsNonInvoice">
                         <label class="form-check-label" for="noninvoice">Non Invoice</label>
                     </div>
 
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="invoice" name="IsNonInvoice" value="Invoice"
+                        <input class="form-check-input" type="radio" id="invoice" name="IsNonInvoice" value="0"
                             formControlName="IsNonInvoice">
                         <label class="form-check-label" for="invoice">Invoice</label>
                     </div>
@@ -906,7 +910,7 @@
                 </div>
                 <div class="col-md-4">
                     <!-- <label class="form-label">Is 40 Billing Model<span class="text-danger"></span></label> -->
-                    <mat-checkbox formControlName="Is40BillingMode">
+                    <mat-checkbox formControlName="Is40BillingModel">
                         Is 40 Billing Model
                     </mat-checkbox>
                 </div>
@@ -969,7 +973,7 @@
             </div>
         </mat-card-content>
         <mat-card-footer class="footer">
-            <div class="col g-3 mb-3">
+            <div class="col g-3 mb-3" style="display:none">
                 <h4 class="form-label"
                     style="color: blue; border-bottom: 1px solid blue; display: inline-block;cursor: pointer;"
                     (click)="AddContactDetails()">
@@ -981,13 +985,14 @@
                     style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
 
                     <button type="Cancel"
-                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;">
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;"
+                        (click)="onClose()">
                         Cancel
                     </button>
 
                     <button type="submit"
                         style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white; "
-                        (click)="Save()">
+                        (click)="AddCompany()">
                         Save
                     </button>
                 </div>
@@ -995,3 +1000,9 @@
         </mat-card-footer>
     </mat-card>
 </form>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets\Loading.gif" alt="Loading...">
+</div>
+<app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+    (close)="showPopup = false">
+</app-alertpopup>

@@ -22,7 +22,7 @@
                     <label class="form-label">Comapny Name<span class="text-danger">*</span></label>
                     <!-- <input type="date" class="form-control" formControlName="EffectiveDate" />-->
                     <select class="form-select" formControlName="ComapnyName">
-                        <option *ngFor="let p of companyName" [value]="p.value">{{p.name}} </option>
+                        <option *ngFor="let p of companyName" [value]="p.Client_Id">{{p.Client_Name}} </option>
                     </select>
                     <div class="text-danger small" *ngIf="CompanyAddForm.get('ComapnyName')?.touched 
              && CompanyAddForm.get('ComapnyName')?.hasError('required')">
@@ -41,7 +41,7 @@
             <div class="row g-3 mb-3">
                 <div class="col-md-4">
                     <label class="form-label">Business Unit Name/Entity<span class="text-danger">*</span></label>
-                    <select class="form-select" formControlName="BusinessUnitName">
+                    <select class="form-select" formControlName="BusinessUnitName" (change)="OnEntitychange($event)">
                         <option *ngFor="let p of entityName" [value]="p.value">{{p.name}} </option>
                     </select>
                     <div class="text-danger small" *ngIf="CompanyAddForm.get('BusinessUnitName')?.touched 
@@ -52,7 +52,7 @@
                 <div class="col-md-4">
                     <label class="form-label">Business Unit Location<span class="text-danger"></span></label>
                     <select class="form-select" formControlName="BusinessUnitLocation">
-                        <option value="">-- Select --</option>
+                        <option *ngFor="let p of BusinessUnitLocation" [value]="p.CITY_ID">{{p.CITY_NAME}} </option>
                     </select>
                 </div>
                 <div class="col-md-4">
@@ -88,14 +88,14 @@
                     </label>
 
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="PayrollType" value="flexi"
+                        <input class="form-check-input" type="radio" name="PayrollType" [value]="true"
                             formControlName="PayrollType" id="payTypeFlexi">
                         <label class="form-check-label" for="payTypeFlexi">
                             Flexi
                         </label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="PayrollType" value="flat"
+                        <input class="form-check-input" type="radio" name="PayrollType" [value]="false"
                             formControlName="PayrollType" id="payTypeFlat">
                         <label class="form-check-label" for="payTypeFlat">
                             Flat
@@ -149,15 +149,15 @@
                 <div class="col-md-4">
                     <label class="form-label">Active<span class="text-danger"></span></label>
                     <select class="form-select" formControlName="Active">
-                        <option value="1">Yes</option>
-                        <option value="0">No</option>
+                        <option [value]="true">Yes</option>
+                        <option [value]="false">No</option>
                     </select>
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">F&F PayMode<span class="text-danger"></span></label>
                     <select class="form-select" formControlName="FPayMode">
-                        <option value="1">Cheque</option>
-                        <option value="2">E-Transfer</option>
+                        <option [value]="true">Cheque</option>
+                        <option [value]="false">E-Transfer</option>
                     </select>
                 </div>
             </div>
@@ -196,14 +196,14 @@
                 <div class="col-md-4">
                     <label class="form-label d-block">Is Insurance Applicable<span class="text-danger"></span></label>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="InsuranceApplicable" value="Yes"
+                        <input class="form-check-input" type="radio" name="InsuranceApplicable" [value]="true"
                             formControlName="InsuranceApplicable" id="InsuranceApplicableYes">
                         <label class="form-check-label" for="InsuranceApplicableyes">
                             Yes
                         </label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="InsuranceApplicable" value="No"
+                        <input class="form-check-input" type="radio" name="InsuranceApplicable" [value]="false"
                             formControlName="InsuranceApplicable" id="InsuranceApplicableNo">
                         <label class="form-check-label" for="InsuranceApplicableNo">
                             No
@@ -279,14 +279,14 @@
                 <div class="col-md-4">
                     <label class="form-label d-block">Month Days<span class="text-danger"></span></label>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="MonthDays" value="Yes"
+                        <input class="form-check-input" type="radio" name="MonthDays" [value]="true"
                             formControlName="MonthDays" id="MonthDaysYes">
                         <label class="form-check-label" for="MonthDaysyes">
                             Yes
                         </label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="MonthDays" value="No"
+                        <input class="form-check-input" type="radio" name="MonthDays" [value]="false"
                             formControlName="MonthDays" id="MonthDaysNo">
                         <label class="form-check-label" for="MonthDaysNo">
                             No
@@ -315,14 +315,14 @@
                 <div class="col-md-4">
                     <label class="form-label d-block">Work Days based on<span class="text-danger"></span></label>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="WorkDaysbased" value="Attendance"
+                        <input class="form-check-input" type="radio" name="WorkDaysbased" [value]="true"
                             formControlName="WorkDaysbased" id="attendance">
                         <label class="form-check-label" for="attendance">
                             Attendance
                         </label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="WorkDaysbased" value="lop"
+                        <input class="form-check-input" type="radio" name="WorkDaysbased" [value]="false"
                             formControlName="WorkDaysbased" id="lop">
                         <label class="form-check-label" for="lop">
                             LOP
@@ -334,13 +334,13 @@
                     <label class="form-label d-block">CTC</label>
 
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="annum" name="CTC" value="Annum"
+                        <input class="form-check-input" type="radio" id="annum" name="CTC" [value]="true"
                             formControlName="CTC">
                         <label class="form-check-label" for="annum">Annum</label>
                     </div>
 
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="monthly" name="CTC" value="Monthly"
+                        <input class="form-check-input" type="radio" id="monthly" name="CTC" [value]="false"
                             formControlName="CTC">
                         <label class="form-check-label" for="monthly">Monthly</label>
                     </div>
@@ -353,9 +353,9 @@
                             <!-- Bank Name -->
                             <div class="mb-3">
                                 <label class="form-label">Bank Name <span class="text-danger">*</span></label>
-                                <select class="form-control" formControlName="BankName">
+                                <select class="form-control" formControlName="BankName" (change)="onBankChange($event)">
                                     <option value="">---Select---</option>
-                                    <option *ngFor="let p of BankName" [value]="p.value">{{p.name}} </option>
+                                    <option *ngFor="let p of BankName" [value]="p.Bank_Id">{{p.Bank_Name}} </option>
                                 </select>
                                 <div class="text-danger small" *ngIf="CompanyAddForm.get('BankName')?.touched 
              && CompanyAddForm.get('BankName')?.hasError('required')">
@@ -434,9 +434,9 @@
                 <div class="col-md-4">
                     <label class="form-label">Onboarding Category</label>
                     <select class="form-select" formControlName="OnboardingCategory">
-                        <option value="">--select---</option>
-                        <option value="1064">Single</option>
-                        <option value="1065">Separate</option>
+                        <option [value]="">--select---</option>
+                        <option [value]="1064">Single</option>
+                        <option [value]="1065">Separate</option>
                     </select>
                 </div>
                 <div class="col-md-4">
@@ -444,8 +444,8 @@
                     <div class="d-flex">
                         <select class="form-select me-2" style="width:40%" formControlName="OnboardingChargesValue">
                             <option value="">Select</option>
-                            <option value="1">%</option>
-                            <option value="0">Rs.</option>
+                            <option [value]="true">%</option>
+                            <option [value]="false">Rs.</option>
                         </select>
                         <input type="text" class="form-control" formControlName="OnboardingCharges">
                     </div>
@@ -456,8 +456,8 @@
                     <label class="form-label">Inedge Category<span class="text-danger"></span></label>
                     <select class="form-select" formControlName="InedgeCategory">
                         <option value="">--select---</option>
-                        <option value="1064">Single</option>
-                        <option value="1065s">Separate</option>
+                        <option [value]="1064">Single</option>
+                        <option [value]="1065">Separate</option>
                     </select>
                 </div>
                 <div class="col-md-4">
@@ -465,8 +465,8 @@
                     <div class="d-flex">
                         <select class="form-select me-2" style="width: 40%;" formControlName="InedgeChargesValue">
                             <option value="">Select</option>
-                            <option value="1">%</option>
-                            <option value="0">Rs.</option>
+                            <option [value]="true">%</option>
+                            <option [value]="false">Rs.</option>
                         </select>
                         <input type="text" class="form-control" formControlName="InedgeCharges" />
                     </div>
@@ -484,8 +484,8 @@
                     <div class="d-flex">
                         <select class="form-select me-2" style="width: 40%;" formControlName="QdemyChargesValue">
                             <option value="">Select</option>
-                            <option value="1">%</option>
-                            <option value="0">Rs.</option>
+                            <option [ngValue]="1">%</option>
+                            <option [ngValue]="0">Rs.</option>
                         </select>
                         <input type="text" class="form-control" formControlName="QdemyCharges" />
                     </div>
@@ -495,17 +495,17 @@
                 <div class="col-md-4">
                     <label class="form-label d-block">PO Applicable<span class="text-danger"></span></label>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="POApplicable" value="yes"
+                        <input class="form-check-input" type="radio" name="POApplicable" [value]="1"
                             formControlName="POApplicable" id="POApplicableyes">
                         <label class="form-check-label" for="POApplicableyes">
-                            Annum
+                            Yes
                         </label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="POApplicable" value="no"
+                        <input class="form-check-input" type="radio" name="POApplicable" [value]="0"
                             formControlName="POApplicable" id="POApplicableno">
                         <label class="form-check-label" for="POApplicableno">
-                            Monthly
+                            No
                         </label>
                     </div>
                 </div>
@@ -515,8 +515,8 @@
                         <select class="form-select me-2" style="width: 40%;"
                             formControlName="TechSubscriptionChargesvalue">
                             <option value="">Select</option>
-                            <option value="1">%</option>
-                            <option value="0">Rs.</option>
+                            <option [value]="true">%</option>
+                            <option [value]="false">Rs.</option>
                         </select>
                         <input type="text" class="form-control" formControlName="TechSubscriptionCharges" />
                     </div>
@@ -526,14 +526,14 @@
                 <div class="col-md-4">
                     <label class="form-label d-block">PO Wise Batch<span class="text-danger"></span></label>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="POWiseBatch" value="yes"
+                        <input class="form-check-input" type="radio" name="POWiseBatch" [value]="true"
                             formControlName="POWiseBatch" id="POWiseBatchyes">
                         <label class="form-check-label" for="POWiseBatchyes">
                             Yes
                         </label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="POWiseBatch" value="no"
+                        <input class="form-check-input" type="radio" name="POWiseBatch" [value]="false"
                             formControlName="POWiseBatch" id="POWiseBatchno">
                         <label class="form-check-label" for="POWiseBatchno">
                             No
@@ -557,16 +557,16 @@
                     <label class="form-label">Dues Based on<span class="text-danger"></span></label>
                     <select class="form-select" formControlName="FDuesBasedon">
                         <option value="">--select---</option>
-                        <option value="1">SD</option>
-                        <option value="2">DR</option>
+                        <option [value]="true">SD</option>
+                        <option [value]="false">DR</option>
                     </select>
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Sourcing/OB Applicable<span class="text-danger"></span></label>
                     <select class="form-select" formControlName="SourcingOBApplicable">
                         <option value="">--select---</option>
-                        <option value="1">Yes</option>
-                        <option value="0">No</option>
+                        <option [value]="true">Yes</option>
+                        <option [value]="false">No</option>
                     </select>
                 </div>
             </div>
@@ -575,8 +575,8 @@
                     <label class="form-label">Insurance<span class="text-danger"></span></label>
                     <select class="form-select" formControlName="Insurance">
                         <option value="">--select---</option>
-                        <option value="1">Yes</option>
-                        <option value="0">No</option>
+                        <option [value]="true">Yes</option>
+                        <option [value]="false">No</option>
                     </select>
                 </div>
             </div>
@@ -620,8 +620,8 @@
                     <label class="form-label">Mode of payment<span class="text-danger"></span></label>
                     <select class="form-select" formControlName="Modeofpayment">
                         <option value="">--select---</option>
-                        <option value="0">Collections</option>
-                        <option value="1">Upfront</option>
+                        <option [value]="false">Collections</option>
+                        <option [value]="true">Upfront</option>
                     </select>
                 </div>
                 <div class="col-md-4" style="display: none;">
@@ -639,8 +639,8 @@
                 <div class="col-md-4">
                     <label class="form-label">Round Off Applicable<span class="text-danger"></span></label>
                     <select class="form-select" formControlName="RoundOffApplicable">
-                        <option value="1">Yes</option>
-                        <option value="0">No</option>
+                        <option [value]="1">Yes</option>
+                        <option [value]="0">No</option>
                     </select>
                 </div>
                 <div class="col-md-4">
@@ -661,18 +661,19 @@
                     <label class="form-label">Deviation<span class="text-danger"></span></label>
                     <select class="form-select" formControlName="Deviation">
                         <option value="">--select---</option>
-                        <option value="1">Yes</option>
-                        <option value="0">No</option>
+                        <option [value]="true">Yes</option>
+                        <option [value]="false">No</option>
                     </select>
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Upload Service Tax Details<span class="text-danger"></span></label>
                     <!-- <input type="date" class="form-control" formControlName="ValidDate" /> -->
                     <span class="upload-link" (click)="triggerFileUploadServiceTax()">
-                        Upload  
+                        Upload
                     </span>
                     <!-- Hidden file input -->
-                    <input type="file" #fileInputServiceTax style="display:none" (change)="onFileSelectedServiceTax($event)">           
+                    <input type="file" #fileInputServiceTax style="display:none"
+                        (change)="onFileSelectedServiceTax($event)">
                 </div>
             </div>
             <div class="row g-3 mb-3">
@@ -687,8 +688,8 @@
                     <!-- <input type="text" class="form-control" formControlName="SalarySMS" /> -->
                     <select class="form-select" formControlName="SalarySMS">
                         <option value="">--select---</option>
-                        <option value="1">Yes</option>
-                        <option value="0">No</option>
+                        <option [value]="true">Yes</option>
+                        <option [value]="false">No</option>
                     </select>
                 </div>
                 <div class="col-md-4">
@@ -709,7 +710,7 @@
                 </div>
             </div>
             <div class="row g-3 mb-3">
-                <div class="col-md-4">
+                <div class="col-md-4" style="display: none;">
                     <label class="form-label">Reimbrusement Date<span class="text-danger"></span></label>
                     <input type="date" class="form-control" formControlName="ReimbrusementDate" />
                 </div>
@@ -738,13 +739,13 @@
                     <label class="form-label d-block">Is NonInvoice</label>
 
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="noninvoice" name="IsNonInvoice"
-                            value="NonInvoice" formControlName="IsNonInvoice">
+                        <input class="form-check-input" type="radio" id="noninvoice" name="IsNonInvoice" [value]="true"
+                            formControlName="IsNonInvoice">
                         <label class="form-check-label" for="noninvoice">Non Invoice</label>
                     </div>
 
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="invoice" name="IsNonInvoice" value="Invoice"
+                        <input class="form-check-input" type="radio" id="invoice" name="IsNonInvoice" [value]="false"
                             formControlName="IsNonInvoice">
                         <label class="form-check-label" for="invoice">Invoice</label>
                     </div>
@@ -867,8 +868,8 @@
                     <label class="form-label">Digital Platform Consent<span class="text-danger">*</span></label>
                     <select class="form-select" formControlName="DigitalPlatformConsent">
                         <option value="">--select---</option>
-                        <option value="1">Yes</option>
-                        <option value="0">No</option>
+                        <option [value]="1">Yes</option>
+                        <option [value]="0">No</option>
                     </select>
                     <div class="text-danger small" *ngIf="CompanyAddForm.get('DigitalPlatformConsent')?.touched 
              && CompanyAddForm.get('DigitalPlatformConsent')?.hasError('required')">
@@ -887,8 +888,8 @@
                     <label class="form-label">IsOneTouchInvoicing</label>
                     <select class="form-select" formControlName="IsOneTouchInvoicing">
                         <option value="">--select---</option>
-                        <option value="1">Yes</option>
-                        <option value="0">No</option>
+                        <option [value]="true">Yes</option>
+                        <option [value]="false">No</option>
                     </select>
                 </div>
                 <div class="col-md-4">
@@ -907,8 +908,8 @@
                     <label class="form-label">IsInovicePoBased</label>
                     <select class="form-select" formControlName="IsInovicePoBased">
                         <option value="">--select---</option>
-                        <option value="1">Yes</option>
-                        <option value="0">No</option>
+                        <option [value]="true">Yes</option>
+                        <option [value]="false">No</option>
                     </select>
                 </div>
                 <div class="col-md-4">
@@ -932,14 +933,10 @@
                     </select>
                 </div>
                 <div class="col-md-4">
-                    <label class="form-label">Bank Advice<span class="text-danger">*</span></label>
+                    <label class="form-label">Bank Advice<span class="text-danger"></span></label>
                     <select class="form-select" formControlName="BankAdvice">
                         <option *ngFor="let p of bankAdvice" [value]="p.value">{{p.name}} </option>
                     </select>
-                    <div class="text-danger small" *ngIf="CompanyAddForm.get('BankAdvice')?.touched 
-             && CompanyAddForm.get('BankAdvice')?.hasError('required')">
-                        BankAdvice is required
-                    </div>
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">ServiceCharge Clubbing</label>
@@ -953,8 +950,8 @@
                     <label class="form-label">DGPSF<span class="text-danger">*</span></label>
                     <select class="form-select" formControlName="DGPSF">
                         <option value="">--select---</option>
-                        <option value="1">Billing</option>
-                        <option value="2">Deduction</option>
+                        <option [value]="1">Billing</option>
+                        <option [value]="0">Deduction</option>
                     </select>
                     <div class="text-danger small" *ngIf="CompanyAddForm.get('DGPSF')?.touched 
              && CompanyAddForm.get('DGPSF')?.hasError('required')">
@@ -965,8 +962,8 @@
                     <label class="form-label">Sector<span class="text-danger">*</span></label>
                     <select class="form-select" formControlName="Sector">
                         <option value="">--select Sector---</option>
-                        <option value="Public Sector">Public Sector</option>
-                        <option value="Private Sector">Private Sector</option>
+                        <option [value]="0">Public Sector</option>
+                        <option [value]="1">Private Sector</option>
                     </select>
                     <div class="text-danger small" *ngIf="CompanyAddForm.get('Sector')?.touched 
              && CompanyAddForm.get('Sector')?.hasError('required')">
@@ -976,7 +973,7 @@
             </div>
         </mat-card-content>
         <mat-card-footer class="footer">
-            <div class="col g-3 mb-3">
+            <div class="col g-3 mb-3" style="display:none">
                 <h4 class="form-label"
                     style="color: blue; border-bottom: 1px solid blue; display: inline-block;cursor: pointer;"
                     (click)="AddContactDetails()">
@@ -994,11 +991,17 @@
 
                     <button type="submit"
                         style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white; "
-                        (click)="Save()">
-                        Save
+                        (click)="updateCompany()">
+                        Update
                     </button>
                 </div>
             </div>
         </mat-card-footer>
     </mat-card>
 </form>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets\Loading.gif" alt="Loading...">
+</div>
+<app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+    (close)="showPopup = false">
+</app-alertpopup>
