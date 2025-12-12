@@ -31,5 +31,6 @@ export interface IEmployeeservice {
     AddemployeePrevioussave(payload: any): Observable<APIResponse>;
     GetEmployeesByCompanyId(payload: any): Observable<any>;
     SalarySearch(Employeeid: any,): Observable<APIResponse>;
+    GetInvoiceLegalEntity(): Observable<APIResponse>;
 
 }

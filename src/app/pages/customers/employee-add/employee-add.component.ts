@@ -57,6 +57,7 @@ export class EmployeeAddComponent {
   selectedCompanyId: any;
   userdetail: any;
   submitted: boolean = false;
+  invoicelegalentity:any;
 
   constructor(private fb: FormBuilder, @Inject(Pay_TOKEN) private service: IEmployeeservice, private dialogRef: MatDialogRef<EmployeeAddComponent>, private dialog: MatDialog, @Inject(MAT_DIALOG_DATA) public data: any,
     private decry: EncryptionService,
@@ -157,7 +158,8 @@ export class EmployeeAddComponent {
       Channel: [this.rowData.ChannelId || ''],
       subvertical: [this.rowData.SubVerticalId || ''],
       Abscondreportingdate: [this.rowData.Abscond_Reporting_Date ? this.formatDate(this.rowData.Abscond_Reporting_Date) : ''],
-      DOD: [this.rowData.Date_Of_Death ? this.formatDate(this.rowData.Date_Of_Death) : '']
+      DOD: [this.rowData.Date_Of_Death ? this.formatDate(this.rowData.Date_Of_Death) : ''],
+      invoicelegalentity: [this.rowData.legalEntityId, Validators.required],
     });
 
     console.log('Row Data:', this.rowData);
@@ -174,6 +176,7 @@ export class EmployeeAddComponent {
     this.BindHiringStatus();
     this.BindEmployeementType();
     this.BindBloodGroup();
+    this.BindInvoiceLegalEntity();
     this.payPeriodType = "All";
   }
 
@@ -308,6 +311,12 @@ export class EmployeeAddComponent {
 
   }
 
+    BindInvoiceLegalEntity() {
+    this.service.GetInvoiceLegalEntity().subscribe({
+      next: res => { this.invoicelegalentity = res.Data }
+    });
+  }  
+
   onsave(): Promise<void> {
     this.submitted = true;
 
@@ -369,7 +378,8 @@ export class EmployeeAddComponent {
           Axpert_Id: raw.axpertid ?? '',
           Is_Black_Listed: raw.blacklisted ?? '',
           Date_Of_Death: raw.DOD ?? '',
-          Death_DocPath: ""
+          Death_DocPath: "",
+          Invoice_Legal_Entity: raw.invoicelegalentity ?? '',
         }
       };
 
