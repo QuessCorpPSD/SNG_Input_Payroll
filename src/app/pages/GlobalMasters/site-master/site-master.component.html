@@ -1,14 +1,13 @@
-<br />
-<div class="page-wrapper">
+<div class="page-wrapper" style="padding-top: 2%;">
     <div class="scrollable-content">
-        <div style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; min-width: 960px">
+        <!-- <div style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; min-width: 960px">
             Site Master
-        </div>
+        </div> -->
+        <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700;">Site
+            Master</mat-card-title>
 
-        <div class="container py-4">
-
+        <div class="container py-2">
             <div class="row g-3 align-items-end">
-
                 <div class="col-md-3">
                     <label class="form-label text-muted small">Company code</label>
                     <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
@@ -45,17 +44,17 @@
             </div>
         </div>
 
-        <!-- Add Button -->
 
         <!-- TABLE SECTION -->
-        <div class="table-wrapper1" style="min-width: 960px;" *ngIf="showTable">
+        <div class="table-wrapper1" style="padding-top: 2%; padding-left: 10px;" *ngIf="showTable">
             <div class="table-scroll">
-
                 <mat-table [dataSource]="dataSource" matSort class="custom-table mat-elevation-z8 auto-fit-table">
 
                     <ng-container matColumnDef="Action">
-                        <mat-header-cell *matHeaderCellDef class="Action"><strong>Action</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row" class="Action">
+                        <mat-header-cell *matHeaderCellDef class="Action"
+                            style="width: 100px !important; min-width: 100px !important; max-width: 100px !important; display: flex; align-items: center;"><strong>Action</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="Action"
+                            style="width: 100px !important; min-width: 100px !important; max-width: 100px !important; display: flex; align-items: center;">
                             <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center"
                                 matTooltip="Delete">
                                 <mat-icon>delete</mat-icon>
@@ -67,8 +66,8 @@
                         </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="SNo">
-                        <mat-header-cell *matHeaderCellDef class="SNo"><strong>SNo</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row" class="SNo">{{ row['Serial_No'] }}</mat-cell>
+                        <mat-header-cell *matHeaderCellDef class="SNo" style="width: 100px !important; min-width: 100px !important; max-width: 100px !important; display: flex; align-items: center;"><strong>SNo</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="SNo" style="width: 100px !important; min-width: 100px !important; max-width: 100px !important; display: flex; align-items: center;">{{ row['Serial_No'] }}</mat-cell>
                     </ng-container>
 
                     <!-- Company Code -->
@@ -82,14 +81,14 @@
                         <mat-header-cell *matHeaderCellDef><strong>Vendor Name</strong></mat-header-cell>
                         <mat-cell *matCellDef="let row">{{ row['Client_Name'] }}</mat-cell>
                     </ng-container>
-                    <ng-container matColumnDef="Group_Id" style="display: none;">
+                    <!-- <ng-container matColumnDef="Group_Id" style="display: none;">
                         <mat-header-cell *matHeaderCellDef><strong>Group_Id</strong></mat-header-cell>
                         <mat-cell *matCellDef="let row">{{ row['Group_Id'] }}</mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="Group_Detail_Id" style="display: none;">
                         <mat-header-cell *matHeaderCellDef><strong>Group_Detail_Id</strong></mat-header-cell>
                         <mat-cell *matCellDef="let row">{{ row['Group_Detail_Id'] }}</mat-cell>
-                    </ng-container>
+                    </ng-container> -->
 
                     <!-- Group Name -->
                     <ng-container matColumnDef="Group Name">
@@ -254,8 +253,7 @@
 
             </div>
 
-            <mat-paginator [length]="dataSource.data.length" [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"
-                showFirstLastButtons>
+            <mat-paginator #paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
             </mat-paginator>
 
         </div>

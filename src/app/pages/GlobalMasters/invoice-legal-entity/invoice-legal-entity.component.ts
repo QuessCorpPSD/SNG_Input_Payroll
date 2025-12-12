@@ -15,6 +15,7 @@ import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import * as XLSX from 'xlsx';
 import FileSaver from 'file-saver';
 import { AlertpopupComponent } from '../../../common/alertpopup/alertpopup.component';
+import { MatCardModule } from "@angular/material/card";
 
 @Component({
   selector: 'app-invoice-legal-entity',
@@ -27,7 +28,8 @@ import { AlertpopupComponent } from '../../../common/alertpopup/alertpopup.compo
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
-    AlertpopupComponent
+    AlertpopupComponent,
+    MatCardModule
   ],
   templateUrl: './invoice-legal-entity.component.html',
   styleUrls: ['./invoice-legal-entity.component.css']
@@ -40,15 +42,15 @@ export class InvoiceLegalEntityComponent implements AfterViewInit {
   entityName: string = "";
   showTable: boolean = false;
 
-  
+
   isLoading: boolean = false;
   showPopup: boolean = false;
   popupMessage: string = '';
   popupSubMessage: string = '';
 
-  uploadDisplayedColumns: string[] = ['Action', 'SI No', 'Entity Name'];
+  uploadDisplayedColumns: string[] = ['SI No', 'Entity Name'];
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild('paginator') paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
@@ -59,7 +61,7 @@ export class InvoiceLegalEntityComponent implements AfterViewInit {
     private fb: FormBuilder,
   ) { }
 
- 
+
   showAlertPopup(message: string, subMessage: string = '') {
     this.popupMessage = message;
     this.popupSubMessage = subMessage;
@@ -123,7 +125,7 @@ export class InvoiceLegalEntityComponent implements AfterViewInit {
     });
   }
 
-  
+
   exportToExcel(): void {
     if (!this.uploadedData || this.uploadedData.length === 0) {
       this.showAlertPopup("No data available to export");
@@ -145,13 +147,12 @@ export class InvoiceLegalEntityComponent implements AfterViewInit {
   AddPOOpen() {
     this.dialog.open(AddInvoiceLegalEntityComponent, {
       width: '35%',
-      height: '36vh',
+      height: '33.5vh',
       disableClose: true,
       data: { example: 'Hello from parent!' }
     });
   }
 
   view(row: any) {
-    console.log("View clicked:", row);
   }
 }

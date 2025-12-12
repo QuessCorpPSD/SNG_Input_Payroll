@@ -1,13 +1,9 @@
   .page-wrapper {
       display: flex;
       align-items: flex-start;
-      height: 100vh;
-      /* Full viewport height */
       overflow: hidden;
-      /* Prevent body scroll */
   }
 
-  /* Left fixed icon area */
   .left-icon {
       flex: 0 0 60px;
       display: flex;
@@ -246,12 +242,29 @@
   }
 
   /* Entity Name column → wide */
-  mat-header-cell:nth-child(3),
-  mat-cell:nth-child(3) {
+  mat-header-cell:nth-child(2),
+  mat-cell:nth-child(2) {
       width: 400px !important;
       min-width: 400px !important;
       max-width: 400px !important;
   }
+
+    mat-header-cell:nth-child(1),
+  mat-cell:nth-child(1) {
+      width: 70px !important;
+      min-width: 70px !important;
+      max-width: 70px !important;
+      text-align: center;
+  }
+
+  /* mat-header-cell:nth-child(1),
+  mat-cell:nth-child(1) {
+      width: 100px !important;
+      min-width: 100px !important;
+      max-width: 100px !important;
+      display: flex;
+      justify-content: center;
+  } */
 
   .loading-overlay {
       position: fixed;

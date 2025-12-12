@@ -27,19 +27,23 @@
                     </companyall>
 
                 </div>
-
-                <div class="col-md-3">
+                <div class="col-md-3" *ngIf="isEntitySelected && !isCompanySelected">
                     <label class="form-label text-muted small">Pay Period</label>
-                    <select class="form-select form-select-sm" [(ngModel)]="payperiod"
-                        (change)="onPayPeriodChange($event)">
+                    <select class="form-select form-select-sm" [(ngModel)]="payperiod">
                         <option value=""> Select</option>
-                        <option *ngFor="let p of payPeriodList" [value]="p.pay_Frequency_Detail_Id">
+                        <option *ngFor="let p of payPeriodList" [ngValue]="p">
                             {{ p.pay_Period }}
                         </option>
                     </select>
                 </div>
 
 
+                <div class="col-md-3" *ngIf="isCompanySelected && !isEntitySelected">
+                    <label class="form-label text-muted small">Pay Period</label>
+                    <PayPeriod [selectedCompanyId]="selectedCC" [payPeriodType]="payPeriodTypetoChild"
+                        (payperiodEmit)="handlePayperiodEvent($event)">
+                    </PayPeriod>
+                </div>
 
                 <div class="col-md-3 d-flex gap-2">
                     <button type="button" class="btn btn-sm d-flex align-items-center justify-content-center"

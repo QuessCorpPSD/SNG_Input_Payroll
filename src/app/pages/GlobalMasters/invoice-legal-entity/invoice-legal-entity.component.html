@@ -1,12 +1,14 @@
-<br />
-<div class="page-wrapper">
+<div class="page-wrapper" style="padding-top: 2%;">
     <div class="scrollable-content">
 
-        <div style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; min-width: 960px">
+        <!-- <div style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; min-width: 960px">
             Invoice Legal Entity
-        </div>
+        </div> -->
 
-        <div class="container py-4">
+        <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 600; ">Invoice
+            Legal Entity</mat-card-title>
+
+        <div class="container py-2">
             <div class="row g-3 align-items-end">
 
                 <div class="col-md-3 small-input">
@@ -23,7 +25,7 @@
                     </button>
                     <button class="btn btn-sm d-flex align-items-center justify-content-center"
                         matTooltip="Export to Excel" (click)="exportToExcel()">
-                        <mat-icon>table_chart</mat-icon>
+                        <mat-icon>download</mat-icon>
                     </button>
 
                     <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Add"
@@ -34,16 +36,13 @@
 
             </div>
         </div>
-
-        <br />
-
-        <div class="table-wrapper1" *ngIf="showTable">
+        <div class="table-wrapper1" style="padding-top: 2%;" *ngIf="showTable">
             <div class="table-scroll">
 
                 <mat-table [dataSource]="uploadedDataSource" matSort
                     class="custom-table mat-elevation-z8 auto-fit-table">
 
-                    <ng-container matColumnDef="Action">
+                    <!-- <ng-container matColumnDef="Action">
                         <mat-header-cell *matHeaderCellDef><strong>Action</strong></mat-header-cell>
                         <mat-cell *matCellDef="let row">
                             <button class="btn btn-sm d-flex align-items-center justify-content-center"
@@ -55,7 +54,7 @@
                                 <mat-icon>edit</mat-icon>
                             </button>
                         </mat-cell>
-                    </ng-container>
+                    </ng-container> -->
 
                     <ng-container matColumnDef="SI No">
                         <mat-header-cell *matHeaderCellDef style="width: 70px;"><strong>SI No</strong></mat-header-cell>
@@ -79,7 +78,7 @@
 
             </div>
 
-            <mat-paginator [length]="uploadedData.length" [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"
+            <mat-paginator #paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
                 showFirstLastButtons>
             </mat-paginator>
 

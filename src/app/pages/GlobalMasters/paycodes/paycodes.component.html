@@ -1,9 +1,11 @@
-<div class="page-wrapper">
+<div class="page-wrapper" style="padding-top: 2%;">
     <div class="scrollable-content">
-<!-- 
+        <!-- 
         <div style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; min-width: 960px">
             Pay Code
         </div> -->
+        <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 600;">Pay
+            Code</mat-card-title>
         <form [formGroup]="Paycodeform">
 
             <div class="container py-2">
@@ -36,7 +38,7 @@
 
                         <button class="btn btn-sm d-flex align-items-center justify-content-center"
                             matTooltip="export to excel" (click)="exportToExcel()">
-                            <mat-icon>table_chart</mat-icon>
+                            <mat-icon>download</mat-icon>
                         </button>
                         <button class="btn  btn-sm d-flex align-items-center justify-content-center" matTooltip="Add"
                             (click)="AddPOOpen()">
@@ -47,15 +49,14 @@
             </div>
         </form>
 
-        <br />
-        <div class="table-wrapper1" style="min-width: 960px;" *ngIf="showTable">
+        <div class="table-wrapper1" style="padding-top: 2%;" *ngIf="showTable">
             <div class="table-scroll">
                 <mat-table [dataSource]="dataSource" class="mat-elevation-z8 custom-table">
 
                     <!--  Action -->
-                    <ng-container matColumnDef="Action">
-                        <mat-header-cell *matHeaderCellDef><strong>Action</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row">
+                    <!-- <ng-container matColumnDef="Action">
+                        <mat-header-cell *matHeaderCellDef class="action"><strong>Action</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="action">
                             <button class="btn btn-sm d-flex align-items-center justify-content-center"
                                 matTooltip="Edit">
                                 <mat-icon>edit</mat-icon>
@@ -65,12 +66,12 @@
                                 <mat-icon>delete</mat-icon>
                             </button>
                         </mat-cell>
-                    </ng-container>
+                    </ng-container> -->
 
                     <!-- 🔹 Sl.No -->
                     <ng-container matColumnDef="slNo">
-                        <mat-header-cell *matHeaderCellDef><strong>Sl.No</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row">{{ row.SNo }}</mat-cell>
+                        <mat-header-cell *matHeaderCellDef class="sno"><strong>Sl.No</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="sno">{{ row.SNo }}</mat-cell>
                     </ng-container>
 
                     <!-- 🔹 Pay Code -->
@@ -158,12 +159,12 @@
                     </ng-container>
 
                     <!-- 🔹 Filter Header Row -->
-                    <ng-container matColumnDef="Actionfilter">
-                        <mat-header-cell *matHeaderCellDef></mat-header-cell>
-                    </ng-container>
+                    <!-- <ng-container matColumnDef="Actionfilter">
+                        <mat-header-cell *matHeaderCellDef class="action"></mat-header-cell>
+                    </ng-container> -->
 
                     <ng-container matColumnDef="slNoFilter">
-                        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef class="sno"></mat-header-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="payCodeFilter">
@@ -174,7 +175,7 @@
                     </ng-container>
 
                     <ng-container matColumnDef="descriptionFilter">
-                        <mat-header-cell *matHeaderCellDef  class="description">
+                        <mat-header-cell *matHeaderCellDef class="description">
                             <input matInput placeholder="Search Description" [(ngModel)]="filterValues.Description"
                                 (keyup)="applyFilter()" />
                         </mat-header-cell>

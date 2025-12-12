@@ -14,6 +14,7 @@ import { EncryptionService } from '../../../Shared/encryption.service';
 import * as XLSX from 'xlsx';
 import { IGstRepository } from '../../../Repository/GlobalMasters/IGstRepository';
 import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.component";
+import { MatCardModule } from "@angular/material/card";
 
 export const Pay_TOKEN = new InjectionToken<IGstRepository>('Pay_TOKEN');
 
@@ -21,7 +22,7 @@ export const Pay_TOKEN = new InjectionToken<IGstRepository>('Pay_TOKEN');
 @Component({
   selector: 'app-gst',
   standalone: true,
-  imports: [MatIconModule, MatTableModule, MatPaginator, CommonModule, MatTooltipModule, FormsModule, AlertpopupComponent],
+  imports: [MatIconModule, MatTableModule, MatPaginator, CommonModule, MatTooltipModule, FormsModule, AlertpopupComponent, MatCardModule],
   templateUrl: './gst.component.html',
   styleUrl: './gst.component.css',
   providers: [

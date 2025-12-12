@@ -13,12 +13,13 @@ import { PaycodeserviceService } from '../../../Service/GlobalMasters/paycodeser
 import { MatSort } from '@angular/material/sort';
 import * as XLSX from 'xlsx';
 import { IPAycodeService } from '../../../Repository/GlobalMasters/Ipaycode.service';
+import { MatCardTitle } from "@angular/material/card";
 
 export const Paycode_TOKEN = new InjectionToken<IPAycodeService>('Paycode_TOKEN');
 @Component({
   selector: 'app-paycodes',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatTooltipModule, MatTableModule, MatPaginatorModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, MatIconModule, MatTooltipModule, MatTableModule, MatPaginatorModule, FormsModule, ReactiveFormsModule, MatCardTitle],
   templateUrl: './paycodes.component.html',
   styleUrl: './paycodes.component.css',
       providers: [{
@@ -41,9 +42,9 @@ export class PaycodesComponent implements AfterViewInit {
 
   showTable = false;
 
-  uploadDisplayedColumns: string[] = ['Action', 'slNo', 'payCode', 'description', 'printAs', 'payType', 'taxable', 'projectTax', 'marginalTax', 'payCodeType', 'lopApplicable', 'pfApplicable', 'esiApplicable', 'ptApplicable', 'pageType', 'accountNumber', 'postingKey'];
+  uploadDisplayedColumns: string[] = ['slNo', 'payCode', 'description', 'printAs', 'payType', 'taxable', 'projectTax', 'marginalTax', 'payCodeType', 'lopApplicable', 'pfApplicable', 'esiApplicable', 'ptApplicable', 'pageType', 'accountNumber', 'postingKey'];
 
-  uploadFilteredColumns: string[] = ['Actionfilter', 'slNoFilter', 'payCodeFilter', 'descriptionFilter', 'printAsFilter', 'payTypeFilter', 'taxableFilter', 'projectTaxFilter', 'marginalTaxFilter', 'payCodeTypeFilter', 'lopApplicableFilter', 'pfApplicableFilter', 'esiApplicableFilter', 'ptApplicableFilter', 'pageTypeFilter', 'accountNumberFilter', 'postingKeyFilter'];
+  uploadFilteredColumns: string[] = [ 'slNoFilter', 'payCodeFilter', 'descriptionFilter', 'printAsFilter', 'payTypeFilter', 'taxableFilter', 'projectTaxFilter', 'marginalTaxFilter', 'payCodeTypeFilter', 'lopApplicableFilter', 'pfApplicableFilter', 'esiApplicableFilter', 'ptApplicableFilter', 'pageTypeFilter', 'accountNumberFilter', 'postingKeyFilter'];
 
   uploadedData: any[] = []; //  No mock data, ready for API hookup
 
@@ -190,7 +191,7 @@ export class PaycodesComponent implements AfterViewInit {
   AddPOOpen() {
     this.dialog.open(PaycodeaddComponent, {
       width: '90%',
-      height: '89.3vh',
+      height: '86vh',
       disableClose: true,
       data: { example: 'Hello from parent!' }
     });

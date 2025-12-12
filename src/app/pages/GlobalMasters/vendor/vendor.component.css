@@ -1,10 +1,7 @@
   .page-wrapper {
     display: flex;
     align-items: flex-start;
-    height: 100vh;
-    /* Full viewport height */
     overflow: hidden;
-    /* Prevent body scroll */
   }
 
   /* Left fixed icon area */
@@ -25,10 +22,9 @@
     padding-left: 10px;
   }
 
-  /* Force min width so horizontal scroll works */
   .container-fluid,
   .table-wrapper1 {
-    min-width: 800px;
+    min-width: 500px;
   }
 
   /* Remove shadow for flat look */
@@ -238,23 +234,23 @@
     }
   }
 
-  /* .SNo {
+  .sno{
     width: 80px !important;
     min-width: 80px !important;
     max-width: 80px !important;
   }
 
   .VC {
-    width: 80px !important;
-    min-width: 80px !important;
-    max-width: 80px !important;
+    width: 100px !important;
+    min-width: 100px !important;
+    max-width: 100px !important;
   }
 
   .VN{
-    width: 400px !important;
-    min-width: 400px !important;
-    max-width: 400px !important;
-  } */
+    width: 300px !important;
+    min-width: 300px !important;
+    max-width: 300px !important;
+  }
   .title {
     color: #302CB3;
     font-size: 22px;
@@ -286,7 +282,6 @@
     background-color: #e9e9e9;
   }
 
-  /* COLUMN WIDTH FIXES */
   .col-small {
     width: 100px !important;
     max-width: 100px !important;
@@ -300,7 +295,6 @@
     max-width: 300px !important;
   }
 
-  /* TABLE SCROLL FIX */
   .table-scroll {
     overflow-x: auto;
     white-space: nowrap;

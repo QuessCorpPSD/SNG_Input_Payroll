@@ -15,9 +15,9 @@ export class BillingubrService implements IBillingUbr {
   GetPayPeriod(): Observable<APIResponse> {
     return this.http.get<APIResponse>(this.env.apiUrl + 'Common/GetPayPeriod');
   }
-  Exporttoexcel(payPeriodId: any): Observable<APIResponse> {
-    return this.http.get<APIResponse>(
-      `${this.env.apiUrl}BillingUBR/GetBillingReport/${payPeriodId}`
+  Exporttoexcel(payload: any): Observable<APIResponse> {
+    return this.http.post<APIResponse>(
+      `${this.env.apiUrl}BillingUBR/GetBillingReport`, payload
     );
   }
 }

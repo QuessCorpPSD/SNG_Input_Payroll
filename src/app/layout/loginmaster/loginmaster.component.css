@@ -370,7 +370,7 @@ html, body {
     text-align: left;
     font-size: 20px;
     color: #000400;
-    font-family: 'Nunito Sans';
+    font-family: 'Montserrat';
 } */
 /* .card {
     min-height:calc(100vh-100px);
@@ -386,7 +386,7 @@ html, body {
     margin: 3rem auto;
     border-radius: 1rem;
     box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.1);
-     font-family: Nunito Sans; 
+     font-family: Montserrat; 
   }
   
 
@@ -460,17 +460,17 @@ html, body {
   }
   .get-started {
     font-size: 1rem;
-     font-family: Nunito Sans; 
+     font-family: Montserrat; 
   }
   
   .welcome-to-qpay {
     font-size: 0.7rem;
     color: #666;
-     font-family: Nunito Sans; 
+     font-family: Montserrat; 
   }
   .form-label{
     font-size: 0.7rem;
-     font-family: Nunito Sans; 
+     font-family: Montserrat; 
   }
   
   .text-parent {

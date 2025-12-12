@@ -1,13 +1,13 @@
-<br />
-<div class="page-wrapper">
+<div class="page-wrapper" style="padding-top: 2%;">
     <div class="scrollable-content">
 
-        <div style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700;">
+        <!-- <div style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700;">
             Vendor Master
-        </div>
+        </div> -->
 
-
-        <div class="container py-4">
+        <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 600;"> Vendor
+            Master</mat-card-title>
+        <div class="container py-2">
             <div class="row g-3 align-items-end">
                 <div class="col-md-3 small-input">
                     <label class="form-label text-muted small">Vendor Name</label>
@@ -24,7 +24,7 @@
 
                     <button class="btn btn-sm d-flex align-items-center justify-content-center"
                         matTooltip="Export to Excel" (click)="exportToExcel()">
-                        <mat-icon>table_chart</mat-icon>
+                        <mat-icon>download</mat-icon>
                     </button>
 
                     <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Add"
@@ -35,45 +35,40 @@
             </div>
         </div>
 
-        <br>
 
-        <!-- TABLE -->
-        <div class="table-wrapper1" *ngIf="showTable">
+        <div class="table-wrapper1" style="padding-top: 2%;" *ngIf="showTable">
             <div class="table-scroll">
 
                 <mat-table [dataSource]="dataSource" matSort class="custom-table mat-elevation-z8 auto-fit-table">
 
                     <!-- Action -->
-                    <ng-container matColumnDef="Action">
+                    <!-- <ng-container matColumnDef="Action">
                         <mat-header-cell *matHeaderCellDef><strong>Action</strong></mat-header-cell>
                         <mat-cell *matCellDef="let row">
                             <button class="btn btn-sm" matTooltip="Edit">
                                 <mat-icon>edit</mat-icon>
                             </button>
                         </mat-cell>
-                    </ng-container>
+                    </ng-container> -->
 
-                    <!-- ✔ FIX: Reduced width -->
                     <ng-container matColumnDef="SI No">
-                        <mat-header-cell *matHeaderCellDef style="width: 70px; min-width: 70px;"><strong>SI
+                        <mat-header-cell *matHeaderCellDef class="sno"><strong>SI
                                 No</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row" style="width: 70px; min-width: 70px;">{{ row['Serial_No']
+                        <mat-cell *matCellDef="let row" class="sno">{{ row['Serial_No']
                             }}</mat-cell>
                     </ng-container>
 
-                    <!-- ✔ FIX: Reduced width -->
                     <ng-container matColumnDef="Vendor Code">
-                        <mat-header-cell *matHeaderCellDef style="width: 120px; min-width: 120px;"><strong>Vendor
+                        <mat-header-cell *matHeaderCellDef class="VC"><strong>Vendor
                                 Code</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row" style="width: 120px; min-width: 120px;">{{ row['Client_Code']
+                        <mat-cell *matCellDef="let row" class="VC">{{ row['Client_Code']
                             }}</mat-cell>
                     </ng-container>
 
-                    <!-- ✔ FIX: Increased width -->
                     <ng-container matColumnDef="Vendor Name">
-                        <mat-header-cell *matHeaderCellDef style="width: 300px; min-width: 300px;"><strong>Vendor
+                        <mat-header-cell *matHeaderCellDef class="VN"><strong>Vendor
                                 Name</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row" style="width: 300px; min-width: 300px;">{{ row['Client_Name']
+                        <mat-cell *matCellDef="let row" class="VN">{{ row['Client_Name']
                             }}</mat-cell>
                     </ng-container>
 
@@ -88,7 +83,7 @@
 
             </div>
 
-            <mat-paginator [length]="dataSource.data.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
+            <mat-paginator #paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
                 showFirstLastButtons>
             </mat-paginator>
 

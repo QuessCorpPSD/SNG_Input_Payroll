@@ -248,3 +248,20 @@
       min-width: 250px !important;
       max-width: 250px !important;
   }
+
+  .action {
+      width: 100px !important;
+      min-width: 100px !important;
+      max-width: 100px !important;
+      display: flex;
+      justify-content: center;
+  }
+
+  
+  .sno {
+      width: 70px !important;
+      min-width: 70px !important;
+      max-width: 70px !important;
+      display: flex;
+      justify-content: center;
+  }

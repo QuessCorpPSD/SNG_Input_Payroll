@@ -1,5 +1,5 @@
 body {
-     font-family: Nunito Sans; 
+     font-family: Montserrat; 
     background-color: #F3F5F7;
     width: 90vw;
     height: 100vh;
@@ -17,7 +17,7 @@ body {
     left: 0;
     top: 5em;
     font-size: 0.8em;
-     font-family: Nunito Sans; 
+     font-family: Montserrat; 
     border: #ffffff,solid;
     overflow-y: auto;
     scrollbar-width: none;
@@ -75,7 +75,7 @@ body {
     margin-left:10.7em;  
     margin-top: 3.9em;  
     background: #ffffff;
-    font-family: Nunito Sans;
+    font-family: Montserrat;
     color: #302CB3;
     overflow-y: auto;
    
