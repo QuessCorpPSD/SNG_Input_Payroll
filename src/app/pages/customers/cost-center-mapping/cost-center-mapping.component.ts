@@ -267,14 +267,14 @@ export class CostCenterMappingComponent {
   DownloadTemplate() {
 
     const templateData = [
-      { Map_Name: "", companyCode: "", costCenter: "" }
+      { Map_Name: "", Company_Code: "", Cost_Center: "" }
     ];
 
     const ws = XLSX.utils.json_to_sheet(templateData);
 
     const wb = {
-      Sheets: { 'CostCenterTemplate': ws },
-      SheetNames: ['CostCenterTemplate']
+      Sheets: { 'Table': ws },
+      SheetNames: ['Table']
     };
 
     const buffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
@@ -285,7 +285,7 @@ export class CostCenterMappingComponent {
 
     FileSaver.saveAs(blob, `CostCenterMapping_Template_${Date.now()}.xlsx`);
 
-    this.showAlertPopup("Template Downloaded Successfully!");
+   // this.showAlertPopup("Template Downloaded Successfully!");
   }
 
   AddPOOpen() {
