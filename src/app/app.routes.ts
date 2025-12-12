@@ -132,6 +132,8 @@ import { BillingubrComponent } from './pages/Reports/billingubr/billingubr.compo
 import { AdminnavigationComponent } from './pages/admin/adminnavigation/adminnavigation.component';
 import { CompanypermissionComponent } from './pages/admin/companypermission/companypermission.component';
 import { CompanyinvoiceformatComponent } from './pages/Invoice/companyinvoiceformat/companyinvoiceformat.component';
+import { MaterialcodeComponent } from './pages/GlobalMasters/materialcode/materialcode.component';
+import { CancelledinvoicerepositoryComponent } from './pages/customers/cancelledinvoicerepository/cancelledinvoicerepository.component';
 
 
 
@@ -290,6 +292,8 @@ export const routes: Routes = [
           { path: "companypaycodemapping", component: CompanypaycodemappingComponent },
           { path: "ServiceCharge", component: ServiceChargeComponent },
           { path: "employee", component: EmployeeComponent },
+          { path: "cancelledinvoicerepository", component: CancelledinvoicerepositoryComponent },
+
 
         ]
       },
@@ -365,7 +369,8 @@ export const routes: Routes = [
           { path: "InvoiceLegalEntity", component: InvoiceLegalEntityComponent },
           { path: "Vendor", component: VendorComponent },
           { path: "gst", component: GSTComponent },
-          { path: "sitemaster", component: SiteMasterComponent }
+          { path: "sitemaster", component: SiteMasterComponent },
+          { path: "materialcode", component: MaterialcodeComponent }
 
 
         ]
