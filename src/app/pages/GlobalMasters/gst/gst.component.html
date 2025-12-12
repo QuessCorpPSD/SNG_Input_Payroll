@@ -1,15 +1,15 @@
-<br />
-<div class="page-wrapper">
+<div class="page-wrapper" style="padding-top: 2%;">
 
     <div class="scrollable-content">
-        <div
+        <!-- <div
             style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; min-width: 960px; padding-left: 25px;">
             GST List
-        </div>
-        <br />
+        </div> -->
+        <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700;"> GST
+            List</mat-card-title>
 
-        <div class="table-wrapper1" style="min-width: 960px;">
-            <div class="col-md-3 d-flex gap-2">
+        <div class="table-wrapper1" style=" padding-top: 2%; padding-left: 10px;">
+            <div class="col-md-3 d-flex">
                 <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Create"
                     (click)="AddPOOpen()">
                     <mat-icon>add</mat-icon>
@@ -19,8 +19,6 @@
                     <mat-icon>table_chart</mat-icon>
                 </button>
             </div>
-            <br />
-
             <div class="table-scroll">
                 <mat-table [dataSource]="uploadedDataSource" matSort
                     class="custom-table mat-elevation-z8 auto-fit-table">
@@ -44,7 +42,7 @@
 
                     <!-- GST Master Id -->
                     <ng-container matColumnDef="GST Master Id">
-                        <mat-header-cell *matHeaderCellDef><strong>GST Master Id</strong></mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef c><strong>GST Master Id</strong></mat-header-cell>
                         <mat-cell *matCellDef="let row">{{ row['GstMasterId'] }}</mat-cell>
                     </ng-container>
 
@@ -93,7 +91,7 @@
                         <mat-header-cell *matHeaderCellDef><strong>Company Address</strong></mat-header-cell>
                         <mat-cell *matCellDef="let row">{{ row['CompanyAddress'] }}</mat-cell>
                     </ng-container>
-                     <ng-container matColumnDef="Entity">
+                    <ng-container matColumnDef="Entity">
                         <mat-header-cell *matHeaderCellDef><strong>Quess Legal Entity</strong></mat-header-cell>
                         <mat-cell *matCellDef="let row">{{ row['EntityName'] }}</mat-cell>
                     </ng-container>
@@ -111,11 +109,10 @@
             </div>
 
             <!-- Paginator -->
-            <mat-paginator #paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
-                showFirstLastButtons aria-label="Select page">
+            <mat-paginator #paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+                aria-label="Select page">
             </mat-paginator>
         </div>
-
     </div>
 </div>
 <div *ngIf="isLoading" class="loading-overlay">

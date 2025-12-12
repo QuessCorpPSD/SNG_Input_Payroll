@@ -1,12 +1,13 @@
-<br />
-<div class="page-wrapper">
+<div class="page-wrapper" style="padding-top: 2%;">
     <div class="scrollable-content">
 
-        <div style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; min-width: 960px">
+        <!-- <div style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; min-width: 960px">
             Entity Master
-        </div>
+        </div> -->
+        <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 600;">Entity
+            Master</mat-card-title>
 
-        <div class="container py-4">
+        <div class="container py-2">
             <div class="row g-3 align-items-end">
                 <div class="col-md-3 small-input">
                     <label class="form-label text-muted small">Entity Name</label>
@@ -23,7 +24,7 @@
 
                     <button class="btn btn-sm d-flex align-items-center justify-content-center"
                         matTooltip="Export to Excel" (click)="exportToExcelLocal()">
-                        <mat-icon>table_chart</mat-icon>
+                        <mat-icon>download</mat-icon>
                     </button>
 
                     <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Add"
@@ -34,17 +35,16 @@
             </div>
         </div>
 
-        <div class="table-wrapper1" style="min-width: 960px;" *ngIf="showTable">
+        <div class="table-wrapper1" style="padding-top: 2%;" *ngIf="showTable">
             <div class="table-scroll">
-
-
                 <mat-table [dataSource]="uploadedDataSource" matSort
                     class="custom-table mat-elevation-z8 auto-fit-table">
 
 
-                    <ng-container matColumnDef="Action">
-                        <mat-header-cell *matHeaderCellDef><strong>Action</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row">
+                    <!-- <ng-container matColumnDef="Action">
+                        <mat-header-cell *matHeaderCellDef
+                          ><strong>Action</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row" >
                             <button class="btn btn-sm d-flex align-items-center justify-content-center"
                                 matTooltip="Delete">
                                 <mat-icon>delete</mat-icon>
@@ -54,7 +54,7 @@
                                 <mat-icon>edit</mat-icon>
                             </button>
                         </mat-cell>
-                    </ng-container>
+                    </ng-container> -->
 
                     <ng-container matColumnDef="SI No">
                         <mat-header-cell *matHeaderCellDef style="width: 70px;"><strong>SI No</strong></mat-header-cell>

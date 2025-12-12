@@ -11,6 +11,7 @@ import * as XLSX from 'xlsx';
 import { FormsModule } from '@angular/forms';
 import { AlertpopupComponent } from '../../../common/alertpopup/alertpopup.component';
 import { VendorMasterService } from '../../../Service/GlobalMasters/vendor-master.service';
+import { MatCardModule } from "@angular/material/card";
 
 @Component({
   selector: 'app-vendor',
@@ -23,8 +24,9 @@ import { VendorMasterService } from '../../../Service/GlobalMasters/vendor-maste
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
-    AlertpopupComponent
-  ],
+    AlertpopupComponent,
+    MatCardModule
+],
   templateUrl: './vendor.component.html',
   styleUrl: './vendor.component.css'
 })
@@ -41,13 +43,12 @@ export class VendorComponent {
   dataSource = new MatTableDataSource<any>();
 
   uploadDisplayedColumns: string[] = [
-    'Action',
     'SI No',
     'Vendor Code',
     'Vendor Name'
   ];
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild('paginator') paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   vendor: any;

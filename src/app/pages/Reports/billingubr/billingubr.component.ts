@@ -46,8 +46,11 @@ export class BillingubrComponent {
       alert('Please select payperiod');
       return;
     }
+    const payload = {
+      "PayPeriod": this.PayPeriod
+    }
 
-    this.service.Exporttoexcel(this.PayPeriod).subscribe({
+    this.service.Exporttoexcel(payload).subscribe({
       next: (res) => {
         console.log('export', res)
         try {

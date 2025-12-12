@@ -5,6 +5,6 @@ export interface INetpaysummary {
     ExporttoExcel(companycode: any, payperiodid: any): Observable<APIResponse>;
     GetEntityNames(): Observable<APIResponse>;
     GetPayperiod(): Observable<APIResponse>;
-    ExporttoExcelByEntity(EntityId: any, payperiodid: any): Observable<APIResponse>;
+    ExporttoExcelByEntity(payload: any): Observable<APIResponse>;
 
 }

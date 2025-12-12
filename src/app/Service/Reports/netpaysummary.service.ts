@@ -16,8 +16,8 @@ export class NetpaysummaryService implements INetpaysummary {
   ExporttoExcel(companycode: any, payperiodid: any): Observable<APIResponse> {
     return this.http.get<APIResponse>(this.env.apiUrl + 'NetpaySummary/ExportToExcel/' + companycode + '/' + payperiodid);
   }
-  ExporttoExcelByEntity(entityId: any, PayPeriodId: any): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.env.apiUrl + 'NetpaySummary/ExportToExcel_Entity/' + entityId + '/' + PayPeriodId);
+  ExporttoExcelByEntity(payload: any): Observable<APIResponse> {
+    return this.http.post<APIResponse>(this.env.apiUrl + 'NetpaySummary/ExportToExcel_Entity', payload);
   }
   GetEntityNames(): Observable<APIResponse> {
     return this.http.get<APIResponse>(this.env.apiUrl + 'Entity/Search')

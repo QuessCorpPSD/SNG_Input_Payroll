@@ -19,9 +19,9 @@ export class PayregisterentitywiseService implements IpayregisterentitywiseServi
   GetPayPeriod(): Observable<APIResponse> {
     return this.http.get<APIResponse>(this.env.apiUrl + 'Common/GetPayPeriod');
   }
-  Exporttoexcel(entityid: any, payPeriodId: any): Observable<APIResponse> {
-    return this.http.get<APIResponse>(
-      `${this.env.apiUrl}PayregisterEntitywise/ExportToExcel/${entityid}/${payPeriodId}`
+  Exporttoexcel(payload: any): Observable<APIResponse> {
+    return this.http.post<APIResponse>(
+      `${this.env.apiUrl}PayregisterEntitywise/ExportToExcel`, payload
     );
   }
 }

@@ -55,41 +55,46 @@ export class PayregisterentitywiseComponent {
       alert('Please select entity');
       return;
     }
-    if(!this.PayPeriod){
+    if (!this.PayPeriod) {
       alert('Please select payperiod');
       return;
     }
 
-    this.service.Exporttoexcel(this.Entity, this.PayPeriod).subscribe({
-    next: (res) => {
-            console.log('export', res)
-            try {
-              const jsonData = res.Data.data.Table0;
-              this.data = res.Data.message;
-    
-              if (!jsonData || jsonData.length === 0) {
-                alert(this.data);
-                return;
-              }
-    
-              const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(jsonData);
-              const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    
-              XLSX.utils.book_append_sheet(wb, ws, "Payregisterentitywise");
-    
-              const timestamp = new Date().toISOString().split('T')[0];
-              const fileName = `Payregisterentitywise_${timestamp}.xlsx`;
-    
-              XLSX.writeFile(wb, fileName);
-    
-            } catch (err) {
-              console.error('Error exporting to Excel:', err);
-            }
-          },
-          error: (err) => {
-            console.error('Error loading data for export', err);
-          },
-        });
-      }
+    const payload = {
+      "EntityId": this.Entity,
+      "PayPeriod": this.PayPeriod?.pay_Period
+    }
+    console.log(JSON.stringify(payload))
+    this.service.Exporttoexcel(payload).subscribe({
+      next: (res) => {
+        console.log('export', res)
+        try {
+          const jsonData = res.Data.data.Table0;
+          this.data = res.Data.message;
+
+          if (!jsonData || jsonData.length === 0) {
+            alert(this.data);
+            return;
+          }
+
+          const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(jsonData);
+          const wb: XLSX.WorkBook = XLSX.utils.book_new();
+
+          XLSX.utils.book_append_sheet(wb, ws, "Payregisterentitywise");
+
+          const timestamp = new Date().toISOString().split('T')[0];
+          const fileName = `Payregisterentitywise_${timestamp}.xlsx`;
+
+          XLSX.writeFile(wb, fileName);
+
+        } catch (err) {
+          console.error('Error exporting to Excel:', err);
+        }
+      },
+      error: (err) => {
+        console.error('Error loading data for export', err);
+      },
+    });
+  }
 
 }

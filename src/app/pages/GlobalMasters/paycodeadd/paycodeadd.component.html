@@ -2,14 +2,13 @@
     <mat-card class="custom-card">
         <mat-card-header class="sticky-header">
 
-            <mat-card-title>Add Pay Code</mat-card-title>
-            <span class="spacer"></span>
+            <mat-card-title style="color: #302CB3; ">Add Pay Code</mat-card-title>
+            <span class=" spacer"></span>
             <button mat-icon-button (click)="onClose()" class="no-border-icon">
                 <mat-icon>close</mat-icon>
             </button>
         </mat-card-header>
-        <mat-card-content class="scroll-content">
-            <br />
+        <mat-card-content class="scroll-content" style="padding-top: 2%;">
             <!-- Row 1 -->
             <div class="row g-3 mb-3">
                 <div class="col-md-4">
@@ -191,9 +190,17 @@
             </div>
         </mat-card-content>
         <mat-card-footer class="footer">
-            <div class="d-flex justify-content-end mt-3">
-                <button type="button" class="btn btn-primary rounded-pill px-3" (click)="onSavePayCode()">Save</button>
-                <button type="reset" class="btn btn-primary me-2 rounded-pill px-3">Cancel</button>
+            <div class="d-flex justify-content-end"
+                style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
+                <button type="button" (click)="onClose()" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+                    cursor: pointer; background-color: #f0f0f0; color: black;">
+                    Cancel
+                </button>
+
+                <button type="button" (click)="onSavePayCode()" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+                    cursor: pointer; background-color: blue; color: white;">
+                    Save
+                </button>
             </div>
         </mat-card-footer>
     </mat-card>

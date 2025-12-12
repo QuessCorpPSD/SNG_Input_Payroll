@@ -14,6 +14,7 @@ import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 import { AlertpopupComponent } from '../../../common/alertpopup/alertpopup.component';
+import { MatCardModule } from "@angular/material/card";
 
 @Component({
   selector: 'app-entity-master',
@@ -26,8 +27,9 @@ import { AlertpopupComponent } from '../../../common/alertpopup/alertpopup.compo
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
-    AlertpopupComponent
-  ],
+    AlertpopupComponent,
+    MatCardModule
+],
   templateUrl: './entity-master.component.html',
   styleUrls: ['./entity-master.component.css']
 })
@@ -53,7 +55,6 @@ export class EntityMasterComponent {
   ) { }
 
   uploadDisplayedColumns: string[] = [
-    'Action',
     'SI No',
     'Entity',
     'Profit Center',
@@ -99,7 +100,7 @@ export class EntityMasterComponent {
         if (!table.length) {
           this.uploadedData = [];
           this.uploadedDataSource.data = [];
-          this.showAlertPopup("No records found");
+          alert("No records found");
           return;
         }
 
@@ -133,7 +134,7 @@ export class EntityMasterComponent {
       error: (err) => {
         this.isLoading = false;
         console.error("Search Error:", err);
-        this.showAlertPopup("Failed to load Entity Master data");
+        alert("Failed to load Entity Master data");
       }
     });
   }
@@ -141,7 +142,7 @@ export class EntityMasterComponent {
  
   exportToExcelLocal() {
     if (!this.uploadedData || this.uploadedData.length === 0) {
-      this.showAlertPopup("No data available to export!");
+      alert("No data available to export!");
       return;
     }
 
@@ -161,13 +162,12 @@ export class EntityMasterComponent {
   AddPOOpen() {
     this.dialog.open(AddEntityMasterComponent, {
       width: '65%',
-      height: '60vh',
+      height: '57vh',
       disableClose: true,
       data: { example: 'Hello from parent!' }
     });
   }
 
   view(row: any) {
-    console.log("View clicked:", row);
   }
 }

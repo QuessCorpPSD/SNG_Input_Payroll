@@ -43,8 +43,6 @@ export class NetpayreportComponent {
   selectedCompanyCode: any;
   payPeriod!: Payperiodclass;
   payPeriodType!: string;
-  // payperiods: string = '';
-  // payPeriodId: number = 0;
   uploadedData: any[] = [];
   showTable: boolean = false;
   userdetail: any;
@@ -63,6 +61,13 @@ export class NetpayreportComponent {
   company: any;
   payperiod: any;
   disabled = false;
+  selectedPP: any;
+  payperiodUI: any;
+  selectedCC: any;
+  selectedCN: any;
+  payPeriodTypetoChild?: string;
+  payperiodId: any;
+
   constructor(
     private dialog: MatDialog,
     private decry: EncryptionService,
@@ -73,6 +78,8 @@ export class NetpayreportComponent {
   ) { }
 
   ngOnInit(): void {
+    this.payPeriodTypetoChild = "All"
+
     const json = this._sessionStoreage.getItem('UserProfile');
 
     if (json) {
@@ -91,7 +98,7 @@ export class NetpayreportComponent {
     if (this.entity) {
       this.isEntitySelected = true;
       this.isCompanySelected = false;
-      this.company = ""; 
+      this.company = "";
     } else {
       this.isEntitySelected = false;
       this.isCompanySelected = false;
@@ -103,7 +110,7 @@ export class NetpayreportComponent {
   previousCompany: any = null;
 
   ngDoCheck() {
-    
+
     if (!this.company || this.company === "" || JSON.stringify(this.company) === "{}") {
       if (this.isCompanySelected) {
         console.log("Company cleared → enabling Entity...");
@@ -114,7 +121,8 @@ export class NetpayreportComponent {
   }
   handleCompanyEvent(value: any) {
     console.log("CompanyEmit:", value);
-
+    this.selectedCC = value.companyId;
+    this.selectedCN = value.companyCode;
     this.company = value;
 
     if (value && value.companyId) {
@@ -139,30 +147,6 @@ export class NetpayreportComponent {
     this.popupSubMessage = subMessage;
     this.showPopup = true;
   }
-  // onEntityChange(selectedEntityId: any) {
-  //   this.selectedEntity = selectedEntityId;
-  //   this.isEntitySelected = !!selectedEntityId;
-
-  //   if (this.isEntitySelected) {
-  //     this.isCompanySelected = false;
-  //     this.selectedCompany = null;
-  //   }
-
-  // }
-
-
-  // handleCompanyEvent(event: any) {
-  //   this.selectedCompany = event;
-  //   this.isCompanySelected = !!event;
-  //   this.selectedCompanyId = event.companyId;
-  //   console.log("Selected Company ID:", this.selectedCompanyId);
-
-  //   if (this.isCompanySelected) {
-  //     this.isEntitySelected = false;
-  //     this.selectedEntity = null;
-  //   }
-  // }
-
   loadPayPeriods() {
     this.service.GetPayperiod().subscribe({
       next: (res: any) => {
@@ -182,80 +166,37 @@ export class NetpayreportComponent {
     });
   }
 
-  onPayPeriodChange(event: any) {
-    const selectedId = Number(event.target.value);
-    const selected = this.payPeriodList.find(
-      p => Number(p.pay_Frequency_Detail_Id) === selectedId
-    );
+  handlePayperiodEvent(payperiod: Payperiodclass) {
+    this.selectedPP = payperiod.payPeriod;
+    this.payperiodId = payperiod.payfrequencyid;
 
-    if (selected) {
-      this.payPeriodId = selectedId;
-      this.payperiods = selected.pay_Period;
-      console.log("Selected PayPeriod ID:", this.payPeriodId, "Name:", this.payperiods);
-    }
+    this.payperiodUI.emit(payperiod);
   }
-  // exportToExcel(): void {
-  //   console.log("Export → Company ID:", this.selectedCompanyId, " PayPeriod ID:", this.payPeriodId);
 
-  //   this.isLoading = true;
-  //   if (!this.selectedCompanyId) {
-  //     this.showAlertPopup("Please select Company");
-  //     this.isLoading = false;
-  //     return;
-  //   }
+  sheetNames: any = {
+    Table0: "Net Pay Summary Report",
+    Table1: "Net Pay Summary Details",
+    Table2: "Partial Hold Summary Report",
+    Table3: "Gratuity Summary Report",
+    Table4: "DBT Hold Summary Report",
+    Table5: "Deduction Flush Out Report"
+  };
 
-  //   if (!this.payPeriodId) {
-  //     this.showAlertPopup("Please select PayPeriod");
-  //     this.isLoading = false;
-  //     return;
-  //   }
 
-  //   this.service.ExporttoExcel(this.selectedCompanyId, this.payPeriodId).subscribe({
-  //     next: (res) => {
-  //       console.log("API Response:", res);
-  //       try {
-  //         const jsonData = res.Data;
-  //         //const jsonData = res.Data.data.Table0;
-
-  //         if (!jsonData || !Array.isArray(jsonData) || jsonData.length === 0) {
-  //           this.showAlertPopup(res.Data.message);
-  //           this.isLoading = false;
-  //           return;
-  //         }
-
-  //         const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(jsonData);
-  //         const wb: XLSX.WorkBook = XLSX.utils.book_new();
-  //         XLSX.utils.book_append_sheet(wb, ws, 'Netpaysummaryreport');
-
-  //         const timestamp = new Date().toISOString().split('T')[0];
-  //         const fileName = `Netpaysummaryreport${timestamp}.xlsx`;
-
-  //         XLSX.writeFile(wb, fileName);
-  //         this.showAlertPopup('Excel file exported successfully!');
-  //         this.isLoading = false;
-
-  //       } catch (err) {
-  //         console.error('Error exporting to Excel:', err);
-  //         this.showAlertPopup('Failed to export data to Excel');
-  //         this.isLoading = false;
-  //       }
-  //     },
-  //     error: (err) => {
-  //       console.error('Error loading data for export', err);
-  //       this.showAlertPopup('Failed to load data for export');
-  //       this.isLoading = false;
-  //     },
-  //   });
-  // }
   exportToExcel(): void {
-    const company = this.company.companyId;
+    const company = this.company?.companyId;
 
-    console.log("Company:", company,
-      "Entity:", this.entity,
-      "PayPeriod:", this.payPeriodId);
     this.isLoading = true;
+    if (!this.entity && !this.company) {
+      alert("Please select Entity or Company");
+      this.isLoading = false;
+      return;
+    }
 
-    if (!this.payPeriodId) {
+    if (
+      (this.isEntitySelected && !this.payperiod) ||
+      (this.isCompanySelected && !this.payperiodId)
+    ) {
       alert("Please select PayPeriod");
       this.isLoading = false;
       return;
@@ -263,40 +204,58 @@ export class NetpayreportComponent {
 
     let apiCall;
 
-    if (this.company) {
-      apiCall = this.service.ExporttoExcel(
-        company,
-        this.payperiod
-      );
+    // ENTITY EXPORT API
+    if (!company) {
+      const payload = {
+        EntityId: this.entity,
+        PayPeriod: this.payperiod?.pay_Period
+      };
+      apiCall = this.service.ExporttoExcelByEntity(payload);
     }
+
+    // COMPANY EXPORT API
     else {
-      apiCall = this.service.ExporttoExcelByEntity(
-        this.entity,
-        this.payperiod
-      );
+      apiCall = this.service.ExporttoExcel(company, this.payperiodId);
     }
 
     apiCall.subscribe({
       next: (res) => {
-        console.log("API Response:", res);
+        const data = res?.Data?.data;
 
-        // const jsonData = res.Data;
-        const jsonData = res?.Data?.data?.Table0;
+        if (!company) {
+          const table0 = data?.Table0 || [];
 
-        if (!jsonData || !Array.isArray(jsonData) || jsonData.length === 0) {
-          alert(res.Data?.message);
+          const wb = XLSX.utils.book_new();
+          const ws = XLSX.utils.json_to_sheet(table0);
+          XLSX.utils.book_append_sheet(wb, ws, "Net Pay Summary Report");
+
+          XLSX.writeFile(wb, "Netpaysummary.xlsx");
+          this.showAlertPopup("Export Successful!");
           this.isLoading = false;
           return;
         }
 
-        const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(jsonData);
-        const wb: XLSX.WorkBook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, 'Netpaysummaryreport');
+        const wb = XLSX.utils.book_new();
+
+        Object.keys(this.sheetNames).forEach(key => {
+          const tableData = data[key] || [];   // empty if null
+
+          let ws: XLSX.WorkSheet;
+
+          if (tableData.length > 0) {
+            ws = XLSX.utils.json_to_sheet(tableData);
+          } else {
+            ws = XLSX.utils.json_to_sheet([{}]);  // create empty sheet
+          }
+
+          XLSX.utils.book_append_sheet(wb, ws, this.sheetNames[key]);
+        });
 
         XLSX.writeFile(wb, "Netpaysummary.xlsx");
         this.showAlertPopup("Export Successful!");
         this.isLoading = false;
       },
+
       error: (err) => {
         console.error("Export Error:", err);
         alert("Failed to export");
@@ -304,6 +263,89 @@ export class NetpayreportComponent {
       }
     });
   }
+
+  // exportToExcel(): void {
+  //   const company = this.company?.companyId;
+
+  //   console.log("Company:", company,
+  //     "Entity:", this.entity,
+  //     "PayPeriod:", this.payperiodId);
+
+  //   this.isLoading = true;
+
+  //   // VALIDATION
+  //   if (
+  //     (this.isEntitySelected && !this.payperiod) ||
+  //     (this.isCompanySelected && !this.payperiodId)
+  //   ) {
+  //     alert("Please select PayPeriod");
+  //     this.isLoading = false;
+  //     return;
+  //   }
+
+  //   let apiCall;
+
+  //   // ENTITY EXPORT
+  //   if (!company) {
+  //     const payload = {
+  //       EntityId: this.entity,
+  //       PayPeriod: this.payperiod?.pay_Period
+  //     };
+  //     apiCall = this.service.ExporttoExcelByEntity(payload);
+  //   }
+
+  //   // COMPANY EXPORT
+  //   else {
+  //     apiCall = this.service.ExporttoExcel(
+  //       company,
+  //       this.payperiodId
+  //     );
+  //   }
+
+  //   apiCall.subscribe({
+  //     next: (res) => {
+  //       console.log("API Response:", res);
+
+  //       const data = res?.Data?.data;
+
+  //       if (!data) {
+  //         alert(res.Data.message);
+  //         this.isLoading = false;
+  //         return;
+  //       }
+
+  //       const wb = XLSX.utils.book_new();
+
+  //       Object.keys(data).forEach((tableName) => {
+  //         const table = data[tableName];
+
+  //         if (Array.isArray(table) && table.length > 0) {
+  //           const ws = XLSX.utils.json_to_sheet(table);
+  //           XLSX.utils.book_append_sheet(wb, ws, tableName);
+  //         }
+  //       });
+
+  //       if (wb.SheetNames.length === 0) {
+  //         alert("No valid data found");
+  //         this.isLoading = false;
+  //         return;
+  //       }
+
+  //       // EXPORT EXCEL
+  //       XLSX.writeFile(wb, "Netpaysummary.xlsx");
+
+  //       this.showAlertPopup("Export Successful!");
+  //       this.isLoading = false;
+  //     },
+
+  //     error: (err) => {
+  //       console.error("Export Error:", err);
+  //       alert("Failed to export");
+  //       this.isLoading = false;
+  //     }
+  //   });
+  // }
+
 
 
   loadEntityNames() {

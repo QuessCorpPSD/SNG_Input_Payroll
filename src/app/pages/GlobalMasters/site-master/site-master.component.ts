@@ -37,9 +37,7 @@ interface APIResponse {
     MatCardModule,
     FormsModule,
     CompanyallComponent,
-    PayPeriodComponent,
     AlertpopupComponent,
-    AddSiteMasterComponent
   ],
   templateUrl: './site-master.component.html',
   styleUrl: './site-master.component.css'
@@ -75,6 +73,8 @@ export class SiteMasterComponent {
   isUploadDataVisible: boolean = false;
   UploadedResponse: any;
 
+  @ViewChild('paginator') paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
   constructor(
     private dialog: MatDialog,
     private decry: EncryptionService,
@@ -96,7 +96,7 @@ export class SiteMasterComponent {
   }
 
   uploadDisplayedColumns: string[] = [
-    'Action', 'SNo', 'Company Code', 'Vendor Name', 'Group_Id', 'Group_Detail_Id', 'Group Name', 'WBS/Cost center',
+    'Action', 'SNo', 'Company Code', 'Vendor Name', 'Group Name', 'WBS/Cost center',
     'SAP Customer Code', 'SAP Customer Name', 'WBS2', 'WBS Name', 'Establishment Name',
     'Establishment Address1', 'Principal Employer Name', 'Principal Employe Address1',
     'Contractor Name', 'Contractor Address1', 'PAYSLIP FORMAT', 'IsLeaveApplicable', 'Active',
@@ -105,8 +105,6 @@ export class SiteMasterComponent {
 
   dataSource = new MatTableDataSource<any>();
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
 
   onSearchClick() {
     this.isLoading = true;
@@ -207,7 +205,7 @@ export class SiteMasterComponent {
   AddPOOpen() {
     this.dialog.open(AddSiteMasterComponent, {
       width: '70%',
-      height: '100vh',
+      height: '93vh',
       disableClose: true,
       data: { mode: 'add' }
     });
@@ -216,7 +214,7 @@ export class SiteMasterComponent {
   openEdit(row: any) {
     const dialogRef = this.dialog.open(AddSiteMasterComponent, {
       width: '70%',
-      height: '100vh',
+      height: '93vh',
       disableClose: true,
       data: { mode: 'edit', row: row }
     });

@@ -1,8 +1,6 @@
   .page-wrapper {
     display: flex;
     align-items: flex-start;
-    height: 100vh;
-    /* Full viewport height */
     overflow: hidden;
     /* Prevent body scroll */
   }
@@ -28,7 +26,7 @@
   /* Force min width so horizontal scroll works */
   .container-fluid,
   .table-wrapper1 {
-    min-width: 600px;
+    min-width: 500px;
   }
 
   /* Remove shadow for flat look */
@@ -95,7 +93,7 @@
     gap: 8px;
     padding: 0px 24px 0 5px;
     /* width: 100%; */
-    max-width: 80px;
+    max-width: 70px;
   }
 
   .table-scroll {
@@ -230,7 +228,7 @@
     }
 
     .custom-table {
-      min-width: 800px;
+      min-width: 700px;
     }
 
     .table-scroll {
@@ -239,8 +237,8 @@
   }
 
   /* SI No column → narrow */
-  mat-header-cell:nth-child(2),
-  mat-cell:nth-child(2) {
+  mat-header-cell:nth-child(1),
+  mat-cell:nth-child(1) {
     width: 70px !important;
     min-width: 70px !important;
     max-width: 70px !important;
@@ -248,8 +246,8 @@
   }
 
   /* Entity Name column → wide */
-  mat-header-cell:nth-child(3),
-  mat-cell:nth-child(3) {
+  mat-header-cell:nth-child(2),
+  mat-cell:nth-child(2) {
     width: 400px !important;
     min-width: 400px !important;
     max-width: 400px !important;

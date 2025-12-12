@@ -135,75 +135,27 @@ export class InvoiceReportComponent {
     }
   }
 
-  // exportToExcel(): void {
-  //   this.isLoading = true;
-
-  //   const companyId = this.selectedCompanyCode;
-  //   const userId = this.userdetail?.user_Id;
-  //   const reportType = this.invoiceForm.value.reportType;
-
-  //   const startDate = this.invoiceForm.value.startDate.split('-').reverse().join('-');
-  //   const endDate = this.invoiceForm.value.endDate.split('-').reverse().join('-');
-
-
-  //   if (!companyId) {
-  //     this.alert("Validation Error", "Please select Company");
-  //     return;
-  //   }
-
-  //   if (!reportType) {
-  //     this.alert("Validation Error", "Please select Report Type");
-  //     return;
-  //   }
-
-  //   if (!userId) {
-  //     this.alert("Error", "User ID not found!");
-  //     return;
-  //   }
-
-  //   console.log("Export Params:", {
-  //     companyId, startDate, endDate, reportType, userId
-  //   });
-
-
-  //   this.reportTypeService.ExporttoExcel(
-  //     companyId,
-  //     startDate,
-  //     endDate,
-  //     reportType,
-  //     userId
-  //   ).subscribe({
-  //     next: (res) => {
-
-  //       const data = res?.Data?.data?.Table0 || [];
-  //       if (data.length === 0) {
-  //         alert(res.Data.message);
-  //         return;
-  //       }
-
-  //       const ws = XLSX.utils.json_to_sheet(data);
-  //       const wb: XLSX.WorkBook = {
-  //         Sheets: { 'InvoiceSummary': ws },
-  //         SheetNames: ['InvoiceSummary']
-  //       };
-
-  //       const buffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-  //       const blob = new Blob([buffer], { type: 'application/octet-stream' });
-
-  //       FileSaver.saveAs(blob, `InvoiceSummary_${Date.now()}.xlsx`);
-
-  //       alert("Excel exported successfully!");
-  //       this.isLoading = false;
-  //     },
-  //     error: (err) => {
-  //       console.error("Export failed:", err);
-  //       alert("Failed to export data");
-  //     }
-  //   });
-  // }
   exportToExcel(): void {
+    const userId = this.userdetail?.user_Id;
 
     this.isLoading = true;
+    if (!this.company && !this.entity) {
+      alert("Please select Company or Entity");
+      this.isLoading = false;
+      return;
+    }
+
+    if (!this.reportType) {
+      alert("Please select Report Type");
+      this.isLoading = false;
+      return;
+    }
+
+    if (!this.startDate || !this.endDate) {
+      alert("Please select Start Date and End Date");
+      this.isLoading = false;
+      return;
+    }
 
     const companyId = this.company?.companyId
     const entityId = this.entity
@@ -211,7 +163,6 @@ export class InvoiceReportComponent {
     const reportType = this.reportType;
     const startDate = this.startDate?.split('-').reverse().join('-');
     const endDate = this.endDate?.split('-').reverse().join('-');
-    const userId = this.userdetail?.user_Id;
 
     console.log('Company:', this.company);
     console.log('Entity:', this.entity);
@@ -226,32 +177,16 @@ export class InvoiceReportComponent {
       userId
     });
 
-    if (!companyId && !entityId) {
-      this.alert("Please select Company or Entity");
-      this.isLoading = false;
-      return;
+
+
+    const payload = {
+      "EntityId": entityId,
+      "FromDate": startDate,
+      "ToDate": endDate,
+      "ReportTypeId": reportType,
+      "UserId": userId
     }
-
-    if (!reportType) {
-      this.alert("Please select Report Type");
-      this.isLoading = false;
-      return;
-    }
-
-    if (!startDate || !endDate) {
-      this.alert("Please select Start Date and End Date");
-      this.isLoading = false;
-      return;
-    }
-
-    if (!userId) {
-      this.alert("User ID not found!");
-      this.isLoading = false;
-      return;
-    }
-
-
-
+    console.log('payload', JSON.stringify(payload));
     let apiCall;
 
     if (companyId) {
@@ -263,13 +198,7 @@ export class InvoiceReportComponent {
         userId
       );
     } else {
-      apiCall = this.reportTypeService.ExporttoExcelByEntity(
-        entityId,
-        startDate,
-        endDate,
-        reportType,
-        userId
-      );
+      apiCall = this.reportTypeService.ExporttoExcelByEntity(payload);
     }
     apiCall.subscribe({
       next: (res) => {
