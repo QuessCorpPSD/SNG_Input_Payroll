@@ -7,7 +7,7 @@
     <div [ngSwitch]="userRole">
       <div class="sidebar" *ngSwitchCase="'admin'">
 
-        <a [routerLink]="['/Master/adminnavigation']" class="nav-link" routerLinkActive="active"
+        <!-- <a [routerLink]="['/Master/adminnavigation']" class="nav-link" routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
           [ngClass]="{ 'inactive-link': !isActive('/Master/adminnavigation') }"><i>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19 18" width="19" height="18" fill="none"
@@ -18,7 +18,7 @@
               <path d="M4 20c0-4 4-6 8-6s8 2 8 6" 
               [attr.fill]="isActive('/Master/adminnavigation')?'#302CB3':'#A9ACB1'" />
             </svg>
-          </i> Admin</a>
+          </i> Admin</a> -->
 
         <a [routerLink]="['/Master/dashboard']" class="nav-link" routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
