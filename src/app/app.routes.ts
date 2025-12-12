@@ -129,6 +129,9 @@ import { CreditnoteapproveComponent } from './pages/Invoice/creditnoteapprove/cr
 import { CreditnoteupdateComponent } from './pages/Invoice/creditnoteupdate/creditnoteupdate.component';
 import { PayregisterentitywiseComponent } from './pages/Reports/payregisterentitywise/payregisterentitywise.component';
 import { BillingubrComponent } from './pages/Reports/billingubr/billingubr.component';
+import { AdminnavigationComponent } from './pages/admin/adminnavigation/adminnavigation.component';
+import { CompanypermissionComponent } from './pages/admin/companypermission/companypermission.component';
+import { CompanyinvoiceformatComponent } from './pages/Invoice/companyinvoiceformat/companyinvoiceformat.component';
 
 
 
@@ -143,6 +146,14 @@ export const routes: Routes = [
       { path: 'user', component: UserMappingComponent },
       { path: 'dashboard', component: DashboardComponent },
       { path: 'changepassword', component: ChangepasswordComponent },
+
+      {
+        path: 'adminnavigation',
+        component: AdminnavigationComponent,
+        children: [
+          { path: 'companypermission', component: CompanypermissionComponent }
+        ]
+      },
       {
         path: 'inputmenu',
         component: InputmenuComponent,
@@ -250,6 +261,7 @@ export const routes: Routes = [
           { path: 'creditnote', component: CreditnoteComponent },
           { path: 'creditnoteapprove', component: CreditnoteapproveComponent },
           { path: 'creditnoteupdate', component: CreditnoteupdateComponent },
+          { path: 'companyinvoiceformat', component: CompanyinvoiceformatComponent },
 
         ]
       },
