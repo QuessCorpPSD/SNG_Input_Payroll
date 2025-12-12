@@ -131,6 +131,9 @@ import { PayregisterentitywiseComponent } from './pages/Reports/payregisterentit
 import { BillingubrComponent } from './pages/Reports/billingubr/billingubr.component';
 import { BankmasterComponent } from './pages/GlobalMasters/bankmaster/bankmaster.component';
 import { FormulaComponent } from './pages/GlobalMasters/formula/formula.component';
+import { OtherIncomeProcessReportComponent } from './pages/Reports/other-income-process-report/other-income-process-report.component';
+import { EmployeeReportProcessComponent } from './pages/Reports/employee-report-process/employee-report-process.component';
+import { IncrementReportComponent } from './pages/Reports/increment-report/increment-report.component';
 
 
 
@@ -310,8 +313,10 @@ export const routes: Routes = [
           { path: 'app-invoice-report', component: InvoiceReportComponent },
           { path: 'app-netpayreport', component: NetpayreportComponent },
           { path: 'payregisterentitywise', component: PayregisterentitywiseComponent },
-          { path: 'billingubr', component: BillingubrComponent }
-
+          { path: 'billingubr', component: BillingubrComponent },
+          { path: 'otherIncomeProcessReport', component: OtherIncomeProcessReportComponent },
+          { path: 'employeReportProcess', component: EmployeeReportProcessComponent },
+          { path: 'IncreamnetReport', component: IncrementReportComponent }
         ]
       },
       {
