@@ -1,5 +1,5 @@
 body {
-  font-family: 'Nunito Sans';
+  font-family: 'Montserrat';
   background-color: #F9F9F9;
   width: 85vw;
   height: 100vh;
@@ -180,21 +180,21 @@ body {
 .headertitle {
   font-size: 32px;
   font-weight: bold;
-  font-family: 'Nunito Sans', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   color: black;
 }
 
 .Questiontitle {
   font-size: 25px;
   font-weight: bold;
-  font-family: 'Nunito Sans', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   color: black;
 }
 
 
 
 .headerdetail {
-  font-family: 'Nunito Sans', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 14px;
   font-weight: normal;
   color: #A0A0A4;
@@ -227,14 +227,14 @@ li:hover {
 .selected {
   background-color: none;
   background-color: #f0f0f0;
-  font-family: 'Nunito Sans', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-weight: 600;
   color: #222222;
   /* or whatever color you want */
 }
 
 .selectedCat {
-  font-family: 'Nunito Sans', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-weight: 600;
   color: #222222;
   border-bottom: 1px solid #222222;
@@ -242,14 +242,14 @@ li:hover {
 }
 
 .selectedQuestion {
-  font-family: 'Nunito Sans', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 17px;
   font-weight: bold;
   color: #222222;
 }
 
 .selectedCategory {
-  font-family: 'Nunito Sans', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   color: #222222;
   border-bottom: 1px solid #222222;
 }
@@ -333,7 +333,7 @@ li:hover {
   color: white;
   border: 1px solid #0094D9;
   font-size: 16px;
-  font-family: 'Nunito Sans', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   border-radius: 8px;
   width: 100%;
   height: 40px;
@@ -352,7 +352,7 @@ li:hover {
 
 .lablefont {
   font-size: 14px;
-  font-family: 'Nunito Sans', sans-serif;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .property-1default-state {
@@ -430,7 +430,7 @@ li:hover {
   text-align: left;
   font-size: 12px;
   color: #222;
-  font-family: 'Nunito Sans';
+  font-family: 'Montserrat';
   padding-bottom: 2%;
 }
 
@@ -444,7 +444,7 @@ li:hover {
   text-align: left;
   font-size: 12px;
   color: #222;
-  font-family: 'Nunito Sans';
+  font-family: 'Montserrat';
   padding-bottom: 5%;
 }
 
@@ -473,7 +473,7 @@ li:hover {
   gap: 8px;
   font-size: 12px;
   color: #222;
-  font-family: 'Nunito Sans', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   cursor: pointer; */
   display: block;
   /* Important: allows stacking */
@@ -555,7 +555,7 @@ li:hover {
   text-align: left;
   font-size: 12px;
   color: #222;
-  font-family: 'Nunito Sans';
+  font-family: 'Montserrat';
 }
 
 
@@ -670,7 +670,7 @@ li:hover {
   text-align: left;
   font-size: 14px;
   color: #a59999;
-  font-family: 'Nunito Sans';
+  font-family: 'Montserrat';
   overflow-y: auto;
   scrollbar-width: none;
 }
@@ -687,7 +687,7 @@ li:hover {
   text-align: left;
   font-size: 14px;
   color: #a59999;
-  font-family: 'Nunito Sans';
+  font-family: 'Montserrat';
   overflow-y: auto;
   scrollbar-width: none;
   border-bottom: 1px solid #ddd;
@@ -774,7 +774,7 @@ li:hover {
   text-align: left;
   font-size: 16px;
   color: #fff;
-  font-family: 'Nunito Sans';
+  font-family: 'Montserrat';
 }
 
 .nested-subanswers {
@@ -813,7 +813,7 @@ li:hover {
 
 .radio-group-wrapper {
   margin-bottom: 16px;
-  font-family: 'Nunito Sans';
+  font-family: 'Montserrat';
 }
 
 .radio-options-inline {
@@ -1041,7 +1041,7 @@ li:hover {
   text-align: left;
   font-size: 16px;
   color: #fff;
-  font-family: 'Nunito Sans';
+  font-family: 'Montserrat';
   cursor: pointer;
 }
 

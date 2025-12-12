@@ -58,7 +58,7 @@
 }
 
 .select-drop {
-    font-family: "Nunito Sans";
+    font-family: "Montserrat";
     font-size: 12px;
     font-style: normal;
     font-weight: 600;
@@ -79,7 +79,7 @@
 }
 
 .select-drop1 {
-    font-family: "Nunito Sans";
+    font-family: "Montserrat";
     font-size: 12px;
     font-style: normal;
     font-weight: 600;
@@ -101,7 +101,7 @@
 
 
 .select-drop2 {
-    font-family: "Nunito Sans";
+    font-family: "Montserrat";
     font-size: 12px;
     font-style: normal;
     font-weight: 600;
@@ -125,7 +125,7 @@
     width: auto;
     table-layout: auto;
     border-collapse: collapse;
-    font-family: "Nunito Sans";
+    font-family: "Montserrat";
     font-size: 12px;
     font-weight: 600;
     line-height: 22.4px;
@@ -137,7 +137,7 @@
 
 .previewtable th,
 .previewtable td {
-    font-family: "Nunito Sans";
+    font-family: "Montserrat";
     font-size: 12px;
     font-weight: 600;
     line-height: 22.4px;
@@ -150,7 +150,7 @@
 }
 
 .previewtable th {
-    font-family: "Nunito Sans";
+    font-family: "Montserrat";
     font-size: 12px;
     font-weight: 600;
     line-height: 22.4px;
@@ -178,7 +178,7 @@
     flex-direction: column;
     width: 1182px;
     gap: 8px;
-    font-family: "Nunito Sans";
+    font-family: "Montserrat";
     font-size: 12px;
     max-height: 500px;
     overflow: hidden;
@@ -193,7 +193,7 @@
     border-spacing: 0;
     width: max-content;
     min-width: 100%;
-    font-family: Nunito Sans, sans-serif;
+    font-family: Montserrat, sans-serif;
 }
 
 .ts th,
@@ -213,7 +213,7 @@
     color: #A0A0A0;
     font-size: 12px;
     /* or any size you prefer */
-    font-family: "Nunito Sans";
+    font-family: "Montserrat";
     font-weight: 600;
     line-height: 35.33px;
     word-wrap: break-word;
@@ -459,7 +459,7 @@ sub {
 .badge-text {
   color: #222222;
   font-size: 10px;
-  font-family: 'Nunito Sans', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-weight: 500;
 }
 
@@ -485,7 +485,7 @@ sub {
 .title {
   color: #302cb3;
   font-size: 22px;
-  font-family: 'Nunito Sans';
+  font-family: 'Montserrat';
   font-weight: 700;
 }
 
@@ -523,7 +523,7 @@ sub {
   align-items: center;
   gap: 8px;
   font-size: 12px;
-  font-family: 'Nunito Sans';
+  font-family: 'Montserrat';
   font-weight: 600;
   color: #222;
 }
@@ -542,7 +542,7 @@ sub {
   background: #302cb3;
   color: white;
   font-size: 12px;
-  font-family: 'Nunito Sans';
+  font-family: 'Montserrat';
   font-weight: 600;
   border: none;
   border-radius: 6px;

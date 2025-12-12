@@ -4,18 +4,18 @@
     padding: 10px; 
     width: 100px;
     height: 10px;  
-     font-family: Nunito Sans; 
+     font-family: Montserrat; 
     font-size: 10px;
   }
 .container{
-   font-family: Nunito Sans; 
+   font-family: Montserrat; 
   font-weight: bold;
 }
 .table-custom {
   width: 90%;
   font-weight: lighter;
   font-size: 0.7em;
-  font-family: 'Nunito Sans', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   margin-top: -2%;
 }
 
@@ -38,7 +38,7 @@
     padding: 10px; 
     width: 50px;
     height: 10px;  
-     font-family: Nunito Sans; 
+     font-family: Montserrat; 
     font-size: 10px;
     
   }
@@ -46,25 +46,25 @@
     display: flex;
     align-items: center;
     gap: 10px;
-     font-family: Nunito Sans; 
+     font-family: Montserrat; 
     margin: 10px 0;
 }
 .info i {
     color: #777;
 }
 .span-text-title{
-  font-family: Nunito Sans; 
+  font-family: Montserrat; 
   font-size: 1em;
   display: inline-block;
   
 }
 .span-assign{
-  font-family: Nunito Sans; 
+  font-family: Montserrat; 
   font-size: 14px;
   color: #302CB3;
 }
 .span-text-detail{
-  font-family: Nunito Sans; 
+  font-family: Montserrat; 
   font-size: 0.6em;
   display: inline-block;
 }
@@ -80,7 +80,7 @@ button:disabled {
   border-radius: 6px;
   color: white;
   font-size: 12px;
-  font-family: 'Nunito Sans', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-weight: 600;
   line-height: 1;
   cursor: pointer;
@@ -108,7 +108,7 @@ button:disabled {
   padding: 3px; 
   width: 9.3em;
   font-size: 1em;
-  font-family: Nunito Sans; 
+  font-family: Montserrat; 
   color:#0f1010;
   font-weight: bold;   
   vertical-align: middle;

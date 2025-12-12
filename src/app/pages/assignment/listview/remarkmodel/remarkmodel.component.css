@@ -108,17 +108,17 @@
     font-weight: 500;
     font-size: 14px;
     gap: 8px;
-    font-family: Nunito Sans; 
+    font-family: Montserrat; 
   }
   
   .file-upload-label i {
     font-size: 20px;
-    font-family: Nunito Sans; 
+    font-family: Montserrat; 
   }
   
   input[type="file"] {
     display: none;
-    font-family: Nunito Sans; 
+    font-family: Montserrat; 
   }
 
   .import-file {
@@ -131,7 +131,7 @@
     align-items: center;
     justify-content: flex-start;
     padding: 10px 10px 0px 20px;
-    font-family: Nunito Sans; 
+    font-family: Montserrat; 
 }
 .lorem-ipsum-is-simply {
     width: 402px;
@@ -139,7 +139,7 @@
     font-weight: 500;
     display: inline-block;
     flex-shrink: 0;
-    font-family: Nunito Sans; 
+    font-family: Montserrat; 
 }
 .h4 {
     align-self: stretch;
@@ -152,7 +152,7 @@
     margin-top: 5px;
     margin-left: 5px;
     color: #212121;
-    font-family: Nunito Sans; 
+    font-family: Montserrat; 
 }
 .h {
     align-self: stretch;
@@ -166,14 +166,14 @@
     height: 3em;
     margin-top: 5px;
     gap: 8px;
-    font-family: Nunito Sans; 
+    font-family: Montserrat; 
 }
 .upload-1-icon {
     width: 24px;
     position: relative;
     height: 24px;
     object-fit: cover;
-    font-family: Nunito Sans; 
+    font-family: Montserrat; 
 }
 .choose-file {
     color: #5c6de3;
@@ -181,7 +181,7 @@
 .drag-drop-container {
     align-self: stretch;
     position: relative;
-    font-family: Nunito Sans; 
+    font-family: Montserrat; 
 }
 .inside-file {
     width: 127px;
@@ -203,10 +203,10 @@
     align-items: flex-start;
     justify-content: center;
     padding: 32px 133px;
-    font-family: Nunito Sans; 
+    font-family: Montserrat; 
 }
 .supported-formate-pdf {
-    font-family: Nunito Sans; 
+    font-family: Montserrat; 
     width: 195px;
     position: relative;
     font-weight: 500;
@@ -247,7 +247,7 @@
     color: #768ea7;
 }
 .file-name-parent {
-    font-family: Nunito Sans; 
+    font-family: Montserrat; 
     width: 338px;
     display: flex;
     flex-direction: column;
@@ -270,7 +270,7 @@
     justify-content: flex-start;
     padding: 10px;
     gap: 10px;
-    font-family: Nunito Sans; 
+    font-family: Montserrat; 
     font-size: 14px;
 }
 .frame-parent {
@@ -346,6 +346,6 @@
     text-align: left;
     font-size: 22px;
     color: #000;
-    font-family: 'Nunito Sans';
+    font-family: 'Montserrat';
 }
 

@@ -91,7 +91,7 @@ th {
 
 .mat-paginator {
   margin-top: 1rem;
-  font-family: 'Nunito Sans', sans-serif;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .mat-paginator-range-label {
@@ -196,7 +196,7 @@ th {
     border-spacing: 0;
     width: max-content;
     min-width: 100%;
-    font-family: Nunito Sans, sans-serif;
+    font-family: Montserrat, sans-serif;
 }
 
 .ts th,
@@ -216,7 +216,7 @@ th {
     color: #A0A0A0;
     font-size: 12px;
     /* or any size you prefer */
-    font-family: "Nunito Sans";
+    font-family: "Montserrat";
     font-weight: 600;
     line-height: 35.33px;
     word-wrap: break-word;

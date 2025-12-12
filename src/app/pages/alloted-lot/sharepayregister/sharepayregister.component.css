@@ -108,12 +108,12 @@
     font-weight: 500;
     font-size: 14px;
     gap: 8px;
-    font-family: Nunito Sans;
+    font-family: Montserrat;
   }
   
   .file-upload-label i {
     font-size: 20px;
-    font-family: Nunito Sans;
+    font-family: Montserrat;
   }
   
   input[type="file"] {
@@ -130,10 +130,10 @@
     align-items: center;
     justify-content: flex-start;
     padding: 10px 10px 0px 20px;
-    font-family: Nunito Sans;
+    font-family: Montserrat;
 }
 .lorem-ipsum-is-simply {
-  font-family: Nunito Sans;
+  font-family: Montserrat;
     width: 402px;
     position: relative;
     font-weight: 500;
@@ -338,7 +338,7 @@
     text-align: left;
     font-size: 22px;
     color: #000;
-    font-family: 'Nunito Sans';
+    font-family: 'Montserrat';
 }
 
 

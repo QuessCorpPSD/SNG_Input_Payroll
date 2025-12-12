@@ -42,7 +42,7 @@
 }
 
 .example-list {
-  font-family: Nunito Sans;
+  font-family: Montserrat;
   border: solid 1px #ccc;
   border-radius: 5px;
   background: #fff;
@@ -52,7 +52,7 @@
 }
 
 .example-list>li {
-  font-family: Nunito Sans;
+  font-family: Montserrat;
   list-style-type: none;
   border-bottom: none 1px #8b8b8b;
   padding: 8px 0;
@@ -60,7 +60,7 @@
 
 .example-list>li:last-child {
   border-bottom: none;
-  font-family: Nunito Sans;
+  font-family: Montserrat;
 }
 
 .overlay-image {

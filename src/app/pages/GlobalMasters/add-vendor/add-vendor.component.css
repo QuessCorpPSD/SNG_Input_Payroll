@@ -22,7 +22,7 @@
     background-color: #f5f5f5 !important;
     color: #555 !important;
     font-size: 13px;
-    font-family: "Nunito Sans", sans-serif;
+    font-family: "Montserrat", sans-serif;
     font-weight: 600;
     height: 32px !important;
     border-right: 1px solid #ddd;
@@ -31,7 +31,7 @@
 
 /* ---------- CELLS ---------- */
 ::ng-deep .mat-mdc-cell {
-    font-family: "Nunito Sans", sans-serif;
+    font-family: "Montserrat", sans-serif;
     font-size: 12px;
     color: #222;
     border-bottom: 1px dashed #E8E8E8 !important;

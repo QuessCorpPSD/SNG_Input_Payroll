@@ -10,7 +10,7 @@ body {
   --bs-table-color: var(--bs-gray-600);
   --bs-table-bg: var(--bs-gray-100);
   --bs-table-border-color: transparent;
-  font-family: Nunito Sans; 
+  font-family: Montserrat; 
 }
 .card{
 width: 30vh;
@@ -38,11 +38,11 @@ width: 30vh;
 .title{
   
   font-size: 1em;
-   font-family: Nunito Sans; 
+   font-family: Montserrat; 
 }
 
 .title-detail{
   padding: 4px;
   font-size: 0.8em;
-   font-family: Nunito Sans; 
+   font-family: Montserrat; 
 }

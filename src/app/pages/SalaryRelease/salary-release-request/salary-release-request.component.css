@@ -6,7 +6,7 @@
 ::ng-deep .mat-mdc-header-cell {
   color: #A0A0A0;
   font-size: 12px;
-  font-family: "Nunito Sans";
+  font-family: "Montserrat";
   font-weight: 600;
   word-wrap: break-word;
   border-right: 1px solid #ddd;
@@ -19,7 +19,7 @@
 }
 
 ::ng-deep .mat-mdc-cell {
-  font-family: "Nunito Sans";
+  font-family: "Montserrat";
   font-size: 12px;
   font-style: normal;
   font-weight: 600;

@@ -1,6 +1,6 @@
 /* ====== General Styling ====== */
 .selectedInput {
-  font-family: 'Nunito Sans', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-weight: 600;
   color: #222222;
   border-bottom: 1px solid #222222;
@@ -72,7 +72,7 @@
   flex-shrink: 0;
   cursor: pointer;
   transition: background-color 0.3s;
-  font-family: 'Nunito Sans';
+  font-family: 'Montserrat';
   font-size: 14px;
   color: #A59999;
 }
@@ -89,7 +89,7 @@ li:hover {
 
 .selected {
   background-color: #f0f0f0;
-  font-family: 'Nunito Sans', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-weight: 700;
   color: #222222;
   font-size: 15px;
@@ -97,7 +97,7 @@ li:hover {
 
 .selectedGreen {
   background-color: #EBFFEF;
-  font-family: 'Nunito Sans', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-weight: 700;
   color: #222222;
   font-size: 15px;

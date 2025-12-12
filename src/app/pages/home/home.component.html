@@ -40,43 +40,43 @@
     <div   style="width: 40%;margin-right: 5px;margin-left: 10px; height: 180px; background: white; border-radius: 10px; border: 1px #D6D6D6 solid">
         <span class="checkin">Check-In & Check-Out</span>
         <div *ngIf="checkInStatus"
-            style="align-self: stretch; color: #27292E; font-size: 1em; font-family: Nunito Sans; font-weight: 800; word-wrap: break-word">
+            style="align-self: stretch; color: #27292E; font-size: 1em; font-family: Montserrat; font-weight: 800; word-wrap: break-word">
             {{ checkInDateTime | date:'dd MMMM yyyy' }}</div>
         <div class="row">
             <div class="col-6 text-start">
                 <div *ngIf="checkInStatus"
-                    style="align-self: stretch; color: #A6AFC1; font-size: 0.6em; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                    style="align-self: stretch; color: #A6AFC1; font-size: 0.6em; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
                     Today’s CheckIn</div>
                 <span *ngIf="checkInStatus">{{ checkInDateTime | date:'hh:mm:ss' }}</span>
                 <div *ngIf="!checkInStatus" (click)="CheckIn()"
                     style="width: 119px; height: 34px; padding-left: 16px; padding-right: 16px; padding-top: 10px; padding-bottom: 10px; background: #302CB3; border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
                     <div
-                        style="color: white; font-size: 16px; font-family: Nunito Sans; font-weight: 600; word-wrap: break-word">
+                        style="color: white; font-size: 16px; font-family: Montserrat; font-weight: 600; word-wrap: break-word">
                         Check In</div>
                 </div>
             </div>
             <div class="col-6 text-end"  *ngIf="checkInStatus">
                 <span 
-                    style="align-self: stretch; color: #A6AFC1; font-size: 0.6em; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">Today’s
+                    style="align-self: stretch; color: #A6AFC1; font-size: 0.6em; font-family: Montserrat; font-weight: 500; word-wrap: break-word">Today’s
                     CheckOut</span>
                 <div (click)="CheckOut()"
                     style="width: 119px; height: 34px; padding-left: 16px; padding-right: 16px; padding-top: 10px; padding-bottom: 10px; background: #302CB3; border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
                     <div
-                        style="color: white; font-size: 16px; font-family: Nunito Sans; font-weight: 600; word-wrap: break-word">
+                        style="color: white; font-size: 16px; font-family: Montserrat; font-weight: 600; word-wrap: break-word">
                         Checkout</div>
                 </div>
             </div>
         </div>
     
         <div class="mt-auto p-1 "
-            style="width: 280px; color: #CE971E;padding: 5; font-size: 10px; font-family: Nunito Sans; font-weight: 400; word-wrap: break-word">
+            style="width: 280px; color: #CE971E;padding: 5; font-size: 10px; font-family: Montserrat; font-weight: 400; word-wrap: break-word">
             Important note: Please ensure all assignments are completed before checking out today.Any pending tasks at
             checkout will impact your overall performance.</div>
     
     </div>
         <div style="width: 57%; height: 180px; background: white; border-radius: 10px; border: 1px #D6D6D6 solid">
             <div class="row">
-                <div class="col-8 text-start"><div style="color: #5D7177; font-size: 0.8em; font-family: Nunito Sans; font-weight: 600; word-wrap: break-word">My Work hours</div> </div>
+                <div class="col-8 text-start"><div style="color: #5D7177; font-size: 0.8em; font-family: Montserrat; font-weight: 600; word-wrap: break-word">My Work hours</div> </div>
                 <div class="col-4 text-end" style="margin-top: 5px;">
                     <div style="align-self: stretch; height: 36px; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: white; border-radius: 6px;  outline-offset: -1px; justify-content: flex-start; align-items: center; gap: 10px; display: inline-flex">
                         <div style="flex: 1 1 0; justify-content: flex-start; align-items: center; gap: 10px; display: flex">
@@ -143,10 +143,10 @@
                     <div><div style="justify-content: flex-start; align-items: center; gap: 19px; display: inline-flex">
                         <div style="width: 206px; height: 88px; padding-left: 14px; padding-right: 14px; padding-top: 10px; padding-bottom: 10px; background: linear-gradient(270deg, #FFFFFF 0%, #E4F4FF 100%); border-radius: 6px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 10px; display: inline-flex">
                           <div style="width: 175px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 14px; display: flex">
-                            <div style="align-self: stretch; color: #5D7177; font-size: 14px; font-family: Nunito Sans; font-weight: 600; word-wrap: break-word">Current score</div>
+                            <div style="align-self: stretch; color: #5D7177; font-size: 14px; font-family: Montserrat; font-weight: 600; word-wrap: break-word">Current score</div>
                             <div style="justify-content: flex-start; align-items: center; gap: 5px; display: inline-flex">
-                              <div style="color: #27292E; font-size: 24px; font-family: Nunito Sans; font-weight: 800; word-wrap: break-word">67</div>
-                              <div style="color: #5D7177; font-size: 14px; font-family: Nunito Sans; font-weight: 600; word-wrap: break-word">/100</div>
+                              <div style="color: #27292E; font-size: 24px; font-family: Montserrat; font-weight: 800; word-wrap: break-word">67</div>
+                              <div style="color: #5D7177; font-size: 14px; font-family: Montserrat; font-weight: 600; word-wrap: break-word">/100</div>
                             </div>
                           </div>
                         </div>
@@ -244,7 +244,7 @@
                   </div>
                   <div class="row p-3">
                     <div style=" padding: 10px; background: #FFF7E6; border-radius: 4px; outline: 0.80px #CE971E solid; outline-offset: -0.80px; justify-content: left; align-items: center; gap: 10px; display: inline-flex">
-                        <div style="width: 491px"><span style="color: #CE971E; font-size: 10px; font-family: Nunito Sans; font-weight: 700; word-wrap: break-word">Important  note:</span><span style="color: #CE971E; font-size: 10px; font-family: Nunito Sans; font-weight: 400; word-wrap: break-word"> Enchance your performance score by keeping all parameters above the mimimum limit.</span></div>
+                        <div style="width: 491px"><span style="color: #CE971E; font-size: 10px; font-family: Montserrat; font-weight: 700; word-wrap: break-word">Important  note:</span><span style="color: #CE971E; font-size: 10px; font-family: Montserrat; font-weight: 400; word-wrap: break-word"> Enchance your performance score by keeping all parameters above the mimimum limit.</span></div>
                       </div>
                   </div>
                 
@@ -259,8 +259,8 @@
                             </div>
                             <div class="card-body">
                                 <div style="justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
-                                    <div style="color: black; font-size: 20px; font-family: Nunito Sans; font-weight: 700; word-wrap: break-word">{{percent_inComplate_Assignment}}</div>
-                                    <div style="color: #5D7177; font-size: 10px; font-family: Nunito Sans; font-weight: 600; word-wrap: break-word">/100</div>
+                                    <div style="color: black; font-size: 20px; font-family: Montserrat; font-weight: 700; word-wrap: break-word">{{percent_inComplate_Assignment}}</div>
+                                    <div style="color: #5D7177; font-size: 10px; font-family: Montserrat; font-weight: 600; word-wrap: break-word">/100</div>
                                   </div>
                                 <div class="progress">
                                     <div class="progress-bar" style="width:0%" id="progressBar" #progressBar>%</div>

@@ -66,13 +66,13 @@
                 <button (click)="submitExcelData()"
                     style="display: inline-block; margin-right: 10px;width: 130px; height: 30px; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
                     <div
-                        style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
+                        style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Montserrat; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
                         Submit</div>
                 </button>
                 <button (click)="showPreviewModal=false"
                     style="display: inline-block; margin-right: 10px;width: 130px; height: 30px; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
                     <div
-                        style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
+                        style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Montserrat; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
                         Cancel</div>
                 </button>
             </div>
@@ -185,7 +185,7 @@
                 <div class="row g-3 align-items-end">
                     <div class="col-md-12" style="padding-top:10px">
                         <div
-                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
                             Company Code</div>
                         <div style="padding-top: 5px;">
                             <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
@@ -193,7 +193,7 @@
                     </div>
                     <div class="col-md-6">
                         <div
-                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
                             Site Name</div>
                         <div style="padding-top: 5px;">
                             <groupname [selectedCompanyId]="selectedCC" (sitenameEmit)="handleGroupNameEvent($event)">
@@ -202,7 +202,7 @@
                     </div>
                     <div class="col-md-6">
                         <div
-                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
                             Billing Type</div>
                         <div style="padding-top: 5px;">
                             <select formControlName="billingType" class="w-100 custom-height rounded-1 select-drop"
@@ -221,7 +221,7 @@
                     <div class="col-md-4">
                         <div class="checkbox-wrapper">
                             <div
-                                style="width: 200px; height: 42.35px; color: var(--text-field-heading-, #89898B); font-size: 12px; font-family: Nunito Sans; font-weight: 500; display: flex; padding-top:17px; padding-left:15px; gap:20px;">
+                                style="width: 200px; height: 42.35px; color: var(--text-field-heading-, #89898B); font-size: 12px; font-family: Montserrat; font-weight: 500; display: flex; padding-top:17px; padding-left:15px; gap:20px;">
                                 <span style="width:200px;">Days As Per Timesheet</span>
                                 <input formControlName="daysAsPerTimesheet" type="checkbox" class="custom-checkbox" />
                             </div>
@@ -229,7 +229,7 @@
                     </div>
                     <div class="col-md-4">
                         <div
-                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
                             Days Per Month</div>
                         <div style="padding-top: 5px;">
                             <input formControlName="dayspermonth" type="number" placeholder="Enter Days Per Month" />
@@ -241,7 +241,7 @@
                     </div>
                     <div class="col-md-4">
                         <div
-                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
                             Weekends Rule</div>
                         <div style="padding-top: 5px;">
                             <select formControlName="weekendsrule">
@@ -258,7 +258,7 @@
                     </div>
                     <div class="col-md-4">
                         <div
-                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
                             Holidays Rule</div>
                         <div style="padding-top: 5px;">
                             <select formControlName="holidaysrule">
@@ -275,7 +275,7 @@
                     </div>
                     <div class="col-md-4">
                         <div
-                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
                             Comp Off Rule</div>
                         <div style="padding-top: 5px;">
                             <select formControlName="comppoffrule">
@@ -292,7 +292,7 @@
                     </div>
                     <div class="col-md-4">
                         <div
-                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
                             Maternity Leave</div>
                         <div style="padding-top: 5px;">
                             <select formControlName="maternityleave">
@@ -309,7 +309,7 @@
                     </div>
                     <div class="col-md-4">
                         <div
-                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
                             Leave Types</div>
                         <div style="padding-top: 5px;">
                             <select formControlName="leavetypes">
@@ -326,7 +326,7 @@
                     </div>
                     <div class="col-md-4">
                         <div
-                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
                             Leave Credit</div>
                         <div style="padding-top: 5px;">
                             <input type="number" formControlName="leavecredit" step="0.01" />
@@ -338,7 +338,7 @@
                     </div>
                     <div class="col-md-4">
                         <div
-                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
                             Leave Rule</div>
                         <div style="padding-top: 5px;">
                             <select formControlName="leaverule">
@@ -355,12 +355,12 @@
                     </div>
                     <div class="col-md-2">
                         <div
-                            style="width: 120px; height: 42.35px; color: var(--text-field-heading-, #89898B); font-size: 12px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word;  padding-top:17px; padding-left:30px; gap:20px;">
+                            style="width: 120px; height: 42.35px; color: var(--text-field-heading-, #89898B); font-size: 12px; font-family: Montserrat; font-weight: 500; word-wrap: break-word;  padding-top:17px; padding-left:30px; gap:20px;">
                             Pay Period:</div>
                     </div>
                     <div class="col-md-2">
                         <div
-                            style="width: 40px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                            style="width: 40px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
                             From</div>
                         <div style="padding-top: 5px;">
                             <select formControlName="payperiodfrom" (change)="onMonthChange()">
@@ -377,7 +377,7 @@
                     </div>
                     <div class="col-md-2">
                         <div
-                            style="width: 40px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                            style="width: 40px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
                             To</div>
                         <div style="padding-top: 5px;">
                             <input formControlName="payperiodto" type="text" readonly="true">
@@ -385,7 +385,7 @@
                     </div>
                     <div class="col-md-3">
                         <div
-                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
                             Carry Forward</div>
                         <div style="padding-top: 5px;">
                             <select formControlName="carryforward">
@@ -402,7 +402,7 @@
                     </div>
                     <div class="col-md-3">
                         <div
-                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
                             No of Carry Forwards</div>
                         <div style="padding-top: 5px;">
                             <input formControlName="noofcarryforwards" type="number"
@@ -416,7 +416,7 @@
                     </div>
                     <div class="col-md-4">
                         <div
-                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
                             OT Rule</div>
                         <div style="padding-top: 5px;">
                             <select formControlName="otrule">
@@ -433,7 +433,7 @@
                     </div>
                     <div class="col-md-4">
                         <div
-                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
                             Gratuity</div>
                         <div style="padding-top: 5px;">
                             <select formControlName="gratuity">
@@ -450,7 +450,7 @@
                     </div>
                     <div class="col-md-4">
                         <div
-                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
                             Reimbursement</div>
                         <div style="padding-top: 5px;">
                             <select formControlName="reimbursement">
@@ -467,7 +467,7 @@
                     </div>
                     <div class="col-md-4">
                         <div
-                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
                             Service Fee on Expenses</div>
                         <div style="padding-top: 5px;">
                             <select formControlName="servicefeeonexpenses">
@@ -484,7 +484,7 @@
                     </div>
                     <div class="col-md-4">
                         <div
-                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
                             Rebates</div>
                         <div style="padding-top: 5px;">
                             <select formControlName="rebates">
@@ -501,7 +501,7 @@
                     </div>
                     <div class="col-md-4">
                         <div
-                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
                             Discounts</div>
                         <div style="padding-top: 5px;">
                             <select formControlName="discounts">
@@ -518,7 +518,7 @@
                     </div>
                     <div class="col-md-12" style="padding-bottom: 10px;">
                         <div
-                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
                             Billable Days Formula</div>
                         <div style="padding-top: 5px;">
                             <input formControlName="billabledaysformula" type="text"
@@ -538,7 +538,7 @@
             <button (click)="SaveData()"
                 style="margin-right: 10px;width: 130px; height: 30px; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
                 <div
-                    style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
+                    style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Montserrat; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
                     Save</div>
             </button>
         </mat-card-actions>
@@ -759,7 +759,7 @@
             <button (click)="SaveEditData()"
                 style="margin-right: 10px;width: 130px; height: 30px; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
                 <div
-                    style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
+                    style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Montserrat; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
                     Update</div>
             </button>
         </mat-card-actions>
