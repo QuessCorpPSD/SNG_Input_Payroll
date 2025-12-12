@@ -1,0 +1,242 @@
+<div class="container py-4">
+    <div class="row g-3 align-items-end">
+        <div class="col-md-3 d-flex gap-2">
+            <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Add"
+                (click)="Addclicked()">
+                <mat-icon>add</mat-icon>
+            </button>
+
+            <button class="btn btn-sm d-flex align-items-center justify
+      -content-center" matTooltip="Import" (click)="FileUpload(fileInput)">
+                <input type="file" #fileInput style="display: none;" accept=".xlsx, .xls"
+                    (change)="onFileChange($event)" />
+                <mat-icon>cloud_upload</mat-icon>
+            </button>
+
+            <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Template"
+                (click)="DownloadTemplate()">
+                <mat-icon>cloud_download</mat-icon>
+            </button>
+
+        </div>
+
+    </div>
+</div>
+
+
+<div class="table-container">
+    <div class="example-container mat-elevation-z8">
+        <table mat-table #searchgrid [dataSource]="dataSource" matSort class="custom-table table-scroll">
+            <ng-container matColumnDef="edit">
+                <mat-header-cell *matHeaderCellDef mat-sort-header class="fixed-width-column"></mat-header-cell>
+                <mat-cell *matCellDef="let element" class="fixed-width-column">
+                    <img src="assets/Icons/edit.svg" style="cursor: pointer; width: 24px; height: 22px;"
+                        (click)="EditClick(element)" />
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="Id">
+                <mat-header-cell *matHeaderCellDef class="fixed-width-column">Id</mat-header-cell>
+                <mat-cell *matCellDef="let element" class="fixed-width-column">{{ element.id }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="CompanyId">
+                <mat-header-cell *matHeaderCellDef>CompanyId</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.companyId }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Company_Code">
+                <mat-header-cell *matHeaderCellDef>Company Code</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.company_Code }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="GroupDetailId">
+                <mat-header-cell *matHeaderCellDef>GroupDetailId</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.groupDetailId }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Group_Name">
+                <mat-header-cell *matHeaderCellDef>Group Name</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.group_Name }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="InvoiceType_Id">
+                <mat-header-cell *matHeaderCellDef>InvoiceType_Id</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.invoiceType_Id }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="InvoiceType">
+                <mat-header-cell *matHeaderCellDef>Invoice Type</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.invoiceType }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="InvoiceFormatId">
+                <mat-header-cell *matHeaderCellDef>InvoiceFormatId</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.invoiceFormatId }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Format_Name">
+                <mat-header-cell *matHeaderCellDef>Format Name</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.format_Name }}</mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+        </table>
+
+    </div>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+
+</div>
+
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>
+
+
+<div *ngIf="isAddclicked" class="popup-overlay">
+    <mat-card class="popup-card">
+        <mat-card-header style="border-bottom: 1px solid #89898B; gap:350px; padding: 15px 15px 15px 15px">
+            <mat-card-title style="color: #302CB3;">Create Company Invoice Format</mat-card-title>
+            <button style="border: none; background: transparent;"><mat-icon (click)="closeclick()"
+                    matTooltip="close">close</mat-icon></button>
+        </mat-card-header>
+        <mat-card-content class="scroll-content">
+            <div class="row g-3 align-items-end" style="padding-bottom: 15px;">
+                <div class="col-md-6" style="padding-top:10px">
+                    <div
+                        style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                        Company Code</div>
+                    <div style="padding-top: 5px;">
+                        <CompanyPicker (companyEmit)="handleCompanyEvent($event)"></CompanyPicker>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div
+                        style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                        Group Detail</div>
+                    <div style="padding-top: 5px;">
+                        <groupname [selectedCompanyId]="comapnyId" (sitenameEmit)="handleGroupNameEvent($event)">
+                        </groupname>
+                    </div>
+                </div>
+                <!-- <div class="col-md-6">
+                    <div
+                        style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                        Invoice Type</div>
+                    <div style="padding-top: 5px;">
+                        <select (change)="onInvoiceTypeChange($event);">
+                            <option value="">Select</option>
+                            <option *ngFor="let type of InvoiceTypes" [value]="type.invoiceType_Id">
+                                {{ type.invoiceType }}
+                            </option>
+                        </select>
+                    </div>
+                </div> -->
+                <div class="col-md-6">
+                    <div
+                        style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                        Invoice Format</div>
+                    <div style="padding-top: 5px;">
+                        <select (change)="onInvoiceFormatChange($event);">
+                            <option value="">Select</option>
+                            <option *ngFor="let type of InvoiceFormat" [value]="type.invoiceFormatId">
+                                {{ type.format_Name }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </mat-card-content>
+
+        <mat-card-actions class="right-align"
+            style="display: flex; padding: 14px 20px; justify-content: flex-end; align-items: center; gap: 12px; align-self: stretch;border-radius: 0 0 10px 10px; border-top: 1px solid var(--Card-Box-border-color, #D6D6D6); background: var(--Card-card-background, white);">
+            <button (click)="SaveClick()"
+                style="margin-right: 10px;width: 150px; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background:  #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
+                <div
+                    style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
+                    Save</div>
+            </button>
+            <button (click)="Cancel()"
+                style="margin-right: 10px;width: 150px;  padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: darkgrey; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
+                <div
+                    style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
+                    Cancel</div>
+            </button>
+        </mat-card-actions>
+    </mat-card>
+</div>
+
+<div *ngIf="iseditclicked" class="popup-overlay">
+    <mat-card class="popup-card">
+        <mat-card-header style="border-bottom: 1px solid #89898B; gap:350px; padding: 15px 15px 15px 15px">
+            <mat-card-title style="color: #302CB3;">Edit Company Invoice Format</mat-card-title>
+            <button style="border: none; background: transparent;"><mat-icon (click)="closeclick()"
+                    matTooltip="close">close</mat-icon></button>
+        </mat-card-header>
+        <mat-card-content class="scroll-content">
+            <div class="row g-3 align-items-end" style="padding-bottom: 15px;">
+                <div class="col-md-6" style="padding-top:10px">
+                    <div
+                        style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                        Company Code</div>
+                    <div style="padding-top: 5px;">
+                        <input type="text" [(ngModel)]="Id" readonly hidden/>
+                        <input type="text" [(ngModel)]="companyValue" readonly="true" disabled/>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div
+                        style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                        Group Detail</div>
+                    <div style="padding-top: 5px;">
+                        <input type="text" [(ngModel)]="groupValue" readonly="true" disabled/>
+                    </div>
+                </div>
+                <!-- <div class="col-md-6">
+                    <div
+                        style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                        Invoice Type</div>
+                    <div style="padding-top: 5px;">
+                        <select [(ngModel)]="invoiceType_Id" (change)="onInvoiceTypeChange($event);">
+                            <option value="">Select</option>
+                            <option *ngFor="let type of InvoiceTypes" [value]="type.invoiceType_Id">
+                                {{ type.invoiceType }}
+                            </option>
+                        </select>
+                    </div>
+                </div> -->
+                <div class="col-md-6">
+                    <div
+                        style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Nunito Sans; font-weight: 500; word-wrap: break-word">
+                        Invoice Format</div>
+                    <div style="padding-top: 5px;">
+                        <select [(ngModel)]="invoiceFormatId" (change)="onInvoiceFormatChange($event);">
+                            <option value="">Select</option>
+                            <option *ngFor="let type of InvoiceFormat" [value]="type.invoiceFormatId">
+                                {{ type.format_Name }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </mat-card-content>
+
+        <mat-card-actions class="right-align"
+            style="display: flex; padding: 14px 20px; justify-content: flex-end; align-items: center; gap: 12px; align-self: stretch;border-radius: 0 0 10px 10px; border-top: 1px solid var(--Card-Box-border-color, #D6D6D6); background: var(--Card-card-background, white);">
+            <button (click)="EditSaveClick()"
+                style="margin-right: 10px;width: 150px; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background:  #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
+                <div
+                    style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
+                    Save</div>
+            </button>
+            <button (click)="Cancel()"
+                style="margin-right: 10px;width: 150px;  padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: darkgrey; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
+                <div
+                    style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
+                    Cancel</div>
+            </button>
+        </mat-card-actions>
+    </mat-card>
+</div>

@@ -304,6 +304,7 @@ export class InvoiceruleComponent {
   Addclicked(): void {
     this.isAddclicked = true;
   }
+  
   deleteClick(invoicingRulesID: number) {
     if (confirm("Are you sure you want to delete this?")) {
       this.invoicerule.PostDeleteInvoiceRule(invoicingRulesID).subscribe({
