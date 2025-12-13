@@ -1,0 +1,190 @@
+.select-drop {
+    font-family: "Nunito Sans";
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 22.4px;
+    letter-spacing: 0.24px;
+    color: #222;
+    appearance: none;
+    -webkit-appearance: none;
+    border-radius: 10px;
+    width: 80px;
+    height: 40px;
+    padding: 4px 24px 4px 4px;
+    padding-left: 10px;
+    background-color: white;
+    position: relative;
+    text-align: left;
+    border: 1px solid #7E7E7E;
+    /* box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.12); */
+}
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+
+.mat-footer-paginator {
+  position: sticky;
+  bottom: 0;
+  background: white;
+  box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+}
+
+.right-align {
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 20px;
+    width: 100%;
+} 
+
+.right-align2 {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 10px;
+    padding-right: 20px;
+    width: 100%;
+}   
+
+.table-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 20px;
+}
+
+.table-container {
+  width: 100%;
+  overflow-x: auto;   /* enables X scroll */
+}
+
+.fixed-width-column {
+  width: 50px;
+  min-width: 50px;
+  max-width: 75px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  
+}
+
+.custom-table {
+  background: white;
+  overflow: auto;
+  border: 1px solid #ddd;
+}
+
+::ng-deep .mat-elevation-z8 {
+  box-shadow: none !important;
+}
+
+::ng-deep .mat-mdc-header-cell {
+  color: #A0A0A0;
+  font-size: 12px;
+  font-family: "Nunito Sans";
+  font-weight: 600;
+  line-height: 19.40px;
+  word-wrap: break-word;
+  border-right: 1px solid #ddd;
+  position: sticky;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+::ng-deep .mat-mdc-cell {
+  font-family: "Nunito Sans";
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 22.4px;
+  letter-spacing: 0.24px;
+  color: #222;
+  border-bottom: 1px dashed #E8E8E8 !important;
+  border-right: 1px solid #ddd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+}
+
+.table-scroll {
+  max-height: 450px;
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
+::ng-deep .mat-header-row {
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 10;
+}
+
+
+.centered-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+}
+
+
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  /* dark background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  /* stay above everything */
+}
+
+.popup-card {
+  width: 700px;
+  max-width: 75%;
+  height: 45vh;
+  max-height: 45vh;
+}
+
+select {
+  width: 100%;
+  padding: 6px 8px;
+  border-radius: 4px;
+  border: 1px solid #A0A0A0;
+  font-size: 12px;
+  font-family: "Nunito Sans";
+  color: #222; 
+  appearance: outline;
+}
+
+input {
+  width: 100%;
+  padding: 6px 8px;
+  border-radius: 4px;
+  border: 1px solid #A0A0A0;
+  font-size: 12px;
+  font-family: "Nunito Sans";
+  color: #222; 
+  appearance: outline;
+}
