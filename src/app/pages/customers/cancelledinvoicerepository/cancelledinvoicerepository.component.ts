@@ -23,6 +23,7 @@ import { MatCardModule } from "@angular/material/card";
 import { GroupnameComponent } from "../../../common/groupname/groupname.component";
 import { Payperiodclass } from '../../../Models/Common';
 import { CancelInvoiceRepository } from '../../../Service/customersserv/CancelInvoiceRepository.service';
+import { ThisReceiver } from '@angular/compiler';
 
 @Component({
   selector: 'cancelledinvoicerepository',
@@ -47,8 +48,8 @@ import { CancelInvoiceRepository } from '../../../Service/customersserv/CancelIn
 })
 export class CancelledinvoicerepositoryComponent {
 
-  selectedCompanyId: number=0;
-  payPeriodType: string = "ALL";
+  selectedCompanyId: number = 0;
+  payPeriodType: string = "All";
   selectedCompanyCode: string = "";
   PayPeriodUI: any;
   isLoading: boolean = false;
@@ -59,6 +60,8 @@ export class CancelledinvoicerepositoryComponent {
   Editform!: FormGroup;
   searchText: string = "";
   File: File | null = null;
+  selectedFileName: string = "";
+  remarksText: string = "";
 
 
   handleCompanyEvent(event: any) {
@@ -88,7 +91,7 @@ export class CancelledinvoicerepositoryComponent {
   constructor(
     private dialog: MatDialog,
     private fb: FormBuilder,
-    private cancelService:CancelInvoiceRepository ,
+    private cancelService: CancelInvoiceRepository,
     private _decrypt: EncryptionService,
     private _sessionStoreage: SessionStorageService
   ) { }
@@ -108,7 +111,7 @@ export class CancelledinvoicerepositoryComponent {
     this.SearchClick(0, 0);
   }
   Search() {
-  this.SearchClick(this.selectedCompanyId, this.PayPeriodUI.payfrequencyid);
+    this.SearchClick(this.selectedCompanyId, this.PayPeriodUI.payfrequencyid);
   }
 
   SearchClick(companyId: number, payperiodId: number) {
@@ -118,8 +121,8 @@ export class CancelledinvoicerepositoryComponent {
         console.log(res.Data);
         this.isLoading = false;
 
-        if (res.StatusCode === 200 && Array.isArray(res.Data.data.Table0) && res.Data.data.Table0.length > 0) {
-          this.dataSource.data = res.Data.data.Table0;
+        if (res.StatusCode === 200 && Array.isArray(res.Data) && res.Data.length > 0) {
+          this.dataSource.data = res.Data;
 
           setTimeout(() => {
             this.dataSource.paginator = this.paginator;
@@ -145,95 +148,80 @@ export class CancelledinvoicerepositoryComponent {
 
 
   EditClick(rowData: any) {
+    this.iseditclicked = true;
+    this.editData = rowData;
+    console.log(JSON.stringify(this.editData));
   }
 
   closeclick() {
     this.iseditclicked = false;
   }
 
-  onUploadClick(fileInput: HTMLInputElement): void {
-    fileInput.click();
-  }
   onFileChange(event: any, remarks: string): void {
-    this.isLoading = true;
-    const target: DataTransfer = <DataTransfer>(event.target);
+    this.File = event.target.files[0];
 
-    if (!target.files || target.files.length !== 1) {
-      console.error('Please upload only one Excel file.');
-      this.isLoading = false;
+    if (!this.File) {
       return;
     }
-
-    this.File = target.files[0];
-    console.log('File before upload:', this.File.name, this.File.size);
-    //Check Column Headers
-    const formData = new FormData();
-    if (this.File) {
-      formData.append('file', this.File);
-      formData.append('userId', this.userdetail.userId);
-      formData.append('companyId', remarks);
-      // formData.append('payPeriodId', this.payperiodUI.payfrequencyid);
-      // formData.append('inputType', this.inputType);
-      // formData.append('lotNo', this.lotNo);
-
-      //   this.onboardService.EmployeeTemplateImport(formData)
-      //     .pipe(
-      //       finalize(() => this.isLoading = true)
-      //     ).subscribe({
-      //       next: res => {
-      //         console.log(res.data.message);
-
-      //         if (res.statuscode == 200 && res.data.message == "1") {
-      //           console.log("revised");
-      //           const formDataRI = new FormData();
-      //           if (this.companyUI) {
-      //             formDataRI.append('companyId', this.companyUI.companyId);
-      //             formDataRI.append('payPeriodId', this.payperiodUI.payfrequencyid);
-      //             formDataRI.append('mapNameId', this.mapnameUI.mapNameId);
-      //             formDataRI.append('inputType', this.inputType);
-      //             formDataRI.append('lotNo', this.lotNo);
-
-      //             this.onboardService.GetRevisedTemplate(formDataRI)
-      //               .pipe(
-      //                 finalize(() => this.isLoading = false) // ✅ only one place to stop loading
-      //               ).subscribe({
-      //                 next: res => {
-      //                   console.log(res);
-      //                   if (res.statuscode == 200) {
-      //                     const data = res.data;
-      //                     var base64 = data.file;
-      //                     //console.log(data.FileName);
-      //                     //this.downloadExcelFromBase64(base64, data.fileName)
-      //                   }
-      //                 },
-      //                 error: error => console.error('Error:', error)
-      //               })
-      //           }
-      //           this.isLoading = false;
-      //           return;
-      //         }
-      //         else {
-      //           const data = res.data;
-      //           var base64 = data.file;
-      //           //console.log(data.FileName);
-      //           this.isLoading = false;
-      //           //this.downloadExcelFromBase64(base64, data.fileName)
-      //         }
-      //       },
-      //       error: error => console.error('Error:', error)
-      //     })
-      // }
-      //   else {
-      //     alert("No File");
-      //     this.isLoading = false;
-    }
+    this.selectedFileName = this.File.name;
+    this.remarksText = remarks;
+    console.log('File selected:', this.selectedFileName);
+    console.log('Remarks:', this.remarksText);
   }
 
   EditSaveClick() {
+    const payload = {
+      Serial_No: this.editData.serial_No,
+      Id: this.editData.id,
+      Company_Id: this.editData.company_Id,
+      Payperiod_Id: this.editData.payperiod_Id,
+      Invoice_Id: this.editData.invoice_Id,
+      Invoice_Number: this.editData.invoice_Number,
+      Document_Name: this.selectedFileName,
+      Remark: this.remarksText
+    }
+    const formData = new FormData();
+    if (this.File) {
+      formData.append('file', this.File);
+      formData.append('cancelDocument', JSON.stringify(payload).toString());
+      formData.append('userId', this.userdetail.user_Id);
 
+      this.cancelService.UploadDocument(formData).subscribe({
+        next: res => {
+          console.log(res);
+          const headerResult = res.Data[0].Error_Message.toString();
+          console.log(headerResult);
+
+          if (headerResult.includes('Successfully')) {
+            alert(headerResult);
+            this.iseditclicked=false;
+            this.SearchClick(0, 0);
+
+          }
+          else {
+            if (headerResult) {
+              alert(headerResult);
+              this.isLoading = false;
+            }
+            else {
+              alert('Error in Check Template');
+              this.isLoading = false;
+              return;
+            }
+          }
+        }
+      });
+    }
+    else {
+      alert('No File choosen');
+      this.isLoading = false;
+      return;
+    }
   }
 
   Cancel() {
+    this.remarksText=''
+    this.selectedFileName=''
     this.iseditclicked = false;
   }
 

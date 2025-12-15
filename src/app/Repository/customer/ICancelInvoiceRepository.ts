@@ -3,4 +3,5 @@ import { APIResponse } from '../../Models/apiresponse';
 
 export interface ICancelInvoiceRepository {
     Search(companyId: any, payPeriodId: any): Observable<APIResponse>;
+    UploadDocument(formData: FormData): Observable<APIResponse>
 }
