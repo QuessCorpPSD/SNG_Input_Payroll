@@ -8,12 +8,21 @@ import { ICancelInvoiceRepository } from '../../Repository/customer/ICancelInvoi
 @Injectable({
   providedIn: 'root'
 })
+
 export class CancelInvoiceRepository implements ICancelInvoiceRepository {
   env = environment
 
   constructor(private http: HttpClient) { }
 
   Search(companyId: number, payPeriodId: number): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.env.apiUrl + `CancelDocument/Search/${companyId}/${payPeriodId}`)
+    const url = `${this.env.apiUrl}CancelDocument/Search/${companyId}/${payPeriodId}`;
+    console.log(url);
+    return this.http.get<APIResponse>(url); 
+  }
+
+  UploadDocument(formData: FormData): Observable<APIResponse> {
+    const url = `${this.env.apiUrl}CancelDocument/UploadDocument`;
+    console.log(url);
+    return this.http.post<APIResponse>(url, formData); 
   }
 }
