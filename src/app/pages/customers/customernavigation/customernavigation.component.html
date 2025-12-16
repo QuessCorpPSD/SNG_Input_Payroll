@@ -5,6 +5,10 @@
                 <div class="Categorylist">
                         <ul class="horizontal-list">
 
+                                <li><a [routerLink]="['/Master/customer/Company']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">Company</a>
+                                </li>
                                 <li><a [routerLink]="['/Master/customer/employee']" class="nav-link"
                                                 routerLinkActive="selectedInput"
                                                 [routerLinkActiveOptions]="{ exact: true }">Employee</a>
@@ -49,10 +53,10 @@
                                                 routerLinkActive="selectedInput"
                                                 [routerLinkActiveOptions]="{ exact: true }">Service Charge</a>
                                 </li>
-                                <!-- <li><a [routerLink]="['/Master/customer/cancelledinvoicerepository']" class="nav-link"
+                                 <li><a [routerLink]="['/Master/customer/cancelledinvoicerepository']" class="nav-link"
                                                 routerLinkActive="selectedInput"
                                                 [routerLinkActiveOptions]="{ exact: true }">Cancelled Invoice Repository</a>
-                                </li> -->
+                                </li> 
                         </ul>
                 </div>
         </div>

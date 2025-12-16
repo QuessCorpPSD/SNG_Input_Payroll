@@ -12,8 +12,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatCheckbox, MatCheckboxModule } from '@angular/material/checkbox';
-import { ContactdetailsComponent } from '../contactdetails/contactdetails.component';
-import { CompanyserviceService } from '../../../Service/company/companyservice.service';
+import { CompanyserviceService } from '../../../Service/CUSTOMER/companyservice.service';
 import { from } from 'rxjs';
 import { json } from 'node:stream/consumers';
 import { EncryptionService } from '../../../Shared/encryption.service';
@@ -70,8 +69,9 @@ export class CompanyaddComponent {
   showPopupvalidate = false;
   showPopup = false;
 
-  constructor(private fb: FormBuilder, private dialogRef: MatDialogRef<CompanyaddComponent>, private dialog: MatDialog, private company: CompanyserviceService, private _decrypt: EncryptionService, private _sessionStoreage: SessionStorageService) { }
-
+  constructor(private fb: FormBuilder, private dialogRef: MatDialogRef<CompanyaddComponent>, 
+    private dialog: MatDialog, private company: CompanyserviceService, 
+    private _decrypt: EncryptionService, private _sessionStoreage: SessionStorageService) { }
   get invoiceType() {
     return this.CompanyAddForm.get('InvoiceType')?.value;
   }
@@ -526,14 +526,14 @@ export class CompanyaddComponent {
     this.isLoading = false;
   }
 
-  AddContactDetails() {
-    this.dialog.open(ContactdetailsComponent, {
-      width: '65%',
-      height: '47vh',
-      disableClose: true,
-      data: { example: 'Hello from parent!' }
-    });
-  }
+  // AddContactDetails() {
+  //   this.dialog.open(ContactdetailsComponent, {
+  //     width: '65%',
+  //     height: '47vh',
+  //     disableClose: true,
+  //     data: { example: 'Hello from parent!' }
+  //   });
+  // }
 
   onClose() {
     this.dialogRef.close();

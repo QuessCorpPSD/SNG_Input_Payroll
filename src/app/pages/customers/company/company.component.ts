@@ -114,7 +114,7 @@ export class CompanyComponent {
     this.isLoading = true;
     this.showTable = true;
 
-    const companyCode = this.CompanyCode;
+    const companyCode = this.CompanyCode||0;
     this.company.searchCompany(companyCode).subscribe({
       next: (res) => {
         this.isLoading = false;
