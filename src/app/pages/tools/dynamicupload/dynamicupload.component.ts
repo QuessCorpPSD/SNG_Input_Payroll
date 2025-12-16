@@ -11,6 +11,7 @@ import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { MatCheckbox } from "@angular/material/checkbox";
 import { SelectionModel } from '@angular/cdk/collections';
 import * as XLSX from 'xlsx';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-dynamicupload',
@@ -185,96 +186,100 @@ export class DynamicuploadComponent {
     }
 
     if (!this.selectedUploadTypeId) {
-      alert('Please select Upload type')
+      alert('Please select Upload type');
+      return;
     }
-    const formData = new FormData();
 
+    const formData = new FormData();
     formData.append('file', file);
     formData.append('UploadTypeId', this.selectedUploadTypeId);
     formData.append('CreatedBy', this.userdetail.user_Id);
-    console.log('UploadTypeId', this.selectedUploadTypeId)
-    this.service.Upload(formData).subscribe({
-      next: (res) => {
-        console.log('📥 API Response:', res);
 
-        if (!res || !res.Data) {
-          console.warn('ℹ️ No data returned from server yet.');
-          alert('Upload request processed. Server did not return any data.');
-          return;
-        }
+    // 🔄 START LOADING
+    this.isLoading = true;
 
-        const response = res.Data.response;
+    this.service.Upload(formData)
+      .pipe(
+        finalize(() => {
+          // 🔄 STOP LOADING (always runs: success / error / return)
+          this.isLoading = false;
+        })
+      )
+      .subscribe({
+        next: (res) => {
+          console.log('📥 API Response:', res);
 
-        if (response && response.includes("Row(s) Uploaded Successfully.")) {
-          alert('✅ Rows uploaded successfully.');
-          return;
-        }
+          if (!res || !res.Data) {
+            alert('Upload request processed. Server did not return any data.');
+            return;
+          }
 
-        const { parsed, msg } = this.tryParseResponse(response);
+          const response = res.Data.response;
 
-        const successMsg = 'Data uploaded successfully.';
-        const successMatch =
-          (Array.isArray(parsed) && parsed[0]?.Message?.trim() === successMsg) ||
-          (parsed && typeof parsed === 'object' && parsed?.Message?.trim() === successMsg);
+          if (response && response.includes("Row(s) Uploaded Successfully.")) {
+            alert('✅ Rows uploaded successfully.');
+            return;
+          }
 
-        if (res?.StatusCode === 200 && successMatch) {
-          alert('✅ Data uploaded successfully.');
-          return;
-        }
+          const { parsed, msg } = this.tryParseResponse(response);
 
-        if (res?.StatusCode === 200 && msg?.trim() === 'Failed to import.') {
-          const rawErr = res.Data.errors?.[0];
-          let errorArray: any[] = [];
+          const successMsg = 'Data uploaded successfully.';
+          const successMatch =
+            (Array.isArray(parsed) && parsed[0]?.Message?.trim() === successMsg) ||
+            (parsed && typeof parsed === 'object' && parsed?.Message?.trim() === successMsg);
 
-          try {
-            if (typeof rawErr === 'string') {
-              const tryJson = JSON.parse(rawErr);
-              errorArray = Array.isArray(tryJson) ? tryJson : [tryJson];
-            } else if (Array.isArray(rawErr)) {
-              errorArray = rawErr;
-            } else if (rawErr) {
-              errorArray = [rawErr];
+          if (res?.StatusCode === 200 && successMatch) {
+            alert('✅ Data uploaded successfully.');
+            return;
+          }
+
+          if (res?.StatusCode === 200 && msg?.trim() === 'Failed to import.') {
+            const rawErr = res.Data.errors?.[0];
+            let errorArray: any[] = [];
+
+            try {
+              if (typeof rawErr === 'string') {
+                const tryJson = JSON.parse(rawErr);
+                errorArray = Array.isArray(tryJson) ? tryJson : [tryJson];
+              } else if (Array.isArray(rawErr)) {
+                errorArray = rawErr;
+              } else if (rawErr) {
+                errorArray = [rawErr];
+              }
+            } catch {
+              errorArray = rawErr ? [{ Error_Message: String(rawErr) }] : [];
             }
-          } catch {
-            errorArray = rawErr ? [{ Error_Message: String(rawErr) }] : [];
+
+            const exportData = errorArray.map((item: any) => ({
+              Error_Message: item?.Validation || ''
+            }));
+
+            const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+            const workbook: XLSX.WorkBook = {
+              Sheets: { ErrorMessages: worksheet },
+              SheetNames: ['ErrorMessages']
+            };
+
+            XLSX.writeFile(
+              workbook,
+              `${this.selectedUploadTypeName}_ErrorMessages.xlsx`
+            );
+            return;
           }
 
-          const exportData = errorArray.map((item: any) => ({
-            Error_Message: item?.Validation || ''
-          }));
+          const fallback =
+            msg ||
+            (Array.isArray(parsed) ? JSON.stringify(parsed) :
+              (parsed?.Error_Message ?? ''));
 
-          const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
-          const workbook: XLSX.WorkBook = {
-            Sheets: { ErrorMessages: worksheet },
-            SheetNames: ['ErrorMessages']
-          };
-          XLSX.writeFile(workbook, `${this.selectedUploadTypeName}_ErrorMessages.xlsx`);
+          alert(fallback || 'Error while processing response.');
+        },
 
-          return;
+        error: (err) => {
+          console.error('❌ Upload failed', err);
+          alert('Upload failed due to a network or server error.');
         }
-
-        const fallback =
-          msg ||
-          (Array.isArray(parsed) ? JSON.stringify(parsed) :
-            (parsed && typeof parsed === 'object' && parsed.Error_Message) ? parsed.Error_Message :
-              (parsed ? JSON.stringify(parsed) : ''));
-
-        if (fallback) {
-          alert(fallback);
-        } else {
-          if (res?.Message) {
-            alert(`ℹ️ ${res.Message}`);
-          } else {
-            alert('Error while processing response.');
-          }
-        }
-
-      },
-      error: (err) => {
-        console.error('❌ Upload failed', err);
-        alert('Upload failed due to a network or server error.');
-      }
-    });
+      });
   }
 
 
