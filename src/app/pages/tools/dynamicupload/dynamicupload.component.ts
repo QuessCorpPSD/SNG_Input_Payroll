@@ -240,7 +240,7 @@ export class DynamicuploadComponent {
           }
 
           const exportData = errorArray.map((item: any) => ({
-            Error_Message: item?.Error_Message || ''
+            Error_Message: item?.Validation || ''
           }));
 
           const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);

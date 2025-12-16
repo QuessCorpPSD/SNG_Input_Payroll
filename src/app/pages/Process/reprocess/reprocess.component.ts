@@ -68,18 +68,18 @@ handleuserEvent(user:any)
   handlePayperiodEvent(payperiod: Payperiodclass) {
     this.payPeriod = payperiod;
 
-    console.log(this.selectedCompanyId);
+    
     if (this.selectedCompanyId != 0 || this.selectedCompanyId != undefined) {
-      console.log(this.payPeriod)
+      
 
       const request = {
         "company_Id": this.selectedCompanyId,
         "End_At": this.selectedDate
       }
-      console.log(request);
+      
       this._payProcessService.GetITCalenderCompany(request).subscribe({
         next: res => {
-          console.log(res.Data)
+          
           if (res?.Data?.actual_declared) {
             this.actual_Or_delcare = res.Data.actual_declared;
           } else {
@@ -101,7 +101,7 @@ handleuserEvent(user:any)
     const json = this._sessionStoreage.getItem('UserProfile');
     if (json) {
       this.userdetail = JSON.parse(this.decry.decrypt(json));
-      console.log('Userdetails',this.userdetail);
+      
 
     } else {
       console.warn('UserProfile not found in session storage');
@@ -147,14 +147,14 @@ handleuserEvent(user:any)
         next: res => {
           this.UploadedResponse = res;
 
-          if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.data.response === 'ReProcessed Successfully.') {
+          if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.Data.response === 'ReProcessed Successfully.') {
             this.isLoading = false;
             this.showPopup = true;
             this.popupMessage = 'Processed Successfully.';
           }
-          else if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.data.response === 'Failed.') {
+          else if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.Data.response === 'Failed.') {
 
-            const errorArray = JSON.parse(this.UploadedResponse.data.errors[0]);
+            const errorArray = JSON.parse(this.UploadedResponse.Data.errors[0]);
             const exportData = errorArray.map((item: any) => ({
               MESSAGE: item.Error_Message || item.ERROR_MESSAGE || ''
             }));
@@ -166,15 +166,15 @@ handleuserEvent(user:any)
             };
 
             // Export the file
-            XLSX.writeFile(workbook, 'ErrorMessages_Timesheet.xlsx');
+            XLSX.writeFile(workbook, 'ErrorMessages_Payroll_Process.xlsx');
             this.isLoading = false;
             this.showPopup = true;
             this.popupMessage = 'Failed to Process.';
 
           }
           else {
-            if (this.UploadedResponse.data.response != '') {
-              alert(this.UploadedResponse.data.response);
+            if (this.UploadedResponse.Data.response != '') {
+              alert(this.UploadedResponse.Data.response);
               this.isLoading = false;
             }
             else {
@@ -195,14 +195,14 @@ handleuserEvent(user:any)
         next: res => {
           this.UploadedResponse = res;
 
-          if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.data.response === 'Processed Successfully.') {
+          if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.Data.response === 'Processed Successfully.') {
             this.isLoading = false;
             this.showPopup = true;
             this.popupMessage = 'Processed Successfully.';
           }
-          else if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.data.response === 'Failed.') {
+          else if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.Data.response === 'Failed.') {
 
-            const errorArray = JSON.parse(this.UploadedResponse.data.errors[0]);
+            const errorArray = JSON.parse(this.UploadedResponse.Data.errors[0]);
             const exportData = errorArray.map((item: any) => ({
               MESSAGE: item.Error_Message || item.ERROR_MESSAGE || ''
             }));
@@ -214,15 +214,15 @@ handleuserEvent(user:any)
             };
 
             // Export the file
-            XLSX.writeFile(workbook, 'ErrorMessages_Timesheet.xlsx');
+            XLSX.writeFile(workbook, 'ErrorMessages_Payroll_Process.xlsx');
             this.isLoading = false;
             this.showPopup = true;
             this.popupMessage = 'Failed to Process.';
 
           }
           else {
-            if (this.UploadedResponse.data.response != '') {
-              alert(this.UploadedResponse.data.response);
+            if (this.UploadedResponse.Data.response != '') {
+              alert(this.UploadedResponse.Data.response);
               this.isLoading = false;
             }
             else {
