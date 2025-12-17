@@ -49,7 +49,7 @@ export class DesignationComponent {
 
 
   uploadDisplayedColumns: string[] = [
-    'Action', 'slNo', 'companycode', 'departmentcode', 'departmentname', 'standarddesignation', 'amount', 'skillcategory', 'npdays'];
+    'slNo', 'companycode', 'departmentcode', 'departmentname', 'standarddesignation', 'amount', 'skillcategory', 'npdays'];
 
   uploadedData: any[] = []; // 🧾 No mock data
 
@@ -111,15 +111,13 @@ export class DesignationComponent {
     this.designation.searchDesignation(companyCode).subscribe({
       next: (res) => {
         this.isLoading = false;
-        console.log(res.Data);
         this.designationSearch = res.Data;
-        console.log(this.designationSearch);
         if (this.designationSearch && this.designationSearch.length > 0) {
           this.dataSource = new MatTableDataSource(this.designationSearch);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
           this.uploadDisplayedColumns = [
-            'Action', 'slNo', 'companycode', 'departmentcode', 'departmentname', 'standarddesignation', 'amount', 'skillcategory', 'npdays'];
+            'slNo', 'companycode', 'departmentcode', 'departmentname', 'standarddesignation', 'amount', 'skillcategory', 'npdays'];
         }
       },
       error: (err) => {
@@ -141,15 +139,12 @@ export class DesignationComponent {
     this.isLoading = true;
     this.designation.exportDesignation(companyId).subscribe({
       next: res => {
-        console.log('API Response:', res);
 
         const base64String = res?.Data?.file;
 
         if (base64String && base64String.length > 0) {
-          console.log('Base64 String Found:', base64String);
           const fileName = res?.Data?.fileName || 'Department';
           this.downloadExcelFromBase64(base64String, fileName, 'xlsx');
-          this.showAlertPopup('Template downloaded successfully!');
         } else {
           alert("No template data available.");
         }
@@ -161,6 +156,7 @@ export class DesignationComponent {
         this.isLoading = false;
       }
     });
+    this.isLoading = false;
   }
 
   downloadExcelFromBase64(base64String: string, fileName: string, fileType: string): void {
@@ -197,8 +193,8 @@ export class DesignationComponent {
     const file = input?.files?.[0];
 
     if (!file) {
-      alert("Please upload only one Excel file.")
       this.isLoading = false;
+      alert("Please upload only one Excel file.")
       return;
     }
 
@@ -274,6 +270,7 @@ export class DesignationComponent {
         // CASE 3: Anything else → show whatever we have
         // CASE: Data is array with Error_Message (e.g. "No rows to Upload")
         if (Array.isArray(res.Data) && res.Data[0]?.Error_Message) {
+          this.isLoading = false;
           alert(res.Data[0].Error_Message)
           return;
         }

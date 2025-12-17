@@ -38,7 +38,7 @@ export class CompanypaycodemappingAddComponent {
   selectedCompanyCode: any;
 
   isFirstAddClick: boolean = true;
-  paycodeList: any[] = [];   
+  paycodeList: any[] = [];
   @ViewChild('paginator') paginator!: MatPaginator;
 
   uploadDisplayedColumns: string[] = ['SNo', 'Paycode', 'Description', 'Paytype', 'taxable', 'LopApplicable', 'PfApplicable', 'ESIApplicable', 'PTApplicable', 'Earnedpaycode', 'Pickfrom', 'Formula'];
@@ -87,6 +87,7 @@ export class CompanypaycodemappingAddComponent {
     this.selectedCompanyId = company.companyId;
     this.selectedCompanyCode = company.companyCode;
   }
+  
   showAlertPopup(message: string, subMessage: string = '') {
     this.popupMessage = message;
     this.popupSubMessage = subMessage;
@@ -256,12 +257,12 @@ export class CompanypaycodemappingAddComponent {
       Earnedpaycode: '',
       Formula: '',
       isEmpty: true,
-      SNo: null 
+      SNo: null
     };
 
 
     this.uploadedData.splice(this.selectedRowIndex, 0, emptyRow);
-    this.uploadedDataSource.paginator = this.paginator; 
+    this.uploadedDataSource.paginator = this.paginator;
 
     this.uploadedData.forEach((row, index) => {
       row.SNo = index + 1;
@@ -292,20 +293,19 @@ export class CompanypaycodemappingAddComponent {
       PaycodeDetail: paycodeDetail
     };
 
-    console.log('payload', JSON.stringify(payloadCreate));
-
     this.paycodeService.PostAddPaycodeMapping(payloadCreate).subscribe({
       next: (res) => {
-        console.log(res);
         const parsedData = JSON.parse(res.Data.data);
         const errormsg = parsedData[0].Error_Message;
 
-        if (errormsg.toLowerCase().includes("successfully")) {
+        if (errormsg.toLowerCase().includes("success")) {
           alert("Company Paycode Mapping Created Successfully");
           this.isLoading = false;
+          this.onClose();
         } else {
           alert(errormsg);
           this.isLoading = false;
+          this.onClose();
         }
         error: (err) => {
           console.error("Error saving:", err);

@@ -10,12 +10,13 @@ import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { MapnameComponent } from '../../../common/Mapname/mapname/mapname.component';
 import { IClientaddress } from '../../../Repository/customer/IClientaddress';
+import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.component";
 export const Pay_TOKEN = new InjectionToken<IClientaddress>('Pay_TOKEN');
 
 @Component({
   selector: 'app-clientaddress-new',
   standalone: true,
-  imports: [MatCardModule, MatIconModule, CompanyallComponent, CommonModule, FormsModule, ReactiveFormsModule, MapnameComponent],
+  imports: [MatCardModule, MatIconModule, CompanyallComponent, CommonModule, FormsModule, ReactiveFormsModule, MapnameComponent, AlertpopupComponent],
   templateUrl: './clientaddress-new.component.html',
   styleUrl: './clientaddress-new.component.css',
   providers: [
@@ -35,6 +36,11 @@ export class ClientaddressNewComponent {
   mapnameUI: any;
   selectedCC?: number;
   selectedMN?: number;
+  message: string = '';
+  popupMessage: string = '';
+  popupSubMessage: string = '';
+  showPopup = false;
+  isLoading: boolean = false;
   constructor(
     private dialogRef: MatDialogRef<ClientaddressNewComponent>,
     private fb: FormBuilder, @Inject(Pay_TOKEN) private service: IClientaddress, private decry: EncryptionService,
@@ -70,6 +76,18 @@ export class ClientaddressNewComponent {
     this.BindCostcenter();
   }
 
+  showAlertPopup(message: string, subMessage: string = '') {
+    this.popupMessage = message;
+    this.popupSubMessage = subMessage;
+    this.showPopup = true;
+  }
+
+  closePopup() {
+    this.showPopup = false;
+    this.popupMessage = '';
+    this.popupSubMessage = '';
+  }
+
   // When company dropdown emits
   handleCompanyEvent(company: any) {
     this.selectedCC = company.companyId;
@@ -82,7 +100,6 @@ export class ClientaddressNewComponent {
   handleMapNameEvent(mapname: any) {
     this.selectedMN = mapname.mapName;
     this.mapnameUI = mapname;
-    //console.log(mapname);
   }
 
   // Mark single field touched
@@ -170,13 +187,9 @@ export class ClientaddressNewComponent {
         CreatedBy: this.userdetail.user_Id
       };
 
-      console.log("Payload:", JSON.stringify(payload));
-
       this.service.clientaddressaddsave(payload).subscribe({
         next: (res: string) => {
-          console.log(res);
           const cleanMessage = res.replace(/<br\s*\/?>/gi, '\n');
-          console.log(cleanMessage);
           if (cleanMessage.includes('Success')) {
             alert('Client Address Created Successfully');
             resolve();
@@ -192,11 +205,6 @@ export class ClientaddressNewComponent {
           reject(err);
         }
       });
-
-
-
     });
   }
-
-
 }

@@ -23,7 +23,7 @@ import { MatCardModule } from "@angular/material/card";
 import { GroupnameComponent } from "../../../common/groupname/groupname.component";
 import { Payperiodclass } from '../../../Models/Common';
 import { CancelInvoiceRepository } from '../../../Service/customersserv/CancelInvoiceRepository.service';
-import { ThisReceiver } from '@angular/compiler';
+import { CompanyallComponent } from "../../../common/CompanyAll/companyall.component";
 
 @Component({
   selector: 'cancelledinvoicerepository',
@@ -42,7 +42,7 @@ import { ThisReceiver } from '@angular/compiler';
     MatButtonModule,
     //CompanyComponent,
     MatTooltipModule,
-    MatCheckboxModule, MatCardModule],
+    MatCheckboxModule, MatCardModule, CompanyallComponent],
   templateUrl: './cancelledinvoicerepository.component.html',
   styleUrl: './cancelledinvoicerepository.component.css'
 })
@@ -110,6 +110,7 @@ export class CancelledinvoicerepositoryComponent {
     this.userdetail = JSON.parse(this._decrypt.decrypt(userdetail!));
     this.SearchClick(0, 0);
   }
+  
   Search() {
     this.SearchClick(this.selectedCompanyId, this.PayPeriodUI.payfrequencyid);
   }

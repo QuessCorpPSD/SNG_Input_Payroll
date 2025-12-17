@@ -14,12 +14,13 @@ import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { PayfrequencyService } from '../../../Service/CUSTOMER/payfrequency.service';
 import { IPayfrequencyservice } from '../../../Repository/customer/IPayfrequency';
+import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.component";
 export const Pay_TOKEN = new InjectionToken<IPayfrequencyservice>('Pay_TOKEN');
 
 @Component({
   selector: 'app-payfrequency-add',
   standalone: true,
-  imports: [MatCardModule, MatPaginatorModule, MatTableModule, MatIconModule, CompanyallComponent, CommonModule, FormsModule, ReactiveFormsModule, MatTooltipModule],
+  imports: [MatCardModule, MatPaginatorModule, MatTableModule, MatIconModule, CompanyallComponent, CommonModule, FormsModule, ReactiveFormsModule, MatTooltipModule, AlertpopupComponent],
   templateUrl: './payfrequency-add.component.html',
   styleUrl: './payfrequency-add.component.css',
   providers: [
@@ -38,24 +39,40 @@ export class PayfrequencyAddComponent {
   selectedCompanyId: any;
   selectedCompanyCode: any;
   selectedRowIndex: number | null = null;
-  isLoading = false;
   userdetail: any;
   Grouptype: any;
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   @ViewChild(MatSort) sort!: MatSort;
   billingpay: any;
   billingpays: any;
+  message: string = '';
+  popupMessage: string = '';
+  popupSubMessage: string = '';
+  showPopup = false;
+  isLoading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<PayfrequencyAddComponent>,
-    private dialog: MatDialog, @Inject(Pay_TOKEN) private service:IPayfrequencyservice,
+    private dialog: MatDialog, @Inject(Pay_TOKEN) private service: IPayfrequencyservice,
     private decry: EncryptionService,
     private _sessionStoreage: SessionStorageService
   ) { }
 
   onClose(): void {
     this.dialogRef.close();
+  }
+
+  showAlertPopup(message: string, subMessage: string = '') {
+    this.popupMessage = message;
+    this.popupSubMessage = subMessage;
+    this.showPopup = true;
+  }
+
+  closePopup() {
+    this.showPopup = false;
+    this.popupMessage = '';
+    this.popupSubMessage = '';
   }
 
   handleCompanyEvent(company: any): void {
@@ -67,7 +84,7 @@ export class PayfrequencyAddComponent {
   selectRow(index: number) {
     this.selectedRowIndex = index;
   }
-  
+
   deleteSelectedRow() {
     if (this.selectedRowIndex === null) {
       alert("Please select a row to delete.");
@@ -201,8 +218,15 @@ export class PayfrequencyAddComponent {
     this.service.Addsave(payload).subscribe({
       next: res => {
         this.isLoading = false;
-        alert(res.Data.data.Table0?.[0].Error_Message);
-        this.dialogRef.close('add');
+        const sucessmsg = res.Data.data.Table0?.[0].Error_Message;
+        if (sucessmsg.includes("Success")) {
+          this.isLoading = false;
+          alert(sucessmsg);
+          this.dialogRef.close('add');
+        } else {
+          alert(res.Data.message);
+
+        }
       },
       error: err => {
         this.isLoading = false;

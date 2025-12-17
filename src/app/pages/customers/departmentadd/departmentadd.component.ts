@@ -36,8 +36,9 @@ import { IdletimeoutService } from '../../../Service/idletimeout.service';
   styleUrl: './departmentadd.component.css'
 })
 export class DepartmentaddComponent {
+  companyCode: any;
 
-  constructor(private dialogRef: MatDialogRef<DepartmentaddComponent>, private _decrypt: EncryptionService,private department: DepartmentService, private _sessionStoreage: SessionStorageService, private idleTimeOutService: IdletimeoutService) { }
+  constructor(private dialogRef: MatDialogRef<DepartmentaddComponent>, private _decrypt: EncryptionService, private department: DepartmentService, private _sessionStoreage: SessionStorageService, private idleTimeOutService: IdletimeoutService) { }
 
   AddDepartmentForm!: FormGroup;
   selectedCompanyId!: number;
@@ -53,7 +54,6 @@ export class DepartmentaddComponent {
   handleCompanyEvent(company) {
     this.selectedCompanyId = company.companyId;
   }
-
 
   showAlertPopup(message: string, subMessage: string = '') {
     this.popupMessage = message;
@@ -81,15 +81,13 @@ export class DepartmentaddComponent {
   Save() {
 
     if (this.AddDepartmentForm.invalid) {
-
-      // Highlight all fields (makes touched = true)
       this.AddDepartmentForm.markAllAsTouched();
-
       return;
     }
 
-    const form = this.AddDepartmentForm.value;
+    this.isLoading = true;
 
+    const form = this.AddDepartmentForm.value;
     const createdBy =
       this.userdetail?.user_Id ? this.userdetail.user_Id.toString() : "0";
 
@@ -117,28 +115,27 @@ export class DepartmentaddComponent {
           let msg = "Error";
 
           if (errors && errors.length > 0) {
-            msg = errors.join("\n");   // <-- Shows "Band already Exists"
+            msg = errors.join("\n");
           } else {
             msg = response;            // fallback
           }
           alert(msg)
+          this.isLoading = false;
           return;
         }
 
         // SUCCESS RESPONSE
         if (response && response.toLowerCase().includes("success")) {
-          this.showAlertPopup("Department Added Successfully!");
-          this.dialogRef.close(true);
-          return;
+          alert("Department Added Successfully!");
+          this.isLoading = false;
+          this.onClose();
         }
-
-        // UNKNOWN
-        alert(response || "Unexpected server response")
       },
 
       error: (err) => {
         console.error("Error saving band:", err);
         alert("Error saving department details");
+        this.isLoading = false;
       }
     });
   }

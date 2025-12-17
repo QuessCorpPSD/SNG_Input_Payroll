@@ -162,12 +162,10 @@ export class CompanypaycodemappingEditComponent {
     this.refreshTable();
     this.selectedRowIndex = null;
   }
+
   getAbsoluteIndex(pageRelativeIndex: number): number {
     return pageRelativeIndex + (this.paginator.pageIndex * this.paginator.pageSize);
   }
-
-
-
 
   onPaycodeSelect(paycodeId: number, pageRelativeIndex: number) {
     const rowIndex = this.getAbsoluteIndex(pageRelativeIndex);
@@ -194,7 +192,6 @@ export class CompanypaycodemappingEditComponent {
     this.uploadedDataSource.data = [...this.uploadedData];
   }
 
-
   onPickFromSelect(selectedId: number, pageRelativeIndex: number) {
     const rowIndex = this.getAbsoluteIndex(pageRelativeIndex);
     const row = this.uploadedData[rowIndex];
@@ -205,9 +202,6 @@ export class CompanypaycodemappingEditComponent {
 
     this.uploadedDataSource.data = [...this.uploadedData];
   }
-
-
-
 
   deleteSelectedRow(): void {
     if (this.selectedRowIndex === null) {
@@ -259,9 +253,6 @@ export class CompanypaycodemappingEditComponent {
     });
   }
 
-
-
-
   onClose(): void {
     this.dialogRef.close();
   }
@@ -285,14 +276,12 @@ export class CompanypaycodemappingEditComponent {
       PaycodeDetail: paycodeDetail
     };
 
-    console.log('Final payload:', JSON.stringify(payload));
-
     this.paycodeService.PostAddPaycodeMapping(payload).subscribe({
       next: (res) => {
         const parsedData = JSON.parse(res.Data);
         const msg = parsedData[0].message;
 
-        if (msg.toLowerCase().includes("successfully")) {
+        if (msg.toLowerCase().includes("success")) {
           alert("Company Paycode Mapping Saved Successfully");
         } else {
           alert(msg);

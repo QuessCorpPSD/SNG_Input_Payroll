@@ -162,3 +162,9 @@
     </mat-card-footer>
   </mat-card>
 </form>
+<div *ngIf="isLoading" class="loading-overlay">
+  <img src="assets/Loading.gif" alt="Loading...">
+</div>
+
+<app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+  (close)="closePopup()"></app-alertpopup>

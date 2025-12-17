@@ -99,6 +99,18 @@ export class CorporatebankaddComponent {
     });
   }
 
+  showAlertPopup(message: string, subMessage: string = '') {
+    this.popupMessage = message;
+    this.popupSubMessage = subMessage;
+    this.showPopup = true;
+  }
+
+  closePoopup() {
+    this.showPopup = false;
+    this.popupMessage = '';
+    this.popupSubMessage = '';
+  }
+
 
   Save() {
     this.isLoading = true;
@@ -160,8 +172,8 @@ export class CorporatebankaddComponent {
           // SUCCESS CASE
           const table = res?.Data?.data?.Table0;
           const message = table?.[0]?.Error_Message || res?.Data?.message;
-          this.showPopup = true;
-          this.popupMessage = message;
+          alert(message);
+          this.onClose();
 
         } else {
 
@@ -173,6 +185,7 @@ export class CorporatebankaddComponent {
             "Failed. Please try again.";
 
           alert(errorMessage.trim());
+          this.onClose();
         }
 
         // <-- show popup for both cases
@@ -186,7 +199,6 @@ export class CorporatebankaddComponent {
       }
     });
   }
-
 
   onClose() {
     this.dialogRef.close();

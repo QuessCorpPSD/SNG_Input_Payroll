@@ -3,7 +3,7 @@
         <mat-card-header class="sticky-header">
 
             <!-- <mat-card-title>Add Department</mat-card-title> -->
-            <mat-card-title style="color: #302CB3;">Add Department</mat-card-title>
+            <mat-card-title style="color: #302CB3;font-weight: 500;">Add Department</mat-card-title>
 
             <span class="spacer"></span>
             <button mat-icon-button (click)="onClose()" class="no-border-icon">
@@ -12,12 +12,11 @@
         </mat-card-header>
 
         <mat-card-content class="scroll-content">
-            <br />
             <!-- Row 1 -->
-            <div class="row g-3 mb-3">
+            <div class="row g-3 mb-3" style="padding-top: 10px;">
                 <div class="col-md-12">
                     <label class="form-label">Company Code<span class="text-danger">*</span></label>
-                    <companyall (companyEmit)="handleCompanyEvent($event)" formControlName="companyCode"></companyall>
+                    <companyall (companyEmit)="handleCompanyEvent($event)" formControlName="companyCode" [ngModel]=""></companyall>
                     <div class="text-danger small" *ngIf="AddDepartmentForm.get('companyCode')?.touched 
              && AddDepartmentForm.get('companyCode')?.hasError('required')">
                         companyCode is required

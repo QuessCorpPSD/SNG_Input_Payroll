@@ -56,6 +56,8 @@ export class DesignationaddComponent {
   }
 
   ngOnInit(): void {
+    const userdetail = this._sessionStoreage.getItem('UserProfile');
+    this.userdetail = JSON.parse(this._decrypt.decrypt(userdetail!));
     this.DesinationAddForm = new FormGroup({
       CompanyCode: new FormControl('', Validators.required),
       DepartmentCode: new FormControl(''),
@@ -90,20 +92,16 @@ export class DesignationaddComponent {
   Save() {
 
     if (this.DesinationAddForm.invalid) {
-
-      // Highlight all fields (makes touched = true)
       this.DesinationAddForm.markAllAsTouched();
-
       return;
     }
 
+    this.isLoading = true;
+
     const form = this.DesinationAddForm.value;
 
-    const createdBy =
-      this.userdetail?.user_Id ? this.userdetail.user_Id.toString() : "0";
-
     const payload = {
-      Created_By: createdBy,
+      Created_By: this.userdetail.user_Id?.toString(),
       Mode: "Add",
       Designationmaster: [
         {
@@ -119,49 +117,42 @@ export class DesignationaddComponent {
         }
       ]
     };
-
     this.designation.saveDesignation(payload).subscribe({
       next: (res) => {
         const response = res?.Data?.response;
         const errors = res?.Data?.errors;
 
-
         if (response && response.toLowerCase().includes("failed")) {
-
           let msg = "Error";
-
           if (errors && errors.length > 0) {
-            msg = errors.join("\n");   // <-- Shows "Band already Exists"
+            msg = errors.join("\n");
           } else {
-            msg = response;            // fallback
+            msg = response;
           }
           alert(msg)
+          this.isLoading = false;
           return;
         }
 
         // SUCCESS RESPONSE
         if (response && response.toLowerCase().includes("success")) {
-          this.showAlertPopup("Desigantion Added Successfully!");
-          this.dialogRef.close(true);
+          alert("Desigantion Added Successfully!");
+          this.isLoading = false;
+          this.onClose();
           return;
         }
-
-        // UNKNOWN
-        alert(response || "Unexpected server response")
       },
 
       error: (err) => {
-        alert("Error saving band details")
+        alert("Error saving designation details")
+        this.isLoading = false;
       }
     });
 
-
   }
-
 
   onClose() {
     this.dialogRef.close();
   }
-
 
 }

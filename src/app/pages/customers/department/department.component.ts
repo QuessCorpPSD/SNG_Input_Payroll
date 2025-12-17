@@ -21,7 +21,7 @@ import { IdletimeoutService } from '../../../Service/idletimeout.service';
 @Component({
   selector: 'app-department',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatTooltipModule, MatTableModule, MatPaginatorModule, FormsModule, ReactiveFormsModule, CompanyallComponent,  AlertpopupComponent],
+  imports: [CommonModule, MatIconModule, MatTooltipModule, MatTableModule, MatPaginatorModule, FormsModule, ReactiveFormsModule, CompanyallComponent, AlertpopupComponent],
   templateUrl: './department.component.html',
   styleUrl: './department.component.css'
 })
@@ -30,7 +30,6 @@ export class DepartmentComponent {
 
   constructor(private dialog: MatDialog, private department: DepartmentService, private _decrypt: EncryptionService, private _sessionStoreage: SessionStorageService, private idleTimeOutService: IdletimeoutService) { }
 
-  DepartmentCode!: FormGroup;
   showTable = false;
   selectedCompanyId!: number;
   payPeriod!: Payperiodclass;
@@ -44,13 +43,12 @@ export class DepartmentComponent {
   popupSubMessage: string = '';
   showPopupalert = false;
   showPopupvalidate = false;
-
   isLoading: boolean = false;
   userdetail: any;
   @ViewChild(MatSort) sort!: MatSort;
 
   uploadDisplayedColumns: string[] = [
-    'Action', 'slNo', 'companycode', 'departmentcode', 'departmentname',];
+    'slNo', 'companycode', 'departmentcode', 'departmentname',];
 
   uploadedData: any[] = []; // 🧾 No mock data
 
@@ -67,12 +65,6 @@ export class DepartmentComponent {
     this.popupMessage = message;
     this.popupSubMessage = subMessage;
     this.showPopupalert = true;
-  }
-
-  showValidatePopup(message: string, subMessage: string = '') {
-    this.popupMessage = message;
-    this.popupSubMessage = subMessage;
-    this.showPopupvalidate = true;
   }
 
   closePoopup() {
@@ -123,15 +115,13 @@ export class DepartmentComponent {
     this.department.searchDepartment(companyCode).subscribe({
       next: (res) => {
         this.isLoading = false;
-        console.log(res.Data);
         this.departmentSearch = res.Data;
-        console.log(this.departmentSearch);
         if (this.departmentSearch && this.departmentSearch.length > 0) {
           this.dataSource = new MatTableDataSource(this.departmentSearch);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
           this.uploadDisplayedColumns = [
-            'Action', 'slNo', 'companycode', 'departmentcode', 'departmentname',];
+            'slNo', 'companycode', 'departmentcode', 'departmentname',];
         }
       },
       error: (err) => {
@@ -153,15 +143,11 @@ export class DepartmentComponent {
     this.isLoading = true;
     this.department.exportDepartment(companyId).subscribe({
       next: res => {
-        console.log('API Response:', res);
-
         const base64String = res?.Data?.file;
 
         if (base64String && base64String.length > 0) {
-          console.log('Base64 String Found:', base64String);
           const fileName = res?.Data?.fileName || 'Department';
           this.downloadExcelFromBase64(base64String, fileName, 'xlsx');
-          this.showAlertPopup('Template downloaded successfully!');
         } else {
           alert("No template data available.")
         }
@@ -357,9 +343,6 @@ export class DepartmentComponent {
   ngOnInit(): void {
     const userdetail = this._sessionStoreage.getItem('UserProfile');
     this.userdetail = JSON.parse(this._decrypt.decrypt(userdetail!));
-    this.DepartmentCode = new FormGroup({
-      companyCode: new FormControl(''),
-    })
   }
 
   AddDepartmentOpen() {

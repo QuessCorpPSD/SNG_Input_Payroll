@@ -41,15 +41,17 @@ export class CompanypaycodemappingCopyComponent {
   isFirstAddClick: boolean = true;
   paycodeList: any[] = [];
   pickfromlist: any[] = [];
-
+  message: string = '';
+  popupMessage: string = '';
+  popupSubMessage: string = '';
+  showPopup = false;
+  isLoading: boolean = false;
   uploadDisplayedColumns: string[] = ['SNo', 'Paycode', 'Description', 'Paytype', 'formula', 'taxable', 'LopApplicable', 'PfApplicable', 'ESIApplicable', 'PTApplicable', 'Earnedpaycode', 'Pickfrom'];
   uploadedData: any[] = [];
   uploadedDataSource = new MatTableDataSource<any>(this.uploadedData);
   selectedRowIndex: number | null = null;
 
-  popupMessage: string = '';
-  showPopup = false;
-  isLoading: boolean = false;
+
   userdetail!: any;
 
   @ViewChild('paginator') paginator!: MatPaginator;
@@ -257,7 +259,17 @@ export class CompanypaycodemappingCopyComponent {
     });
   }
 
+  showAlertPopup(message: string, subMessage: string = '') {
+    this.popupMessage = message;
+    this.popupSubMessage = subMessage;
+    this.showPopup = true;
+  }
 
+  closePopup() {
+    this.showPopup = false;
+    this.popupMessage = '';
+    this.popupSubMessage = '';
+  }
 
 
   onClose(): void {
@@ -287,8 +299,6 @@ export class CompanypaycodemappingCopyComponent {
       PaycodeDetail: paycodeDetail
     };
 
-    console.log("Final Payload:", JSON.stringify(payload));
-
     this.paycodeService.PostAddPaycodeMapping(payload).subscribe({
       next: (res) => {
         const parsedData = JSON.parse(res.Data.data);
@@ -297,9 +307,11 @@ export class CompanypaycodemappingCopyComponent {
         if (errormsg.toLowerCase().includes("successfully")) {
           alert("Company Paycode Mapping Created Successfully");
           this.isLoading = false;
+          this.onClose()
         } else {
           alert(errormsg);
           this.isLoading = false;
+          this.onClose();
         }
       },
       error: (err) => {

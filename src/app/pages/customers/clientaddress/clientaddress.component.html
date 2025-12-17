@@ -1,4 +1,4 @@
-<div class="page-wrapper" style="padding-top: 2%;">
+<div class="page-wrapper">
 
     <div class="scrollable-content">
         <!-- <div style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;">
@@ -11,21 +11,21 @@
             <div class="row g-3 align-items-end">
 
                 <div class="col-md-3 d-flex gap-2">
-                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Create"
-                        (click)="AddPOOpen()">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-add"
+                        matTooltip="Create" (click)="AddPOOpen()">
                         <mat-icon>add</mat-icon>
                     </button>
 
-                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Export"
-                        (click)="exportToExcel()">
-                        <mat-icon>table_chart</mat-icon>
+                    <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="Export" (click)="exportToExcel()">
+                        <mat-icon>download</mat-icon>
                     </button>
-                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Template"
-                        (click)="downloadTemplate()">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                        matTooltip="Template" (click)="downloadTemplate()">
                         <mat-icon>cloud_download</mat-icon>
                     </button>
-                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Import"
-                        (click)="ImportClick(fileInput)">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
+                        matTooltip="Import" (click)="ImportClick(fileInput)">
                         <mat-icon>cloud_upload</mat-icon>
                     </button>
                     <input type="file" #fileInput style="display: none;" (click)="fileInput.value=''"
@@ -33,22 +33,22 @@
                 </div>
             </div>
         </div>
-        <div class="table-wrapper1" style="padding-top: 2%;">
+        <div class="table-wrapper1">
             <div class="table-scroll">
                 <mat-table [dataSource]="dataSource" matSort class="custom-table mat-elevation-z8 auto-fit-table">
-
-
                     <ng-container matColumnDef="Action">
                         <mat-header-cell *matHeaderCellDef><strong>Action</strong></mat-header-cell>
                         <mat-cell *matCellDef="let row">
-                            <button class="btn btn-sm d-flex align-items-center justify-content-center"
-                                matTooltip="Edit" (click)="editOpen(row)">
-                                <mat-icon>edit</mat-icon>
-                            </button>
-                            <button class="btn btn-sm d-flex align-items-center justify-content-center"
-                                matTooltip="Delete" (click)="deleteClientAddress(row)">
-                                <mat-icon>delete</mat-icon>
-                            </button>
+                            <div class="action-wrapper">
+                                <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                    matTooltip="Edit" (click)="editOpen(row)">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                                <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                    matTooltip="Delete" (click)="deleteClientAddress(row)">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </div>
                         </mat-cell>
                     </ng-container>
 
@@ -88,11 +88,9 @@
                     </ng-container>
 
                     <ng-container matColumnDef="Shippingaddresssameasbilling">
-                        <mat-header-cell *matHeaderCellDef
-                            style="width: 240px!important;min-width: 240px!important;"><strong>Shipping Address
-                                same as
+                        <mat-header-cell *matHeaderCellDef><strong>Shipping Address same as
                                 Billing</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row" style="width: 240px!important;min-width: 240px!important;">{{
+                        <mat-cell *matCellDef="let row">{{
                             row['isShippingAddressSameAsBilling'] }}</mat-cell>
                     </ng-container>
 
