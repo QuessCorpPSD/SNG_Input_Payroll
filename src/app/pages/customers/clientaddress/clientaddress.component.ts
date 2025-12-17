@@ -86,8 +86,6 @@ export class ClientaddressComponent {
     this.showValidate = false;
   }
 
-
-
   AddPOOpen() {
     const dialogRef = this.dialog.open(ClientaddressNewComponent, {
       width: '60%',
@@ -111,6 +109,7 @@ export class ClientaddressComponent {
     });
 
   }
+
   editOpen(row: any) {
     const dialogRef = this.dialog.open(ClientaddressEditComponent, {
       width: '60%',
@@ -124,25 +123,31 @@ export class ClientaddressComponent {
       }
     });
   }
-  deleteClientAddress(row: any): void {
 
+  deleteClientAddress(row: any): void {
     const userId = this.userdetail.user_Id;
 
     this.service.PostClientAddressDelete(row.clientAddressId, userId)
-      .subscribe(
-        (res: string) => {
-          alert(res);
-          this.onsearch();
+      .subscribe({
+        next: (res: string) => {
+          if (res.includes('Success')) {
+            alert(res);
+            this.onsearch();
+          }
+          else {
+            alert(res);
+            this.onsearch();
+          }
         },
-        (err) => {
+        error: (err) => {
           alert('Error deleting Client Address.');
           console.error(err);
+        },
+        complete: () => {
+          console.error('Delete client address completed');
         }
-      );
+      });
   }
-
-
-
 
   onsearch() {
     this.isLoading = true;
@@ -208,8 +213,6 @@ export class ClientaddressComponent {
           apiFileName = apiFileName.replace(".xlsx", "");
 
           this.downloadExcelFromBase64(base64File, apiFileName, "Excel");
-
-          this.showAlertPopup("File downloaded successfully!");
         } catch (err) {
           console.error("Error exporting to Excel:", err);
         }

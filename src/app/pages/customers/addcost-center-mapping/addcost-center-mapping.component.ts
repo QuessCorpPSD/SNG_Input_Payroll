@@ -13,6 +13,7 @@ import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CostMappingCenterService } from '../../../Service/CUSTOMER/cost-mapping-center.service';
+import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.component";
 
 @Component({
   selector: 'app-addcost-center-mapping',
@@ -25,7 +26,8 @@ import { CostMappingCenterService } from '../../../Service/CUSTOMER/cost-mapping
     MatPaginator,
     MatCardModule,
     CompanyallComponent,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    AlertpopupComponent
   ],
   templateUrl: './addcost-center-mapping.component.html',
   styleUrl: './addcost-center-mapping.component.css'
@@ -34,9 +36,15 @@ export class AddcostCenterMappingComponent {
 
   costForm!: FormGroup;
   showErrors = false;
-
   selectedCompanyCode: any;
   userdetail: any;
+  message: string = '';
+  popupMessage: string = '';
+  popupSubMessage: string = '';
+  showPopupalert = false;
+  showPopupvalidate = false;
+  isLoading: boolean = false;
+  showPopup = false;
 
   constructor(
     private dialogRef: MatDialogRef<AddcostCenterMappingComponent>,
@@ -63,21 +71,30 @@ export class AddcostCenterMappingComponent {
     });
   }
 
+  showAlertPopup(message: string, subMessage: string = '') {
+    this.popupMessage = message;
+    this.popupSubMessage = subMessage;
+    this.showPopup = true;
+  }
+
+  closePoopup() {
+    this.showPopup = false;
+    this.popupMessage = '';
+    this.popupSubMessage = '';
+  }
+
   handleCompanyEvent(company: any) {
     this.selectedCompanyCode = company.companyId;
     this.costForm.patchValue({ companyCode: company.companyId });
   }
 
-  // ============================
-  //    SAVE FUNCTION (UPDATED)
-  // ============================
   saveCostCenter() {
     this.showErrors = true;
 
     if (this.costForm.invalid) {
-      alert("Please fill all required fields");
       return;
     }
+    this.isLoading = true;
 
     const form = this.costForm.value;
 
@@ -102,17 +119,13 @@ export class AddcostCenterMappingComponent {
       ]
     };
 
-    console.log("Cost Center Save Payload:", payload);
-
     this.costService.SaveCostCenterDetails(payload).subscribe({
       next: (res) => {
 
         const response = res?.Data?.response;
         const errors = res?.Data?.errors;
 
-        console.log(response);
-
-        // ❌ FAILED RESPONSE
+        //  FAILED RESPONSE
         if (response && response.toLowerCase().includes("failed")) {
 
           let msg = "Error!";
@@ -124,10 +137,11 @@ export class AddcostCenterMappingComponent {
           }
 
           alert(msg);
+          this.isLoading = false;
           return;
         }
 
-        // ✅ SUCCESS RESPONSE
+        //  SUCCESS RESPONSE
         if (response && response.toLowerCase().includes("success")) {
           alert("Cost Center Mapping Added Successfully!");
           this.dialogRef.close(true);
@@ -135,11 +149,13 @@ export class AddcostCenterMappingComponent {
         }
 
         alert(response || "Unexpected response from server");
+        this.isLoading = false;
       },
 
       error: (err) => {
         console.error("Error saving cost center mapping:", err);
         alert("Failed to save cost center mapping");
+        this.isLoading = false;
       }
     });
   }

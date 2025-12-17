@@ -26,25 +26,22 @@ import { IdletimeoutService } from '../../../Service/idletimeout.service';
   templateUrl: './cost-center-mapping.component.html',
   styleUrl: './cost-center-mapping.component.css'
 })
+
 export class CostCenterMappingComponent {
 
-  // POPUP + LOADING
   showPopup = false;
   popupMessage: string = "";
   popupSubMessage: string = "";
   isLoading = false;
-
   uploadedData: any[] = [];
   showTable = false;
   searchMapName = "";
-
   selectedFile: File | null = null;
   userdetail: any;
 
   uploadedDataSource = new MatTableDataSource<any>(this.uploadedData);
 
   uploadDisplayedColumns: string[] = [
-    'Action',
     'SNo',
     'Map Name',
     'Business Unit Name',
@@ -54,7 +51,7 @@ export class CostCenterMappingComponent {
     'Company Location'
   ];
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild('paginator') paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   @ViewChild('fileInput') fileInput: any;
@@ -64,7 +61,7 @@ export class CostCenterMappingComponent {
     private costService: CostMappingCenterService,
     private decry: EncryptionService,
     private _sessionStoreage: SessionStorageService,
-    private idletimeout:IdletimeoutService
+    private idletimeout: IdletimeoutService
   ) { }
 
   ngOnInit(): void {
@@ -84,83 +81,100 @@ export class CostCenterMappingComponent {
     this.showPopup = false;
   }
 
-    ngAfterViewInit() {
+  ngAfterViewInit() {
     this.uploadedDataSource.paginator = this.paginator;
     this.uploadedDataSource.sort = this.sort;
   }
 
-  // -----------------------------------------------------------
-  // SEARCH
-  // -----------------------------------------------------------
   onSearchClick() {
+    this.isLoading = true;
+    this.showTable = false;
+
     this.costService.GetAllCostDetails().subscribe({
       next: (res) => {
 
-        if (res?.StatusCode === 200 && res?.Data?.length > 0) {
-
-          let filteredData = res.Data;
-
-          if (this.searchMapName.trim() !== "") {
-            const filterValue = this.searchMapName.trim().toLowerCase();
-
-            filteredData = res.Data.filter(item =>
-              item.map_Name?.toLowerCase().includes(filterValue)
-            );
-          }
-
-          if (filteredData.length === 0) {
-            alert("No matching Cost Center Map Name found");
-            return;
-          }
-
-          this.uploadedData = filteredData.map((item, index) => ({
-            SNo: index + 1,
-            'Map Name': item.map_Name,
-            'Business Unit Name': item.business_Unit_Name,
-            'Company code': item.company_Code,
-            'company Name': item.company_Name,
-            'Cost Center': item.cost_Center_Name,
-            'Company Location': item.city_Name
-          }));
-
-          this.uploadedDataSource = new MatTableDataSource(this.uploadedData);
-          this.uploadedDataSource.paginator = this.paginator;
-          this.uploadedDataSource.sort = this.sort;
-          this.showTable = true;
-
-        } else {
+        // Invalid / no data
+        if (res?.StatusCode !== 200 || !res?.Data || res.Data.length === 0) {
           alert("No cost center records found");
+          this.uploadedData = [];
+          this.uploadedDataSource.data = [];
+          this.isLoading = false;
+          return;
         }
+
+        let filteredData = res.Data;
+
+        // APPLY FILTER
+        if (this.searchMapName?.trim() !== "") {
+          const filterValue = this.searchMapName.trim().toLowerCase();
+
+          filteredData = res.Data.filter(item =>
+            item.map_Name?.toLowerCase().includes(filterValue)
+          );
+        }
+
+        //  No matching results
+        if (filteredData.length === 0) {
+          alert("No matching Cost Center Map Name found");
+          this.uploadedData = [];
+          this.uploadedDataSource.data = [];
+          this.isLoading = false; // ✅ STOP LOADING
+          return;
+        }
+
+        // ✅ SUCCESS
+        this.uploadedData = filteredData.map((item, index) => ({
+          SNo: index + 1,
+          'Map Name': item.map_Name,
+          'Business Unit Name': item.business_Unit_Name,
+          'Company code': item.company_Code,
+          'company Name': item.company_Name,
+          'Cost Center': item.cost_Center_Name,
+          'Company Location': item.city_Name
+        }));
+
+        this.uploadedDataSource = new MatTableDataSource(this.uploadedData);
+        this.uploadedDataSource.paginator = this.paginator;
+        this.uploadedDataSource.sort = this.sort;
+        this.showTable = true;
+
+        this.isLoading = false;
       },
 
-      error: () => alert("Failed to load cost center mapping")
+      error: () => {
+        alert("Failed to load cost center mapping");
+        this.uploadedData = [];
+        this.uploadedDataSource.data = [];
+        this.isLoading = false;
+      }
     });
   }
 
-  // -----------------------------------------------------------
-  // EXPORT EXCEL WITH SEARCH FILTER (LOCAL)
-  // -----------------------------------------------------------
   exportExcelBase64() {
+    this.isLoading = true;
 
     this.costService.ExportCostCenterMapping({}).subscribe({
       next: (res) => {
 
         if (!res?.Data?.file) {
           alert("No data received from server!");
+          this.isLoading = false;
           return;
         }
 
         const base64 = res.Data.file;
 
         const byteCharacters = atob(base64);
-        const byteArray = new Uint8Array([...byteCharacters].map(c => c.charCodeAt(0)));
+        const byteArray = new Uint8Array(
+          [...byteCharacters].map(c => c.charCodeAt(0))
+        );
 
         const wb = XLSX.read(byteArray, { type: 'array' });
         const ws = wb.Sheets[wb.SheetNames[0]];
 
         let excelData: any[] = XLSX.utils.sheet_to_json(ws);
 
-        if (this.searchMapName.trim() !== "") {
+        if (this.searchMapName?.trim() !== "") {
           const filterValue = this.searchMapName.trim().toLowerCase();
           excelData = excelData.filter(row =>
             row["Map Name"]?.toLowerCase().includes(filterValue)
@@ -169,22 +183,25 @@ export class CostCenterMappingComponent {
 
         if (excelData.length === 0) {
           alert("No matching records found to export");
+          this.isLoading = false;
           return;
         }
 
         const newSheet = XLSX.utils.json_to_sheet(excelData);
 
         const newWB = {
-          Sheets: { "Filtered": newSheet },
+          Sheets: { Filtered: newSheet },
           SheetNames: ["Filtered"]
         };
 
         XLSX.writeFile(newWB, "CostCenter_Filtered.xlsx");
-
-        this.showAlertPopup("Excel Exported Successfully!");
-
+        this.isLoading = false;
       },
-      error: () => alert("Failed to export excel")
+
+      error: () => {
+        alert("Failed to export excel");
+        this.isLoading = false;
+      }
     });
   }
 
@@ -194,17 +211,16 @@ export class CostCenterMappingComponent {
   }
 
   onFileChange(event: Event): void {
-
     const input = event.target as HTMLInputElement;
     const file = input?.files?.[0];
 
     if (!file) {
-      this.showAlertPopup("Please upload an Excel file.");
+      alert("Please upload an Excel file.");
       return;
     }
 
-    if (!this.userdetail || !this.userdetail.user_Id) {
-      this.showAlertPopup("User not loaded. Please re-login.");
+    if (!this.userdetail?.user_Id) {
+      alert("User not loaded. Please re-login.");
       return;
     }
 
@@ -218,51 +234,43 @@ export class CostCenterMappingComponent {
       next: (res) => {
         this.isLoading = false;
 
-        console.log("SERVER RESPONSE:", res);
-
-        // ✅ CASE 1: Successful upload
+        //  SUCCESS
         if (res?.Data?.response?.includes("Row(s) Uploaded Successfully")) {
           this.showAlertPopup("Row(s) Uploaded Successfully!");
           return;
         }
 
-        // ✅ CASE 2: Validation errors (file / userId)
+        //  VALIDATION ERRORS
         if (res?.Data?.errors) {
           const errors = res.Data.errors;
 
           if (errors.file) {
-            this.showAlertPopup(errors.file[0]);
+            alert(errors.file[0]);
             return;
           }
 
           if (errors.userId) {
-            this.showAlertPopup(errors.userId[0]);
+            alert(errors.userId[0]);
             return;
           }
         }
 
-        // ✅ CASE 3: Error_Message returned as array
+        // ARRAY ERROR MESSAGE
         if (Array.isArray(res?.Data) && res.Data.length > 0) {
-
-          const msg = res.Data[0].Error_Message || "Error occurred";
-          this.showAlertPopup(msg);
+          alert(res.Data[0]?.Error_Message || "Error occurred");
           return;
         }
-
-        // ❓ UNKNOWN RESPONSE
-        this.showAlertPopup("Unexpected server response.");
+        //  FALLBACK
+        alert("Unexpected server response.");
       },
 
       error: (err) => {
-        this.isLoading = false;
         console.error("UPLOAD ERROR:", err);
+        this.isLoading = false; //  STOP LOADING
         this.showAlertPopup("Upload failed. Please try again.");
       }
     });
   }
-
-
-
 
   DownloadTemplate() {
 
@@ -285,13 +293,13 @@ export class CostCenterMappingComponent {
 
     FileSaver.saveAs(blob, `CostCenterMapping_Template_${Date.now()}.xlsx`);
 
-   // this.showAlertPopup("Template Downloaded Successfully!");
+    // this.showAlertPopup("Template Downloaded Successfully!");
   }
 
   AddPOOpen() {
     this.dialog.open(AddcostCenterMappingComponent, {
-      width: '40%',
-      height: '43vh',
+      width: '30%',
+      height: '52vh',
       disableClose: true
     });
   }

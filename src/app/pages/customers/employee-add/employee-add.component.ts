@@ -19,13 +19,14 @@ import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { APIResponse } from '../../../Models/apiresponse';
 import { EmployeeService } from '../../../Service/CUSTOMER/employee.service';
 import { IEmployeeservice } from '../../../Repository/customer/Iemployee';
+import { AlertpopupComponent } from '../../../common/alertpopup/alertpopup.component';
 export const Pay_TOKEN = new InjectionToken<IEmployeeservice>('Pay_TOKEN');
 
 
 @Component({
   selector: 'app-employee-add',
   standalone: true,
-  imports: [MatCardModule, MatIconModule, FormsModule, CommonModule, ReactiveFormsModule, MatRadioModule, MatTabsModule, PayPeriodComponent],
+  imports: [MatCardModule, MatIconModule, FormsModule, CommonModule, ReactiveFormsModule, MatRadioModule, MatTabsModule, PayPeriodComponent, AlertpopupComponent],
   templateUrl: './employee-add.component.html',
   styleUrl: './employee-add.component.css',
   providers: [
@@ -57,7 +58,12 @@ export class EmployeeAddComponent {
   selectedCompanyId: any;
   userdetail: any;
   submitted: boolean = false;
-  invoicelegalentity:any;
+  invoicelegalentity: any;
+  message: string = '';
+  popupMessage: string = '';
+  popupSubMessage: string = '';
+  showPopup = false;
+  isLoading: boolean = false;
 
   constructor(private fb: FormBuilder, @Inject(Pay_TOKEN) private service: IEmployeeservice, private dialogRef: MatDialogRef<EmployeeAddComponent>, private dialog: MatDialog, @Inject(MAT_DIALOG_DATA) public data: any,
     private decry: EncryptionService,
@@ -70,14 +76,26 @@ export class EmployeeAddComponent {
     this.payPeriod = payperiod;
     this.payperiodId = payperiod.payfrequencyid;
     this.payperiods = payperiod.payPeriod;
-    console.log(this.selectedCompanyId)
   }
   handlePayperiodEvent(payperiod: Payperiodclass) {
     this.payPeriod = payperiod;
     this.payperiodId = payperiod.payfrequencyid;
     this.payperiods = payperiod.payPeriod;
-    console.log(this.selectedCompanyId)
   }
+
+  showAlertPopup(message: string, subMessage: string = '') {
+    this.popupMessage = message;
+    this.popupSubMessage = subMessage;
+    this.showPopup = true;
+  }
+
+  // Method to close popup
+  closePopup() {
+    this.showPopup = false;
+    this.popupMessage = '';
+    this.popupSubMessage = '';
+  }
+
   formatDate(date: string): string {
     const [day, month, year] = date.split('-');
     return `${year}-${month}-${day}`; // Converts DD-MM-YYYY to YYYY-MM-DD
@@ -92,7 +110,6 @@ export class EmployeeAddComponent {
     }
 
     this.selectedCompanyId = this.rowData.Company_Id;
-    console.log('company', this.selectedCompanyId);
 
     // Initialize the form
     this.employeeForm = this.fb.group({
@@ -162,7 +179,6 @@ export class EmployeeAddComponent {
       invoicelegalentity: [this.rowData.legalEntityId, Validators.required],
     });
 
-    console.log('Row Data:', this.rowData);
     this.BindSprstatus();
     this.BindMaterialStatus();
     this.BindMapname();
@@ -288,7 +304,6 @@ export class EmployeeAddComponent {
     this.service.GetEmploymenttype().subscribe({
       next: (res) => {
         this.employmenttype = res.Data.data.Table0;
-        console.log(this.employmenttype)
       },
       error: (err) => {
         console.error('Error fetching material status', err);
@@ -301,7 +316,6 @@ export class EmployeeAddComponent {
     this.service.GetBloodGroup().subscribe({
       next: (res) => {
         this.Bloodgroup = res.Data?.data ?? [];
-        console.log("Bloodgroup List:", this.Bloodgroup);
       },
       error: (err) => {
         console.error("Error fetching blood group", err);
@@ -311,103 +325,102 @@ export class EmployeeAddComponent {
 
   }
 
-    BindInvoiceLegalEntity() {
+  BindInvoiceLegalEntity() {
     this.service.GetInvoiceLegalEntity().subscribe({
       next: res => { this.invoicelegalentity = res.Data }
     });
-  }  
+  }
 
-  onsave(): Promise<void> {
+  onsave(): void {
     this.submitted = true;
 
-    return new Promise<void>((resolve, reject) => {
+    if (this.employeeForm.invalid) {
+      this.employeeForm.markAllAsTouched();
+      return;
+    }
 
-      if (this.employeeForm.invalid) {
-        this.employeeForm.markAllAsTouched();
-        reject("Form validation failed");
-        return;
+    this.isLoading = true;
+
+    const raw = this.employeeForm.getRawValue();
+
+    const payload = {
+      createdBy: this.userdetail.user_Id,
+      detail: {
+        Employee_Id: this.rowData.Employee_Id ?? '',
+        Employee_Code: raw.empid ?? '',
+        SPR_Status: raw.sprstatus ?? '',
+        Effective_Date: raw.Effectivedate ?? '',
+        First_Name: raw.firstname ?? '',
+        Middle_Name: raw.middlename ?? '',
+        Last_Name: raw.lastname ?? '',
+        Father_Name: raw.fathername ?? '',
+        Company_Id: this.rowData.Company_Id ?? '',
+        Company_Code: raw.CompanyCode ?? '',
+        Gender: raw.gender ?? '',
+        Languages_Known: raw.LanguageKnown ?? '',
+        Blood_Group: raw.bloodgroup ?? '',
+        Disability: raw.disability ?? '',
+        Date_Of_Birth: raw.DOB ?? '',
+        Cost_Center_Mapping_Id: raw.Mapname ?? '',
+        Marital_Status: raw.materialstatus ?? '',
+        Hiring_Status: raw.Hiringstatus ?? '',
+        Deputee_Id: raw.Deputeeid ?? '',
+        DMS_Id: raw.DMSId ?? '',
+        Entity_Location_Id: raw.Businessunitlocation ?? '',
+        Group_Detail_Id: raw.groupname ?? '',
+        Business_Head: raw.Businesshead ?? '',
+        Report_Manager: raw.Reportmanager ?? '',
+        Reporting_Head_Email: raw.Reportheademail ?? '',
+        Reason_Of_Leaving: raw.ROL ?? '',
+        Date_Of_Joining: raw.DOJ ?? '',
+        Rejoinee_Date: raw.Rejoineedate ?? '',
+        Joining_Pay_Period: raw.joinpayperiod ?? '',
+        Department_Id: raw.department ?? '',
+        Band_Id: raw.paycategory ?? '',
+        Rejoin_Month: raw.Rejoinmonth ?? '',
+        Stop_Payment: raw.stoppayment ?? '??',
+        Designation_Id: raw.designation ?? '',
+        Work_Location: raw.worklocation ?? '',
+        Is_PF_Applicable: raw.PF ?? '',
+        Is_Insurance_Applicable: raw.Insurance ?? '',
+        Resignation_Date: raw.DateOfResignation ?? '',
+        Last_Working_Day: raw.Lastworkingdays ?? '',
+        Resign_Period: raw.ResignPayPeriod ?? '',
+        EntityID: raw.Businessunit ?? '',
+        EActive: raw.Active ?? '',
+        Axpert_Id: raw.axpertid ?? '',
+        Is_Black_Listed: raw.blacklisted ?? '',
+        Date_Of_Death: raw.DOD ?? '',
+        Death_DocPath: "",
+        Invoice_Legal_Entity: raw.invoicelegalentity ?? '',
       }
+    };
 
-      const raw = this.employeeForm.getRawValue();
+    this.service.Addemployeesave(payload).subscribe({
+      next: (res: APIResponse) => {
+        const msg = res?.Data?.message ?? '';
 
-      const payload = {
-        createdBy: this.userdetail.user_Id,
-        detail: {
-          Employee_Id: this.rowData.Employee_Id ?? '',
-          Employee_Code: raw.empid ?? '',
-          SPR_Status: raw.sprstatus ?? '',
-          Effective_Date: raw.Effectivedate ?? '',
-          First_Name: raw.firstname ?? '',
-          Middle_Name: raw.middlename ?? '',
-          Last_Name: raw.lastname ?? '',
-          Father_Name: raw.fathername ?? '',
-          Company_Id: this.rowData.Company_Id ?? '',
-          Company_Code: raw.CompanyCode ?? '',
-          Gender: raw.gender ?? '',
-          Languages_Known: raw.LanguageKnown ?? '',
-          Blood_Group: raw.bloodgroup ?? '',
-          Disability: raw.disability ?? '',
-          Date_Of_Birth: raw.DOB ?? '',
-          Cost_Center_Mapping_Id: raw.Mapname ?? '',
-          Marital_Status: raw.materialstatus ?? '',
-          Hiring_Status: raw.Hiringstatus ?? '',
-          Deputee_Id: raw.Deputeeid ?? '',
-          DMS_Id: raw.DMSId ?? '',
-          Entity_Location_Id: raw.Businessunitlocation ?? '',
-          Group_Detail_Id: raw.groupname ?? '',
-          Business_Head: raw.Businesshead ?? '',
-          Report_Manager: raw.Reportmanager ?? '',
-          Reporting_Head_Email: raw.Reportheademail ?? '',
-          Reason_Of_Leaving: raw.ROL ?? '',
-          Date_Of_Joining: raw.DOJ ?? '',
-          Rejoinee_Date: raw.Rejoineedate ?? '',
-          Joining_Pay_Period: raw.joinpayperiod ?? '',
-          Department_Id: raw.department ?? '',
-          Band_Id: raw.paycategory ?? '',
-          Rejoin_Month: raw.Rejoinmonth ?? '',
-          Stop_Payment: raw.stoppayment ?? '??',
-          Designation_Id: raw.designation ?? '',
-          Work_Location: raw.worklocation ?? '',
-          Is_PF_Applicable: raw.PF ?? '',
-          Is_Insurance_Applicable: raw.Insurance ?? '',
-          Resignation_Date: raw.DateOfResignation ?? '',
-          Last_Working_Day: raw.Lastworkingdays ?? '',
-          Resign_Period: raw.ResignPayPeriod ?? '',
-          EntityID: raw.Businessunit ?? '',
-          EActive: raw.Active ?? '',
-          Axpert_Id: raw.axpertid ?? '',
-          Is_Black_Listed: raw.blacklisted ?? '',
-          Date_Of_Death: raw.DOD ?? '',
-          Death_DocPath: "",
-          Invoice_Legal_Entity: raw.invoicelegalentity ?? '',
+        // SUCCESS
+        if (msg.toLowerCase().includes('success')) {
+          alert(msg);
+          this.isLoading = false; //  stop loading
+          this.onClose()
+          return;
         }
-      };
 
+        //FAILURE
+        alert(msg || 'Failed to save employee');
+        this.isLoading = false; //  stop loading
+      },
 
-
-      console.log("Payload:", JSON.stringify(payload));
-
-      this.service.Addemployeesave(payload).subscribe({
-        next: (res: APIResponse) => {
-          console.log(res)
-          const msg = res.Data.message;
-
-          if (msg.includes('Success')) {
-            alert(msg)
-            resolve();
-          } else {
-            alert(msg);
-            reject('API returned failure');
-          }
-        },
-        error: (err) => {
-          console.error('API Error:', err);
-          reject(err);
-        }
-      });
-
+      error: (err) => {
+        console.error('API Error:', err);
+        alert('Something went wrong while saving employee');
+        this.isLoading = false; //  stop loading
+      }
     });
   }
+
 
 
   onClose(): void {

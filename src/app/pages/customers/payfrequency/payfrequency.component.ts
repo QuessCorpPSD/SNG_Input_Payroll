@@ -13,12 +13,13 @@ import { PayfrequencyEditComponent } from '../payfrequency-edit/payfrequency-edi
 import * as XLSX from 'xlsx';
 import { PayfrequencyService } from '../../../Service/CUSTOMER/payfrequency.service';
 import { IPayfrequencyservice } from '../../../Repository/customer/IPayfrequency';
+import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.component";
 export const Pay_TOKEN = new InjectionToken<IPayfrequencyservice>('Pay_TOKEN');
 
 @Component({
   selector: 'app-payfrequency',
   standalone: true,
-  imports: [MatTableModule, MatIconModule, CompanyallComponent, CommonModule, FormsModule, ReactiveFormsModule, MatTooltipModule, MatPaginator],
+  imports: [MatTableModule, MatIconModule, CompanyallComponent, CommonModule, FormsModule, ReactiveFormsModule, MatTooltipModule, MatPaginator, AlertpopupComponent],
   templateUrl: './payfrequency.component.html',
   styleUrl: './payfrequency.component.css',
   providers: [
@@ -30,7 +31,11 @@ export const Pay_TOKEN = new InjectionToken<IPayfrequencyservice>('Pay_TOKEN');
 })
 export class PayfrequencyComponent {
   isuploadgridvisible = false;
-  isLoading = false;
+  message: string = '';
+  popupMessage: string = '';
+  popupSubMessage: string = '';
+  showPopup = false;
+  isLoading: boolean = false;
 
   uploadDisplayedColumns: string[] = [
     'SNo', 'Companycode', 'Group', 'Startingdate', 'Endingdate',
@@ -69,6 +74,18 @@ export class PayfrequencyComponent {
   selectedRow: any | null = null;
   onRowClick(row: any) {
     this.selectedRow = row;
+  }
+
+  showAlertPopup(message: string, subMessage: string = '') {
+    this.popupMessage = message;
+    this.popupSubMessage = subMessage;
+    this.showPopup = true;
+  }
+
+  closePopup() {
+    this.showPopup = false;
+    this.popupMessage = '';
+    this.popupSubMessage = '';
   }
 
   AddOpen() {

@@ -11,14 +11,12 @@
             </button>
         </mat-card-header>
 
-        <br />
-
         <mat-card-content>
-
             <div style="display: grid; grid-template-columns: 150px 250px; row-gap: 15px; align-items: start;">
 
                 <!-- Company Code -->
-                <label class="form-label text-muted small" style="white-space: nowrap;">Company Code</label>
+                <label class="form-label text-muted small" style="white-space: nowrap;">Company Code<span
+                        style="color:red">*</span></label>
 
                 <div>
                     <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
@@ -31,7 +29,8 @@
 
 
                 <!-- Band Code -->
-                <label class="form-label text-muted small mb-0" style="white-space: nowrap;">Band Code:</label>
+                <label class="form-label text-muted small mb-0" style="white-space: nowrap;">Band Code<span
+                        style="color:red">*</span></label>
 
                 <div>
                     <input type="text" class="form-control form-control-sm" formControlName="bandCode" />
@@ -43,7 +42,8 @@
 
 
                 <!-- Band Name -->
-                <label class="form-label text-muted small mb-0" style="white-space: nowrap;">Band Name:</label>
+                <label class="form-label text-muted small mb-0" style="white-space: nowrap;">Band Name<span
+                        style="color:red">*</span></label>
 
                 <div>
                     <input type="text" class="form-control form-control-sm" formControlName="bandName" />
@@ -78,3 +78,9 @@
 
     </mat-card>
 </form>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets\Loading.gif" alt="Loading...">
+</div>
+<app-alertpopup *ngIf="showPopupalert" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+    (close)="showPopupalert = false">
+</app-alertpopup>

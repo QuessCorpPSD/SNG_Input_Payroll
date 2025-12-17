@@ -1,7 +1,7 @@
   .page-wrapper {
       display: flex;
       align-items: flex-start;
-
+      padding-top: 10px !important;
   }
 
   /* Left fixed icon area */
@@ -26,11 +26,38 @@
   .container-fluid,
   .table-wrapper1 {
       min-width: 960px;
+      padding-top: 20px !important;
+  }
+
+  .container.py-2 {
+      overflow-y: hidden;
   }
 
   /* Remove shadow for flat look */
   ::ng-deep .mat-elevation-z8 {
       box-shadow: none !important;
+  }
+
+
+  /* Convert Angular Material flex table to real table */
+  ::ng-deep .mat-mdc-table {
+      display: table !important;
+      table-layout: auto !important;
+      width: max-content !important;
+      min-width: 100% !important;
+  }
+
+  ::ng-deep .mat-mdc-header-row,
+  ::ng-deep .mat-mdc-row {
+      display: table-row !important;
+      height: 50px !important;
+  }
+
+  ::ng-deep .mat-mdc-header-cell,
+  ::ng-deep .mat-mdc-cell {
+      display: table-cell !important;
+      width: auto !important;
+      white-space: nowrap;
   }
 
   /* Header Cells */
@@ -41,15 +68,16 @@
       font-family: "Montserrat", sans-serif;
       font-weight: 600;
       border-right: 1px solid #ddd;
-      position: sticky;
-      top: 0;
-      display: flex;
       justify-content: left;
       align-items: center;
       text-align: center;
-      height: 32px !important;
+      height: 50px !important;
       z-index: 1;
       width: 100%;
+      align-items: center;
+      vertical-align: middle;
+      background: #f5f5f5 !important;
+      z-index: 1001;
   }
 
   /* Body Cells */
@@ -60,12 +88,12 @@
       color: #222;
       border-bottom: 1px dashed #E8E8E8 !important;
       border-right: 1px solid #ddd;
-      display: flex;
       justify-content: left;
       align-items: center;
       text-align: center;
       padding: 0 10px;
       height: 30px;
+      vertical-align: middle;
   }
 
   /* Hover effect for rows */
@@ -96,6 +124,7 @@
       /* Full viewport height */
       overflow: hidden;
       /* Prevent body scroll */
+      padding-right: 30px;
   }
 
   .table-scroll {
@@ -129,24 +158,22 @@
       height: 32px !important;
       background-color: #f5f5f5 !important;
       border-bottom: 1px solid #ddd;
-      position: static !important;
-      z-index: auto !important;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: #f5f5f5;
   }
 
-
-  /* ===== Angular Material Table Width Handling ===== */
   .custom-table {
       width: max-content;
-      /* grows to fit all columns */
       min-width: 100%;
-      /* ensures full width when few columns */
       table-layout: auto !important;
   }
 
   /* ===== Header Cells ===== */
   ::ng-deep .mat-mdc-header-cell {
-      background-color: #f5f5f5 !important;
-      color: #555 !important;
+      background-color: transparent !important;
+      color: black !important;
       font-size: 13px;
       font-family: "Montserrat", sans-serif;
       font-weight: 600;
@@ -156,7 +183,6 @@
       align-items: center;
       text-align: center;
       height: 32px !important;
-      min-width: 140px;
       /* ensures consistent width for scrolling */
       white-space: nowrap;
   }
@@ -175,7 +201,6 @@
       text-align: center;
       padding: 0 10px;
       height: 30px;
-      min-width: 140px;
       white-space: nowrap;
   }
 
@@ -196,8 +221,8 @@
       border: 1px solid #ddd;
       border-top: none;
       border-radius: 0 0 4px 4px;
-      background-color: #fafafa !important;
-      color: #555;
+      background-color: transparent !important;
+      color: black;
       padding: 4px 12px !important;
       display: flex;
       align-items: center;
@@ -249,57 +274,79 @@
       max-width: 250px !important;
   }
 
-  
-.loading-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-}
+  .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+  }
+
+  .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+  }
+
+  .centered-popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1000;
+  }
+
+  .sno {
+      min-width: 80px;
+      max-width: 80px;
+      width: 80px;
+  }
+
+  .action {
+      min-width: 100px;
+      max-width: 100px;
+      width: 100px;
+  }
+
+  .btn-search {
+      background-color: #0d6efd;
+      color: #fff;
+  }
+
+  .btn-add {
+      background-color: #28a745;
+      color: #fff;
+  }
+
+  .btn-edit {
+      background-color: #fd7e14;
+      color: #fff;
+  }
+
+  .btn-upload {
+      background-color: #6f42c1;
+      color: #fff;
+  }
+
+  .btn-download {
+      background-color: #20c997;
+      color: #fff;
+  }
 
 
-.popup-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.5); /* dark background */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000; /* stay above everything */
-}
-
-.popup-card {
-  width: 800px;         /* adjust size */
-  max-width: 75%;
-  height: 80vh;         /* 80% of viewport height */
-  max-height: 80vh;     /* ensures it won’t exceed 80% */
-  overflow-y: auto;     /* make inner content scrollable */
-}
-
-
-.overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-}
-
-.centered-popup {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1000;
-}
+  ::ng-deep .action-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      width: 100%;
+  }

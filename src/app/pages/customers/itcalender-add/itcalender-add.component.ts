@@ -33,8 +33,8 @@ export class ITcalenderAddComponent {
   ITcalenderform!: FormGroup;
   selectedCompanyId: any;
   selectedCompanyCode: any;
-  selectedfinacialyearId:any;
-  selectedfinacialyear:any;
+  selectedfinacialyearId: any;
+  selectedfinacialyear: any;
   constructor(private dialogRef: MatDialogRef<ITcalenderAddComponent>, private fb: FormBuilder,
     private _decrypt: EncryptionService,
     private _sessionStoreage: SessionStorageService,
@@ -52,6 +52,7 @@ export class ITcalenderAddComponent {
   onClose(): void {
     this.dialogRef.close();
   }
+  
   ngOnInit(): void {
 
     const userdetail = this._sessionStoreage.getItem('UserProfile');
@@ -97,15 +98,15 @@ export class ITcalenderAddComponent {
   }
 
   onFinancialYearChange(event: any) {
-  const selectedId = event.target.value; // Financial_Year_Id
-  const selectedObj = this.finacialyearres.find(fy => fy.Financial_Year_Id == selectedId);
+    const selectedId = event.target.value; // Financial_Year_Id
+    const selectedObj = this.finacialyearres.find(fy => fy.Financial_Year_Id == selectedId);
 
-  if (selectedObj) {
-    this.selectedfinacialyearId = selectedObj.Financial_Year_Id;
-    this.selectedfinacialyear = selectedObj.Financial_Year_Name;
+    if (selectedObj) {
+      this.selectedfinacialyearId = selectedObj.Financial_Year_Id;
+      this.selectedfinacialyear = selectedObj.Financial_Year_Name;
 
+    }
   }
-}
 
   closePopup() {
     this.showPopup = false;
@@ -114,37 +115,13 @@ export class ITcalenderAddComponent {
   }
 
   Save() {
+    if (this.ITcalenderform.invalid) {
+      this.ITcalenderform.markAllAsTouched();
+      return;
+    }
     this.isLoading = true;
     var payload;
-
-
-
     const formValue = this.ITcalenderform.value;
-
-    if (String(formValue.companycode) == '') {
-      alert('Please select Company code');
-      this.isLoading = false;
-      return;
-    }
-
-    if (String(formValue.Financialyear) == '') {
-      alert('Please select Financial year');
-      this.isLoading = false;
-      return;
-    }
-
-
-    if (String(formValue.declarationdate) == '') {
-      alert('Please select declaration date');
-      this.isLoading = false;
-      return;
-    }
-
-    if (String(formValue.submisiondate) == '') {
-      alert('Please select submisiond date');
-      this.isLoading = false;
-      return;
-    }
     payload = {
       "createdBy": this.userdetail.user_Id,
       "mode": "Add",
@@ -162,7 +139,6 @@ export class ITcalenderAddComponent {
       }
     };
 
-
     this.itcalenderService.Create(payload).subscribe({
       next: (res: any) => {
 
@@ -174,11 +150,10 @@ export class ITcalenderAddComponent {
           // SUCCESS CASE
           const table = res?.Data?.data?.Table0;
           const message = table?.[0]?.Error_Message || res?.Data?.message;
-          this.showPopup = true;
-          this.popupMessage = message;
+          alert(message);
+          this.onClose();
 
         } else {
-
           // FAILURE CASE
           const errorMessage =
             res?.Data?.message ||
@@ -187,6 +162,7 @@ export class ITcalenderAddComponent {
             "Failed. Please try again.";
 
           alert(errorMessage.trim());
+          this.onClose();
         }
 
         // <-- show popup for both cases
@@ -201,11 +177,11 @@ export class ITcalenderAddComponent {
     });
   }
 
- formatDate = (dateString: string) => {
-  if (!dateString) return '';
-  
-  const [year, month, day] = dateString.split('-');
-  return `${day}/${month}/${year}`;
-}
+  formatDate = (dateString: string) => {
+    if (!dateString) return '';
+
+    const [year, month, day] = dateString.split('-');
+    return `${day}/${month}/${year}`;
+  }
 
 }

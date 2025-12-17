@@ -1,10 +1,8 @@
   .page-wrapper {
       display: flex;
       align-items: flex-start;
-      /* height: 100vh; */
-      /* Full viewport height */
-      overflow: hidden;
-      /* Prevent body scroll */
+      padding-top: 10px;
+
   }
 
   /* Left fixed icon area */
@@ -28,7 +26,8 @@
   /* Force min width so horizontal scroll works */
   .container-fluid,
   .table-wrapper1 {
-      min-width: 960px;
+      min-width: 500px;
+      padding-top: 20px !important;
   }
 
   /* Remove shadow for flat look */
@@ -95,7 +94,9 @@
       gap: 8px;
       padding: 0px 24px 0 5px;
       /* width: 100%; */
-      max-width: 80px;
+      height: 80vh;
+      overflow: hidden;
+      width: 600px;
   }
 
   .table-scroll {
@@ -237,23 +238,6 @@
       }
   }
 
-  /* .SNo {
-      width: 80px !important;
-      min-width: 80px !important;
-      max-width: 80px !important;
-  }
-
-  .Action {
-      width: 80px !important;
-      min-width: 80px !important;
-      max-width: 80px !important;
-  }
-
-  .mat-mdc-paginator-range-label {
-      width: 80px !important;
-      min-width: 80px !important;
-      max-width: 80px !important;
-  } */
   .loading-overlay {
       position: fixed;
       top: 0;
@@ -267,19 +251,14 @@
       z-index: 9999;
   }
 
-  .loading-overlay img {
-      width: 80px;
-      height: 80px;
-  }
-
   .overlay {
       position: fixed;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.4);
-      z-index: 9998;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 999;
   }
 
   .centered-popup {
@@ -287,5 +266,57 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      z-index: 9999;
+  }
+
+  .sno {
+      width: 80px;
+      min-width: 80px;
+      max-width: 80px;
+  }
+
+  .companycode {
+      width: 150px;
+      min-width: 150px;
+      max-width: 150px;
+
+
+  }
+
+  .departmentcode {
+      width: 160px;
+      min-width: 160px;
+      max-width: 160px;
+
+  }
+
+  .departmentname {
+      width: 180px;
+      min-width: 180px;
+      max-width: 180px;
+
+  }
+
+  .btn-search {
+      background-color: #0d6efd;
+      color: #fff;
+  }
+
+  .btn-add {
+      background-color: #28a745;
+      color: #fff;
+  }
+
+  .btn-edit {
+      background-color: #fd7e14;
+      color: #fff;
+  }
+
+  .btn-upload {
+      background-color: #6f42c1;
+      color: #fff;
+  }
+
+  .btn-download {
+      background-color: #20c997;
+      color: #fff;
   }

@@ -20,8 +20,8 @@ export const Pay_TOKEN = new InjectionToken<ICorporatebabk>('Pay_TOKEN');
 @Component({
   selector: 'app-corporatebank',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatTooltipModule, MatTableModule, 
-    MatPaginatorModule, FormsModule, ReactiveFormsModule,AlertpopupComponent],
+  imports: [CommonModule, MatIconModule, MatTooltipModule, MatTableModule,
+    MatPaginatorModule, FormsModule, ReactiveFormsModule, AlertpopupComponent],
   templateUrl: './corporatebank.component.html',
   styleUrl: './corporatebank.component.css',
   providers: [
@@ -32,6 +32,7 @@ export const Pay_TOKEN = new InjectionToken<ICorporatebabk>('Pay_TOKEN');
   ]
 })
 export class CorporatebankComponent {
+  BankName: any;
 
   constructor(private dialog: MatDialog,
     private _decrypt: EncryptionService,
@@ -198,7 +199,7 @@ export class CorporatebankComponent {
   }
 
   deletCorporateBank(row: any) {
-    this.isLoading=true;
+    this.isLoading = true;
     const bankId = row.Bank_Id;
 
     var payload;
@@ -233,8 +234,7 @@ export class CorporatebankComponent {
           // SUCCESS CASE
           const table = res?.Data?.data?.Table0;
           const message = table?.[0]?.Error_Message || res?.Data?.message;
-          this.showPopup = true;
-          this.popupMessage = message;
+          alert(message);
           this.onsearch();
         } else {
 

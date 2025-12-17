@@ -12,6 +12,7 @@ import { EncryptionService } from '../../../Shared/encryption.service';
 import { CompanyallComponent } from '../../../common/CompanyAll/companyall.component';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { BandDeatialsService } from '../../../Service/CUSTOMER/band-deatials.service';
+import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.component";
 
 @Component({
   selector: 'app-band-add',
@@ -23,7 +24,8 @@ import { BandDeatialsService } from '../../../Service/CUSTOMER/band-deatials.ser
     MatTableModule,
     MatCardModule,
     CompanyallComponent,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    AlertpopupComponent
   ],
   templateUrl: './band-add.component.html',
   styleUrl: './band-add.component.css'
@@ -32,10 +34,15 @@ export class BandADDComponent {
 
   selectedCompanyId!: number;
   selectedCompanyCode: any;
-
   bandForm!: FormGroup;
   userdetail: any;
   showErrors = false;
+  message: string = '';
+  popupMessage: string = '';
+  popupSubMessage: string = '';
+  showPopupalert = false;
+  showPopupvalidate = false;
+  isLoading: boolean = false;
 
   constructor(
     private dialogRef: MatDialogRef<BandADDComponent>,
@@ -62,6 +69,20 @@ export class BandADDComponent {
     });
   }
 
+  showAlertPopup(message: string, subMessage: string = '') {
+    this.popupMessage = message;
+    this.popupSubMessage = subMessage;
+    this.showPopupalert = true;
+  }
+
+  closePoopup() {
+    this.showPopupalert = false;
+    this.showPopupvalidate = false;
+    this.popupMessage = '';
+    this.popupSubMessage = '';
+  }
+
+
   handleCompanyEvent(company: any) {
     this.selectedCompanyId = company.companyId;
     this.selectedCompanyCode = company.companyCode;
@@ -72,10 +93,9 @@ export class BandADDComponent {
     this.showErrors = true;
 
     if (this.bandForm.invalid) {
-      alert("Please fill all required fields");
       return;
     }
-
+    this.isLoading = true;
 
     const form = this.bandForm.value;
 
@@ -97,9 +117,6 @@ export class BandADDComponent {
         }
       ]
     };
-
-    console.log("Band Save Payload:", payload);
-
     this.bandService.SaveBandDetails(payload).subscribe({
       next: (res) => {
         const response = res?.Data?.response;
@@ -117,28 +134,29 @@ export class BandADDComponent {
           }
 
           alert(msg);
+          this.isLoading = false;
           return;
         }
 
-        // ✅ SUCCESS RESPONSE
+        // SUCCESS RESPONSE
         if (response && response.toLowerCase().includes("success")) {
           alert("Band Added Successfully!");
           this.dialogRef.close(true);
           return;
         }
 
-        // ❓ UNKNOWN
+        //  UNKNOWN
         alert(response || "Unexpected server response");
+        this.isLoading = false;
       },
 
       error: (err) => {
         console.error("Error saving band:", err);
         alert("Error saving band details");
+        this.isLoading = false;
       }
     });
   }
-
-
 
   onCancel() {
     this.dialogRef.close();

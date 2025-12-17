@@ -49,8 +49,6 @@ export class ITcalenderEditComponent {
     this.dialogRef.close();
   }
   ngOnInit(): void {
-
-
     const userdetail = this._sessionStoreage.getItem('UserProfile');
     this.userdetail = JSON.parse(this._decrypt.decrypt(userdetail!));
 
@@ -75,13 +73,9 @@ export class ITcalenderEditComponent {
     return `${year}-${month}-${day}`;   // yyyy-MM-dd
   }
 
-
   Update() {
     this.isLoading = true;
     var payload;
-
-
-
     const formValue = this.ITcalenderform.value;
 
     payload = {
@@ -100,8 +94,6 @@ export class ITcalenderEditComponent {
       }
     };
 
-
-
     this.itcalenderService.Create(payload).subscribe({
       next: (res: any) => {
 
@@ -113,8 +105,8 @@ export class ITcalenderEditComponent {
           // SUCCESS CASE
           const table = res?.Data?.data?.Table0;
           const message = table?.[0]?.Error_Message || res?.Data?.message;
-          this.showPopup = true;
-          this.popupMessage = message;
+          alert(message);
+          this.onClose();
 
         } else {
 
@@ -126,13 +118,13 @@ export class ITcalenderEditComponent {
             "Failed. Please try again.";
 
           alert(errorMessage.trim());
+          this.onClose();
         }
 
         // <-- show popup for both cases
         //this.dialogRef?.close();
         this.isLoading = false;
       },
-
       error: (err) => {
         alert("Error while processing");
         this.isLoading = false;

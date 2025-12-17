@@ -53,7 +53,7 @@ export class CompanypaycodemappingComponent {
   Companypaycode: any;
   selectedCompanyId: any;
   selectedCompanyCode: any;
-  @ViewChild('paginator_Page') paginator!: MatPaginator;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   constructor(private dialog: MatDialog,
     @Inject(Pay_TOKEN) private service: ICompanypaycodemapping,
@@ -175,9 +175,6 @@ export class CompanypaycodemappingComponent {
     });
   }
 
-
-
-
   exportToExcel(): void {
     this.isLoading = true;
 
@@ -210,9 +207,6 @@ export class CompanypaycodemappingComponent {
           const fileName = `CompanyPaycodeMapping${timestamp}.xlsx`;
 
           XLSX.writeFile(wb, fileName);
-
-          this.showAlertPopup('File downloaded successfully!');
-
         } catch (err) {
           console.error('Error exporting to Excel:', err);
         }
