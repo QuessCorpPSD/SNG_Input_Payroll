@@ -533,7 +533,7 @@ export class InvoiceruleComponent {
       payperiodto: formValue.payperiodto,
       carryforward: formValue.carryforward.text,
       noofcarryforwards: formValue.noofcarryforwards,
-      otrule: formValue.otrule,
+      otrule: formValue.otrule.text,
       gratuity: formValue.gratuity.text,
       reimbursement: formValue.reimbursement.text,
       servicefeeonexpenses: formValue.servicefeeonexpenses.text,
@@ -542,7 +542,7 @@ export class InvoiceruleComponent {
       billabledaysformula: formValue.billabledaysformula,
       userId: String(this.userdetail.user_Id)
     };
-    console.log('PALOAD', InvoiceRuleAdd);
+    
 
 
     this.invoicerule.PostAddInvoiceRule(InvoiceRuleAdd).subscribe({
@@ -707,7 +707,6 @@ export class InvoiceruleComponent {
         if (errormsg.includes('false')) {
           this.isAddclicked = false;
           this.showPopup = true;
-          alert("Invoice Updated Successfully")
           this.closeEditclick();
           this.invoiceruleEditform.reset();
           this.companyUI = null;
