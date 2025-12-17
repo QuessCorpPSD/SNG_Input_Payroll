@@ -164,7 +164,7 @@ export class DynamicuploadComponent {
 
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet([], { header: headers });
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, this.selectedUploadTypeName);
+    XLSX.utils.book_append_sheet(wb, ws, "Table");
 
     const fileName = this.selectedUploadTypeName ? `${this.selectedUploadTypeName}.xlsx` : "Template.xlsx";
 
