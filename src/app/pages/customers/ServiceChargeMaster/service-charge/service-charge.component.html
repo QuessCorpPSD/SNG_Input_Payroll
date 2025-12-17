@@ -1,4 +1,3 @@
-<br />
 <div class="page-wrapper">
     <div class="scrollable-content">
 
@@ -17,17 +16,17 @@
                     <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label text-muted small">Service Charge Master</label>
-                    <select class="form-select form-select-sm" (change)="onServiceChargeChange($event)">
+                    <label class="form-label text-muted small">Service Charge Type</label>
+                    <select class="form-select form-select-sm" (change)="onServiceChargeChangeNew($event)">
                         <option value="">Select</option>
                         <option *ngFor="let servicecharge of servicechargedata"
-                            [value]="servicecharge.Service_Charge_Master_Id">
-                            {{servicecharge.Service_Charge_Master_Name}}
+                            [value]="servicecharge.Service_Charge_Type">
+                            {{servicecharge.Service_Charge_Type}}
                         </option>
                     </select>
                 </div>
 
-                <div class="col-md-3">
+                <!-- <div class="col-md-3">
                     <label class="form-label text-muted small">Service Charge Type</label>
                     <select class="form-select form-select-sm" (change)="onServiceChargeTypeChange($event)">
                         <option value="">Select</option>
@@ -38,9 +37,16 @@
                     </select>
 
                 </div>
-
-                <br />
-                <br />
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Service Charge</label>
+                    <select class="form-select form-select-sm" (change)="onServiceChargeChange($event)">
+                        <option value="">Select</option>
+                        <option *ngFor="let servicecharge of servicechargedata"
+                            [value]="servicecharge.Service_Charge_Master_Id">
+                            {{servicecharge.Service_Charge_Master_Name}}
+                        </option>
+                    </select>
+                </div> -->
                 <!-- Buttons Section -->
                 <div class="col-md-9 d-flex gap-2">
                     <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Search"
@@ -49,7 +55,7 @@
                     </button> -->
 
                     <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Search"
-                    (click)="onSearchClick()">
+                        (click)="onSearchClick()">
                         <mat-icon>search</mat-icon>
                     </button>
 
@@ -82,74 +88,415 @@
 
     </div>
 </div>
-   <div *ngIf="showPopup" class="overlay">
-        <app-alertpopup *ngIf="showPopup" [message]="popupMessage" class="centered-popup"
-            (close)="showPopup = false"></app-alertpopup>
-    </div>
-<br />
+<div *ngIf="showPopup" class="overlay">
+    <app-alertpopup *ngIf="showPopup" [message]="popupMessage" class="centered-popup"
+        (close)="showPopup = false"></app-alertpopup>
+</div>
 
-<!-- TABLE SECTION -->
-<!-- <div class="table-wrapper1" style="min-width: 960px;" *ngIf="showTable">
-    <div class="table-scroll">
+<div class="table-container" style="top:10px;" *ngIf="showTable===true">
+    <div class="table-scroll-window">
+        <mat-table [dataSource]="dataSource" matSort class="custom-table">
 
-        <mat-table [dataSource]="uploadedDataSource" matSort class="custom-table mat-elevation-z8 auto-fit-table">
-
-            <ng-container matColumnDef="Action">
-                <mat-header-cell *matHeaderCellDef><strong>Action</strong></mat-header-cell>
-                <mat-cell *matCellDef="let row">
-                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Delete">
-                        <mat-icon>delete</mat-icon>
-                    </button>
-                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Edit">
-                        <mat-icon>edit</mat-icon>
-                    </button>
-                </mat-cell>
+            <!--Data Rows-->
+            <ng-container matColumnDef="SNo">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>SNo</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.SNo
+                    }}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="Company_Id">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Company_Id</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Company_Id
+                    }}</mat-cell>
             </ng-container>
 
-            <ng-container matColumnDef="SI No">
-                <mat-header-cell *matHeaderCellDef><strong>SI No</strong></mat-header-cell>
-                <mat-cell *matCellDef="let row">{{ row['SI No'] }}</mat-cell>
+            <ng-container matColumnDef="Service_Charge_Id">
+                <mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="position: sticky;">Service_Charge_Id</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{
+                    element.Service_Charge_Id
+                    }}</mat-cell>
             </ng-container>
 
-            <ng-container matColumnDef="Entity">
-                <mat-header-cell *matHeaderCellDef><strong>Entity</strong></mat-header-cell>
-                <mat-cell *matCellDef="let row">{{ row['Entity'] }}</mat-cell>
+            <ng-container matColumnDef="Service_Charge_Master_Id">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Service_Charge_Master_Id</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Service_Charge_Master_Id }}</mat-cell>
             </ng-container>
 
-            <ng-container matColumnDef="Culture Type">
-                <mat-header-cell *matHeaderCellDef><strong>Culture Type</strong></mat-header-cell>
-                <mat-cell *matCellDef="let row">{{ row['Culture Type'] }}</mat-cell>
+            <ng-container matColumnDef="Service_Charge_Type_Id">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Service_Charge_Type_Id</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Service_Charge_Type_Id }}</mat-cell>
             </ng-container>
 
-            <ng-container matColumnDef="PF Code">
-                <mat-header-cell *matHeaderCellDef><strong>PF Code</strong></mat-header-cell>
-                <mat-cell *matCellDef="let row">{{ row['PF Code'] }}</mat-cell>
+            <ng-container matColumnDef="Service_Charge_Slab_Item_Id">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Service_Charge_Slab_Item_Id</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Service_Charge_Slab_Item_Id }}</mat-cell>
             </ng-container>
-            <ng-container matColumnDef="Company Code">
-                <mat-header-cell *matHeaderCellDef><strong>Company Code</strong></mat-header-cell>
-                <mat-cell *matCellDef="let row">{{ row['Company Code'] }}</mat-cell>
+
+            <ng-container matColumnDef="Service_Charge_Slab_Inner_Item_Id">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Service_Charge_Slab_Inner_Item_Id</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Service_Charge_Slab_Inner_Item_Id }}</mat-cell>
             </ng-container>
-            <ng-container matColumnDef="Company Name">
-                <mat-header-cell *matHeaderCellDef><strong>Company Name</strong></mat-header-cell>
-                <mat-cell *matCellDef="let row">{{ row['Company Name'] }}</mat-cell>
+
+            <ng-container matColumnDef="Map_Name_Id">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Map_Name_Id</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Map_Name_Id }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Map_Name">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Map Name</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Map_Name }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Service_Charge_Name">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Service_Charge_Name</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Service_Charge_Name }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="PayCode_Id">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>PayCode_Id</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.PayCode_Id }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="PayCode_Code">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>PayCode</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.PayCode_Code }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Types">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Types</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Types }}</mat-cell>
+
+            </ng-container> <ng-container matColumnDef="Type_Names">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Type_Names</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Type_Names }}</mat-cell>
+
+            </ng-container> <ng-container matColumnDef="Value">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Value</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Value }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="MaxAmount">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Max Amount</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.MaxAmount }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Effective_Date">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Effective Date</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Effective_Date }}</mat-cell>
+
+            </ng-container> <ng-container matColumnDef="IsBillToRate">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>IsBillToRate</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.IsBillToRate | date:'dd MMM yyyy'
+                    }}</mat-cell>
+
+            </ng-container> <ng-container matColumnDef="IsHeadCount">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>IsHeadCount</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.IsHeadCount }}</mat-cell>
+
+            </ng-container> <ng-container matColumnDef="IsCriteriaApplicable">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>IsCriteriaApplicable</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.IsCriteriaApplicable }}</mat-cell>
+
+            </ng-container> <ng-container matColumnDef="IsCriteriaApplicable_Text">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>IsCriteriaApplicable_Text</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.IsCriteriaApplicable_Text }}</mat-cell>
+
+            </ng-container> <ng-container matColumnDef="IsAttendanceProrated">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>IsAttendanceProrated</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.IsAttendanceProrated }}</mat-cell>
+
+            </ng-container> <ng-container matColumnDef="IsAttendanceProrated_Text">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>IsAttendance Prorated</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.IsAttendanceProrated_Text }}</mat-cell>
+
+            </ng-container> <ng-container matColumnDef="Criteria">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Criteria</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Criteria }}</mat-cell>
+
+            </ng-container> <ng-container matColumnDef="IsReplacementClauseApplicable">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>IsReplacementClauseApplicable</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.IsReplacementClauseApplicable }}</mat-cell>
+
+            </ng-container> <ng-container matColumnDef="Slab_Id">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Slab_Id</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Slab_Id }}</mat-cell>
+
+            </ng-container> <ng-container matColumnDef="IsReplacementClauseApplicable_Text">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>IsReplacementClauseApplicable_Text</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.IsReplacementClauseApplicable_Text }}</mat-cell>
+
+            </ng-container> <ng-container matColumnDef="Replacement">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Replacement</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Replacement }}</mat-cell>
+
+            </ng-container> <ng-container matColumnDef="IsSourcingWaitingPeriod">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>IsSourcingWaitingPeriod</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.IsSourcingWaitingPeriod }}</mat-cell>
+
+            </ng-container> <ng-container matColumnDef="IsSourcingWaitingPeriod_Text">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>IsSourcingWaitingPeriod_Text</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.IsSourcingWaitingPeriod_Text }}</mat-cell>
+
+            </ng-container> <ng-container matColumnDef="SourcingValue">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>SourcingValue</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.SourcingValue }}</mat-cell>
+
+            </ng-container> <ng-container matColumnDef="TATDays">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>TATDays</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.TATDays }}</mat-cell>
+
+            </ng-container> <ng-container matColumnDef="IsMapNameRequired">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>IsMapNameRequired</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.IsMapNameRequired }}</mat-cell>
+
+            </ng-container> <ng-container matColumnDef="IsMapnamerequire_Text">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>IsMapnamerequire_Text</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.IsMapnamerequire_Text }}</mat-cell>
+
+            </ng-container> <ng-container matColumnDef="Category_Id">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Category_Id</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Category_Id }}</mat-cell>
+
+            </ng-container> <ng-container matColumnDef="Category_Name">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Category_Name</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Category_Name }}</mat-cell>
+
+            </ng-container> <ng-container matColumnDef="Invoice_Map_Name_Id">
+                <mat-header-cell *matHeaderCellDef mat-sort-header
+                    style="width:100px;">Invoice_Map_Name_Id</mat-header-cell>
+                <mat-cell *matCellDef="let element" style="width:100px;">{{ element.v
+                    }}</mat-cell>
+
+            </ng-container> <ng-container matColumnDef="Invoice_Map_Name">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Invoice_Map_Name</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Invoice_Map_Name }}</mat-cell>
+
+            </ng-container> <ng-container matColumnDef="Compliance_Fee">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Compliance Fee</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Compliance_Fee }}</mat-cell>
+
+            </ng-container> <ng-container matColumnDef="RandStad_Fee">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>RandStad Fee</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.RandStad_Fee }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="UnitType_Id">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>UnitType_Id</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.UnitType_Id }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Unit_Type">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Unit_Type</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Unit_Type }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Discount_Type_Id">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Discount_Type_Id</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Discount_Type_Id }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Discount_Type">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Discount_Type</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Discount_Type }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Discount_Amount">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Discount_Amount</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Discount_Amount }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Type_Id">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Type_Id</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Type_Id }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Pay_Code_Id">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Pay_Code_Id</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Pay_Code_Id }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="From">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>From</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.From }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="To">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>To</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.To }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="TYPES1">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>TYPES1</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.TYPES1 }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Pay_Code">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Pay_Code</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Pay_Code }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Slab_Calculation_Type_Id">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Slab_Calculation_Type_Id</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Slab_Calculation_Type_Id }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Slab_Calculation_Type">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Slab_Calculation_Type</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Slab_Calculation_Type }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Cap_Value">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Cap_Value</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Cap_Value }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Upfront_Charge">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Upfront Fee</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Upfront_Charge}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Upfront_PayCode">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Upfront PayCode</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Upfront_PayCode }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Upfront_Type_Id">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Upfront_Type_Id</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Upfront_Type_Id }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Upfront_Type">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Upfront Type</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Upfront_Type }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Insurance_Amount">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Insurance Amount</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Insurance_Amount }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="MarginalPayCodeId">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>MarginalPayCodeId</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.MarginalPayCodeId }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="MarginalPayCode">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>MarginalPayCode</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.MarginalPayCode }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="QDemyFee">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>QDemy Charge</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.QDemyFee }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="InEdgeFee">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>InEdge Charge</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.InEdgeFee }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="BTP_Training">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>BTP_Training</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.BTP_Training }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Govt_Grants_Subsidy">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Govt_Grants_Subsidy</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Govt_Grants_Subsidy }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Assessment_And_Certificatioin_Cost">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Assessment_And_Certificatioin_Cost</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Assessment_And_Certificatioin_Cost }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="Registration_Fee">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Registration_Fee</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.Registration_Fee }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="IsNewjoineeProrate">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>IsNewjoineeProrate</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.IsNewjoineeProrate }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="IsNewjoineeProrate_Text">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>New joineeProrate</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.IsNewjoineeProrate_Text }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="IsFAndFProrate">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>IsFAndFProrate</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.IsFAndFProrate }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="IsFAndFProrate_Text">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>FAndF Prorate</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.IsFAndFProrate_Text }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="IsFAndFArrearProrate">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>IsFAndFArrearProrate</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.IsFAndFArrearProrate }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="IsFAndFArrearProrate_Text">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>FAndFArrear Prorate</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.IsFAndFArrearProrate_Text }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="IsNewJoineeArrearProrate">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>IsNewJoineeArrearProrate</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.IsNewJoineeArrearProrate }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="IsNewJoineeArrearProrate_Text">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>NewJoineeArrear Prorate</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.IsNewJoineeArrearProrate_Text }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="QDemyFee_Type_Id">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>QDemyFee_Type_Id</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.QDemyFee_Type_Id }}</mat-cell>
             </ng-container>
 
 
-            <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: uploadDisplayedColumns;"></mat-row>
+            <ng-container matColumnDef="QDemyFee_Type">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>QDemy Fee</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.QDemyFee_Type }}</mat-cell>
+            </ng-container>
 
+
+            <ng-container matColumnDef="InEdgeFee_Type_Id">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>InEdgeFee_Type_Id</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.InEdgeFee_Type_Id }}</mat-cell>
+            </ng-container>
+
+
+            <ng-container matColumnDef="InEdgeFee_Type">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>InEdgeFee Type</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.InEdgeFee_Type }}</mat-cell>
+            </ng-container>
+
+
+            <ng-container matColumnDef="IsNewJoineeArrearFixed">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>IsNewJoineeArrearFixed</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.IsNewJoineeArrearFixed }}</mat-cell>
+            </ng-container>
+
+
+            <ng-container matColumnDef="IsNewJoineeArrearFixed_Text">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>IsNewJoineeArrearFixed_Text</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.IsNewJoineeArrearFixed_Text }}</mat-cell>
+            </ng-container>
+
+
+            <mat-header-row *matHeaderRowDef="displayedColumns" class="header-row"></mat-header-row>
+            <!-- <mat-header-row *matHeaderRowDef="filterDisplayedColumns" class="filter-row"></mat-header-row> -->
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
         </mat-table>
-
-        <div *ngIf="uploadedData.length === 0" class="text-center p-4">
-            <p class="text-muted">No data to display</p>
-        </div>
-
+        <mat-paginator class="mat-footer-paginator" [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons stickyEnd>
+        </mat-paginator>
     </div>
-
-    <mat-paginator [length]="uploadedData.length" [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
-    </mat-paginator>
-
 </div>
-
-</div>
-</div> -->
+<br><br><br><br>
