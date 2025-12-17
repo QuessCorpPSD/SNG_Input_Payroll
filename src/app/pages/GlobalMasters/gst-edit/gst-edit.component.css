@@ -30,7 +30,7 @@ mat-card-footer.footer {
 
 .no-border-icon {
     border: none;
-    background-color: white;
+    background-color: transparent;
 }
 
 /* Align checkboxes + input neatly */

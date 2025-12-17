@@ -14,18 +14,19 @@ import { MatSort } from '@angular/material/sort';
 import * as XLSX from 'xlsx';
 import { IPAycodeService } from '../../../Repository/GlobalMasters/Ipaycode.service';
 import { MatCardTitle } from "@angular/material/card";
+import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.component";
 
 export const Paycode_TOKEN = new InjectionToken<IPAycodeService>('Paycode_TOKEN');
 @Component({
   selector: 'app-paycodes',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatTooltipModule, MatTableModule, MatPaginatorModule, FormsModule, ReactiveFormsModule, MatCardTitle],
+  imports: [CommonModule, MatIconModule, MatTooltipModule, MatTableModule, MatPaginator, FormsModule, ReactiveFormsModule, MatCardTitle, AlertpopupComponent],
   templateUrl: './paycodes.component.html',
   styleUrl: './paycodes.component.css',
-      providers: [{
-      provide: Paycode_TOKEN,
-      useClass: PaycodeserviceService
-    }]
+  providers: [{
+    provide: Paycode_TOKEN,
+    useClass: PaycodeserviceService
+  }]
 })
 export class PaycodesComponent implements AfterViewInit {
   paytype: any;
@@ -37,16 +38,24 @@ export class PaycodesComponent implements AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   paySearch: any;
   pagetype: any;
+  paycode: any;
+  PayType: any;
+  Taxable: any;
 
-  constructor(@Inject(Paycode_TOKEN)private payCode: PaycodeserviceService, private dialog: MatDialog) { }
+  isLoading: boolean = false;
+  showPopup: boolean = false;
+  popupMessage: string = '';
+  popupSubMessage: string = '';
+
+  constructor(@Inject(Paycode_TOKEN) private payCode: PaycodeserviceService, private dialog: MatDialog) { }
 
   showTable = false;
 
   uploadDisplayedColumns: string[] = ['slNo', 'payCode', 'description', 'printAs', 'payType', 'taxable', 'projectTax', 'marginalTax', 'payCodeType', 'lopApplicable', 'pfApplicable', 'esiApplicable', 'ptApplicable', 'pageType', 'accountNumber', 'postingKey'];
 
-  uploadFilteredColumns: string[] = [ 'slNoFilter', 'payCodeFilter', 'descriptionFilter', 'printAsFilter', 'payTypeFilter', 'taxableFilter', 'projectTaxFilter', 'marginalTaxFilter', 'payCodeTypeFilter', 'lopApplicableFilter', 'pfApplicableFilter', 'esiApplicableFilter', 'ptApplicableFilter', 'pageTypeFilter', 'accountNumberFilter', 'postingKeyFilter'];
+  uploadFilteredColumns: string[] = ['slNoFilter', 'payCodeFilter', 'descriptionFilter', 'printAsFilter', 'payTypeFilter', 'taxableFilter', 'projectTaxFilter', 'marginalTaxFilter', 'payCodeTypeFilter', 'lopApplicableFilter', 'pfApplicableFilter', 'esiApplicableFilter', 'ptApplicableFilter', 'pageTypeFilter', 'accountNumberFilter', 'postingKeyFilter'];
 
-  uploadedData: any[] = []; //  No mock data, ready for API hookup
+  uploadedData: any[] = [];
 
   uploadedDataSource = new MatTableDataSource<any>(this.uploadedData);
 
@@ -54,7 +63,7 @@ export class PaycodesComponent implements AfterViewInit {
     slNo: '', payCode: '', description: '', payType: '', taxable: '', accountNumber: ''
   };
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild('paginator') paginator!: MatPaginator;
 
   ngOnInit(): void {
     this.BindPayType();
@@ -66,6 +75,18 @@ export class PaycodesComponent implements AfterViewInit {
     });
   }
 
+
+  showAlertPopup(message: string, subMessage: string = '') {
+    this.popupMessage = message;
+    this.popupSubMessage = subMessage;
+    this.showPopup = true;
+  }
+
+  closePopup() {
+    this.showPopup = false;
+    this.popupMessage = '';
+    this.popupSubMessage = '';
+  }
   BindPayType() {
     this.payCode.GetPayType().subscribe({
       next: res => { this.paytype = res.Data }
@@ -73,7 +94,7 @@ export class PaycodesComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.uploadedDataSource.paginator = this.paginator;
+   // this.uploadedDataSource.paginator = this.paginator;
     this.setUpCustomFilter();
   }
 
@@ -99,9 +120,9 @@ export class PaycodesComponent implements AfterViewInit {
       accountNumber: this.filterValues.accountNumber.trim().toLowerCase(),
     });
 
-    if (this.uploadedDataSource.paginator) {
-      this.uploadedDataSource.paginator.firstPage();
-    }
+    // if (this.uploadedDataSource.paginator) {
+    //   this.uploadedDataSource.paginator.firstPage();
+    // }
   }
 
   PayCodeSearch() {
@@ -113,35 +134,33 @@ export class PaycodesComponent implements AfterViewInit {
       "PayId": 0
 
     }
+    this.isLoading = true;
 
-    console.log('Payload:', JSON.stringify(payload));
 
     this.payCode.SearchPayCode(payload).subscribe({
       next: (res) => {
-        console.log(res);
+        this.isLoading = false;
         this.paySearch = res.Data.data.Table0;
-        console.log(this.paySearch);
         if (this.paySearch && this.paySearch.length > 0) {
           this.dataSource = new MatTableDataSource(this.paySearch);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
           this.displayedColumns = ['Action', 'slNo', 'payCode', 'description', 'printAs', 'payType', 'taxable', 'projectTax', 'marginalTax', 'payCodeType', 'lopApplicable', 'pfApplicable', 'esiApplicable', 'ptApplicable', 'pageType', 'accountNumber', 'postingKey'];
         } else {
+          this.isLoading = false;
           this.dataSource.data = [];
-          this.showAlertPopup('Information', 'No data found for the selected criteria');
+          alert('No data found for the selected criteria');
         }
       },
       error: (err) => {
         console.error('Error loading salary release data', err);
-        this.showAlertPopup('Error', 'Failed to load salary release data');
+        this.isLoading = false;
+        alert('Failed to load salary release data');
       },
     });
   }
-  showAlertPopup(arg0: string, arg1: string) {
-    throw new Error('Method not implemented.');
-  }
-
   exportToExcel(): void {
+    this.isLoading = true;
     const payload = {
       "paycode_Code": '',
       "PayTypeId": 0,
@@ -150,26 +169,21 @@ export class PaycodesComponent implements AfterViewInit {
 
     }
 
-    console.log('Payload:', JSON.stringify(payload));
 
     this.payCode.SearchPayCode(payload).subscribe({
       next: (res) => {
+        this.isLoading=false;
         try {
-          console.log('🔍 API Response:', res);
-
           const jsonData = res?.Data?.data?.Table0;
-
-          // ✅ Check if Data is not an array or empty
           if (!Array.isArray(jsonData) || jsonData.length === 0) {
-            alert('No data available for the selected company and pay period.');
+            alert('No data available');
             return;
           }
 
-          // ✅ Create Excel file
           const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(jsonData);
           const wb: XLSX.WorkBook = XLSX.utils.book_new();
 
-          XLSX.utils.book_append_sheet(wb, ws, 'salaryData');
+          XLSX.utils.book_append_sheet(wb, ws, 'paycodeData');
 
           const timestamp = new Date().toISOString().split('T')[0];
           const fileName = `PayCode_${timestamp}.xlsx`;
@@ -182,6 +196,7 @@ export class PaycodesComponent implements AfterViewInit {
       },
       error: (err) => {
         console.error('Error loading data for export', err);
+        this.isLoading = false;
         alert('Failed to load data from server.');
       },
     });
@@ -191,7 +206,7 @@ export class PaycodesComponent implements AfterViewInit {
   AddPOOpen() {
     this.dialog.open(PaycodeaddComponent, {
       width: '90%',
-      height: '86vh',
+      height: '84vh',
       disableClose: true,
       data: { example: 'Hello from parent!' }
     });

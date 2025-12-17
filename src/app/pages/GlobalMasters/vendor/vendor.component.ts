@@ -26,31 +26,25 @@ import { MatCardModule } from "@angular/material/card";
     MatSortModule,
     AlertpopupComponent,
     MatCardModule
-],
+  ],
   templateUrl: './vendor.component.html',
   styleUrl: './vendor.component.css'
 })
 export class VendorComponent {
-
   VendorName: string = "";
   showTable: boolean = false;
-
   showPopup: boolean = false;
   popupMessage: string = '';
   popupSubMessage: string = '';
   isLoading: boolean = false;
-
   dataSource = new MatTableDataSource<any>();
-
   uploadDisplayedColumns: string[] = [
     'SI No',
     'Vendor Code',
     'Vendor Name'
   ];
-
   @ViewChild('paginator') paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-
   vendor: any;
 
   constructor(
@@ -98,22 +92,24 @@ export class VendorComponent {
           this.dataSource.sort = this.sort;
         } else {
           this.dataSource.data = [];
-          this.showAlertPopup('Information', 'No data found for the selected criteria');
+          alert('No data found for the selected criteria');
         }
       },
 
       error: () => {
         this.isLoading = false;
-        this.showAlertPopup('Error', 'Failed to load vendor data');
+        alert('Failed to load vendor data');
       },
     });
   }
 
   exportToExcel(): void {
+    this.isLoading = true;
     const data = this.dataSource.data;
 
     if (!data || data.length === 0) {
-      this.showAlertPopup("No data available to export");
+      this.isLoading = false;
+      alert("No data available to export");
       return;
     }
 
@@ -122,14 +118,13 @@ export class VendorComponent {
 
     XLSX.utils.book_append_sheet(wb, ws, 'Vendor Master');
     XLSX.writeFile(wb, `VendorMaster_${new Date().toISOString().split("T")[0]}.xlsx`);
-
-    this.showAlertPopup("Excel downloaded successfully");
+    this.isLoading = false;
   }
 
   AddPOOpen() {
     this.dialog.open(AddVendorComponent, {
       width: '35%',
-      height: '39vh',
+      height: '35vh',
       disableClose: true
     });
   }

@@ -1,53 +1,48 @@
 <div class="page-wrapper" style="padding-top: 2%;">
     <div class="scrollable-content">
-        <!-- 
-        <div style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700; min-width: 960px">
-            Pay Code
-        </div> -->
+
         <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 600;">Pay
             Code</mat-card-title>
-        <form [formGroup]="Paycodeform">
 
-            <div class="container py-2">
-                <div class="row g-3 align-items-end">
-                    <div class="col-md-3">
-                        <label class="form-label text-muted small">Pay Code</label>
-                        <input type="text" class="form-control form-control-sm" formControlName="payCode" />
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label text-muted small">Pay Type</label>
-                        <select class="form-select form-select-sm" formControlName="PayType">
-                            <option value="">--Select--</option>
-                            <option *ngFor="let pay of paytype" [value]="pay.PayType_Id">{{pay.PayType}}</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label text-muted small">Taxable</label>
-                        <select class="form-select form-select-sm" formControlName="Taxable">
-                            <option value="">Select</option>
-                            <option value="Yes">Yes</option>
-                            <option value="No">No</option>
-                        </select>
-                    </div>
+        <div class="container py-2">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Pay Code</label>
+                    <input type="text" class="form-control form-control-sm" [(ngModel)]="paycode" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Pay Type</label>
+                    <select class="form-select form-select-sm" [(ngModel)]="PayType">
+                        <option value="">--Select--</option>
+                        <option *ngFor="let pay of paytype" [value]="pay.PayType_Id">{{pay.PayType}}</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Taxable</label>
+                    <select class="form-select form-select-sm" [(ngModel)]="Taxable">
+                        <option value="">Select</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
 
-                    <div class="col-md-2 d-flex gap-2">
-                        <button class="btn  btn-sm d-flex align-items-center justify-content-center" matTooltip="Search"
-                            (click)="PayCodeSearch()">
-                            <mat-icon>search</mat-icon>
-                        </button>
+                <div class="col-md-2 d-flex gap-2">
+                    <button class="btn  btn-sm d-flex align-items-center justify-content-center btn-search"
+                        matTooltip="Search" (click)="PayCodeSearch()">
+                        <mat-icon>search</mat-icon>
+                    </button>
 
-                        <button class="btn btn-sm d-flex align-items-center justify-content-center"
-                            matTooltip="export to excel" (click)="exportToExcel()">
-                            <mat-icon>download</mat-icon>
-                        </button>
-                        <button class="btn  btn-sm d-flex align-items-center justify-content-center" matTooltip="Add"
-                            (click)="AddPOOpen()">
-                            <mat-icon>add</mat-icon>
-                        </button>
-                    </div>
+                    <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="export to excel" (click)="exportToExcel()">
+                        <mat-icon>download</mat-icon>
+                    </button>
+                    <button class="btn btn-success btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="Add" (click)="AddPOOpen()">
+                        <mat-icon>add</mat-icon>
+                    </button>
                 </div>
             </div>
-        </form>
+        </div>
 
         <div class="table-wrapper1" style="padding-top: 2%;" *ngIf="showTable">
             <div class="table-scroll">
@@ -291,8 +286,19 @@
                 <p class="text-muted">No data to display</p>
             </div>
 
-            <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+            <mat-paginator #paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
+                showFirstLastButtons></mat-paginator>
         </div>
 
     </div>
 </div>
+
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>
+
+
+<div *ngIf="showPopup" class="overlay"></div>
+<app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+    (close)="closePopup()">
+</app-alertpopup>

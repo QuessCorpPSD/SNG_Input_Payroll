@@ -12,6 +12,8 @@ import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CPFslabDetailsService } from '../../../Service/GlobalMasters/cpfslab-details.service';
 import * as XLSX from 'xlsx';
+import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.component";
+import { MatCardModule } from "@angular/material/card";
 
 @Component({
   selector: 'app-cpfslab-details',
@@ -21,11 +23,13 @@ import * as XLSX from 'xlsx';
     MatIconModule,
     MatTooltipModule,
     MatTableModule,
-    MatPaginator,
+    MatPaginatorModule,
     MatSortModule,
     FormsModule,
-    ReactiveFormsModule
-  ],
+    ReactiveFormsModule,
+    AlertpopupComponent,
+    MatCardModule
+],
   templateUrl: './cpfslab-details.component.html',
   styleUrls: ['./cpfslab-details.component.css']
 })
@@ -37,11 +41,15 @@ export class CPFslabDetailsComponent {
   categories: any[] = [];
   selectedCategory: any;
 
+  isLoading: boolean = false;
+  showPopup: boolean = false;
+  popupMessage: string = '';
+  popupSubMessage: string = '';
 
+  Category: any;
   uploadedDataSource = new MatTableDataSource<any>(this.uploadedData);
 
   uploadDisplayedColumns: string[] = [
-    'Action',
     'SNo',
     'PayCodeId',
     'PayCode',
@@ -57,7 +65,6 @@ export class CPFslabDetailsComponent {
     'EffectiveDate'
   ];
   filterDisplayedColumns: string[] = [
-    'filter_Action',
     'filter_SNo',
     'filter_PayCodeId',
     'filter_PayCode',
@@ -73,10 +80,9 @@ export class CPFslabDetailsComponent {
     'filter_EffectiveDate'
   ];
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild('paginator') paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   selectedPaycode: any;
-  isLoading: boolean | undefined;
 
   constructor(
     private cpfService: CPFslabDetailsService,
@@ -86,6 +92,19 @@ export class CPFslabDetailsComponent {
     private fb: FormBuilder,
 
   ) { }
+
+
+  showAlertPopup(message: string, subMessage: string = '') {
+    this.popupMessage = message;
+    this.popupSubMessage = subMessage;
+    this.showPopup = true;
+  }
+
+  closePopup() {
+    this.showPopup = false;
+    this.popupMessage = '';
+    this.popupSubMessage = '';
+  }
 
   ngOnInit(): void {
     const json = this._sessionStorage.getItem('UserProfile');
@@ -103,26 +122,24 @@ export class CPFslabDetailsComponent {
   }
   onSearchClick(): void {
     this.showTable = true;
-
+    this.isLoading = true;
     const payload = {
-      Category: this.Cpfform.get('Category')?.value || null,
+      Category: this.Category || null,
       Paycode: this.Cpfform.get('Paycode')?.value || null
     };
 
-    console.log('Payload:', JSON.stringify(payload));
 
     this.cpfService.CDFSearch(payload).subscribe({
       next: (res: any) => {
-        console.log('API Response:', res.Data.data);
-
+        this.isLoading = false;
         if (res?.Message === 'Success') {
           const data = res?.Data?.data?.Table0 || res?.Data || [];
 
           if (Array.isArray(data) && data.length > 0) {
             this.uploadedData = data;
             this.uploadedDataSource.data = this.uploadedData;
-            this.uploadedDataSource.paginator=this.paginator;
-            this.uploadedDataSource.sort=this.sort;
+            this.uploadedDataSource.paginator = this.paginator;
+            this.uploadedDataSource.sort = this.sort;
           } else if (res?.Data?.errors) {
             const validationErrors = res.Data.errors;
             const messages: string[] = [];
@@ -138,29 +155,31 @@ export class CPFslabDetailsComponent {
             alert('No data found.');
           }
         } else {
-          alert('Unexpected API response. Check console.');
           console.warn('Unexpected:', res);
+          this.isLoading = false;
+          alert('Unexpected API response. Check console.');
         }
       },
       error: (err) => {
         console.error('Error fetching CPF slab data:', err);
+        this.isLoading = false;
         alert('Failed to load CPF slab details.');
       }
     });
   }
   exportToExcel(): void {
 
-
+    this.isLoading = true;
     const payload = {
-      Category: this.Cpfform.get('Category')?.value || null,
+      Category: this.Category || null,
       Paycode: this.Cpfform.get('Paycode')?.value || null
     };
 
-    console.log('Payload:', JSON.stringify(payload));
+
 
     this.cpfService.CDFSearch(payload).subscribe({
       next: (res) => {
-
+        this.isLoading = false;
         try {
           const jsonData = res.Data.data.Table0;
 
@@ -184,11 +203,12 @@ export class CPFslabDetailsComponent {
 
         } catch (err) {
           console.error('Error exporting to Excel:', err);
-
+          this.isLoading = false;
         }
       },
       error: (err) => {
         console.error('Error loading data for export', err);
+        this.isLoading = false;
       },
     });
   }
@@ -198,8 +218,6 @@ export class CPFslabDetailsComponent {
     this.isLoading = true;
     this.cpfService.GetCategory().subscribe({
       next: (res: any) => {
-        console.log('Categories API Response:', res);
-
         if (res?.StatusCode === 200 && Array.isArray(res?.Data?.data)) {
           this.categories = res.Data.data;
         } else {
@@ -225,14 +243,14 @@ export class CPFslabDetailsComponent {
   AddPOOpen(): void {
     this.dialog.open(AddCPFslabDetailsComponent, {
       width: '70%',
-      height: '71.7vh',
+      height: '71vh',
       disableClose: true,
       data: { example: 'Hello from parent!' }
     });
   }
 
   view(row: any): void {
-    console.log('View clicked for:', row);
+
   }
 
   applyFilter(event: Event, column: string): void {

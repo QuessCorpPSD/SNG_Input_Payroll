@@ -1,155 +1,13 @@
-/* 
-
-.small-datepicker {
-  width: 180px;   
-}
-.small-datepicker .mat-mdc-text-field-wrapper {
-  height: 20px !important;   
-  padding: 0 8px !important;
-}  /* border-radius: 0.600rem; */
-
-
-/* .small-datepicker .mat-mdc-form-field-infix {
-  padding: 0 !important;
-}
-
-.small-datepicker input.mat-mdc-input-element {
-  height: 15px !important;
-  font-size: 13px;   
-}  */
-
-/* Reduce overall height */
-.small-datepicker .mat-mdc-text-field-wrapper {
-    --mdc-outlined-text-field-container-height: 36px;
-    /* default is 56px */
-    --mdc-outlined-text-field-input-text-size: 13px;
-    /* smaller font */
-    --mdc-outlined-text-field-label-text-size: 12px;
-    /* smaller label */
-}
-
-.small-datepicker .mat-mdc-input-element {
-    padding: 0 4px !important;
-}
-
-
-.custom-form .form-label {
-    font-size: 0.8rem;
-    letter-spacing: .2px;
-}
-
-.custom-form .form-control,
-.custom-form .form-select {
-    border-radius: .6rem;
-}
-
-/* Make all form inputs and selects take full width of their column */
-/* .form-control,
-.form-select,
-CompanyPicker {
-  width: 100%;
-  box-sizing: border-box;
-} */
-
-.form-control,
-.form-select {
-    height: 30px;
-    padding: 6px 10px;
-    align-items: center;
-    font-size: 0.8rem;
-    /* border-radius: 80px; */
-}
-
-
-.custom-form .section {
-    background: #fff;
-}
-
-.custom-form .card {
-    background: #fff;
-}
-
-.custom-form hr {
-    opacity: .12;
-}
-
-/* .custom-form .form-control:focus,
-.custom-form .form-select:focus {
-  box-shadow: 0 0 0 .2rem rgba(13,110,253,.15);
-  border-color: rgba(13,110,253,.5);
-} */
-
-input[type="date"].form-control-sm {
-    padding-top: .375rem;
-    padding-bottom: .375rem;
-}
-
-.btn {
-    transition: all 0.15s ease-in-out;
-    padding: 0.5rem 1.25rem;
-    /* border-radius: 50px; pill style */
-    font-size: 0.9rem;
-    font-weight: 600;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-    border: none;
-}
-
-.btn-primary {
-    background-color: #4f4a9c;
-    color: white;
-    border: 1.5px solid #4f4a9c;
-}
-
-.btn-primary:hover {
-    background-color: #4f4a9c;
-    border-color: #4f4a9c;
-    box-shadow: 0 4px 12px rgba(13, 110, 253, 0.4);
-}
-
-.btn-light {
-    background-color: #f8f9fa;
-    color: #212529;
-    border: 1.5px solid #ced4da;
-    box-shadow: none;
-    transition: background-color 0.15s ease-in-out;
-}
-
-.btn-light:hover {
-    background-color: #e2e6ea;
-    border-color: #adb5bd;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-
-
-.custom-card .mat-card-header {
-    align-items: center;
-}
-
-.no-border-icon {
-    box-shadow: none !important;
-    border: none !important;
-    background: transparent !important;
-}
-
-.custom-card .spacer {
-    flex: 1 1 auto;
-}
-
 .custom-card {
     overflow: hidden;
+    /* prevent full scroll */
+    display: flex;
     flex-direction: column;
-    padding-bottom: 16px;
-
+    padding-bottom: 17px;
 }
 
-
 .scroll-content {
-    flex-grow: 1;
+    flex: 1;
     overflow-y: auto;
 }
 
@@ -158,34 +16,50 @@ input[type="date"].form-control-sm {
     top: 0;
     z-index: 1;
     background: white;
-    /* keep background visible */
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.btn-primary {
-    margin-right: 20px;
+mat-card-footer.footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+
 }
 
-.btn1-:hover {
-    background-color: #4f4a9c;
-    color: white;
+.no-border-icon {
+    border: none;
+    background-color: transparent;
 }
 
-.btn-primary:hover {
-    background-color: white;
-    color: #212529;
+/* Align checkboxes + input neatly */
+.row .d-flex input[type='checkbox'] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
 }
 
-.btn-light:hover~.btn-primary {
-    background-color: white;
-    color: #212529;
+.row .d-flex label {
+    margin-right: 6px;
+    font-weight: 500;
 }
 
-.btn-primary:hover~.btn-light {
-    background-color: #4f4a9c;
-    color: #212529;
+.row .d-flex input[type='number'] {
+    text-align: right;
+    padding-right: 6px;
+}
+
+/* Optional: control column width on smaller screens */
+@media (max-width: 768px) {
+    .row .d-flex {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .row .d-flex input[type='number'] {
+        width: 100%;
+    }
 }
 
 

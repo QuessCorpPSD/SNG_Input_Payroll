@@ -40,7 +40,6 @@ export class GSTComponent {
   // Explicit column names must match HTML columnDef values
   uploadDisplayedColumns: string[] = [
     'Action',
-    'GST Master Id',
     'Effective Date',
     'GST Number',
     'Company Name',
@@ -62,6 +61,17 @@ export class GSTComponent {
 
 
 
+  showAlertPopup(message: string, subMessage: string = '') {
+    this.popupMessage = message;
+    this.popupSubMessage = subMessage;
+    this.showPopup = true;
+  }
+
+  closePopup() {
+    this.showPopup = false;
+    this.popupMessage = '';
+    this.popupSubMessage = '';
+  }
   ngOnInit(): void {
     const json = this._sessionStoreage.getItem('UserProfile');
     if (json) {
@@ -74,13 +84,15 @@ export class GSTComponent {
   }
 
   onSearchClick(): void {
+    this.isLoading = true;
     this.gstService.Search(this.userdetail.user_Id).subscribe({
       next: (res: any) => {
-        console.log('search', res)
+        this.isLoading = false;
         if (res?.Message === 'Success') {
           const data = res?.Data?.data?.Table0 || res?.Data || [];
-
+          this.isLoading = false;
           if (Array.isArray(data) && data.length > 0) {
+            this.isLoading = false;
             this.uploadedData = data;
             this.uploadedDataSource.data = this.uploadedData;
             this.uploadedDataSource.paginator = this.paginator;
@@ -91,12 +103,14 @@ export class GSTComponent {
             Object.keys(validationErrors).forEach(key => {
               messages.push(`${key}: ${validationErrors[key].join(', ')}`);
             });
+            this.isLoading = false;
             alert('Validation Errors:\n' + messages.join('\n'));
             this.uploadedData = [];
             this.uploadedDataSource.data = [];
           } else {
             this.uploadedData = [];
             this.uploadedDataSource.data = [];
+            this.isLoading = false;
             alert('No data found.');
           }
         } else {
@@ -106,42 +120,40 @@ export class GSTComponent {
       },
       error: (err) => {
         console.error('Error fetching GST slab data:', err);
+        this.isLoading = false;
       }
     });
   }
   exportToExcel(): void {
-
+    this.isLoading = true;
     this.gstService.ExporttoExcel(this.userdetail.user_Id).subscribe({
       next: (res) => {
-
+        this.isLoading = false;
         try {
           const jsonData = res.Data.data.Table0;
 
           if (!jsonData || !Array.isArray(jsonData) || jsonData.length === 0) {
+            alert('No Data Found')
+            this.isLoading = false;
             return;
+
           }
 
-          // Create Excel file from the JSON data
           const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(jsonData);
           const wb: XLSX.WorkBook = XLSX.utils.book_new();
 
           XLSX.utils.book_append_sheet(wb, ws, 'GST');
-
-          // Generate filename with timestamp
           const timestamp = new Date().toISOString().split('T')[0];
           const fileName = `GST_Details_${timestamp}.xlsx`;
-
-
           XLSX.writeFile(wb, fileName);
-
-
         } catch (err) {
           console.error('Error exporting to Excel:', err);
-
+          this.isLoading = false;
         }
       },
       error: (err) => {
         console.error('Error loading data for export', err);
+        this.isLoading = false;
       },
     });
   }

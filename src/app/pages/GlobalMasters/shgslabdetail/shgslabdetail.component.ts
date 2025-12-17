@@ -11,13 +11,15 @@ import { MatSort } from '@angular/material/sort';
 import * as XLSX from 'xlsx';
 import { ISHGService } from '../../../Repository/GlobalMasters/IShg.service';
 import { ShgserviceService } from '../../../Service/GlobalMasters/shgservice.service';
+import { MatCardModule } from "@angular/material/card";
+import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.component";
 
 export const SHG_TOKEN = new InjectionToken<ISHGService>('SHG_TOKEN');
 
 @Component({
   selector: 'app-shgslabdetail',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatTooltipModule, MatTableModule, MatPaginatorModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, MatIconModule, MatTooltipModule, MatTableModule, MatPaginatorModule, FormsModule, ReactiveFormsModule, MatCardModule, AlertpopupComponent],
   templateUrl: './shgslabdetail.component.html',
   styleUrl: './shgslabdetail.component.css',
   providers: [{
@@ -28,6 +30,12 @@ export const SHG_TOKEN = new InjectionToken<ISHGService>('SHG_TOKEN');
 export class ShgslabdetailComponent implements AfterViewInit {
   shgSearch: any;
   Selecteddate: any;
+
+  isLoading: boolean = false;
+  showPopup: boolean = false;
+  popupMessage: string = '';
+  popupSubMessage: string = '';
+
   constructor(@Inject(SHG_TOKEN) private shg: ShgserviceService, private dialog: MatDialog) { }
 
   showTable = false;
@@ -38,11 +46,11 @@ export class ShgslabdetailComponent implements AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   uploadDisplayedColumns: string[] = [
-    'Action', 'slNo', 'effectivedate', 'category', 'fromvalue', 'tovalue', 'value'
+    'slNo', 'effectivedate', 'category', 'fromvalue', 'tovalue', 'value'
   ];
 
   filteredDisplayedColumns: string[] = [
-    'Actionfilter', 'slNoFilter', 'effectivedateFilter', 'categoryFilter', 'fromvalueFilter', 'tovalueFilter', 'valueFilter'
+    'slNoFilter', 'effectivedateFilter', 'categoryFilter', 'fromvalueFilter', 'tovalueFilter', 'valueFilter'
   ];
 
   filterValues = {
@@ -54,13 +62,24 @@ export class ShgslabdetailComponent implements AfterViewInit {
     value: ''
   };
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild('paginator') paginator!: MatPaginator;
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.setupCustomFilter();
   }
 
+  showAlertPopup(message: string, subMessage: string = '') {
+    this.popupMessage = message;
+    this.popupSubMessage = subMessage;
+    this.showPopup = true;
+  }
+
+  closePopup() {
+    this.showPopup = false;
+    this.popupMessage = '';
+    this.popupSubMessage = '';
+  }
   setupCustomFilter() {
     this.dataSource.filterPredicate = (data, filter: string): boolean => {
       const search = JSON.parse(filter);
@@ -94,49 +113,46 @@ export class ShgslabdetailComponent implements AfterViewInit {
     //   alert("Please select Effective Date");
     //   return;
     // }
+    this.isLoading = true;
     this.showTable = true;
 
     const date = this.Selecteddate;
     this.shg.SearchShg(date).subscribe({
       next: (res) => {
-        console.log(res.Data.data.Table0);
+        this.isLoading = false;
         this.shgSearch = res.Data.data.Table0;
-        console.log(this.shgSearch);
         if (this.shgSearch && this.shgSearch.length > 0) {
           this.dataSource = new MatTableDataSource(this.shgSearch);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
           this.uploadDisplayedColumns = [
-            'Action', 'slNo', 'effectivedate', 'category', 'fromvalue', 'tovalue', 'value'
+            'slNo', 'effectivedate', 'category', 'fromvalue', 'tovalue', 'value'
           ];
         }
       },
       error: (err) => {
         console.error('Error loading salary release data', err);
+        this.isLoading = false;
       },
     });
   }
 
   exportToExcel(): void {
     const date = this.Selecteddate;
+    this.isLoading = true;
     this.shg.SearchShg(date).subscribe({
       next: (res) => {
+        this.isLoading = false;
         try {
-          console.log('🔍 API Response:', res);
-
           const jsonData = res?.Data.data.Table0;
-
-          // ✅ Check if Data is not an array or empty
           if (!Array.isArray(jsonData) || jsonData.length === 0) {
             alert('No data available for the selected company and pay period.');
             return;
           }
-
-          // ✅ Create Excel file
           const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(jsonData);
           const wb: XLSX.WorkBook = XLSX.utils.book_new();
 
-          XLSX.utils.book_append_sheet(wb, ws, 'salaryData');
+          XLSX.utils.book_append_sheet(wb, ws, 'shgslabData');
 
           const timestamp = new Date().toISOString().split('T')[0];
           const fileName = `shg_slab_detail_${timestamp}.xlsx`;
@@ -154,12 +170,10 @@ export class ShgslabdetailComponent implements AfterViewInit {
     });
   }
 
-
-
   AddShgslabdetailOpen() {
     this.dialog.open(ShgslabdetailaddComponent, {
-      width: '90%',
-      height: '48.5vh',
+      width: '60%',
+      height: '43.5vh',
       disableClose: true,
       data: { example: 'Hello from parent!' }
     });

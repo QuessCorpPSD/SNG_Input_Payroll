@@ -1,7 +1,7 @@
 <form [formGroup]="EditbankForm" novalidate>
     <mat-card class="custom-card">
         <mat-card-header class="sticky-header">
-            <mat-card-title>Edit Bank</mat-card-title>
+            <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;">Edit Bank</mat-card-title>
             <span class="spacer"></span>
             <button mat-icon-button (click)="onClose()" class="no-border-icon">
                 <mat-icon>close</mat-icon>
@@ -9,10 +9,8 @@
         </mat-card-header>
 
         <mat-card-content class="scroll-content">
-            <br />
-            <!-- Row 1 -->
             <div class="row g-2 mb-2">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <label class="form-label">Bank Name<span class="text-danger">*</span></label>
                     <input type="text" class="form-control" formControlName="Bank_Name" />
                     <div class="text-danger small" *ngIf="EditbankForm.get('Bank_Name')?.touched 
@@ -42,12 +40,12 @@
             </div>
             <!-- Row 2 -->
             <div class="row g-2 mb-2">
-                <div class="col-md-6" style="display: none;">
+                <div class="col-md-12" style="display: none;">
                     <label class="form-label">Bank Name<span class="text-danger">*</span></label>
                     <input type="text" class="form-control" formControlName="Bank_Id" />
 
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <label class="form-label">
                         Bank A/C Digit<span class="text-danger">*</span>
                     </label>
@@ -93,7 +91,8 @@
                     style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
 
                     <button type="Cancel"
-                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;">
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;"
+                        (click)="onClose()">
                         Cancel
                     </button>
 

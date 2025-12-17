@@ -12,6 +12,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ADDSDLslabDetailComponent } from '../addsdlslab-detail/addsdlslab-detail.component';
 import * as XLSX from 'xlsx';
 import { SDLslabDetailsService } from '../../../Service/GlobalMasters/sdlslab-details.service';
+import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.component";
 
 @Component({
   selector: 'app-sdlslab-detail',
@@ -26,7 +27,8 @@ import { SDLslabDetailsService } from '../../../Service/GlobalMasters/sdlslab-de
     FormsModule,
     ReactiveFormsModule,
     MatCardModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    AlertpopupComponent
   ],
   templateUrl: './sdlslab-detail.component.html',
   styleUrl: './sdlslab-detail.component.css'
@@ -38,9 +40,14 @@ export class SDLslabDetailComponent {
   dynamicColumns: string[] = [];
   @ViewChild(MatSort) sort!: MatSort;
   dataSource = new MatTableDataSource<any>();
+  @ViewChild('paginator') paginator!: MatPaginator;
+
+  isLoading: boolean = false;
+  showPopup: boolean = false;
+  popupMessage: string = '';
+  popupSubMessage: string = '';
 
   uploadDisplayedColumns: String[] = [
-    'Action',
     'SNo',
     'PayCode',
     'Description',
@@ -53,7 +60,6 @@ export class SDLslabDetailComponent {
   ];
 
   filterDisplayedColumns: String[] = [
-    'filter_Action',
     'filter_SNo',
     'filter_PayCode',
     'filter_Description',
@@ -68,7 +74,6 @@ export class SDLslabDetailComponent {
 
 
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(
     private dialog: MatDialog,
@@ -78,16 +83,26 @@ export class SDLslabDetailComponent {
 
   ngOnInit(): void {
 
-    // Load table immediately
     this.onSearchClick();
   }
 
 
+  showAlertPopup(message: string, subMessage: string = '') {
+    this.popupMessage = message;
+    this.popupSubMessage = subMessage;
+    this.showPopup = true;
+  }
+
+  closePopup() {
+    this.showPopup = false;
+    this.popupMessage = '';
+    this.popupSubMessage = '';
+  }
   onSearchClick(): void {
+    this.isLoading = true;
     this.sdlService.SDLSearch().subscribe({
       next: (res: any) => {
-        console.log('API Response:', res);
-
+        this.isLoading = false;
         if (res?.StatusCode === 200 && res?.Message === 'Success') {
           const data = res?.Data?.data?.Table0;
           if (Array.isArray(data) && data.length > 0) {
@@ -95,7 +110,6 @@ export class SDLslabDetailComponent {
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
             this.uploadDisplayedColumns = [
-              'Action',
               'SNo',
               'PayCode',
               'Description',
@@ -116,60 +130,52 @@ export class SDLslabDetailComponent {
       },
       error: (err) => {
         console.error('Error fetching SDL slab data:', err);
+        this.isLoading = false;
         alert('Failed to load SDL slab details.');
       }
     });
   }
 
   exportToExcel(): void {
-
-
+    this.isLoading = true;
     this.sdlService.SDLSearch().subscribe({
       next: (res) => {
-
+        this.isLoading = false;
         try {
           const jsonData = res.Data.data.Table0;
-
           if (!jsonData || !Array.isArray(jsonData) || jsonData.length === 0) {
             return;
           }
-
-          // Create Excel file from the JSON data
           const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(jsonData);
           const wb: XLSX.WorkBook = XLSX.utils.book_new();
-
           XLSX.utils.book_append_sheet(wb, ws, 'SDL');
-
-          // Generate filename with timestamp
           const timestamp = new Date().toISOString().split('T')[0];
           const fileName = `sdl_slab_${timestamp}.xlsx`;
-
-
           XLSX.writeFile(wb, fileName);
 
 
         } catch (err) {
           console.error('Error exporting to Excel:', err);
-
+          this.isLoading = false;
         }
       },
       error: (err) => {
         console.error('Error loading data for export', err);
+        this.isLoading = false;
       },
     });
   }
 
   AddPOOpen(): void {
     this.dialog.open(ADDSDLslabDetailComponent, {
-      width: '55%',
-      height: '84.5vh',
+      width: '40%',
+      height: '80vh',
       disableClose: true,
       data: { example: 'Hello from parent!' }
     });
   }
 
   view(row: any): void {
-    console.log('View clicked for:', row);
   }
 
   applyFilter(event: Event, column: string): void {

@@ -1,7 +1,7 @@
 <form [formGroup]="entityForm" novalidate>
     <mat-card class="custom-card">
         <mat-card-header class="sticky-header" style="padding-top: 2%;">
-            <mat-card-title style="color: #302CB3;"> Add Entity Master</mat-card-title>
+            <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;"> Add Entity Master</mat-card-title>
             <span class="spacer"></span>
             <button mat-icon-button (click)="onClose()" class="no-border-icon">
                 <mat-icon>close</mat-icon>
@@ -11,8 +11,6 @@
         <mat-card-content>
 
             <div class="row g-3 mb-3">
-
-                <!-- ENTITY NAME -->
                 <div class="col-md-4">
                     <label class="form-label text-muted small">Entity Name<span class="text-danger">*</span></label>
                     <input type="text" class="form-control form-control-sm" formControlName="EntityName"
@@ -24,7 +22,6 @@
                     </div>
                 </div>
 
-                <!-- FUNCTION CODE -->
                 <div class="col-md-4">
                     <label class="form-label text-muted small">Function Code<span class="text-danger">*</span></label>
                     <input type="text" class="form-control form-control-sm" formControlName="FunctionCode"
@@ -36,7 +33,6 @@
                     </div>
                 </div>
 
-                <!-- JV WBS -->
                 <div class="col-md-4">
                     <label class="form-label text-muted small">JV WBS</label>
                     <input type="text" class="form-control form-control-sm" formControlName="WBS">

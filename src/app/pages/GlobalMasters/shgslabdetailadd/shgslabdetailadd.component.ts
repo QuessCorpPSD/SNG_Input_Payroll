@@ -61,20 +61,14 @@ export class ShgslabdetailaddComponent {
   }
 
   onSaveSHG(): void {
-    console.log(' Save SHG button clicked');
 
-    // Step 1: Validate form
     if (this.addshgform.invalid) {
       console.warn('Form invalid. Please enter all required fields.');
       this.addshgform.markAllAsTouched();
       alert("Please enter all required fields.")
       return;
     }
-
-    //  Step 2: Get form values
     const formValue = this.addshgform.getRawValue();
-
-    //  Step 3: Build XML string
     const xmlDetails = `
 <Root>
   <Row
@@ -87,14 +81,12 @@ export class ShgslabdetailaddComponent {
 </Root>
 `.trim();
 
-    // Step 4: Prepare final payload
     const payload = {
       strXmlDetails: xmlDetails,
       mode: 'Add',
       userId: 3
     };
 
-        //  Step 5: Call API
     this.shg.createShg(payload).subscribe({
       next: (res: any) => {
         if (res?.StatusCode === 200 && res?.Data?.statusCode === '200') {
@@ -102,7 +94,6 @@ export class ShgslabdetailaddComponent {
           alert("SHG Slab Detail record created successfully")
           this.dialogRef?.close();
         } else {
-          //  Failure Case
           const message =
             res?.Data?.message ||
             res?.Message ||

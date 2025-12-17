@@ -67,11 +67,23 @@ export class GSTEditComponent {
     });
     this.LoadEntity();
   }
-  LoadEntity() {
 
+
+  showAlertPopup(message: string, subMessage: string = '') {
+    this.popupMessage = message;
+    this.popupSubMessage = subMessage;
+    this.showPopup = true;
+  }
+
+  closePopup() {
+    this.showPopup = false;
+    this.popupMessage = '';
+    this.popupSubMessage = '';
+  }
+  LoadEntity() {
     this.gstService.GetEntity().subscribe({
       next: (res: any) => {
-        console.log(" Pay Category API Response:", res);
+
 
         if (res?.Data?.data?.Table0) {
           this.entity = res.Data.data.Table0;
@@ -85,10 +97,6 @@ export class GSTEditComponent {
   }
 
   SaveClick() {
-
-    console.log("Form Values:", this.Gsteditform.value);
-    console.log("Form Valid:", this.Gsteditform.valid);
-
     if (this.Gsteditform.invalid) {
       this.Gsteditform.markAllAsTouched();
       alert("Please fill all mandatory fields with valid data.");
@@ -111,22 +119,16 @@ export class GSTEditComponent {
       "EntityId": Number(form.Entity),
       "Pincode": String(form.PinCode)
     };
-
-    console.log("Final Payload:", JSON.stringify(payload));
-
     this.gstService.Edit(payload).subscribe({
       next: (res: any) => {
         this.isLoading = false;
-
-        if (res?.StatusCode == 200 && res?.Data?.response === "Updated Successfully") {
-          this.showPopup = true;
-          this.popupMessage = res.Data.response;
-          this.dialogRef.close('refresh')
-
+        const msg = res?.Data?.response;
+        if (msg.toLowerCase().includes('success')) {
+          alert(res.Data.response);
+          this.dialogRef.close('refresh');
         } else {
           alert(res?.Data?.response || "Unexpected response");
-          this.dialogRef.close('refresh')
-
+          this.dialogRef.close('refresh');
         }
       },
       error: () => {

@@ -2,8 +2,7 @@
     <mat-card class="custom-card">
 
         <mat-card-header class="sticky-header">
-            <br />
-            <mat-card-title style="color: #302CB3;">Add CDF Slab Details</mat-card-title>
+            <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700; padding-top: 2%;">Add CDF Slab Details</mat-card-title>
             <span class="spacer"></span>
             <button mat-icon-button (click)="onClose()">
                 <mat-icon>close</mat-icon>
@@ -11,11 +10,7 @@
         </mat-card-header>
 
         <mat-card-content>
-
-            <!-- ROW 1 -->
             <div class="row g-3 mb-3">
-
-                <!-- Category -->
                 <div class="col-md-4">
                     <label class="form-label text-muted small">Category <span class="text-danger">*</span></label>
                     <select class="form-select form-select-sm" formControlName="Category">
@@ -30,7 +25,6 @@
                     </small>
                 </div>
 
-                <!-- Pay Code -->
                 <div class="col-md-4">
                     <label class="form-label text-muted small">Pay Code <span class="text-danger">*</span></label>
                     <select class="form-select form-select-sm" formControlName="PayCodeId">
@@ -45,7 +39,6 @@
                     </small>
                 </div>
 
-                <!-- Description -->
                 <div class="col-md-4">
                     <label class="form-label text-muted small">Description <span class="text-danger">*</span></label>
                     <input type="text" class="form-control form-control-sm" formControlName="Description">
@@ -56,7 +49,6 @@
                 </div>
             </div>
 
-            <!-- ROW 2 -->
             <div class="row g-3 mb-3">
 
                 <div class="col-md-4">

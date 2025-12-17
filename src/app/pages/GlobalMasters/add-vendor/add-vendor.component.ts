@@ -99,7 +99,7 @@ export class AddVendorComponent {
 
         if (res?.StatusCode === 200) {
 
-          this.showAlertPopup(message);
+          alert(message);
 
           setTimeout(() => {
             this.closePopup();
@@ -107,13 +107,13 @@ export class AddVendorComponent {
           }, 900);
 
         } else {
-          this.showAlertPopup("Save failed");
+          alert("Save failed");
         }
       },
 
       error: (err) => {
         this.isLoading = false;
-        this.showAlertPopup("Error", "API Error");
+        alert("API Error");
       }
     });
   }

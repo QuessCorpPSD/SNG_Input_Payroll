@@ -65,7 +65,7 @@ export class EntityMasterComponent {
     'Invoice Legal Entity'
   ];
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild('paginator') paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   ngAfterViewInit() {
@@ -156,7 +156,7 @@ export class EntityMasterComponent {
 
     XLSX.writeFile(wb, fileName);
 
-    this.showAlertPopup("Excel Exported Successfully!");
+   
   }
 
   AddPOOpen() {

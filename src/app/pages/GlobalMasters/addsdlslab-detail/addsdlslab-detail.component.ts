@@ -89,8 +89,6 @@ export class ADDSDLslabDetailComponent {
   loadPayCodes(): void {
     this.sdlService.GetPayCodeList().subscribe({
       next: (res: any) => {
-        console.log('PayCode Response:', res);
-
         if (res?.StatusCode === 200 && res?.Message === 'Success') {
           const tableData = res?.Data?.data?.Table0;
 
@@ -115,7 +113,6 @@ export class ADDSDLslabDetailComponent {
   loadCriteriaTypes(): void {
     this.sdlService.GetCriteriaType().subscribe({
       next: (res: any) => {
-        console.log('Criteria API Response:', res);
         if (Array.isArray(res?.Data?.data?.Table0)) {
           this.CriteriaList = res.Data.data.Table0;
         } else if (Array.isArray(res?.Data?.data)) {

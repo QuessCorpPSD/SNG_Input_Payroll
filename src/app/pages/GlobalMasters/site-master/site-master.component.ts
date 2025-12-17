@@ -134,18 +134,18 @@ export class SiteMasterComponent {
           this.dataSource.sort = this.sort;
         } else {
           this.dataSource.data = [];
-          this.showAlertPopup('No data found for the selected criteria');
+          alert('No data found for the selected criteria');
         }
       },
       error: () => {
         this.isLoading = false;
-        this.showAlertPopup('Failed to load vendor data');
+        alert('Failed to load vendor data');
       }
     });
   }
   exportToExcel(): void {
     // if (!this.selectedCompanyId) {
-    //   this.showAlertPopup("Please select Company");
+    //   alert("Please select Company");
     //   return;
     // }
 
@@ -161,28 +161,20 @@ export class SiteMasterComponent {
         const data = res.Data?.data?.Table0 || [];
 
         if (!data || data.length === 0) {
-          this.showAlertPopup("No data available to export");
+          alert("No data available to export");
+          this.isLoading = false;
           return;
         }
-
-
         const ws = XLSX.utils.json_to_sheet(data);
-
-
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "SiteMaster");
-
-
         const fileName = `SiteMaster_${companyId}_${groupId}_${new Date().toISOString().split("T")[0]}.xlsx`;
-
         XLSX.writeFile(wb, fileName);
-
-        this.showAlertPopup("Excel downloaded successfully");
       },
 
       error: () => {
         this.isLoading = false;
-        this.showAlertPopup("Failed to export data");
+        alert("Failed to export data");
       }
     });
   }
@@ -268,12 +260,12 @@ export class SiteMasterComponent {
           this.isUploadGridVisible = true;
           this.isUploadDataVisible = true;
 
-          this.showAlertPopup('Success', 'Please review the data and click Submit when ready.');
+          alert('Please review the data and click Submit when ready.');
         } else {
-          this.showAlertPopup('Error', 'The Excel file appears to be empty!');
+          alert('The Excel file appears to be empty!');
         }
       } catch (error) {
-        this.showAlertPopup('Error', 'Error reading Excel file.');
+        alert('Error reading Excel file.');
       }
     };
 
@@ -282,11 +274,11 @@ export class SiteMasterComponent {
 
   submitUploadedData() {
     if (!this.formData || !this.selectedFile) {
-      this.showAlertPopup('Error', 'No file data to submit!');
+      alert('No file data to submit!');
       return;
     }
 
-    this.showAlertPopup('Info', 'Submit API not implemented in this component.');
+    alert('Unknown Error');
   }
 
   resetUploadState() {
@@ -302,9 +294,7 @@ export class SiteMasterComponent {
     }
   }
   DownloadTemplate() {
-
     this.isLoading = true;
-
     const templateData = [
       {
         Company_Code: "",
@@ -335,8 +325,6 @@ export class SiteMasterComponent {
     const buffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
     const blob = new Blob([buffer], { type: 'application/octet-stream' });
     FileSaver.saveAs(blob, `Site_Master_Template.xlsx`);
-
-    //this.showAlertPopup('Template downloaded.');
     this.isLoading = false;
   }
 
@@ -384,7 +372,6 @@ export class SiteMasterComponent {
             SheetNames: ['ErrorMessages']
           };
 
-          // Export the file
           XLSX.writeFile(workbook, 'ErrorMessages_SiteMaster.xlsx');
           this.isLoading = false;
           alert(this.UploadedResponse.Data.response);

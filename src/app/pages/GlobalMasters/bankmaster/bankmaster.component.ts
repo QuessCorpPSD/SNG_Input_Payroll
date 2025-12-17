@@ -16,13 +16,15 @@ import { BankmasteraddComponent } from '../bankmasteradd/bankmasteradd.component
 import { AddEditComponent } from '../add-edit/add-edit.component';
 import { IBankRepository } from '../../../Repository/GlobalMasters/IBankrepository';
 import { BankService } from '../../../Service/GlobalMasters/Bank.service';
+import { MatCardModule } from "@angular/material/card";
+import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.component";
 
 export const Bank_TOKEN = new InjectionToken<IBankRepository>('Bank_TOKEN');
 
 @Component({
   selector: 'app-bankmaster',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatTooltipModule, MatTableModule, MatPaginatorModule, FormsModule],
+  imports: [CommonModule, MatIconModule, MatTooltipModule, MatTableModule, MatPaginatorModule, FormsModule, MatCardModule, AlertpopupComponent],
   templateUrl: './bankmaster.component.html',
   styleUrl: './bankmaster.component.css',
   providers: [
@@ -38,7 +40,10 @@ export class BankmasterComponent implements AfterViewInit {
   Editdata: any;
   dialogRef: any;
 
-
+  isLoading: boolean = false;
+  showPopup: boolean = false;
+  popupMessage: string = '';
+  popupSubMessage: string = '';
   constructor(
     private dialog: MatDialog,
     @Inject(Bank_TOKEN) private bankService: IBankRepository,
@@ -74,6 +79,17 @@ export class BankmasterComponent implements AfterViewInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
+  showAlertPopup(message: string, subMessage: string = '') {
+    this.popupMessage = message;
+    this.popupSubMessage = subMessage;
+    this.showPopup = true;
+  }
+
+  closePopup() {
+    this.showPopup = false;
+    this.popupMessage = '';
+    this.popupSubMessage = '';
+  }
   ngAfterViewInit() {
     this.uploadedDataSource.paginator = this.paginator;
     this.setupFilterPredicate();
@@ -114,9 +130,10 @@ export class BankmasterComponent implements AfterViewInit {
 
   onsearch() {
     this.showTable = true;
-
+    this.isLoading = true;
     this.bankService.Search().subscribe({
       next: (res: any) => {
+        this.isLoading = false;
         if (res) {
           const table = res?.Data?.data?.Table0 || [];
 
@@ -127,7 +144,6 @@ export class BankmasterComponent implements AfterViewInit {
             return;
           }
 
-          // 🔥 SAME PATTERN AS EntityMaster
           let filteredTable = table;
 
           if (this.bankName.trim() !== "") {
@@ -142,18 +158,22 @@ export class BankmasterComponent implements AfterViewInit {
           this.uploadedDataSource.data = this.uploadedData;
           this.uploadedDataSource.paginator = this.paginator;
         } else {
-          alert('Unexpected API response. Check console.');
           console.warn('Unexpected:', res);
+          this.isLoading = false;
+          alert('Unexpected API response. Check console.');
         }
       },
       error: (err) => {
         console.error('Error fetching GST slab data:', err);
+        this.isLoading = false
       }
     });
   }
 
   exportToExcel() {
+    this.isLoading = true;
     if (!this.uploadedData || this.uploadedData.length === 0) {
+      this.isLoading = false;
       alert("No data available to export!");
       return;
     }
@@ -165,16 +185,14 @@ export class BankmasterComponent implements AfterViewInit {
 
     const timestamp = new Date().toISOString().split("T")[0];
     const fileName = `Bank_Master_${timestamp}.xlsx`;
-
     XLSX.writeFile(wb, fileName);
-
-    alert("Excel Exported Successfully!");
+    this.isLoading = false;
   }
 
   AddBankOpen() {
     this.dialog.open(BankmasteraddComponent, {
-      width: '40%',
-      height: '48vh',
+      width: '30%',
+      height: '44vh',
       disableClose: true,
       data: { example: 'Hello from parent!' }
     });
@@ -182,28 +200,28 @@ export class BankmasterComponent implements AfterViewInit {
 
   openEdit(row: any) {
     const dialogRef = this.dialog.open(AddEditComponent, {
-      width: '40%',
-      height: '48vh',
+      width: '30%',
+      height: '44vh',
       disableClose: true,
       data: row
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log("Dialog Closed with:", result);
-
       if (result === 'updated') {
         this.onsearch();
       }
     });
   }
   DeleteBankMaster(row: any) {
-
+    this.isLoading = true;
     if (!row) {
       alert("Please select a row to delete.");
+      this.isLoading = false;
       return;
     }
 
     if (!confirm("Are you sure you want to delete this bank record?")) {
+      this.isLoading = false;
       return;
     }
 
@@ -221,16 +239,13 @@ export class BankmasterComponent implements AfterViewInit {
       mode: "Delete",
       detail: BankAdd
     };
-
-    console.log("DELETE PAYLOAD:", JSON.stringify(BankRequest));
-
     this.bankService.PostAddBank(BankRequest).subscribe({
       next: (res: any) => {
-        console.log(res);
-
+        this.isLoading = false;
         const msg = res?.Data?.data;
 
         if (msg === "Bank Deleted Successfully") {
+
           alert(msg);
           this.onsearch();
           return;
@@ -241,7 +256,7 @@ export class BankmasterComponent implements AfterViewInit {
     });
   }
   onClose() {
-    throw new Error('Method not implemented.');
+    this.dialogRef.close();
   }
 }
 

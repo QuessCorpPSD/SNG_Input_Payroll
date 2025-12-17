@@ -95,7 +95,7 @@ export class AddInvoiceLegalEntityComponent {
 
         if (msg) {
           // ✔ Instead of alert(msg)
-          this.showAlertPopup(msg);
+          alert(msg);
 
           // close dialog slightly delayed
           setTimeout(() => {
@@ -105,13 +105,13 @@ export class AddInvoiceLegalEntityComponent {
 
         } else {
           // ✔ Instead of alert("Save failed")
-          this.showAlertPopup("Save failed");
+          alert("Save failed");
         }
       },
 
       error: () => {
         this.isLoading = false;
-        this.showAlertPopup("Error", "API Error");
+        alert("API Error");
       }
     });
   }

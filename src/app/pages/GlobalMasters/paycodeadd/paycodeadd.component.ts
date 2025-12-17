@@ -68,16 +68,11 @@ export class PaycodeaddComponent {
   }
 
   onSavePayCode(): void {
-    console.log('Save PayCode button clicked');
-
-    //  Check if form is invalid
     if (this.AddPaycodeform.invalid) {
       console.warn('Form invalid. Please fill all required fields.');
 
-      // Highlight all invalid fields in red
       this.AddPaycodeform.markAllAsTouched();
 
-      //  Show popup (replace alert with your custom popup function if you have one)
       alert("Please enter all required fields.")
       return;
     }
@@ -108,20 +103,16 @@ export class PaycodeaddComponent {
 </Root>
 `.trim();
 
-    //  Final payload
     const payload = {
       strXmlDetails: xmlDetails,
       mode: 'Add',
       userId: 3
     };
 
-    console.log(' Final Payload:', JSON.stringify(payload, null, 2));
 
-    // Make API call
+ 
     this.payCode.CreatePayCode(payload).subscribe({
       next: (res: any) => {
-        console.log(' PayCode API Response:', res);
-
         if (res?.StatusCode === 200 && res?.Data?.statusCode === '200') {
           alert("PayCode created successfully.")
           this.dialogRef?.close();

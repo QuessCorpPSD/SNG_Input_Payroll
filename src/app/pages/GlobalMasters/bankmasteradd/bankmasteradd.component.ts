@@ -44,9 +44,11 @@ export const Bank_TOKEN = new InjectionToken<IBankRepository>('Bank_TOKEN');
 })
 export class BankmasteraddComponent {
   AddbankForm!: FormGroup;
-  showPopup = false;
-  popupMessage: string = "";
-  isLoading = false;
+  isLoading: boolean = false;
+  showPopup: boolean = false;
+  popupMessage: string = '';
+  popupSubMessage: string = '';
+
   userdetail: any;
   constructor(private dialogRef: MatDialogRef<BankmasteraddComponent>
     , @Inject(Bank_TOKEN) private bankService: IBankRepository,
@@ -54,11 +56,21 @@ export class BankmasteraddComponent {
     private _sessionStoreage: SessionStorageService
   ) { }
 
+  showAlertPopup(message: string, subMessage: string = '') {
+    this.popupMessage = message;
+    this.popupSubMessage = subMessage;
+    this.showPopup = true;
+  }
+
+  closePopup() {
+    this.showPopup = false;
+    this.popupMessage = '';
+    this.popupSubMessage = '';
+  }
   ngOnInit() {
     const json = this._sessionStoreage.getItem('UserProfile');
     if (json) {
       this.userdetail = JSON.parse(this.decry.decrypt(json));
-      console.log(this.userdetail.userId);
     } else {
       console.warn('UserProfile not found in session storage');
     }
@@ -95,7 +107,6 @@ export class BankmasteraddComponent {
 
     this.bankService.PostAddBank(BankRequest).subscribe({
       next: (res) => {
-        console.log(res);
         const errormsg = res.Data.data;
 
         if (errormsg === "Bank Created Successfully") {
@@ -118,8 +129,6 @@ export class BankmasteraddComponent {
         }
       }
     });
-
-    console.log("Form submitted", BankRequest);
   }
 
   onClose() {

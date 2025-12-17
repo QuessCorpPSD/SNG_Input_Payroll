@@ -1,11 +1,8 @@
 <form [formGroup]="Gsteditform" novalidate>
     <mat-card class="custom-card">
         <mat-card-header class="sticky-header">
-            <!-- <div
-                style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700; padding-right: 600px;">
-                Update GST Master
-            </div> -->
-            <mat-card-title style="color: #302CB3;">Update GST Master</mat-card-title>
+            <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;">Update
+                GST Master</mat-card-title>
             <span class="spacer"></span>
             <button mat-icon-button (click)="onClose()" class="no-border-icon">
                 <mat-icon>close</mat-icon>
@@ -103,8 +100,8 @@
             <!-- </div> -->
             <!-- <div style="display: none;" class="row g-3 mb-3"> -->
 
-                <!-- CGST -->
-                <!-- <div class="col-md-4 d-flex flex-column align-items-start">
+            <!-- CGST -->
+            <!-- <div class="col-md-4 d-flex flex-column align-items-start">
                     <div class="d-flex align-items-center mb-1">
                         <input type="checkbox" id="cgstCheck" class="me-2" [(ngModel)]="cgstApplicable"
                             name="cgstApplicable" (change)="toggleField('cgst')" />
@@ -114,8 +111,8 @@
                         name="cgstPercentage" [disabled]="!cgstApplicable" />
                 </div> -->
 
-                <!-- SGST -->
-                <!-- <div class="col-md-4 d-flex flex-column align-items-start">
+            <!-- SGST -->
+            <!-- <div class="col-md-4 d-flex flex-column align-items-start">
                     <div class="d-flex align-items-center mb-1">
                         <input type="checkbox" id="sgstCheck" class="me-2" [(ngModel)]="sgstApplicable"
                             name="sgstApplicable" (change)="toggleField('sgst')" />
@@ -124,8 +121,8 @@
                     <input type="number" class="form-control form-control-sm w-100" [(ngModel)]="sgstPercentage"
                         name="sgstPercentage" [disabled]="!sgstApplicable" />
                 </div> -->
-                <!-- UTGST -->
-                <!-- <div class="col-md-4 d-flex flex-column align-items-start">
+            <!-- UTGST -->
+            <!-- <div class="col-md-4 d-flex flex-column align-items-start">
                     <div class="d-flex align-items-center mb-1">
                         <input type="checkbox" id="utgstCheck" class="me-2" [(ngModel)]="utgstApplicable"
                             name="utgstApplicable" (change)="toggleField('utgst')" />
@@ -184,7 +181,5 @@
 <div *ngIf="isLoading" class="loading-overlay">
     <img src="assets/Loading.gif" alt="Loading...">
 </div>
-<div *ngIf="showPopup" class="overlay">
-    <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
-        (close)="showPopup = false"></app-alertpopup>
-</div>
+<app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+    (close)="showPopup = false"></app-alertpopup>
