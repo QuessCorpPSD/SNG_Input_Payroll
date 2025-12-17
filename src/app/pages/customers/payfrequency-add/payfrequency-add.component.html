@@ -4,13 +4,13 @@
             <mat-card-header class="sticky-header">
                 <!-- <div style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700; padding-right: 80%; white-space: nowrap;">
                     Add Pay Frequency
-                </div> -->     
-            <mat-card-title style="color: #302CB3;">Add Pay Frequency</mat-card-title>
+                </div> -->
+                <mat-card-title style="color: #302CB3;">Add Pay Frequency</mat-card-title>
 
                 <span class=" spacer"></span>
-                    <button mat-icon-button (click)="onClose()" class="no-border-icon">
-                        <mat-icon>close</mat-icon>
-                    </button>
+                <button mat-icon-button (click)="onClose()" class="no-border-icon">
+                    <mat-icon>close</mat-icon>
+                </button>
 
             </mat-card-header>
 
@@ -158,3 +158,6 @@
 <div *ngIf="isLoading" class="loading-overlay">
     <img src="assets/Loading.gif" alt="Loading...">
 </div>
+
+<app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+    (close)="closePopup()"></app-alertpopup>

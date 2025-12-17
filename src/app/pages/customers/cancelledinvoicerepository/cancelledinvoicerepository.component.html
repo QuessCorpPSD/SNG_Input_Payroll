@@ -1,97 +1,107 @@
-<div class="container py-4">
-    <div class="row g-3 align-items-end">
-        <div class="col-md-12 d-flex gap-2" style="padding-left:0px;">
-            <div class="col-md-4" style="padding-left:0px;">
-                <label class="form-label text-muted small">Company Code</label>
-                <CompanyPicker (companyEmit)="handleCompanyEvent($event)"></CompanyPicker>
-            </div>
-            <div class="col-md-4">
-                <label class="form-label text-muted small">Pay Period</label>
-                <PayPeriod [selectedCompanyId]="selectedCompanyId" [payPeriodType]="payPeriodType"
-                    (payperiodEmit)="handlePayperiodEvent($event)"></PayPeriod>
-            </div>
-            <div class="col-md-4 py-4">
-                <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Search"
-                    (click)="Search()">
-                    <mat-icon>search</mat-icon>
-                </button>
+<div class="page-wrapper">
+
+    <div class="scrollable-content">
+        <!-- <div style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;">
+            Cilent Address List
+        </div> -->
+        <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;">Cancelled
+            Invoice Repository
+        </mat-card-title>
+
+        <div class="container py-2">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Company Code</label>
+                    <CompanyPicker (companyEmit)="handleCompanyEvent($event)"></CompanyPicker>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Pay Period</label>
+                    <PayPeriod [selectedCompanyId]="selectedCompanyId" [payPeriodType]="payPeriodType"
+                        (payperiodEmit)="handlePayperiodEvent($event)"></PayPeriod>
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search" matTooltip="
+                        Search" (click)="Search()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                </div>
             </div>
         </div>
 
+        <div class="table-wrapper1">
+            <div class="table-scroll">
+                <mat-table #searchgrid [dataSource]="dataSource" matSort class="mat-elevation-z8 custom-table">
+                    <ng-container matColumnDef="edit">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header class="fixed-width-column"></mat-header-cell>
+                        <mat-cell *matCellDef="let element" class="fixed-width-column">
+                            <img src="assets/Icons/edit.svg" style="cursor: pointer; width: 24px; height: 22px;"
+                                (click)="EditClick(element)" />
+                        </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="Serial_No">
+                        <mat-header-cell *matHeaderCellDef
+                            class="fixed-width-column"><strong>SNo</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let element" class="fixed-width-column">{{ element.Serial_No
+                            }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Id">
+                        <mat-header-cell *matHeaderCellDef><strong>Id</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ element.Id }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Company_Id">
+                        <mat-header-cell *matHeaderCellDef><strong>Company_Id</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ element.Company_Id }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Payperiod_Id">
+                        <mat-header-cell *matHeaderCellDef><strong>Payperiod_Id</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ element.Payperiod_Id }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Invoice_Id">
+                        <mat-header-cell *matHeaderCellDef><strong>Invoice_Id</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ element.Invoice_Id }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Invoice_Number">
+                        <mat-header-cell *matHeaderCellDef><strong>Invoice Number</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ element.Invoice_Number }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Document_Name">
+                        <mat-header-cell *matHeaderCellDef><strong>Document Name</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ element.Document_Name }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Uploaded_Date">
+                        <mat-header-cell *matHeaderCellDef><strong>Uploaded Date</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ element.Uploaded_Date }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Document_FilePath">
+                        <mat-header-cell *matHeaderCellDef><strong>Uploaded Date</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ element.Document_FilePath }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Document_Remarks">
+                        <mat-header-cell *matHeaderCellDef>
+                            <strong>Document Remarks</strong>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ element.Document_Remarks }}</mat-cell>
+                    </ng-container>
+
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                </mat-table>
+            </div>
+
+            <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+        </div>
     </div>
 </div>
 
-
-<div class="table-container">
-    <div class="example-container mat-elevation-z8">
-        <table mat-table #searchgrid [dataSource]="dataSource" matSort class="custom-table table-scroll">
-            <ng-container matColumnDef="edit">
-                <mat-header-cell *matHeaderCellDef mat-sort-header class="fixed-width-column"></mat-header-cell>
-                <mat-cell *matCellDef="let element" class="fixed-width-column">
-                    <img src="assets/Icons/edit.svg" style="cursor: pointer; width: 24px; height: 22px;"
-                        (click)="EditClick(element)" />
-                </mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="Serial_No">
-                <mat-header-cell *matHeaderCellDef class="fixed-width-column">SNo</mat-header-cell>
-                <mat-cell *matCellDef="let element" class="fixed-width-column">{{ element.serial_No }}</mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="Id">
-                <mat-header-cell *matHeaderCellDef>Id</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{ element.id }}</mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="Company_Id">
-                <mat-header-cell *matHeaderCellDef>Company_Id</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{ element.company_Id }}</mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="Payperiod_Id">
-                <mat-header-cell *matHeaderCellDef>Payperiod_Id</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{ element.payperiod_Id }}</mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="Invoice_Id">
-                <mat-header-cell *matHeaderCellDef>Invoice_Id</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{ element.invoice_Id }}</mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="Invoice_Number">
-                <mat-header-cell *matHeaderCellDef>Invoice Number</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{ element.invoice_Number }}</mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="Document_Name">
-                <mat-header-cell *matHeaderCellDef>Document Name</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{ element.document_Name }}</mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="Uploaded_Date">
-                <mat-header-cell *matHeaderCellDef>Uploaded Date</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{ element.uploaded_Date ? (element.uploaded_Date | date:'dd/MM/yyyy') : '' }}</mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="Document_FilePath">
-                <mat-header-cell *matHeaderCellDef>Document FilePath</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{ element.document_FilePath }}</mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="Document_Remarks">
-                <mat-header-cell *matHeaderCellDef>Document Remarks</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{ element.document_Remarks }}</mat-cell>
-            </ng-container>
-
-            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-
-        </table>
-
-    </div>
-
-    <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
-
-</div>
 
 <div *ngIf="isLoading" class="loading-overlay">
     <img src="assets/Loading.gif" alt="Loading...">

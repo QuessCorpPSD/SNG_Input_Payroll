@@ -11,7 +11,6 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CompanyallComponent } from '../../../common/CompanyAll/companyall.component';
-import { PayPeriodComponent } from '../../../common/payperiod/payperiod.component';
 import { Payperiodclass } from '../../../Models/Common';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
@@ -25,7 +24,7 @@ import * as XLSX from 'xlsx';
   standalone: true,
   imports: [
     CommonModule, MatIconModule, MatTooltipModule, MatTableModule, MatPaginatorModule,
-    MatCardModule, FormsModule, CompanyallComponent, PayPeriodComponent, AlertpopupComponent
+    MatCardModule, FormsModule, CompanyallComponent, AlertpopupComponent
   ],
   templateUrl: './band-details.component.html',
   styleUrl: './band-details.component.css'
@@ -42,8 +41,6 @@ export class BandDetailsComponent {
   showTable: boolean = false;
   payPeriodId: number = 0;
   userdetail: any;
-
-  // ⭐ ADDED FOR POPUP + LOADING
   isLoading: boolean = false;
   showPopup = false;
   popupMessage: string = '';
@@ -58,7 +55,6 @@ export class BandDetailsComponent {
   ) { }
 
   uploadDisplayedColumns: string[] = [
-    'Action',
     'SNo',
     'Company Code',
     'Band Code',
@@ -82,34 +78,33 @@ export class BandDetailsComponent {
     this.popupSubMessage = '';
   }
 
- 
-  onSearchClick() {
 
+  onSearchClick() {
     this.showTable = true;
     this.isLoading = true;
+
     this.bandService.GetAllBandDetails(this.selectedCompanyId || 0).subscribe({
       next: (res) => {
 
-        this.isLoading = false;
-
+        //  Stop loading immediately if invalid data
         if (res.StatusCode !== 200 || !res.Data || res.Data.length === 0) {
           this.uploadedData = [];
           this.uploadedDataSource.data = [];
+          this.isLoading = false; // ✅ STOP LOADING
           return;
         }
 
         let table = res.Data;
 
-        // ⭐ APPLY FILTER LIKE ENTITY MASTER (NO ALERT)
+        //  FILTER BY COMPANY CODE
         if (this.selectedCompanyCode && this.selectedCompanyCode !== "") {
           const keyword = String(this.selectedCompanyCode).trim().toLowerCase();
-
           table = table.filter((row: any) =>
             row.company_Code?.toLowerCase().includes(keyword)
           );
         }
 
-        // ⭐ FINAL MAPPING (same as your current logic)
+        //  MAP TO TABLE FORMAT
         this.uploadedData = table.map((item, index) => ({
           SNo: index + 1,
           'Company Code': item.company_Code,
@@ -121,15 +116,18 @@ export class BandDetailsComponent {
         this.uploadedDataSource.paginator = this.paginator;
         this.uploadedDataSource.sort = this.sort;
 
+        this.isLoading = false; //  STOP LOADING
       },
 
       error: (err) => {
-        this.isLoading = false;
         console.error(err);
+        this.uploadedData = [];
+        this.uploadedDataSource.data = [];
+        this.isLoading = false; // STOP LOADING
       }
     });
-
   }
+
 
   exportToExcel() {
 
@@ -147,8 +145,6 @@ export class BandDetailsComponent {
     const fileName = `Band_Details_${today}.xlsx`;
 
     XLSX.writeFile(wb, fileName);
-
-    this.showAlertPopup("Excel exported successfully!");
   }
 
   ngOnInit(): void {
@@ -174,10 +170,6 @@ export class BandDetailsComponent {
       disableClose: true,
       data: { example: 'Hello from parent!' }
     });
-  }
-
-  view(row: any) {
-    console.log('View clicked for:', row);
   }
 
   handleCompanyEvent(company) {

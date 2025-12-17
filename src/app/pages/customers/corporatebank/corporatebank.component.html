@@ -1,56 +1,55 @@
-<br />
 <div class="page-wrapper">
 
     <div class="scrollable-content">
-        <div style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700; min-width: 960px">
+        <div style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;">
             Corporate Bank
         </div>
-        <form [formGroup]="corporateBankForm">
-
-            <div class="container py-2">
-                <div class="row g-3 align-items-end">
-                    <div class="col-md-3" style="display: none;">
-                        <label class="form-label text-muted small">Bank Name</label>
-                        <input type="text" class="form-control form-control-sm" formControlName="BankName" />
-                    </div>
-                    <div class="col-md-2 d-flex gap-2">
-                        <!-- <button class="btn  btn-sm d-flex align-items-center justify-content-center" matTooltip="Search"
+        <div class="container py-2">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3" style="display: none;">
+                    <label class="form-label text-muted small">Bank Name</label>
+                    <input type="text" class="form-control form-control-sm" [ngModel]="BankName" />
+                </div>
+                <div class="col-md-2 d-flex gap-2">
+                    <!-- <button class="btn  btn-sm d-flex align-items-center justify-content-center" matTooltip="Search"
                             (click)="onsearch()">
                             <mat-icon>search</mat-icon>
                         </button> -->
 
-                        <button class="btn btn-sm d-flex align-items-center justify-content-center"
-                            matTooltip="export to excel" (click)="ExportToExcel()">
-                            <mat-icon>table_chart</mat-icon>
-                        </button>
-                        <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Add"
-                            (click)="AddCorporatebank()">
-                            <mat-icon>add</mat-icon>
-                        </button>
-                    </div>
+                    <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="Export to Excel" (click)="ExportToExcel()">
+                        <mat-icon>download</mat-icon>
+                    </button>
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-add" matTooltip="Add"
+                        (click)="AddCorporatebank()">
+                        <mat-icon>add</mat-icon>
+                    </button>
                 </div>
             </div>
-        </form>
-
-        <br />
-        <div class=" table-wrapper1" style="min-width: 960px;" *ngIf="showTable">
+        </div>
+        <div class=" table-wrapper1" *ngIf="showTable">
             <div class="table-scroll">
                 <mat-table [dataSource]="uploadedData" class="mat-elevation-z8 custom-table">
 
                     <!--  Action -->
                     <ng-container matColumnDef="Action">
-                        <mat-header-cell *matHeaderCellDef><strong>Action</strong></mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef>
+                            <strong>Action</strong>
+                        </mat-header-cell>
+
                         <mat-cell *matCellDef="let row">
-                            <button class="btn btn-sm d-flex align-items-center justify-content-center"
-                                matTooltip="Edit" (click)="editCorporateBank(row)">
-                                <mat-icon>edit</mat-icon>
-                            </button>
-                            <button class="btn btn-sm d-flex align-items-center justify-content-center"
-                                matTooltip="Delete" (click)="deletCorporateBank(row)">
-                                <mat-icon>delete</mat-icon>
-                            </button>
+                            <div class="action-wrapper">
+                                <button class="btn btn-sm" matTooltip="Edit" (click)="editCorporateBank(row)">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+
+                                <button class="btn btn-sm" matTooltip="Delete" (click)="deletCorporateBank(row)">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </div>
                         </mat-cell>
                     </ng-container>
+
 
                     <!-- 🔹 Sl.No -->
                     <ng-container matColumnDef="slNo">

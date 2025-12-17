@@ -10,12 +10,13 @@ import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { ClientaddressService } from '../../../Service/customersserv/clientaddress.service';
 import { IClientaddress } from '../../../Repository/customer/IClientaddress';
+import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.component";
 export const Pay_TOKEN = new InjectionToken<IClientaddress>('Pay_TOKEN');
 
 @Component({
   selector: 'app-clientaddress-edit',
   standalone: true,
-  imports: [MatCardModule, MatIconModule, CommonModule, FormsModule, ReactiveFormsModule, MatTooltipModule],
+  imports: [MatCardModule, MatIconModule, CommonModule, FormsModule, ReactiveFormsModule, MatTooltipModule, AlertpopupComponent],
   templateUrl: './clientaddress-edit.component.html',
   styleUrl: './clientaddress-edit.component.css',
   providers: [
@@ -31,6 +32,11 @@ export class ClientaddressEditComponent {
   submitted = false;
   rowData: any;
   userdetail: any;
+  message: string = '';
+  popupMessage: string = '';
+  popupSubMessage: string = '';
+  showPopup = false;
+  isLoading: boolean = false;
 
   constructor(
     private dialogRef: MatDialogRef<ClientaddressEditComponent>,
@@ -38,10 +44,9 @@ export class ClientaddressEditComponent {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private decry: EncryptionService,
     private _sessionStoreage: SessionStorageService,
-   @Inject(Pay_TOKEN) private service: IClientaddress,
+    @Inject(Pay_TOKEN) private service: IClientaddress,
   ) {
     this.rowData = data.rowData;
-    console.log('rowdata', this.rowData)
   }
   formatDate(dateStr: string): string {
     const date = new Date(dateStr);
@@ -78,6 +83,18 @@ export class ClientaddressEditComponent {
 
   markFieldTouched(field: string) {
     this.clientaddress.get(field)?.markAsTouched();
+  }
+
+  showAlertPopup(message: string, subMessage: string = '') {
+    this.popupMessage = message;
+    this.popupSubMessage = subMessage;
+    this.showPopup = true;
+  }
+
+  closePopup() {
+    this.showPopup = false;
+    this.popupMessage = '';
+    this.popupSubMessage = '';
   }
 
   onSameAsBillingChange(event: any) {
@@ -145,13 +162,9 @@ export class ClientaddressEditComponent {
         CreatedBy: this.userdetail.user_Id
       };
 
-      console.log("Payload:", JSON.stringify(payload));
-
       this.service.clientaddressaddsave(payload).subscribe({
         next: (res: string) => {
-          console.log(res);
           const cleanMessage = res.replace(/<br\s*\/?>/gi, '\n');
-          console.log(cleanMessage);
           if (cleanMessage.includes('Success')) {
             alert('Client Address updated Successfully');
             resolve();
@@ -167,9 +180,6 @@ export class ClientaddressEditComponent {
           reject(err);
         }
       });
-
-
-
     });
   }
 

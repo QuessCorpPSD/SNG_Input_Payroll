@@ -1,55 +1,51 @@
 <form [formGroup]="costForm" novalidate>
     <mat-card class="custom-card">
         <mat-card-header class="sticky-header">
-            <br />
             <mat-card-title style="color: #302CB3;"> Add Cost Center Mapping </mat-card-title>
-
             <span class="spacer"></span>
             <button mat-icon-button (click)="onClose()" class="no-border-icon">
                 <mat-icon>close</mat-icon>
             </button>
         </mat-card-header>
-        <br />
 
-        <mat-card-content>
+        <mat-card-content style="padding-top: 10px;">
+            <div class="row g-3 mb-3">
+                <div class="col-md-12">
+                    <label class="form-label text-muted small mb-0" style="white-space: nowrap;">Map Name<span
+                            style="color:red">*</span></label>
+                    <div>
+                        <input type="text" class="form-control form-control-sm" formControlName="mapName" />
 
-            <div style="display: grid; grid-template-columns: 150px 250px; row-gap: 10px; align-items: start;">
+                        <small class="text-danger d-block mt-1" *ngIf="showErrors && costForm.get('mapName')?.invalid">
+                            Map Name is required
+                        </small>
+                    </div>
 
-                <!-- Map Name -->
-                <label class="form-label text-muted small mb-0" style="white-space: nowrap;">Map Name:</label>
-                <div>
-                    <input type="text" class="form-control form-control-sm" formControlName="mapName" />
+                    <!-- Company Code -->
+                    <label class="form-label text-muted small" style="white-space: nowrap;">Company code<span
+                            style="color:red">*</span></label>
+                    <div>
+                        <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
 
-                    <small class="text-danger d-block mt-1" *ngIf="showErrors && costForm.get('mapName')?.invalid">
-                        Map Name is required
-                    </small>
+                        <small class="text-danger d-block mt-1"
+                            *ngIf="showErrors && costForm.get('companyCode')?.invalid">
+                            Company Code is required
+                        </small>
+                    </div>
+
+                    <!-- Company Name -->
+                    <label class="form-label text-muted small mb-0" style="white-space: nowrap;">Cost Center<span
+                            style="color:red">*</span></label>
+                    <div>
+                        <input type="text" class="form-control form-control-sm" formControlName="CostCenter" />
+
+                        <small class="text-danger d-block mt-1"
+                            *ngIf="showErrors && costForm.get('CostCenter')?.invalid">
+                            Cost Center is required
+                        </small>
+                    </div>
                 </div>
-
-                <!-- Company Code -->
-                <label class="form-label text-muted small" style="white-space: nowrap;">Company code</label>
-                <div>
-                    <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
-
-                    <small class="text-danger d-block mt-1" *ngIf="showErrors && costForm.get('companyCode')?.invalid">
-                        Company Code is required
-                    </small>
-                </div>
-
-                <!-- Company Name -->
-                <label class="form-label text-muted small mb-0" style="white-space: nowrap;">Cost Center:</label>
-                <div>
-                    <input type="text" class="form-control form-control-sm" formControlName="CostCenter" />
-
-                    <small class="text-danger d-block mt-1" *ngIf="showErrors && costForm.get('CostCenter')?.invalid">
-                        Cost Center is required
-                    </small>
-                </div>
-
-                
-               
-
             </div>
-
         </mat-card-content>
 
         <!-- FOOTER BUTTONS -->
@@ -67,12 +63,13 @@
                cursor: pointer; background-color: blue; color: white;">
                     Save
                 </button>
-
-
             </div>
-
         </div>
-   
-
     </mat-card>
 </form>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets\Loading.gif" alt="Loading...">
+</div>
+<app-alertpopup *ngIf="showPopupalert" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+    (close)="showPopupalert = false">
+</app-alertpopup>

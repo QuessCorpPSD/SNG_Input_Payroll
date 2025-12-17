@@ -1,60 +1,56 @@
-
-<div class="page-wrapper" style="padding-top: 2%;">
+<div class="page-wrapper" style="padding-top: 10px;">
 
     <div class="scrollable-content">
-        <div
-            style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;">
+        <div style="color: #302CB3; font-size: 22px; font-family: Montserrat;font-weight: 700;">
             IT Calender
         </div>
 
-        <div class="container-fluid g-2">
-            <div class="card-body g-2">
-                <div class="row align-items-end">
-                    <div class="col-md-3">
-                        <label class="form-label text-muted small">Company Code</label>
-                        <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label text-muted small">Financial Year</label>
-                        <select class="form-select form-select-sm" appearance="outline"
-                            style="background-color: white;height:30px;" (change)="onFinancialYearChange($event)">
-                            <option value="0">--Select--</option>
-                            <option *ngFor="let financialyear of finacialyearres"
-                                [value]="financialyear.Financial_Year_Id">{{ financialyear.Financial_Year_Name }}
-                            </option>
-                        </select>
-                    </div>
+        <div class="container py-2">
+            <div class="row align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Company Code</label>
+                    <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Financial Year</label>
+                    <select class="form-select form-select-sm" appearance="outline"
+                        style="background-color: white;height:30px;" (change)="onFinancialYearChange($event)">
+                        <option value="0">--Select--</option>
+                        <option *ngFor="let financialyear of finacialyearres" [value]="financialyear.Financial_Year_Id">
+                            {{ financialyear.Financial_Year_Name }}
+                        </option>
+                    </select>
+                </div>
 
-                    <div class="col-md-3 d-flex gap-2">
-                        <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Search"
-                            (click)="onsearch()">
-                            <mat-icon>search</mat-icon>
-                        </button>
-                        <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Add"
-                            (click)="AddPOOpen()">
-                            <mat-icon>add</mat-icon>
-                        </button>
-                        <button class="btn btn-sm d-flex align-items-center justify-content-center"
-                            matTooltip="Export to Excel">
-                            <mat-icon>table_chart</mat-icon>
-                        </button>
+                <div class="col-md-3 d-flex gap-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
+                        matTooltip="Search" (click)="onsearch()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-add" matTooltip="Add"
+                        (click)="AddPOOpen()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                    <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                        style="display:none" matTooltip="Export to Excel">
+                        <mat-icon>download</mat-icon>
+                    </button>
 
-                        <button class="btn btn-sm d-flex align-items-center justify-content-center"
-                            matTooltip="Download Template">
-                            <mat-icon>cloud_download</mat-icon>
-                        </button>
-                        <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Import">
-                            <mat-icon>cloud_upload</mat-icon>
-                        </button>
-                        <input type="file" #fileInput style="display: none;" (click)="fileInput.value=''"
-                            accept=".xlsx, .xls" />
-                    </div>
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                        style="display:none" matTooltip="Download Template">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button>
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
+                        style="display:none" matTooltip="Import">
+                        <mat-icon>cloud_upload</mat-icon>
+                    </button>
+                    <input type="file" #fileInput style="display: none;" (click)="fileInput.value=''"
+                        accept=".xlsx, .xls" />
                 </div>
             </div>
         </div>
 
-        <div class="table-wrapper1" *ngIf="isuploadgridvisible" style="padding-top: 2%;">
-
+        <div class="table-wrapper1" *ngIf="isuploadgridvisible">
             <div class="table-scroll">
                 <mat-table [dataSource]="uploadedDataSource" matSort
                     class="custom-table mat-elevation-z8 auto-fit-table">

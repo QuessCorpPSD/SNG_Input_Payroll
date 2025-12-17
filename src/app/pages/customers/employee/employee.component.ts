@@ -87,6 +87,7 @@ export class EmployeeComponent {
     this.popupMessage = '';
     this.popupSubMessage = '';
   }
+  
   BindEmployeeCode() {
     const payload = { CompanyId: this.selectedCompanyId?.toString() };
 
@@ -107,9 +108,9 @@ export class EmployeeComponent {
   onsearch() {
     if (!this.selectedCompanyId) {
       alert('Please Select Company')
-      this.isLoading = false;
       return;
     }
+    this.isLoading = true;
     this.isUploadGridVisible = true;
 
     const form = this.employee.getRawValue();
@@ -118,7 +119,6 @@ export class EmployeeComponent {
     this.service.search(Companyid, eactive).subscribe({
       next: (res) => {
         this.isLoading = false;
-        console.log('API Response:', res.Data);
         this.employeedata = res?.Data?.data?.Table0;
 
         if (!this.employeedata) {
@@ -138,17 +138,20 @@ export class EmployeeComponent {
         }
       },
       error: (err) => {
-        this.isLoading = false;
         console.error('Error loading Companypaycode release data', err);
+        this.isLoading = false;
       },
     });
     this.isLoading = false;
   }
+
   exportToExcel(): void {
     if (!this.selectedCompanyId) {
       alert('Please Select Company');
       return;
     }
+
+    this.isLoading = true;
 
     const Companyid = this.selectedCompanyId;
 
@@ -172,13 +175,16 @@ export class EmployeeComponent {
           const fileName = `payFrequency_${timestamp}.xlsx`;
 
           XLSX.writeFile(wb, fileName);
+          this.isLoading = false;
 
         } catch (err) {
           console.error('Error exporting to Excel:', err);
+          this.isLoading = false;
         }
       },
       error: (err) => {
         console.error('Error loading data for export', err);
+        this.isLoading = false;
       },
     });
   }
@@ -194,7 +200,7 @@ export class EmployeeComponent {
       console.error('Please upload only one Excel file.');
       return;
     }
-
+    this.isLoading = true;
     const formData = new FormData();
     formData.append('file', file);
     formData.append('userId', this.userdetail.user_Id);
@@ -224,7 +230,7 @@ export class EmployeeComponent {
           };
 
           // Export the file
-          XLSX.writeFile(workbook, 'ErrorMessages_SiteMaster.xlsx');
+          XLSX.writeFile(workbook, 'ErrorMessages_Employee.xlsx');
           this.isLoading = false;
           alert(this.UploadedResponse.Data.response);
           return;
@@ -245,10 +251,13 @@ export class EmployeeComponent {
 
       },
       error: (err) => {
-        console.error('❌ Upload failed', err);
+        console.error(' Upload failed', err);
         alert('Upload failed due to a network or server error.');
+        this.isLoading = false;
+
       }
     });
+    this.isLoading = false;
   }
 
   tryParseResponse(r: any): { parsed: any; msg: string } {
@@ -283,10 +292,11 @@ export class EmployeeComponent {
       return;
     }
 
+    this.isLoading = true;
+
     const formData = new FormData();
     formData.append('file', file);
     formData.append('userId', this.userdetail.user_Id);
-
 
     this.service.Upload(formData).subscribe({
       next: (res) => {
@@ -312,7 +322,7 @@ export class EmployeeComponent {
           };
 
           // Export the file
-          XLSX.writeFile(workbook, 'ErrorMessages_SiteMaster.xlsx');
+          XLSX.writeFile(workbook, 'ErrorMessages_Employee.xlsx');
           this.isLoading = false;
           alert(this.UploadedResponseSalary.Data.response);
           return;
@@ -333,10 +343,12 @@ export class EmployeeComponent {
 
       },
       error: (err) => {
-        console.error('❌ Upload failed', err);
+        console.error(' Upload failed', err);
         alert('Upload failed due to a network or server error.');
+        this.isLoading = false;
       }
     });
+    this.isLoading = false;
   }
 
   tryParseResponses(r: any): { parsed: any; msg: string } {
