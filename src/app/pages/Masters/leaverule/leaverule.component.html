@@ -1,61 +1,85 @@
-<div class="container-fluid">
-    <div class="card-body">
-        <div class="row g-3 align-items-end">
-            <div class="card-body d-flex gap-2">
-                <div class="col-md-3">
-                    <label class="form-label text-muted small">Company Code</label>
-                    <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label text-muted small">Site Name</label>
-                    <groupname [selectedCompanyId]="companyId" (sitenameEmit)="groupnameEvent($event)">
-                    </groupname>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label text-muted small">State</label>
-                    <state (stateEmit)="stateEvent($event)"></state>
-                </div>
-                <div class="col-md-3" style="padding-top: 27px;">
-                    <div class="d-flex gap-2">
-                        <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
-                            (click)="Searchclick()" matTooltip="Search">
-                            <mat-icon>search</mat-icon>
-                        </button>
-                        <button class="btn btn-sm d-flex align-items-center justify-content-center btn-add"
-                            (click)="onMainAddClick()" matTooltip="Add">
-                            <mat-icon>add</mat-icon>
-                        </button>
-                        <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
-                            (click)="DownloadTemplate()" matTooltip="Template">
-                            <mat-icon>cloud_download</mat-icon>
-                        </button>
-                        <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
-                            (click)="ImportClick(fileInput)" matTooltip="Import">
-                            <mat-icon>cloud_upload</mat-icon>
-                        </button>
-                        <button *ngIf="this.dataSource && this.dataSource.data && this.dataSource.data.length > 0"
-                            class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
-                            (click)="ExportClick()" matTooltip="Excel Export">
-                            <mat-icon>table_chart</mat-icon>
-                        </button>
-                        <input type="file" #fileInput style="display: none;" (click)="fileInput.value=''"
-                            (change)="onFileChange($event)" accept=".xlsx, .xls" />
-                    </div>
+<div class="container-fluid w-100" style="padding-left:16px; padding-right:0;">
+
+    <!-- TITLE -->
+    <div style="
+        color:#302CB3;
+        font-size:22px;
+        font-family:Montserrat;
+        font-weight:700;
+        padding-top:8px;
+        margin-bottom:6px;">
+        Leave Rule
+    </div>
+
+    <!-- FILTERS -->
+    <div class="card-body" style="padding:0;">
+        <!-- 🔥 key fix: remove row negative margin -->
+        <div class="row g-1 align-items-end w-100" style="margin-left:0; margin-right:0;">
+
+            <div class="col-md-3">
+                <label class="form-label text-muted small">Company Code<span style="color: red;">*</span></label>
+                <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label text-muted small">Site Name<span style="color: red;">*</span></label>
+                <groupname [selectedCompanyId]="companyId" (sitenameEmit)="groupnameEvent($event)">
+                </groupname>
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label text-muted small">State</label>
+                <state (stateEmit)="stateEvent($event)"></state>
+            </div>
+
+            <div class="col-md-3" style="padding-top:27px;">
+                <div class="d-flex gap-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
+                        (click)="Searchclick()" matTooltip="Search">
+                        <mat-icon>search</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-add"
+                        (click)="onMainAddClick()" matTooltip="Add">
+                        <mat-icon>add</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                        (click)="DownloadTemplate()" matTooltip="Template">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
+                        (click)="ImportClick(fileInput)" matTooltip="Import">
+                        <mat-icon>cloud_upload</mat-icon>
+                    </button>
+
+                    <button *ngIf="(dataSource?.data?.length || 0) > 0"
+                        class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                        (click)="ExportClick()" matTooltip="Excel Export">
+                        <mat-icon>table_chart</mat-icon>
+                    </button>
+
+                    <input type="file" #fileInput style="display:none;" (click)="fileInput.value=''"
+                        (change)="onFileChange($event)" accept=".xlsx,.xls" />
                 </div>
             </div>
+
         </div>
     </div>
 </div>
+
+
 <div class="row">
-    <div class="col-md-12" style="padding-left: 25px;" *ngIf="(dataSource.data.length || 0) > 0">
+    <div class="col-md-12" style="padding-left: 50px;" [hidden]="!showTable">
         <div class="table-wrapper">
             <div class="table-scroll">
                 <table class="previewtable" mat-table [dataSource]="dataSource" matSort
                     class="custom-table mat-elevation-z8">
                     <!-- Dynamic Columns -->
                     <ng-container *ngFor="let column of dynamicColumns" [matColumnDef]="column">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header>{{ headerMap[column] || column
-                            }}</mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef mat-sort-header><strong>{{ headerMap[column] || column
+                                }}</strong></mat-header-cell>
                         <mat-cell *matCellDef="let element"> {{ element[column] }} </mat-cell>
                     </ng-container>
 

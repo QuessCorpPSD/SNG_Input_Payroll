@@ -32,7 +32,7 @@ type RawRow = Record<string, any>;
   standalone: true,
   imports: [CommonModule, MatFormFieldModule, MatIconModule, MatInputModule, FormsModule, ReactiveFormsModule,
     CompanyallComponent, GroupnameComponent, MatPaginatorModule, MatTableModule, MatRadioModule,
-    StateComponent, MatDialogModule, MatButtonModule, AlertpopupComponent,MatTooltipModule],
+    StateComponent, MatDialogModule, MatButtonModule, AlertpopupComponent, MatTooltipModule],
   templateUrl: './holidaymaster.component.html',
   styleUrl: './holidaymaster.component.css',
   providers: [
@@ -97,7 +97,7 @@ export class HolidaymasterComponent {
       width: '90%',
       maxWidth: '1000px',
       autoFocus: false,
-      disableClose: true   // optional
+      disableClose: true   
     });
   }
 
@@ -110,7 +110,6 @@ export class HolidaymasterComponent {
   }
 
   isRowMeaningful(g: FormGroup): boolean {
-    // consider the row only if user started filling it
     const date = g.get('date')?.value;
     const type = g.get('type')?.value;
     const desc = g.get('description')?.value;
@@ -118,7 +117,6 @@ export class HolidaymasterComponent {
   }
 
   isRowValid(g: FormGroup): boolean {
-    // your normal row validity (all required fields present)
     return g.valid && !this.isPlaceholder(g.get('date')?.value);
   }
 
@@ -134,12 +132,12 @@ export class HolidaymasterComponent {
     const currentRow = this.holidays.at(index);
 
     if (currentRow.invalid) {
-      return; // prevent add if row not valid
+      return; 
     }
 
     const newDate = currentRow.get('date')?.value;
 
-    // check for duplicates in existing rows
+   
     const duplicate = this.holidays.controls.some(
       (ctrl, i) => i !== index && ctrl.get('date')?.value === newDate
     );
@@ -147,7 +145,7 @@ export class HolidaymasterComponent {
     if (duplicate) {
       alert('Duplicate holiday date is not allowed');
 
-      // clear the entered values
+     
       currentRow.patchValue({
         date: '',
         type: 'NH',
@@ -159,10 +157,8 @@ export class HolidaymasterComponent {
       return;
     }
 
-    // mark current row as saved
-    currentRow.patchValue({ isSaved: true });
-
-    // add new blank row
+    
+    currentRow.patchValue({ isSaved: true }); 
     this.holidays.push(this.createHolidayRow(false));
   }
 
@@ -184,39 +180,86 @@ export class HolidaymasterComponent {
     this.companyId = 0;
     this.siteId = 0;
 
+    this.tableHeaders = ['CompanyCode', 'SiteName', 'State', 'FromDate', 'Todate'];
+    this.dynamicColumns = [...this.tableHeaders];
+    this.displayedColumns = [...this.dynamicColumns];
+    this.dataSource = new MatTableDataSource<RawRow>([]);
+
     const json = this._sessionStoreage.getItem('UserProfile');
     if (json) {
       this.userdetail = JSON.parse(this.decry.decrypt(json));
-
     } else {
       console.warn('UserProfile not found in session storage');
     }
 
     const userInfo = {
-      "userId": this.userdetail.user_Id,
-      "userName": this.userdetail.userName,
+      userId: this.userdetail?.user_Id ?? 0,
+      userName: this.userdetail?.userName ?? ''
     };
-
   }
 
+
+  // Searchclick() {
+  //   if (!this.companyId) {
+  //     alert('Please select Company Code');
+  //     this.isLoading = false;
+  //     return;
+  //   }
+  //   this.isLoading = true;
+  //   this.holidayService.GetHolidayCompanywise(String(this.companyId), String(this.siteId)).subscribe({
+  //     next: res => {
+  //       this.holidaysearchdeails = res.Data;
+  //       const table: RawRow[] = this.holidaysearchdeails?.data?.Table0 ?? [];
+  //       if (table.length > 0) {
+  //         this.tableHeaders = Object.keys(table[0]); // not table itself
+  //         this.dynamicColumns = ['CompanyCode', 'SiteName', 'State', 'FromDate', 'Todate'];
+  //         //this.dynamicColumns = [...this.tableHeaders];
+  //         this.displayedColumns = [...this.dynamicColumns];
+  //         // Update dynamic columns
+  //         this.dataSource = new MatTableDataSource(table);
+  //         this.dataSource.paginator = this.paginator;
+  //         this.dataSource.sort = this.sort;
+
+  //       }
+  //     },
+  //     error: err => {
+  //       console.error('Error loading data', err);
+  //     }
+  //   });
+  // }
   Searchclick() {
-    this.holidayService.GetHolidayCompanywise(String(this.companyId), String(this.siteId)).subscribe({
+    if (!this.companyId) {
+      alert('Please select Company Code');
+      this.isLoading = false; 
+      return;
+    }
+
+    this.isLoading = true;
+
+    this.holidayService.GetHolidayCompanywise(
+      String(this.companyId),
+      String(this.siteId)
+    ).subscribe({
       next: res => {
+        this.isLoading = false;
         this.holidaysearchdeails = res.Data;
         const table: RawRow[] = this.holidaysearchdeails?.data?.Table0 ?? [];
+
         if (table.length > 0) {
-          this.tableHeaders = Object.keys(table[0]); // not table itself
-          this.dynamicColumns = ['CompanyCode', 'SiteName', 'State', 'FromDate', 'Todate'];
-          //this.dynamicColumns = [...this.tableHeaders];
-          this.displayedColumns = [...this.dynamicColumns];
-          // Update dynamic columns
-          this.dataSource = new MatTableDataSource(table);
+         
+          this.tableHeaders = Object.keys(table[0]);
+          // this.dynamicColumns = ['CompanyCode', 'SiteName', 'State', 'FromDate', 'Todate'];
+          // this.displayedColumns = [...this.dynamicColumns];
+          this.dataSource = new MatTableDataSource<RawRow>(table);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
-
+        } else {
+          alert('No data found');
+          this.dataSource = new MatTableDataSource<RawRow>([]);
         }
       },
       error: err => {
+        this.isLoading = false;
         console.error('Error loading data', err);
       }
     });
@@ -234,7 +277,7 @@ export class HolidaymasterComponent {
     this.selectedrowFromdate = this.parseDate(row.FromDate);
     this.selectedrowTodate = this.parseDate(row.Todate);
 
-    // Load child holidays
+   
     const childRows = this.holidaysearchdeails?.data?.Table1
       ?.filter((c: any) =>
         c.CompanyCode == row.CompanyCode &&
@@ -244,7 +287,7 @@ export class HolidaymasterComponent {
         c.Todate == row.Todate
       ) ?? [];
 
-      
+
 
     const toISODate = (d: string) =>
       d.replace(/(\d{2})\/(\d{2})\/(\d{4})/, "$3-$2-$1");
@@ -287,12 +330,9 @@ export class HolidaymasterComponent {
     this.selectedrowTodate = '';
     this.calendartypeselected = '';
 
-    // clear previous child holidays
+   
     this.holidays.clear();
-    // add one fresh editable row
     this.holidays.push(this.createHolidayRow(false));
-
-    // 👇 actually open the popup now
     this.openHolidayPopup(this.popupTpl);
   }
 
@@ -340,7 +380,7 @@ export class HolidaymasterComponent {
   }
 
   ImportClick(fileInput: HTMLInputElement): void {
-    fileInput.value='';
+    fileInput.value = '';
     fileInput.click();
   }
 
@@ -363,11 +403,8 @@ export class HolidaymasterComponent {
     this.holidayService.UploadHolidayMaster(formData).subscribe({
       next: (res) => {
         this.UploadedResponse = res;
-
-        // --- parse response defensively ---
         const { parsed, msg } = this.tryParseResponse(res?.Data?.response);
 
-        // CASE 1: Success message inside parsed JSON array/object
         const successMsg = 'Holiday Master data uploaded successfully.';
         const successMatch =
           (Array.isArray(parsed) && parsed[0]?.Message?.trim() === successMsg) ||
@@ -383,12 +420,10 @@ export class HolidaymasterComponent {
           return;
         }
 
-        // CASE 2: Plain failure string
-        if (res?.StatusCode === 200 && msg?.trim() === 'Failed to import.') {
-          // Optional debug
-          // alert('1');
 
-          // errors[0] may be a JSON string, an array, or a plain string/object
+        if (res?.StatusCode === 200 && msg?.trim() === 'Failed to import.') {
+          
+          // alert('1')
           const rawErr = res?.Data?.errors?.[0];
           let errorArray: any[] = [];
           try {
@@ -420,8 +455,6 @@ export class HolidaymasterComponent {
           this.popupMessage = 'Import Failed.';
           return;
         }
-
-        // CASE 3: Anything else → show whatever we have
         const fallback =
           msg ||
           (Array.isArray(parsed) ? JSON.stringify(parsed) :
@@ -436,7 +469,7 @@ export class HolidaymasterComponent {
         this.isLoading = false;
       },
       error: (err) => {
-        console.error('❌ Upload failed', err);
+        console.error(' Upload failed', err);
         this.isLoading = false;
         this.showPopup = true;
         this.popupMessage = 'Upload failed.';
@@ -450,7 +483,6 @@ export class HolidaymasterComponent {
     if (Array.isArray(r)) return { parsed: r, msg: '' };
     if (typeof r === 'object') return { parsed: r, msg: '' };
 
-    // string
     if (typeof r === 'string') {
       try {
         const p = JSON.parse(r);
@@ -484,7 +516,6 @@ export class HolidaymasterComponent {
     if (!Number.isInteger(day) || !Number.isInteger(month) || !Number.isInteger(year)) return null;
 
     const d = new Date(year, month - 1, day);
-    // validate (handles invalid like 31/02/2025)
     return (d.getFullYear() === year && d.getMonth() === month - 1 && d.getDate() === day) ? d : null;
   }
 
@@ -522,7 +553,7 @@ export class HolidaymasterComponent {
     let hasValidRow = false;
     const seenDates = new Set<string>();
 
-    // 🔴 use for loop, not forEach
+   
     for (let index = 0; index < this.holidays.length; index++) {
       const ctrl = this.holidays.at(index);
       const date = ctrl.get('date')?.value;
@@ -550,7 +581,7 @@ export class HolidaymasterComponent {
 
       if (ctrl.valid) {
         if (date && seenDates.has(date)) {
-          // duplicate → clear and stop
+         
           ctrl.patchValue({
             date: '',
             type: 'NH',
@@ -562,7 +593,7 @@ export class HolidaymasterComponent {
 
           alert(`Duplicate holiday date removed in row ${index + 1}`);
           this.isLoading = false;
-          return; // ✅ this now exits Updateclick()
+          return;
         } else {
           hasValidRow = true;
           if (date) {
@@ -586,9 +617,8 @@ export class HolidaymasterComponent {
     };
 
     const holidaysPayload = this.holidays.value
-      // filter out rows with no values
+      
       .filter((row: any) => row.date && row.type && row.description)
-      // map and reformat date
       .map((row: any, index: number) => ({
         SrNo: (index + 1).toString(),
         ...commonData,
@@ -599,7 +629,7 @@ export class HolidaymasterComponent {
 
     const requestPayload = {
       Created_By: this.userdetail.user_Id,
-      Mode: "Add",  // or UPDATE etc.
+      Mode: "Add", 
       holidaymaster: holidaysPayload
     };
 
@@ -607,10 +637,8 @@ export class HolidaymasterComponent {
       next: res => {
         this.SaveResponse = res;
 
-        // --- parse response defensively ---
         const { parsed, msg } = this.tryParseResponse(res?.Data?.response);
 
-        // CASE 1: Success message inside parsed JSON array/object
         const successMsg = 'Holiday Master data Added successfully.';
         const successMatch =
           (Array.isArray(parsed) && parsed[0]?.Message?.trim() === successMsg) ||
@@ -629,12 +657,9 @@ export class HolidaymasterComponent {
           return;
         }
 
-        // CASE 2: Plain failure string
+        
         if (res?.StatusCode === 200 && msg?.trim() === 'Failed to Add.') {
-          // Optional debug
-          // alert('1');
-
-          // errors[0] may be a JSON string, an array, or a plain string/object
+          
           const rawErr = res?.Data?.errors?.[0];
           let errorArray: any[] = [];
           try {
@@ -667,7 +692,7 @@ export class HolidaymasterComponent {
           return;
         }
 
-        // CASE 3: Anything else → show whatever we have
+       
         const fallback =
           msg ||
           (Array.isArray(parsed) ? JSON.stringify(parsed) :
@@ -689,7 +714,7 @@ export class HolidaymasterComponent {
     let hasValidRow = false;
     const seenDates = new Set<string>();
 
-    // 🔴 use for loop, not forEach
+    
     for (let index = 0; index < this.holidays.length; index++) {
       const ctrl = this.holidays.at(index);
       const date = ctrl.get('date')?.value;
@@ -718,7 +743,7 @@ export class HolidaymasterComponent {
 
       if (ctrl.valid) {
         if (date && seenDates.has(date)) {
-          // duplicate → clear and stop
+          
           ctrl.patchValue({
             date: '',
             type: 'NH',
@@ -730,7 +755,7 @@ export class HolidaymasterComponent {
 
           alert(`Duplicate holiday date removed in row ${index + 1}`);
           this.isLoading = false;
-          return; // ✅ this now exits Updateclick()
+          return;
         } else {
           hasValidRow = true;
           if (date) {
@@ -755,9 +780,9 @@ export class HolidaymasterComponent {
     };
 
     const holidaysPayload = this.holidays.value
-      // filter out rows with no values
+      
       .filter((row: any) => row.date && row.type && row.description)
-      // map and reformat date
+     
       .map((row: any, index: number) => ({
         SrNo: (index + 1).toString(),
         ...commonData,
@@ -768,7 +793,7 @@ export class HolidaymasterComponent {
 
     const requestPayload = {
       Created_By: this.userdetail.user_Id,
-      Mode: "Edit",  // or UPDATE etc.
+      Mode: "Edit",  
       holidaymaster: holidaysPayload
     };
 
@@ -776,10 +801,10 @@ export class HolidaymasterComponent {
       next: res => {
         this.SaveResponse = res;
 
-        // --- parse response defensively ---
+       
         const { parsed, msg } = this.tryParseResponse(res?.Data?.response);
 
-        // CASE 1: Success message inside parsed JSON array/object
+       
         const successMsg = 'Holiday Master data Updated successfully.';
         const successMatch =
           (Array.isArray(parsed) && parsed[0]?.Message?.trim() === successMsg) ||
@@ -795,12 +820,9 @@ export class HolidaymasterComponent {
           return;
         }
 
-        // CASE 2: Plain failure string
+        
         if (res?.StatusCode === 200 && msg?.trim() === 'Failed to Edit.') {
-          // Optional debug
-          // alert('1');
-
-          // errors[0] may be a JSON string, an array, or a plain string/object
+          
           const rawErr = res?.Data?.errors?.[0];
           let errorArray: any[] = [];
           try {
@@ -833,7 +855,7 @@ export class HolidaymasterComponent {
           return;
         }
 
-        // CASE 3: Anything else → show whatever we have
+        
         const fallback =
           msg ||
           (Array.isArray(parsed) ? JSON.stringify(parsed) :
@@ -866,7 +888,7 @@ export class HolidaymasterComponent {
 
     let holidaysPayload: any[] = [];
 
-    // ✅ Only build rows if holidays exist
+  
     if (filledRows.length > 0) {
       holidaysPayload = filledRows.map((row: any, index: number) => ({
         SrNo: (index + 1).toString(),
@@ -876,7 +898,7 @@ export class HolidaymasterComponent {
         HolidayDescription: row.description
       }));
     } else {
-      // ✅ No rows or all rows are empty → still send commonData with blanks
+     
       holidaysPayload = [{
         ...commonData,
         SrNo: "",
@@ -888,19 +910,19 @@ export class HolidaymasterComponent {
 
     const requestPayload = {
       Created_By: this.userdetail.user_Id,
-      Mode: "Delete",  // or Delete.
+      Mode: "Delete", 
       holidaymaster: holidaysPayload
     };
 
-    
+
     this.holidayService.SaveUpdateDeleteHolidayMaster(requestPayload).subscribe({
       next: res => {
         this.SaveResponse = res;
 
-        // --- parse response defensively ---
+      
         const { parsed, msg } = this.tryParseResponse(res?.Data?.response);
 
-        // CASE 1: Success message inside parsed JSON array/object
+        
         const successMsg = 'Holiday Master data Deleted successfully.';
         const successMatch =
           (Array.isArray(parsed) && parsed[0]?.Message?.trim() === successMsg) ||
@@ -919,12 +941,8 @@ export class HolidaymasterComponent {
           return;
         }
 
-        // CASE 2: Plain failure string
         if (res?.StatusCode === 200 && msg?.trim() === 'Failed to Delete.') {
-          // Optional debug
-          // alert('1');
-
-          // errors[0] may be a JSON string, an array, or a plain string/object
+        
           const rawErr = res?.Data?.errors?.[0];
           let errorArray: any[] = [];
           try {
@@ -957,7 +975,7 @@ export class HolidaymasterComponent {
           return;
         }
 
-        // CASE 3: Anything else → show whatever we have
+      
         const fallback =
           msg ||
           (Array.isArray(parsed) ? JSON.stringify(parsed) :
@@ -981,43 +999,43 @@ export class HolidaymasterComponent {
 
     const s = String(val).trim();
 
-    // YYYY-MM-DD (from <input type="date">)
+    
     if (/^\d{4}-\d{2}-\d{2}$/.test(s)) {
       const [y, m, d] = s.split('-').map(Number);
       return new Date(y, m - 1, d);
     }
 
-    // DD/MM/YYYY (your edit-mode labels / saved strings)
+   
     if (/^\d{2}\/\d{2}\/\d{4}$/.test(s)) {
       const [d, m, y] = s.split('/').map(Number);
       return new Date(y, m - 1, d);
     }
 
-    // Fallback (rarely used)
+   
     const parsed = Date.parse(s);
     return isNaN(parsed) ? null : new Date(parsed);
   }
 
   cmpDate(a: Date, b: Date) {
-    // normalize to YYYYMMDD number for robust comparisons
+   
     const key = (dt: Date) => dt.getFullYear() * 10000 + (dt.getMonth() + 1) * 100 + dt.getDate();
     return key(a) - key(b);
   }
 
   ExportClick(): void {
-      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.dataSource.data);
-  
-      // Create a workbook
-      const wb: XLSX.WorkBook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-  
-      // Generate a binary string
-      const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'base64' });
-  
-      // Create a download link
-      const link = document.createElement('a');
-      link.href = 'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,' + wbout;
-      link.download = 'HolidayMaster.xlsx';
-      link.click();
-    }
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.dataSource.data);
+
+   
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    
+    const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'base64' });
+
+    
+    const link = document.createElement('a');
+    link.href = 'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,' + wbout;
+    link.download = 'HolidayMaster.xlsx';
+    link.click();
+  }
 }

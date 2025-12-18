@@ -24,17 +24,17 @@ export class PayProcessRepository implements IPayProcessRepository {
         return this.http.post<APIResponse>(url, JSON.stringify(val), { headers: config });
     }
 
-    PayProcess(formData: FormData): Observable<APIResponse> {
+    PayProcess(payload: any): Observable<APIResponse> {
         return this.http.post<APIResponse>(
             this.environment.apiUrl + 'PayProcess/ReProcess',
-            formData // send as FormData directly
+            payload
         );
     }
 
-     FandFPayProcess(formData: FormData): Observable<APIResponse> {
+    FandFPayProcess(payload: any): Observable<APIResponse> {
         return this.http.post<APIResponse>(
             this.environment.apiUrl + 'PayProcess/FandFReProcess',
-            formData // send as FormData directly
+            payload // send as FormData directly
         );
     }
 }

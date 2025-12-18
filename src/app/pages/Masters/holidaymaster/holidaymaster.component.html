@@ -1,75 +1,118 @@
-<div class="container-fluid">
-    <div class="card-body">
-        <div class="row g-3 align-items-end">
-            <div class="card-body d-flex gap-2">
+<div class="container-fluid" style="padding-left:8px; padding-right:8px;">
+    <div class="card-body" style="padding-top:6px; padding-left:0;">
+
+        <!-- TITLE -->
+        <div style="
+            color:#302CB3;
+            font-size:22px;
+            font-family:Montserrat;
+            font-weight:700;
+            min-width:960px;
+            margin-bottom:6px;
+            padding-left:0;">
+            Holiday Master
+        </div>
+
+        <!-- FILTERS -->
+        <div class="row g-1 align-items-end" style="margin-bottom:6px;">
+            <div class="card-body d-flex gap-2" style="padding:0; margin:0;">
+
                 <div class="col-md-3">
-                <label class="form-label">Company Code</label>
+                    <label class="form-label text-muted small">Company Code<span style="color: red;">*</span></label>
                     <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
                 </div>
+
                 <div class="col-md-3">
-                    <label class="form-label">Site Name</label>
+                    <label class="form-label text-muted small">Site Name</label>
                     <groupname [selectedCompanyId]="companyId" (sitenameEmit)="groupnameEvent($event)">
                     </groupname>
                 </div>
+
                 <div class="col-md-3">
-                    <div class="d-flex gap-2" style="padding-top: 32px;">
+                    <div class="d-flex gap-2" style="padding-top:26px;">
                         <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
                             (click)="Searchclick()" matTooltip="Search">
                             <mat-icon>search</mat-icon>
                         </button>
+
                         <button class="btn btn-sm d-flex align-items-center justify-content-center btn-add"
                             (click)="onMainAddClick()" matTooltip="Add">
                             <mat-icon>add</mat-icon>
                         </button>
+
                         <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
                             (click)="DownloadTemplate()" matTooltip="Template">
                             <mat-icon>cloud_download</mat-icon>
                         </button>
+
                         <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
                             (click)="ImportClick(fileInput)" matTooltip="Upload">
                             <mat-icon>cloud_upload</mat-icon>
                         </button>
-                        <button *ngIf="this.dataSource && this.dataSource.data && this.dataSource.data.length > 0"
+
+                        <button button *ngIf="(dataSource?.data?.length || 0) > 0"
                             class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
-                            (click)="ExportClick()" matTooltip="Excel Export" >
+                            (click)="ExportClick()" matTooltip="Excel Export">
                             <mat-icon>table_chart</mat-icon>
                         </button>
-                        <input type="file" #fileInput style="display: none;" (click)="fileInput.value=''"
-                            (change)="onFileChange($event)" accept=".xlsx, .xls" />
+
+                        <input type="file" #fileInput style="display:none;" (click)="fileInput.value=''"
+                            (change)="onFileChange($event)" accept=".xlsx,.xls" />
                     </div>
                 </div>
+
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-12" style="padding-left: 25px;" *ngIf="(dataSource?.data?.length || 0) > 0">
-                <div class="table-wrapper">
+
+        <!-- TABLE -->
+        <div class="row" style="margin-top:4px;">
+            <div class="col-md-12" style="padding-left:0;">
+                <div class="table-wrapper" style="padding-top:4px; padding-left:0;">
                     <div class="table-scroll">
                         <table class="previewtable" mat-table [dataSource]="dataSource" matSort
                             class="custom-table mat-elevation-z8">
-                            <!-- Dynamic Columns -->
+
                             <ng-container *ngFor="let column of dynamicColumns" [matColumnDef]="column">
-                                <mat-header-cell *matHeaderCellDef mat-sort-header>{{ column }}</mat-header-cell>
-                                <mat-cell *matCellDef="let element"> {{ element[column] }} </mat-cell>
+                                <mat-header-cell *matHeaderCellDef mat-sort-header><strong>{{ column }}</strong>
+
+                                </mat-header-cell>
+                                <mat-cell *matCellDef="let element">
+                                    {{ element[column] || '-' }}
+                                </mat-cell>
                             </ng-container>
 
                             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                            <mat-row *matRowDef="let row; columns: displayedColumns;"
-                                (click)="onTopRowClick(row)"></mat-row>
+                            <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onTopRowClick(row)">
+                            </mat-row>
+
+                            <tr *ngIf="dataSource?.data?.length === 0">
+                                <td [attr.colspan]="displayedColumns.length" class="text-center">
+                                    No data available
+                                </td>
+                            </tr>
+
                         </table>
                     </div>
-                    <mat-paginator  [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons></mat-paginator>
+
+                    <mat-paginator [pageSizeOptions]="[5,10,25,100]" showFirstLastButtons>
+                    </mat-paginator>
+
                 </div>
             </div>
         </div>
+
     </div>
 </div>
+
+
 <ng-template #popupTpl>
-    <h2 mat-dialog-title class="d-flex justify-content-between align-items-center">
-    <span>Holiday Master</span>
-    <button mat-icon-button mat-dialog-close aria-label="Close">
-      <mat-icon>close</mat-icon>
-    </button>
-  </h2>
+    <h2 mat-dialog-title class="d-flex justify-content-between align-items-center"
+        style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;">
+        <span>Holiday Master</span>
+        <button mat-icon-button mat-dialog-close aria-label="Close">
+            <mat-icon>close</mat-icon>
+        </button>
+    </h2>
 
     <mat-dialog-content class="mat-typography">
         <!-- your exact div goes here -->
@@ -107,12 +150,11 @@
                 </div>
             </div>
 
-            <div class="row" style="padding-top: 1rem;">
+            <div class="row">
                 <div class="col-md-4">
                     <label class="form-label text-muted small d-block">From Date</label>
                     <ng-container *ngIf="isNew; else existingFromDate">
-                        <input type="date" class="form-control" [(ngModel)]="selectedFromdate"
-                        style="font-size: 11px;">
+                        <input type="date" class="form-control" [(ngModel)]="selectedFromdate" style="font-size: 11px;">
                     </ng-container>
                     <ng-template #existingFromDate>
                         <label class="form-control" style="font-size: 11px;">
@@ -124,8 +166,7 @@
                 <div class="col-md-4">
                     <label class="form-label text-muted small d-block">To Date</label>
                     <ng-container *ngIf="isNew; else existingToDate">
-                        <input type="date" class="form-control" [(ngModel)]="selectedTodate"
-                        style="font-size: 11px;">
+                        <input type="date" class="form-control" [(ngModel)]="selectedTodate" style="font-size: 11px;">
                     </ng-container>
                     <ng-template #existingToDate>
                         <label class="form-control" style="font-size: 11px;">
@@ -151,7 +192,8 @@
                         <tbody formArrayName="holidays">
                             <tr *ngFor="let row of holidays.controls; let i = index" [formGroupName]="i">
                                 <td>{{ i + 1 }}</td>
-                                <td><input type="date" formControlName="date" class="form-control" style="font-size: 11px;"/></td>
+                                <td><input type="date" formControlName="date" class="form-control"
+                                        style="font-size: 11px;" /></td>
                                 <td>
                                     <select formControlName="type" class="form-control" style="font-size: 11px;">
                                         <option value="NH">NH</option>
@@ -159,7 +201,8 @@
                                         <option value="WO">WO</option>
                                     </select>
                                 </td>
-                                <td><input type="text" formControlName="description" class="form-control" style="font-size: 11px;"/></td>
+                                <td><input type="text" formControlName="description" class="form-control"
+                                        style="font-size: 11px;" /></td>
                                 <td class="text-center">
                                     <button class="btn btn-sm btn-add" *ngIf="!row.value.isSaved" (click)="addRow(i)"
                                         [disabled]="row.invalid">
@@ -175,7 +218,7 @@
                     </table>
                 </form>
             </div>
-            <div *ngIf="isNew" class="row mt-3">
+            <!-- <div *ngIf="isNew" class="row mt-3">
                 <div class="col-md-5"></div>
                 <div class="col-md-1">
                     <button *ngIf="isNew" class="btn btn-success" (click)="Saveclick()">Save</button>
@@ -184,7 +227,51 @@
                     <button class="btn btn-secondary" mat-dialog-close>Close</button>
                 </div>
                 <div class="col-md-5"></div>
+            </div> -->
+            <!-- <div class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">
+
+            <button type="button" (click)="onClose()" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+            cursor: pointer; background-color: #f0f0f0; color: black;">
+                Cancel
+            </button>
+
+            <button type="button" (click)="onSave()" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+            cursor: pointer; background-color: blue; color: white;">
+                Save
+            </button>
+
+        </div>   -->
+            <div *ngIf="isNew" class="d-flex justify-content-center mt-3" style="gap: 10px;">
+
+                <button type="button" mat-dialog-close style="
+          border: none;
+          border-radius: 7px;
+          width: 80px;
+          height: 30px;
+          cursor: pointer;
+          background-color: #f0f0f0;
+          color: black;
+        ">
+                    Close
+                </button>
+
+                <button type="button" (click)="Saveclick()" style="
+          border: none;
+          border-radius: 7px;
+          width: 80px;
+          height: 30px;
+          cursor: pointer;
+          background-color: blue;
+          color: white;
+        ">
+                    Save
+                </button>
+
             </div>
+
+
+
+
             <div *ngIf="!isNew" class="row mt-3">
                 <div class="col-md-4"></div>
                 <div class="col-md-4" style="display: flex;gap: 10px;align-items: center;">

@@ -1,30 +1,30 @@
-/* your.component.scss */
 .custom-input {
-  width: 150px;         
-  height: 60px;        
-  
+  width: 150px;
+  height: 60px;
+
   .mat-form-field-wrapper {
-    padding-bottom: 0px;
+    padding-bottom: 0;
   }
 
   .mat-form-field-flex {
-    height: 10px;       
+    height: 10px;
   }
 
   .mat-input-element {
     height: 10px;
-    padding: 1px 2px;   
-    font-size: 14px;    
+    padding: 1px 2px;
+    font-size: 14px;
   }
 
   .mat-form-field-underline {
-    bottom: 0px;
+    bottom: 0;
   }
 
   .mat-form-field-subscript-wrapper {
-    display: none;      
+    display: none;
   }
 }
+
 
 .btn-search {
   background-color: #0d6efd;
@@ -34,6 +34,10 @@
 .btn-add {
   background-color: #28a745;
   color: #fff;
+}
+
+.btn-add:hover {
+  background-color: #218838;
 }
 
 .btn-edit {
@@ -51,27 +55,109 @@
   color: #fff;
 }
 
-.mat-footer-paginator {
-  position: sticky;
-  bottom: 0;
-  width: calc(100%);
-  background: white;
-  box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.1);
-  z-index: 100;
+.btn-delete {
+  background-color: #dc3545;
+  color: #fff;
 }
 
-.col-md-12 {
-  padding-left: 0px !important;
- }
+.btn-delete:hover {
+  background-color: #c82333;
+}
 
 .table-wrapper {
   display: flex;
-  width: calc(100%);
   flex-direction: column;
-  /* gap: 8px; */
+  width: 80%;
+  /* or adjust as needed */
+  margin-left: 10px;
+  /* pushes the table from the left */
   padding-top: 20px;
-  padding-left: 15px;
+}
 
+.table-scroll {
+  max-height: 450px;
+  overflow-y: auto;
+  overflow-x: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+}
+
+.custom-table {
+  width: 100%;
+  background: white;
+  border-collapse: collapse;
+  table-layout: auto;
+  overflow: auto;
+  border: 1px solid #E8E8E8;
+}
+
+::ng-deep .mat-elevation-z8 {
+  box-shadow: none !important;
+}
+
+/* Header Cells */
+::ng-deep .mat-mdc-header-cell {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600 !important;
+  font-size: 12px;
+  line-height: 19.4px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-right: 1px solid #ddd;
+  position: sticky;
+  top: 0;
+  min-width: 140px;
+  height: 32px;
+  z-index: 10;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+/* Body Cells */
+::ng-deep .mat-mdc-cell {
+  font-family: "Montserrat", sans-serif;
+  font-size: 12px;
+  font-weight: 600 !important;
+  color: #222;
+  line-height: 22.4px;
+  border-bottom: 1px dashed #E8E8E8 !important;
+  border-right: 1px solid #ddd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0 10px;
+  height: 30px;
+  min-width: 140px;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+/* Hover Effect */
+::ng-deep .mat-row:hover {
+  background-color: #f9f9f9 !important;
+  transition: background 0.2s ease-in-out;
+}
+
+.clickable-row {
+  cursor: pointer;
+}
+
+.clickable-row:hover {
+  background-color: #f0f4ff;
+}
+
+/* Header Row Sticky */
+::ng-deep .mat-header-row {
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+  z-index: 10;
 }
 
 .fixed-width-column {
@@ -83,195 +169,105 @@
   text-overflow: ellipsis;
 }
 
-.custom-table {
-  background: white;
-  width: calc(100%);
-  overflow: auto;
+.fixed-width-column2 {
+  width: 30px;
+  min-width: 30px;
+  max-width: 50px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+
+::ng-deep .mat-mdc-paginator {
   border: 1px solid #ddd;
-}
-
-::ng-deep .mat-elevation-z8 {
-  box-shadow: none !important;
-}
-
-::ng-deep .mat-mdc-header-cell {
-  color: #A0A0A0;
-  font-size: 12px;
-  font-family: "Montserrat";
-  font-weight: 600;
-  line-height: 19.40px;
-  word-wrap: break-word;
-  border-right: 1px solid #ddd;
-  position: sticky;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  background-color: #fff !important;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+  justify-content: space-between;
+  align-items: center !important;
+  padding: 4px 12px !important;
 }
 
-::ng-deep .mat-mdc-cell {
-  font-family: "Montserrat";
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 22.4px;
-  letter-spacing: 0.24px;
-  color: #222;
-  border-bottom: 1px dashed #E8E8E8 !important;
-  border-right: 1px solid #ddd;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-
+::ng-deep .mat-mdc-paginator-range-label {
+  font-size: 13px;
+  font-weight: 500 !important;
+  color: #000000;
 }
 
-.table-scroll {
-  max-height: 450px;
-  /* adjust based on your need */
-  overflow-y: auto;
-  overflow-x: hidden;
+::ng-deep .mat-mdc-paginator-icon {
+  color: #302CB3 !important;
 }
 
-::ng-deep .mat-header-row {
-  position: sticky;
-  top: 0;
-  background: white;
-  z-index: 10;
+::ng-deep .mat-mdc-icon-button:hover {
+  background-color: #f1f1f1 !important;
 }
 
 
 .previewtable {
   width: auto;
-  table-layout: auto;
   border-collapse: collapse;
-  font-family: "Montserrat";
+  font-family: "Montserrat", sans-serif;
   font-size: 12px;
   font-weight: 600;
-  line-height: 22.4px;
-  letter-spacing: 0.24px;
   color: #7E7E7E;
   border: 1px solid #E8E8E8;
-  /* 🔹 Full table border */
-  scrollbar-width: none;
 }
 
 .previewtable th,
 .previewtable td {
-  font-family: "Montserrat";
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 22.4px;
-  letter-spacing: 0.24px;
-  white-space: nowrap;
   padding: 8px;
   border: 1px solid #E8E8E8;
-  /* 🔹 Cell border */
   text-align: left;
+  white-space: nowrap;
 }
 
 .previewtable th {
-  font-family: "Montserrat";
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 22.4px;
-  letter-spacing: 0.24px;
   background-color: #f9f9f9;
-  /* Optional for visibility */
   color: #A0A0A0;
 }
 
 
-.previewtable .mat-header-cell {
-  text-align: center;
-  justify-content: center;
-}
+@media (max-width: 768px) {
 
-.custom-table {
-  background: white;
-  width: 100%;
-  overflow: auto;
-  border-collapse: collapse;
-  border: 1px #E8E8E8 solid;
-}
-
-.form-row {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    margin-bottom: 20px;
-  }
-  
-  .form-column {
-    flex: 1;
+  ::ng-deep .mat-mdc-header-cell,
+  ::ng-deep .mat-mdc-cell {
+    font-size: 11px;
+    padding: 4px 6px;
+    min-width: 100px;
   }
 
-  .radio-options-container {
-    display: flex;
-    flex-direction: row;
-    /* <-- This makes options display horizontally */
-    gap: 24px;
-    /* Space between each radio option */
-    align-items: center;
-    flex-wrap: wrap;
-  }
-  .checkboxradio-button {
-    display: flex; /* Changed from block to flex */
-    align-items: center;
-    gap: 8px;
-    font-size: 12px;
-    color: #222;
-    font-family: 'Montserrat', sans-serif;
-    cursor: pointer;
-
+  .custom-table {
+    min-width: 800px;
   }
 
-  .radio-inline {
-  display: flex;
-  gap: 20px; /* spacing between options */
-  align-items: center;
+  .table-scroll {
+    max-width: 100%;
+  }
 }
 
-.btn-add:hover {
-  background-color: #218838;
-}
 
-.btn-delete {
-  background-color: #dc3545; /* red */
-  color: white;
-}
-
-.btn-delete:hover {
-  background-color: #c82333;
-}
-
-::ng-deep .mat-radio-label-content {
-  font-family: 'Montserrat', sans-serif;  /* your font */
-  font-size: 14px;                         /* adjust size */
-  color: #302CB3;                          /* custom color */
-}
-
-.clickable-row:hover {
-  background-color: #f0f4ff; /* light highlight on hover */
-}
-
-.clickable-row {
-  cursor: pointer;
-}
-
-.loading-overlay {
+.loading-overlay,
+.overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(255, 255, 255, 0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   z-index: 9999;
 }
 
+.loading-overlay {
+  background: rgba(255, 255, 255, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.overlay {
+  background: rgba(0, 0, 0, 0.5);
+}
 
 .centered-popup {
   position: fixed;
@@ -279,23 +275,29 @@
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 2200;
+  background: #fff;
+  border-radius: 6px;
+  padding: 15px;
+  max-height: 80vh;
+  overflow-y: auto;
 }
 
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 2100;
+::ng-deep .mat-mdc-table {
+  display: table !important;
+  table-layout: auto !important;
+  width: max-content !important;
+  min-width: 100% !important;
 }
 
-.card-body {
-  padding: 0px !important;
+::ng-deep .mat-mdc-header-row,
+::ng-deep .mat-mdc-row {
+  display: table-row !important;
+  height: 50px !important;
 }
 
-.form-label {
-  font-size: 12px !important;
-  color: #222 !important;
+::ng-deep .mat-mdc-header-cell,
+::ng-deep .mat-mdc-cell {
+  display: table-cell !important;
+  width: auto !important;
+  white-space: nowrap;
 }

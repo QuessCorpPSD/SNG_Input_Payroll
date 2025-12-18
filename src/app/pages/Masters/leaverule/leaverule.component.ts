@@ -43,6 +43,7 @@ type RawRow = Record<string, any>;
 export class LeaveruleComponent {
 
   @ViewChild('popupTpl', { static: false }) popupTpl!: TemplateRef<any>;
+  showTable: boolean = false;
 
   dialogRef!: MatDialogRef<any>;
   companyId: number = 0;
@@ -274,6 +275,7 @@ export class LeaveruleComponent {
           this.dynamicColumns = ['company_name', 'state', 'Group_name', 'EffectiveDate'];
           //this.dynamicColumns = [...this.tableHeaders];
           this.displayedColumns = [...this.dynamicColumns];
+          this.showTable = true;
           // Update dynamic columns
           this.dataSource = new MatTableDataSource(table);
           this.dataSource.paginator = this.paginator;
@@ -746,7 +748,7 @@ export class LeaveruleComponent {
       leaverulemaster: leaverulePayload
     };
 
-    
+
 
     this.leaveruleService.SaveUpdateDeleteLeaveRule(requestPayload).subscribe({
       next: res => {
@@ -1074,7 +1076,7 @@ export class LeaveruleComponent {
       leaverulemaster: leaverulePayload
     };
 
-    console.log('requestPayload', JSON.stringify(requestPayload));
+    // console.log('requestPayload', JSON.stringify(requestPayload));
 
     this.leaveruleService.SaveUpdateDeleteLeaveRule(requestPayload).subscribe({
       next: res => {
@@ -1198,7 +1200,7 @@ export class LeaveruleComponent {
   }
 
   GetLeavetypeDetails(CompanyId: any, done?: () => void): void {
-    
+
     this.leaveruleService.GetLeaveType(CompanyId).subscribe({
       next: (res: any) => {
         this.leavetypedetails = (res?.Data ?? [])

@@ -1,8 +1,7 @@
-<br />
 <div class="page-wrapper">
     <div class="scrollable-content">
-
-        <div style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700; min-width: 960px">
+        <div
+            style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700; min-width: 960px;padding-top: 12px;">
             FNF Revoke
         </div>
 
@@ -10,28 +9,27 @@
             <div class="row g-3 align-items-end">
                 <div class="col-md-3 d-flex gap-2">
 
-                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Import"
-                        (click)="ImportClick(fileInput)">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
+                        (click)="ImportClick(fileInput)" matTooltip="Upload">
                         <mat-icon>cloud_upload</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                        (click)="DownloadTemplate()" matTooltip="Template">
+                        <mat-icon>cloud_download</mat-icon>
                     </button>
 
                     <input type="file" #fileInput style="display: none;" (click)="fileInput.value=''"
                         (change)="onFileChange($event)" accept=".xlsx, .xls" />
-
-
-                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Template"
-                        (click)=" DownloadTemplate()">
-                        <mat-icon>cloud_download</mat-icon>
-                    </button>
                 </div>
             </div>
         </div>
-       
+
         <div *ngIf="isLoading" class="loading-overlay">
             <img src="assets/Loading.gif" alt="Loading..." />
         </div>
 
-        
+
         <div *ngIf="showPopup" class="overlay"></div>
 
         <app-alertpopup *ngIf="showPopup" class="centered-popup" [message]="popupMessage" [submessage]="popupSubMessage"

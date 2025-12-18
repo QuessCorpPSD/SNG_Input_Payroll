@@ -105,7 +105,7 @@ export class InvoiceruleComponent {
 
   displayedColumns: string[] = [
     'companyCode', 'siteName', 'daysPerMonth', 'weekends',
-    'holidays', 'compOff', 'edit', 'delete'
+    'holidays', 'compOff', 'action'
   ];
 
   constructor(@Inject(IR_TOKEN) private invoicerule: IinvoiceRuleService, private _sessionStoreage: SessionStorageService,
@@ -120,8 +120,8 @@ export class InvoiceruleComponent {
   onEditMonthChange(): void {
     const selected = this.invoiceruleEditform.get('editpayperiodfrom')?.value;
     if (selected && selected.id > 0) {
-      // 12 months difference from fromMonth
-      const toIndex = (selected.id + 11) % 12; // ensures circular month
+
+      const toIndex = (selected.id + 11) % 12;
       this.invoiceruleEditform.get('editpayperiodto')?.setValue(this.months[toIndex].text);
     } else {
       this.invoiceruleEditform.get('editpayperiodto')?.setValue('');
@@ -304,7 +304,7 @@ export class InvoiceruleComponent {
   Addclicked(): void {
     this.isAddclicked = true;
   }
-  
+
   deleteClick(invoicingRulesID: number) {
     if (confirm("Are you sure you want to delete this?")) {
       this.invoicerule.PostDeleteInvoiceRule(invoicingRulesID).subscribe({
@@ -316,11 +316,11 @@ export class InvoiceruleComponent {
           this.companyUI = null;
           this.sitenameUI = null;
           this.searchClick();
-          
+
         }
       });
     } else {
-      console.log("Cancelled");
+      //console.log("Cancelled");
     }
 
   }
@@ -542,7 +542,7 @@ export class InvoiceruleComponent {
       billabledaysformula: formValue.billabledaysformula,
       userId: String(this.userdetail.user_Id)
     };
-    console.log('PALOAD', InvoiceRuleAdd);
+    //.log('PALOAD', InvoiceRuleAdd);
 
 
     this.invoicerule.PostAddInvoiceRule(InvoiceRuleAdd).subscribe({
@@ -596,7 +596,7 @@ export class InvoiceruleComponent {
 
 
     this.editInvoiceRuleId = row.invoicingRulesID;
-    console.log("Invoice Rule ID:", this.editInvoiceRuleId);
+    //console.log("Invoice Rule ID:", this.editInvoiceRuleId);
 
     this.companyUI = {
       companyId: row.companyId,
@@ -609,7 +609,7 @@ export class InvoiceruleComponent {
       siteName: row.siteName
     };
 
-    console.log("EDIT ROW:", row);
+    // console.log("EDIT ROW:", row);
 
     const [fromMonth, toMonth] = row.leavePeriod.split('-');
 
@@ -698,12 +698,12 @@ export class InvoiceruleComponent {
       userId: String(this.userdetail.user_Id)
     };
 
-    console.log("FORM VALUE:", JSON.stringify(invoiceRuleEdit));
+    //console.log("FORM VALUE:", JSON.stringify(invoiceRuleEdit));
 
     this.invoicerule.PostUpdateInvoiceRule(invoiceRuleEdit).subscribe({
       next: (res) => {
         const errormsg = res.Data[0].msg;
-        console.log('console', errormsg)
+        //console.log('console', errormsg)
         if (errormsg.includes('false')) {
           this.isAddclicked = false;
           this.showPopup = true;

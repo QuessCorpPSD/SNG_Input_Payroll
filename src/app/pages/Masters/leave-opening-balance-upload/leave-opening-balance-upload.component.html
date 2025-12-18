@@ -1,52 +1,104 @@
-<div class="container-fluid">
-    <div class="card-body g-2">
-        <br />
-        <form>
-            <div class="row g-2 align-items-end ">
+<div class="container-fluid w-100" style="padding-left:16px; padding-right:0;">
 
-                <div class="col-md-3 ">
-                    <label class="form-label text-muted small">Company Code</label>
-                    <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
-                </div>
+    <!-- TITLE -->
+    <div style="
+        color:#302CB3;
+        font-size:22px;
+        font-family:Montserrat;
+        font-weight:700;
+        padding-top:8px;
+        margin-bottom:6px;">
+        Leave Opening Balance
+    </div>
 
-                <div class="col-md-2">
-                    <label class="form-label text-muted small">Site Name</label>
-                    <groupname [selectedCompanyId]="companyId" (sitenameEmit)="groupnameEvent($event)">
-                    </groupname>
-                </div>
-                <div class="col-md-2">
-                    <label class="form-label text-muted small">From Date</label>
-                    <input type="date" class="form-control form-control-sm" [(ngModel)]="fromDateInput" name="fromDateInput" />
-                </div>
+    <!-- FILTERS -->
+    <div class="card-body" style="padding:0;">
+        <!-- 🔥 key fix: remove row negative margin -->
+        <div class="row g-1 align-items-end w-100" style="margin-left:0; margin-right:0;">
 
-                <div class="col-md-2">
-                    <label class="form-label text-muted small">To Date</label>
-                    <input type="date" class="form-control form-control-sm" [(ngModel)]="toDateInput" name="toDateInput" />
-                </div>
-
-
-
-                <div class="col-md-3" style="padding-top: 27px;">
-                    <div class="d-flex gap-2">
-                        <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
-                            matTooltip="Search" (click)="searchLeaveopeningbalance()">
-                            <mat-icon>search</mat-icon>
-                        </button>
-
-                        <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
-                            matTooltip="Template" (click)="DownloadLeaveTemplate()">
-                            <mat-icon>cloud_download</mat-icon>
-                        </button>
-<button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
-                            matTooltip="Upload" (click)="ImportLeaveBalanceClick(fileInput)">
-                            <mat-icon>cloud_upload</mat-icon>
-                        </button>
-                        <input type="file" #fileInput style="display: none;" (click)="fileInput.value=''"
-                            (change)="onFileChange($event)" accept=".xlsx, .xls" />
-                    </div>
-                </div>
-
+            <div class="col-md-3 ">
+                <label class="form-label text-muted small">Company Code<span style="color: red;">*</span></label>
+                <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
             </div>
-        </form>
+
+            <div class="col-md-2">
+                <label class="form-label text-muted small">Site Name<span style="color: red;">*</span></label>
+                <groupname [selectedCompanyId]="companyId" (sitenameEmit)="groupnameEvent($event)">
+                </groupname>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label text-muted small">From Date</label>
+                <input type="date" class="form-control form-control-sm" [(ngModel)]="fromDateInput"
+                    name="fromDateInput" />
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label text-muted small">To Date</label>
+                <input type="date" class="form-control form-control-sm" [(ngModel)]="toDateInput" name="toDateInput" />
+            </div>
+
+            <div class="col-md-3" style="padding-top: 27px;">
+                <div class="d-flex gap-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
+                        matTooltip="Search" (click)="searchLeaveopeningbalance()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                        matTooltip="Template" (click)="DownloadLeaveTemplate()">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button>
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
+                        matTooltip="Upload" (click)="ImportLeaveBalanceClick(fileInput)">
+                        <mat-icon>cloud_upload</mat-icon>
+                    </button>
+                    <input type="file" #fileInput style="display: none;" (click)="fileInput.value=''"
+                        (change)="onFileChange($event)" accept=".xlsx, .xls" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" [hidden]="!showTable">
+    <div class="col-md-12">
+        <div class="table-wrapper">
+
+            <div class="table-scroll">
+                <table mat-table [dataSource]="dataSource" matSort class="custom-table mat-elevation-z8 previewtable">
+
+                    <!-- Dynamic Columns -->
+                    <ng-container *ngFor="let column of dynamicColumns" [matColumnDef]="column">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header
+                            [class.hidden-column]="column === 'Company_Id'"><strong>{{ column }}</strong>
+
+                        </mat-header-cell>
+
+                        <mat-cell *matCellDef="let element" [class.hidden-column]="column === 'Company_Id'">
+                            {{ element[column] || '-' }}
+                        </mat-cell>
+                    </ng-container>
+
+
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+
+                    <!-- No Data -->
+                    <tr *ngIf="dataSource?.data?.length === 0">
+                        <td [attr.colspan]="displayedColumns.length" class="text-center">
+                            No data available
+                        </td>
+                    </tr>
+
+                </table>
+            </div>
+
+            <div class="paginator-wrapper">
+                <mat-paginator #paginator [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons>
+                </mat-paginator>
+            </div>
+
+
+        </div>
     </div>
 </div>

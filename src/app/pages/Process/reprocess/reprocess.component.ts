@@ -27,7 +27,7 @@ export const Pay_TOKEN = new InjectionToken<IPayProcessRepository>('Pay_TOKEN');
   standalone: true,
   imports: [CommonModule, MatTabsModule, CompanyallComponent,
     PayperiodsequenceComponent, MatIconModule, FormsModule, MatCardModule, MatFormFieldModule,
-    MatSelectModule, AlertpopupComponent,PayprocesstypeComponent],
+    MatSelectModule, AlertpopupComponent, PayprocesstypeComponent],
   templateUrl: './reprocess.component.html',
   styleUrl: './reprocess.component.css',
   providers: [DatePipe,
@@ -50,7 +50,7 @@ export class ReprocessComponent implements OnInit {
   showPopup = false;
   popupMessage = '';
   popupSubMessage = '';
-   constructor(private datePipe: DatePipe, @Inject(Pay_TOKEN) private _payProcessService: IPayProcessRepository,
+  constructor(private datePipe: DatePipe, @Inject(Pay_TOKEN) private _payProcessService: IPayProcessRepository,
     private _sessionStoreage: SessionStorageService, private decry: EncryptionService,) {
 
   }
@@ -59,12 +59,11 @@ export class ReprocessComponent implements OnInit {
 
   }
 
-  
-handleuserEvent(user:any)
-{
-  this.selectoption=user;
-  //console.log(user)
-}
+
+  handleuserEvent(user: any) {
+    this.selectoption = user;
+    //console.log(user)
+  }
   handlePayperiodEvent(payperiod: Payperiodclass) {
     this.payPeriod = payperiod;
 
@@ -101,7 +100,7 @@ handleuserEvent(user:any)
     const json = this._sessionStoreage.getItem('UserProfile');
     if (json) {
       this.userdetail = JSON.parse(this.decry.decrypt(json));
-      console.log('Userdetails',this.userdetail);
+      console.log('Userdetails', this.userdetail);
 
     } else {
       console.warn('UserProfile not found in session storage');
@@ -113,9 +112,140 @@ handleuserEvent(user:any)
     };
   }
 
+  // ProcessClick() {
+  //   this.isLoading = true;
+
+  //   if (!this.selectedCompanyId) {
+  //     alert("Please select Company Code");
+  //     this.isLoading = false;
+  //     return;
+  //   }
+
+  //   if (!this.payPeriod) {
+  //     alert("Please select Payperiod");
+  //     this.isLoading = false;
+  //     return;
+  //   }
+
+  //   if (this.actual_Or_delcare == '') {
+  //     alert("Actual Or Delcare is empty");
+  //     this.isLoading = false;
+  //     return;
+  //   }
+
+  //   const payload = {
+  //     Company_Id: String(this.selectedCompanyId),
+  //     Pay_Period_Id: String(this.payPeriod.payfrequencyid),
+  //     Declaration_type: String(this.actual_Or_delcare),
+  //     CreatedBy: String(this.userdetail.user_Id)
+
+  //   };
+
+  //   if (this.selectoption === "PP") {
+  //     this._payProcessService.PayProcess(payload).subscribe({
+  //       next: res => {
+  //         this.UploadedResponse = res;
+
+  //         if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.data.response === 'ReProcessed Successfully.') {
+  //           this.isLoading = false;
+  //           this.showPopup = true;
+  //           this.popupMessage = 'Processed Successfully.';
+  //         }
+  //         else if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.data.response === 'Failed.') {
+
+  //           const errorArray = JSON.parse(this.UploadedResponse.data.errors[0]);
+  //           const exportData = errorArray.map((item: any) => ({
+  //             MESSAGE: item.Error_Message || item.ERROR_MESSAGE || ''
+  //           }));
+
+  //           const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+  //           const workbook: XLSX.WorkBook = {
+  //             Sheets: { 'ErrorMessages': worksheet },
+  //             SheetNames: ['ErrorMessages']
+  //           };
+
+  //           // Export the file
+  //           XLSX.writeFile(workbook, 'ErrorMessages_Timesheet.xlsx');
+  //           this.isLoading = false;
+  //           this.showPopup = true;
+  //           this.popupMessage = 'Failed to Process.';
+
+  //         }
+  //         else {
+  //           if (this.UploadedResponse.data.response != '') {
+  //             alert(this.UploadedResponse.data.response);
+  //             this.isLoading = false;
+  //           }
+  //           else {
+  //             alert('Error while processing response.');
+  //             this.isLoading = false;
+  //           }
+
+  //         }
+  //       },
+  //       error: err => {
+  //         console.error("Error:", err);
+  //         this.isLoading = false;
+  //       }
+  //     });
+  //   }
+  //   else if (this.selectoption === "FPP") {
+  //     this._payProcessService.FandFPayProcess(payload).subscribe({
+  //       next: res => {
+  //         this.UploadedResponse = res;
+
+  //         if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.data.response === 'Processed Successfully.') {
+  //           this.isLoading = false;
+  //           this.showPopup = true;
+  //           this.popupMessage = 'Processed Successfully.';
+  //         }
+  //         else if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.data.response === 'Failed.') {
+
+  //           const errorArray = JSON.parse(this.UploadedResponse.data.errors[0]);
+  //           const exportData = errorArray.map((item: any) => ({
+  //             MESSAGE: item.Error_Message || item.ERROR_MESSAGE || ''
+  //           }));
+
+  //           const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+  //           const workbook: XLSX.WorkBook = {
+  //             Sheets: { 'ErrorMessages': worksheet },
+  //             SheetNames: ['ErrorMessages']
+  //           };
+
+  //           // Export the file
+  //           XLSX.writeFile(workbook, 'ErrorMessages_Timesheet.xlsx');
+  //           this.isLoading = false;
+  //           this.showPopup = true;
+  //           this.popupMessage = 'Failed to Process.';
+
+  //         }
+  //         else {
+  //           if (this.UploadedResponse.data.response != '') {
+  //             alert(this.UploadedResponse.data.response);
+  //             this.isLoading = false;
+  //           }
+  //           else {
+  //             alert('Error while processing response.');
+  //             this.isLoading = false;
+  //           }
+
+  //         }
+  //       },
+  //       error: err => {
+  //         console.error("Error:", err);
+  //         this.isLoading = false;
+  //       }
+  //     });
+  //   }
+  //   this.isLoading = false;
+
+  // }
+
   ProcessClick() {
+    // Start loading
     this.isLoading = true;
 
+    // Validations
     if (!this.selectedCompanyId) {
       alert("Please select Company Code");
       this.isLoading = false;
@@ -128,117 +258,76 @@ handleuserEvent(user:any)
       return;
     }
 
-    if (this.actual_Or_delcare == '') {
+    if (!this.actual_Or_delcare) {
       alert("Actual Or Delcare is empty");
       this.isLoading = false;
       return;
     }
 
+    // Payload
     const payload = {
-      Company_Id:String(this.selectedCompanyId),
+      Company_Id: String(this.selectedCompanyId),
       Pay_Period_Id: String(this.payPeriod.payfrequencyid),
       Declaration_type: String(this.actual_Or_delcare),
       CreatedBy: String(this.userdetail.user_Id)
-
     };
 
-        if (this.selectoption === "PP") {
-      this._payProcessService.PayProcess(payload).subscribe({
-        next: res => {
-          this.UploadedResponse = res;
+    // ✅ Log payload to console
+    console.log('Payload to be sent:', payload);
 
-          if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.data.response === 'ReProcessed Successfully.') {
-            this.isLoading = false;
-            this.showPopup = true;
-            this.popupMessage = 'Processed Successfully.';
-          }
-          else if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.data.response === 'Failed.') {
+    // Choose service based on option
+    const serviceCall = this.selectoption === "PP"
+      ? this._payProcessService.PayProcess(payload)
+      : this._payProcessService.FandFPayProcess(payload);
 
-            const errorArray = JSON.parse(this.UploadedResponse.data.errors[0]);
-            const exportData = errorArray.map((item: any) => ({
-              MESSAGE: item.Error_Message || item.ERROR_MESSAGE || ''
-            }));
+    serviceCall.subscribe({
+      next: res => {
+        this.UploadedResponse = res;
 
-            const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
-            const workbook: XLSX.WorkBook = {
-              Sheets: { 'ErrorMessages': worksheet },
-              SheetNames: ['ErrorMessages']
-            };
+        const responseText = this.UploadedResponse?.Data?.response;
 
-            // Export the file
-            XLSX.writeFile(workbook, 'ErrorMessages_Timesheet.xlsx');
-            this.isLoading = false;
-            this.showPopup = true;
-            this.popupMessage = 'Failed to Process.';
-
-          }
-          else {
-            if (this.UploadedResponse.data.response != '') {
-              alert(this.UploadedResponse.data.response);
-              this.isLoading = false;
-            }
-            else {
-              alert('Error while processing response.');
-              this.isLoading = false;
-            }
-
-          }
-        },
-        error: err => {
-          console.error("Error:", err);
-          this.isLoading = false;
+        if (this.UploadedResponse?.StatusCode === 200 && responseText?.includes('Successfully')) {
+          // Success
+          this.showPopup = true;
+          this.popupMessage = 'Processed Successfully.';
         }
-      });
-    }
-    else if (this.selectoption === "FPP") {
-      this._payProcessService.FandFPayProcess(payload).subscribe({
-        next: res => {
-          this.UploadedResponse = res;
-
-          if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.data.response === 'Processed Successfully.') {
-            this.isLoading = false;
-            this.showPopup = true;
-            this.popupMessage = 'Processed Successfully.';
+        else if (responseText === 'Failed.' && this.UploadedResponse?.Data?.errors?.length) {
+          // Failed, export errors
+          let errorArray: any[] = [];
+          try {
+            errorArray = JSON.parse(this.UploadedResponse.Data.errors[0]);
+          } catch {
+            errorArray = [];
           }
-          else if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.data.response === 'Failed.') {
 
-            const errorArray = JSON.parse(this.UploadedResponse.data.errors[0]);
-            const exportData = errorArray.map((item: any) => ({
-              MESSAGE: item.Error_Message || item.ERROR_MESSAGE || ''
-            }));
+          const exportData = errorArray.map((item: any) => ({
+            MESSAGE: item.Error_Message || item.ERROR_MESSAGE || ''
+          }));
 
-            const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
-            const workbook: XLSX.WorkBook = {
-              Sheets: { 'ErrorMessages': worksheet },
-              SheetNames: ['ErrorMessages']
-            };
+          const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+          const workbook: XLSX.WorkBook = {
+            Sheets: { 'ErrorMessages': worksheet },
+            SheetNames: ['ErrorMessages']
+          };
+          XLSX.writeFile(workbook, 'ErrorMessages_Timesheet.xlsx');
 
-            // Export the file
-            XLSX.writeFile(workbook, 'ErrorMessages_Timesheet.xlsx');
-            this.isLoading = false;
-            this.showPopup = true;
-            this.popupMessage = 'Failed to Process.';
-
-          }
-          else {
-            if (this.UploadedResponse.data.response != '') {
-              alert(this.UploadedResponse.data.response);
-              this.isLoading = false;
-            }
-            else {
-              alert('Error while processing response.');
-              this.isLoading = false;
-            }
-
-          }
-        },
-        error: err => {
-          console.error("Error:", err);
-          this.isLoading = false;
+          //this.showPopup = true;
+          alert('Failed to Process.');
         }
-      });
-    }
+        else {
+          // Fallback
+          alert(responseText || this.UploadedResponse?.Message || 'Error while processing response.');
+        }
 
-
+        // Stop loading after response
+        this.isLoading = false;
+      },
+      error: err => {
+        console.error("Error:", err);
+        alert('Process failed due to server or network error.');
+        this.isLoading = false;
+      }
+    });
   }
+
 }

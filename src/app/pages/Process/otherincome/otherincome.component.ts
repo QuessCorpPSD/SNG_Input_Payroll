@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { OtherincomeAddComponent } from '../otherincome-add/otherincome-add.component';
 import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
@@ -45,6 +45,12 @@ export class OtherincomeComponent {
   popupSubMessage: string = '';
   showPopup = false;
   isLoading: boolean = false;
+  filteredRows: any[] = [];
+  paginatedData: any[] = [];
+
+  pageSize = 10;
+  currentPage = 0;
+
   constructor(private dialog: MatDialog, private decry: EncryptionService, private service: OtherincomeService,
     private _sessionStoreage: SessionStorageService) { }
   isUploadGridVisible = false;
@@ -97,12 +103,12 @@ export class OtherincomeComponent {
 
   onsearch() {
     if (!this.selectedCompanyId) {
-      this.showAlertPopup('Please Select Company');
+      alert('Please Select Company');
       return;
     }
 
     if (!this.payperiodId) {
-      this.showAlertPopup('Please Select Payperiod');
+      alert('Please Select Payperiod');
       return;
     }
     this.isLoading = true;
@@ -125,7 +131,7 @@ export class OtherincomeComponent {
 
         // 🔥 SHOW this.showAlertPopup ONLY WHEN NO DATA IS RETURNED
         if (!this.itadjusts || this.itadjusts.length === 0) {
-          this.showAlertPopup(this.itadjust || "No data available.");
+          alert(this.itadjust || "No data available.");
           this.dataSource.data = [];
           this.isLoading = false;
 
@@ -190,7 +196,7 @@ export class OtherincomeComponent {
 
         // ✅ handle case when Data is null
         if (!res || !res.Data) {
-          this.showAlertPopup('Upload request processed. Server did not return any data.');
+          alert('Upload request processed. Server did not return any data.');
           this.isLoading = false;
 
           return;
@@ -223,7 +229,7 @@ export class OtherincomeComponent {
         if (res?.StatusCode === 200 && msg?.trim() === 'Failed to import.') {
           this.isLoading = true;
 
-          this.showAlertPopup('Failed to import');
+          alert('Failed to import');
           const rawErr = res?.Data?.errors?.[0];
           let errorArray: any[] = [];
           try {
@@ -240,8 +246,9 @@ export class OtherincomeComponent {
           }
 
           const exportData = errorArray.map((item: any) => ({
-            Error_Message: item?.Error_Message || item?.Error_Message || item?.Error_Message || ''
+            Error_Message: item?.Error_Message || item?.Validation || ''
           }));
+
 
           const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
           const workbook: XLSX.WorkBook = {
@@ -262,13 +269,13 @@ export class OtherincomeComponent {
               (parsed ? JSON.stringify(parsed) : ''));
 
         if (fallback) {
-          this.showAlertPopup(fallback);
+          alert(fallback);
         } else {
           // ⚙️ Handle case where API returns message but no data (your current case)
           if (res?.Message) {
-            this.showAlertPopup(`ℹ️ ${res.Message}`);
+            alert(`ℹ️ ${res.Message}`);
           } else {
-            this.showAlertPopup('Error while processing response.');
+            alert('Error while processing response.');
           }
         }
 
@@ -277,7 +284,7 @@ export class OtherincomeComponent {
         this.isLoading = false;
 
         console.error('❌ Upload failed', err);
-        this.showAlertPopup('Upload failed due to a network or server error.');
+        alert('Upload failed due to a network or server error.');
       }
     });
   }
@@ -314,8 +321,8 @@ export class OtherincomeComponent {
         Remarks: "",
         Input_No: "",
         Amount: "",
-        Map_Name:"",
-        Other_Deduction:"",
+        Map_Name: "",
+        Other_Deduction: "",
       }
     ];
 
@@ -327,10 +334,22 @@ export class OtherincomeComponent {
     };
 
     const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    this.showAlertPopup('downloaded successfully')
     const blob = new Blob([buffer], { type: 'application/octet-stream' });
 
     FileSaver.saveAs(blob, `otherincome_Template_${Date.now()}.xlsx`);
     this.isLoading = false;
+  }
+  setPaginatedData() {
+    const startIndex = this.currentPage * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    this.paginatedData = this.filteredRows.slice(startIndex, endIndex);
+  }
+
+  onPageChange(event: PageEvent) {
+    this.pageSize = event.pageSize;
+    this.currentPage = event.pageIndex;
+    this.setPaginatedData();
   }
 
 

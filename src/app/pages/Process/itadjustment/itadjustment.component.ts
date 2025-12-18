@@ -25,6 +25,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   styleUrl: './itadjustment.component.css'
 })
 export class ITAdjustmentComponent {
+  selectedEmployeeId: any;
   selectedCompanyId: any;
   selectedCompanyCode: any;
   dataSource = new MatTableDataSource<any>();
@@ -95,7 +96,7 @@ export class ITAdjustmentComponent {
 
   onsearch() {
     if (!this.selectedCompanyId) {
-      this.showAlertPopup('Please Select Company');
+      alert('Please Select Company');
       return;
     }
 
@@ -111,17 +112,17 @@ export class ITAdjustmentComponent {
     this.service.Search(payload).subscribe({
       next: (res) => {
 
-        this.itadjusts = res.Data?.data?.Table0 ?? []; // records
-        this.itadjust = res.Data.message; // message from API
+        this.itadjusts = res.Data?.data?.Table0 ?? [];
+        this.itadjust = res.Data.message;
 
-        // 🔥 SHOW this.showAlertPopup ONLY WHEN NO DATA IS RETURNED
+
         if (!this.itadjusts || this.itadjusts.length === 0) {
-          this.showAlertPopup(this.itadjust || "No data available.");
+          alert(this.itadjust || "No data available.");
           this.dataSource.data = [];
-          return; // stop here
+          return;
         }
 
-        // 🔥 IF DATA EXISTS → load table
+
         this.dataSource = new MatTableDataSource(this.itadjusts);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
@@ -155,7 +156,7 @@ export class ITAdjustmentComponent {
   exportToExcel(): void {
 
     if (!this.selectedCompanyId) {
-      this.showAlertPopup('Please Select Company')
+      alert('Please Select Company')
       return;
     }
     this.isLoading = true;
@@ -176,17 +177,17 @@ export class ITAdjustmentComponent {
 
           if (!jsonData || !Array.isArray(jsonData) || jsonData.length === 0) {
             this.isLoading = false;
-            this.showAlertPopup(res.Data.message)
+            alert(res.Data.message)
             return;
           }
 
-          // Create Excel file from the JSON data
+
           const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(jsonData);
           const wb: XLSX.WorkBook = XLSX.utils.book_new();
 
           XLSX.utils.book_append_sheet(wb, ws, 'ITAdjustmentdata');
 
-          // Generate filename with timestamp
+
           const timestamp = new Date().toISOString().split('T')[0];
           const fileName = `ITAdjustment${timestamp}.xlsx`;
 
@@ -232,6 +233,7 @@ export class ITAdjustmentComponent {
 
 
     this.service.Upload(formData).subscribe({
+
       next: (res) => {
 
         if (!res || !res.Data) {
@@ -265,7 +267,7 @@ export class ITAdjustmentComponent {
 
         // CASE 2: Plain failure string
         if (res?.StatusCode === 200 && msg?.trim() === 'Failed to import.') {
-          this.showAlertPopup('Failed to Import');
+          alert('Failed to Import');
           const rawErr = res?.Data?.errors?.[0];
           let errorArray: any[] = [];
           try {
@@ -303,13 +305,13 @@ export class ITAdjustmentComponent {
               (parsed ? JSON.stringify(parsed) : ''));
 
         if (fallback) {
-          this.showAlertPopup(fallback);
+          alert(fallback);
         } else {
           // ⚙️ Handle case where API returns message but no data (your current case)
           if (res?.Message) {
-            this.showAlertPopup(`ℹ️ ${res.Message}`);
+            alert(`ℹ️ ${res.Message}`);
           } else {
-            this.showAlertPopup('Error while processing response.');
+            alert('Error while processing response.');
           }
         }
         this.isLoading = false;
@@ -318,7 +320,7 @@ export class ITAdjustmentComponent {
       error: (err) => {
         this.isLoading = false;
         console.error('❌ Upload failed', err);
-        this.showAlertPopup('Upload failed due to a network or server error.');
+        alert('Upload failed due to a network or server error.');
       }
     });
   }
