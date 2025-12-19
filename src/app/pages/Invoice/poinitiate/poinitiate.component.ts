@@ -122,27 +122,26 @@ export class POInitiateComponent {
 
     };
 
-    console.log(POInvoiceInitiateRequest);
-
     this._invoiceService.POInvoiceInitiate(POInvoiceInitiateRequest).subscribe({
       next: (res) => {
-        console.log(res);
         const parsedData = JSON.parse(res.Data);
         const errormsg = parsedData[0].Error_Message;
 
         if (errormsg.toLowerCase().includes("successfully")) {
-          //alert(errormsg);
           this.showPopup = true;
           this.popupMessage = "Invoice Initiated Successfully";
-          this.isLoading = false;
         } else {
           alert(errormsg);
-          this.isLoading = false;
         }
-        error: (err) => {
-          console.error("Error saving:", err);
-          this.isLoading = false;
-        }
+
+        this.isLoading = false;
+        this.isdisabled = false;
+      },
+      error: (err) => {
+        console.error("Error saving:", err);
+        alert("Something went wrong while initiating invoice");
+        this.isLoading = false;
+        this.isdisabled = false;
       }
     });
   }
