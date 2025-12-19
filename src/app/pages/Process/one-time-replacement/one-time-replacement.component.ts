@@ -47,8 +47,8 @@ export class OneTimeReplacementComponent {
   popupMessage: string = '';
   popupSubMessage: string = '';
 
-  EmployeeList: any[] = [];      
-  employeeCode: string = "";      
+  EmployeeList: any[] = [];
+  employeeCode: string = "";
   onetimeform!: FormGroup;
   constructor(
     private dialog: MatDialog,
@@ -177,7 +177,7 @@ export class OneTimeReplacementComponent {
         const jsonData = Array.isArray(res?.Data) ? res.Data : [];
 
         if (!jsonData.length) {
-          this.showAlertPopup( 'No Records Found');
+          this.showAlertPopup('No Records Found');
           return;
         }
 
@@ -277,7 +277,7 @@ export class OneTimeReplacementComponent {
     this.isLoading = true;
 
     const templateData = [
-      { Compcode: "", PayPeriod: "", Empcode: "", ModeofEntry: "", Type: "", ArrearPayPeriod: "", Pay_Type: "", Remarks: "" }
+      { Compcode: "", PayPeriod: "", Empcode: "", Band: "", Paycode: "", Amount: "", ModeofEntry: "", Type: "", ArrearPayPeriod: "", Pay_Type: "", Remarks: "" }
     ];
 
     const ws = XLSX.utils.json_to_sheet(templateData);
