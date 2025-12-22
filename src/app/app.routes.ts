@@ -143,6 +143,8 @@ import { CompanyinvoiceformatComponent } from './pages/Invoice/companyinvoicefor
 import { MaterialcodeComponent } from './pages/GlobalMasters/materialcode/materialcode.component';
 import { CancelledinvoicerepositoryComponent } from './pages/customers/cancelledinvoicerepository/cancelledinvoicerepository.component';
 import { CompanyComponent } from './pages/customers/company/company.component';
+import { ProfessionaltaxComponent } from './pages/GlobalMasters/professionaltax/professionaltax.component';
+import { ProvidentfundComponent } from './pages/GlobalMasters/providentfund/providentfund.component';
 
 
 
@@ -303,7 +305,7 @@ export const routes: Routes = [
           { path: "ServiceCharge", component: ServiceChargeComponent },
           { path: "employee", component: EmployeeComponent },
           { path: "cancelledinvoicerepository", component: CancelledinvoicerepositoryComponent },
-{ path: "Company", component: CompanyComponent },
+          { path: "Company", component: CompanyComponent },
 
         ]
       },
@@ -389,9 +391,9 @@ export const routes: Routes = [
           { path: "sitemaster", component: SiteMasterComponent },
           { path: "materialcode", component: MaterialcodeComponent },
           { path: 'BankMaster', component: BankmasterComponent },
-          { path: 'Formula', component: FormulaComponent }
-
-
+          { path: 'Formula', component: FormulaComponent },
+          { path: "professionaltax", component: ProfessionaltaxComponent },
+          { path: "providentfund", component: ProvidentfundComponent }
 
         ]
 

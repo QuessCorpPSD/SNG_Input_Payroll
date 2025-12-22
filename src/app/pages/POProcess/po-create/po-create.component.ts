@@ -24,6 +24,7 @@ import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { Console } from 'console';
 import { response } from 'express';
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-po-create',
@@ -40,7 +41,8 @@ import { response } from 'express';
     PotypeComponent,
     PonumbersearchComponent,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatTooltip
 
   ],
   templateUrl: './po-create.component.html',
@@ -51,7 +53,7 @@ export class PoCreateComponent {
   comapnyId: number = 0;
   PONumbber: string = '';
   ponumber: any;
-  PricingType: string='';
+  PricingType: string = '';
   IActive: any; // Could be typed if you know the type
   message: string = '';
   popupMessage: string = '';
@@ -64,17 +66,17 @@ export class PoCreateComponent {
   dynamicColumns: string[] = [];
   tableHeaders: string[] = [];
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild("pagiantor") paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(PotypeComponent) potypeComponent!: PotypeComponent;
   selectedCompanyCode: any;
-  selectedPONumbber: string='';
+  selectedPONumbber: string = '';
   userdetail: any;
-  @ViewChild(MatPaginator) paginator0!: MatPaginator;
+  @ViewChild("pagiantor0") paginator0!: MatPaginator;
   @ViewChild(MatSort) sort0!: MatSort;
-  @ViewChild(MatPaginator) paginator1!: MatPaginator;
+  @ViewChild('pagiantor1') paginator1!: MatPaginator;
   @ViewChild(MatSort) sort1!: MatSort;
-  @ViewChild(MatPaginator) paginator2!: MatPaginator;
+  @ViewChild('pagiantor2') paginator2!: MatPaginator;
   @ViewChild(MatSort) sort2!: MatSort;
   tableHeaders1: string[] = [];
   dynamicColumns1: string[] = [];
@@ -125,29 +127,28 @@ export class PoCreateComponent {
   };
   MainPOSearch() {
 
-     if (this.comapnyId  === 0) {
+    if (this.comapnyId === 0) {
       alert('Please select a valid Company');
       return;
     }
-    if (this.selectedPONumbber==='') {
+    if (this.selectedPONumbber === '') {
       alert('Please enter a PO Number');
       return;
     }
-    if (this.PricingType==='') {
+    if (this.PricingType === '') {
       alert('Please select a Pricing Type');
       return;
     }
-    
-    var ponumberstr1="";
+
+    var ponumberstr1 = "";
     const companyidstr = this.comapnyId === 0 ? '""' : this.comapnyId;
     const pricingtypestr = this.PricingType === '' ? '""' : this.PricingType;
     const ponumberstr = this.selectedPONumbber === '' ? '""' : this.selectedPONumbber;
-  
-    if(ponumberstr!="undefined" && ponumberstr!="")
-    {
+
+    if (ponumberstr != "undefined" && ponumberstr != "") {
       ponumberstr1 = ponumberstr.replace('/', '_');
     }
-   
+
 
     this.poRespository
       .Mainposearch(
@@ -263,7 +264,7 @@ export class PoCreateComponent {
     } else {
       console.warn('UserProfile not found in session storage');
     }
-    
+
   }
 
   DownloadTemplate() {
@@ -321,7 +322,7 @@ export class PoCreateComponent {
     this.poRespository.BulkPOUpload(formData).subscribe({
       next: (res) => {
 
-        console.log('response',JSON.stringify(res?.Data));
+        console.log('response', JSON.stringify(res?.Data));
 
         if (res?.Data?.response?.includes("Row(s) Uploaded Successfully.")) {
           this.showPopup = true;
@@ -380,9 +381,7 @@ export class PoCreateComponent {
             SheetNames: ['ErrorMessages']
           };
           XLSX.writeFile(workbook, 'ErrorMessages_MAINPO.xlsx');
-
-          this.showPopup = true;
-          this.popupMessage = 'Import Failed.';
+          alert('Import Failed.');
           this.isLoading = false;
           return;
         }
@@ -402,7 +401,7 @@ export class PoCreateComponent {
 
       },
       error: (err) => {
-        console.error('❌ Upload failed', err);
+        console.error('Upload failed', err);
 
         this.showPopup = true;
         this.popupMessage = 'Upload failed.';

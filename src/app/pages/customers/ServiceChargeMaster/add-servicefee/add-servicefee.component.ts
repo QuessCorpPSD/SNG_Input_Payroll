@@ -83,7 +83,6 @@ export class AddServicefeeComponent implements OnInit {
         break;
 
       case 5:   // Billable Report
-        console.log("Billable Report selected");
         break;
     }
   }

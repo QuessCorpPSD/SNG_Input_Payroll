@@ -53,8 +53,9 @@ export class CompanypaycodemappingComponent {
   Companypaycode: any;
   selectedCompanyId: any;
   selectedCompanyCode: any;
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild("paginator") paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+
   constructor(private dialog: MatDialog,
     @Inject(Pay_TOKEN) private service: ICompanypaycodemapping,
     private idleTimeoutService: IdletimeoutService) { }
@@ -76,7 +77,6 @@ export class CompanypaycodemappingComponent {
     this.showAlert = false;
     this.showValidate = false;
   }
-
 
   AddPOOpen() {
     this.dialog.open(CompanypaycodemappingAddComponent, {

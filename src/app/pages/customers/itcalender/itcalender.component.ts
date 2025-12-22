@@ -159,7 +159,6 @@ export class ITcalenderComponent {
     });
   }
   EditOpen(row: any) {
-    console.log(row);
     this.dialog.open(ITcalenderEditComponent, {
       width: '50%',
       height: '50vh',

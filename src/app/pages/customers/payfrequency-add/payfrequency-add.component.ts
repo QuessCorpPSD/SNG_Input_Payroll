@@ -113,10 +113,6 @@ export class PayfrequencyAddComponent {
 
     const startdate = this.BillingpayaddForm.get('startdate')?.value;
     const enddate = this.BillingpayaddForm.get('Enddate')?.value;
-
-
-    console.log('Start:', startdate, 'End:', enddate);
-
     this.dataSource = new MatTableDataSource<any>([]);
 
     this.service.GetAdddata(startdate, enddate).subscribe({
@@ -210,8 +206,6 @@ export class PayfrequencyAddComponent {
         Working_Days: row.Working_Days
       }))
     };
-
-    console.log("SENDING PAYLOAD:", JSON.stringify(payload));
 
     this.isLoading = true;
 

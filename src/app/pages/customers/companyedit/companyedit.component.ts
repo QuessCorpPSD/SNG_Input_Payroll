@@ -39,7 +39,7 @@ import { CompanyserviceService } from '../../../Service/CUSTOMER/companyservice.
     MatCheckboxModule,
     FormsModule,
     AlertpopupComponent
-],
+  ],
   templateUrl: './companyedit.component.html',
   styleUrl: './companyedit.component.css'
 })
@@ -683,7 +683,7 @@ export class CompanyeditComponent {
     this.company.updateCompany(payload).subscribe({
       next: res => {
         const msg1 = res.Data.data.Table0[0].Message;
-        this.showAlertPopup(msg1);
+        alert(msg1);
         this.isLoading = false;
         this.onClose();
       },

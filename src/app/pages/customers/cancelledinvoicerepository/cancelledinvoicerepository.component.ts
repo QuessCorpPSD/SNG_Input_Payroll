@@ -42,7 +42,7 @@ import { CompanyallComponent } from "../../../common/CompanyAll/companyall.compo
     MatButtonModule,
     //CompanyComponent,
     MatTooltipModule,
-    MatCheckboxModule, MatCardModule, CompanyallComponent],
+    MatCheckboxModule, MatCardModule],
   templateUrl: './cancelledinvoicerepository.component.html',
   styleUrl: './cancelledinvoicerepository.component.css'
 })
@@ -62,7 +62,7 @@ export class CancelledinvoicerepositoryComponent {
   File: File | null = null;
   selectedFileName: string = "";
   remarksText: string = "";
-
+  showTable = false;
 
   handleCompanyEvent(event: any) {
     this.selectedCompanyId = event.companyId;
@@ -110,13 +110,13 @@ export class CancelledinvoicerepositoryComponent {
     this.userdetail = JSON.parse(this._decrypt.decrypt(userdetail!));
     this.SearchClick(0, 0);
   }
-  
+
   Search() {
+    this.showTable = true;
     this.SearchClick(this.selectedCompanyId, this.PayPeriodUI.payfrequencyid);
   }
 
   SearchClick(companyId: number, payperiodId: number) {
-
     this.cancelService.Search(companyId, payperiodId).subscribe({
       next: (res: any) => {
         console.log(res.Data);
@@ -195,7 +195,7 @@ export class CancelledinvoicerepositoryComponent {
 
           if (headerResult.includes('Successfully')) {
             alert(headerResult);
-            this.iseditclicked=false;
+            this.iseditclicked = false;
             this.SearchClick(0, 0);
 
           }
@@ -221,8 +221,8 @@ export class CancelledinvoicerepositoryComponent {
   }
 
   Cancel() {
-    this.remarksText=''
-    this.selectedFileName=''
+    this.remarksText = ''
+    this.selectedFileName = ''
     this.iseditclicked = false;
   }
 

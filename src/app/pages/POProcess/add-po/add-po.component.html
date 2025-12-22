@@ -1,16 +1,14 @@
 <form [formGroup]="POAddForm" novalidate>
     <mat-card class="custom-card">
         <mat-card-header class="sticky-header">
-
-            <mat-card-title><mat-icon>add_shopping_cart</mat-icon> Purchase Order</mat-card-title>
+            <mat-card-title style="color: #302CB3;">Purchase Order</mat-card-title>
             <span class="spacer"></span>
             <button mat-icon-button (click)="onClose()" class="no-border-icon">
                 <mat-icon>close</mat-icon>
             </button>
         </mat-card-header>
 
-        <mat-card-content class="scroll-content">
-            <br />
+        <mat-card-content class="scroll-content" style="padding-top:10px">
             <!-- Row 1 -->
             <div class="row g-3 mb-3">
                 <div class="col-md-4">
@@ -22,7 +20,6 @@
                         Company Code is required
                     </div>
                 </div>
-
                 <div class="col-md-4">
                     <label class="form-label">PO Category<span class="text-danger">*</span></label>
                     <select class="form-select" formControlName="POCategory">
@@ -31,9 +28,6 @@
                         <option *ngFor="let cat of Category" [value]="cat.categoryID">{{cat.category_Name}}</option>
                     </select>
                 </div>
-
-
-
                 <div class="col-md-4">
                     <label class="form-label">PO No<span class="text-danger">*</span></label>
                     <input type="text" class="form-control" formControlName="POform" />
@@ -43,8 +37,6 @@
                         <option *ngFor="let PONo of PONumber" [value]="PONo.poid">{{PONo.ponumber}}</option>
                     </select> -->
                 </div>
-
-
             </div>
 
             <!-- Row 2 -->
@@ -63,9 +55,6 @@
                     <label class="form-label">End Date<span class="text-danger">*</span></label>
                     <input type="date" class="form-control" formControlName="EndDate" />
                 </div>
-
-
-
             </div>
 
             <!-- Row 3 -->
@@ -76,7 +65,6 @@
                         <option value="">-- Select --</option>
                         <option *ngFor="let Quantity of POQuantitytype" [value]="Quantity.rowid">{{Quantity.code}}
                         </option>
-
                     </select>
                 </div>
                 <div class="col-md-4">
@@ -98,14 +86,12 @@
                         </option>
                     </select>
                 </div>
-
                 <div class="col-md-4">
                     <label class="form-label">Currency<span class="text-danger">*</span></label>
                     <select class="form-select" formControlName="CurrencyType">
                         <option *ngFor="let curr of currency" [value]="curr.rowid">{{curr.code}}</option>
                     </select>
                 </div>
-
                 <div class="col-md-4">
                     <label class="form-label">PO Value<span class="text-danger">*</span></label>
                     <input type="number" class="form-control" formControlName="POValue" />
@@ -121,7 +107,7 @@
                         </select>
                     </div>
 
-                     <div class="col-md-4"> 
+                    <div class="col-md-4">
                         <label class="form-label text-muted small mb-1">Upload Document<span
                                 class="text-danger">*</span></label>
 
@@ -146,149 +132,48 @@
                             Document is required
                         </div>
 
-                    </div> 
+                    </div>
                 </div>
             </div>
 
-
             <!-- File Upload Row -->
             <!-- <div class="row g-3 mb-4"> -->
-
-
-
             <!-- Addresses -->
             <div class="row g-4 mt-1">
-                <!-- Billing -->
-                <!-- <div class="col-12 col-lg-6">
-                        <div class="section border rounded-4 p-3">
-                            <div class="d-flex align-items-center mb-2">
-                                <span class="badge bg-light text-dark me-2">Billing</span>
-                                <span class="text-muted small">To Address</span>
-                            </div>
-    
-                                <div class="row g-3" formGroupName="BillingAddress">
-                                <div class="col-12">
-                                    <label for="billAddress" class="form-label text-muted small mb-1">Address</label>
-                                    <input type="text" class="form-control form-control-sm" id="billAddress"
-                                        placeholder="Street, area" formControlName="Address">
-                                </div>
-    
-                                <div class="col-12 col-md-6">
-                                    <label for="billState" class="form-label text-muted small mb-1">Province/State</label>
-                                    
-                                    <select id="billState" class="form-select form-select-sm"  formControlName="State">
-                                        <option value="">-- Select --</option>
-                                        <option *ngFor="let categ of this.State" [value]="categ.stateId">{{categ.state_Name}}</option>
-                                    </select>
-                                </div>
-    
-                                <div class="col-12 col-md-6">
-                                    <label class="form-label text-muted small mb-1">City</label>
-                                    <select id="BillCity" class="form-select form-select-sm"  formControlName="City">
-                                        <option value="">-- Select --</option>
-                                        <option *ngFor="let categ of this.City" [value]="categ.city_Id">{{categ.city_Name}}</option>
-                                    </select>
-                                </div>
-    
-                                <div class="col-12 col-md-6">
-                                    <label for="billPin" class="form-label text-muted small mb-1">Pin
-                                        Code</label>
-                                    <input type="text" class="form-control form-control-sm" id="billPin" formControlName="PinCode">
-                                </div>
-    
-                                <div class="col-12 col-md-6">
-                                    <label  class="form-label text-muted small mb-1">Phone</label>
-                                    <input type="text" class="form-control form-control-sm" id="billPhone" formControlName="Phone">
-                                </div>
-    
-                                <div class="col-12 col-md-6">
-                                    <label  class="form-label text-muted small mb-1">Email
-                                        ID</label>
-                                    <input type="email" class="form-control form-control-sm" id="billEmail" formControlName="EmailID">
-                                </div>
-    
-                                <div class="col-12 col-md-6">
-                                    <label for="billGst" class="form-label text-muted small mb-1">GST No</label>
-                                    <input type="text" class="form-control form-control-sm" id="billGst" formControlName="GSTNO">
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
-
-                <!-- Shipping -->
-                <!-- <div class="col-12 col-lg-6">
-                        <div class="section border rounded-4 p-3">
-                            <div class="d-flex align-items-center mb-2">
-                                <span class="badge bg-light text-dark me-2">Shipping</span>
-                                <span class="text-muted small">To Address</span>
-                            </div>
-    
-                            <div class="row g-3" formGroupName="BillingAddress">
-                                <div class="col-12">
-                                    <label for="shipAddress" class="form-label text-muted small mb-1">Address</label>
-                                    <input type="text" class="form-control form-control-sm" id="shipAddress"
-                                        placeholder="Street, area" formControlName="Address">
-                                </div>
-    
-                                <div class="col-12 col-md-6">
-                                    <label for="shipState" class="form-label text-muted small mb-1">Province/State</label>
-                                    <select id="State" class="form-select form-select-sm" (change)="onBillingCityChange($event)" formControlName="State">
-                                        <option value="">-- Select --</option>
-                                        <option *ngFor="let categ of this.State" [value]="categ.stateId">{{categ.state_Name}}</option>
-                                    </select>
-                                </div>
-    
-                                <div class="col-12 col-md-6">
-                                    <label for="shipCity" class="form-label text-muted small mb-1">City</label>
-                                   <select id="City" class="form-select form-select-sm" formControlName="City">
-                                        <option value="">-- Select --</option>
-                                        <option *ngFor="let categ of this.ShippingCity" [value]="categ.city_Id">{{categ.city_Name}}</option>
-                                    </select>
-                                </div>
-    
-                                <div class="col-12 col-md-6">
-                                    <label for="shipPin" class="form-label text-muted small mb-1">Pin
-                                        Code</label>
-                                    <input type="text" class="form-control form-control-sm" id="shipPin" formControlName="PinCode">
-                                </div>
-    
-                                <div class="col-12 col-md-6">
-                                    <label for="shipPhone" class="form-label text-muted small mb-1">Phone</label>
-                                    <input type="text" class="form-control form-control-sm" id="shipPhone" formControlName="Phone">
-                                </div>
-    
-                                <div class="col-12 col-md-6">
-                                    <label for="shipEmail" class="form-label text-muted small mb-1">Email
-                                        ID</label>
-                                    <input type="email" class="form-control form-control-sm" id="shipEmail" formControlName="EmailID">
-                                </div>
-    
-                                <div class="col-12 col-md-6">
-                                    <label for="shipGst" class="form-label text-muted small mb-1">GST No</label>
-                                    <input type="text" class="form-control form-control-sm" id="shipGst" formControlName="GSTNO">
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
             </div>
-
-
         </mat-card-content>
         <mat-card-footer class="footer">
+            <div class="d-flex justify-content-end mt-3">
+                <div class="btn-1"
+                    style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
+
+                    <button type="Cancel"
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;"
+                        (click)="resetForm()">
+                        Reset
+                    </button>
+
+                    <button type="submit"
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white; "
+                        (click)="ValidatedSubmit()">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </mat-card-footer>
+        <!-- <mat-card-footer class="footer">
             <div class="d-flex justify-content-end mt-3">
                 <button type="reset" class="btn btn-primary me-2 rounded-pill px-3" (click)="resetForm()">Reset</button>
                 <button type="button" class="btn btn-primary rounded-pill px-3"
                     (click)="ValidatedSubmit()">Save</button>
             </div>
-        </mat-card-footer>
-
-
+        </mat-card-footer> -->
     </mat-card>
 </form>
 <div *ngIf="isLoading" class="loading-overlay">
     <img src="assets/Loading.gif" alt="Loading...">
 </div>
 <div *ngIf="showPopup" class="overlay">
-  <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
-    (close)="showPopup = false"></app-alertpopup>
+    <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+        (close)="showPopup = false"></app-alertpopup>
 </div>

@@ -68,7 +68,7 @@ export class ServiceChargeComponent {
   uploadDisplayedColumns: string[] = [];
   uploadedDaeavetaSource = new MatTableDataSource<any>(this.uploadedData);
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild("pagiantor") paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   displayedColumns: string[] = [];
@@ -107,7 +107,6 @@ export class ServiceChargeComponent {
   }
 
   AddPOOpen() {
-    console.log(this.selectedCompanyId);
     if (!this.selectedCompanyId) {
       alert("Please Select Company for Add");
       return;
@@ -124,7 +123,6 @@ export class ServiceChargeComponent {
     });
   }
   view(row: any) {
-    console.log('View clicked for:', row);
   }
   handleCompanyEvent(company) {
     this.selectedCompanyId = company.companyId;
@@ -140,7 +138,6 @@ export class ServiceChargeComponent {
   onServiceChargeChangeNew(event: any) {
     this.selectedMasterId = event.target.value;
     this.dataSource.data= [];
-    console.log('selectedCharge', this.selectedMasterId);
 
     if (this.selectedMasterId = 'ServiceFeeFixed') {
       this.gridData = ['SNo', 'Map_Name', 'Value', 'IsAttendanceProrated_Text', 'IsFAndFProrate_Text',
@@ -216,15 +213,12 @@ export class ServiceChargeComponent {
       next: (res: any) => {
         this.isLoading = false;
 
-        console.log("Search Response:", res);
-
         if (!res?.Data.data.Table0 || res.Data.data.Table0.length === 0) {
           this.uploadedDataSource.data = [];
           alert("No Records Found");
           return;
         }
         this.dataSource = new MatTableDataSource<any>(res.Data.data.Table0);
-        console.log("dataSource:", this.dataSource);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
         this.isLoading = false;
@@ -292,6 +286,7 @@ export class ServiceChargeComponent {
       }
     });
   }
+
   ImportClick(fileInput: HTMLInputElement): void {
     fileInput.click();
   }
@@ -320,8 +315,6 @@ export class ServiceChargeComponent {
         const status = res?.StatusCode;
         const response = res?.Data?.response || "";
         const errors = res?.Data?.errors || [];
-
-        console.log("Service Charge Upload:", res);
 
         if (
           status === 200 &&
