@@ -45,7 +45,7 @@
                 </div>
             </div>
             <!-- TABLE SECTION -->
-            <div class="table-wrapper1" *ngIf="showTable">
+            <div class="table-wrapper1" [hidden]="!showTable">
                 <div class="table-scroll">
 
                     <mat-table [dataSource]="uploadedDataSource" matSort

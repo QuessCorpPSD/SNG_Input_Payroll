@@ -177,27 +177,10 @@ export class AddPOComponent implements OnInit {
         action: formValue.action || 1,
         po_CategoryID: parseInt(formValue.POCategory) || 0
       };
-      // this.poService.AddPOSave(payload).subscribe({
-      //   next: (res) => {
-      //     console.log('PO Save success:', res);
-      //   },
-      //   error: (err) => {
-      //     console.error('PO save error:', err);
-      //     if (err.error) {
-      //       console.error('Server error response:', err.error);
-      //     }
-      //   }
-      // });
-
 
       this.poService.AddPOSave(payload).subscribe({
         next: poSaveResponse => {
           if (poSaveResponse.Data?.response.includes("SuccessFully Updated")) {
-            console.log('file:', this.selectedFile);
-            // console.log('File name',this.selectedFile.name);
-            console.log('File_Path', "File path");
-            console.log('PONumber', formValue.POform);
-            console.log('CreatedBy', this.userdetail.user_Id.toString());
 
             if (this.selectedFile) {
               const formData = new FormData();
@@ -218,14 +201,10 @@ export class AddPOComponent implements OnInit {
                     return;
                   }
                   else {
-                    this.showPopup = true;
-
-                    this.popupMessage = fileUploadResponse?.Data?.response;
+                    alert(fileUploadResponse?.Data?.response)
                     this.isLoading = false;
                     return;
                   }
-
-                  console.log('File uploaded:', fileUploadResponse);
                   resolve();
                 },
                 error: uploadErr => {
@@ -238,10 +217,7 @@ export class AddPOComponent implements OnInit {
             }
           }
           else {
-            
-            this.showPopup = true;
-
-            this.popupMessage = poSaveResponse?.Data?.response;
+            alert(poSaveResponse?.Data?.response);
             this.isLoading = false;
             return;
           }
@@ -254,8 +230,6 @@ export class AddPOComponent implements OnInit {
       });
     });
   }
-
-
 
   handleImportErrors(rawErr: any) {
     let errorArray: any[] = [];
@@ -309,16 +283,12 @@ export class AddPOComponent implements OnInit {
     const file: File = event.target.files[0];
     if (file) {
       this.selectedFile = file;
-      this.POAddForm.get('Document')?.setValue(file); // ✅ For form validation
+      this.POAddForm.get('Document')?.setValue(file); //  For form validation
     }
   }
 
 
-
-
   ngOnInit(): void {
-
-
     this.BindCategory();
     this.BindInvoiceType();
     this.BindBillingType('Currency');
@@ -344,50 +314,11 @@ export class AddPOComponent implements OnInit {
       Internal_External: ['0', Validators.required],
       Document: [null, Validators.required],
 
-      // BillingAddress: this.fb.group({
-      //   Address: [''],
-      //   State: [''],
-      //   City: [''],
-      //   PinCode: ['', Validators.pattern('^[0-9]{6}$')],
-      //   Phone: ['', Validators.pattern('^[0-9]{10}$')],
-      //   EmailID: ['', Validators.email],
-      //   GSTNO: ['', Validators.pattern('^[0-9A-Z]{15}$')]
-      // }),
-
-      // ShippingAddress: this.fb.group({
-      //   Address: [''],
-      //   State: [''],
-      //   City: [''],
-      //   PinCode: ['', Validators.pattern('^[0-9]{6}$')],
-      //   Phone: ['', Validators.pattern('^[0-9]{10}$')],
-      //   EmailID: ['', Validators.email],
-      //   GSTNO: ['', Validators.pattern('^[0-9A-Z]{15}$')]
-      // })
     });
     this.POAddForm.patchValue({
       POQuantity: '10',
       POQuantityValue: '1000',
     });
-
-
-
-
-    // Uncomment and adjust if you want to auto-load cities on state change
-    /*
-    this.POAddForm.get('BillingAddress.State')?.valueChanges
-      .pipe(
-        filter(v => !!v),
-        distinctUntilChanged()
-      )
-      .subscribe((stateId: string) => {
-        console.log("State " + stateId);
-        this.BindBillingCity(stateId);
-        this.POAddForm.get('BillingAddress.City')?.reset('');
-      });
-    */
-    //  this.POAddForm.get('PONumber')?.disable();
-
-
 
     combineLatest([
       this.POAddForm.get('StartDate')!.valueChanges.pipe(distinctUntilChanged()),
@@ -407,12 +338,8 @@ export class AddPOComponent implements OnInit {
         companyId: this.companyId
       };
 
-
-      console.log('Sending payload:', JSON.stringify(val));
-
       this.poService.GetPOQuantyValues(val).subscribe({
         next: res => {
-          console.log('response', JSON.stringify(res));
           if (res && res.Data) {
             this.selectedPOQuantityCode = res.Data.poquantity || '';
           } else {
@@ -441,56 +368,30 @@ export class AddPOComponent implements OnInit {
     }
 
   }
+
   formatDateString(date: any): string {
     return formatDate(date, 'yyyy-MM-dd', 'en-US');
   }
 
-
-
-
-
   BindCategory() {
     this.poService.GetPOCategory().subscribe({
       next: res => {
-        console.log('PO Category response:', res.Data);
         this.Category = res.Data;
       },
       error: err => {
-        console.log('PO Category error:', err);
       }
     });
   }
-  // BindPONumber() {
-  //   if (!this.companyId) {
-  //     console.warn('BindPONumber: companyId is undefined or null, skipping API call.');
-  //     return;
-  //   }
-  //   console.log('companyId', this.companyId);
-  //   this.poService.PONumberSearch(this.companyId).subscribe({
-  //     next: res => {
-  //       console.log('PO Number response:', res.Data);
-  //       this.PONumber = res.Data;
-  //       // console.log('poid:',this.poid)
-  //     },
-  //     error: err => {
-  //       console.log('PO Number error:', err);
-  //     }
-  //   });
-  // }
-
-
 
   BindPOQuantitytype(POQuantitytype: string) {
     if (POQuantitytype == 'Currency') {
       this.poService.GetInvoiceDescription(POQuantitytype).subscribe({
-        next: res => { console.log(res.Data); this.currency = res.Data; },
-        error: err => { console.log(err) }
+        next: res => { this.currency = res.Data; },
 
       });
     } else {
       this.poService.GetInvoiceDescription(POQuantitytype).subscribe({
-        next: res => { console.log(res.Data); this.POQuantitytype = res.Data; this.Priceing = res.Data },
-        error: err => { console.log(err) }
+        next: res => { this.POQuantitytype = res.Data; this.Priceing = res.Data },
       });
     }
   }
@@ -501,27 +402,23 @@ export class AddPOComponent implements OnInit {
     const selected = this.POQuantitytype.find(item => item.rowid == selectedRowId);
 
     this.selectedPOQuantityCode = selected ? selected.code : '';
-    console.log('POQuantitytype', this.selectedPOQuantityCode)
   }
 
   BindBillingType(BillingType: string) {
     if (BillingType == 'Currency') {
       this.poService.GetInvoiceDescription(BillingType).subscribe({
-        next: res => { console.log(res.Data); this.currency = res.Data; },
-        error: err => { console.log(err) }
+        next: res => { this.currency = res.Data; },
       });
     } else {
       this.poService.GetInvoiceDescription(BillingType).subscribe({
-        next: res => { console.log(res.Data); this.BillingType = res.Data; this.Priceing = res.Data },
-        error: err => { console.log(err) }
+        next: res => { this.BillingType = res.Data; this.Priceing = res.Data },
       });
     }
   }
 
   BindInvoiceType() {
     this.poService.GetInvoiceType().subscribe({
-      next: res => { console.log(res.Data); this.InvoiceType = res.Data },
-      error: err => { console.log(err) }
+      next: res => { this.InvoiceType = res.Data },
     });
   }
 
@@ -530,7 +427,6 @@ export class AddPOComponent implements OnInit {
   }
 
   handleCompanyEvent(event: any) {
-    console.log('Company selected:', event);
     this.companyId = event.companyId;
     this.selectedCompanyCode = event.companyCode;
     this.POAddForm.get('CompanyCode')?.setValue(this.companyId);

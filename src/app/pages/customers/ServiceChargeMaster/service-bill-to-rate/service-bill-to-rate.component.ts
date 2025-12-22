@@ -79,8 +79,6 @@ export class ServiceBillToRateComponent {
     this.showErrors = true;
 
     if (this.billRateForm.invalid) return;
-
-    console.log("Billing Rate Form Submitted:", this.billRateForm.value);
   }
 
   onReset() {

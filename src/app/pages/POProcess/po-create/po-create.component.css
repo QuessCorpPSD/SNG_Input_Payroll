@@ -1,232 +1,372 @@
-
-.custom-input {
-  width: 150px;
-  height: 60px;
-
-  .mat-form-field-wrapper {
-    padding-bottom: 0px;
+  .page-wrapper {
+    display: flex;
+    align-items: flex-start;
+    padding-top: 10px !important;
   }
 
-  .mat-form-field-flex {
-    height: 10px;
+  /* Left fixed icon area */
+  .left-icon {
+    flex: 0 0 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0f0f0;
+    border-right: 1px solid #ddd;
   }
 
-  .mat-input-element {
-    height: 10px;
-    padding: 1px 2px;
-    font-size: 14px;
+  /* Scrollable main content */
+  .scrollable-content {
+    flex: 1 1 auto;
+    overflow-x: auto;
+    overflow-y: auto;
+    padding-left: 10px;
   }
 
-  .mat-form-field-underline {
-    bottom: 0px;
+  /* Force min width so horizontal scroll works */
+  .container-fluid,
+  .table-wrapper1 {
+    min-width: 960px;
+    padding-top: 20px !important;
   }
 
-  .mat-form-field-subscript-wrapper {
-    display: none;
-  }
-}
-
-.loading-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-}
-
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 999;
-}
-
-.centered-popup {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1000;
-}
-
-.table-container {
-  overflow-x: auto;
-  overflow-y: hidden;
-  border: 1px solid #ddd;
-  max-width: 950px;
-  margin: 20px 0;
-}
-
-::ng-deep .mat-header-cell {
-  background-color: #302CB3;
-  /* Optional */
-  color: rgb(18, 227, 15) !important;
-  font-weight: 700;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  box-shadow: 0 2px 2px -1px rgba(84, 84, 84, 0.4);
-  padding: 10px;
-  text-align: left;
-  border-left: 1px solid #ddd;
-}
-
-th {
-  color: #948c8c;
-}
-
-td,
-th {
-  border: 1px solid #ddd;
-  padding: 10px;
-}
-
-.mat-paginator {
-  margin-top: 1rem;
-  font-family: 'Montserrat', sans-serif;
-}
-
-.mat-paginator-range-label {
-  font-size: 13px;
-  color: #555;
-}
-
-.mat-paginator-icon {
-  color: #302CB3;
-}
-
-.table1-container {
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 10px 20px;
-  margin-top: 20px;
-  max-width: 600px;
-}
-
-.field-row {
-  display: contents;
-}
-
-.field-label {
-  display: contents;
-  font-weight: bold;
-  align-self: center;
-  padding: 10px;
-  color: blue;
-  white-space: nowrap;
-}
-
-.field-input {
-  width: 100px;
-  padding: 0px 8px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background: #f5f5f5;
-}
-
-@media (max-width: 768px) {
-  .table1-container {
-    flex-direction: column;
-    max-width: 100%;
+  .container.py-2 {
+    overflow-y: hidden;
   }
 
-  .field-input {
+  /* Remove shadow for flat look */
+  ::ng-deep .mat-elevation-z8 {
+    box-shadow: none !important;
+  }
+
+
+  /* Convert Angular Material flex table to real table */
+  ::ng-deep .mat-mdc-table {
+    display: table !important;
+    table-layout: auto !important;
+    width: max-content !important;
+    min-width: 100% !important;
+  }
+
+  ::ng-deep .mat-mdc-header-row,
+  ::ng-deep .mat-mdc-row {
+    display: table-row !important;
+    height: 50px !important;
+  }
+
+  ::ng-deep .mat-mdc-header-cell,
+  ::ng-deep .mat-mdc-cell {
+    display: table-cell !important;
+    width: auto !important;
+    white-space: nowrap;
+  }
+
+  /* Header Cells */
+  ::ng-deep .mat-mdc-header-cell {
+    background-color: #f5f5f5 !important;
+    color: #555 !important;
+    font-size: 13px;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    border-right: 1px solid #ddd;
+    justify-content: left;
+    align-items: center;
+    text-align: center;
+    height: 50px !important;
+    z-index: 1;
     width: 100%;
-    box-sizing: border-box;
+    align-items: center;
+    vertical-align: middle;
+    background: #f5f5f5 !important;
+    z-index: 1001;
+  }
+
+  /* Body Cells */
+  ::ng-deep .mat-mdc-cell {
+    font-family: "Montserrat", sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: #222;
+    border-bottom: 1px dashed #E8E8E8 !important;
+    border-right: 1px solid #ddd;
+    justify-content: left;
+    align-items: center;
+    text-align: center;
+    padding: 0 10px;
+    height: 30px;
+    vertical-align: middle;
+  }
+
+  /* Hover effect for rows */
+  ::ng-deep .mat-row:hover {
+    background-color: #f9f9f9 !important;
+    transition: background 0.2s ease-in-out;
+  }
+
+  /* Header Row */
+  ::ng-deep .mat-header-row {
+    height: 32px !important;
+    background-color: #f5f5f5 !important;
+    border-bottom: 1px solid #ddd;
+  }
+
+  /* Row Heights */
+  ::ng-deep .mat-row {
+    height: 32px !important;
+  }
+
+  .table-wrapper1 {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 0px 24px 0 5px;
+    width: 100%;
+    height: 80vh;
+    /* Full viewport height */
+    overflow: hidden;
+    /* Prevent body scroll */
+    padding-right: 30px;
+  }
+
+  .table-scroll {
+    overflow-x: auto;
+    /* horizontal scroll */
+    overflow-y: auto;
+    /* vertical scroll */
+    max-height: auto;
+    /* 👈 adjust height to show scrollbar */
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    width: 100%;
+    position: relative;
+  }
+
+
+  /* make sure both scrollbars are visible */
+  .table-scroll::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .table-scroll::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 3px;
+  }
+
+  /* Header row scrolls with body */
+  ::ng-deep .mat-header-row {
+    height: 32px !important;
+    background-color: #f5f5f5 !important;
+    border-bottom: 1px solid #ddd;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: #f5f5f5;
+  }
+
+  .custom-table {
+    width: max-content;
+    min-width: 100%;
+    table-layout: auto !important;
+  }
+
+  /* ===== Header Cells ===== */
+  ::ng-deep .mat-mdc-header-cell {
+    background-color: transparent !important;
+    color: black !important;
+    font-size: 13px;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    border-right: 1px solid #ddd;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    text-align: center;
+    height: 32px !important;
+    /* ensures consistent width for scrolling */
+    white-space: nowrap;
+  }
+
+  /* ===== Body Cells ===== */
+  ::ng-deep .mat-mdc-cell {
+    font-family: "Montserrat", sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: #222;
+    border-bottom: 1px dashed #E8E8E8 !important;
+    border-right: 1px solid #ddd;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    text-align: center;
+    padding: 0 10px;
+    height: 30px;
+    white-space: nowrap;
+  }
+
+
+  /* ===== Row Styling ===== */
+  ::ng-deep .mat-row {
+    height: 32px !important;
+  }
+
+  /* Hover effect */
+  ::ng-deep .mat-row:hover {
+    background-color: #f9f9f9 !important;
+    transition: background 0.2s ease-in-out;
+  }
+
+  /* ===== Paginator ===== */
+  ::ng-deep .mat-mdc-paginator {
+    border: 1px solid #ddd;
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    background-color: transparent !important;
+    color: black;
+    padding: 4px 12px !important;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  ::ng-deep .mat-mdc-paginator-range-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #555;
+  }
+
+  ::ng-deep .mat-mdc-paginator-icon {
+    color: #302CB3 !important;
+  }
+
+  ::ng-deep .mat-mdc-icon-button:hover {
+    background-color: #f1f1f1 !important;
+  }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 768px) {
+
+    ::ng-deep .mat-mdc-header-cell,
+    ::ng-deep .mat-mdc-cell {
+      font-size: 11px;
+      padding: 4px 6px;
+      min-width: 100px;
+    }
+
+    .custom-table {
+      min-width: 800px;
+    }
+
+    .table-scroll {
+      max-width: 100%;
+    }
+  }
+
+  .description {
+    width: 250px !important;
+    min-width: 250px !important;
+    max-width: 250px !important;
+  }
+
+  .printas {
+    width: 250px !important;
+    min-width: 250px !important;
+    max-width: 250px !important;
+  }
+
+  .loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
+
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+  }
+
+  .centered-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+  }
+
+  .sno {
+    min-width: 80px;
+    max-width: 80px;
+    width: 80px;
+  }
+
+  .action {
+    min-width: 100px;
+    max-width: 100px;
+    width: 100px;
+  }
+
+  .btn-search {
+    background-color: #0d6efd;
+    color: #fff;
+  }
+
+  .btn-add {
+    background-color: #28a745;
+    color: #fff;
+  }
+
+  .btn-edit {
+    background-color: #fd7e14;
+    color: #fff;
+  }
+
+  .btn-upload {
+    background-color: #6f42c1;
+    color: #fff;
+  }
+
+  .btn-download {
+    background-color: #20c997;
+    color: #fff;
+  }
+
+  .summary-grid {
+    display: flex;
+    grid-template-columns: 200px 140px;
+    /* label | value */
+    row-gap: 12px;
+    column-gap: 16px;
+    align-items: center;
+    direction: row;
+
+  }
+
+  .field-row {
+    display: contents;
+    /* allows label + input to occupy grid columns */
   }
 
   .field-label {
-    padding: 5px 2px;
-    /* display: block; */
-    align-items: start;
-  }
-}
-
-@media (max-width: 768px) {
-
-  table.mat-elevation-z8 th.mat-header-cell,
-  table.mat-elevation-z8 td.mat-cell {
-    padding: 8px 10px;
-    font-size: 13px;
-    border: 1px solid #ddd;
-  }
-}
-
-.table-wrapper {
-    display: flex;
-    /* width: 1185px; */
-    flex-direction: column;
-    gap: 8px;
-    padding: 20px 24px 0 24px;
-    /* padding lives here */
-    /* no overflow here */
-}
-
-.table-scroll {
-    max-height: 450px;
-    overflow-y: auto;
-    overflow-x: auto;
-    /* both axes if needed */
-    scrollbar-gutter: stable;
-    /* reserves space for scrollbar (no overlap, no layout shift) */
-    /* optional: extra end padding so content doesn’t touch the scrollbar track */
-    padding-right: 8px;
-    /* tweak to taste */
-}
-
-.table-scroll table {
-    border-collapse: collapse;
-    width: max-content;
-    /* prevent shrink */
-    min-width: 100%;
-    /* fill container */
-}
-
-
-.ts {
-    border-collapse: separate;
-    border-spacing: 0;
-    width: max-content;
-    min-width: 100%;
-    font-family: Montserrat, sans-serif;
-}
-
-.ts th,
-.ts td {
-    border: 1px solid #e8e8e8;
-    padding: 4px 5px;
-    background: #fff;
+    font-weight: 300;
     white-space: nowrap;
-}
+  }
 
-.ts thead .head-1 th {
-    /* background: #2f6d8f;
-  color: #fff; */
-    /* position: sticky; */
-    top: 0;
-    z-index: 2;
-    color: #A0A0A0;
-    font-size: 12px;
-    /* or any size you prefer */
-    font-family: "Montserrat";
-    font-weight: 600;
-    line-height: 35.33px;
-    word-wrap: break-word;
-}
-
-.ts thead .head-2 th {
-    /* background: #3e7fa3;
-  color: #fff; */
-    font-weight: 600;
-    /* position: sticky; */
-    top: 34px;
-    z-index: 2;
-}
+  .field-input {
+    width: 120px;
+    padding: 4px 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background: #f5f5f5;
+  }

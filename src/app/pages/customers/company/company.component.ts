@@ -156,7 +156,6 @@ export class CompanyComponent {
           const fileName = `Company_${timestamp}.xlsx`;
 
           XLSX.writeFile(wb, fileName);
-          this.showAlertPopup(res.Data?.message || "File downloaded successfully!");
 
         } catch (err) {
           alert('An error occurred while exporting data.')

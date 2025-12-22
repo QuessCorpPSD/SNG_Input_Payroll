@@ -145,27 +145,25 @@
 }
 
 
-
 .popup-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   background: rgba(0, 0, 0, 0.5);
-  /* dark background */
+  z-index: 99999;
+  /* 🔥 VERY IMPORTANT */
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
-  /* stay above everything */
 }
 
 .popup-card {
-  width: 500px;
-  max-width: 60%;
-  height: 45vh;
-  max-height: 45vh;
+  background: #fff;
+  width: 400px;
+  max-width: 90%;
+  height: 50vh;
+  border-radius: 8px;
+  overflow: hidden;
+  z-index: 100000;
 }
 
 select {
@@ -532,4 +530,44 @@ input {
 .btn-download {
   background-color: #20c997;
   color: #fff;
+}
+
+.custom-card .spacer {
+  flex: 1 1 auto;
+}
+
+.custom-card {
+  /* overflow: hidden; */
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 16px;
+  /* max-height: 800px; */
+}
+
+.custom-card .mat-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.no-border-icon {
+  box-shadow: none !important;
+  border: none !important;
+  background: transparent !important;
+}
+
+.sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: white;
+  /* keep background visible */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.scroll-content {
+  flex-grow: 1;
+  overflow-y: auto;
 }
