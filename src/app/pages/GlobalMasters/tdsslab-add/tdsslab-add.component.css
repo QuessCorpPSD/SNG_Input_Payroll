@@ -159,7 +159,7 @@ mat-card-footer.footer {
     background-color: #ffffff !important;
     color: #000000 !important;
     font-size: 13px;
-    font-family: "Nunito Sans", sans-serif;
+    font-family: "Montserrat", sans-serif;
     font-weight: 600;
     border-right: 1px solid #ddd;
     display: flex;
@@ -174,7 +174,7 @@ mat-card-footer.footer {
 
 /* ===== Body Cells ===== */
 ::ng-deep .mat-mdc-cell {
-    font-family: "Nunito Sans", sans-serif;
+    font-family: "Montserrat", sans-serif;
     font-size: 12px;
     font-weight: 600;
     color: #222;

@@ -78,7 +78,7 @@
       background: white;
       color: #A0A0A0;
       font-size: 12px;
-      font-family: "Nunito Sans";
+      font-family: "Montserrat";
       font-weight: 500;
       line-height: 19.40px;
       word-wrap: break-word;
@@ -87,7 +87,7 @@
   }
 
   ::ng-deep .mat-mdc-cell {
-      font-family: "Nunito Sans";
+      font-family: "Montserrat";
       font-size: 12px;
       font-style: normal;
       font-weight: 500;

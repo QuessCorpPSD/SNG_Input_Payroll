@@ -160,9 +160,6 @@ export class PaycodesComponent implements AfterViewInit {
     });
   }
   
-  showAlertPopup(arg0: string, arg1: string) {
-    throw new Error('Method not implemented.');
-  }
 
   exportToExcel(): void {
     this.isLoading = true;

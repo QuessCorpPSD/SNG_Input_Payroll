@@ -96,7 +96,7 @@
         background-color: #ffffff !important;
         color: #000000 !important;
         font-size: 13px;
-        font-family: "Nunito Sans", sans-serif;
+        font-family: "Montserrat", sans-serif;
         font-weight: 700 !important;
         /* 🔑 FORCE BOLD */
         height: 40px;
@@ -108,7 +108,7 @@
 
     /* ---------- BODY CELLS ---------- */
     ::ng-deep .mat-mdc-cell {
-        font-family: "Nunito Sans", sans-serif;
+        font-family: "Montserrat", sans-serif;
         font-size: 12px;
         color: #222;
         height: 40px;
