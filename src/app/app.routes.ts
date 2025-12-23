@@ -145,6 +145,7 @@ import { CancelledinvoicerepositoryComponent } from './pages/customers/cancelled
 import { CompanyComponent } from './pages/customers/company/company.component';
 import { ProfessionaltaxComponent } from './pages/GlobalMasters/professionaltax/professionaltax.component';
 import { ProvidentfundComponent } from './pages/GlobalMasters/providentfund/providentfund.component';
+import { ComputationruleComponent } from './pages/GlobalMasters/computationrule/computationrule.component';
 
 import { OffercreationComponent } from './pages/gsoffer/offercreation/offercreation.component';
 import { LFWSlabComponent } from './pages/GlobalMasters/lfwslab/lfwslab.component';
@@ -396,6 +397,8 @@ export const routes: Routes = [
           { path: 'BankMaster', component: BankmasterComponent },
           { path: 'Formula', component: FormulaComponent },
           { path: "professionaltax", component: ProfessionaltaxComponent },
+          { path: "providentfund", component: ProvidentfundComponent },
+          { path: "computationrule", component: ComputationruleComponent },
           { path: "providentfund", component: ProvidentfundComponent },
           { path: 'Formula', component: FormulaComponent },
           { path: 'lfw', component: LFWSlabComponent },

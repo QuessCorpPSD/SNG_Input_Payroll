@@ -182,6 +182,11 @@ export class ProfessionaltaxComponent implements AfterViewInit {
   }
 
   deleteProfessionalTax(row: any) {
+
+    if (!confirm('Are you sure you want to delete this record?')) {
+      return;
+    }
+
     this.isLoading = true;
     const payload = {
       mode: 'Delete',
