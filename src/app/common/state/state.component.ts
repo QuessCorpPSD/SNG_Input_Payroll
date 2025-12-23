@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, forwardRef, Inject, InjectionToken, OnInit, Output, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, forwardRef, Inject, InjectionToken, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { ReactiveFormsModule, FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
@@ -23,6 +23,7 @@ export const COMM_TOKEN = new InjectionToken<ICommonService>('COMM_TOKEN');
   ],
   templateUrl: './state.component.html',
   styleUrl: './state.component.css',
+  encapsulation: ViewEncapsulation.None,
   providers: [
     {
 
@@ -44,6 +45,7 @@ export class StateComponent {
   filteredOptions$!: Observable<State[]>;
   selectedOption?: State;
   userdetail!: any;
+  @Input() disabled: boolean = false;
   @Output() stateEmit = new EventEmitter<State>();
 
   constructor(@Inject(COMM_TOKEN) private _commonService: ICommonService

@@ -143,6 +143,7 @@ import { CompanyinvoiceformatComponent } from './pages/Invoice/companyinvoicefor
 import { MaterialcodeComponent } from './pages/GlobalMasters/materialcode/materialcode.component';
 import { CancelledinvoicerepositoryComponent } from './pages/customers/cancelledinvoicerepository/cancelledinvoicerepository.component';
 import { CompanyComponent } from './pages/customers/company/company.component';
+import { CityComponent } from './pages/GlobalMasters/city/city.component';
 
 
 
@@ -389,10 +390,8 @@ export const routes: Routes = [
           { path: "sitemaster", component: SiteMasterComponent },
           { path: "materialcode", component: MaterialcodeComponent },
           { path: 'BankMaster', component: BankmasterComponent },
-          { path: 'Formula', component: FormulaComponent }
-
-
-
+          { path: 'Formula', component: FormulaComponent },
+          { path: 'city', component: CityComponent }
         ]
 
       },

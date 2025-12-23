@@ -1,0 +1,333 @@
+<div class="page-wrapper">
+  <div class="scrollable-content">
+    <div class="justify-content-between align-items-center mb-3">
+      <div class="row g-3 align-items-end">
+
+        <div class="col-md-3">
+          <label class="form-label text-muted small">City Name</label>
+          <input #cityName type="text"  style="height: 10px;"/>
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label text-muted small">State</label>
+          <state (stateEmit)="stateEvent($event)"></state>
+        </div>
+
+        <div class="col-md-3 d-flex gap-2">
+          <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Search"
+            (click)="SearchClick(cityName.value)">
+            <mat-icon>search</mat-icon>
+          </button>
+          <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Add"
+            (click)="AddPOOpen()">
+            <mat-icon>add</mat-icon>
+          </button>
+          <!-- 
+      <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="export to excel">
+        <mat-icon>table_chart</mat-icon>
+      </button>
+
+      <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Import"
+        (click)="FileUpload(fileInput)">
+        <input type="file" #fileInput style="display: none;" (change)="onFileChange($event)" accept=".xlsx, .xls" />
+        <mat-icon>cloud_upload</mat-icon>
+      </button>
+
+      <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Template"
+        (click)="DownloadTemplate()">
+        <mat-icon>cloud_download</mat-icon>
+      </button> -->
+
+        </div>
+
+      </div>
+      <div class="table-container" style="top:30px;">
+        <div class="table-scroll-window">
+          <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+            <ng-container matColumnDef="delete">
+              <mat-header-cell *matHeaderCellDef mat-sort-header class="fixed-width-column"></mat-header-cell>
+              <mat-cell *matCellDef="let element" class="fixed-width-column">
+                <img src="assets/delete.svg" style="cursor: pointer; width: 24px; height: 22px;"
+                  (click)="DeleteClick()" />
+              </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="edit">
+              <mat-header-cell *matHeaderCellDef mat-sort-header class="fixed-width-column"></mat-header-cell>
+              <mat-cell *matCellDef="let element" class="fixed-width-column">
+                <img src="assets/Icons/edit.svg" style="cursor: pointer; width: 24px; height: 22px;"
+                  (click)="EditClick()" />
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="serial_No">
+              <mat-header-cell *matHeaderCellDef>serial_No</mat-header-cell>
+              <mat-cell *matCellDef="let element">{{ element.serial_No }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="cityID">
+              <mat-header-cell *matHeaderCellDef>cityID</mat-header-cell>
+              <mat-cell *matCellDef="let element">{{ element.cityID }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="cityName">
+              <mat-header-cell *matHeaderCellDef>City Name</mat-header-cell>
+              <mat-cell *matCellDef="let element">{{ element.cityName }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="cityCode">
+              <mat-header-cell *matHeaderCellDef>City Code</mat-header-cell>
+              <mat-cell *matCellDef="let element">{{ element.cityCode }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="stateId">
+              <mat-header-cell *matHeaderCellDef>stateId</mat-header-cell>
+              <mat-cell *matCellDef="let element">{{ element.stateId }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="stateName">
+              <mat-header-cell *matHeaderCellDef>State Name</mat-header-cell>
+              <mat-cell *matCellDef="let element">{{ element.stateName }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="country">
+              <mat-header-cell *matHeaderCellDef>country</mat-header-cell>
+              <mat-cell *matCellDef="let element">{{ element.country }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="regionId">
+              <mat-header-cell *matHeaderCellDef>regionId</mat-header-cell>
+              <mat-cell *matCellDef="let element">{{ element.regionId }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="regionName">
+              <mat-header-cell *matHeaderCellDef>regionName</mat-header-cell>
+              <mat-cell *matCellDef="let element">{{ element.regionName }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="saP_Code">
+              <mat-header-cell *matHeaderCellDef>SAP Code</mat-header-cell>
+              <mat-cell *matCellDef="let element">{{ element.saP_Code }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="isActive">
+              <mat-header-cell *matHeaderCellDef>isActive</mat-header-cell>
+              <mat-cell *matCellDef="let element">{{ element.isActive }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="pin_Code">
+              <mat-header-cell *matHeaderCellDef>PIN Code</mat-header-cell>
+              <mat-cell *matCellDef="let element">{{ element.pin_Code}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="taluk">
+              <mat-header-cell *matHeaderCellDef>Taluk</mat-header-cell>
+              <mat-cell *matCellDef="let element">{{ element.taluk }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="district">
+              <mat-header-cell *matHeaderCellDef>District</mat-header-cell>
+              <mat-cell *matCellDef="let element">{{ element.district }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="circle">
+              <mat-header-cell *matHeaderCellDef>Circle</mat-header-cell>
+              <mat-cell *matCellDef="let element">{{ element.circle }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="ikya_Location">
+              <mat-header-cell *matHeaderCellDef>Ikya Location</mat-header-cell>
+              <mat-cell *matCellDef="let element">{{ element.ikya_Location }}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="esI_SUB_CODE">
+              <mat-header-cell *matHeaderCellDef>esI_SUB_CODE</mat-header-cell>
+              <mat-cell *matCellDef="let element">{{ element.esI_SUB_CODE }}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="esI_SUB_CODE_NAME">
+              <mat-header-cell *matHeaderCellDef>esI_SUB_CODE_NAME</mat-header-cell>
+              <mat-cell *matCellDef="let element">{{ element.esI_SUB_CODE_NAME }}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="tier">
+              <mat-header-cell *matHeaderCellDef>tier</mat-header-cell>
+              <mat-cell *matCellDef="let element">{{ element.tier }}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="esiC_Implementation">
+              <mat-header-cell *matHeaderCellDef>esiC_Implementation</mat-header-cell>
+              <mat-cell *matCellDef="let element">{{ element.esiC_Implementation }}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="zone">
+              <mat-header-cell *matHeaderCellDef>zone</mat-header-cell>
+              <mat-cell *matCellDef="let element">{{ element.zone }}</mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+          </table>
+        </div>
+
+        <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<br><br><br><br><br><br>
+
+
+<div *ngIf="isAddclicked" class="popup-overlay" (keydown.escape)="closeclick()">
+  <mat-card class="popup-card">
+    <mat-card-header style="border-bottom: 1px solid #89898B; gap:570px">
+      <mat-card-title>Add City</mat-card-title>
+      <button style="border: none; background: transparent;"><mat-icon (click)="closeclick()"
+          matTooltip="close">close</mat-icon></button>
+    </mat-card-header>
+    <mat-card-content class="scroll-content">
+      <form [formGroup]="Cityform">
+        <div class="row g-3 align-items-end">
+          <div class="col-md-4">
+            <div
+              style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
+              City Code</div>
+            <div style="padding-top: 5px;">
+              <input formControlName="City_Code" type="text" placeholder="Enter City Code" />
+            </div>
+            <div *ngIf="Cityform.get('City_Code')?.touched && Cityform.get('City_Code')?.hasError('required')"
+              class="text-danger">
+              City Code is required
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div
+              style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
+              City Name</div>
+            <div style="padding-top: 5px;">
+              <input formControlName="City_Name" type="text" placeholder="Enter City Name" />
+            </div>
+            <div *ngIf="Cityform.get('City_Name')?.touched && Cityform.get('City_Name')?.hasError('required')"
+              class="text-danger">
+              City Name is required
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div
+              style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
+              State</div>
+            <div style="padding-top: 5px;">
+              <state (stateEmit)="stateEvent2($event)"></state>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div
+              style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
+              SAP Code</div>
+            <div style="padding-top: 5px;">
+              <input formControlName="SAP_Code" type="text" placeholder="Enter SAP Code" />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div
+              style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
+              Pin Code</div>
+            <div style="padding-top: 5px;">
+              <input formControlName="Pin_Code" type="text" placeholder="Enter Pin Code" />
+            </div>
+            <div *ngIf="Cityform.get('Pin_Code')?.touched && Cityform.get('Pin_Code')?.hasError('required')"
+              class="text-danger">
+              Pin Code is required
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div
+              style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
+              Taluk</div>
+            <div style="padding-top: 5px;">
+              <input formControlName="Taluk" type="text" placeholder="Enter Taluk" />
+            </div>
+            <div *ngIf="Cityform.get('Taluk')?.touched && Cityform.get('Taluk')?.hasError('required')"
+              class="text-danger">
+              Taluk is required
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div
+              style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
+              District</div>
+            <div style="padding-top: 5px;">
+              <input formControlName="District" type="text" placeholder="Enter City Name" />
+            </div>
+            <div *ngIf="Cityform.get('District')?.touched && Cityform.get('District')?.hasError('required')"
+              class="text-danger">
+              District is required
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div
+              style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
+              Circle</div>
+            <div style="padding-top: 5px;">
+              <select formControlName="circle" class="w-100 custom-height rounded-1 select-drop" appearance="outline"
+                style="background-color: white;height:30px;">
+                <option value="">Select</option>
+                <option *ngFor="let type of circle" [ngValue]="type">
+                  {{ type.text }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div
+              style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
+              ESI SubCode</div>
+            <div style="padding-top: 5px;">
+              <input formControlName="ESI_SubCode" type="text" placeholder="Enter City Name" />
+            </div>
+            <div *ngIf="Cityform.get('ESI_SubCode')?.touched && Cityform.get('ESI_SubCode')?.hasError('required')"
+              class="text-danger">
+              ESI SubCode is required
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div
+              style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
+              ESI SubCode Name</div>
+            <div style="padding-top: 5px;">
+              <input formControlName="ESI_SubCode_Name" type="text" placeholder="Enter ESI SubCode Name" />
+            </div>
+            <div
+              *ngIf="Cityform.get('ESI_SubCode_Name')?.touched && Cityform.get('ESI_SubCode_Name')?.hasError('required')"
+              class="text-danger">
+              ESI SubCode Name is required
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div
+              style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
+              ESIC Implementation</div>
+            <div style="padding-top: 5px;">
+              <input formControlName="ESIC_Implementation" type="text" placeholder="Enter City Name" />
+            </div>
+            <div
+              *ngIf="Cityform.get('ESIC_Implementation')?.touched && Cityform.get('ESIC_Implementation')?.hasError('required')"
+              class="text-danger">
+              ESIC Implementation is required
+            </div>
+          </div>
+
+        </div>
+      </form>
+    </mat-card-content>
+
+    <mat-card-actions
+      style="display: flex; padding: 14px 20px; justify-content: flex-end; align-items: center; gap: 12px; align-self: stretch;border-radius: 0 0 10px 10px; border-top: 1px solid var(--Card-Box-border-color, #D6D6D6); background: var(--Card-card-background, #F9F9F9);">
+      <button (click)="SaveData()"
+        style="margin-right: 10px;width: 130px; height: 30px; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
+        <div
+          style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Montserrat; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
+          Save</div>
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>
