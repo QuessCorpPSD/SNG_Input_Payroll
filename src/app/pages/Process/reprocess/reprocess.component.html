@@ -1,17 +1,23 @@
 <div class="container py-1">
     <div class="container-fluid">
         <div>
+            <div
+                style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700; min-width: 960px; padding-left: 3px;padding-top:12px;">
+                Pay Process
+            </div>
             <div class="row  align-items-end ">
                 <!-- Company Code -->
                 <div class="col-12 col-md-6">
-                    <label for="companySelect" class="form-label small fw-semibold">Company Code</label>
+                    <label for="companySelect" class="form-label text-muted small">Company Code<span
+                            style="color: red;">*</span></label>
                     <!-- keep your custom component; add an id for accessibility -->
                     <companyall id="companySelect" (companyEmit)="handleCompanyEvent($event)"></companyall>
                 </div>
 
                 <!-- Pay Period -->
                 <div class="col-12 col-md-3">
-                    <label for="payPeriod" class="form-label small fw-semibold">Pay Period</label>
+                    <label for="payPeriod" class="form-label text-muted small">Pay Period<span
+                            style="color: red;">*</span></label>
                     <!-- pass inputs as before -->
                     <payperiodsequence id="payPeriod" [selectedCompanyId]="selectedCompanyId"
                         [payPeriodType]="payPeriodType" (payperiodEmit)="handlePayperiodEvent($event)">
@@ -20,7 +26,7 @@
 
                 <!-- Date (responsive) -->
                 <div class="col-12 col-md-3">
-                    <label for="dateInput" class="form-label small fw-semibold">Date</label>
+                    <label for="dateInput" class="form-label text-muted small">Date</label>
                     <div class="input-group">
                         <!-- use native date control for better UX; fallback to text if not desired -->
                         <input id="dateInput" type="text" class="form-control" [(ngModel)]="selectedDate"
@@ -30,7 +36,7 @@
             </div>
             <div class="row align-items-end ">
                 <div class="col-12 col-md-3">
-                    <label for="companySelect" class="form-label small fw-semibold">Actual / Declared</label>
+                    <label for="companySelect" class="form-label text-muted small">Actual / Declared</label>
                     <!-- keep your custom component; add an id for accessibility -->
                     <div class="input-group">
                         <!-- use native date control for better UX; fallback to text if not desired -->
@@ -39,7 +45,7 @@
                     </div>
                 </div>
                 <div class="col-12 col-md-3">
-                    <label for="companySelect" class="form-label small fw-semibold">Type</label>
+                    <label for="companySelect" class="form-label text-muted small">Type</label>
 
                     <!-- keep your custom component; add an id for accessibility -->
                     <div class="input-group">
@@ -52,7 +58,7 @@
                 </div>
                 <div class="col-12 col-md-3" (click)="ProcessClick()" style="cursor: pointer;">
                     <div
-                        style="width: 139px; height: 34px; padding-left: 16px; padding-right: 16px; padding-top: 10px; padding-bottom: 10px; background: #302CB3; border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+                        style="width: 120px; height: 34px; padding-left: 16px; padding-right: 16px; padding-top: 10px; padding-bottom: 10px; background: #302CB3; border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
                         <div
                             style="color: white; font-size: 16px; font-family: Montserrat; font-weight: 600; word-wrap: break-word">
                             Process</div>
@@ -68,3 +74,4 @@
         </div>
     </div>
 </div>
+

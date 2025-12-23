@@ -114,13 +114,13 @@ export class LOPAdjustmentsComponent {
     this.isLoading = true;
     if (!this.selectedCompanyId) {
       this.isLoading = false;
-      this.showAlertPopup('Please Select Company');
+      alert('Please Select Company');
       return;
     }
 
     if (!this.payperiodId) {
       this.isLoading = false;
-      this.showAlertPopup('Please Select Payperiod');
+      alert('Please Select Payperiod');
       return;
     }
 
@@ -135,18 +135,17 @@ export class LOPAdjustmentsComponent {
     this.service.Search(payload).subscribe({
       next: (res) => {
 
-        this.lopadjusts = res.Data?.data?.Table0 ?? []; // records
-        this.lopadjust = res.Data.message; // message from API
+        this.lopadjusts = res.Data?.data?.Table0 ?? [];
+        this.lopadjust = res.Data.message;
 
-        // 🔥 SHOW this.showAlertPopup ONLY WHEN NO DATA IS RETURNED
+
         if (!this.lopadjusts || this.lopadjusts.length === 0) {
-          this.showAlertPopup(this.lopadjust || "No data available.");
+          alert(this.lopadjust || "No data available.");
           this.dataSource.data = [];
           this.isLoading = false;
-          return; // stop here
+          return;
         }
 
-        // 🔥 IF DATA EXISTS → load table
         this.dataSource = new MatTableDataSource(this.lopadjusts);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
@@ -172,22 +171,19 @@ export class LOPAdjustmentsComponent {
 
     if (!this.selectedCompanyId) {
       this.isLoading = false;
-      this.showAlertPopup('Please Select Company')
+      alert('Please Select Company')
       return;
     }
 
     if (!this.payperiodId) {
       this.isLoading = false;
-      this.showAlertPopup('Please Select Payperiod');
+      alert('Please Select Payperiod');
       return;
     }
     const payload = {
       Company_id: this.selectedCompanyId?.toString() ?? '',
       Pay_Frequency_Id: this.payperiodId?.toString() ?? ''
     };
-
-
-
     this.service.Export(payload).subscribe({
       next: (res) => {
 
@@ -197,7 +193,7 @@ export class LOPAdjustmentsComponent {
 
           if (!jsonData || !Array.isArray(jsonData) || jsonData.length === 0) {
             this.isLoading = false;
-            this.showAlertPopup(res.Data.message)
+            alert(res.Data.message)
             return;
           }
 
@@ -231,7 +227,6 @@ export class LOPAdjustmentsComponent {
     });
   }
 
-
   ImportClick(fileInput: HTMLInputElement): void {
     fileInput.click();
   }
@@ -253,20 +248,19 @@ export class LOPAdjustmentsComponent {
     this.service.Upload(formData).subscribe({
       next: (res) => {
 
-        // ✅ handle case when Data is null
+
         if (!res || !res.Data) {
           this.isLoading = false;
-          this.showAlertPopup('Upload request processed. Server did not return any data.');
+          alert('Upload request processed. Server did not return any data.');
           return;
         }
 
         const response = res.Data.response;
 
-        // ✅ Defensive check before accessing response
         if (response && response.includes("Row(s) Uploaded Successfully.")) {
           this.isLoading = false;
 
-          this.showAlertPopup('✅ Rows uploaded successfully.');
+          this.showAlertPopup('Rows uploaded successfully.');
           return;
         }
 
@@ -280,13 +274,13 @@ export class LOPAdjustmentsComponent {
         if (res?.StatusCode === 200 && successMatch) {
           this.isLoading = false;
 
-          this.showAlertPopup('✅ Data uploaded successfully.');
+          this.showAlertPopup('Data uploaded successfully.');
           return;
         }
 
         if (res?.StatusCode === 200 && msg?.trim() === 'Failed to import.') {
           this.isLoading = false;
-          this.showAlertPopup('Failed to Import');
+          alert('Failed to Import');
           const rawErr = res.Data.errors?.[0];
           let errorArray: any[] = [];
 
@@ -316,8 +310,6 @@ export class LOPAdjustmentsComponent {
           this.isLoading = false;
           return;
         }
-
-        // ✅ Fallback if no specific case matched
         const fallback =
           msg ||
           (Array.isArray(parsed) ? JSON.stringify(parsed) :
@@ -325,22 +317,22 @@ export class LOPAdjustmentsComponent {
               (parsed ? JSON.stringify(parsed) : ''));
 
         if (fallback) {
-          this.showAlertPopup(fallback);
+          alert(fallback);
         } else {
-          // ⚙️ Handle case where API returns message but no data (your current case)
+
           if (res?.Message) {
-            this.showAlertPopup(`ℹ️ ${res.Message}`);
+            alert(`ℹ️ ${res.Message}`);
           } else {
-            this.showAlertPopup('Error while processing response.');
+            alert('Error while processing response.');
           }
         }
         this.isLoading = false;
 
       },
       error: (err) => {
-        console.error('❌ Upload failed', err);
+        console.error(' Upload failed', err);
         this.isLoading = false;
-        this.showAlertPopup('Upload failed due to a network or server error.');
+        alert('Upload failed due to a network or server error.');
       }
     });
   }
@@ -366,7 +358,6 @@ export class LOPAdjustmentsComponent {
 
   DownloadTemplate() {
     this.isLoading = true;
-    // STATIC TEMPLATE HEADERS
     const templateData = [
       {
         COMPCODE: "",

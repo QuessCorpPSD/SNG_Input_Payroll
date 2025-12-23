@@ -142,6 +142,7 @@ import { CompanypermissionComponent } from './pages/admin/companypermission/comp
 import { CompanyinvoiceformatComponent } from './pages/Invoice/companyinvoiceformat/companyinvoiceformat.component';
 import { MaterialcodeComponent } from './pages/GlobalMasters/materialcode/materialcode.component';
 import { CancelledinvoicerepositoryComponent } from './pages/customers/cancelledinvoicerepository/cancelledinvoicerepository.component';
+import { ESIslabComponent } from './pages/GlobalMasters/esislab/esislab.component';
 import { CompanyComponent } from './pages/customers/company/company.component';
 import { ProfessionaltaxComponent } from './pages/GlobalMasters/professionaltax/professionaltax.component';
 import { ProvidentfundComponent } from './pages/GlobalMasters/providentfund/providentfund.component';
@@ -396,6 +397,9 @@ export const routes: Routes = [
           { path: "materialcode", component: MaterialcodeComponent },
           { path: 'BankMaster', component: BankmasterComponent },
           { path: 'Formula', component: FormulaComponent },
+          { path: 'ESIslab', component: ESIslabComponent },
+          
+          { path: 'Formula', component: FormulaComponent },
           { path: "professionaltax", component: ProfessionaltaxComponent },
           { path: "providentfund", component: ProvidentfundComponent },
           { path: "computationrule", component: ComputationruleComponent },
@@ -403,8 +407,7 @@ export const routes: Routes = [
           { path: 'Formula', component: FormulaComponent },
           { path: 'lfw', component: LFWSlabComponent },
           { path: 'tds', component: TDSslabComponent }
-        ]
-
+      ]
       },
       {
         path: 'onboarding', component: OffercreationComponent,

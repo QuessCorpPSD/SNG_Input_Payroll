@@ -1,10 +1,14 @@
 <div class="container py-1">
     <div class="container-fluid">
         <div>
-            <div class="row  align-items-end ">
+            <div
+                style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700; min-width: 960px;padding-top: 12px;">
+                Attendance
+            </div>
+            <div class="row  align-items-end" style="padding-top:12px">
                 <!-- Company Code -->
                 <div class="col-12 col-md-6">
-                    <label for="companySelect" class="form-label small fw-semibold">Company Code</label><span
+                    <label for="companySelect" class="form-label text-muted small">Company Code</label><span
                         style="color: red;">*</span>
                     <!-- keep your custom component; add an id for accessibility -->
                     <companyall id="companySelect" (companyEmit)="handleCompanyEvent($event)"></companyall>
@@ -12,7 +16,7 @@
 
                 <!-- Pay Period -->
                 <div class="col-12 col-md-3">
-                    <label for="payPeriod" class="form-label small fw-semibold">Pay Period</label><span
+                    <label for="payPeriod" class="form-label text-muted small">Pay Period</label><span
                         style="color: red;">*</span>
                     <!-- pass inputs as before -->
                     <payperiodsequence id="payPeriod" [selectedCompanyId]="selectedCompanyId"
@@ -21,7 +25,7 @@
                 </div>
                 <!-- Date (responsive) -->
                 <div class="col-12 col-md-3">
-                    <label for="companySelect" class="form-label small fw-semibold">Resign Status</label>
+                    <label for="companySelect" class="form-label text-muted small">Resign Status</label>
                     <div class="input-group">
                         <select class="form-control" style="height: 32px;" [(ngModel)]="selectoption">
                             <option value="0">No</option>
@@ -32,7 +36,7 @@
             </div>
             <div style="padding-top: 1%;" class="row align-items-end ">
                 <div class="col-12 col-md-3">
-                    <label for="companySelect" class="form-label small fw-semibold">Employee Code</label>
+                    <label for="companySelect" class="form-label text-muted small">Employee Code</label>
                     <!-- keep your custom component; add an id for accessibility -->
                     <div class="input-group">
                         <!-- use native date control for better UX; fallback to text if not desired -->
@@ -53,9 +57,13 @@
                             (click)="ImportClick(fileInput)" matTooltip="Upload">
                             <mat-icon>cloud_upload</mat-icon>
                         </button>
-                        <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                        <!-- <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
                             (click)="ExportClick()" matTooltip="Excel Export">
                             <mat-icon>table_chart</mat-icon>
+                        </button> -->
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center btn-secondary"
+                            (click)="ExportClick()" matTooltip="ExportToExcel">
+                            <mat-icon>download</mat-icon>
                         </button>
                         <input type="file" #fileInput style="display: none;" (click)="fileInput.value=''"
                             (change)="onFileChange($event)" accept=".xlsx, .xls" />
@@ -101,8 +109,7 @@
                     </th>
                 </tr>
                 <tbody *ngIf="paginatedData">
-                    <tr *ngFor="let item of paginatedData;"
-                        style="height: 30px;vertical-align: middle;">
+                    <tr *ngFor="let item of paginatedData;" style="height: 30px;vertical-align: middle;">
                         <td>
                             <span class="span-text-detail">{{item.Company_Code}}</span>
                         </td>

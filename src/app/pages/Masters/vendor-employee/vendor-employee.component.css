@@ -4,25 +4,15 @@
   text-align: center;
   background-color: rgb(55, 112, 153);
   width: 100%;
-  padding: 0px 360px; 
+  padding: 0px 360px;
   font-family: inherit;
-  box-sizing: border-box; 
-  
-}
-
-@media(min-width: 768px) {
-  .h1 {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0px 360px;
-  }
+  box-sizing: border-box;
 }
 
 .btn-search {
   background-color: #0d6efd;
   color: #fff;
 }
-
 
 .btn-download {
   background-color: #20c997;
@@ -32,83 +22,6 @@
 .btn-upload {
   background-color: #6f42c1;
   color: #fff;
-}
-
-.material-icons {
-  font-size: 20px;
-  vertical-align: middle;
-}
-
-.form-control-sm, .form-select-sm {
-  height: calc(1.5em + 0.5rem + 2px);
-  padding: 0.25rem 0.5rem;
-  font-size: 0.875rem;
-}
-.small-input {
-  max-width: 200px; 
-}
-
-.btn-sm {
-  padding: 0.25rem 0.5rem;
-  font-size: 0.875rem;
-  line-height: 1.25;
-}
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.table-container {
-  overflow-x: auto;     
-  overflow-y: hidden;
-  border: 1px solid #ddd;
-  max-width: 950px;
-
-}
-
-
-th.mat-header-cell {
-  background-color: #302CB3;
-  color: white;
-  font-weight: 700;
-  position: sticky;       
-  top: 0;
-  z-index: 10;             
-  box-shadow: 0 2px 2px -1px rgba(0,0,0,0.4);
-}
-
-
-
-
-.mat-paginator {
-  margin-top: 1rem;
-  font-family: 'Montserrat', sans-serif;
-}
-
-.mat-paginator-range-label {
-  font-size: 13px;
-  color: #555;
-}
-
-.mat-paginator-icon {
-  color: #302CB3;
-}
-
-@media (max-width: 768px) {
-  table.mat-elevation-z8 th.mat-header-cell,
-  table.mat-elevation-z8 td.mat-cell {
-    padding: 8px 10px;
-    font-size: 13px;
-  }
-}
-
-.card-body {
-  width: 100%;
-  display: flex;
-  gap: 15px;
-  padding: 0px !important;
 }
 
 .form-label {
@@ -121,4 +34,117 @@ th.mat-header-cell {
   font-family: "nunito-sans";
   font-weight: 500;
   border: 1px solid #a0a0a0;
+}
+
+
+.table-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  padding: 20px 25px 0 25px;
+}
+
+.table-scroll {
+  width: 100%;
+  max-height: 450px;
+  overflow-x: auto;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+}
+
+.custom-table {
+  width: max-content;
+  min-width: 100%;
+  table-layout: auto;
+  border-collapse: collapse;
+}
+
+
+::ng-deep .mat-elevation-z8 {
+  box-shadow: none !important;
+}
+
+/* Header */
+::ng-deep .mat-mdc-header-cell {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  font-size: 12px;
+  font-weight: 750 !important;
+  text-align: center;
+  position: sticky;
+  font-family: "Montserrat", sans-serif !important;
+  top: 0;
+  min-width: 140px;
+  height: 32px;
+  border-right: 1px solid #ddd;
+  z-index: 5;
+  vertical-align: middle;
+}
+
+/* Body */
+::ng-deep .mat-mdc-cell {
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  height: 30px;
+  min-width: 140px;
+  border-bottom: 1px dashed #e8e8e8;
+  border-right: 1px solid #ddd;
+  font-family: "Montserrat", sans-serif !important;
+  vertical-align: middle;
+}
+
+/* Hover */
+::ng-deep .mat-row:hover {
+  background-color: #f9f9f9 !important;
+}
+
+
+::ng-deep .mat-mdc-paginator {
+  border: 1px solid #ddd;
+  border-top: none;
+  background-color: #fff;
+}
+
+::ng-deep .mat-mdc-paginator-range-label {
+  font-size: 13px;
+}
+
+::ng-deep .mat-mdc-paginator-icon {
+  color: #ffffff;
+}
+
+/* Hide sort arrow icon */
+::ng-deep .mat-sort-header-arrow {
+  opacity: 0 !important;
+  display: none !important;
+}
+
+/* Hide sort arrow icon */
+::ng-deep .mat-sort-header-arrow {
+  opacity: 0 !important;
+  display: none !important;
+}
+
+::ng-deep .mat-mdc-table {
+  display: table !important;
+  table-layout: auto !important;
+  width: max-content !important;
+  min-width: 100% !important;
+}
+
+::ng-deep .mat-mdc-header-row,
+::ng-deep .mat-mdc-row {
+  display: table-row !important;
+  height: 50px !important;
+}
+
+::ng-deep .mat-mdc-header-cell,
+::ng-deep .mat-mdc-cell {
+  display: table-cell !important;
+  width: auto !important;
+  white-space: nowrap;
 }

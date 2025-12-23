@@ -4,10 +4,10 @@
   text-align: center;
   background-color: rgb(55, 112, 153);
   width: 100%;
-  padding: 0px 360px; 
+  padding: 0px 360px;
   font-family: inherit;
-  box-sizing: border-box; 
-  
+  box-sizing: border-box;
+
 }
 
 @media(min-width: 768px) {
@@ -39,13 +39,21 @@
   vertical-align: middle;
 }
 
-.form-control-sm, .form-select-sm {
+.form-control-sm,
+.form-select-sm {
   height: calc(1.5em + 0.5rem + 2px);
   padding: 0.25rem 0.5rem;
   font-size: 0.875rem;
 }
+
+/* Hide sort arrow icon */
+::ng-deep .mat-sort-header-arrow {
+  opacity: 0 !important;
+  display: none !important;
+}
+
 .small-input {
-  max-width: 200px; 
+  max-width: 200px;
 }
 
 .btn-sm {
@@ -53,6 +61,7 @@
   font-size: 0.875rem;
   line-height: 1.25;
 }
+
 input[type="date"] {
   appearance: none;
   -webkit-appearance: none;
@@ -66,7 +75,7 @@ input[type="date"] {
   background-color: #fff;
   color: #495057;
   box-sizing: border-box;
-  height: 30px; 
+  height: 30px;
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator {
@@ -78,14 +87,17 @@ input[type="date"]:focus {
   border-color: #86b7fe;
   outline: 0;
   box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
-  
+
 }
 
 
 .small-datepicker .mat-mdc-text-field-wrapper {
-  --mdc-outlined-text-field-container-height: 36px; /* default is 56px */
-  --mdc-outlined-text-field-input-text-size: 13px;  /* smaller font */
-  --mdc-outlined-text-field-label-text-size: 12px;  /* smaller label */
+  --mdc-outlined-text-field-container-height: 36px;
+  /* default is 56px */
+  --mdc-outlined-text-field-input-text-size: 13px;
+  /* smaller font */
+  --mdc-outlined-text-field-label-text-size: 12px;
+  /* smaller label */
 }
 
 .small-datepicker .mat-mdc-input-element {
@@ -102,4 +114,83 @@ input[type="date"]:focus {
 .form-label {
   font-size: 12px !important;
   color: #222 !important;
+}
+
+.table-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  padding: 20px 25px 0 25px;
+}
+
+.table-scroll {
+  width: 100%;
+  max-height: 450px;
+  overflow-x: auto;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+}
+
+.custom-table {
+  width: max-content;
+  min-width: 100%;
+  table-layout: auto;
+  border-collapse: collapse;
+}
+
+
+::ng-deep .mat-elevation-z8 {
+  box-shadow: none !important;
+}
+
+/* Header */
+::ng-deep .mat-mdc-header-cell {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  font-size: 12px;
+  font-weight: 750 !important;
+  font-family: "Montserrat", sans-serif !important;
+  /* 🔥 added */
+  text-align: center;
+  position: sticky;
+  top: 0;
+  min-width: 140px;
+  height: 32px;
+  border-right: 1px solid #ddd;
+  z-index: 5;
+}
+
+/* Body */
+::ng-deep .mat-mdc-cell {
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  height: 30px;
+  min-width: 140px;
+  border-bottom: 1px dashed #e8e8e8;
+  border-right: 1px solid #ddd;
+  font-family: "Montserrat", sans-serif !important;
+}
+
+/* Hover */
+::ng-deep .mat-row:hover {
+  background-color: #f9f9f9 !important;
+}
+
+
+/* Hide Company_Id column */
+.hidden-column {
+  display: none;
+}
+
+
+::ng-deep .mat-mdc-paginator-icon {
+  color: #ffffff;
+}
+
+.hidden-column {
+  display: none;
 }

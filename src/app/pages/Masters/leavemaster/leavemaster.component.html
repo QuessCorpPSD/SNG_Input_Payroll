@@ -1,31 +1,50 @@
-<div class="container-fluid w-100">
-    <div class="card-body">
-        <div class="row g-3 align-items-end w-100">
+<div class="container-fluid w-100" style="padding-left:0; padding-right:0;">
+
+    <!-- TITLE -->
+    <div style="
+            color:#302CB3;
+            font-size:22px;
+            font-family:Montserrat;
+            font-weight:700;
+            padding-top:8px;
+            margin-bottom:6px;
+            margin-left:16px;">
+        Leave Master
+    </div>
+
+    <!-- FILTERS -->
+    <div class="card-body" style="padding-top:0; padding-left:16px; padding-bottom:6px;">
+        <div class="row g-1 align-items-end w-100">
+
             <!-- Company Code -->
-            <div class="col-md-4">
-                <label class="form-label">Company Code</label>
-                <companyall (companyEmit)="handleCompanyEvent($event)" style="width: 300px;"></companyall>
+            <div class="col-md-3">
+                <label class="form-label text-muted small">Company Code<span style="color: red;">*</span></label>
+                <companyall (companyEmit)="handleCompanyEvent($event)" style="width:300px;">
+                </companyall>
             </div>
 
             <!-- Site Name -->
             <div class="col-md-3">
-                <label class="form-label">Site Name</label>
-                <groupname [selectedCompanyId]="selectedCC" (sitenameEmit)="handleGroupNameEvent($event)"></groupname>
+                <label class="form-label text-muted small">Site Name</label>
+                <groupname [selectedCompanyId]="selectedCC" (sitenameEmit)="handleGroupNameEvent($event)">
+                </groupname>
             </div>
 
             <!-- Action Buttons -->
-            <div class="col-md-5 d-flex gap-2">
+            <div class="col-md-5 d-flex gap-2" style="padding-top:24px;">
                 <button class="btn btn-primary btn-sm d-flex align-items-center justify-content-center"
                     (click)="searchClick()" matTooltip="Search">
                     <mat-icon>search</mat-icon>
                 </button>
+
                 <button class="btn btn-success btn-sm d-flex align-items-center justify-content-center"
                     (click)="Addclicked()" matTooltip="Add">
                     <mat-icon>add</mat-icon>
                 </button>
-                <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
-                    (click)="ExportClick()" matTooltip="Excel Export">
-                    <mat-icon>table_chart</mat-icon>
+
+                <button class="btn btn-sm d-flex align-items-center justify-content-center btn-secondary"
+                    (click)="ExportClick()" matTooltip="ExportToExcel">
+                    <mat-icon>download</mat-icon>
                 </button>
             </div>
 
@@ -37,74 +56,101 @@
     <img src="assets/Loading.gif" alt="Loading...">
 </div>
 
-<div class="table-wrapper">
+<!-- TABLE -->
+<div class="table-wrapper1" style="padding-top:6px; padding-left:16px;">
     <div class="table-scroll">
+
         <table mat-table [dataSource]="dataSource" matSort class="custom-table mat-elevation-z8">
 
-            <!-- Checkbox Column -->
+            <!-- Checkbox -->
             <ng-container matColumnDef="select">
                 <mat-header-cell *matHeaderCellDef class="fixed-width-column">
                     <mat-checkbox (change)="toggleAllRows()" [checked]="selection.hasValue() && isAllSelected()"
                         [indeterminate]="isPartialSelected()">
                     </mat-checkbox>
                 </mat-header-cell>
+
                 <mat-cell *matCellDef="let element" class="fixed-width-column">
                     <mat-checkbox (click)="$event.stopPropagation()" (change)="toggleRow(element)"
                         [checked]="selection.isSelected(element)">
                     </mat-checkbox>
                 </mat-cell>
             </ng-container>
-            <!-- id Column -->
+
+            <!-- ID -->
             <ng-container matColumnDef="leavemasterid">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>id</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{ element.leavemasterid
-                    }}</mat-cell>
+                <mat-header-cell *matHeaderCellDef mat-sort-header>
+                    ID
+                </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                    {{ element.leavemasterid }}
+                </mat-cell>
             </ng-container>
+
+            <!-- Action -->
             <ng-container matColumnDef="delete">
-                <mat-header-cell *matHeaderCellDef mat-sort-header class="fixed-width-column"></mat-header-cell>
+                <mat-header-cell *matHeaderCellDef class="fixed-width-column">
+                    <strong>Action</strong>
+                </mat-header-cell>
                 <mat-cell *matCellDef="let element" class="fixed-width-column">
-                    <img src="assets/delete.svg" style="cursor: pointer; width: 24px; height: 22px;"
+                    <img src="assets/delete.svg" style="cursor:pointer;width:24px;height:22px"
                         (click)="deleteClick(element.leavemasterid)" />
                 </mat-cell>
             </ng-container>
-            <!-- company Code Column -->
+
+            <!-- Company Code -->
             <ng-container matColumnDef="company_Code">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Company Code</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{ element.company_Code
-                    }}</mat-cell>
+                <mat-header-cell *matHeaderCellDef mat-sort-header>
+                    <strong>Company Code</strong>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                    {{ element.company_Code }}
+                </mat-cell>
             </ng-container>
-            <!-- Site Name Column -->
+
+            <!-- Site Name -->
             <ng-container matColumnDef="siteName">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Site Name</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{ element.siteName
-                    }}</mat-cell>
+                <mat-header-cell *matHeaderCellDef mat-sort-header>
+                    <strong>Site Name</strong>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                    {{ element.siteName }}
+                </mat-cell>
             </ng-container>
-            <!-- days per month Column -->
+
+            <!-- Leave Type -->
             <ng-container matColumnDef="leaveType">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Leave Type</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{ element.leaveType
-                    }}</mat-cell>
+                <mat-header-cell *matHeaderCellDef mat-sort-header>
+                    <strong>Leave Type</strong>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                    {{ element.leaveType }}
+                </mat-cell>
             </ng-container>
-            <!-- Header and Row Declaration -->
+
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
             <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
         </table>
     </div>
 
-    <mat-paginator class="mat-footer-paginator" [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons stickyEnd>
+    <mat-paginator class="mat-footer-paginator" [pageSizeOptions]="[5,10,25,100]" showFirstLastButtons>
     </mat-paginator>
 </div>
+
 <div *ngIf="showPopup" class="overlay">
     <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
-        (close)="showPopup = false"></app-alertpopup>
+        (close)="showPopup = false">
+    </app-alertpopup>
 </div>
+
 
 <div *ngIf="isAddclicked" class="popup-overlay">
     <mat-card class="popup-card">
         <mat-card-header style="border-bottom: 1px solid #89898B; gap:360px">
             <mat-card-title>Add Leave Master</mat-card-title>
-            <button style="border: none; background: transparent;"><mat-icon
-                    (click)="closeclick()" matTooltip="close">close</mat-icon></button>
+            <button style="border: none; background: transparent;"><mat-icon (click)="closeclick()"
+                    matTooltip="close">close</mat-icon></button>
         </mat-card-header>
         <mat-card-content class="scroll-content">
             <form [formGroup]="leaveaMasterform">
@@ -133,9 +179,10 @@
                         <div style="padding-top: 5px;">
                             <select formControlName="leavetype" class="w-100 custom-height rounded-1 select-drop"
                                 appearance="outline" style="background-color: white;height:30px;">
-                                    <option *ngFor="let userleave of leavetypedd"
-                                        [value]="userleave.leavetype">{{ userleave.leavetype }}
-                                    </option>
+                                <option *ngFor="let userleave of leavetypedd" [value]="userleave.leavetype">
+                                    {{
+                                    userleave.leavetype }}
+                                </option>
                             </select>
                         </div>
                         <div *ngIf="leaveaMasterform.get('leavetype')?.touched && leaveaMasterform.get('leavetype')?.hasError('required')"

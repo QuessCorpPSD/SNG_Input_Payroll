@@ -1,29 +1,28 @@
-/* your.component.scss */
 .custom-input {
-  width: 150px;         
-  height: 60px;        
-  
-  .mat-form-field-wrapper {
-    padding-bottom: 0px;
-  }
+  width: 150px;
+  height: 60px;
+}
 
-  .mat-form-field-flex {
-    height: 10px;       
-  }
+.custom-input .mat-form-field-wrapper {
+  padding-bottom: 0px;
+}
 
-  .mat-input-element {
-    height: 10px;
-    padding: 1px 2px;   
-    font-size: 14px;    
-  }
+.custom-input .mat-form-field-flex {
+  height: 10px;
+}
 
-  .mat-form-field-underline {
-    bottom: 0px;
-  }
+.custom-input .mat-input-element {
+  height: 10px;
+  padding: 1px 2px;
+  font-size: 14px;
+}
 
-  .mat-form-field-subscript-wrapper {
-    display: none;      
-  }
+.custom-input .mat-form-field-underline {
+  bottom: 0px;
+}
+
+.custom-input .mat-form-field-subscript-wrapper {
+  display: none;
 }
 
 .btn-search {
@@ -51,22 +50,38 @@
   color: #fff;
 }
 
+.btn-add:hover {
+  background-color: #218838;
+}
+
+.btn-delete {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-delete:hover {
+  background-color: #c82333;
+}
+
+
 .mat-footer-paginator {
   position: sticky;
   bottom: 0;
-  width: calc(100%);
+  width: 100%;
   background: white;
   box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.1);
   z-index: 100;
 }
 
+
 .table-wrapper {
   display: flex;
-  width: calc(100%);
+  width: 702px;
   flex-direction: column;
   gap: 8px;
   padding-top: 20px;
 }
+
 
 .fixed-width-column {
   width: 50px;
@@ -79,7 +94,7 @@
 
 .custom-table {
   background: white;
-  width: calc(100%);
+  width: 100%;
   overflow: auto;
   border: 1px solid #ddd;
 }
@@ -88,26 +103,27 @@
   box-shadow: none !important;
 }
 
+
 ::ng-deep .mat-mdc-header-cell {
-  color: #A0A0A0;
-  font-size: 12px;
+  color: #000000;
+  font-size: 14px;
   font-family: "Montserrat";
   font-weight: 600;
-  line-height: 19.40px;
-  word-wrap: break-word;
+  line-height: 19.4px;
   border-right: 1px solid #ddd;
   position: sticky;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
+  vertical-align: middle;
 }
+
 
 ::ng-deep .mat-mdc-cell {
   font-family: "Montserrat";
   font-size: 12px;
-  font-style: normal;
-  font-weight: 600;
+  font-weight: 550;
   line-height: 22.4px;
   letter-spacing: 0.24px;
   color: #222;
@@ -117,15 +133,70 @@
   justify-content: center;
   align-items: center;
   text-align: center;
-
+  vertical-align: middle;
 }
+
 
 .table-scroll {
   max-height: 450px;
-  /* adjust based on your need */
   overflow-y: auto;
-  overflow-x: hidden;
+  overflow-x: auto;
+
 }
+
+::ng-deep .mat-mdc-header-cell.mat-column-state,
+::ng-deep .mat-mdc-cell.mat-column-state {
+  width: 90px !important;
+  min-width: 90px !important;
+  max-width: 90px !important;
+
+  padding-left: 4px !important;
+  padding-right: 4px !important;
+
+  text-align: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+::ng-deep .mat-mdc-header-cell.mat-column-EffectiveDate,
+::ng-deep .mat-mdc-cell.mat-column-EffectiveDate {
+  width: 180px !important;
+  /* 👈 fits 03-Dec-2025 */
+  min-width: 180px !important;
+  max-width: 180px !important;
+  padding: 0 6px !important;
+  text-align: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+/* Group Name column */
+::ng-deep .mat-mdc-header-cell.mat-column-Group_name,
+::ng-deep .mat-mdc-cell.mat-column-Group_name {
+  width: 180px !important;
+  /* adjust width as needed */
+  min-width: 180px !important;
+  max-width: 180px !important;
+  padding: 0 6px !important;
+  text-align: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+/* Company Name column */
+::ng-deep .mat-mdc-header-cell.mat-column-company_name,
+::ng-deep .mat-mdc-cell.mat-column-company_name {
+  width: 250px !important;
+  /* adjust width as needed */
+  min-width: 250px !important;
+  max-width: 250px !important;
+  padding: 0 8px !important;
+  text-align: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+
 
 ::ng-deep .mat-header-row {
   position: sticky;
@@ -135,9 +206,13 @@
 }
 
 
+
+
+
 .previewtable {
-  width: auto;
-  table-layout: auto;
+  width: 100%;
+  table-layout: fixed;
+
   border-collapse: collapse;
   font-family: "Montserrat";
   font-size: 12px;
@@ -146,9 +221,8 @@
   letter-spacing: 0.24px;
   color: #7E7E7E;
   border: 1px solid #E8E8E8;
-  /* 🔹 Full table border */
-  scrollbar-width: none;
 }
+
 
 .previewtable th,
 .previewtable td {
@@ -157,108 +231,85 @@
   font-weight: 600;
   line-height: 22.4px;
   letter-spacing: 0.24px;
-  white-space: nowrap;
   padding: 8px;
   border: 1px solid #E8E8E8;
-  /* 🔹 Cell border */
   text-align: left;
+  white-space: nowrap;
+  max-width: 120px;
+  /* 👈 COLUMN WIDTH */
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
+.previewtable th:nth-child(2),
+.previewtable td:nth-child(2) {
+  max-width: 40px;
+}
+
+
 .previewtable th {
-  font-family: "Montserrat";
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 22.4px;
-  letter-spacing: 0.24px;
   background-color: #f9f9f9;
-  /* Optional for visibility */
   color: #A0A0A0;
 }
 
-
-.previewtable .mat-header-cell {
-  text-align: center;
-  justify-content: center;
-}
-
-.custom-table {
-  background: white;
-  width: 100%;
-  overflow: auto;
-  border-collapse: collapse;
-  border: 1px #E8E8E8 solid;
-}
-
-.form-row {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    margin-bottom: 20px;
-  }
-  
-  .form-column {
-    flex: 1;
-  }
-
-  .radio-options-container {
-    display: flex;
-    flex-direction: row;
-    /* <-- This makes options display horizontally */
-    gap: 24px;
-    /* Space between each radio option */
-    align-items: center;
-    flex-wrap: wrap;
-  }
-  .checkboxradio-button {
-    display: flex; /* Changed from block to flex */
-    align-items: center;
-    gap: 8px;
-    font-size: 12px;
-    color: #222;
-    font-family: 'Montserrat', sans-serif;
-    cursor: pointer;
-
-  }
-
-  .radio-inline {
-  display: flex;
-  gap: 20px; /* spacing between options */
-  align-items: center;
-}
-
-.btn-add:hover {
-  background-color: #218838;
-}
-
-.btn-delete {
-  background-color: #dc3545; /* red */
-  color: white;
-}
-
-.btn-delete:hover {
-  background-color: #c82333;
-}
-
-::ng-deep .mat-radio-label-content {
-  font-family: 'Montserrat', sans-serif;  /* your font */
-  font-size: 14px;                         /* adjust size */
-  color: #302CB3;                          /* custom color */
-}
-
-.clickable-row:hover {
-  background-color: #f0f4ff; /* light highlight on hover */
-}
 
 .clickable-row {
   cursor: pointer;
 }
 
+.clickable-row:hover {
+  background-color: #f0f4ff;
+}
+
+.form-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.form-column {
+  flex: 1;
+}
+
+.form-label {
+  font-size: 12px !important;
+  color: #222 !important;
+}
+
+
+.radio-options-container {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.checkboxradio-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-family: 'Montserrat', sans-serif;
+  cursor: pointer;
+}
+
+.radio-inline {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+::ng-deep .mat-radio-label-content {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  color: #302CB3;
+}
+
+
 .loading-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   background: rgba(255, 255, 255, 0.7);
   display: flex;
   align-items: center;
@@ -277,10 +328,7 @@
 
 .overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 2100;
 }
@@ -292,7 +340,22 @@
   padding: 0px !important;
 }
 
-.form-label {
-  font-size: 12px !important;
-  color: #222 !important;
+::ng-deep .mat-mdc-table {
+  display: table !important;
+  table-layout: auto !important;
+  width: max-content !important;
+  min-width: 100% !important;
+}
+
+::ng-deep .mat-mdc-header-row,
+::ng-deep .mat-mdc-row {
+  display: table-row !important;
+  height: 50px !important;
+}
+
+::ng-deep .mat-mdc-header-cell,
+::ng-deep .mat-mdc-cell {
+  display: table-cell !important;
+  width: auto !important;
+  white-space: nowrap;
 }

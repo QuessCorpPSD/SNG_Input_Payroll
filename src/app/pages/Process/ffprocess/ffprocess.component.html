@@ -5,9 +5,9 @@
             F&F Process
         </div>
 
-        <div class="container py-4">
+        <div class="container py-2">
 
-            <div class="row g-3 align-items-end">
+            <div class="row g-2 align-items-end">
 
                 <mat-card-content [formGroup]="form">
 
@@ -46,16 +46,52 @@
                             <input type="text" class="form-control form-control-sm" />
                         </div>
                     </div>
+                    <!-- <div class="d-flex justify-content-end mt-3"> -->
+
+                        <div class="btn-1"
+                            style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
+
+                            <button type="Process"
+                                style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;">
+                                Process
+                            </button>
+
+                            <button type="ReProcess" style="border: none; border-radius: 7px; width: 100px; height: 30px;
+                           cursor: pointer; background-color: blue; color: white;">
+                                ReProcess
+                            </button>
+
+                        <!-- </div> -->
+
+                    </div>
 
                 </mat-card-content>
 
-                <mat-card-footer class="footer">
+                <!-- <mat-card-footer class="footer">
                     <div class="d-flex justify-content-end mt-3">
                         <button type="Process" class="btn btn-primary me-2 rounded-pill px-3">Process</button>
                         <button type="ReProcess" class="btn btn-primary rounded-pill px-3">ReProcess</button>
                     </div>
-                </mat-card-footer>
+                </mat-card-footer> -->
+
+
             </div>
         </div>
     </div>
 </div>
+
+<!-- <div class="d-flex justify-content-end mt-3">
+    <div class="btn-1" style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
+
+        <button type="button" (click)="onCancel()"
+            style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;">
+            Cancel
+        </button>
+
+        <button type="button" (click)="onSave()"
+            style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white;">
+            Save
+        </button>
+
+    </div>
+</div> -->

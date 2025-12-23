@@ -169,7 +169,7 @@ export class PaytransactionComponent {
     }
 
     if (!this.selectedCompanyId) {
-      this.showAlertPopup("please select Company Code");
+      alert("please select Company Code");
       return;
     }
     this.isLoading = true;
@@ -185,14 +185,14 @@ export class PaytransactionComponent {
 
         } else {
           this.dataSource.data = [];
-          this.showAlertPopup('Information', 'No data found for the selected criteria');
+          alert('No data found for the selected criteria');
         }
         this.isLoading = false;
 
       },
       error: (err) => {
         this.isLoading = false;
-        this.showAlertPopup('Error', 'Failed to load salary release data');
+        alert('Failed to load salary release data');
       },
     });
     this.isLoading = false;
@@ -202,14 +202,14 @@ export class PaytransactionComponent {
     const formValue = this.PayTransactionForm.getRawValue()
 
     const payload = {
-      "CompanyId": this.selectedCompanyId?.toString(),  
+      "CompanyId": this.selectedCompanyId?.toString(),
       "EmployeeId": formValue?.EmployeeCode?.toString() ?? '',
       "Pay_Frequency_Id": this.payperiodId?.toString() ?? '',
       "Paycode_Id": formValue?.PayCode?.toString() ?? ''
     }
 
     if (!this.selectedCompanyId) {
-      this.showAlertPopup("please select Company Code");
+      alert("please select Company Code");
       return;
     }
 
@@ -221,7 +221,7 @@ export class PaytransactionComponent {
 
           // Check if Data is not an array or empty
           if (!Array.isArray(jsonData) || jsonData.length === 0) {
-            this.showAlertPopup('No data available for the selected company and pay period.');
+          alert('No data available for the selected company and pay period.');
             return;
           }
 
@@ -236,11 +236,11 @@ export class PaytransactionComponent {
 
           XLSX.writeFile(wb, fileName);
         } catch (err) {
-          this.showAlertPopup('An error occurred while exporting data.');
+          alert('An error occurred while exporting data.');
         }
       },
       error: (err) => {
-        this.showAlertPopup('Failed to load data from server.');
+        alert('Failed to load data from server.');
       },
     });
   }
@@ -255,7 +255,7 @@ export class PaytransactionComponent {
     const file = input?.files?.[0];
 
     if (!file) {
-      this.showAlertPopup("Please upload only one Excel file.")
+      alert("Please upload only one Excel file.")
       this.isLoading = false;
       return;
     }
@@ -268,7 +268,7 @@ export class PaytransactionComponent {
       next: (res) => {
 
         if (!res || !res.Data) {
-          this.showAlertPopup("upload Request processed.Server did not return any data")
+          alert("upload Request processed.Server did not return any data")
           return;
         }
 
@@ -296,7 +296,7 @@ export class PaytransactionComponent {
           // Optional debug
           // alert('1');
           this.isLoading = false;
-          this.showAlertPopup("Failed to Import");
+          alert("Failed to Import");
           // errors[0] may be a JSON string, an array, or a plain string/object
           const rawErr = res?.Data?.errors?.[0];
           let errorArray: any[] = [];
@@ -335,16 +335,16 @@ export class PaytransactionComponent {
               (parsed ? JSON.stringify(parsed) : ''));
 
         if (fallback) {
-          this.showAlertPopup(fallback)
+          alert(fallback)
         } else {
-          this.showAlertPopup('Error while processing response.');
+          alert('Error while processing response.');
         }
         this.isLoading = false;
 
       },
       error: (err) => {
         this.isLoading = false;
-        this.showAlertPopup('Upload failed');
+        alert('Upload failed');
       }
     });
   }
@@ -389,6 +389,7 @@ export class PaytransactionComponent {
     };
 
     const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    this.showAlertPopup('Downloaded Successfully')
     const blob = new Blob([buffer], { type: 'application/octet-stream' });
 
     FileSaver.saveAs(blob, `PayTransaction_${Date.now()}.xlsx`)

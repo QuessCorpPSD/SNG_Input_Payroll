@@ -1,177 +1,153 @@
-<div class="container-fluid w-100">
-    <div class="card-body">
+<div class="container-fluid w-100" style="padding-left:0; padding-right:0;">
+
+    <!-- TITLE -->
+    <div style="
+            color:#302CB3;
+            font-size:22px;
+            font-family:Montserrat;
+            font-weight:700;
+            min-width:960px;
+            padding-top:10px;
+            padding-left:0;
+            margin-left:16px;
+            margin-bottom:6px;">
+        Invoice Rule
+    </div>
+
+    <!-- FILTERS -->
+    <div class="card-body" style="padding-left:16px; padding-top:0; padding-bottom:8px;">
         <div class="row g-3 align-items-end w-100">
 
             <!-- Company Code -->
-            <div class="col-md-4">
-                <label class="form-label text-muted small">Company Code</label>
-                <companyall (companyEmit)="handleCompanyEvent($event)" style="width: 300px;"></companyall>
+            <div class="col-md-3">
+                <label class="form-label text-muted small">Company Code<span style="color: red;">*</span></label>
+                <companyall (companyEmit)="handleCompanyEvent($event)" style="width:300px;">
+                </companyall>
             </div>
 
             <!-- Site Name -->
             <div class="col-md-3">
                 <label class="form-label text-muted small">Site Name</label>
-                <groupname [selectedCompanyId]="selectedCC" (sitenameEmit)="handleGroupNameEvent($event)"></groupname>
+                <groupname [selectedCompanyId]="selectedCC" (sitenameEmit)="handleGroupNameEvent($event)">
+                </groupname>
             </div>
 
             <!-- Action Buttons -->
-            <div class="col-md-5 d-flex gap-2">
+            <div class="col-md-5 d-flex gap-2" style="padding-top:24px;">
                 <button class="btn btn-primary btn-sm d-flex align-items-center justify-content-center"
                     (click)="searchClick()" matTooltip="Search">
                     <mat-icon>search</mat-icon>
                 </button>
+
                 <button class="btn btn-success btn-sm d-flex align-items-center justify-content-center"
                     (click)="Addclicked()" matTooltip="Add">
                     <mat-icon>add</mat-icon>
                 </button>
-                <!-- <button class="btn btn-success btn-sm d-flex align-items-center justify-content-center"
-                    (click)="TemplateClick()" matTooltip="Template Download">
-                    <mat-icon>article</mat-icon>
-                </button> -->
-                <!-- <button class="btn btn-success btn-sm d-flex align-items-center justify-content-center"
-                    matTooltip="File Uplaod">
-                    <mat-icon>cloud_upload</mat-icon>
-                </button> -->
-                <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
-                    (click)="ExportClick()" matTooltip="Excel Export">
-                    <mat-icon>table_chart</mat-icon>
+
+                <button class="btn btn-sm d-flex align-items-center justify-content-center btn-secondary"
+                    (click)="ExportClick()" matTooltip="ExportToExcel">
+                    <mat-icon>download</mat-icon>
                 </button>
             </div>
 
         </div>
     </div>
-</div>
-<div *ngIf="showPreviewModal" class="modal-overlay">
-    <div class="modal-content">
-        <div
-            style="font-family: nunito-sans;font-size: 18px; font-weight: 600; color: #302CB3; text-align: center; vertical-align: bottom; ">
-            <h3>Preview Excel Data</h3>
+
+    <!-- TABLE -->
+    <div class="table-wrapper" style="padding-left:16px; padding-top:10px;">
+        <div class="table-scroll">
+            <table mat-table [dataSource]="dataSource" matSort class="custom-table mat-elevation-z8">
+
+                <!-- Company Code -->
+                <ng-container matColumnDef="companyCode">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header><strong> Company Code</strong>
+
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                        {{ element.companyCode }}
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Site Name -->
+                <ng-container matColumnDef="siteName">
+                    <mat-header-cell *matHeaderCellDef class="site-name-column">
+                        Site Name
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="site-name-column">
+                        {{ element.siteName }}
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Days Per Month -->
+                <ng-container matColumnDef="daysPerMonth">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+                        Days Per Month
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                        {{ element.daysPerMonth }}
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Weekends -->
+                <ng-container matColumnDef="weekends">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+                        Weekends Rule
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                        {{ element.weekends }}
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Holidays -->
+                <ng-container matColumnDef="holidays">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+                        Holidays Rule
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                        {{ element.holidays }}
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Comp Off -->
+                <ng-container matColumnDef="compOff">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+                        Comp Off Rule
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                        {{ element.compOff }}
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Action -->
+                <ng-container matColumnDef="action">
+                    <mat-header-cell *matHeaderCellDef>
+                        Action
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                        <div class="action-buttons">
+                            <button class="btn-edit" matTooltip="Edit" (click)="editClick(element)"
+                                style="background:none;border:none;padding:0;">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+
+                            <img src="assets/delete.svg" class="delete-icon"
+                                (click)="deleteClick(element.invoicingRulesID)" />
+                        </div>
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+            </table>
         </div>
-        <div class="table-wrapper">
-            <div style="  max-height: 400px; overflow-y: auto; overflow-x: auto;">
-                <table class="previewtable" style="border:1px solid #E8E8E8; padding: 5px 5px 5px 5px;">
-                    <thead>
-                        <tr>
-                            <th *ngFor="let col of getTableColumns()">{{ col }}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let row of excelPreviewData">
-                            <td *ngFor="let col of getTableColumns()">{{ row[col] }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="modal-actions">
-                <button (click)="submitExcelData()"
-                    style="display: inline-block; margin-right: 10px;width: 130px; height: 30px; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
-                    <div
-                        style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Montserrat; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
-                        Submit</div>
-                </button>
-                <button (click)="showPreviewModal=false"
-                    style="display: inline-block; margin-right: 10px;width: 130px; height: 30px; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
-                    <div
-                        style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Montserrat; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
-                        Cancel</div>
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
 
-
-<div *ngIf="isLoading" class="loading-overlay">
-    <img src="assets/Loading.gif" alt="Loading...">
-</div>
-
-<div class="table-wrapper">
-    <div class="table-scroll">
-        <table mat-table [dataSource]="dataSource" matSort class="custom-table mat-elevation-z8">
-
-            <!-- Checkbox Column -->
-            <ng-container matColumnDef="select">
-                <mat-header-cell *matHeaderCellDef class="fixed-width-column">
-                    <mat-checkbox (change)="toggleAllRows()" [checked]="selection.hasValue() && isAllSelected()"
-                        [indeterminate]="isPartialSelected()">
-                    </mat-checkbox>
-                </mat-header-cell>
-                <mat-cell *matCellDef="let element" class="fixed-width-column">
-                    <mat-checkbox (click)="$event.stopPropagation()" (change)="toggleRow(element)"
-                        [checked]="selection.isSelected(element)">
-                    </mat-checkbox>
-                </mat-cell>
-            </ng-container>
-            <!-- id Column -->
-            <ng-container matColumnDef="invoicingRulesID">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>id</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{ element.invoicingRulesID
-                    }}</mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="edit">
-                <mat-header-cell *matHeaderCellDef></mat-header-cell>
-
-                <mat-cell *matCellDef="let element">
-                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Edit"
-                        (click)="editClick(element)">
-                        <mat-icon>edit</mat-icon>
-                    </button>
-                </mat-cell>
-            </ng-container>
-
-
-            <ng-container matColumnDef="delete">
-                <mat-header-cell *matHeaderCellDef mat-sort-header class="fixed-width-column"></mat-header-cell>
-                <mat-cell *matCellDef="let element" class="fixed-width-column">
-                    <img src="assets/delete.svg" style="cursor: pointer; width: 24px; height: 22px;"
-                        (click)="deleteClick(element.invoicingRulesID)" />
-                </mat-cell>
-            </ng-container>
-            <!-- company Code Column -->
-            <ng-container matColumnDef="companyCode">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Company Code</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{ element.companyCode
-                    }}</mat-cell>
-            </ng-container>
-            <!-- Site Name Column -->
-            <ng-container matColumnDef="siteName">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Site Name</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{ element.siteName
-                    }}</mat-cell>
-            </ng-container>
-            <!-- days per month Column -->
-            <ng-container matColumnDef="daysPerMonth">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Days Per Month</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{ element.daysPerMonth
-                    }}</mat-cell>
-            </ng-container>
-            <!-- weekends Column -->
-            <ng-container matColumnDef="weekends">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Weekends Rule</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{ element.weekends
-                    }}</mat-cell>
-            </ng-container>
-            <!-- holidays Column -->
-            <ng-container matColumnDef="holidays">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Holidays Rule</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{ element.holidays
-                    }}</mat-cell>
-            </ng-container>
-            <!-- compoffrule Column -->
-            <ng-container matColumnDef="compOff">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Comp Off Rule</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{ element.compOff
-                    }}</mat-cell>
-            </ng-container>
-            <!-- Header and Row Declaration -->
-            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-        </table>
+        <mat-paginator [pageSizeOptions]="[5,10,25,100]" showFirstLastButtons>
+        </mat-paginator>
     </div>
 
-    <mat-paginator class="mat-footer-paginator" [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons stickyEnd>
-    </mat-paginator>
 </div>
+
 
 <div *ngIf="isAddclicked" class="popup-overlay" (keydown.escape)="closeclick()">
     <mat-card class="popup-card">

@@ -78,8 +78,8 @@ export class VendorEmployeeComponent {
   userdetail: any;
 
   dataSource = new MatTableDataSource<any>();
-  displayedColumns: string[] = [];
-  dynamicColumns: string[] = [];
+  // displayedColumns: string[] = [];
+  // dynamicColumns: string[] = [];
   tableHeaders: string[] = [];
 
   vendoremployeeForm: FormGroup;
@@ -89,6 +89,7 @@ export class VendorEmployeeComponent {
   UploadedResponse: any;
   popupMessage = '';
   showPopup = false;
+
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -115,6 +116,16 @@ export class VendorEmployeeComponent {
       }
     }
   }
+  dynamicColumns: string[] = [
+    'Serial_No', 'Company_Code', 'Map_Name', 'Employee_Code', 'Employee_Name',
+    'Vendor', 'EActive', 'Date_Joined', 'DOS', 'Vertical', 'PO_Value',
+    'PO_Start_Date', 'PO_End_Date', 'Requisitioner_Name', 'Salary',
+    'Mobile_Number', 'PAN_Number', 'Email_Id', 'Full_Address',
+    'State_Name', 'Group_Name'
+  ];
+
+  displayedColumns: string[] = [...this.dynamicColumns];
+
 
   handleCompanyEventpopup(event: any) {
     this.companyIdpopup = event.companyId;
@@ -144,48 +155,89 @@ export class VendorEmployeeComponent {
     this.siteId = event.siteCode;
     this.selectedSiteName = event.siteName;
   }
-  
-  
 
+
+
+  //   searchVendorEmployee() {
+  //   const companyidstr = this.companyId === 0 ? '""' : this.companyId;
+  //   const siteidstr = this.siteId === '' ? '""' : this.siteId; // Ensure it’s not undefined
+  //   const employeecodestr = this.employeecode === 0 ? '""' : this.employeecode;
+  //   const eactivestr = this.Eactive?.trim() ?? "ALL";
+
+  //   // Just for debug:
+  //   //console.log("API Params =>", companyidstr, siteidstr, employeecodestr, eactivestr);
+
+  //   this.vendoremployeeService
+  //     .GetVendorEmployeeCompanywise(
+  //       String(companyidstr),
+  //       String(siteidstr),
+  //       String(employeecodestr),
+  //       String(eactivestr)
+  //     )
+  //     .subscribe({
+  //       next: (res) => {
+  //         const table = res?.Data?.data?.Table0 ?? [];
+
+  //         if (table.length > 0) {
+  //           this.tableHeaders = Object.keys(table[0]);
+  //           // this.dynamicColumns = Object.keys(table[0]);
+  //           this.dynamicColumns=['Serial_No','Company_Code','Map_Name','Employee_Code','Employee_Name','Vendor','EActive','Date_Joined','DOS','Vertical','PO_Value','PO_Start_Date','PO_End_Date','Requisitioner_Name','Salary','Mobile_Number','PAN_Number','Email_Id','Full_Address','State_Name','Group_Name']
+  //           this.displayedColumns = [...this.dynamicColumns];
+  //           this.dataSource = new MatTableDataSource(table);
+  //           this.dataSource.paginator = this.paginator;
+  //           this.dataSource.sort = this.sort;
+  //         } else {
+  //           this.dataSource.data = [];
+  //           alert('No data found');
+  //         }
+  //       },
+  //       error: (err) => {
+  //         console.error('Error loading vendor employees', err);
+  //         alert('Failed to load vendor employees');
+  //       }
+  //     });
+  // }
   searchVendorEmployee() {
-  const companyidstr = this.companyId === 0 ? '""' : this.companyId;
-  const siteidstr = this.siteId === '' ? '""' : this.siteId; // Ensure it’s not undefined
-  const employeecodestr = this.employeecode === 0 ? '""' : this.employeecode;
-  const eactivestr = this.Eactive?.trim() ?? "ALL";
 
-  // Just for debug:
-  console.log("API Params =>", companyidstr, siteidstr, employeecodestr, eactivestr);
+    if (this.companyId === 0) {
+      alert('Please select Company Code');
+      return;
+    }
 
-  this.vendoremployeeService
-    .GetVendorEmployeeCompanywise(
-      String(companyidstr),
-      String(siteidstr),
-      String(employeecodestr),
-      String(eactivestr)
-    )
-    .subscribe({
-      next: (res) => {
-        const table = res?.Data?.data?.Table0 ?? [];
+    const companyidstr = this.companyId === 0 ? '""' : this.companyId;
+    const siteidstr = this.siteId === '' ? '""' : this.siteId;
+    const employeecodestr = this.employeecode === 0 ? '""' : this.employeecode;
+    const eactivestr = this.Eactive?.trim() ?? "ALL";
 
-        if (table.length > 0) {
-          this.tableHeaders = Object.keys(table[0]);
-          // this.dynamicColumns = Object.keys(table[0]);
-          this.dynamicColumns=['Serial_No','Company_Code','Map_Name','Employee_Code','Employee_Name','Vendor','EActive','Date_Joined','DOS','Vertical','PO_Value','PO_Start_Date','PO_End_Date','Requisitioner_Name','Salary','Mobile_Number','PAN_Number','Email_Id','Full_Address','State_Name','Group_Name']
-          this.displayedColumns = [...this.dynamicColumns];
-          this.dataSource = new MatTableDataSource(table);
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
-        } else {
-          this.dataSource.data = [];
-          alert('No data found');
+    this.vendoremployeeService
+      .GetVendorEmployeeCompanywise(
+        String(companyidstr),
+        String(siteidstr),
+        String(employeecodestr),
+        String(eactivestr)
+      )
+      .subscribe({
+        next: (res) => {
+          const table = res?.Data?.data?.Table0 ?? [];
+
+          if (table.length > 0) {
+            this.tableHeaders = Object.keys(table[0]);
+
+            this.dataSource = new MatTableDataSource(table);
+            this.dataSource.paginator = this.paginator;
+            this.dataSource.sort = this.sort;
+          } else {
+            this.dataSource.data = [];
+            alert('No data found');
+          }
+        },
+        error: (err) => {
+          console.error('Error loading vendor employees', err);
+          alert('Failed to load vendor employees');
         }
-      },
-      error: (err) => {
-        console.error('Error loading vendor employees', err);
-        alert('Failed to load vendor employees');
-      }
-    });
-}
+      });
+  }
+
 
 
   DownloadTemplate() {
@@ -302,24 +354,24 @@ export class VendorEmployeeComponent {
     XLSX.writeFile(workbook, 'Import_Errors.xlsx');
   }
 
- tryParseResponse(r: any): { parsed: any; msg: string } {
-  if (r == null) return { parsed: null, msg: '' };
-  if (Array.isArray(r)) return { parsed: r, msg: '' };
-  if (typeof r === 'object') {
-    // Try common keys for messages
-    const msg = r.Message || r.message || r.error || r.errorMessage || '';
-    return { parsed: r, msg };
-  }
-  if (typeof r === 'string') {
-    try {
-      const p = JSON.parse(r);
-      const msg = p.Message || p.message || p.error || p.errorMessage || '';
-      return { parsed: p, msg };
-    } catch {
-      return { parsed: null, msg: r };
+  tryParseResponse(r: any): { parsed: any; msg: string } {
+    if (r == null) return { parsed: null, msg: '' };
+    if (Array.isArray(r)) return { parsed: r, msg: '' };
+    if (typeof r === 'object') {
+      // Try common keys for messages
+      const msg = r.Message || r.message || r.error || r.errorMessage || '';
+      return { parsed: r, msg };
     }
+    if (typeof r === 'string') {
+      try {
+        const p = JSON.parse(r);
+        const msg = p.Message || p.message || p.error || p.errorMessage || '';
+        return { parsed: p, msg };
+      } catch {
+        return { parsed: null, msg: r };
+      }
+    }
+    return { parsed: null, msg: String(r) };
   }
-  return { parsed: null, msg: String(r) };
-}
-  
+
 }

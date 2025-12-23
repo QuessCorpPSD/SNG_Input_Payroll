@@ -32,7 +32,7 @@ import { LeaveMasterGrid, LeavetypeDD } from '../../../Models/LeaveMaster';
 @Component({
   selector: 'leavemaster',
   standalone: true,
-  imports: [GroupnameComponent, CommonModule, MatPaginator, MatTableModule,
+  imports: [GroupnameComponent, CommonModule, MatPaginator, MatTableModule, MatTooltipModule,
     MatSort, MatSelectModule, MatInputModule, MatFormFieldModule, MatCheckbox, MatCardModule,
     MatIconModule, MatTooltipModule, FormsModule, CompanyallComponent, ReactiveFormsModule, AlertpopupComponent],
   templateUrl: './leavemaster.component.html',
@@ -100,15 +100,19 @@ export class LeavemasterComponent {
         displayName: ''
       };
     }
+    if (this.companyUI.companyId === 0) {
+      alert('Please select company code');
+      return;
+    }
     if (!this.sitenameUI) {
       this.sitenameUI = {
         siteCode: '0',
         siteName: ''
       };
     }
+    this.isLoading = true;
 
     if (this.companyUI) {
-      this.isLoading = true;
       this.BindDashBoard(this.companyUI.companyId, this.sitenameUI.siteCode)
     }
   }
@@ -149,7 +153,7 @@ export class LeavemasterComponent {
     } else {
       console.warn('UserProfile not found in session storage');
     }
-    this.GetLeaveTypeDD();    //load Leavetype by default
+    this.GetLeaveTypeDD();
     this.leaveaMasterform = this.fb.group({
       company: [null],
       group: [null],
@@ -209,7 +213,7 @@ export class LeavemasterComponent {
         }
       });
     } else {
-      console.log("Cancelled");
+      //console.log("Cancelled");
     }
 
   }
@@ -268,14 +272,14 @@ export class LeavemasterComponent {
     }
     const formValue = this.leaveaMasterform.value;
     const leaveMasterAdd = {
-        CompanyId: this.companyUI?.companyId,
-        CompanyCode: this.companyUI?.companyCode,
-        SiteId: this.sitenameUI?.siteCode,
-        SiteName: this.sitenameUI?.siteName,
-        Leavetype: formValue.leavetype,
-        UserId: String(this.userdetail.user_Id)
+      CompanyId: this.companyUI?.companyId,
+      CompanyCode: this.companyUI?.companyCode,
+      SiteId: this.sitenameUI?.siteCode,
+      SiteName: this.sitenameUI?.siteName,
+      Leavetype: formValue.leavetype,
+      UserId: String(this.userdetail.user_Id)
     };
-    
+
     this.leavemaster.PostAddLeaveMaster(leaveMasterAdd).subscribe({
       next: (res) => {
         const errormsg = res.Data[0].msg;

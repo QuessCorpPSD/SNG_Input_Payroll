@@ -2,7 +2,8 @@
 <div class="page-wrapper">
     <div class="scrollable-content">
 
-        <div style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700; min-width: 960px">
+        <div
+            style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700; min-width: 960px;padding-top: 12px;">
             Allow Reprocess
         </div>
 
@@ -12,7 +13,7 @@
 
                 <!-- Company Code -->
                 <div class="col-md-3">
-                    <label class="form-label text-muted small">Company code</label>
+                    <label class="form-label text-muted small">Company code<span style="color: red;">*</span></label>
                     <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
                 </div>
 
@@ -44,10 +45,7 @@
 
         </div>
 
-
-        <br />
-
-        <div *ngIf="showTable" class="table-wrapper1">
+        <div *ngIf="showTable" class="table-wrapper1" style="padding-top: 12px;">
 
             <div class="table-scroll">
 

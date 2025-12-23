@@ -42,6 +42,8 @@ export class LockpayperiodComponent {
   month: any;
   LockPayPeriodform!: FormGroup;
   selectedRows: any[] = [];
+  selectedMonth: any = '';
+
 
   constructor(private _decrypt: EncryptionService, private _sessionStoreage: SessionStorageService, private dialog: MatDialog, private lockPayPeriod: LockpayperiodService) { }
 
@@ -105,41 +107,55 @@ export class LockpayperiodComponent {
 
     } else {
       // When user unchecks the row → clear selection
-      this.selectedRows = [];    }
+      this.selectedRows = [];
+    }
   }
 
   onsearch() {
-    const formValue = this.LockPayPeriodform.getRawValue()
-    if (!formValue?.Month) {
-      this.showAlertPopup("please select Pay Period");
+
+    // ✅ validate ngModel value (same pattern as Arrear Attendance)
+    if (!this.selectedMonth) {
+      alert("Please select Month");
       return;
     }
+
     const payload = {
-      "PayPeriod": formValue?.Month
-    }
+      PayPeriod: this.selectedMonth
+    };
 
     this.isLoading = true;
     this.showTable = true;
+
     this.lockPayPeriod.SearchLockPayPeriod(payload).subscribe({
       next: (res) => {
         this.paySearch = res.Data?.data?.Table0;
+
         if (this.paySearch && this.paySearch.length > 0) {
           this.dataSource = new MatTableDataSource(this.paySearch);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
-          this.displayedColumns = ['checkbox', 'slNo', 'companycode', 'CompanyName', 'PayPeriod', 'status'];
+          this.displayedColumns = [
+            'checkbox',
+            'slNo',
+            'companycode',
+            'CompanyName',
+            'PayPeriod',
+            'status'
+          ];
         } else {
           this.dataSource.data = [];
-          this.showAlertPopup('Information', 'No data found for the selected criteria');
+          alert('No data found for the selected criteria');
         }
+
         this.isLoading = false;
       },
-      error: (err) => {
+      error: () => {
         this.isLoading = false;
-        this.showAlertPopup('Error', 'Failed to load lock pay period data');
-      },
+        alert('Failed to load lock pay period data');
+      }
     });
   }
+
 
   exportToExcel(): void {
     const payload = {
@@ -154,7 +170,7 @@ export class LockpayperiodComponent {
 
           // Check if Data is not an array or empty
           if (!Array.isArray(jsonData) || jsonData.length === 0) {
-            this.showAlertPopup(res.Data.message);
+            alert(res.Data.message);
             return;
           }
 
@@ -169,11 +185,11 @@ export class LockpayperiodComponent {
 
           XLSX.writeFile(wb, fileName);
         } catch (err) {
-          this.showAlertPopup('An error occurred while exporting data.');
+          alert('An error occurred while exporting data.');
         }
       },
       error: (err) => {
-        this.showAlertPopup('Failed to load data from server.');
+        alert('Failed to load data from server.');
       },
     });
   }
@@ -188,7 +204,7 @@ export class LockpayperiodComponent {
     const file = input?.files?.[0];
 
     if (!file) {
-      this.showAlertPopup("Please upload only one Excel file.")
+      alert("Please upload only one Excel file.")
       this.isLoading = false;
       return;
     }
@@ -201,7 +217,7 @@ export class LockpayperiodComponent {
       next: (res) => {
 
         if (!res || !res.Data) {
-          this.showAlertPopup('Upload request Processed.Server did not return any data');
+          alert('Upload request Processed.Server did not return any data');
           this.isLoading = false;
           return;
         }
@@ -270,16 +286,16 @@ export class LockpayperiodComponent {
               (parsed ? JSON.stringify(parsed) : ''));
 
         if (fallback) {
-          this.showAlertPopup(fallback);
+          alert(fallback);
         } else {
-          this.showAlertPopup('Error while processing response.')
+          alert('Error while processing response.')
         }
         this.isLoading = false;
 
       },
       error: (err) => {
         this.isLoading = false;
-        this.showAlertPopup("Upload Failed")
+        alert("Upload Failed")
       }
     });
   }
@@ -328,7 +344,7 @@ export class LockpayperiodComponent {
   AddLockPayPeriodOpen(rowData: any) {
     this.dialog.open(LockpayperiodaddComponent, {
       width: '30%',
-      height: '68vh',
+      height: '61vh',
       disableClose: true,
       data: { row: rowData }
     });

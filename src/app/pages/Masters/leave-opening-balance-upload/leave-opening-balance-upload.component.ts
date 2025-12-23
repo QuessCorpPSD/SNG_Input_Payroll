@@ -51,14 +51,17 @@ export class LeaveOpeningBalanceUploadComponent {
   siteId = '';
   Fromdate: string = '0';
   Todate: string = '0';
-  dataSource = new MatTableDataSource<any>();
+  dataSource = new MatTableDataSource<any>([]);
   displayedColumns: string[] = [];
   dynamicColumns: string[] = [];
   tableHeaders: string[] = [];
+  showTable = false;
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
-    companyIdInput: string = '';
+
+  @ViewChild('paginator', { static: false }) paginator!: MatPaginator;
+  @ViewChild(MatSort, { static: false }) sort!: MatSort;
+
+  companyIdInput: string = '';
   siteIdInput: string = '';
   companyCodeInput: string = '';
   fromDateInput: string = '';
@@ -70,9 +73,9 @@ export class LeaveOpeningBalanceUploadComponent {
   UploadedResponse: any;
   popupMessage = '';
   showPopup = false;
-     
- 
-  constructor(private leaveOpeningBalanceService: LeaveOpeningBalanceService,private _sessionStoreage: SessionStorageService,private decry: EncryptionService) { }
+
+
+  constructor(private leaveOpeningBalanceService: LeaveOpeningBalanceService, private _sessionStoreage: SessionStorageService, private decry: EncryptionService) { }
 
   handleCompanyEvent(event: any) {
     this.companyId = event.companyId;
@@ -90,8 +93,11 @@ export class LeaveOpeningBalanceUploadComponent {
       return;
     }
 
-    // Ensure siteId is never empty string
-    const siteParam = this.siteId && this.siteId.trim() !== '' ? this.siteId : '0';
+    this.isLoading = true;
+    this.showTable = false; 
+
+    const siteParam =
+      this.siteId && this.siteId.trim() !== '' ? this.siteId : '0';
 
     this.leaveOpeningBalanceService
       .GetLeaveOpeningCompanywise(
@@ -100,26 +106,38 @@ export class LeaveOpeningBalanceUploadComponent {
       )
       .subscribe({
         next: (res) => {
+          this.isLoading = false;
+
           const table = res?.Data?.data?.Table0 ?? [];
 
           if (table.length > 0) {
             this.tableHeaders = Object.keys(table[0]);
-            this.dynamicColumns = Object.keys(table[0]);
+            this.dynamicColumns = [...this.tableHeaders];
             this.displayedColumns = [...this.dynamicColumns];
-            this.dataSource = new MatTableDataSource(table);
+
+            this.dataSource = new MatTableDataSource<any>(table);
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
+
+            this.showTable = true; 
           } else {
-            this.dataSource.data = [];
             alert('No data found');
+
+            this.dynamicColumns = [];
+            this.displayedColumns = [];
+            this.dataSource = new MatTableDataSource<any>([]);
+
+            this.showTable = true; 
           }
         },
         error: (err) => {
+          this.isLoading = false;
           console.error('Error loading leave opening balance', err);
           alert('Failed to load leave opening balance');
         }
       });
   }
+
 
   ngOnInit(): void {
     this.companyId = 0;
@@ -139,61 +157,61 @@ export class LeaveOpeningBalanceUploadComponent {
     };
 
   }
-DownloadLeaveTemplate() {
-  console.log('companyId:', this.companyId);
-  console.log('siteId:', this.siteId);
-  console.log('companyCode:', this.selectedCompanyCode);
-  console.log('fromDate:', this.fromDateInput);
-  console.log('toDate:', this.toDateInput);
+  DownloadLeaveTemplate() {
+    // console.log('companyId:', this.companyId);
+    // console.log('siteId:', this.siteId);
+    // console.log('companyCode:', this.selectedCompanyCode);
+    // console.log('fromDate:', this.fromDateInput);
+    // console.log('toDate:', this.toDateInput);
 
-  if (
-    !this.companyId ||
-    // !this.siteId?.trim() ||
-    !this.selectedCompanyCode?.trim() ||
-    !this.fromDateInput?.trim() ||
-    !this.toDateInput?.trim()
-  ) {
-    alert('All fields are mandatory. Please fill all the details.');
-    return;
-  }
-
-  const payload = {
-    companyId: this.companyId.toString(),
-    siteId: this.siteId,
-    companyCode: this.selectedCompanyCode,
-    fromdate: this.fromDateInput,
-    todate: this.toDateInput
-  };
-
-  console.log('Payload sent:', payload);
-
-  this.leaveOpeningBalanceService.PostLeaveOpeningTemplate(payload).subscribe({
-    next: (res) => {
-      console.log('Backend response:', res);
-
-      if (res.StatusCode === 200 && res.Data?.data?.Table0?.length) {
-        const data = res.Data.data.Table0;
-
-        const worksheet = XLSX.utils.json_to_sheet(data);
-        const workbook: XLSX.WorkBook = {
-          Sheets: { 'LeaveOpeningBalance': worksheet },
-          SheetNames: ['LeaveOpeningBalance']
-        };
-
-        const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-        const blob = new Blob([buffer], { type: 'application/octet-stream' });
-
-        FileSaver.saveAs(blob, `LeaveOpeningBalance_Template_${Date.now()}.xlsx`);
-      } else {
-        alert('No template data available or backend rejected the request.');
-      }
-    },
-    error: (err) => {
-      console.error('Error downloading template:', err);
-      alert('Failed to download template');
+    if (
+      !this.companyId ||
+      // !this.siteId?.trim() ||
+      !this.selectedCompanyCode?.trim() ||
+      !this.fromDateInput?.trim() ||
+      !this.toDateInput?.trim()
+    ) {
+      alert('All fields are mandatory. Please fill all the details.');
+      return;
     }
-  });
-}
+
+    const payload = {
+      companyId: this.companyId.toString(),
+      siteId: this.siteId,
+      companyCode: this.selectedCompanyCode,
+      fromdate: this.fromDateInput,
+      todate: this.toDateInput
+    };
+
+    //console.log('Payload sent:', payload);
+
+    this.leaveOpeningBalanceService.PostLeaveOpeningTemplate(payload).subscribe({
+      next: (res) => {
+        //console.log('Backend response:', res);
+
+        if (res.StatusCode === 200 && res.Data?.data?.Table0?.length) {
+          const data = res.Data.data.Table0;
+
+          const worksheet = XLSX.utils.json_to_sheet(data);
+          const workbook: XLSX.WorkBook = {
+            Sheets: { 'LeaveOpeningBalance': worksheet },
+            SheetNames: ['LeaveOpeningBalance']
+          };
+
+          const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+          const blob = new Blob([buffer], { type: 'application/octet-stream' });
+
+          FileSaver.saveAs(blob, `LeaveOpeningBalance_Template_${Date.now()}.xlsx`);
+        } else {
+          alert('No template data available or backend rejected the request.');
+        }
+      },
+      error: (err) => {
+        console.error('Error downloading template:', err);
+        alert('Failed to download template');
+      }
+    });
+  }
 
   ImportLeaveBalanceClick(fileInput: HTMLInputElement): void {
     fileInput.click();
@@ -210,28 +228,28 @@ DownloadLeaveTemplate() {
       this.isLoading = false;
       return;
     }
-    console.log()
+    //console.log()
 
-const formData = new FormData();
-console.log('CompanyId:', this.companyId);
-console.log('Fromdate:', this.fromDateInput);
-console.log('Todate:', this.toDateInput);
-console.log('CreatedBy:', this.userdetail?.user_Id);
-console.log('File:', file?.name, file?.type, file?.size);
+    const formData = new FormData();
+    // console.log('CompanyId:', this.companyId);
+    // console.log('Fromdate:', this.fromDateInput);
+    // console.log('Todate:', this.toDateInput);
+    // console.log('CreatedBy:', this.userdetail?.user_Id);
+    // console.log('File:', file?.name, file?.type, file?.size);
 
-formData.append('file', file);
-formData.append('CompanyId', this.companyId?.toString() || '');
-formData.append('Fromdate', this.fromDateInput?.trim() || '');
-formData.append('Todate', this.toDateInput?.trim() || '');
-formData.append('CreatedBy', this.userdetail?.user_Id?.toString() || '');
+    formData.append('file', file);
+    formData.append('CompanyId', this.companyId?.toString() || '');
+    formData.append('Fromdate', this.fromDateInput?.trim() || '');
+    formData.append('Todate', this.toDateInput?.trim() || '');
+    formData.append('CreatedBy', this.userdetail?.user_Id?.toString() || '');
 
     this.leaveOpeningBalanceService.UploadLeaveOpeningBalance(formData).subscribe({
       next: (res) => {
-        console.log('Upload response:', res);
+        //console.log('Upload response:', res);
 
         this.UploadedResponse = res;
-        console.log('Uploading file:', file.name, file.type, file.size);
-        console.log('User:', this.userdetail?.user_Id);
+        //console.log('Uploading file:', file.name, file.type, file.size);
+        //console.log('User:', this.userdetail?.user_Id);
 
         const { parsed, msg } = this.tryParseResponse(res?.Data?.response);
         const successMsg = 'Leave Opening Balance data uploaded successfully.';
