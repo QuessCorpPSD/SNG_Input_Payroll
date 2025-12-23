@@ -396,9 +396,7 @@ export const routes: Routes = [
           { path: 'BankMaster', component: BankmasterComponent },
           { path: 'Formula', component: FormulaComponent },
           { path: "professionaltax", component: ProfessionaltaxComponent },
-          { path: "providentfund", component: ProvidentfundComponent }
-
-        ]
+          { path: "providentfund", component: ProvidentfundComponent },
           { path: 'Formula', component: FormulaComponent },
           { path: 'lfw', component: LFWSlabComponent },
           { path: 'tds', component: TDSslabComponent }
