@@ -516,7 +516,7 @@ export class CompanyaddComponent {
     this.company.createCompany(payload).subscribe({
       next: res => {
         const msg = res.Data.message
-        alert(msg);
+        this.showAlertPopup(msg);
         this.isLoading = false;
         this.onClose();
         this.dialogRef.close('refresh');
