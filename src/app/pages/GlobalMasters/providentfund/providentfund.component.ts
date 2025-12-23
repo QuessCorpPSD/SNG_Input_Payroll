@@ -94,32 +94,32 @@ export class ProvidentfundComponent implements AfterViewInit {
     this.dataSource.filter = filterValue;
   }
 
-    onSearch() {
-      this.showTable = true;
-      this.isLoading = true;
-      const CapType = this.capType || "''"
+  onSearch() {
+    this.showTable = true;
+    this.isLoading = true;
+    const CapType = this.capType || "''"
 
-      this.service.Search(CapType).subscribe({
+    this.service.Search(CapType).subscribe({
 
-        next: (res) => {
-          this.pfSearch = res.Data.data.Table0;
-          if (this.pfSearch && this.pfSearch.length > 0) {
-            this.dataSource = new MatTableDataSource(this.pfSearch);
-            this.dataSource.paginator = this.paginator;
-            this.uploadDisplayedColumns = ['Action', 'slNo', 'payCode', 'description', 'capnoncap', 'fromvalue', 'tovalue', 'criteriatypename', 'criteria', 'formula'];
-          } else {
-            this.dataSource.data = [];
-            alert('No data found for the selected criteria');
-          }
-          this.isLoading = false;
-        },
-        error: (err) => {
-          console.error('Error loading salary release data', err);
-          alert('Failed to load salary release data');
-          this.isLoading = false;
-        },
-      });
-    }
+      next: (res) => {
+        this.pfSearch = res.Data.data.Table0;
+        if (this.pfSearch && this.pfSearch.length > 0) {
+          this.dataSource = new MatTableDataSource(this.pfSearch);
+          this.dataSource.paginator = this.paginator;
+          this.uploadDisplayedColumns = ['Action', 'slNo', 'payCode', 'description', 'capnoncap', 'fromvalue', 'tovalue', 'criteriatypename', 'criteria', 'formula'];
+        } else {
+          this.dataSource.data = [];
+          alert('No data found for the selected criteria');
+        }
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Error loading salary release data', err);
+        alert('Failed to load salary release data');
+        this.isLoading = false;
+      },
+    });
+  }
 
   exportToExcel(): void {
     this.isLoading = true;
@@ -162,6 +162,11 @@ export class ProvidentfundComponent implements AfterViewInit {
   }
 
   deleteProvidentFund(row: any) {
+
+    if (!confirm('Are you sure you want to delete this record?')) {
+      return;
+    }
+
     this.isLoading = true;
 
     const payload = {
