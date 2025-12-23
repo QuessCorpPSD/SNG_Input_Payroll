@@ -142,6 +142,9 @@ import { CompanypermissionComponent } from './pages/admin/companypermission/comp
 import { CompanyinvoiceformatComponent } from './pages/Invoice/companyinvoiceformat/companyinvoiceformat.component';
 import { MaterialcodeComponent } from './pages/GlobalMasters/materialcode/materialcode.component';
 import { CancelledinvoicerepositoryComponent } from './pages/customers/cancelledinvoicerepository/cancelledinvoicerepository.component';
+import { OffercreationComponent } from './pages/gsoffer/offercreation/offercreation.component';
+import { LFWSlabComponent } from './pages/GlobalMasters/lfwslab/lfwslab.component';
+import { TDSslabComponent } from './pages/GlobalMasters/tdsslab/tdsslab.component';
 
 
 
@@ -387,11 +390,14 @@ export const routes: Routes = [
           { path: "sitemaster", component: SiteMasterComponent },
           { path: "materialcode", component: MaterialcodeComponent },
           { path: 'BankMaster', component: BankmasterComponent },
-          { path: 'Formula', component: FormulaComponent }
-
-
-
+          { path: 'Formula', component: FormulaComponent },
+          { path: 'lfw', component: LFWSlabComponent },
+          { path: 'tds', component: TDSslabComponent }
         ]
+
+      },
+      {
+        path: 'onboarding', component: OffercreationComponent,
 
       },
       //   { path: 'UI', component: SopComponent },

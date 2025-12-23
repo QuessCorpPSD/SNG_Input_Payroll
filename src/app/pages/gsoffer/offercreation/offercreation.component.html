@@ -1,0 +1,137 @@
+<div class="stepper-container">
+    <div class="step" *ngFor="let step of steps; let i = index" [class.active]="i === activeStep"
+        [class.locked]="isStepLocked(i)" (click)="!isStepLocked(i) && setActiveStep(i)">
+        <div class="step-icon">
+            <mat-icon>{{ getStepIcon(i) }}</mat-icon>
+        </div>
+
+        <div class="step-text">
+            <div class="step-label">{{ step.label }}</div>
+        </div>
+
+        <div class="step-line" *ngIf="i !== steps.length - 1" [class.active-line]="i < activeStep"></div>
+    </div>
+</div>
+
+<div class="submenu-bar" *ngIf="activeStep === 0">
+    <div class="submenu-tab" [class.active]="activeSubmenuStep0 === 'create'" (click)="selectSubmenuStep0('create')">
+        Create Offer
+    </div>
+
+    <div class="submenu-tab" [class.active]="activeSubmenuStep0 === 'bulk'" (click)="selectSubmenuStep0('bulk')">
+        Bulk Offer
+    </div>
+</div>
+
+
+<div class="submenu-bar" *ngIf="activeStep === 1">
+    <div class="submenu-tab" [class.active]="activeSubmenuStep1 === 'manual'" (click)="selectSubmenuStep1('manual')">
+        Manual Input
+    </div>
+
+    <div class="submenu-tab" [class.active]="activeSubmenuStep1 === 'aadhar'" (click)="selectSubmenuStep1('aadhar')">
+        Aadhar Validation
+    </div>
+
+    <div class="submenu-tab" [class.active]="activeSubmenuStep1 === 'auto'" (click)="selectSubmenuStep1('auto')">
+        Auto Calculation
+    </div>
+</div>
+<div class="submenu-bar" *ngIf="activeStep === 2">
+    <div class="submenu-tab" [class.active]="activeSubmenuStep2 === 'single'" (click)="selectSubmenuStep2('single')">
+        Selected Offer Approval
+    </div>
+
+    <div class="submenu-tab" [class.active]="activeSubmenuStep2 === 'bulk'" (click)="selectSubmenuStep2('bulk')">
+        Bulk Offer Approval
+    </div>
+</div>
+
+<div *ngIf="activeStep === 0 && activeSubmenuStep0 === 'create'">
+    <div class="create-offer-accordion">
+        <mat-accordion *ngIf="forms?.length">
+            <mat-expansion-panel *ngFor="let form of forms; let i = index" [expanded]="i === currentFormIndex">
+                <mat-expansion-panel-header>
+                    <mat-panel-title><strong>
+                            {{ form.formName }}</strong>
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <form [formGroup]="formsFormGroups[form.formName]" *ngIf="formsFormGroups[form.formName]">
+                    <div class="form-grid" style="padding-top: 2%;">
+                        <div class="field-box" *ngFor="let field of form.fields">
+
+                            <!-- LABEL -->
+                            <label class="form-label">
+                                {{ field.labelName }}
+                                <span *ngIf="field.isRequired" class="required">*</span>
+                            </label>
+
+                            <!-- INPUT TYPES -->
+                            <input *ngIf="field.fieldType === 'text'" class="form-control" type="text"
+                                [formControlName]="sanitize(field.fieldName)" />
+
+                            <input *ngIf="field.fieldType === 'number'" class="form-control" type="number"
+                                [formControlName]="sanitize(field.fieldName)" />
+
+                            <input *ngIf="field.fieldType === 'date'" class="form-control" type="date"
+                                [formControlName]="sanitize(field.fieldName)" />
+
+                            <input *ngIf="field.fieldType === 'email'" class="form-control" type="email"
+                                [formControlName]="sanitize(field.fieldName)"
+                                placeholder="Enter {{ field.labelName }}" />
+
+                            <select *ngIf="field.fieldType === 'select'" class="form-control"
+                                [formControlName]="sanitize(field.fieldName)">
+                                <option value="">Select</option>
+                                <option *ngFor="let opt of dropdownOptions[sanitize(field.fieldName)] || []"
+                                    [value]="opt[field.valueKey]">
+                                    {{ opt[field.displayKey] }}
+                                </option>
+                            </select>
+
+
+                            <div *ngIf="field.fieldType === 'checkbox'" class="checkbox-row">
+                                <input type="checkbox" [formControlName]="sanitize(field.fieldName)" />
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button *ngIf="i < forms.length - 1" mat-raised-button color="primary" (click)="nextForm(i)">
+                            Next
+                        </button>
+
+                        <button *ngIf="i === forms.length - 1" mat-raised-button color="accent" (click)="submitForm()">
+                            Save
+                        </button>
+                    </div>
+
+                </form>
+
+            </mat-expansion-panel>
+
+        </mat-accordion>
+    </div>
+</div>
+<div *ngIf="activeStep === 0 && activeSubmenuStep0 === 'bulk'">
+    <p>Bulk Offer Content Here</p>
+</div>
+<div *ngIf="activeStep === 1 && activeSubmenuStep1 === 'manual'">
+    <p>Manual Input Content</p>
+</div>
+
+<div *ngIf="activeStep === 1 && activeSubmenuStep1 === 'aadhar'">
+    <p>Aadhar Validation Content</p>
+</div>
+
+<div *ngIf="activeStep === 1 && activeSubmenuStep1 === 'auto'">
+    <p>Auto Calculation Content</p>
+</div>
+<div *ngIf="activeStep === 2 && activeSubmenuStep2 === 'single'">
+    <p>Selected Offer Approval Content</p>
+</div>
+
+<div *ngIf="activeStep === 2 && activeSubmenuStep2 === 'bulk'">
+    <p>Bulk Offer Approval Content</p>
+</div>

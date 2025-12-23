@@ -1,0 +1,153 @@
+<form [formGroup]="tdsForm" novalidate>
+    <mat-card class="custom-card">
+        <mat-card-header class="sticky-header">
+            <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;">
+                {{ EDIT ? 'Edit TDS Slab' : 'Add TDS Slab' }}
+            </mat-card-title>
+
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="onClose()" class="no-border-icon">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+
+        <mat-card-content>
+            <div class="row g-3 mb-3">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">
+                        Financial Year <span class="text-danger">*</span>
+                    </label>
+
+                    <!-- ADD MODE : DROPDOWN -->
+                    <select *ngIf="!EDIT" class="form-select form-select-sm" formControlName="financialYear"
+                        [class.is-invalid]="isInvalid('financialYear')">
+                        <option value="" disabled>Select</option>
+                        <option *ngFor="let y of year" [value]="y.Financial_Year_Id">
+                            {{ y.Financial_Year_Name }}
+                        </option>
+                    </select>
+
+                    <input *ngIf="EDIT" type="text" class="form-control form-control-sm" formControlName="financialYear"
+                        readonly />
+
+                    <div class="invalid-feedback" *ngIf="!EDIT">
+                        Financial Year is required
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Category<span class="text-danger">*</span></label>
+                    <select class="form-select form-select-sm" formControlName="category"
+                        [class.is-invalid]="isInvalid('category')">
+                        <option value="" disabled>Select</option>
+                        <option *ngFor="let cat of categ" [value]="cat">{{cat}}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Age From<span class="text-danger">*</span></label>
+                    <input class="form-control form-control-sm" formControlName="agefrom"
+                        [class.is-invalid]="isInvalid('agefrom')" />
+                    <div class="invalid-feedback">Age From is required</div>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Age To<span class="text-danger">*</span></label>
+                    <input class="form-control form-control-sm" formControlName="ageto"
+                        [class.is-invalid]="isInvalid('ageto')" />
+                    <div class="invalid-feedback">Age To is required</div>
+                </div>
+
+            </div>
+
+            <div class="table-wrapper1">
+                <div class="col-md-3 d-flex gap-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Add"
+                        (click)="addRow()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Delete"
+                        (click)="selectedRowIndex !== null ? deleteRow(selectedRowIndex) : null">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+
+                </div>
+                <div formArrayName="rows">
+
+                    <div class="table-scroll">
+                        <mat-table [dataSource]="uploadedDataSource" matSort
+                            class="custom-table mat-elevation-z8 auto-fit-table">
+                            <ng-container matColumnDef="SNo">
+                                <mat-header-cell *matHeaderCellDef><strong>S.No</strong></mat-header-cell>
+                                <mat-cell *matCellDef="let row; let i = index">{{ i + 1 }}</mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Income From">
+                                <mat-header-cell *matHeaderCellDef><strong>Income From</strong></mat-header-cell>
+                                <mat-cell *matCellDef="let row; let i = index" [formGroupName]="i">
+                                    <input class="form-control form-control-sm" matInput type="number"
+                                        formControlName="incomeFrom" [class.is-invalid]="rowInvalid(i,'incomeFrom')" />
+                                    <div class="invalid-feedback">Required</div>
+
+                                </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Income To">
+                                <mat-header-cell *matHeaderCellDef><strong>Income To</strong></mat-header-cell>
+                                <mat-cell *matCellDef="let row; let i = index" [formGroupName]="i">
+                                    <input class="form-control form-control-sm" matInput type="number"
+                                        formControlName="incomeTo" [class.is-invalid]="rowInvalid(i,'incomeTo')" />
+                                    <div class="invalid-feedback">Required</div>
+
+                                </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Amount">
+                                <mat-header-cell *matHeaderCellDef><strong>Amount</strong></mat-header-cell>
+                                <mat-cell *matCellDef="let row; let i = index" [formGroupName]="i">
+                                    <input class="form-control form-control-sm" matInput type="number"
+                                        formControlName="amount" [class.is-invalid]="rowInvalid(i,'amount')" />
+                                    <div class="invalid-feedback">Required</div>
+
+                                </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Tax Percentage">
+                                <mat-header-cell *matHeaderCellDef><strong>Tax Percentage</strong></mat-header-cell>
+                                <mat-cell *matCellDef="let row; let i = index" [formGroupName]="i">
+                                    <input class="form-control form-control-sm" matInput type="number"
+                                        formControlName="taxPercentage"
+                                        [class.is-invalid]="rowInvalid(i,'taxPercentage')" />
+                                    <div class="invalid-feedback">Required</div>
+
+                                </mat-cell>
+                            </ng-container>
+
+                            <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+                            <mat-row *matRowDef="let row; let i = index; columns: uploadDisplayedColumns"
+                                (click)="selectRow(row, i)" [class.selected]="selectedRowIndex === i"></mat-row>
+                        </mat-table>
+                    </div>
+
+                    <div *ngIf="uploadedDataSource.data.length === 0" class="text-center p-4">
+                        <p class="text-muted">No data to display</p>
+                    </div>
+
+
+                </div>
+            </div>
+        </mat-card-content>
+
+        <mat-card-footer class="footer">
+            <div class="d-flex justify-content-end  gap-2 p-2">
+
+                <button type="button" (click)="onClose()"
+                    style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0;">Cancel</button>
+                <button type="submit" [disabled]="tdsForm.invalid" (click)="EDIT ? onUpdate() : onSave()"
+                    style="border:none;border-radius:7px;width:80px;height:30px;background-color:blue; color: white;">
+                    {{ EDIT ? 'Update' : 'Save' }}
+                </button>
+
+            </div>
+        </mat-card-footer>
+    </mat-card>
+</form>
