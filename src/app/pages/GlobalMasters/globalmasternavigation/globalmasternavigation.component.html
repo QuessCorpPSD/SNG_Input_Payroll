@@ -8,7 +8,14 @@
                                                 routerLinkActive="selectedInput"
                                                 [routerLinkActiveOptions]="{ exact: true }">Entity Master</a>
                                 </li>
-                                
+                                <li><a [routerLink]="['/Master/navigationglobal/ESIslab']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">ESI</a>
+                                </li>
+                                <li><a [routerLink]="['/Master/navigationglobal/BranchMaster']" class="nav-link"
+                                                routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">BranchMaster</a>
+                                </li>
                                 <li><a [routerLink]="['/Master/navigationglobal/InvoiceLegalEntity']" class="nav-link"
                                                 routerLinkActive="selectedInput"
                                                 [routerLinkActiveOptions]="{ exact: true }">Invoice Legal
@@ -55,6 +62,7 @@
                                                 routerLinkActive="selectedInput"
                                                 [routerLinkActiveOptions]="{ exact: true }">Formula</a>
                                 </li>
+
                         </ul>
                 </div>
         </div>

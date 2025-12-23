@@ -142,6 +142,8 @@ import { CompanypermissionComponent } from './pages/admin/companypermission/comp
 import { CompanyinvoiceformatComponent } from './pages/Invoice/companyinvoiceformat/companyinvoiceformat.component';
 import { MaterialcodeComponent } from './pages/GlobalMasters/materialcode/materialcode.component';
 import { CancelledinvoicerepositoryComponent } from './pages/customers/cancelledinvoicerepository/cancelledinvoicerepository.component';
+import { ESIslabComponent } from './pages/GlobalMasters/esislab/esislab.component';
+import { BranchmasterComponent } from './pages/GlobalMasters/branchmaster/branchmaster.component';
 
 
 
@@ -387,7 +389,9 @@ export const routes: Routes = [
           { path: "sitemaster", component: SiteMasterComponent },
           { path: "materialcode", component: MaterialcodeComponent },
           { path: 'BankMaster', component: BankmasterComponent },
-          { path: 'Formula', component: FormulaComponent }
+          { path: 'Formula', component: FormulaComponent },
+          { path: 'ESIslab', component: ESIslabComponent },
+          { path: 'BranchMaster', component: BranchmasterComponent }
 
 
 

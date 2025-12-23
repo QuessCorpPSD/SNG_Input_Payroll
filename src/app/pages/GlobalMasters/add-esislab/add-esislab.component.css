@@ -1,0 +1,369 @@
+    /* ===================================================== */
+    /* =============== CARD & BUTTON FIX =================== */
+    /* ===================================================== */
+
+    .custom-card {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    /* ================= CLOSE BUTTON FIX ================= */
+
+    /* Make header relative so button can be positioned */
+    .sticky-header {
+        position: relative;
+    }
+
+    /* Place close button at top-right */
+    .no-border-icon {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+
+        padding: 0 !important;
+        min-width: auto !important;
+        width: auto;
+        height: auto;
+    }
+
+    /* Remove hover / focus box */
+    .no-border-icon:hover,
+    .no-border-icon:focus,
+    .no-border-icon:active {
+        background: transparent !important;
+        box-shadow: none !important;
+    }
+
+    /* Icon size & color */
+    .no-border-icon mat-icon {
+        font-size: 22px;
+        color: #000;
+    }
+
+
+    /* Keep content scrollable but buttons fixed */
+    .custom-card mat-card-content {
+        flex: 1;
+        overflow-y: auto;
+    }
+
+    /* Button container pinned to bottom */
+    .custom-card .action-footer,
+    .custom-card .d-flex.justify-content-end {
+        margin-top: auto;
+        padding: 12px 8px;
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        background: #fff;
+    }
+
+    /* ===================================================== */
+    /* =============== TABLE ALIGNMENT FIX ================= */
+    /* ===================================================== */
+
+    /* ---------- TABLE SCROLL ---------- */
+    .table-scroll {
+        width: 100%;
+        overflow-x: auto;
+        overflow-y: auto;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    /* ---------- MATERIAL TABLE ---------- */
+    ::ng-deep .mat-mdc-table {
+        width: 85%;
+        table-layout: fixed;
+        border-collapse: collapse;
+    }
+
+    /* 🔑 PREVENT EXTRA EMPTY COLUMN */
+    ::ng-deep .mat-mdc-header-row,
+    ::ng-deep .mat-mdc-row {
+        display: flex;
+        width: fit-content;
+        min-width: 100%;
+    }
+
+    /* ---------- HEADER CELLS ---------- */
+    ::ng-deep .mat-mdc-header-cell {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        font-size: 13px;
+        font-family: "Nunito Sans", sans-serif;
+        font-weight: 700 !important;
+        /* 🔑 FORCE BOLD */
+        height: 40px;
+        padding: 6px 8px !important;
+        border-right: 1px solid #ddd;
+        box-sizing: border-box;
+        white-space: nowrap;
+    }
+
+    /* ---------- BODY CELLS ---------- */
+    ::ng-deep .mat-mdc-cell {
+        font-family: "Nunito Sans", sans-serif;
+        font-size: 12px;
+        color: #222;
+        height: 40px;
+        padding: 6px 8px !important;
+        border-bottom: 1px solid #eee;
+        border-right: 1px solid #ddd;
+        box-sizing: border-box;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    /* ---------- REMOVE ROW BOX FEEL ---------- */
+    ::ng-deep .mat-mdc-row {
+        background: transparent !important;
+    }
+
+    /* ---------- INPUTS & SELECTS ---------- */
+    ::ng-deep .mat-mdc-cell input,
+    ::ng-deep .mat-mdc-cell select {
+        width: 100% !important;
+        height: 28px;
+        padding: 2px 6px;
+        font-size: 12px;
+        box-sizing: border-box;
+        box-shadow: none !important;
+    }
+
+    /* ---------- COLUMN WIDTH CONTROL ---------- */
+    ::ng-deep .mat-column-slNo {
+        width: 50px;
+        flex: 0 0 80px;
+    }
+
+    ::ng-deep .mat-column-fromValue {
+        width: 175px;
+        flex: 0 0 150px;
+    }
+
+    ::ng-deep .mat-column-toValue {
+        width: 175px;
+        flex: 0 0 150px;
+    }
+
+    ::ng-deep .mat-column-criteria {
+        width: 175px;
+        flex: 0 0 175px;
+    }
+
+    ::ng-deep .mat-column-criteriaType {
+        width: 200px;
+        flex: 0 0 200px;
+    }
+
+    /* ---------- ROW HOVER ---------- */
+    ::ng-deep .mat-mdc-row:hover {
+        background-color: #f9f9f9 !important;
+    }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 768px) {
+
+        ::ng-deep .mat-mdc-header-cell,
+        ::ng-deep .mat-mdc-cell {
+            font-size: 11px;
+            padding: 4px 6px !important;
+        }
+    }
+
+    /* ===================================================== */
+    /* ============ ESI SLAB PAGINATOR FIX ================= */
+    /* ===================================================== */
+
+    /* Wrapper takes the exact width of the table */
+    .esi-slab-table-wrapper {
+        width: fit-content;
+        max-width: 100%;
+    }
+
+    /* Table remains content-sized */
+    .esi-slab-table-wrapper .custom-table {
+        width: auto !important;
+        table-layout: auto;
+    }
+
+    /* Paginator width = table width */
+    ::ng-deep .esi-slab-table-wrapper .esi-slab-paginator {
+        width: 100% !important;
+        box-sizing: border-box;
+        border-top: 1px solid #ddd;
+        background: #fff;
+    }
+
+    /* Align paginator controls neatly to the right */
+    ::ng-deep .esi-slab-table-wrapper .esi-slab-paginator .mat-mdc-paginator-container {
+        justify-content: flex-end;
+        padding: 0 12px;
+        min-height: 44px;
+    }
+
+    /* ===================================================== */
+    /* ========== ESI BLOCK – TABLE & PAGINATOR FIX ========= */
+    /* ===================================================== */
+
+    /* Remove right-side empty/light area */
+    .esi-block-wrapper,
+    .table-wrapper1 {
+        width: fit-content !important;
+        max-width: 100%;
+    }
+
+    /* Wrapper controls table + paginator width */
+    .esi-block-table-wrapper {
+        width: fit-content;
+        max-width: 100%;
+    }
+
+    /* Increase table width */
+    .esi-block-table {
+        width: auto !important;
+        min-width: 900px;
+        /* 👈 adjust if needed */
+        table-layout: auto;
+    }
+
+    /* Horizontal scroll only */
+    .esi-block-scroll {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    /* Paginator width = table width */
+    ::ng-deep .esi-block-table-wrapper .esi-block-paginator {
+        width: 100% !important;
+        box-sizing: border-box;
+        border-top: 1px solid #ddd;
+        background: #fff;
+    }
+
+    /* Align paginator content */
+    ::ng-deep .esi-block-table-wrapper .esi-block-paginator .mat-mdc-paginator-container {
+        justify-content: flex-end;
+        padding: 0 8px;
+        min-height: 40px;
+    }
+
+    /* ===================================================== */
+    /* ========== ESI BLOCK – FINAL COMPACT FIX ============= */
+    /* ===================================================== */
+
+    /* Remove unnecessary wide wrapper */
+    .esi-block-wrapper,
+    .table-wrapper1 {
+        width: auto !important;
+        max-width: 100%;
+    }
+
+    /* Wrapper controls table + paginator width */
+    .esi-block-table-wrapper {
+        width: fit-content;
+        max-width: 100%;
+    }
+
+    /* Compact table width (3 columns only) */
+    .esi-block-table {
+        width: auto !important;
+        min-width: 420px;
+        /* enough for SlNo + Block + Month */
+        max-width: 600px;
+        /* prevents long table */
+        table-layout: auto;
+    }
+
+    /* Horizontal scroll only if really needed */
+    .esi-block-scroll {
+        max-width: 600px;
+        overflow-x: auto;
+    }
+
+    /* Paginator width EXACTLY same as table */
+    ::ng-deep .esi-block-table-wrapper .esi-block-paginator {
+        width: 100% !important;
+        max-width: 600px;
+        box-sizing: border-box;
+        border-top: 1px solid #ddd;
+        background: #fff;
+    }
+
+    /* Paginator alignment */
+    ::ng-deep .esi-block-table-wrapper .esi-block-paginator .mat-mdc-paginator-container {
+        justify-content: flex-end;
+        padding: 0 8px;
+        min-height: 40px;
+    }
+
+    /* Reduce header boldness */
+    ::ng-deep .esi-block-table .mat-mdc-header-cell {
+        font-weight: 600 !important;
+        font-size: 13px;
+    }
+
+    /* Body text */
+    ::ng-deep .esi-block-table .mat-mdc-cell {
+        font-weight: 400;
+        font-size: 12px;
+    }
+
+    /* Highlight selected row */
+    .selected-row {
+        background-color: #e6eaed !important;
+        /* light blue */
+    }
+
+    .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        flex-direction: column;
+    }
+
+    .loading-overlay .spinner-border {
+        width: 3rem;
+        height: 3rem;
+    }
+
+    .loading-overlay span {
+        margin-top: 10px;
+        font-weight: bold;
+        color: #302CB3;
+    }
+
+    .centered-popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 2200;
+    }
+
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 2100;
+    }
+
+    .selected-row {
+        background-color: #dce6ff !important;
+    }

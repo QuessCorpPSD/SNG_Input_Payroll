@@ -1,0 +1,867 @@
+<!-- ===================== ADD ESI SLAB ===================== -->
+<ng-container *ngIf="mode === 'ESI_SLAB' && !Edit">
+
+  <mat-card class="custom-card">
+    <mat-card-header class="sticky-header">
+      <mat-card-title style="color: #302CB3;">Add ESI Slab</mat-card-title>
+
+      <span class="spacer"></span>
+      <button mat-icon-button (click)="onClose()" class="no-border-icon">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-card-header>
+
+    <mat-card-content>
+
+      <!-- ===== FORM SECTION (UNCHANGED) ===== -->
+      <div class="row g-3 mb-3">
+        <div class="col-md-4">
+          <label class="form-label text-muted small">
+            Pay Code<span class="text-danger">*</span>
+          </label>
+
+          <select class="form-select form-select-sm" [(ngModel)]="selectedPayCode" name="payCode"
+            (change)="val_paycode = false; onPayCodeChange()">
+            <option value="">Select</option>
+            <option *ngFor="let pay of payCodeList" [value]="pay.paycode_Id">
+              {{ pay.paycode_Code }}
+            </option>
+          </select>
+
+          <div *ngIf="val_paycode" class="text-danger small mt-1">
+            Pay Code is required.
+          </div>
+
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label text-muted small">Description</label>
+          <input type="text" class="form-control form-control-sm" [(ngModel)]="description" name="description"
+            disabled />
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label text-muted small">Print As</label>
+          <input type="text" class="form-control form-control-sm" [(ngModel)]="printAs" name="printAs" disabled />
+        </div>
+      </div>
+
+      <div class="row g-3 mb-3">
+        <div class="col-md-4">
+          <label class="form-label text-muted small">
+            Disability:<span class="text-danger">*</span>
+          </label>
+
+          <select class="form-select form-select-sm" [(ngModel)]="disability" name="disability"
+            (change)="val_disability = false">
+            <option value="">Select</option>
+            <option [ngValue]="0">No</option>
+            <option [ngValue]="1">Yes</option>
+          </select>
+
+          <div *ngIf="val_disability" class="text-danger small mt-1">
+            Disability is required.
+          </div>
+
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">
+            Effective Date:<span class="text-danger">*</span>
+          </label>
+          <input type="date" class="form-control" [(ngModel)]="effectiveDate" name="effectiveDate"
+            (change)="val_effectiveDate = false" />
+
+          <div *ngIf="val_effectiveDate" class="text-danger small mt-1">
+            Effective Date is required.
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ===== ACTION BUTTONS ===== -->
+      <div class="d-flex gap-2 mb-2">
+        <button class="btn btn-sm btn-add" (click)="addRow()">
+          <mat-icon>add</mat-icon>
+        </button>
+
+        <button class="btn btn-sm btn-delete" (click)="deleteRow()">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+
+      <div class="esi-slab-table-wrapper">
+
+        <div class="table-scroll">
+          <mat-table [dataSource]="uploadedDataSource" class="custom-table mat-elevation-z8">
+
+            <ng-container matColumnDef="slNo">
+              <mat-header-cell *matHeaderCellDef>Sl No</mat-header-cell>
+              <mat-cell *matCellDef="let row; let i = index">
+                {{ i + 1 }}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="fromValue">
+              <mat-header-cell *matHeaderCellDef>From Value</mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                <input type="number" class="form-control form-control-sm" [(ngModel)]="row.fromValue">
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="toValue">
+              <mat-header-cell *matHeaderCellDef>To Value</mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                <input type="number" class="form-control form-control-sm" [(ngModel)]="row.toValue">
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="criteria">
+              <mat-header-cell *matHeaderCellDef>Criteria</mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                <input type="number" class="form-control form-control-sm" [(ngModel)]="row.criteria" step="0.01"
+                  inputmode="decimal" placeholder="0.00">
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="criteriaType">
+              <mat-header-cell *matHeaderCellDef>Criteria Type</mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                <select class="form-select form-select-sm" [(ngModel)]="row.criteriaType">
+                  <option value="">Select</option>
+                  <option *ngFor="let ct of criteriaTypeList" [value]="ct.criteria_Type_Id">
+                    {{ ct.criteria_Type_Name }}
+                  </option>
+                </select>
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; let i = index; columns: uploadDisplayedColumns" (click)="selectRow(i)"
+              [class.selected-row]="selectedRowIndex === i">
+            </mat-row>
+
+
+          </mat-table>
+        </div>
+
+        <!-- <mat-paginator #esiSlabPaginator class="esi-slab-paginator" [pageSize]="5" [pageSizeOptions]="[5,10,20]"
+          showFirstLastButtons>
+        </mat-paginator> -->
+
+      </div>
+
+      <div class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">
+
+        <button type="button" (click)="onClose()" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+            cursor: pointer; background-color: #f0f0f0; color: black;">
+          Cancel
+        </button>
+
+        <button type="button" (click)="SaveClick()" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+            cursor: pointer; background-color: blue; color: white;">
+          Save
+        </button>
+
+      </div>
+
+
+    </mat-card-content>
+  </mat-card>
+
+</ng-container>
+<!-- ===================== EDIT ESI SLAB ===================== -->
+<ng-container *ngIf="mode === 'ESI_SLAB' && Edit">
+
+  <mat-card class="custom-card">
+    <mat-card-header class="sticky-header">
+      <mat-card-title style="color:#302CB3;">Edit ESI Slab</mat-card-title>
+      <span class="spacer"></span>
+      <button mat-icon-button (click)="onClose()" class="no-border-icon">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-card-header>
+
+    <mat-card-content>
+
+      <!-- FORM (READONLY PAYCODE) -->
+      <div class="row g-3 mb-3">
+        <div class="col-md-4">
+          <label class="form-label text-muted small">Pay Code</label>
+          <select class="form-select form-select-sm" [(ngModel)]="selectedPayCode" disabled>
+            <option *ngFor="let pay of payCodeList" [value]="pay.paycode_Id">
+              {{ pay.paycode_Code }}
+            </option>
+          </select>
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label text-muted small">Description</label>
+          <input class="form-control form-control-sm" [(ngModel)]="description" disabled />
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label text-muted small">Print As</label>
+          <input class="form-control form-control-sm" [(ngModel)]="printAs" disabled />
+        </div>
+      </div>
+
+      <div class="row g-3 mb-3">
+        <div class="col-md-4">
+          <label class="form-label text-muted small">Disability</label>
+          <select class="form-select form-select-sm" [(ngModel)]="disability" disabled>
+
+            <option value="">Select</option>
+            <option [ngValue]="0">No</option>
+            <option [ngValue]="1">Yes</option>
+          </select>
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">Effective Date</label>
+          <input type="date" class="form-control" [(ngModel)]="effectiveDate" disabled />
+        </div>
+      </div>
+
+      <!-- ACTION -->
+      <div class="d-flex gap-2 mb-2">
+        <button class="btn btn-sm btn-add" (click)="addRow()">
+          <mat-icon>add</mat-icon>
+        </button>
+        <button class="btn btn-sm btn-delete" (click)="deleteRow()">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+
+      <!-- FULL TABLE AGAIN -->
+      <div class="esi-slab-table-wrapper">
+        <div class="table-scroll">
+
+          <mat-table [dataSource]="uploadedDataSource" class="custom-table mat-elevation-z8">
+
+            <ng-container matColumnDef="slNo">
+              <mat-header-cell *matHeaderCellDef>Sl No</mat-header-cell>
+              <mat-cell *matCellDef="let row; columns: ['slNo', 'fromValue','toValue','criteria', 'criteriaType'];">
+                {{ row.slNo }}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="fromValue">
+              <mat-header-cell *matHeaderCellDef>From Value</mat-header-cell>
+              <mat-cell *matCellDef="let r">
+                <input class="form-control form-control-sm" [(ngModel)]="r.fromValue">
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="toValue">
+              <mat-header-cell *matHeaderCellDef>To Value</mat-header-cell>
+              <mat-cell *matCellDef="let r">
+                <input class="form-control form-control-sm" [(ngModel)]="r.toValue">
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="criteria">
+              <mat-header-cell *matHeaderCellDef>Criteria</mat-header-cell>
+              <mat-cell *matCellDef="let r">
+                <input class="form-control form-control-sm" [(ngModel)]="r.criteria">
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="criteriaType">
+              <mat-header-cell *matHeaderCellDef>Criteria Type</mat-header-cell>
+              <mat-cell *matCellDef="let r">
+                <select class="form-select form-select-sm" [(ngModel)]="r.criteriaType">
+                  <option value="">Select</option>
+                  <option *ngFor="let ct of criteriaTypeList" [value]="ct.criteria_Type_Id">
+                    {{ ct.criteria_Type_Name }}
+                  </option>
+                </select>
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: uploadDisplayedColumns"></mat-row>
+
+          </mat-table>
+
+        </div>
+
+        <!-- ✅ ONLY CHANGE HERE -->
+        <!-- <mat-paginator #esiSlabPaginator [pageSize]="10" [pageSizeOptions]="[5,10,20]" showFirstLastButtons>
+        </mat-paginator> -->
+
+      </div>
+      <div class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">
+
+        <button type="button" (click)="onClose()" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+            cursor: pointer; background-color: #f0f0f0; color: black;">
+          Cancel
+        </button>
+
+        <button type="button" (click)="UpdateClick()" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+            cursor: pointer; background-color: blue; color: white;">
+          Update
+        </button>
+
+      </div>
+
+
+    </mat-card-content>
+  </mat-card>
+
+</ng-container>
+
+<!-- ===================== ADD ESI BLOCK ===================== -->
+<ng-container *ngIf="mode === 'ESI_BLOCK' && !Edit">
+
+  <mat-card class="custom-card esi-block-wrapper">
+    <mat-card-header class="sticky-header">
+      <mat-card-title style="color:#302CB3;">Add ESI Block</mat-card-title>
+
+      <span class="spacer"></span>
+      <button mat-icon-button (click)="onClose()" class="no-border-icon">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-card-header>
+
+    <mat-card-content>
+
+      <!-- EFFECTIVE DATE -->
+      <div class="row g-3 mb-3">
+        <div class="col-md-4">
+          <label class="form-label">
+            Effective Date<span class="text-danger">*</span>
+          </label>
+
+          <input type="date" class="form-control" [(ngModel)]="blockEffectiveDate"
+            (change)="val_blockEffectiveDate = false">
+
+          <div *ngIf="val_blockEffectiveDate" class="text-danger small mt-1">
+            Effective Date is required.
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ACTION BUTTONS -->
+      <div class="d-flex gap-2 mb-2">
+        <button class="btn btn-sm btn-add" (click)="addBlockRow()">
+          <mat-icon>add</mat-icon>
+        </button>
+
+        <button class="btn btn-sm btn-delete" (click)="deleteBlockRow()">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+
+      <!-- TABLE -->
+      <div class="esi-block-table-wrapper">
+        <div class="table-scroll esi-block-scroll">
+
+          <mat-table [dataSource]="esiBlockDataSource" class="custom-table esi-block-table mat-elevation-z8">
+
+            <ng-container matColumnDef="slNo">
+              <mat-header-cell *matHeaderCellDef>Sl No</mat-header-cell>
+              <mat-cell *matCellDef="let r; let i=index">
+                {{ i + 1 }}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="block">
+              <mat-header-cell *matHeaderCellDef>Block</mat-header-cell>
+              <mat-cell *matCellDef="let r; let i=index">
+                <select class="form-select form-select-sm" [(ngModel)]="r.block">
+                  <option value="">Select</option>
+                  <option *ngFor="let bt of blockTypeList" [value]="bt.block_Type_Id">
+                    {{ bt.block_Type_Name }}
+                  </option>
+                </select>
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="month">
+              <mat-header-cell *matHeaderCellDef>Month</mat-header-cell>
+              <mat-cell *matCellDef="let r; let i=index">
+                <select class="form-select form-select-sm" [(ngModel)]="r.month">
+                  <option value="">Select</option>
+                  <option *ngFor="let m of monthList" [value]="m.month_Id">
+                    {{ m.month_Name }}
+                  </option>
+                </select>
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="esiBlockColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; let i = index; columns: esiBlockColumns" (click)="selectBlockRow(i)"
+              [class.selected-row]="selectedBlockRowIndex === i">
+            </mat-row>
+
+          </mat-table>
+
+        </div>
+
+        <!-- <mat-paginator [pageSize]="5" [pageSizeOptions]="[5,10]" showFirstLastButtons>
+        </mat-paginator> -->
+      </div>
+
+    </mat-card-content>
+    <div class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">
+
+      <button type="button" (click)="onClose()" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+            cursor: pointer; background-color: #f0f0f0; color: black;">
+        Cancel
+      </button>
+
+      <button type="button" (click)="SaveESIBlockClick()" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+            cursor: pointer; background-color: blue; color: white;">
+        Save
+      </button>
+
+    </div>
+
+  </mat-card>
+
+</ng-container>
+
+<!-- ===================== EDIT ESI BLOCK ===================== -->
+<ng-container *ngIf="mode === 'ESI_BLOCK' && Edit">
+
+  <mat-card class="custom-card esi-block-wrapper">
+    <mat-card-header class="sticky-header">
+      <mat-card-title style="color:#302CB3;">Edit ESI Block</mat-card-title>
+
+      <span class="spacer"></span>
+      <button mat-icon-button (click)="onClose()" class="no-border-icon">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-card-header>
+
+    <mat-card-content>
+
+      <!-- EFFECTIVE DATE (DISABLED) -->
+      <div class="row g-3 mb-3">
+        <div class="col-md-4">
+          <label class="form-label">Effective Date</label>
+          <input type="date" class="form-control" [(ngModel)]="blockEffectiveDate" disabled>
+        </div>
+      </div>
+
+      <!-- ACTION BUTTONS -->
+      <div class="d-flex gap-2 mb-2">
+        <button class="btn btn-sm btn-add" (click)="addBlockRow()">
+          <mat-icon>add</mat-icon>
+        </button>
+
+        <button class="btn btn-sm btn-delete" (click)="deleteBlockRow()">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+
+      <!-- 🔥 SAME TABLE AS ADD -->
+      <div class="esi-block-table-wrapper">
+        <div class="table-scroll esi-block-scroll">
+
+          <mat-table [dataSource]="esiBlockDataSource" class="custom-table esi-block-table mat-elevation-z8">
+
+            <ng-container matColumnDef="slNo">
+              <mat-header-cell *matHeaderCellDef>Sl No</mat-header-cell>
+              <mat-cell *matCellDef="let r; let i=index">
+                {{ i + 1 }}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="block">
+              <mat-header-cell *matHeaderCellDef>Block</mat-header-cell>
+
+              <mat-cell *matCellDef="let r; let i = index">
+                <select class="form-select form-select-sm" [(ngModel)]="r.block">
+
+                  <option [value]="">Select</option>
+
+                  <option *ngFor="let bt of blockTypeList" [value]="bt.block_Type_Id">
+                    {{ bt.block_Type_Name }}
+                  </option>
+
+                </select>
+              </mat-cell>
+            </ng-container>
+
+
+            <ng-container matColumnDef="month">
+              <mat-header-cell *matHeaderCellDef>Month</mat-header-cell>
+              <mat-cell *matCellDef="let r; let i=index">
+                <select class="form-select form-select-sm" [(ngModel)]="r.month">
+                  <option value="">Select</option>
+                  <option *ngFor="let m of monthList" [value]="m.month_Id">
+                    {{ m.month_Name }}
+                  </option>
+                </select>
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="esiBlockColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: esiBlockColumns"></mat-row>
+
+          </mat-table>
+
+        </div>
+
+        <!-- <mat-paginator [pageSize]="5" [pageSizeOptions]="[5,10]" showFirstLastButtons>
+        </mat-paginator> -->
+      </div>
+
+    </mat-card-content>
+
+    <div class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">
+
+      <button type="button" (click)="onClose()" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+            cursor: pointer; background-color: #f0f0f0; color: black;">
+        Cancel
+      </button>
+
+      <button type="button" (click)="UpdateESIBlockClick()" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+            cursor: pointer; background-color: blue; color: white;">
+        Update
+      </button>
+
+    </div>
+  </mat-card>
+
+</ng-container>
+
+
+<!-- ===================== ADD ESI LOCATION ===================== -->
+<ng-container *ngIf="mode === 'ESI_LOCATION' && !Edit">
+
+  <mat-card class="custom-card">
+    <mat-card-header class="sticky-header">
+      <mat-card-title style="color:#302CB3;">Add ESI Location Slab</mat-card-title>
+      <span class="spacer"></span>
+      <button mat-icon-button (click)="onClose()" class="no-border-icon">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-card-header>
+
+    <mat-card-content>
+
+      <!-- ===== HEADER FORM ===== -->
+      <div class="row g-3 mb-3">
+
+        <div class="col-md-4">
+          <label class="form-label text-muted small">
+            Pay Code<span class="text-danger">*</span>
+          </label>
+          <select class="form-select form-select-sm" [(ngModel)]="selectedPayCode" (change)="onPayCodeChange()">
+            <option value="">Select</option>
+            <option *ngFor="let pay of payCodeList" [value]="pay.paycode_Id">
+              {{ pay.paycode_Code }}
+            </option>
+          </select>
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label text-muted small">Description</label>
+          <input class="form-control form-control-sm" [(ngModel)]="description" disabled />
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label text-muted small">Print As</label>
+          <input class="form-control form-control-sm" [(ngModel)]="printAs" disabled />
+        </div>
+
+      </div>
+
+      <div class="row g-3 mb-3">
+
+        <div class="col-md-4">
+          <label class="form-label">From Date<span class="text-danger">*</span></label>
+          <input type="date" class="form-control" [(ngModel)]="locFromDate" />
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label text-muted small">
+            State<span class="text-danger">*</span>
+          </label>
+          <select class="form-select form-select-sm" [(ngModel)]="selectedStateId" (change)="onStateChange()">
+            <option value="">Select</option>
+            <option *ngFor="let s of stateList" [value]="s.stateId">
+              {{ s.stateName }}
+            </option>
+          </select>
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label text-muted small">
+            City<span class="text-danger">*</span>
+          </label>
+          <select class="form-select form-select-sm" [(ngModel)]="selectedCityId">
+            <option value="">Select</option>
+            <option *ngFor="let c of cityList" [value]="c.cityID">
+              {{ c.cityName }}
+            </option>
+          </select>
+        </div>
+
+        <div class="col-md-4 mt-2">
+          <label class="form-label">To Date</label>
+          <input type="date" class="form-control" [(ngModel)]="locToDate" />
+        </div>
+
+      </div>
+
+      <!-- ===== ROW ACTIONS ===== -->
+      <div class="d-flex gap-2 mb-2">
+        <button class="btn btn-sm btn-add" (click)="addLocation()">
+          <mat-icon>add</mat-icon>
+        </button>
+        <button class="btn btn-sm btn-delete" (click)="deleteLocationRow()">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+
+      <!-- ===== TABLE ===== -->
+      <div class="esi-slab-table-wrapper">
+        <div class="table-scroll">
+
+          <mat-table [dataSource]="uploadedDataSource" class="custom-table mat-elevation-z8">
+
+            <ng-container matColumnDef="slNo">
+              <mat-header-cell *matHeaderCellDef>Sl No</mat-header-cell>
+              <mat-cell *matCellDef="let row; let i = index">
+                {{ i + 1 }}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="fromValue">
+              <mat-header-cell *matHeaderCellDef>From Value</mat-header-cell>
+              <mat-cell *matCellDef="let r">
+                <input class="form-control form-control-sm" [(ngModel)]="r.fromValue">
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="toValue">
+              <mat-header-cell *matHeaderCellDef>To Value</mat-header-cell>
+              <mat-cell *matCellDef="let r">
+                <input class="form-control form-control-sm" [(ngModel)]="r.toValue">
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="criteria">
+              <mat-header-cell *matHeaderCellDef>Criteria</mat-header-cell>
+              <mat-cell *matCellDef="let r">
+                <input class="form-control form-control-sm" [(ngModel)]="r.criteria">
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="criteriaType">
+              <mat-header-cell *matHeaderCellDef>Criteria Type</mat-header-cell>
+              <mat-cell *matCellDef="let r">
+                <select class="form-select form-select-sm" [(ngModel)]="r.criteriaType">
+                  <option value="">Select</option>
+                  <option *ngFor="let ct of criteriaTypeList" [value]="ct.criteria_Type_Id">
+                    {{ ct.criteria_Type_Name }}
+                  </option>
+                </select>
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; let i = index; columns: uploadDisplayedColumns" (click)="selectLocationRow(i)"
+              [class.selected-row]="selectedRowIndex === i">
+            </mat-row>
+          </mat-table>
+        </div>
+
+        <!-- <mat-paginator #esiLocationPaginator [pageSize]="10" [pageSizeOptions]="[5,10,20]" showFirstLastButtons>
+        </mat-paginator> -->
+      </div>
+
+
+      <div class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">
+
+        <button type="button" (click)="onClose()" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+            cursor: pointer; background-color: #f0f0f0; color: black;">
+          Cancel
+        </button>
+
+        <button type="button" (click)="SaveESILocationClick()" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+            cursor: pointer; background-color: blue; color: white;">
+          Save
+        </button>
+
+      </div>
+      <!-- ===== FOOTER ===== -->
+      <!-- <div class="d-flex justify-content-end mt-3" style="gap:10px;">
+        <button type="button" (click)="onClose()" class="btn btn-light btn-sm">
+          Cancel
+        </button>
+        <button type="button" (click)="SaveESILocationClick()" class="btn btn-primary btn-sm">
+          Save
+        </button>
+      </div> -->
+    </mat-card-content>
+  </mat-card>
+
+</ng-container>
+<!-- ===================== EDIT ESI LOCATION ===================== -->
+<ng-container *ngIf="mode === 'ESI_LOCATION' && Edit">
+
+  <mat-card class="custom-card">
+    <mat-card-header class="sticky-header">
+      <mat-card-title style="color:#302CB3;">Edit ESI Location Slab</mat-card-title>
+      <span class="spacer"></span>
+      <button mat-icon-button (click)="onClose()" class="no-border-icon">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-card-header>
+
+    <mat-card-content>
+
+      <!-- HEADER (READ ONLY PAYCODE) -->
+      <div class="row g-3 mb-3">
+
+        <div class="col-md-4">
+          <label class="form-label text-muted small">Pay Code</label>
+          <select class="form-select form-select-sm" [(ngModel)]="selectedPayCode" disabled>
+            <option *ngFor="let pay of payCodeList" [value]="pay.paycode_Id">
+              {{ pay.paycode_Code }}
+            </option>
+          </select>
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label text-muted small">Description</label>
+          <input class="form-control form-control-sm" [(ngModel)]="description" disabled />
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label text-muted small">Print As</label>
+          <input class="form-control form-control-sm" [(ngModel)]="printAs" disabled />
+        </div>
+
+      </div>
+
+      <div class="row g-3 mb-3">
+
+        <div class="col-md-4">
+          <label class="form-label">From Date</label>
+          <input type="date" class="form-control" [(ngModel)]="locFromDate" />
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">State</label>
+          <select class="form-select form-select-sm" [(ngModel)]="selectedStateId" (change)="onStateChange()">
+            <option *ngFor="let s of stateList" [value]="s.stateId">
+              {{ s.stateName }}
+            </option>
+          </select>
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">City</label>
+          <select class="form-select form-select-sm" [(ngModel)]="selectedCityId">
+            <option *ngFor="let c of cityList" [value]="c.cityID">
+              {{ c.cityName }}
+            </option>
+          </select>
+        </div>
+
+        <div class="col-md-4 mt-2">
+          <label class="form-label">To Date</label>
+          <input type="date" class="form-control" [(ngModel)]="locToDate" />
+        </div>
+
+      </div>
+
+      <!-- ROW ACTIONS -->
+      <div class="d-flex gap-2 mb-2">
+        <button class="btn btn-sm btn-add" (click)="addLocation()">
+          <mat-icon>add</mat-icon>
+        </button>
+        <button class="btn btn-sm btn-delete" (click)="deleteLocationRow()">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+
+      <!-- TABLE -->
+      <div class="esi-slab-table-wrapper">
+        <div class="table-scroll">
+
+          <mat-table [dataSource]="uploadedDataSource" class="custom-table mat-elevation-z8">
+
+            <!-- SL NO -->
+            <ng-container matColumnDef="slNo">
+              <mat-header-cell *matHeaderCellDef> Sl No </mat-header-cell>
+              <mat-cell *matCellDef="let row; let i = index">
+                {{ i + 1 }}
+              </mat-cell>
+            </ng-container>
+
+            <!-- FROM VALUE -->
+            <ng-container matColumnDef="fromValue">
+              <mat-header-cell *matHeaderCellDef> From Value </mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                <input class="form-control form-control-sm" [(ngModel)]="row.fromValue">
+              </mat-cell>
+            </ng-container>
+
+            <!-- TO VALUE -->
+            <ng-container matColumnDef="toValue">
+              <mat-header-cell *matHeaderCellDef> To Value </mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                <input class="form-control form-control-sm" [(ngModel)]="row.toValue">
+              </mat-cell>
+            </ng-container>
+
+            <!-- CRITERIA -->
+            <ng-container matColumnDef="criteria">
+              <mat-header-cell *matHeaderCellDef> Criteria </mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                <input class="form-control form-control-sm" [(ngModel)]="row.criteria">
+              </mat-cell>
+            </ng-container>
+
+            <!-- CRITERIA TYPE -->
+            <ng-container matColumnDef="criteriaType">
+              <mat-header-cell *matHeaderCellDef> Criteria Type </mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                <select class="form-select form-select-sm" [(ngModel)]="row.criteriaType">
+                  <option value="">Select</option>
+                  <option *ngFor="let ct of criteriaTypeList" [value]="ct.criteria_Type_Id">
+                    {{ ct.criteria_Type_Name }}
+                  </option>
+                </select>
+              </mat-cell>
+            </ng-container>
+
+            <!-- HEADER & ROW DEFINITIONS -->
+            <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: uploadDisplayedColumns" (click)="selectLocationRow(row)">
+            </mat-row>
+
+          </mat-table>
+
+        </div>
+
+        <!-- <mat-paginator #esiLocationPaginator [pageSize]="10" [pageSizeOptions]="[5,10,20]" showFirstLastButtons>
+        </mat-paginator> -->
+      </div>
+
+
+      <!-- FOOTER -->
+      <div class="d-flex justify-content-end mt-3" style="gap:10px;">
+        <button type="button" (click)="onClose()" class="btn btn-light btn-sm">
+          Cancel
+        </button>
+        <button type="button" (click)="UpdateESILocationClick()" class="btn btn-primary btn-sm">
+          Update
+        </button>
+      </div>
+
+    </mat-card-content>
+  </mat-card>
+
+</ng-container>
+<div *ngIf="isLoading" class="loading-overlay">
+  <img src="assets/Loading.gif" alt="Loading...">
+</div>
