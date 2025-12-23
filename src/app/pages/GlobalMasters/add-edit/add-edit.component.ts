@@ -60,7 +60,6 @@ export class AddEditComponent {
     const json = this._sessionStoreage.getItem('UserProfile');
     if (json) {
       this.userdetail = JSON.parse(this.decry.decrypt(json));
-      //console.log(this.userdetail.userId);
     } else {
       console.warn('UserProfile not found in session storage');
     }
@@ -80,65 +79,8 @@ export class AddEditComponent {
         Digit_Length_Condition: this.Editdata.Digit_Length_Condition,
         Bank_Account_Number_Digits: this.Editdata.Bank_Account_Number_Digits,
       });
-      console.log("Id", this.Editdata.Bank_Id)
-
     }
-
-
   }
-
-  // Save() {
-
-  //   if (this.EditbankForm.invalid) {
-  //     this.EditbankForm.markAllAsTouched();
-  //     return;
-  //   }
-  //   const formValue = this.EditbankForm.value;
-  //   const BankAdd = {
-  //     Bank_Id: this.Editdata.Bank_Id,
-  //     Serial_No: 1,
-  //     Error_Message: '',
-  //     Bank_Name: formValue.Bank_Name,
-  //     Bank_Account_Number_Digits: formValue.Bank_Account_Number_Digits,
-  //     Digit_Length_Condition: formValue.Digit_Length_Condition,
-  //   };
-
-  //   const BankRequest = {
-  //     createdBy: this.userdetail.user_Id,
-  //     mode: 'Edit',
-  //     detail: BankAdd
-  //   }
-  //   console.log(BankRequest);
-
-  //   this.bankService.PostAddBank(BankRequest).subscribe({
-  //     next: (res) => {
-  //       console.log(res);
-  //       const errormsg = res.Data.data;
-
-  //       if (errormsg === "Bank Created Successfully") {
-  //         this.showPopup = true;
-  //         this.popupMessage = "Bank Added Successfully";
-  //       }
-  //       else {
-  //         // alert("Bank Name already availabe");
-  //         alert(res.Data.data);
-  //         this.EditbankForm.reset({
-  //           Bank_Name: '',
-  //           Bank_Account_Number_Digits: '',
-  //           Digit_Length_Condition: '',
-  //         });
-  //         this.isLoading = false;
-  //         this.onClose()
-  //       }
-  //       error: (err) => {
-  //         console.error("Error saving:", err);
-  //       }
-  //     }
-  //   });
-
-
-  //   console.log("Form submitted", BankRequest);
-  // }
 
   Save() {
 
@@ -166,7 +108,6 @@ export class AddEditComponent {
 
     this.bankService.PostAddBank(BankRequest).subscribe({
       next: (res) => {
-        console.log(res);
         const msg = res.Data.data;
 
         if (msg === "Bank Updated Successfully") {

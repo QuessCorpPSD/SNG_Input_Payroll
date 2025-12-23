@@ -1,23 +1,11 @@
   .page-wrapper {
       display: flex;
       align-items: flex-start;
-      height: 100vh;
-      /* Full viewport height */
       overflow: hidden;
-      /* Prevent body scroll */
   }
 
-  /* Left fixed icon area */
-  .left-icon {
-      flex: 0 0 60px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: #f0f0f0;
-      border-right: 1px solid #ddd;
-  }
 
-  /* Scrollable main content */
+
   .scrollable-content {
       flex: 1 1 auto;
       overflow-x: auto;
@@ -25,66 +13,80 @@
       padding-left: 10px;
   }
 
-  /* Force min width so horizontal scroll works */
   .container-fluid,
   .table-wrapper1 {
       min-width: 960px;
   }
 
-  /* Remove shadow for flat look */
   ::ng-deep .mat-elevation-z8 {
       box-shadow: none !important;
   }
 
-  /* Header Cells */
-  ::ng-deep .mat-mdc-header-cell {
-      background-color: #f5f5f5 !important;
-      color: #555 !important;
-      font-size: 13px;
-      font-family: "Montserrat", sans-serif;
-      font-weight: 600;
-      border-right: 1px solid #ddd;
-      position: sticky;
-      top: 0;
-      display: flex;
-      justify-content: left;
-      align-items: center;
-      text-align: center;
-      height: 32px !important;
-      z-index: 1;
-      width: 100%;
+  ::ng-deep .mat-mdc-table {
+      display: table !important;
+      table-layout: auto !important;
+      width: max-content !important;
+      min-width: 100% !important;
   }
 
-  /* Body Cells */
+  ::ng-deep .mat-mdc-header-row,
+  ::ng-deep .mat-mdc-row {
+      display: table-row !important;
+      height: 50px !important;
+  }
+
+  ::ng-deep .mat-mdc-header-cell,
+  ::ng-deep .mat-mdc-cell {
+      display: table-cell !important;
+      width: auto !important;
+      white-space: nowrap;
+  }
+
+  ::ng-deep .mat-mdc-header-cell {
+      background-color: #ffffff !important;
+      color: #000000 !important;
+      font-family: "Montserrat", sans-serif;
+      font-size: 13px;
+      font-weight: 700 !important;
+      border-right: 1px solid #ddd;
+      height: 32px !important;
+      /* padding: 0 12px; */
+      padding-top: 12px !important;
+      padding-bottom: 12px !important;
+      box-sizing: border-box;
+      white-space: nowrap;
+      display: table-cell !important;
+      vertical-align: middle;
+  }
+
   ::ng-deep .mat-mdc-cell {
       font-family: "Montserrat", sans-serif;
       font-size: 12px;
       font-weight: 600;
       color: #222;
-      border-bottom: 1px dashed #E8E8E8 !important;
+      border-bottom: 1px dashed #e8e8e8 !important;
       border-right: 1px solid #ddd;
-      display: flex;
-      justify-content: left;
-      align-items: center;
-      text-align: center;
-      padding: 0 10px;
       height: 30px;
+      padding-top: 12px !important;
+      padding-bottom: 12px !important;
+      box-sizing: border-box;
+      white-space: nowrap;
+      display: table-cell !important;
+      vertical-align: middle;
   }
 
-  /* Hover effect for rows */
+
   ::ng-deep .mat-row:hover {
       background-color: #f9f9f9 !important;
       transition: background 0.2s ease-in-out;
   }
 
-  /* Header Row */
   ::ng-deep .mat-header-row {
       height: 32px !important;
       background-color: #f5f5f5 !important;
       border-bottom: 1px solid #ddd;
   }
 
-  /* Row Heights */
   ::ng-deep .mat-row {
       height: 32px !important;
   }
@@ -99,11 +101,8 @@
 
   .table-scroll {
       overflow-x: auto;
-      /* horizontal scroll */
       overflow-y: auto;
-      /* vertical scroll */
       max-height: auto;
-      /* 👈 adjust height to show scrollbar */
       border-radius: 4px;
       border: 1px solid #ddd;
       background-color: #fff;
@@ -112,7 +111,6 @@
   }
 
 
-  /* make sure both scrollbars are visible */
   .table-scroll::-webkit-scrollbar {
       width: 8px;
       height: 8px;
@@ -123,7 +121,6 @@
       border-radius: 3px;
   }
 
-  /* Header row scrolls with body */
   ::ng-deep .mat-header-row {
       height: 32px !important;
       background-color: #f5f5f5 !important;
@@ -133,58 +130,50 @@
   }
 
 
-  /* ===== Angular Material Table Width Handling ===== */
   .custom-table {
       width: max-content;
-      /* grows to fit all columns */
       min-width: 100%;
-      /* ensures full width when few columns */
       table-layout: auto !important;
   }
 
-  /* ===== Header Cells ===== */
   ::ng-deep .mat-mdc-header-cell {
-      background-color: #f5f5f5 !important;
-      color: #555 !important;
-      font-size: 13px;
+      background-color: #ffffff !important;
+      color: #000000 !important;
       font-family: "Montserrat", sans-serif;
-      font-weight: 600;
+      font-size: 13px;
+      font-weight: 700 !important;
       border-right: 1px solid #ddd;
-      display: flex;
-      justify-content: left;
-      align-items: center;
-      text-align: center;
       height: 32px !important;
-      min-width: 140px;
-      /* ensures consistent width for scrolling */
+      /* padding: 0 12px; */
+      padding-top: 12px !important;
+      padding-bottom: 12px !important;
+      box-sizing: border-box;
       white-space: nowrap;
+      display: table-cell !important;
+      vertical-align: middle;
   }
 
-  /* ===== Body Cells ===== */
   ::ng-deep .mat-mdc-cell {
       font-family: "Montserrat", sans-serif;
       font-size: 12px;
       font-weight: 600;
       color: #222;
-      border-bottom: 1px dashed #E8E8E8 !important;
+      border-bottom: 1px dashed #e8e8e8 !important;
       border-right: 1px solid #ddd;
-      display: flex;
-      justify-content: left;
-      align-items: center;
-      text-align: center;
-      padding: 0 10px;
       height: 30px;
-      min-width: 140px;
+      padding-top: 12px !important;
+      padding-bottom: 12px !important;
+      box-sizing: border-box;
       white-space: nowrap;
+      display: table-cell !important;
+      vertical-align: middle;
   }
 
 
-  /* ===== Row Styling ===== */
   ::ng-deep .mat-row {
       height: 32px !important;
   }
 
-  /* Hover effect */
   ::ng-deep .mat-row:hover {
       background-color: #f9f9f9 !important;
       transition: background 0.2s ease-in-out;
@@ -195,8 +184,8 @@
       border: 1px solid #ddd;
       border-top: none;
       border-radius: 0 0 4px 4px;
-      background-color: #fafafa !important;
-      color: #555;
+      background-color: #ffffff !important;
+      color: #000000;
       padding: 4px 12px !important;
       display: flex;
       align-items: center;
@@ -206,7 +195,6 @@
   ::ng-deep .mat-mdc-paginator-range-label {
       font-size: 13px;
       font-weight: 500;
-      color: #555;
   }
 
   ::ng-deep .mat-mdc-paginator-icon {
@@ -217,7 +205,14 @@
       background-color: #f1f1f1 !important;
   }
 
-  /* ===== Responsive ===== */
+  ::ng-deep .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      width: 100%
+  }
+
   @media (max-width: 768px) {
 
       ::ng-deep .mat-mdc-header-cell,
@@ -285,7 +280,8 @@
       min-width: 80px !important;
       max-width: 80px !important;
   }
-   .Action {
+
+  .Action {
       width: 120px !important;
       min-width: 120px !important;
       max-width: 120px !important;
@@ -295,4 +291,9 @@
       width: 400px !important;
       min-width: 400px !important;
       max-width: 400px !important;
+  }
+
+  .btn-search {
+      background-color: #0d6efd;
+      color: #fff;
   }

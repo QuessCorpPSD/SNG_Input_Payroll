@@ -83,11 +83,23 @@ export class GSTCreateComponent {
         break;
     }
   }
+
+  showAlertPopup(message: string, subMessage: string = '') {
+    this.popupMessage = message;
+    this.popupSubMessage = subMessage;
+    this.showPopup = true;
+  }
+
+  closePopup() {
+    this.showPopup = false;
+    this.popupMessage = '';
+    this.popupSubMessage = '';
+  }
   LoadEntity() {
 
     this.gstService.GetEntity().subscribe({
       next: (res: any) => {
-        console.log(" Pay Category API Response:", res);
+
 
         if (res?.Data?.data?.Table0) {
           this.entity = res.Data.data.Table0;
@@ -151,26 +163,21 @@ export class GSTCreateComponent {
       "Pincode": String(this.PinCode)
 
     };
-    console.log('create payload', JSON.stringify(payload));
+
     this.gstService.Create(payload).subscribe({
       next: (res: any) => {
 
-        let isSuccess = String(res?.StatusCode) === '200' &&
-          String(res?.Data?.response) === 'Created Successfully';
+        const msg=res?.Data?.response;
 
-        if (isSuccess) {
+        if (msg.includes('Success')) {
           this.showPopup = true;
-          this.popupMessage = res?.Data?.response;
+          alert(res?.Data?.response);
           this.dialogRef.close('add')
           this.isLoading = false;
-
-
         } else {
-
           this.isLoading = false;
           alert(res?.Data?.response);
           this.dialogRef.close('add')
-
         }
 
         // <-- show popup for both cases

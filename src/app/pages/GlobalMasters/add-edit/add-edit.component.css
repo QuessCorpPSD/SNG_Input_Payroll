@@ -1,24 +1,3 @@
-/* 
-
-.small-datepicker {
-  width: 180px;   
-}
-.small-datepicker .mat-mdc-text-field-wrapper {
-  height: 20px !important;   
-  padding: 0 8px !important;
-}  /* border-radius: 0.600rem; */
-
-
-/* .small-datepicker .mat-mdc-form-field-infix {
-  padding: 0 !important;
-}
-
-.small-datepicker input.mat-mdc-input-element {
-  height: 15px !important;
-  font-size: 13px;   
-}  */
-
-/* Reduce overall height */
 .small-datepicker .mat-mdc-text-field-wrapper {
     --mdc-outlined-text-field-container-height: 36px;
     /* default is 56px */

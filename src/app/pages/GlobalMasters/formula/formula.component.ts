@@ -10,19 +10,18 @@ import { AddFormulasComponent } from '../add-formulas/add-formulas.component';
 import { PaycodeComponent } from "../../../common/paycode/paycode.component";
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
-
-
-import FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 import { FormualService } from '../../../Repository/GlobalMasters/formula.service';
 import { IFormulaRepository } from '../../../Repository/GlobalMasters/IFormulaRepository';
+import { MatCardModule } from "@angular/material/card";
+import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.component";
 
 export const Formula_TOKEN = new InjectionToken<IFormulaRepository>('Formula_TOKEN');
 
 @Component({
   selector: 'app-formula',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatTooltipModule, MatTableModule, MatPaginator, PaycodeComponent],
+  imports: [CommonModule, MatIconModule, MatTooltipModule, MatTableModule, MatPaginator, PaycodeComponent, MatCardModule, AlertpopupComponent],
   templateUrl: './formula.component.html',
   styleUrl: './formula.component.css',
   providers: [{
@@ -34,13 +33,14 @@ export const Formula_TOKEN = new InjectionToken<IFormulaRepository>('Formula_TOK
 export class FormulaComponent {
   uploadedData: any[] = [];
   showTable: boolean = false;
-  constructor(private dialog: MatDialog,
-    @Inject(Formula_TOKEN) private formula: IFormulaRepository,
-    private decry: EncryptionService,
-    private _sessionStoreage: SessionStorageService) { }
-  isLoading = false;
+
   paycodeUI: any;
   userdetail: any;
+
+  isLoading: boolean = false;
+  showPopup: boolean = false;
+  popupMessage: string = '';
+  popupSubMessage: string = '';
 
 
   uploadDisplayedColumns: string[] = [
@@ -57,7 +57,23 @@ export class FormulaComponent {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  constructor(private dialog: MatDialog,
+    @Inject(Formula_TOKEN) private formula: IFormulaRepository,
+    private decry: EncryptionService,
+    private _sessionStoreage: SessionStorageService) { }
 
+
+  showAlertPopup(message: string, subMessage: string = '') {
+    this.popupMessage = message;
+    this.popupSubMessage = subMessage;
+    this.showPopup = true;
+  }
+
+  closePopup() {
+    this.showPopup = false;
+    this.popupMessage = '';
+    this.popupSubMessage = '';
+  }
   ngOnInit(): void {
     const json = this._sessionStoreage.getItem('UserProfile');
     if (json) {
@@ -76,7 +92,6 @@ export class FormulaComponent {
 
   handlePaycodeEvent(paycode: any) {
     this.paycodeUI = paycode;
-    console.log(this.paycodeUI);
   }
 
 
@@ -94,7 +109,6 @@ export class FormulaComponent {
           this.isLoading = false;
           return;
         }
-        console.log(res.Data.data.Table0);
         this.uploadedDataSource = new MatTableDataSource<any>(res.Data.data.Table0);
         this.uploadedDataSource.paginator = this.paginator;
         this.uploadedDataSource.sort = this.sort;
@@ -107,34 +121,26 @@ export class FormulaComponent {
     });
   }
   exportToExcel() {
-
+    this.isLoading = true;
     const data = this.uploadedDataSource.data;
     if (!data || data.length === 0) {
       alert("No data available to export");
+      this.isLoading = false;
       return;
     }
-
-
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
-
-
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Formula");
-
-
     const today = new Date().toISOString().split('T')[0];
     const fileName = `Formula_${today}.xlsx`;
-
-
     XLSX.writeFile(wb, fileName);
-
-    alert("Excel exported successfully!");
+    this.isLoading = false;
   }
 
   AddPOOpen() {
     this.dialog.open(AddFormulasComponent, {
-      width: '50%',
-      height: '60vh',
+      width: '40%',
+      height: '54vh',
       disableClose: true,
       data: { mode: 'add' }
     });
@@ -142,8 +148,8 @@ export class FormulaComponent {
 
   openEdit(row: any) {
     const dialogRef = this.dialog.open(AddFormulasComponent, {
-      width: '50%',
-      height: '60vh',
+      width: '40%',
+      height: '54vh',
       disableClose: true,
       data: { mode: 'edit', row: row }
     });
@@ -156,19 +162,19 @@ export class FormulaComponent {
   }
   deleteFormula(row: any) {
 
-
-    // if (!row) {
-    //   alert("Please select a row to delete.");
-    //   return;
-    // }
-
-
-    const confirmDelete = confirm("Are you sure you want to delete this row?");
-    if (!confirmDelete) {
+    this.isLoading = true;
+    if (!row) {
+      alert("Please select a row to delete.");
+      this.isLoading = false;
       return;
     }
 
 
+    const confirmDelete = confirm("Are you sure you want to delete this row?");
+    if (!confirmDelete) {
+      this.isLoading = false;
+      return;
+    }
     const payload = {
       createdBy: this.userdetail.user_Id,
       mode: "Delete",
@@ -187,21 +193,21 @@ export class FormulaComponent {
         SNo: 0
       }
     };
-
-    console.log("DELETE PAYLOAD:", JSON.stringify(payload));
-
-
     this.formula.CreateFormula(payload).subscribe({
       next: (res: any) => {
-        console.log(res);
+        this.isLoading = false;
         if (res?.StatusCode === 200) {
-          alert(res?.Data?.message || "Formula Deleted successfully");
+          this.showAlertPopup(res?.Data?.message || "Formula Deleted successfully");
           this.onSearchClick();
         } else {
           alert("Delete failed");
+          this.isLoading = false;
         }
       },
-      error: () => alert("Failed")
+      error: () => {
+        this.isLoading = false;
+        alert("Failed");
+      }
     });
 
   }

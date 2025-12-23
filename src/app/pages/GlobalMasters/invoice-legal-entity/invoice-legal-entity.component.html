@@ -19,52 +19,48 @@
                 </div>
 
                 <div class="col-md-3 d-flex gap-2">
-                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Search"
-                        (click)="onSearchClick()">
+                    <button class="btn btn-search btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="Search" (click)="onSearchClick()">
                         <mat-icon>search</mat-icon>
                     </button>
-                    <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                    <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
                         matTooltip="Export to Excel" (click)="exportToExcel()">
                         <mat-icon>download</mat-icon>
                     </button>
 
-                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Add"
-                        (click)="AddPOOpen()">
+                    <button class="btn btn-success btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="Add" (click)="AddPOOpen()">
                         <mat-icon>add</mat-icon>
                     </button>
                 </div>
 
             </div>
         </div>
-        <div class="table-wrapper1" style="padding-top: 2%;" *ngIf="showTable">
+        <div class="table-wrapper1" style="padding-top: 2%;" [hidden]="!showTable">
+
             <div class="table-scroll">
 
                 <mat-table [dataSource]="uploadedDataSource" matSort
                     class="custom-table mat-elevation-z8 auto-fit-table">
 
-                    <!-- <ng-container matColumnDef="Action">
-                        <mat-header-cell *matHeaderCellDef><strong>Action</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row">
-                            <button class="btn btn-sm d-flex align-items-center justify-content-center"
-                                matTooltip="Delete">
-                                <mat-icon>delete</mat-icon>
-                            </button>
-                            <button class="btn btn-sm d-flex align-items-center justify-content-center"
-                                matTooltip="Edit">
-                                <mat-icon>edit</mat-icon>
-                            </button>
-                        </mat-cell>
-                    </ng-container> -->
-
+                    <!-- SI No -->
                     <ng-container matColumnDef="SI No">
-                        <mat-header-cell *matHeaderCellDef style="width: 70px;"><strong>SI No</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row" style="width: 70px;">{{ row['SI No'] }}</mat-cell>
+                        <mat-header-cell *matHeaderCellDef class="sno">
+                            <strong>SI No</strong>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="sno">
+                            {{ row['SI No'] }}
+                        </mat-cell>
                     </ng-container>
 
+                    <!-- Entity Name -->
                     <ng-container matColumnDef="Entity Name">
-                        <mat-header-cell *matHeaderCellDef style="width: 400px;"><strong>Entity
-                                Name</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row" style="width: 400px;">{{ row['Entity Name'] }}</mat-cell>
+                        <mat-header-cell *matHeaderCellDef class="entity">
+                            <strong>Entity Name</strong>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="entity">
+                            {{ row['Entity Name'] }}
+                        </mat-cell>
                     </ng-container>
 
                     <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
@@ -72,26 +68,24 @@
 
                 </mat-table>
 
-                <div *ngIf="uploadedData.length === 0" class="text-center p-4">
+                <div *ngIf="uploadedDataSource.data.length === 0" class="text-center p-4">
                     <p class="text-muted">No data to display</p>
                 </div>
 
             </div>
 
-            <mat-paginator #paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
-                showFirstLastButtons>
+            <mat-paginator #paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
             </mat-paginator>
 
         </div>
-        <div *ngIf="isLoading" class="loading-overlay">
-            <img src="assets/Loading.gif" alt="Loading...">
-        </div>
-
-
-        <div *ngIf="showPopup" class="overlay"></div>
-        <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
-            (close)="closePopup()">
-        </app-alertpopup>
-
     </div>
 </div>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>
+
+
+<div *ngIf="showPopup" class="overlay"></div>
+<app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+    (close)="closePopup()">
+</app-alertpopup>

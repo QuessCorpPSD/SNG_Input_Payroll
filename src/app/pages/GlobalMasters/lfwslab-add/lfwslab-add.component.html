@@ -1,0 +1,262 @@
+<form [formGroup]="addlwfform" novalidate *ngIf="!EDIT">
+    <mat-card class="custom-card">
+        <mat-card-header class="sticky-header">
+            <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 550;">
+                Add Labor Welfare Fund
+            </mat-card-title>
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="onClose()" class="no-border-icon">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+
+        <mat-card-content>
+            <div class="row g-3 mb-3" style="padding-top: 2%;">
+                <div class="col-md-6">
+                    <label class="form-label small">State Name<span class="text-danger">*</span></label>
+                    <select class="form-select form-select-sm" formControlName="State">
+                        <option value="">Select</option>
+                        <option *ngFor="let s of State" [ngValue]="s.stateId">
+                            {{ s.stateName }}
+                        </option>
+                    </select>
+
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label form-label-sm">Effective Date<span class="text-danger">*</span></label>
+                    <input type="date" class="form-control form-control-sm" formControlName="EffectiveDate">
+                </div>
+            </div>
+
+            <div class="table-wrapper1">
+                <div class="d-flex gap-2 mb-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-success"
+                        (click)="addRow()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-danger"
+                        (click)="deleteSelectedRow(selectedRowIndex!)" [disabled]="selectedRowIndex === null">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+
+                </div>
+                <div class="table-scroll" formArrayName="rows">
+                    <mat-table [dataSource]="uploadedDataSource" class="custom-table mat-elevation-z8 auto-fit-table">
+
+                        <ng-container matColumnDef="SNo">
+                            <mat-header-cell *matHeaderCellDef class="sno">
+                                <strong>S.No</strong>
+                            </mat-header-cell>
+
+                            <mat-cell *matCellDef="let row; let i = index" class="sno">
+                                {{ (paginator.pageIndex * paginator.pageSize) + (i + 1) }}
+                            </mat-cell>
+                        </ng-container>
+
+
+                        <ng-container matColumnDef="FromValue">
+                            <mat-header-cell *matHeaderCellDef><strong>From Value</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i">
+                                <input class="form-control form-control-sm" matInput type="number"
+                                    formControlName="FromValue">
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ToValue">
+                            <mat-header-cell *matHeaderCellDef><strong>To Value</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i">
+                                <input class="form-control form-control-sm" matInput type="number"
+                                    formControlName="ToValue">
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Month">
+                            <mat-header-cell *matHeaderCellDef><strong>Month</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i">
+                                <select class="form-select form-select-md" formControlName="Month">
+                                    <option value="0">ALL</option>
+                                    <option *ngFor="let m of Month" [value]="m.month_Id">
+                                        {{ m.month_Name }}
+                                    </option>
+                                </select>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="EContribution">
+                            <mat-header-cell *matHeaderCellDef><strong>E Contribution</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i">
+                                <input class="form-control form-control-sm" matInput type="number"
+                                    formControlName="EContribution">
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ERContribution">
+                            <mat-header-cell *matHeaderCellDef><strong>ER Contribution</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i">
+                                <input class="form-control form-control-sm" matInput type="number"
+                                    formControlName="ERContribution">
+                            </mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+
+                        <mat-row *matRowDef="let row; let i = index; columns: uploadDisplayedColumns"
+                            (click)="selectRow(row)" [class.selected]="selectedRowIndex === i">
+                        </mat-row>
+
+
+                    </mat-table>
+                </div>
+                <div *ngIf="uploadedDataSource.data.length === 0" class="text-center p-4">
+                    <p class="text-muted"> No data to display</p>
+                </div>
+
+
+                <mat-paginator #paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+                    aria-label="Select page">
+                </mat-paginator>
+
+            </div>
+        </mat-card-content>
+
+        <!-- FOOTER -->
+        <mat-card-footer class="d-flex justify-content-end gap-2 p-2">
+            <button
+                style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0;"
+                (click)="onClose()">Cancel</button>
+            <button style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color:
+            blue;color: white; " type=" button" (click)="onSave()">Save</button>
+        </mat-card-footer>
+
+    </mat-card>
+</form>
+<!-- <form [formGroup]="editlwfform" novalidate *ngIf="EDIT">
+    <mat-card class="custom-card">
+        <mat-card-header class="sticky-header">
+            <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 550;">
+                Edit Labor Welfare Fund
+            </mat-card-title>
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="onClose()" class="no-border-icon">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+
+        <mat-card-content>
+            <div class="row g-3 mb-3" style="padding-top: 2%;">
+                <div class="col-md-6">
+                    <label class="form-label small">State Name<span class="text-danger">*</span></label>
+
+                    <input class="form-control form-control-sm" formControlName="editState" readonly />
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label small">Effective Date<span class="text-danger">*</span></label>
+                    <input class="form-control form-control-sm" formControlName="editEffectiveDate" readonly>
+                </div>
+            </div>
+
+            <div class="table-wrapper1">
+                <div class="d-flex gap-2 mb-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-success"
+                        (click)="addRow()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-danger"
+                        (click)="deleteSelectedRow(selectedRowIndex!)" [disabled]="selectedRowIndex === null">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+
+                </div>
+                <div class="table-scroll" formArrayName="rows">
+                    <mat-table [dataSource]="uploadedDataSource" class="custom-table mat-elevation-z8 auto-fit-table">
+
+                        <ng-container matColumnDef="SNo">
+                            <mat-header-cell *matHeaderCellDef class="sno">
+                                <strong>S.No</strong>
+                            </mat-header-cell>
+
+                            <mat-cell *matCellDef="let row; let i = index" class="sno">
+                                {{ (paginator.pageIndex * paginator.pageSize) + (i + 1) }}
+                            </mat-cell>
+                        </ng-container>
+
+
+                        <ng-container matColumnDef="FromValue">
+                            <mat-header-cell *matHeaderCellDef><strong>From Value</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i">
+                                <input class="form-control form-control-sm" matInput type="number"
+                                    formControlName="FromValue">
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ToValue">
+                            <mat-header-cell *matHeaderCellDef><strong>To Value</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i">
+                                <input class="form-control form-control-sm" matInput type="number"
+                                    formControlName="ToValue">
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Month">
+                            <mat-header-cell *matHeaderCellDef><strong>Month</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i">
+                                <select class="form-select form-select-md" formControlName="Month">
+                                    <option value="">select</option>
+                                    <option *ngFor="let m of Month" [value]="m.month_Id">
+                                        {{ m.month_Name }}
+                                    </option>
+                                </select>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="EContribution">
+                            <mat-header-cell *matHeaderCellDef><strong>E Contribution</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i">
+                                <input class="form-control form-control-sm" matInput type="number"
+                                    formControlName="EContribution">
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ERContribution">
+                            <mat-header-cell *matHeaderCellDef><strong>ER Contribution</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i">
+                                <input class="form-control form-control-sm" matInput type="number"
+                                    formControlName="ERContribution">
+                            </mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+
+                        <mat-row *matRowDef="let row; let i = index; columns: uploadDisplayedColumns"
+                            (click)="selectRow(row)" [class.selected]="selectedRowIndex === i">
+                        </mat-row>
+
+
+                    </mat-table>
+                </div>
+                <div *ngIf="uploadedDataSource.data.length === 0" class="text-center p-4">
+                    <p class="text-muted"> No data to display</p>
+                </div>
+
+
+                <mat-paginator #paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+                    aria-label="Select page">
+                </mat-paginator>
+
+            </div>
+        </mat-card-content>
+
+        <mat-card-footer class="d-flex justify-content-end gap-2 p-2">
+            <button
+                style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0;"
+                (click)="onClose()">Cancel</button>
+            <button style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color:
+            blue;color: white; " type=" button" (click)="onUpdate()">Save</button>
+        </mat-card-footer>
+
+    </mat-card>
+</form> -->

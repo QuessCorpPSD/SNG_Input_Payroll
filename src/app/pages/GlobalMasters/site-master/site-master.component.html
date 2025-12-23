@@ -14,29 +14,29 @@
                 </div>
 
                 <div class="col-md-2 d-flex gap-2">
-                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Search"
-                        (click)=" onSearchClick()">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
+                        matTooltip="Search" (click)=" onSearchClick()">
                         <mat-icon>search</mat-icon>
                     </button>
 
-                    <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-secondary"
                         matTooltip="export to excel" (click)="exportToExcel()">
-                        <mat-icon>table_chart</mat-icon>
+                        <mat-icon>download</mat-icon>
                     </button>
 
-                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Import"
-                        (click)="ImportClick(fileInput)">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
+                        matTooltip="Import" (click)="ImportClick(fileInput)">
                         <mat-icon>cloud_upload</mat-icon>
                     </button>
                     <input type="file" #fileInput style="display:none" (change)="onFileSelected($event)" />
 
 
-                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Template"
-                        (click)=" DownloadTemplate()">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                        matTooltip="Template" (click)=" DownloadTemplate()">
                         <mat-icon>cloud_download</mat-icon>
                     </button>
-                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Add"
-                        (click)="AddPOOpen()">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-success"
+                        matTooltip="Add" (click)="AddPOOpen()">
                         <mat-icon>add</mat-icon>
                     </button>
                 </div>
@@ -66,8 +66,11 @@
                         </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="SNo">
-                        <mat-header-cell *matHeaderCellDef class="SNo" style="width: 100px !important; min-width: 100px !important; max-width: 100px !important; display: flex; align-items: center;"><strong>SNo</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row" class="SNo" style="width: 100px !important; min-width: 100px !important; max-width: 100px !important; display: flex; align-items: center;">{{ row['Serial_No'] }}</mat-cell>
+                        <mat-header-cell *matHeaderCellDef class="SNo"
+                            style="width: 100px !important; min-width: 100px !important; max-width: 100px !important; display: flex; align-items: center;"><strong>SNo</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="SNo"
+                            style="width: 100px !important; min-width: 100px !important; max-width: 100px !important; display: flex; align-items: center;">{{
+                            row['Serial_No'] }}</mat-cell>
                     </ng-container>
 
                     <!-- Company Code -->

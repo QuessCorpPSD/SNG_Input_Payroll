@@ -90,7 +90,7 @@ export class AddEntityMasterComponent {
         const table = res?.Data?.data?.Table0 || [];
 
         if (!table.length) {
-          this.showAlertPopup("No legal entity records found");
+          alert("No legal entity records found");
           return;
         }
 
@@ -101,7 +101,7 @@ export class AddEntityMasterComponent {
       },
       error: () => {
         this.isLoading = false;
-        this.showAlertPopup("Failed to load legal entity dropdown");
+        alert("Failed to load legal entity dropdown");
       }
     });
   }
@@ -111,9 +111,6 @@ export class AddEntityMasterComponent {
   }
 
   onSave(): void {
-
-    console.log("➡️ Save button clicked");
-
     if (this.entityForm.invalid) {
       console.warn("❌ Form invalid:", this.entityForm.value);
       this.entityForm.markAllAsTouched();
@@ -121,8 +118,6 @@ export class AddEntityMasterComponent {
     }
 
     const f = this.entityForm.value;
-    console.log("📝 FORM VALUES:", f);
-
     this.isLoading = true;
 
     const payload = {
@@ -151,45 +146,26 @@ export class AddEntityMasterComponent {
         Serial_No: 1
       }
     };
-
-    console.log("📦 FINAL PAYLOAD SENT:", payload);
-    console.log("📡 Sending API request...");
-
     this.entityService.CreateEntity(payload).subscribe({
       next: (res: any) => {
         this.isLoading = false;
-
-        console.log("✅ API RESPONSE RECEIVED:", res);
-
         const msg = res?.Data?.message || "";
         const code = res?.Data?.statusCode;
 
-        console.log("🔍 Extracted message:", msg);
-        console.log("🔍 Extracted statusCode:", code);
-        console.log("🔍 Top level StatusCode:", res?.StatusCode);
-
         if ((res?.StatusCode === 200 && msg) || code === "400") {
-
-          console.log("🎉 SUCCESS CONDITION PASSED");
-
-          this.showAlertPopup(msg || "Entity saved");
-
-          setTimeout(() => {
-            console.log("🔒 Closing popup + dialog");
-            this.closePopup();
-            this.dialogRef.close(true);
-          }, 900);
+          alert(msg || "Entity saved");
+          this.dialogRef.close(true);
 
         } else {
           console.warn("⚠️ Success condition FAILED");
-          this.showAlertPopup("Save failed");
+          alert("Save failed");
         }
       },
 
       error: (err) => {
         this.isLoading = false;
         console.error("❌ API ERROR:", err);
-        this.showAlertPopup("Error", "API Error");
+        alert("API Error");
       }
     });
   }

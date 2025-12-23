@@ -105,7 +105,6 @@ export class MaterialcodeComponent {
 
     this.materialService.Search().subscribe({
       next: (res: any) => {
-        console.log(res.Data);
         this.isLoading = false;
 
         if (res.StatusCode === 200 && Array.isArray(res.Data.data.Table0) && res.Data.data.Table0.length > 0) {
@@ -169,11 +168,10 @@ export class MaterialcodeComponent {
         mode: "Delete",
         detail: MaterialCodeAdd
       }
-      console.log('PALOAD', payload);
+
 
       this.materialService.Create(payload).subscribe({
         next: (res) => {
-          console.log(res);
           const errormsg = res.Data.data.Table0[0].Error_Message;
 
           if (errormsg.includes("Successfully")) {
@@ -218,12 +216,11 @@ export class MaterialcodeComponent {
       mode: "Add",
       detail: MaterialCodeAdd
     }
-    console.log('PALOAD', payload);
+  
 
 
     this.materialService.Create(payload).subscribe({
       next: (res) => {
-        console.log(res);
         const errormsg = res.Data.data.Table0[0].Error_Message;
 
         if (errormsg.includes("Successfully")) {
@@ -268,12 +265,12 @@ export class MaterialcodeComponent {
       mode: "Edit",
       detail: MaterialCodeAdd
     }
-    console.log('PALOAD', payload);
+
 
 
     this.materialService.Create(payload).subscribe({
       next: (res) => {
-        console.log(res);
+      
         const errormsg = res.Data.data.Table0[0].Error_Message;
 
         if (errormsg.includes("Successfully")) {

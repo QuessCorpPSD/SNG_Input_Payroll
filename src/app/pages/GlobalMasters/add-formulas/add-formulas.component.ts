@@ -47,7 +47,7 @@ export class AddFormulasComponent {
     private decry: EncryptionService,
     private _sessionStoreage: SessionStorageService,
     @Inject(MAT_DIALOG_DATA) public editData: any,
-  ) { console.log("edit", editData) }
+  ) { }
 
   // VARIABLES
   isUploadGridVisible = false;
@@ -144,19 +144,11 @@ export class AddFormulasComponent {
 
       this.Description = row.Formula_Name;
       this.Formula = row.Formula;
-
-      console.log("Dropdown model values:", {
-        selectedCompanyId: this.selectedCompanyId,
-        selectedPayCategory: this.selectedPayCategory,
-        selectedPayCode: this.selectedPayCode
-      });
     }
   }
 
 
   handleCompanyEvent(company) {
-    console.log(" Company Selected:", company);
-
     this.selectedCompanyId = company.companyId;
     this.companyUI = company;
 
@@ -169,15 +161,11 @@ export class AddFormulasComponent {
 
 
   LoadpayCategory(companyId: number) {
-    // console.log(" Loading Pay Category for Company:", companyId);
-
     this.formula.payCategory(companyId).subscribe({
       next: (res: any) => {
-        console.log(" Pay Category API Response:", res);
 
         if (res?.Data?.data?.Table0) {
           this.payCategory = res.Data.data.Table0;
-          // console.log(" payCategory Loaded:", this.payCategory);
         }
       },
       error: err => console.error(" Pay Category API Error:", err)
@@ -185,23 +173,16 @@ export class AddFormulasComponent {
   }
 
   ChangepayCategory(selected: any) {
-    console.log("🔄 Pay Category Changed:", selected);
-
     this.selectedPayCategory = selected;
     this.val_category = false;
   }
 
 
   LoadpayCode() {
-    // console.log("📥 Loading Pay Code...");
-
     this.formula.payCode().subscribe({
       next: (res: any) => {
-        console.log(" Pay Code API Response:", res);
-
         if (res?.Data) {
           this.payCode = res.Data;
-          console.log(" payCode Loaded:", this.payCode);
         }
       },
       error: err => console.error(" Pay Code API Error:", err)
@@ -209,8 +190,6 @@ export class AddFormulasComponent {
   }
 
   ChangepayCode(paycodeId: number) {
-    console.log(" Pay Code Changed:", paycodeId);
-
     this.selectedPayCode = paycodeId;
     this.val_paycode = false;
   }
@@ -226,7 +205,7 @@ export class AddFormulasComponent {
       alert("Please fill all required fields.");
       return;
     }
-
+    this.isLoading = true;
     const pc = this.payCode.find(x => x.paycode_Id == this.selectedPayCode);
 
     const payload = {
@@ -246,21 +225,26 @@ export class AddFormulasComponent {
         SNo: 0
       }
     };
-    console.log(JSON.stringify(payload));
     this.formula.CreateFormula(payload).subscribe({
       next: (res: any) => {
+        this.isLoading = false;
         if (res?.StatusCode === 200) {
           alert(res?.Data?.message || "Formula saved successfully");
           this.dialogRef.close(true);
         } else {
           alert("Save failed");
+          this.isLoading = false;
         }
       },
-      error: () => alert("API Error")
+      error: () => {
+        alert("API Error")
+        this.isLoading = false;
+      }
     });
   }
 
   Save() {
+    this.isLoading = true;
     const row = this.editData.row;
     const formvalue = this.editFormula.getRawValue();
 
@@ -281,18 +265,22 @@ export class AddFormulasComponent {
         SNo: row.SNo
       }
     };
-    console.log(JSON.stringify(payload));
     this.formula.CreateFormula(payload).subscribe({
       next: (res: any) => {
+        this.isLoading = false;
         if (res?.StatusCode === 200) {
           alert(res?.Data?.message || "Formula saved successfully");
           this.dialogRef.close('updated');
           return;
         } else {
           alert("Save failed");
+          this.isLoading = false;
         }
       },
-      error: () => alert("API Error")
+      error: () => {
+        alert("API Error");
+        this.isLoading = false;
+      }
     });
   }
 

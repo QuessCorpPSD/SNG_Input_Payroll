@@ -111,7 +111,7 @@ export class AddSiteMasterComponent {
       StartDate: new FormControl("", Validators.required),
       SalaryDate: new FormControl("", Validators.required),
       PortalPayslipFormat: new FormControl("", Validators.required),
-      Value: new FormControl("", Validators.required),
+      //Value: new FormControl("", Validators.required),
     });
 
 
@@ -137,7 +137,7 @@ export class AddSiteMasterComponent {
       StartDate: new FormControl("", Validators.required),
       SalaryDate: new FormControl("", Validators.required),
       PortalPayslipFormat: new FormControl("", Validators.required),
-      Value: new FormControl("", Validators.required)
+      //Value: new FormControl("", Validators.required)
     });
 
 
@@ -174,7 +174,7 @@ export class AddSiteMasterComponent {
         Value: row.Active === "Yes" || row.Active === true ? "1" : "0",
       });
 
-      console.log(this.editSiteData);
+   
     }
 
     this.loadVendorList();
@@ -236,20 +236,14 @@ export class AddSiteMasterComponent {
       Value: Number(f.Active)
     };
 
-    console.log("FINAL PAYLOAD:", JSON.stringify(payload));
+   
 
     this.siteService.CreateSiteMaster(payload).subscribe({
       next: (res: any) => {
-
-        console.log("API Response:", res);
-
         if (res?.StatusCode === 200) {
-
-
           if (res.Data?.response) {
             alert(res.Data.response);
           }
-
           else {
             alert(JSON.stringify(res, null, 2));
           }
@@ -265,7 +259,7 @@ export class AddSiteMasterComponent {
     const row = this.editSiteData.row;
     const formvalue = this.SiteEditForm.getRawValue();
 
-    console.log('formvalue',formvalue);
+
 
     const payload = {
       
@@ -297,9 +291,6 @@ export class AddSiteMasterComponent {
         Value: Number(formvalue.Active),
       
     };
-
-    console.log("FINAL EDIT PAYLOAD:", JSON.stringify(payload));
-
     this.siteService.CreateSiteMaster(payload).subscribe({
       next: (res: any) => {
         if (res?.StatusCode === 200) {
@@ -312,8 +303,6 @@ export class AddSiteMasterComponent {
 
 
   handleCompanyEvent(company) {
-    console.log("Selected company:", company);
-
     this.selectedCompanyId = company.companyId;
     this.selectedCompanyCode = company.companyCode;
 

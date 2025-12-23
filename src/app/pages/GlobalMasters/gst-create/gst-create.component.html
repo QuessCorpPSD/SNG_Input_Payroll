@@ -1,11 +1,8 @@
 <form novalidate>
     <mat-card class="custom-card">
         <mat-card-header class="sticky-header">
-            <!-- <div
-                style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700; padding-right: 600px;">
-                Create GST Master
-            </div> -->
-            <mat-card-title style="color: #302CB3;">Create GST Master</mat-card-title>
+            <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;">Create
+                GST Master</mat-card-title>
             <span class="spacer"></span>
             <button mat-icon-button (click)="onClose()" class="no-border-icon">
                 <mat-icon>close</mat-icon>
@@ -74,10 +71,10 @@
                     <span style="color: red;">*</span>
                     <input class="form-control form-control-sm" [(ngModel)]="PinCode" name="PinCode" />
                 </div>
-            <!-- </div> -->
+                <!-- </div> -->
 
-            <!-- <div style="display: none;" class="row g-3 mb-3"> -->
-            <!-- <div class="col-md-4">
+                <!-- <div style="display: none;" class="row g-3 mb-3"> -->
+                <!-- <div class="col-md-4">
                     <label class="form-label text-muted small">PAN Number*</label>
                     <input class="form-control form-control-sm" />
                 </div>
@@ -87,7 +84,7 @@
                 </div> -->
 
 
-            <!-- <div class="row g-3 mb-3"> -->
+                <!-- <div class="row g-3 mb-3"> -->
                 <!-- <div class="col-md-4">
                     <label class="form-label text-muted small">Location*</label>
                     <input class="form-control form-control-sm" />
@@ -183,5 +180,5 @@
 </div>
 <div *ngIf="showPopup" class="overlay">
     <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
-        (close)="showPopup = false" ></app-alertpopup>
+        (close)="showPopup = false"></app-alertpopup>
 </div>

@@ -16,6 +16,7 @@ import * as XLSX from 'xlsx';
 import FileSaver from 'file-saver';
 import { AlertpopupComponent } from '../../../common/alertpopup/alertpopup.component';
 import { MatCardModule } from "@angular/material/card";
+import { Console } from 'console';
 
 @Component({
   selector: 'app-invoice-legal-entity',
@@ -26,7 +27,7 @@ import { MatCardModule } from "@angular/material/card";
     MatIconModule,
     MatTooltipModule,
     MatTableModule,
-    MatPaginatorModule,
+    MatPaginator,
     MatSortModule,
     AlertpopupComponent,
     MatCardModule
@@ -34,10 +35,10 @@ import { MatCardModule } from "@angular/material/card";
   templateUrl: './invoice-legal-entity.component.html',
   styleUrls: ['./invoice-legal-entity.component.css']
 })
-export class InvoiceLegalEntityComponent implements AfterViewInit {
+export class InvoiceLegalEntityComponent {
 
   uploadedData: any[] = [];
-  uploadedDataSource = new MatTableDataSource<any>([]);
+  uploadedDataSource = new MatTableDataSource<any>();
 
   entityName: string = "";
   showTable: boolean = false;
@@ -74,12 +75,6 @@ export class InvoiceLegalEntityComponent implements AfterViewInit {
     this.popupSubMessage = '';
   }
 
-  ngAfterViewInit() {
-    this.uploadedDataSource.paginator = this.paginator;
-    this.uploadedDataSource.sort = this.sort;
-  }
-
-
   onSearchClick() {
     this.isLoading = true;
 
@@ -89,11 +84,11 @@ export class InvoiceLegalEntityComponent implements AfterViewInit {
 
         let table = res?.Data?.data?.Table0 || [];
 
-        // filter
-        if (this.entityName.trim() !== "") {
-          const keyword = this.entityName.trim().toLowerCase();
+
+        if (this.entityName.trim()) {
+          const keyword = this.entityName.toLowerCase();
           table = table.filter((x: any) =>
-            (x.EntityName || "").toLowerCase().includes(keyword)
+            (x.EntityName || '').toLowerCase().includes(keyword)
           );
         }
 
@@ -101,7 +96,7 @@ export class InvoiceLegalEntityComponent implements AfterViewInit {
           this.uploadedData = [];
           this.uploadedDataSource.data = [];
           this.showTable = true;
-          this.showAlertPopup("No records found");
+          alert('No records found');
           return;
         }
 
@@ -111,24 +106,32 @@ export class InvoiceLegalEntityComponent implements AfterViewInit {
           'Id': r.Id
         }));
 
-        this.uploadedDataSource = new MatTableDataSource(this.uploadedData);
+
+        this.uploadedDataSource =  new MatTableDataSource(this.uploadedData);
         this.uploadedDataSource.paginator = this.paginator;
         this.uploadedDataSource.sort = this.sort;
 
+        // ✅ Reset paginator index
+        // this.paginator.firstPage();
+
         this.showTable = true;
       },
-      error: (err) => {
+      error: () => {
         this.isLoading = false;
-        console.error("Search Error:", err);
-        this.showAlertPopup("Failed to load Invoice Legal Entity data");
+        alert('Failed to load Invoice Legal Entity data');
       }
     });
   }
 
+  ngAfterViewInit() {
+    
+     this.uploadedDataSource.paginator = this.paginator;
+    this.uploadedDataSource.sort = this.sort;
+  }
 
   exportToExcel(): void {
     if (!this.uploadedData || this.uploadedData.length === 0) {
-      this.showAlertPopup("No data available to export");
+      alert("No data available to export");
       return;
     }
 
@@ -140,14 +143,12 @@ export class InvoiceLegalEntityComponent implements AfterViewInit {
     const fileName = `InvoiceLegalEntity_${new Date().toISOString().split("T")[0]}.xlsx`;
 
     XLSX.writeFile(wb, fileName);
-
-    this.showAlertPopup("Excel downloaded successfully!");
-  }
+    }
 
   AddPOOpen() {
     this.dialog.open(AddInvoiceLegalEntityComponent, {
       width: '35%',
-      height: '33.5vh',
+      height: '31vh',
       disableClose: true,
       data: { example: 'Hello from parent!' }
     });

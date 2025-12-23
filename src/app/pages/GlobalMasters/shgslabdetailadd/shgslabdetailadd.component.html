@@ -2,7 +2,7 @@
     <mat-card class="custom-card">
         <mat-card-header class="sticky-header">
 
-            <mat-card-title>Add SHG Slab Detail</mat-card-title>
+            <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;">Add SHG Slab Detail</mat-card-title>
             <span class="spacer"></span>
             <button mat-icon-button (click)="onClose()" class="no-border-icon">
                 <mat-icon>close</mat-icon>
@@ -65,9 +65,12 @@
             </div>
         </mat-card-content>
         <mat-card-footer class="footer">
-            <div class="d-flex justify-content-end mt-3">
-                <button type="button" class="btn btn-primary rounded-pill px-3" (click)="onSaveSHG()">Save</button>
-                <button type="reset" class="btn btn-primary me-2 rounded-pill px-3">Cancel</button>
+            <div class="d-flex justify-content-end"
+                style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
+                <button type="button" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+                    cursor: pointer; background-color: #f0f0f0; color: black;" (click)="onSaveSHG()">Save</button>
+                <button type="reset" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+                    cursor: pointer; background-color: blue; color: white;" (click)="onClose()">Cancel</button>
             </div>
         </mat-card-footer>
     </mat-card>

@@ -2,25 +2,19 @@
 
     <mat-card class="custom-card">
         <mat-card-header class="sticky-header">
-            <br />
-            <mat-card-title style="color: #302CB3;"> Add Formula </mat-card-title>
+            <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;"> Add
+                Formula </mat-card-title>
 
             <span class="spacer"></span>
             <button mat-icon-button (click)="onClose()" class="no-border-icon">
                 <mat-icon>close</mat-icon>
             </button>
         </mat-card-header>
-        <br />
 
         <mat-card-content>
-
-            <!-- FORM TABLE -->
-            <div style="display: grid; grid-template-columns: 150px 1fr; row-gap: 15px; align-items: center;">
-
-                <!-- COMPANY -->
+            <div
+                style="display: grid; grid-template-columns: 150px 1fr; row-gap: 15px; align-items: center;padding-top: 2%;">
                 <label class="form-label text-muted small mb-0">Company Code:</label>
-
-                <!-- WRAPPER WITH FIXED WIDTH -->
                 <div style="width: 250px;">
                     <companyall (companyEmit)="handleCompanyEvent($event)" style="display:block;">
                     </companyall>
@@ -31,12 +25,10 @@
                 </div>
 
 
-                <!-- PAY CATEGORY -->
                 <label class="form-label text-muted small mb-0">Pay Category:</label>
                 <div>
                     <select class="form-select form-select-sm" style="width:250px; padding:2px 4px;" name="payCategory"
                         [(ngModel)]="selectedPayCategory" (ngModelChange)="ChangepayCategory($event)">
-
                         <option value="">Select Pay Category</option>
                         <option *ngFor="let pf of payCategory" [ngValue]="pf">
                             {{ pf.Band_Name }}
@@ -48,7 +40,6 @@
                     </div>
                 </div>
 
-                <!-- PAY CODE -->
                 <label class="form-label text-muted small mb-0">Formula Name:</label>
                 <div>
                     <select class="form-select form-select-sm" style="width:250px; padding:2px 4px;" name="payCode"
@@ -64,17 +55,15 @@
                     </div>
                 </div>
 
-                <!-- DESCRIPTION (NO VALIDATION AS PER YOUR REQUEST) -->
                 <label class="form-label text-muted small mb-0">Description:</label>
                 <input type="text" class="form-control form-control-sm" style="width:250px;"
-                    formControlName="Description" [(ngModel)]="Description">
+                    [(ngModel)]="Description">
 
 
-                <!-- FORMULA -->
                 <label class="form-label text-muted small mb-0">Formula :</label>
                 <div>
                     <input type="text" class="form-control form-control-sm" style="width:250px;"
-                        formControlName="Formula" [(ngModel)]="Formula">
+                      [(ngModel)]="Formula">
 
                     <div *ngIf="addformula.get('Formula')?.touched && addformula.get('Formula')?.invalid"
                         class="text-danger small mt-1">
@@ -88,7 +77,7 @@
         <div class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">
 
             <button type="button" style="border: none; border-radius: 7px; width: 80px; height: 30px;
-                           cursor: pointer; background-color: #f0f0f0; color: black;">
+                           cursor: pointer; background-color: #f0f0f0; color: black;" (click)="onClose()">
                 Cancel
             </button>
 
@@ -103,7 +92,6 @@
 
     <mat-card class="custom-card">
         <mat-card-header class="sticky-header">
-            <br />
             <mat-card-title style="color: #302CB3;"> Edit Formula </mat-card-title>
 
             <span class="spacer"></span>
@@ -188,7 +176,6 @@
 </div>
 
 
-<div *ngIf="showPopup" class="overlay"></div>
 <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
     (close)="closePopup()">
 </app-alertpopup>
