@@ -181,7 +181,7 @@ export class OffercreationComponent {
           if (!parentValue) return;
 
           const apiUrl =
-            environment.apiBaseUrl +
+            environment.apiUrl +
             field.apiUrl.replace('{id}', parentValue);
 
           this.http.get<any>(apiUrl).subscribe({
@@ -255,7 +255,7 @@ export class OffercreationComponent {
     // ✅ API dropdown
     if (field.isApiCall && field.apiUrl) {
 
-      const fullUrl = environment.apiBaseUrl + field.apiUrl;
+      const fullUrl = environment.apiUrl + field.apiUrl;
 
       this.http.get<any>(fullUrl).subscribe({
         next: (res) => {
