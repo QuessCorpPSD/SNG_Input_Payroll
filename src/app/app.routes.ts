@@ -144,6 +144,7 @@ import { MaterialcodeComponent } from './pages/GlobalMasters/materialcode/materi
 import { CancelledinvoicerepositoryComponent } from './pages/customers/cancelledinvoicerepository/cancelledinvoicerepository.component';
 import { ESIslabComponent } from './pages/GlobalMasters/esislab/esislab.component';
 import { CompanyComponent } from './pages/customers/company/company.component';
+import { CityComponent } from './pages/GlobalMasters/city/city.component';
 import { ProfessionaltaxComponent } from './pages/GlobalMasters/professionaltax/professionaltax.component';
 import { ProvidentfundComponent } from './pages/GlobalMasters/providentfund/providentfund.component';
 import { ComputationruleComponent } from './pages/GlobalMasters/computationrule/computationrule.component';
@@ -396,6 +397,9 @@ export const routes: Routes = [
           { path: "sitemaster", component: SiteMasterComponent },
           { path: "materialcode", component: MaterialcodeComponent },
           { path: 'BankMaster', component: BankmasterComponent },
+          { path: 'Formula', component: FormulaComponent },
+          { path: 'city', component: CityComponent }
+        ]
           { path: 'Formula', component: FormulaComponent },
           { path: 'ESIslab', component: ESIslabComponent },
           
