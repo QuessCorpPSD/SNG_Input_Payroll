@@ -217,10 +217,18 @@ export class CompanypaycodemappingEditComponent {
 
 
   loadPaycodes() {
-    this.paycodeService.companypaycodesearch(this.selectedCompanyId).subscribe({
+
+     const payload = {
+      "paycode_Code": '',
+      "PayTypeId": 0,
+      "IsTaxable": 0,
+      "PayId": 0
+
+    }
+    this.paycodeService.paycodeSearch(payload).subscribe({
       next: (res: any) => {
         if (res?.Data?.data) {
-          this.paycodeList = res.Data.data;
+          this.paycodeList = res.Data.data.Table0;
         }
       },
       error: (err) => console.error("Paycode API Error", err)

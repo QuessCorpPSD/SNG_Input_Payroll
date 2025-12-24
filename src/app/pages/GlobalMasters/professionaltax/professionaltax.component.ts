@@ -117,7 +117,7 @@ export class ProfessionaltaxComponent implements AfterViewInit {
           this.uploadDisplayedColumns = ['Action', 'slNo', 'effectivedate', 'statename', 'professionaltaxtype', 'fromvalue', 'tovalue', 'amount', 'category', 'ptcirclename', 'monthname'];
         } else {
           this.dataSource.data = [];
-          alert('No data found for the selected criteria');
+          alert('No data found');
         }
         this.isLoading = false;
       },
