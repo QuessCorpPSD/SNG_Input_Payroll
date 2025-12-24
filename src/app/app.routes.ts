@@ -398,8 +398,8 @@ export const routes: Routes = [
           { path: "materialcode", component: MaterialcodeComponent },
           { path: 'BankMaster', component: BankmasterComponent },
           { path: 'Formula', component: FormulaComponent },
-          { path: 'city', component: CityComponent }
-        ]
+          { path: 'city', component: CityComponent },
+        
           { path: 'Formula', component: FormulaComponent },
           { path: 'ESIslab', component: ESIslabComponent },
           
