@@ -498,7 +498,7 @@ export class AddESIslabComponent {
       },
       error: () => {
         this.isLoading = false;
-        alert('API Error'); // ✅ API ERROR ALERT
+        alert('API Error');
       }
     });
   }

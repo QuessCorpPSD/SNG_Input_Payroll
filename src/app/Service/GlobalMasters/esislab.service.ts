@@ -11,7 +11,6 @@ import { IESIslab } from '../../Repository/GlobalMasters/IESIslab';
 export class ESIslabService implements IESIslab {
 
   env = environment
-
   constructor(private http: HttpClient) { }
 
   SearchESI(payload: any): Observable<APIResponse> {

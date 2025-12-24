@@ -1,0 +1,111 @@
+<!-- Add this somewhere in your Angular template/component -->
+<br />
+<div class="page-wrapper">
+
+    <div class="scrollable-content">
+        <div
+            style="color: #302CB3; font-size: 22px; font-family: Nunito Sans; font-weight: 700; min-width: 960px; padding-left: 25px;">
+            Branch Master
+        </div>
+
+        <div class="container-fluid g-2" style="min-width: 960px;">
+            <div class="card-body g-2">
+                <form>
+                    <div class="row align-items-end">
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small">PT State</label>
+
+                            <select class="form-select form-select-sm" [(ngModel)]="selectedStateId" name="ptState">
+
+                                <option [ngValue]="null">Select</option>
+
+                                <option *ngFor="let state of PTstateList" [ngValue]="state.State_Id">
+                                    {{ state.State_Name }}
+                                </option>
+
+                            </select>
+                        </div>
+
+
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small">Branch Name</label>
+                            <input class="form-control form-control-sm">
+                        </div>
+
+
+                        <div class="col-md-3 d-flex gap-2">
+                            <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                matTooltip="Search" (click)="onsearch()">
+                                <mat-icon>search</mat-icon>
+                            </button>
+                            <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Add"
+                                (click)="AddBMOpen()">
+                                <mat-icon>add</mat-icon>
+                            </button>
+                            <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                matTooltip="Export to Excel">
+                                <mat-icon>table_chart</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="table-wrapper1" [hidden]="!isUploadGridVisible">
+
+            <div class="table-scroll">
+                <mat-table [dataSource]="uploadedDataSource" matSort
+                    class="custom-table mat-elevation-z8 auto-fit-table">
+
+
+                    <ng-container matColumnDef="Action">
+                        <mat-header-cell *matHeaderCellDef class="action"><strong>Action</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="action">
+                            <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                matTooltip="Delete">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                            <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                matTooltip="Edit">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="SNo">
+                        <mat-header-cell *matHeaderCellDef class="sno"><strong>SNO</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="sno">{{ row['Serial_No'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- PT State Column -->
+                    <ng-container matColumnDef="PT State">
+                        <mat-header-cell *matHeaderCellDef><strong>PT State</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['PT_State'] }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Branch Name Column -->
+                    <ng-container matColumnDef="Branch Name">
+                        <mat-header-cell *matHeaderCellDef><strong>Branch Name</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Branch_Name'] }}</mat-cell>
+                    </ng-container>
+
+
+                    <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: uploadDisplayedColumns"></mat-row>
+
+                </mat-table>
+            </div>
+
+            <div *ngIf="uploadedData.length === 0" class="text-center p-4">
+                <p class="text-muted">No data to display</p>
+            </div>
+
+            <mat-paginator #paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+                aria-label="Select page">
+            </mat-paginator>
+
+        </div>
+
+    </div>
+</div>

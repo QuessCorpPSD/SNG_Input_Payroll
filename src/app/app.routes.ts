@@ -147,6 +147,7 @@ import { BranchmasterComponent } from './pages/GlobalMasters/branchmaster/branch
 
 
 
+
 export const routes: Routes = [
   {
     path: 'Master', component: MasterComponent, children: [
@@ -391,7 +392,8 @@ export const routes: Routes = [
           { path: 'BankMaster', component: BankmasterComponent },
           { path: 'Formula', component: FormulaComponent },
           { path: 'ESIslab', component: ESIslabComponent },
-          { path: 'BranchMaster', component: BranchmasterComponent }
+          { path: 'BranchMaster', component: BranchmasterComponent },
+
 
 
 
