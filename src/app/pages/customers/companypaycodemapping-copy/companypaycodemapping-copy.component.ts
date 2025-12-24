@@ -46,7 +46,7 @@ export class CompanypaycodemappingCopyComponent {
   popupSubMessage: string = '';
   showPopup = false;
   isLoading: boolean = false;
-  uploadDisplayedColumns: string[] = ['SNo', 'Paycode', 'Description', 'Paytype', 'formula', 'taxable', 'LopApplicable', 'PfApplicable', 'ESIApplicable', 'PTApplicable', 'Earnedpaycode', 'Pickfrom'];
+  uploadDisplayedColumns: string[] = ['SNo', 'Paycode', 'Description', 'Paytype', 'formula', 'taxable', 'LopApplicable', 'PfApplicable', 'Earnedpaycode', 'Pickfrom'];
   uploadedData: any[] = [];
   uploadedDataSource = new MatTableDataSource<any>(this.uploadedData);
   selectedRowIndex: number | null = null;
@@ -175,28 +175,33 @@ export class CompanypaycodemappingCopyComponent {
 
 
   onPaycodeSelect(paycodeId: number, pageRelativeIndex: number) {
-    const rowIndex = this.getAbsoluteIndex(pageRelativeIndex); // absolute index
+    const rowIndex = this.getAbsoluteIndex(pageRelativeIndex);
     const selectedPaycode = this.paycodeList.find(pc => pc.Paycode_Id === paycodeId);
 
-    if (selectedPaycode) {
-      this.uploadedData[rowIndex] = {
-        ...this.uploadedData[rowIndex],
-        Paycode_Id: selectedPaycode.Paycode_Id,
-        Paycode_Code: selectedPaycode.Paycode_Code,
-        Description: selectedPaycode.Description,
-        PayType: selectedPaycode.PayType,
-        Formula: selectedPaycode.Formula,
-        Taxable: selectedPaycode.Taxable,
-        LOP_Applicable: selectedPaycode.LOP_Applicable,
-        PF_Applicable: selectedPaycode.PF_Applicable,
-        ESI_Applicable: selectedPaycode.ESI_Applicable,
-        PT_Applicable: selectedPaycode.PT_Applicable,
-        EarnedPaycode_Code: selectedPaycode.EarnedPaycode_Code,
-        Company_Paycode_Pick_From_Id: selectedPaycode.Company_Paycode_Pick_From_Id,
-        Company_Paycode_Pick_From_Value: selectedPaycode.Company_Paycode_Pick_From_Value
-      };
-      this.refreshTable();
+    if (!selectedPaycode) return;
+
+    const row = this.uploadedData[rowIndex];
+    row.Paycode_Id = selectedPaycode.Paycode_Id;
+    row.Paycode_Code = selectedPaycode.Paycode_Code;
+    row.Description = selectedPaycode.Description;
+    row.PayType = selectedPaycode.PayType;
+    row.Formula = selectedPaycode.Formula;
+    row.Taxable = selectedPaycode.IsTaxable;
+    row.LOP_Applicable = selectedPaycode.Is_LOP_Applicable;
+    row.PF_Applicable = selectedPaycode.Is_PF_Applicable;
+
+    if (selectedPaycode.Is_LOP_Applicable) {
+      row.EarnedPaycode_Code = 'E' + selectedPaycode.Paycode_Code;
+    } else {
+      row.EarnedPaycode_Code = selectedPaycode.EarnedPaycode_Code;
     }
+
+
+    row.Company_Paycode_Pick_From_Id = selectedPaycode.Company_Paycode_Pick_From_Id;
+    row.Company_Paycode_Pick_From_Value = selectedPaycode.Company_Paycode_Pick_From_Value;
+    row.isEmpty = false;
+
+    this.uploadedDataSource.data = [...this.uploadedData];
   }
 
   onPickFromSelect(selectedId: number, pageRelativeIndex: number): void {
@@ -223,10 +228,18 @@ export class CompanypaycodemappingCopyComponent {
 
 
   loadPaycodes() {
-    this.paycodeService.companypaycodesearch(this.selectedCompanyId).subscribe({
+
+    const payload = {
+      "paycode_Code": '',
+      "PayTypeId": 0,
+      "IsTaxable": 0,
+      "PayId": 0
+
+    }
+    this.paycodeService.paycodeSearch(payload).subscribe({
       next: (res: any) => {
         if (res?.Data?.data) {
-          this.paycodeList = res.Data.data;
+          this.paycodeList = res.Data.data.Table0;
         }
       },
       error: (err) => console.error("Paycode API Error", err)

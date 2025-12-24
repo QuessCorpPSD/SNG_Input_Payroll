@@ -81,29 +81,32 @@
                         <ng-container matColumnDef="taxable">
                             <mat-header-cell *matHeaderCellDef><strong>Taxable</strong></mat-header-cell>
                             <mat-cell *matCellDef="let row">
-                                {{ row.Taxable}}
+                                {{ row.Taxable === true || row.Taxable === 'Yes' ? 'Yes'
+                                : row.Taxable === false || row.Taxable === 'No' ? 'No'
+                                : '' }}
                             </mat-cell>
-
                         </ng-container>
-
 
                         <ng-container matColumnDef="LopApplicable">
                             <mat-header-cell *matHeaderCellDef><strong>LOP Applicable</strong></mat-header-cell>
                             <mat-cell *matCellDef="let row">
-                                {{ row.LOP_Applicable}}
+                                {{ row.LOP_Applicable === true || row.LOP_Applicable === 'Yes' ? 'Yes'
+                                : row.LOP_Applicable === false || row.LOP_Applicable === 'No' ? 'No'
+                                : '' }}
                             </mat-cell>
-
                         </ng-container>
 
                         <ng-container matColumnDef="PfApplicable">
                             <mat-header-cell *matHeaderCellDef><strong>PF Applicable</strong></mat-header-cell>
                             <mat-cell *matCellDef="let row">
-                                {{ row.PF_Applicable}}
+                                {{ row.PF_Applicable === true || row.PF_Applicable === 'Yes' ? 'Yes'
+                                : row.PF_Applicable === false || row.PF_Applicable === 'No' ? 'No'
+                                : '' }}
                             </mat-cell>
-
                         </ng-container>
 
-                        <ng-container matColumnDef="ESIApplicable">
+
+                        <!-- <ng-container matColumnDef="ESIApplicable">
                             <mat-header-cell *matHeaderCellDef><strong>ESI Applicable</strong></mat-header-cell>
                             <mat-cell *matCellDef="let row">
                                 {{ row.ESI_Applicable}}
@@ -117,8 +120,7 @@
                             <mat-cell *matCellDef="let row">
                                 {{ row.PT_Applicable}}
                             </mat-cell>
-
-                        </ng-container>
+                        </ng-container> -->
 
 
                         <ng-container matColumnDef="Earnedpaycode">
@@ -153,21 +155,18 @@
                     <p class="text-muted">No data to display</p>
                 </div>
 
-                <mat-paginator #paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
-                    showFirstLastButtons aria-label="Select page">
+                <mat-paginator #paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+                    aria-label="Select page">
                 </mat-paginator>
             </div>
         </mat-card-content>
 
-        <mat-card-footer class="footer">
-            <div class="d-flex justify-content-end mt-3" style="gap:10px;">
-                <button type="button"
-                    style="border:none; border-radius:7px; width:80px; height:30px; background-color:#f0f0f0;"
-                    (click)="onClose()">Cancel</button>
-                <button type="button"
-                    style="border:none; border-radius:7px; width:80px; height:30px; background-color:blue; color:white;"
-                    (click)="savePaycodeDetails()">Save</button>
-            </div>
+        <mat-card-footer class="d-flex justify-content-end gap-2 p-2">
+            <button
+                style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0;"
+                (click)="onClose()">Cancel</button>
+            <button style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color:
+            blue;color: white; " type=" button" (click)="savePaycodeDetails()">Save</button>
         </mat-card-footer>
     </div>
 </mat-card>

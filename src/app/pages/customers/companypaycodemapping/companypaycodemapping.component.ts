@@ -81,7 +81,7 @@ export class CompanypaycodemappingComponent {
   AddPOOpen() {
     this.dialog.open(CompanypaycodemappingAddComponent, {
       width: '80%',
-      height: '95vh',
+      height: '80vh',
       disableClose: true,
       data: { example: 'Hello from parent!' }
     });

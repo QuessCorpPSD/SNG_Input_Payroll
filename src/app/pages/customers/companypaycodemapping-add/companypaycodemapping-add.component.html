@@ -114,7 +114,7 @@
                             </mat-cell>
 
                         </ng-container>
-
+                        <!-- 
                         <ng-container matColumnDef="ESIApplicable">
                             <mat-header-cell *matHeaderCellDef><strong>ESI Applicable</strong></mat-header-cell>
                             <mat-cell *matCellDef="let row">
@@ -131,7 +131,7 @@
                                 {{ row.Is_PT_Applicable === true ? 'Yes' : row.Is_PT_Applicable === false ? 'No' : '' }}
                             </mat-cell>
 
-                        </ng-container>
+                        </ng-container> -->
 
 
                         <ng-container matColumnDef="Earnedpaycode">
@@ -154,13 +154,11 @@
                             </mat-cell>
                         </ng-container>
                         <ng-container matColumnDef="Formula">
-                            <mat-header-cell *matHeaderCellDef
-                                style="width: 200px!important; min-width: 200px!important; max-width: 200px!important;">
+                            <mat-header-cell *matHeaderCellDef>
                                 <strong>Formula</strong>
                             </mat-header-cell>
 
-                            <mat-cell *matCellDef="let row; let i = index"
-                                style="width: 200px!important; min-width: 200px!important; max-width: 200px!important;">
+                            <mat-cell *matCellDef="let row; let i = index">
 
                                 <textarea [(ngModel)]="row.Formula" class="form-control form-control-sm"
                                     style="height: 60px;"></textarea>
@@ -182,28 +180,18 @@
                     <p class="text-muted">No data to display</p>
                 </div>
 
-                <mat-paginator #paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
-                    showFirstLastButtons aria-label="Select page">
+                <mat-paginator #paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+                    aria-label="Select page">
                 </mat-paginator>
             </div>
         </mat-card-content>
 
-        <mat-card-footer class="footer">
-            <div class="d-flex justify-content-end mt-3">
-                <div class="btn-1"
-                    style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
-
-                    <button type="button"
-                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0;">
-                        Cancel
-                    </button>
-
-                    <button type="button" (click)="savePaycodeDetails()"
-                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white; ">
-                        Save
-                    </button>
-                </div>
-            </div>
+        <mat-card-footer class="d-flex justify-content-end gap-2 p-2">
+            <button
+                style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0;"
+                (click)="onClose()">Cancel</button>
+            <button style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color:
+            blue;color: white; " type=" button" (click)="savePaycodeDetails()">Save</button>
         </mat-card-footer>
     </div>
 </mat-card>
