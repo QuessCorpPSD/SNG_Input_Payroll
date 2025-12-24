@@ -39,7 +39,7 @@ export class CompanypaycodemappingEditComponent {
   paycodeList: any[] = [];
   pickfromlist: any[] = [];
 
-  uploadDisplayedColumns: string[] = ['SNo', 'Paycode', 'Description', 'Paytype', 'formula', 'taxable', 'LopApplicable', 'PfApplicable', 'ESIApplicable', 'PTApplicable', 'Earnedpaycode', 'Pickfrom'];
+  uploadDisplayedColumns: string[] = ['SNo', 'Paycode', 'Description', 'Paytype', 'formula', 'taxable', 'LopApplicable', 'PfApplicable', 'Earnedpaycode', 'Pickfrom'];
   uploadedData: any[] = [];
   uploadedDataSource = new MatTableDataSource<any>(this.uploadedData);
   selectedRowIndex: number | null = null;
@@ -179,18 +179,24 @@ export class CompanypaycodemappingEditComponent {
     row.Description = selectedPaycode.Description;
     row.PayType = selectedPaycode.PayType;
     row.Formula = selectedPaycode.Formula;
-    row.Taxable = selectedPaycode.Taxable;
-    row.LOP_Applicable = selectedPaycode.LOP_Applicable;
-    row.PF_Applicable = selectedPaycode.PF_Applicable;
-    row.ESI_Applicable = selectedPaycode.ESI_Applicable;
-    row.PT_Applicable = selectedPaycode.PT_Applicable;
-    row.EarnedPaycode_Code = selectedPaycode.EarnedPaycode_Code;
+    row.Taxable = selectedPaycode.IsTaxable;
+    row.LOP_Applicable = selectedPaycode.Is_LOP_Applicable;
+    row.PF_Applicable = selectedPaycode.Is_PF_Applicable;
+
+    if (selectedPaycode.Is_LOP_Applicable) {
+      row.EarnedPaycode_Code = 'E' + selectedPaycode.Paycode_Code;
+    } else {
+      row.EarnedPaycode_Code = selectedPaycode.EarnedPaycode_Code;
+    }
+
+
     row.Company_Paycode_Pick_From_Id = selectedPaycode.Company_Paycode_Pick_From_Id;
     row.Company_Paycode_Pick_From_Value = selectedPaycode.Company_Paycode_Pick_From_Value;
     row.isEmpty = false;
 
     this.uploadedDataSource.data = [...this.uploadedData];
   }
+
 
   onPickFromSelect(selectedId: number, pageRelativeIndex: number) {
     const rowIndex = this.getAbsoluteIndex(pageRelativeIndex);
@@ -218,7 +224,7 @@ export class CompanypaycodemappingEditComponent {
 
   loadPaycodes() {
 
-     const payload = {
+    const payload = {
       "paycode_Code": '',
       "PayTypeId": 0,
       "IsTaxable": 0,

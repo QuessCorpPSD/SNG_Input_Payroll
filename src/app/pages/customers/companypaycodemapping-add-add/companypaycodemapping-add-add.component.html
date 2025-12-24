@@ -29,23 +29,21 @@
 
                         <!-- Other Columns -->
                         <ng-container matColumnDef="Paycode">
-                            <mat-header-cell *matHeaderCellDef
-                                style="min-width: 100px!important;"><strong>Paycode</strong></mat-header-cell>
-                            <mat-cell *matCellDef="let row;" style="min-width: 100px!important;">{{ row.Paycode_Code
+                            <mat-header-cell *matHeaderCellDef><strong>Paycode</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row;">{{ row.Paycode_Code
                                 }}</mat-cell>
                         </ng-container>
 
                         <ng-container matColumnDef="Description">
-                            <mat-header-cell *matHeaderCellDef
-                                style="min-width: 280px!important;"><strong>Description</strong></mat-header-cell>
-                            <mat-cell *matCellDef="let row;" style="min-width: 280px!important;">{{ row.Description
+                            <mat-header-cell *matHeaderCellDef><strong>Description</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row;">{{ row.Description
                                 }}</mat-cell>
                         </ng-container>
 
                         <ng-container matColumnDef="Paytype">
-                            <mat-header-cell *matHeaderCellDef style="min-width: 100px!important;"><strong>Pay
+                            <mat-header-cell *matHeaderCellDef><strong>Pay
                                     Type</strong></mat-header-cell>
-                            <mat-cell *matCellDef="let row" style="min-width: 100px!important;">{{ row.PayType
+                            <mat-cell *matCellDef="let row">{{ row.PayType
                                 }}</mat-cell>
                         </ng-container>
                         <ng-container matColumnDef="FilterCheckbox">
@@ -54,9 +52,9 @@
 
                         <!-- Other Columns -->
                         <ng-container matColumnDef="FilterPaycode">
-                            <mat-header-cell *matHeaderCellDef style="min-width: 100px!important;"> <input
-                                    class="form-control form-control-sm " matInput placeholder="Search"
-                                    (keyup)="applyFilter($event, 'Paycode')"></mat-header-cell>
+                            <mat-header-cell *matHeaderCellDef> <input class="form-control form-control-sm " matInput
+                                    placeholder="Search"
+                                    (keyup)="applyFilter($event, 'Paycode_Code')"></mat-header-cell>
 
                         </ng-container>
 
@@ -68,9 +66,8 @@
                         </ng-container>
 
                         <ng-container matColumnDef="FilterPaytype">
-                            <mat-header-cell *matHeaderCellDef style="min-width: 100px!important;"> <input
-                                    class="form-control form-control-sm " matInput placeholder="Search"
-                                    (keyup)="applyFilter($event, 'Paytype')"></mat-header-cell>
+                            <mat-header-cell *matHeaderCellDef> <input class="form-control form-control-sm " matInput
+                                    placeholder="Search" (keyup)="applyFilter($event, 'PayType')"></mat-header-cell>
 
                         </ng-container>
 
@@ -94,22 +91,12 @@
             </div>
         </mat-card-content>
 
-        <mat-card-footer class="footer">
-            <div class="d-flex justify-content-end mt-3">
-                <div class="btn-1"
-                    style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
-                    <button type="button"
-                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0;"
-                        (click)="onCancel()">
-                        Cancel
-                    </button>
-                    <button type="submit"
-                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white;"
-                        (click)="onSave()">
-                        Save
-                    </button>
-                </div>
-            </div>
+        <mat-card-footer class="d-flex justify-content-end gap-2 p-2">
+            <button
+                style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0;"
+                (click)="onClose()">Cancel</button>
+            <button style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color:
+            blue;color: white; " type=" button" (click)="onSave()">Save</button>
         </mat-card-footer>
     </div>
 </mat-card>

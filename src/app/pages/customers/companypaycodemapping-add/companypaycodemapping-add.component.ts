@@ -41,7 +41,7 @@ export class CompanypaycodemappingAddComponent {
   paycodeList: any[] = [];
   @ViewChild('paginator') paginator!: MatPaginator;
 
-  uploadDisplayedColumns: string[] = ['SNo', 'Paycode', 'Description', 'Paytype', 'taxable', 'LopApplicable', 'PfApplicable', 'ESIApplicable', 'PTApplicable', 'Earnedpaycode', 'Pickfrom', 'Formula'];
+  uploadDisplayedColumns: string[] = ['SNo', 'Paycode', 'Description', 'Paytype', 'taxable', 'LopApplicable', 'PfApplicable', 'Earnedpaycode', 'Pickfrom', 'Formula'];
   uploadedData: any[] = [];
   uploadedDataSource = new MatTableDataSource(this.uploadedData);
   selectedRowIndex: number | null = null;
@@ -146,8 +146,8 @@ export class CompanypaycodemappingAddComponent {
     }
 
     const dialogRef = this.dialog.open(CompanypaycodemappingAddAddComponent, {
-      width: '50%',
-      height: '90vh',
+      width: '70%',
+      height: '85vh',
       disableClose: true
     });
 

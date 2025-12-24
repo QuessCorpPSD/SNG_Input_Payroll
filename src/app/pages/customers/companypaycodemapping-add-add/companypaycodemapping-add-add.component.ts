@@ -70,15 +70,15 @@ export class CompanypaycodemappingAddAddComponent {
   }
 
   loadPaycodes(payload: any): void {
-    this.companypaycodemappingService.paycodeSearch(payload).subscribe(
-      (data) => {
+    this.companypaycodemappingService.paycodeSearch(payload).subscribe({
+      next: (data: any) => {
         this.uploadedData = data.Data.data.Table0;
         this.uploadedDataSource.data = this.uploadedData;
       },
-      (error) => {
-        console.error('Error fetching paycodes:', error);
+      error: (err: any) => {
+        console.error('Error fetching paycodes:', err);
       }
-    );
+    });
   }
 
   // Check if the row is selected
