@@ -94,12 +94,10 @@ export class CityComponent {
       state_Id: this.isEditMode ? this.selectedRow.stateId : 0,
       state_Name: this.isEditMode ? this.selectedRow.stateName : ''
     }
-
     this.Cityform = this.fb.group({
-      state: [null],
       City_Code: ['', Validators.required],
       City_Name: ['', Validators.required],
-      Tier: ['', Validators.required],
+      state: [null, Validators.required],  // Make sure 'State' is part of your form group
       SAP_Code: [''],
       Pin_Code: ['', Validators.required],
       Taluk: ['', Validators.required],
@@ -108,9 +106,9 @@ export class CityComponent {
       ESI_SubCode: ['', Validators.required],
       ESI_SubCode_Name: ['', Validators.required],
       ESIC_Implementation: ['', Validators.required],
-      Zone: ['', Validators.required],
-
+      Zone: ['', Validators.required]
     });
+
 
   }
 
@@ -333,11 +331,10 @@ export class CityComponent {
 
 
   SaveData() {
-    // if (this.Cityform.invalid) {
-    //   this.Cityform.markAllAsTouched();
-    //   return;
-    // }
-
+    if (this.Cityform.invalid) {
+      this.Cityform.markAllAsTouched();
+      return;
+    }
 
 
     const f = this.Cityform.value;

@@ -48,9 +48,11 @@ export class StateComponent implements ControlValueAccessor, OnInit {
   filteredOptions$!: Observable<State[]>;
   selectedOption?: State;
 
+  userdetail!: any;
+
   // CVA callbacks
-  private onChange: (value: State | null) => void = () => { };
-  private onTouched: () => void = () => { };
+  onChange: any = () => { };
+  onTouched: any = () => { };
 
   constructor(
     @Inject(COMM_TOKEN) private _commonService: ICommonService,
@@ -59,29 +61,30 @@ export class StateComponent implements ControlValueAccessor, OnInit {
   ) { }
 
   ngOnInit(): void {
+    const json = this._sessionStoreage.getItem('UserProfile');
+    if (json) {
+      this.userdetail = JSON.parse(this.decry.decrypt(json));
+    }
     this.BindStateId();
-
-    this.myControl.valueChanges.subscribe(value => {
-      if (typeof value === 'object' && value?.state_Id) {
-        this.onChange(value);
-      }
-    });
   }
 
-
   BindStateId() {
-    this._commonService.GetAllState().subscribe(res => {
-      this.state_Id = res.Data;
+    this._commonService.GetAllState().subscribe({
+      next: res => {
+        this.state_Id = res.Data;
 
-      this.filteredOptions$ = this.myControl.valueChanges.pipe(
-        startWith(null),
-        map(value => {
-          if (typeof value === 'string') {
-            return this._filter(value);
-          }
-          return this._filter(value?.state_Name ?? '');
-        })
-      );
+        this.filteredOptions$ = this.myControl.valueChanges.pipe(
+          startWith(null),
+          map(value => {
+            const searchText =
+              typeof value === 'string'
+                ? value
+                : value?.state_Name ?? '';
+            return this._filter(searchText);
+          })
+        );
+      },
+      error: err => console.error(err)
     });
   }
 
@@ -92,32 +95,28 @@ export class StateComponent implements ControlValueAccessor, OnInit {
     );
   }
 
-  displayFn(option: State | null): string {
-    return option ? option.state_Name : '';
+  displayFn(option: State): string {
+    return option?.state_Name ?? '';
   }
 
+  // 🔥 called when option selected
   onOptionSelected(option: State) {
     this.selectedOption = option;
     this.myControl.setValue(option);
     this.onChange(option);
     this.onTouched();
     this.stateEmit.emit(option);
-    console.log('Emitting state:', option);  // In the StateComponent before emitting the event
-
   }
 
+  // 🔥 IMPORTANT: bind value on EDIT
   writeValue(value: State | null): void {
     if (value) {
-      const matchedState = this.state_Id.find(s => s.state_Id === value.state_Id) || value;
-      this.myControl.setValue(matchedState);  // Ensure the form control gets the correct value
-      this.selectedOption = matchedState;
+      this.selectedOption = value;
+      this.myControl.setValue(value, { emitEvent: false });
     } else {
-      this.myControl.setValue(null);
-      this.selectedOption = undefined;
+      this.myControl.reset();
     }
   }
-
-
 
   registerOnChange(fn: any): void {
     this.onChange = fn;
