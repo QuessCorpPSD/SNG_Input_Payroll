@@ -143,6 +143,12 @@ import { CompanyinvoiceformatComponent } from './pages/Invoice/companyinvoicefor
 import { MaterialcodeComponent } from './pages/GlobalMasters/materialcode/materialcode.component';
 import { CancelledinvoicerepositoryComponent } from './pages/customers/cancelledinvoicerepository/cancelledinvoicerepository.component';
 import { CompanyComponent } from './pages/customers/company/company.component';
+import { PayPeriodUnlockComponent } from './pages/admin/pay-period-unlock/pay-period-unlock.component';
+import { SalaryReleaseMenuComponent } from './pages/SalaryReleaseNew/salary-release-menu/salary-release-menu.component';
+import { HoldRequestComponent } from './pages/SalaryReleaseNew/hold-request/hold-request.component';
+import { UpfrontApprovalComponent } from './pages/SalaryReleaseNew/upfront-approval/upfront-approval.component';
+import { YearlyPayoutComponent } from './pages/SalaryReleaseNew/yearly-payout/yearly-payout.component';
+import { NetpaySummaryComponent } from './pages/SalaryReleaseNew/netpay-summary/netpay-summary.component';
 
 
 
@@ -160,10 +166,11 @@ export const routes: Routes = [
       { path: 'changepassword', component: ChangepasswordComponent },
 
       {
-        path: 'adminnavigation',
+        path: 'Admin',
         component: AdminnavigationComponent,
         children: [
-          { path: 'companypermission', component: CompanypermissionComponent }
+          { path: 'companypermission', component: CompanypermissionComponent },
+          { path: 'payperiodunlock', component: PayPeriodUnlockComponent }
         ]
       },
       {
@@ -255,7 +262,16 @@ export const routes: Routes = [
 
         ]
       },
-
+{
+        path: 'salaryreleasemenu',
+        component: SalaryReleaseMenuComponent,
+        children: [
+          { path: 'Holdrequest', component: HoldRequestComponent },
+          { path: 'Netpaysummary', component: NetpaySummaryComponent },
+          { path: 'Upfrontapproval', component: UpfrontApprovalComponent },
+          { path: 'Yearlypayout', component: YearlyPayoutComponent }
+        ]
+      },
       {
         path: 'invoicenavigation',
         component: InvoicenavigationComponent,

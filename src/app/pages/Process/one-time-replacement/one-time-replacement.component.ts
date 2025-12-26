@@ -41,6 +41,7 @@ export class OneTimeReplacementComponent {
   showTable: boolean = false;
   payPeriodId: number = 0;
   userdetail: any;
+  UploadedResponse: any;
 
   isLoading: boolean = false;
   showPopup: boolean = false;
@@ -103,12 +104,12 @@ export class OneTimeReplacementComponent {
   }
   onSearchClick() {
     if (!this.selectedCompanyId) {
-      this.showAlertPopup('Please select Company');
+      alert('Please select Company');
       return;
     }
 
     if (!this.payPeriodId) {
-      this.showAlertPopup('Please select PayPeriod');
+      alert('Please select PayPeriod');
       return;
     }
 
@@ -124,36 +125,39 @@ export class OneTimeReplacementComponent {
 
     this.leave.OneTimeSearch(payload).subscribe({
       next: (res) => {
-        this.isLoading = false;
 
-        if (res?.Data?.statusCode === 400) {
+        const lopadjusts = res.Data?.data?.Table0 ?? []; // records
+
+
+        if (!lopadjusts || lopadjusts.length === 0) {
+          alert("No data available.");
           this.uploadedDataSource.data = [];
-          this.showAlertPopup('No Records Found');
-          return;
+          this.isLoading = false;
+          return; // stop here
         }
 
-        if (Array.isArray(res?.Data)) {
-          this.uploadedData = res.Data;
-          this.uploadedDataSource.data = this.uploadedData;
-          this.uploadedDataSource.paginator = this.paginator;
-          this.uploadedDataSource.sort = this.sort;
-        }
+        this.uploadedData = res.Data?.data?.Table0;
+        this.uploadedDataSource.data = this.uploadedData;
+        this.uploadedDataSource.paginator = this.paginator;
+        this.uploadedDataSource.sort = this.sort;
+
+        this.isLoading = false;
       },
       error: () => {
         this.isLoading = false;
-        this.showAlertPopup('Failed to load data.');
+        alert('Failed to load data.');
       }
     });
   }
 
   exportToExcel(): void {
     if (!this.selectedCompanyId) {
-      this.showAlertPopup('Please select Company');
+      alert('Please select Company');
       return;
     }
 
     if (!this.payPeriodId) {
-      this.showAlertPopup('Please select Payperiod');
+      alert('Please select Payperiod');
       return;
     }
 
@@ -169,17 +173,14 @@ export class OneTimeReplacementComponent {
       next: (res) => {
         this.isLoading = false;
 
-        if (res?.Data?.statusCode === 400) {
-          this.showAlertPopup('No records found');
+        const jsonData = res?.Data?.data?.Table0;
+
+        if (!jsonData || !Array.isArray(jsonData) || jsonData.length === 0) {
+          this.isLoading = false;
+          alert(res.Data.message)
           return;
         }
 
-        const jsonData = Array.isArray(res?.Data) ? res.Data : [];
-
-        if (!jsonData.length) {
-          this.showAlertPopup('No Records Found');
-          return;
-        }
 
         const ws = XLSX.utils.json_to_sheet(jsonData);
         const wb = XLSX.utils.book_new();
@@ -189,11 +190,10 @@ export class OneTimeReplacementComponent {
 
         XLSX.writeFile(wb, fileName);
 
-        this.showAlertPopup('Excel exported successfully!');
       },
       error: () => {
         this.isLoading = false;
-        this.showAlertPopup('Failed to load data for export');
+        alert('Failed to load data for export');
       }
     });
   }
@@ -207,7 +207,7 @@ export class OneTimeReplacementComponent {
     const file = input?.files?.[0];
 
     if (!file) {
-      this.showAlertPopup('Please upload an Excel file.');
+      alert('Please upload an Excel file.');
       return;
     }
 
@@ -219,63 +219,61 @@ export class OneTimeReplacementComponent {
 
     this.leave.UploadOneTime(formData).subscribe({
       next: (res: any) => {
-        this.isLoading = false;
+        this.UploadedResponse = res;
 
-        if (res?.Data?.status === 400 && res?.Data?.errors) {
-          this.showAlertPopup('Import Failed');
+        if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.Data.response.includes('Rows Uploaded Successfully.')) {
+          this.isLoading = false;
+          this.showPopup = true;
+          this.showAlertPopup(this.UploadedResponse.Data.response);
+        }
+        else if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.Data.response === 'Failed to import.') {
+          const errorArray = JSON.parse(this.UploadedResponse.Data.errors[0]);
+          const exportData = errorArray.map((item: any) => ({
+            MESSAGE: item.Error_Message || item.ERROR_MESSAGE || ''
+          }));
 
-          const errors = res.Data.errors;
-          const errorList: any[] = [];
+          const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+          const workbook: XLSX.WorkBook = {
+            Sheets: { 'ErrorMessages': worksheet },
+            SheetNames: ['ErrorMessages']
+          };
 
-          if (errors.file) errorList.push({ Error_Message: errors.file[0] });
-          if (errors.User) errorList.push({ Error_Message: errors.User[0] });
+          // Export the file
+          XLSX.writeFile(workbook, 'OnetimeReplacement_ErrorMessages.xlsx');
+          this.isLoading = false;
+          alert('Import Failed');
 
-          const ws = XLSX.utils.json_to_sheet(errorList);
-          const wb = { Sheets: { Errors: ws }, SheetNames: ['Errors'] };
-          XLSX.writeFile(wb, 'OneTimeReplacement_Errors.xlsx');
+        }
+        else {
+          if (this.UploadedResponse.Data.response != '') {
+            alert(this.UploadedResponse.Data.response);
+            if (this.UploadedResponse.Data.response != '') {
+              alert(this.UploadedResponse.Data.response);
+              this.isLoading = false;
+            }
+            else {
+              alert('Error while processing response.');
+              this.isLoading = false;
+            }
 
-          return;
+          }
+        }
+        error: err => {
+          console.error('❌ Upload failed', err);
+          this.isLoading = false;
         }
 
-        const successMsg = "Row(s) Uploaded Successfully.";
-        const raw = res?.Data?.response || res?.Data || "";
 
-        if (raw.includes(successMsg)) {
-          this.showAlertPopup('Success');
-          return;
-        }
-
-        if (Array.isArray(res?.Data)) {
-          const ws = XLSX.utils.json_to_sheet(res.Data);
-          const wb = { Sheets: { Errors: ws }, SheetNames: ['Errors'] };
-          XLSX.writeFile(wb, 'OneTimeReplacement_Errors.xlsx');
-          this.showAlertPopup('Import Failed');
-          return;
-        }
-
-        this.showAlertPopup('No Rows to Upload');
       },
 
       error: () => {
         this.isLoading = false;
-        this.showAlertPopup('Upload Failed');
+        alert('Upload Failed');
       }
     });
   }
 
   DownloadTemplate() {
-    if (!this.selectedCompanyId) {
-      this.showAlertPopup('Please select Company');
-      return;
-    }
-
-    if (!this.payPeriodId) {
-      this.showAlertPopup('Please select Payperiod');
-      return;
-    }
-
-    this.isLoading = true;
-
     const templateData = [
       { Compcode: "", PayPeriod: "", Empcode: "", Band: "", Paycode: "", Amount: "", ModeofEntry: "", Type: "", ArrearPayPeriod: "", Pay_Type: "", Remarks: "" }
     ];
@@ -287,8 +285,6 @@ export class OneTimeReplacementComponent {
     const blob = new Blob([buffer], { type: 'application/octet-stream' });
     FileSaver.saveAs(blob, `onetimereplacement_Template_${Date.now()}.xlsx`);
 
-    this.showAlertPopup('Template downloaded.');
-    this.isLoading = false;
   }
 
   ngOnInit(): void {

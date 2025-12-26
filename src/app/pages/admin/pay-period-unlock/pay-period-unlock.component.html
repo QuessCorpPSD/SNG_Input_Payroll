@@ -1,0 +1,111 @@
+<div class="page-wrapper" style="padding-top: 2%;">
+    <div class="scrollable-content">
+        <!-- 
+        <div style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700; min-width: 960px">
+            Pay Code
+        </div> -->
+        <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 600;">Pay Period
+            Unlock
+        </mat-card-title>        
+
+        <div class="table-wrapper1" style="padding-top: 2%;" *ngIf="showTable">
+            <div class="table-scroll">
+                <mat-table [dataSource]="dataSource" class="mat-elevation-z8 custom-table">
+
+                    <!-- 🔹 Sl.No -->
+                    <ng-container matColumnDef="Serial_No">
+                        <mat-header-cell *matHeaderCellDef class="sno"><strong>Sl.No</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="sno">{{ row.Serial_No }}</mat-cell>
+                    </ng-container>
+
+                    <!-- 🔹 Pay Code -->
+                    <ng-container matColumnDef="Company_Code">
+                        <mat-header-cell *matHeaderCellDef  class="CompanyCode"><strong>Company Code</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row"  class="CompanyCode">{{ row.Company_Code }}</mat-cell>
+                    </ng-container>
+
+                    <!-- 🔹 Description -->
+                    <ng-container matColumnDef="Pay_Period">
+                        <mat-header-cell *matHeaderCellDef
+                            class="PayPeriod"><strong>Pay Period</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="PayPeriod">{{ row.Pay_Period }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="UserName">
+                        <mat-header-cell *matHeaderCellDef class="UserName"><strong>Name</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="UserName">{{ row.UserName }}</mat-cell>
+                    </ng-container>
+
+                    <!-- 🔹 Pay Type -->
+                    <ng-container matColumnDef="USER_ID">
+                        <mat-header-cell *matHeaderCellDef class="USERID"><strong>Login Id</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="USERID">{{ row.USER_ID }}</mat-cell>
+                    </ng-container>
+
+                     <ng-container matColumnDef="CreatedOn">
+                        <mat-header-cell *matHeaderCellDef class="CreatedOn"><strong>Last Triggered</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row" >{{ row.CreatedOn }}</mat-cell>
+                        <mat-cell *matCellDef="let row" class="">{{ row.CreatedOn }}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="Allow_Reprocess_Id" style="display: none;">
+                        <mat-header-cell *matHeaderCellDef><strong>Allow_Reprocess_Id</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Allow_Reprocess_Id }}</mat-cell>
+                    </ng-container>                    
+                    <ng-container matColumnDef="Serial_NoFilter">
+                        <mat-header-cell *matHeaderCellDef class="sno"></mat-header-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="Company_CodeFilter">
+                        <mat-header-cell *matHeaderCellDef class="CompanyCode">
+                            <input matInput placeholder="Company Code" [(ngModel)]="filterValues.Company_Code"
+                                (keyup)="applyFilter()" />
+                        </mat-header-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Pay_PeriodFilter">
+                        <mat-header-cell *matHeaderCellDef class="PayPeriod">
+                            <input matInput placeholder="Pay Period" [(ngModel)]="filterValues.Pay_Period"
+                                (keyup)="applyFilter()" />
+                        </mat-header-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="UserNameFilter">
+                        <mat-header-cell *matHeaderCellDef class="UserName">
+                            <input matInput placeholder="Name" [(ngModel)]="filterValues.UserName"
+                                (keyup)="applyFilter()" />
+                        </mat-header-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="USER_IDFilter">
+                        <mat-header-cell *matHeaderCellDef class="UserID">
+                            <input matInput placeholder="Login id" [(ngModel)]="filterValues.USER_ID"
+                                (keyup)="applyFilter()" class="UserID" />
+                        </mat-header-cell>
+                    </ng-container>
+                    
+                    <ng-container matColumnDef="CreatedOnFilter">
+                        <mat-header-cell *matHeaderCellDef class="CreatedOn">
+                            <input matInput placeholder="Last triggered" [(ngModel)]="filterValues.CreatedOn"
+                                (keyup)="applyFilter()" />
+                        </mat-header-cell>
+                    </ng-container>
+
+                    <!-- Header Rows -->
+                    <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+
+                    <mat-header-row *matHeaderRowDef="uploadFilteredColumns"></mat-header-row>
+
+
+                    <!-- Data Rows -->
+                    <mat-row *matRowDef="let row; columns: uploadDisplayedColumns"></mat-row>
+                </mat-table>
+            </div>
+
+            <div *ngIf="dataSource.data.length === 0" class="text-center p-4">
+                <p class="text-muted">No data to display</p>
+            </div>
+
+            <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        </div>
+
+    </div>
+</div>
