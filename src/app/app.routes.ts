@@ -152,6 +152,7 @@ import { ComputationruleComponent } from './pages/GlobalMasters/computationrule/
 import { OffercreationComponent } from './pages/gsoffer/offercreation/offercreation.component';
 import { LFWSlabComponent } from './pages/GlobalMasters/lfwslab/lfwslab.component';
 import { TDSslabComponent } from './pages/GlobalMasters/tdsslab/tdsslab.component';
+import { StatesComponent } from './pages/GlobalMasters/state/state.component';
 
 
 
@@ -399,10 +400,10 @@ export const routes: Routes = [
           { path: 'BankMaster', component: BankmasterComponent },
           { path: 'Formula', component: FormulaComponent },
           { path: 'city', component: CityComponent },
-        
+          { path: 'states', component: StatesComponent },
           { path: 'Formula', component: FormulaComponent },
           { path: 'ESIslab', component: ESIslabComponent },
-          
+
           { path: 'Formula', component: FormulaComponent },
           { path: "professionaltax", component: ProfessionaltaxComponent },
           { path: "providentfund", component: ProvidentfundComponent },
@@ -411,7 +412,7 @@ export const routes: Routes = [
           { path: 'Formula', component: FormulaComponent },
           { path: 'lfw', component: LFWSlabComponent },
           { path: 'tds', component: TDSslabComponent }
-      ]
+        ]
       },
       {
         path: 'onboarding', component: OffercreationComponent,
