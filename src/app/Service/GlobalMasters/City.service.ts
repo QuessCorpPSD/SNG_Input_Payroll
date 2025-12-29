@@ -28,6 +28,23 @@ export class CityService implements ICityRepository {
         );
     }
 
+    // GetCircle(stateId: number): Observable<APIResponse> {
+    //     return this.http.get<APIResponse>(
+    //         this.env.apiUrl + 'City/GetAllCircle/' + stateId);
+    // }
+
+    // PostAddCity(CityAddRequest: any): Observable<APIResponse> {
+    //     return this.http.post<APIResponse>(
+    //         this.env.apiUrl + 'City/AddCity', CityAddRequest);
+    // }
+    //  SearchCity(payload: any): Observable<APIResponse> {
+    //     return this.http.post<APIResponse>(
+    //         this.env.apiUrl + 'City/GetAllCity',
+    //         payload
+    //     );
+    // }
+
+
     GetCircle(stateId: number): Observable<APIResponse> {
         return this.http.get<APIResponse>(
             this.env.apiUrl + 'City/GetAllCircle/' + stateId);
@@ -38,3 +55,6 @@ export class CityService implements ICityRepository {
             this.env.apiUrl + 'City/AddCity', CityAddRequest);
     }
 }
+
+
+

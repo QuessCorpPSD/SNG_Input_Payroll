@@ -1,0 +1,234 @@
+<div class="page-wrapper">
+    <div class="scrollable-content">
+        <div class="justify-content-between align-items-center mb-3">
+            <div class="row g-3 align-items-end">
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">State Name</label>
+                    <input type="text" class="form-control form-control-sm" style="height: 10px;"
+                        [(ngModel)]="searchCityName" placeholder="Enter State Name" />
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Religion</label>
+                    <select [(ngModel)]="regions" class="w-100 custom-height rounded-1 select-drop" appearance="outline"
+                        style="background-color: white;height:30px;">
+                        <option value="">Select</option>
+                        <option *ngFor="let type of region" [ngValue]="type.region_Id">
+                            {{ type.region_Name }}
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-md-3 d-flex gap-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Search"
+                        (click)="SearchClick()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Add"
+                        (click)="AddPOOpen()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="export to excel" (click)="exportToExcel()">
+                        <mat-icon>download</mat-icon>
+                    </button>
+
+                    <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Import"
+        (click)="FileUpload(fileInput)">
+        <input type="file" #fileInput style="display: none;" (change)="onFileChange($event)" accept=".xlsx, .xls" />
+        <mat-icon>cloud_upload</mat-icon>
+      </button>
+
+      <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Template"
+        (click)="DownloadTemplate()">
+        <mat-icon>cloud_download</mat-icon>
+      </button> -->
+
+                </div>
+
+            </div>
+            <div class="table-container" style="top:30px;">
+                <div class="table-scroll-window">
+                    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+                        <ng-container matColumnDef="delete">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header
+                                class="fixed-width-column"></mat-header-cell>
+                            <mat-cell *matCellDef="let element" class="fixed-width-column">
+                                <img src="assets/delete.svg" style="cursor: pointer; width: 24px; height: 22px;"
+                                    (click)="DeleteState(element)" />
+                            </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="edit">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header
+                                class="fixed-width-column"></mat-header-cell>
+                            <mat-cell *matCellDef="let element" class="fixed-width-column">
+                                <img src="assets/Icons/edit.svg" style="cursor: pointer; width: 20px; height: 22px;"
+                                    (click)="editState(element)" />
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="serial_No">
+                            <mat-header-cell *matHeaderCellDef>serial_No</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.seriaL_NO }}</mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="StateCode">
+                            <mat-header-cell *matHeaderCellDef>State Code</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.stateCode }}</mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="stateName">
+                            <mat-header-cell *matHeaderCellDef>State Name</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.stateName }}</mat-cell>
+                        </ng-container>
+
+
+
+                        <ng-container matColumnDef="country">
+                            <mat-header-cell *matHeaderCellDef>country</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.country }}</mat-cell>
+                        </ng-container>
+
+
+                        <ng-container matColumnDef="regionName">
+                            <mat-header-cell *matHeaderCellDef>Region</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.regionName }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="saP_Code">
+                            <mat-header-cell *matHeaderCellDef>SAP Code</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.sapCode }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="min_labor_count">
+                            <mat-header-cell *matHeaderCellDef>Min Labor Count</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.min_Labor_Count }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Security_Deposit">
+                            <mat-header-cell *matHeaderCellDef>Security Deposit</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.security_Deposit}}</mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+                    </table>
+                </div>
+
+                <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<br><br><br><br><br><br>
+
+
+<div *ngIf="isAddclicked" class="popup-overlay" (keydown.escape)="closeclick()">
+    <mat-card class="popup-card">
+
+        <mat-card-header class="popup-header">
+            <mat-card-title>
+                {{ isEditMode ? 'Edit State' : 'Add State' }}
+            </mat-card-title>
+
+            <button class="close-btn" matTooltip="Close" (click)="closeclick()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+
+        <mat-card-content class="scroll-content">
+            <form [formGroup]="stateform">
+
+                <div class="row g-3 align-items-end">
+
+                    <!-- State Code -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">State Code <span class="text-danger">*</span></label>
+                        <input formControlName="State_Code" type="text" placeholder="Enter State Code" />
+                        <div *ngIf="stateform.get('State_Code')?.touched && stateform.get('State_Code')?.hasError('required')"
+                            class="text-danger">
+                            State Code is required
+                        </div>
+                    </div>
+
+                    <!-- State Name -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">State Name <span class="text-danger">*</span></label>
+                        <input formControlName="State_Name" type="text" placeholder="Enter State Name" />
+                        <div *ngIf="stateform.get('State_Name')?.touched && stateform.get('State_Name')?.hasError('required')"
+                            class="text-danger">
+                            State Name is required
+                        </div>
+                    </div>
+
+                    <!-- Country -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Country <span class="text-danger">*</span></label>
+                        <input formControlName="Country" type="text" placeholder="Enter Country" />
+                        <div *ngIf="stateform.get('Country')?.touched && stateform.get('Country')?.hasError('required')"
+                            class="text-danger">
+                            Country is required
+                        </div>
+                    </div>
+
+                    <!-- Region -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Region <span class="text-danger">*</span></label>
+                        <select formControlName="Region" class="w-100 custom-height rounded-1 select-drop"
+                            appearance="outline" style="background-color: white;height:30px;">
+                            <option value="">Select</option>
+                            <option *ngFor="let type of region" [ngValue]="type.region_Id">
+                                {{ type.region_Name }}
+                            </option>
+                        </select>
+                        <div *ngIf="stateform.get('Region')?.touched && stateform.get('Region')?.hasError('required')"
+                            class="text-danger">
+                            Region is required
+                        </div>
+                    </div>
+
+                    <!-- SAP Code -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">SAP Code</label>
+                        <input formControlName="SAP_Code" type="text" placeholder="Enter SAP Code" />
+                    </div>
+
+                    <!-- Min Labor Count -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Min Labor Count <span
+                                class="text-danger">*</span></label>
+                        <input formControlName="Min_Labor_Count" type="number" placeholder="Enter Min Labor Count" />
+                        <div *ngIf="stateform.get('Min_Labor_Count')?.touched && stateform.get('Min_Labor_Count')?.hasError('required')"
+                            class="text-danger">
+                            Min Labor Count is required
+                        </div>
+                    </div>
+
+                    <!-- Security Deposit -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Security Deposit</label>
+                        <input formControlName="Min_Labor_Count" type="number" placeholder="Enter Min Labor Count" />
+
+                    </div>
+
+                </div>
+            </form>
+        </mat-card-content>
+
+        <!-- Footer Buttons -->
+        <div class="d-flex justify-content-end mt-3" style="gap:10px; padding-right:8px;">
+            <button type="button" (click)="closeclick()" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+                           cursor: pointer; background-color: #f0f0f0; color: black;">
+                Cancel
+            </button>
+
+            <button type="button" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+                           cursor: pointer; background-color: blue; color: white;" (click)="SaveData()">
+                {{ isEditMode ? 'Update' : 'Save' }} </button>
+        </div>
+
+    </mat-card>
+</div>

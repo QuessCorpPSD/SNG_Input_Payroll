@@ -5,17 +5,19 @@
 
         <div class="col-md-3">
           <label class="form-label text-muted small">City Name</label>
-          <input #cityName type="text"  style="height: 10px;"/>
+          <input type="text" class="form-control form-control-sm" style="height: 10px;" [(ngModel)]="searchCityName"
+            placeholder="Enter City Name" />
         </div>
 
         <div class="col-md-3">
           <label class="form-label text-muted small">State</label>
-          <state (stateEmit)="stateEvent($event)"></state>
+          <state (stateEmit)="stateEvent2($event)"></state>
+
         </div>
 
         <div class="col-md-3 d-flex gap-2">
           <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Search"
-            (click)="SearchClick(cityName.value)">
+            (click)="SearchClick()">
             <mat-icon>search</mat-icon>
           </button>
           <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Add"
@@ -48,14 +50,14 @@
               <mat-header-cell *matHeaderCellDef mat-sort-header class="fixed-width-column"></mat-header-cell>
               <mat-cell *matCellDef="let element" class="fixed-width-column">
                 <img src="assets/delete.svg" style="cursor: pointer; width: 24px; height: 22px;"
-                  (click)="DeleteClick()" />
+                  (click)="DeleteClick(element)" />
               </mat-cell>
             </ng-container>
             <ng-container matColumnDef="edit">
               <mat-header-cell *matHeaderCellDef mat-sort-header class="fixed-width-column"></mat-header-cell>
               <mat-cell *matCellDef="let element" class="fixed-width-column">
                 <img src="assets/Icons/edit.svg" style="cursor: pointer; width: 24px; height: 22px;"
-                  (click)="EditClick()" />
+                  (click)="EditClick(element)" />
               </mat-cell>
             </ng-container>
 
@@ -176,18 +178,25 @@
 
 <div *ngIf="isAddclicked" class="popup-overlay" (keydown.escape)="closeclick()">
   <mat-card class="popup-card">
-    <mat-card-header style="border-bottom: 1px solid #89898B; gap:570px">
-      <mat-card-title>Add City</mat-card-title>
-      <button style="border: none; background: transparent;"><mat-icon (click)="closeclick()"
-          matTooltip="close">close</mat-icon></button>
+    <mat-card-header class="popup-header">
+      <mat-card-title>
+        {{ isEditMode ? 'Edit City' : 'Add City' }}
+      </mat-card-title>
+
+      <button class="close-btn" matTooltip="Close" (click)="closeclick()">
+        <mat-icon>close</mat-icon>
+      </button>
     </mat-card-header>
     <mat-card-content class="scroll-content">
+
       <form [formGroup]="Cityform">
+        <br>
         <div class="row g-3 align-items-end">
+
           <div class="col-md-4">
             <div
               style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
-              City Code</div>
+              City Code<span class="text-danger">*</span></div>
             <div style="padding-top: 5px;">
               <input formControlName="City_Code" type="text" placeholder="Enter City Code" />
             </div>
@@ -199,7 +208,7 @@
           <div class="col-md-4">
             <div
               style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
-              City Name</div>
+              City Name<span class="text-danger">*</span></div>
             <div style="padding-top: 5px;">
               <input formControlName="City_Name" type="text" placeholder="Enter City Name" />
             </div>
@@ -210,12 +219,15 @@
           </div>
           <div class="col-md-4">
             <div
-              style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
-              State</div>
+              style="width: 160px; height: 12.35px; color: #89898B; font-size: 10px; font-family: Montserrat; font-weight: 500;">
+              State<span class="text-danger">*</span>
+            </div>
             <div style="padding-top: 5px;">
-              <state (stateEmit)="stateEvent2($event)"></state>
+              <!-- Capture the emitted state object -->
+              <state formControlName="state" (stateEmit)="stateEvent2($event)"></state>
             </div>
           </div>
+
           <div class="col-md-4">
             <div
               style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
@@ -227,7 +239,7 @@
           <div class="col-md-4">
             <div
               style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
-              Pin Code</div>
+              Pin Code<span class="text-danger">*</span></div>
             <div style="padding-top: 5px;">
               <input formControlName="Pin_Code" type="text" placeholder="Enter Pin Code" />
             </div>
@@ -239,7 +251,7 @@
           <div class="col-md-4">
             <div
               style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
-              Taluk</div>
+              Taluk<span class="text-danger">*</span></div>
             <div style="padding-top: 5px;">
               <input formControlName="Taluk" type="text" placeholder="Enter Taluk" />
             </div>
@@ -251,7 +263,7 @@
           <div class="col-md-4">
             <div
               style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
-              District</div>
+              District<span class="text-danger">*</span></div>
             <div style="padding-top: 5px;">
               <input formControlName="District" type="text" placeholder="Enter City Name" />
             </div>
@@ -270,7 +282,7 @@
                 style="background-color: white;height:30px;">
                 <option value="">Select</option>
                 <option *ngFor="let type of circle" [ngValue]="type">
-                  {{ type.text }}
+                  {{ type.ptCircle_Name }}
                 </option>
               </select>
             </div>
@@ -303,31 +315,98 @@
           </div>
 
           <div class="col-md-4">
-            <div
-              style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
-              ESIC Implementation</div>
-            <div style="padding-top: 5px;">
-              <input formControlName="ESIC_Implementation" type="text" placeholder="Enter City Name" />
+            <div style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B);
+           font-size: 10px; font-family: Montserrat; font-weight: 500;">
+              ESIC Implementation
             </div>
-            <div
-              *ngIf="Cityform.get('ESIC_Implementation')?.touched && Cityform.get('ESIC_Implementation')?.hasError('required')"
-              class="text-danger">
+
+            <div style="padding-top: 5px;">
+              <select formControlName="ESIC_Implementation" class="form-control form-control-sm" style="height: 30px;">
+
+                <option value="">Select</option>
+                <option value="Fully Implemented">Fully Implemented</option>
+                <option value="Partially Implemented">Partially Implemented</option>
+                <option value="Not Implemented">Not Implemented</option>
+
+              </select>
+            </div>
+
+            <div *ngIf="Cityform.get('ESIC_Implementation')?.touched &&
+           Cityform.get('ESIC_Implementation')?.hasError('required')" class="text-danger">
               ESIC Implementation is required
             </div>
           </div>
+
+          <div class="col-md-4">
+            <div style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B);
+           font-size: 10px; font-family: Montserrat; font-weight: 500;">
+              Zone
+            </div>
+
+            <div style="padding-top: 5px;">
+              <select formControlName="Zone" class="form-control form-control-sm" style="height: 30px;">
+
+                <option value="">Select</option>
+                <option value="Zone A">Zone A</option>
+                <option value="Zone B">Zone B</option>
+                <option value="Zone C">Zone C</option>
+                <option value="Zone D">Zone D</option>
+
+              </select>
+            </div>
+
+            <div *ngIf="Cityform.get('ESIC_Implementation')?.touched &&
+           Cityform.get('ESIC_Implementation')?.hasError('required')" class="text-danger">
+              ESIC Implementation is required
+            </div>
+          </div>
+
 
         </div>
       </form>
     </mat-card-content>
 
-    <mat-card-actions
-      style="display: flex; padding: 14px 20px; justify-content: flex-end; align-items: center; gap: 12px; align-self: stretch;border-radius: 0 0 10px 10px; border-top: 1px solid var(--Card-Box-border-color, #D6D6D6); background: var(--Card-card-background, #F9F9F9);">
-      <button (click)="SaveData()"
-        style="margin-right: 10px;width: 130px; height: 30px; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
-        <div
-          style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Montserrat; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
-          Save</div>
+    <!-- <mat-card-actions
+      style="display: flex; padding: 14px 20px; justify-content: flex-end; align-items: center; gap: 12px; border-radius: 0 0 10px 10px;">
+
+      <button type="button" (click)="SaveData()" [disabled]="isLoading" style="margin-right: 10px;
+           width: 130px;
+           height: 30px;
+           padding: 6px 16px;
+           background: #302CB3;
+           box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20);
+           border-radius: 6px;
+           border: none;
+           display: inline-flex;
+           justify-content: center;
+           align-items: center;
+           gap: 10px;
+           cursor: pointer;">
+
+        <span style="color: #F5F5F5;
+             font-size: 12px;
+             font-family: Montserrat;
+             font-weight: 600;
+             line-height: 22px;
+             letter-spacing: 0.24px;">
+          Save
+        </span>
+
       </button>
-    </mat-card-actions>
+
+    </mat-card-actions> -->
+    <div class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">
+
+      <button type="button" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+                           cursor: pointer; background-color: #f0f0f0; color: black;" (click)="closeclick()">
+        Cancel
+      </button>
+
+      <button type="button" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+                           cursor: pointer; background-color: blue; color: white;" (click)="SaveData()">
+        {{ isEditMode ? 'Update' : 'Save' }} </button>
+
+    </div>
+
   </mat-card>
 </div>

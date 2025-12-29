@@ -233,7 +233,7 @@
   width: 800px;
   /* adjust size */
   max-width: 75%;
-  height: 70vh;
+  height: 60vh;
   /* 80% of viewport height */
   max-height: 80vh;
   /* ensures it won’t exceed 80% */

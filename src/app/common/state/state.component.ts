@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, forwardRef, Inject, InjectionToken, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
-import { ReactiveFormsModule, FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ReactiveFormsModule, FormControl, NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -38,78 +38,53 @@ export const COMM_TOKEN = new InjectionToken<ICommonService>('COMM_TOKEN');
     }
   ]
 })
-export class StateComponent {
-  searchText: string = '';
-  myControl = new FormControl<string | State>('');
-  state_Id: State[] = [];
-  filteredOptions$!: Observable<State[]>;
-  selectedOption?: State;
-  userdetail!: any;
+export class StateComponent implements ControlValueAccessor, OnInit {
+
   @Input() disabled: boolean = false;
   @Output() stateEmit = new EventEmitter<State>();
 
-  constructor(@Inject(COMM_TOKEN) private _commonService: ICommonService
-    , private _sessionStoreage: SessionStorageService, private decry: EncryptionService) {
+  myControl = new FormControl<State | null>(null);
+  state_Id: State[] = [];
+  filteredOptions$!: Observable<State[]>;
+  selectedOption?: State;
 
-  }
-  value: string = '';
+  userdetail!: any;
 
-  // callbacks from Angular forms
-  onChange: (value: any) => void = () => { };
-  onTouched: () => void = () => { };
+  // CVA callbacks
+  onChange: any = () => { };
+  onTouched: any = () => { };
 
-  writeValue(value: any): void {
-    this.value = value || '';
-  }
-
-  registerOnChange(fn: any): void {
-    this.onChange = fn;
-  }
-
-  registerOnTouched(fn: any): void {
-    this.onTouched = fn;
-  }
-
-  setDisabledState?(isDisabled: boolean): void {
-    // optional, in case you need disable support
-  }
+  constructor(
+    @Inject(COMM_TOKEN) private _commonService: ICommonService,
+    private _sessionStoreage: SessionStorageService,
+    private decry: EncryptionService
+  ) { }
 
   ngOnInit(): void {
     const json = this._sessionStoreage.getItem('UserProfile');
     if (json) {
       this.userdetail = JSON.parse(this.decry.decrypt(json));
-      //console.log(this.userdetail.userId);
-    } else {
-      console.warn('UserProfile not found in session storage');
     }
     this.BindStateId();
-    const userInfo = {
-      "userId": this.userdetail.user_Id,
-      "userName": this.userdetail.userName,
-    };
-
   }
+
   BindStateId() {
     this._commonService.GetAllState().subscribe({
       next: res => {
-        //console.log(res);
         this.state_Id = res.Data;
+
         this.filteredOptions$ = this.myControl.valueChanges.pipe(
-          startWith(''),
+          startWith(null),
           map(value => {
-            let searchText = '';
-
-            if (typeof value === 'string') {
-              searchText = value;
-            } else if (value && typeof value === 'object' && 'state_Name' in value) {
-              searchText = value?.state_Name;
-            }
-
+            const searchText =
+              typeof value === 'string'
+                ? value
+                : value?.state_Name ?? '';
             return this._filter(searchText);
           })
         );
       },
-      error: err => console.error(err.message)
+      error: err => console.error(err)
     });
   }
 
@@ -120,13 +95,38 @@ export class StateComponent {
     );
   }
 
-  displayFn = (option: any): string => option?.state_Name ?? option.state_Name;
+  displayFn(option: State): string {
+    return option?.state_Name ?? '';
+  }
 
-  onOptionSelected(option: any) {
+  // 🔥 called when option selected
+  onOptionSelected(option: State) {
     this.selectedOption = option;
-    this.onChange(option); // update parent form
+    this.myControl.setValue(option);
+    this.onChange(option);
     this.onTouched();
-    this.stateEmit.emit(this.selectedOption);
+    this.stateEmit.emit(option);
+  }
+
+  // 🔥 IMPORTANT: bind value on EDIT
+  writeValue(value: State | null): void {
+    if (value) {
+      this.selectedOption = value;
+      this.myControl.setValue(value, { emitEvent: false });
+    } else {
+      this.myControl.reset();
+    }
+  }
+
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    isDisabled ? this.myControl.disable() : this.myControl.enable();
   }
 }
-
