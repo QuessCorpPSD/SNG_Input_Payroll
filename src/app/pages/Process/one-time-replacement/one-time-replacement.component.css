@@ -299,12 +299,6 @@
       color: #fff;
   }
 
-  .SNo {
-      width: 80px !important;
-      min-width: 80px !important;
-      max-width: 80px !important;
-  }
-
   ::ng-deep .mat-mdc-table {
       display: table !important;
       table-layout: auto !important;

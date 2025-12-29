@@ -62,19 +62,19 @@ export class OneTimeReplacementComponent {
   ) { }
 
   uploadDisplayedColumns: string[] = [
-    'Action',
+   // 'Action',
     'SNo',
     'Company_Code',
     'Employee_Code',
     'Employee_Name',
     'Pay_Category_Code',
-    'Pay_Sequence_Number',
+    //'Pay_Sequence_Number',
     'Pay_Period',
     'Paycode_Code',
     'Amount',
     'Mode_Of_Entry',
     'Type',
-    'Arrear_Pay_Sequence_Number',
+    //'Arrear_Pay_Sequence_Number',
     'Arrear_Pay_Period'
   ];
 

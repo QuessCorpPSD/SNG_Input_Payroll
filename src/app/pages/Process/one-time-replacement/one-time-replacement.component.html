@@ -68,7 +68,7 @@
                 <mat-table [dataSource]="uploadedDataSource" matSort
                     class="custom-table mat-elevation-z8 auto-fit-table">
 
-                    <ng-container matColumnDef="Action">
+                    <!-- <ng-container matColumnDef="Action">
                         <mat-header-cell *matHeaderCellDef><strong>Action</strong></mat-header-cell>
                         <mat-cell *matCellDef="let row">
                             <button class="btn btn-sm d-flex align-items-center justify-content-center"
@@ -80,11 +80,11 @@
                                 <mat-icon>edit</mat-icon>
                             </button>
                         </mat-cell>
-                    </ng-container>
+                    </ng-container> -->
                     <!-- SNo -->
                     <ng-container matColumnDef="SNo">
-                        <mat-header-cell *matHeaderCellDef class="SNO"><strong>SNo</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row" class="SNO">{{ row['SNo'] }}</mat-cell>
+                        <mat-header-cell *matHeaderCellDef ><strong>SNo</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['SNo'] }}</mat-cell>
                     </ng-container>
 
                     <!-- Company_Code -->
@@ -112,10 +112,10 @@
                     </ng-container>
 
                     <!-- Pay_Sequence_Number -->
-                    <ng-container matColumnDef="Pay_Sequence_Number">
+                    <!-- <ng-container matColumnDef="Pay_Sequence_Number">
                         <mat-header-cell *matHeaderCellDef><strong>Pay Sequence Number</strong></mat-header-cell>
                         <mat-cell *matCellDef="let row">{{ row['Pay_Sequence_Number'] }}</mat-cell>
-                    </ng-container>
+                    </ng-container> -->
 
                     <!-- Pay_Period -->
                     <ng-container matColumnDef="Pay_Period">
@@ -148,10 +148,10 @@
                     </ng-container>
 
                     <!-- Arrear_Pay_Sequence_Number -->
-                    <ng-container matColumnDef="Arrear_Pay_Sequence_Number">
+                    <!-- <ng-container matColumnDef="Arrear_Pay_Sequence_Number">
                         <mat-header-cell *matHeaderCellDef><strong>Arrear Pay Sequence Number</strong></mat-header-cell>
                         <mat-cell *matCellDef="let row">{{ row['Arrear_Pay_Sequence_Number'] }}</mat-cell>
-                    </ng-container>
+                    </ng-container> -->
 
                     <!-- Arrear_Pay_Period -->
                     <ng-container matColumnDef="Arrear_Pay_Period">
