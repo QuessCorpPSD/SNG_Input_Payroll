@@ -235,10 +235,13 @@
                         </mat-header-cell>
                         <mat-cell *matCellDef="let element; let i = index">
                             <div class="cell-center">
-                                <select class="dbt-select1" [(ngModel)]="element.Hold_Salary_Status"
-                                    [disabled]="holdSelections[i] !== 'SalaryHold'">
-                                    <option value="CTCHold">CTC Hold</option>
-                                    <option value="NetpayHold">Netpay Hold</option>
+                                <select class="dbt-select1"
+                                 [(ngModel)]="element.Hold_Salary_Status"
+                                    [disabled]="holdSelections[i] !== 'SalaryHold'"
+                                    [ngClass]="{ 'disabled-control': holdSelections[i] !== 'SalaryHold' }">
+                                    <option value="CTC">CTC</option>
+                                    <option value="Netpay">Netpay</option>
+                                    <option value="STATUTORY">STATUTORY</option>
                                 </select>
                             </div>
                         </mat-cell>
@@ -253,8 +256,10 @@
                         </mat-header-cell>
                         <mat-cell *matCellDef="let element; let i = index">
                             <div class="cell-center">
-                                <input type="text" class="custom-input" [value]="element.Partial_Hold_Amount"
-                                    [disabled]="holdSelections[i] !== 'PartialHold'" (input)="onDecimalInput($event)" />
+                                <input type="text" class="custom-input" [(ngModel)]="element.Partial_Hold_Amount"
+                                    [disabled]="holdSelections[i] !== 'PartialHold'" 
+                                    [ngClass]="{ 'disabled-control': holdSelections[i] !== 'PartialHold' }"
+                                    (input)="onDecimalInput($event)" />
                             </div>
                         </mat-cell>
                     </ng-container>
@@ -268,8 +273,10 @@
                         </mat-header-cell>
                         <mat-cell *matCellDef="let element; let i = index">
                             <div class="cell-center">
-                                <input type="text" class="custom-input" [value]="element.DBT_Hold_Amount"
-                                    [disabled]="holdSelections[i] !== 'DBTHold'" (input)="onDecimalInput($event)" />
+                                <input type="text" class="custom-input" [(ngModel)]="element.DBT_Hold_Amount"
+                                    [disabled]="holdSelections[i] !== 'DBTHold'" 
+                                    [ngClass]="{ 'disabled-control': holdSelections[i] !== 'DBTHold' }"
+                                    (input)="onDecimalInput($event)" />
                             </div>
                         </mat-cell>
                     </ng-container>
@@ -295,7 +302,7 @@
                         </mat-header-cell>
                         <mat-cell *matCellDef="let element">
                             <div class="cell-center">
-                                <input class="custom-input" type="text">
+                                <input class="custom-input" type="text" [(ngModel)]="element.Remarks" >
                             </div>
                         </mat-cell>
                     </ng-container>
@@ -614,4 +621,8 @@
             </mat-paginator>
         </div>
     </div>
+</div>
+<div *ngIf="showPopup" class="overlay">
+    <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+        (close)="showPopup = false"></app-alertpopup>
 </div>

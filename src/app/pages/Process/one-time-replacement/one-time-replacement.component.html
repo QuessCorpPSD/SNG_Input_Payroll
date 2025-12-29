@@ -25,7 +25,7 @@
                 <!-- Employee Code -->
                 <div class="col-md-3 small-input">
                     <label for="employeeSelect" class="form-label text-muted small">Employee Code</label>
-                    <select id="employeeSelect" class="form-select">
+                    <select id="employeeSelect" class="form-select" [(ngModel)]="Employee_Id">
                         <option value="">select</option>
                         <option *ngFor="let cat of EmployeeList" [value]="cat.Employee_Id">
                             {{cat.Employee_Code}}

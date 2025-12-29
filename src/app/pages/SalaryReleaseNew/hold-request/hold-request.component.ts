@@ -31,12 +31,16 @@ import { IHoldRequest } from '../../../Repository/SalaryRequestNew/IHoldRequest'
 import { SalaryHoldGrid } from '../../../Models/SalaryRelease/SalaryHold';
 import { PartialHoldGrid } from '../../../Models/SalaryRelease/PartialHold';
 import { DBTHoldGrid } from '../../../Models/SalaryRelease/DBTHold';
+import { AlertpopupComponent } from '../../../common/alertpopup/alertpopup.component';
+import { saveAs } from 'file-saver';
 
 
 @Component({
   selector: 'Holdrequest',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatCheckboxModule, MatPaginatorModule, MatSort, MatSelectModule, MatInputModule, MatFormFieldModule, ReactiveFormsModule, FormsModule, PayrollinputComponent],
+  imports: [CommonModule, MatTableModule, MatCheckboxModule, MatPaginatorModule, MatSort,
+    MatSelectModule, MatInputModule, MatFormFieldModule, ReactiveFormsModule, FormsModule,
+    PayrollinputComponent, AlertpopupComponent],
   templateUrl: './hold-request.component.html',
   styleUrl: './hold-request.component.css',
   providers: [{
@@ -68,6 +72,9 @@ export class HoldRequestComponent implements OnInit {
   payPeriodTypefromParent: string = '';
   userdetail!: any;
   holdSelections: { [key: number]: string } = {};
+  popupMessage: string = '';
+  popupSubMessage: string = '';
+  showPopup = false;
 
   displayedColumns: string[] = [
     'select',
@@ -153,7 +160,7 @@ export class HoldRequestComponent implements OnInit {
     public stateService: OnboardingStateService,
     private _sessionStoreage: SessionStorageService,
     private decry: EncryptionService,
-    @Inject(Common_TOKEN) private holdservice: HoldRequestService,
+    @Inject(Common_TOKEN) private holdservice: IHoldRequest
   ) { }
 
   handleCompanyEvent(company: any) {
@@ -177,7 +184,7 @@ export class HoldRequestComponent implements OnInit {
     if (this.companyUI && this.payperiodUI) {
       //this.BindDashBoard(this.companyUI.companyCode, this.payperiodUI.payPeriod)
     }
-    //console.log(this.payperiodUI);
+
   }
   searchClick() {
     this.selectedTemplate = "";
@@ -190,11 +197,8 @@ export class HoldRequestComponent implements OnInit {
       return;
     }
     if (!this.payperiodUI) {
-      this.payperiodUI = {
-        payPeriod: 'All Records',
-        payfrequencyid: 0,
-        paySequenceNo: '0'
-      };
+      alert("Select Pay Period");
+      return;
     }
 
     if (this.companyUI && this.payperiodUI) {
@@ -207,7 +211,7 @@ export class HoldRequestComponent implements OnInit {
     const json = this._sessionStoreage.getItem('UserProfile');
     if (json) {
       this.userdetail = JSON.parse(this.decry.decrypt(json));
-      //console.log(this.userdetail.userId);
+
     } else {
       console.warn('UserProfile not found in session storage');
     }
@@ -248,6 +252,9 @@ export class HoldRequestComponent implements OnInit {
 
   toggleRow(row: HoldGrid) {
     this.selection.toggle(row);
+    this.selectionPartial.clear();
+    this.selectionDBT.clear();
+    this.selectionSalary.clear();
   }
 
   selectionSalary = new SelectionModel<SalaryHoldGrid>(true, []);
@@ -275,6 +282,9 @@ export class HoldRequestComponent implements OnInit {
   }
 
   toggleRowSalary(row: SalaryHoldGrid) {
+    this.selection.clear();
+    this.selectionPartial.clear();
+    this.selectionDBT.clear();
     this.selectionSalary.toggle(row);
   }
 
@@ -303,6 +313,9 @@ export class HoldRequestComponent implements OnInit {
   }
 
   toggleRowPartial(row: PartialHoldGrid) {
+    this.selection.clear();
+    this.selectionDBT.clear();
+    this.selectionSalary.clear();
     this.selectionPartial.toggle(row);
   }
 
@@ -332,207 +345,40 @@ export class HoldRequestComponent implements OnInit {
 
   toggleRowDBT(row: DBTHoldGrid) {
     this.selectionDBT.toggle(row);
+    this.selection.clear();
+    this.selectionPartial.clear();
+    this.selectionSalary.clear();
   }
 
 
 
   BindDashBoard(companyCode: string, payPeriod: string) {
     this.isLoading = true;
+
     const payload = {
-      "Company_Id": String(companyCode),
-      "Pay_Period_Id": String(payPeriod),
+      "Company_Id": this.companyUI.companyId,
+      "Pay_Period_Id": this.payperiodUI.payfrequencyid,
       "QZoneUserName": "123"
-    };
+    }
 
-    var res = {
-      "statuscode": 200,
-      "message": "",
-      "data": {
-        "statuscode": 200,
-        "message": "",
-        "data": {
-          "Table0": [
-            {
-              "Invoice_No": "TE707048",
-              "SalaryType": "Regular",
-              "Employee_Code": "2002296977",
-              "Employee_Name": "KODURI RAMAKRISHNA",
-              "Bank_Account_Number": ":41089009108",
-              "Bank_Name": "STATE BANK OF INDIA",
-              "IFSC_Code": "SBIN0007165",
-              "Company_Code": "PSL00123",
-              "Pay_Period": "August 2024",
-              "Hold_Salary_Status": "NetpayHold",
-              "Partial_Hold_Amount": 10.00,
-              "DBT_Hold_Amount": 110.00,
-              "Net_Pay": 1100.0000
-            },
-            {
-              "Invoice_No": "AN702940",
-              "SalaryType": "Regular",
-              "Employee_Code": "2002297008",
-              "Employee_Name": "SAYYAD IMARAN BASHA",
-              "Bank_Account_Number": ":924010046346139",
-              "Bank_Name": "AXIS BANK",
-              "IFSC_Code": "UTIB0001836",
-              "Company_Code": "PSL00123",
-              "Pay_Period": "August 2024",
-              "Hold_Salary_Status": 101.09,
-              "Partial_Hold_Amount": 121.98,
-              "DBT_Hold_Amount": null,
-              "Net_Pay": 700.0000
-            },
-            {
-              "Invoice_No": "TE707048",
-              "SalaryType": "Regular",
-              "Employee_Code": "2002296977",
-              "Employee_Name": "KODURI RAMAKRISHNA",
-              "Bank_Account_Number": ":41089009108",
-              "Bank_Name": "STATE BANK OF INDIA",
-              "IFSC_Code": "SBIN0007165",
-              "Company_Code": "PSL00123",
-              "Pay_Period": "August 2024",
-              "Hold_Salary_Status": "NetpayHold",
-              "Partial_Hold_Amount": 10.00,
-              "DBT_Hold_Amount": 110.00,
-              "Net_Pay": 1100.0000
-            },
-            {
-              "Invoice_No": "AN702940",
-              "SalaryType": "Regular",
-              "Employee_Code": "2002297008",
-              "Employee_Name": "SAYYAD IMARAN BASHA",
-              "Bank_Account_Number": ":924010046346139",
-              "Bank_Name": "AXIS BANK",
-              "IFSC_Code": "UTIB0001836",
-              "Company_Code": "PSL00123",
-              "Pay_Period": "August 2024",
-              "Hold_Salary_Status": 101.09,
-              "Partial_Hold_Amount": 121.98,
-              "DBT_Hold_Amount": null,
-              "Net_Pay": 700.0000
-            },
-            {
-              "Invoice_No": "TE707048",
-              "SalaryType": "Regular",
-              "Employee_Code": "2002296977",
-              "Employee_Name": "KODURI RAMAKRISHNA",
-              "Bank_Account_Number": ":41089009108",
-              "Bank_Name": "STATE BANK OF INDIA",
-              "IFSC_Code": "SBIN0007165",
-              "Company_Code": "PSL00123",
-              "Pay_Period": "August 2024",
-              "Hold_Salary_Status": "NetpayHold",
-              "Partial_Hold_Amount": 10.00,
-              "DBT_Hold_Amount": 110.00,
-              "Net_Pay": 1100.0000
-            },
-            {
-              "Invoice_No": "AN702940",
-              "SalaryType": "Regular",
-              "Employee_Code": "2002297008",
-              "Employee_Name": "SAYYAD IMARAN BASHA",
-              "Bank_Account_Number": ":924010046346139",
-              "Bank_Name": "AXIS BANK",
-              "IFSC_Code": "UTIB0001836",
-              "Company_Code": "PSL00123",
-              "Pay_Period": "August 2024",
-              "Hold_Salary_Status": 101.09,
-              "Partial_Hold_Amount": 121.98,
-              "DBT_Hold_Amount": null,
-              "Net_Pay": 700.0000
-            },
-            {
-              "Invoice_No": "TE707048",
-              "SalaryType": "Regular",
-              "Employee_Code": "2002296977",
-              "Employee_Name": "KODURI RAMAKRISHNA",
-              "Bank_Account_Number": ":41089009108",
-              "Bank_Name": "STATE BANK OF INDIA",
-              "IFSC_Code": "SBIN0007165",
-              "Company_Code": "PSL00123",
-              "Pay_Period": "August 2024",
-              "Hold_Salary_Status": "NetpayHold",
-              "Partial_Hold_Amount": 10.00,
-              "DBT_Hold_Amount": 110.00,
-              "Net_Pay": 1100.0000
-            },
-            {
-              "Invoice_No": "AN702940",
-              "SalaryType": "Regular",
-              "Employee_Code": "2002297008",
-              "Employee_Name": "SAYYAD IMARAN BASHA",
-              "Bank_Account_Number": ":924010046346139",
-              "Bank_Name": "AXIS BANK",
-              "IFSC_Code": "UTIB0001836",
-              "Company_Code": "PSL00123",
-              "Pay_Period": "August 2024",
-              "Hold_Salary_Status": 101.09,
-              "Partial_Hold_Amount": 121.98,
-              "DBT_Hold_Amount": null,
-              "Net_Pay": 700.0000
-            },
-            {
-              "Invoice_No": "TE707048",
-              "SalaryType": "Regular",
-              "Employee_Code": "2002296977",
-              "Employee_Name": "KODURI RAMAKRISHNA",
-              "Bank_Account_Number": ":41089009108",
-              "Bank_Name": "STATE BANK OF INDIA",
-              "IFSC_Code": "SBIN0007165",
-              "Company_Code": "PSL00123",
-              "Pay_Period": "August 2024",
-              "Hold_Salary_Status": "NetpayHold",
-              "Partial_Hold_Amount": 10.00,
-              "DBT_Hold_Amount": 110.00,
-              "Net_Pay": 1100.0000
-            },
-            {
-              "Invoice_No": "AN702940",
-              "SalaryType": "Regular",
-              "Employee_Code": "2002297008",
-              "Employee_Name": "SAYYAD IMARAN BASHA",
-              "Bank_Account_Number": ":924010046346139",
-              "Bank_Name": "AXIS BANK",
-              "IFSC_Code": "UTIB0001836",
-              "Company_Code": "PSL00123",
-              "Pay_Period": "August 2024",
-              "Hold_Salary_Status": 101.09,
-              "Partial_Hold_Amount": 121.98,
-              "DBT_Hold_Amount": null,
-              "Net_Pay": 700.0000
-            }
-          ]
-        },
-        "error": null
+    this.holdservice.SearchInvoiceHoldList(payload).subscribe({
+      next: res => {
+        if (!res.Data || res.Data.length === 0) {
+          alert("No data available to display.");
+          this.isLoading = false;
+          return;
+        }
+
+        this.dataSource = new MatTableDataSource<any>(res.Data.data.Table0);
+        this.dataSource.paginator = this.holdpaginator;
+        this.dataSource.sort = this.sort;
+        this.isLoading = false;
       },
-      "error": null
-    };
-
-    this.dataSource = new MatTableDataSource<any>(res.data.data.Table0);
-    this.dataSource.paginator = this.holdpaginator;
-    this.dataSource.sort = this.sort;
-    this.isLoading = false;
-
-
-    // this.onboardService.GetOnboardingData(companyCode, payPeriod).subscribe({
-    //   next: res => {
-    //     if (!res.Data || res.Data.length === 0) {
-    //       alert("No data available to display.");
-    //       this.isLoading = false;
-    //       return;
-    //     }
-    //     //console.log(res.data);
-    //     this.dataSource = new MatTableDataSource<any>(res.Data.data.Table0);
-    //     this.dataSource.paginator = this.paginator;
-    //     this.dataSource.sort = this.sort;
-    //     this.isLoading = false;
-    //   },
-    //   error: err => {
-    //     console.error('Error fetching data:', err.message);
-    //     this.isLoading = false;
-    //   }
-    // });
+      error: err => {
+        console.error('Error fetching data:', err.message);
+        this.isLoading = false;
+      }
+    });
   }
 
   onTemplateChange(): void {
@@ -557,7 +403,7 @@ export class HoldRequestComponent implements OnInit {
     downloadLink.click();
   }
   downloadExcel(data: any[], templateId: string): void {
-    //console.log("export");
+
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
     const workbook: XLSX.WorkBook = {
       Sheets: { 'Sheet1': worksheet },
@@ -697,7 +543,7 @@ export class HoldRequestComponent implements OnInit {
       console.error("⚠️ No file selected.");
       return;
     }
-    //console.log("pass1");
+
     const formData = new FormData();
     if (this.excelFile) {
       formData.append('file', this.excelFile);
@@ -731,42 +577,310 @@ export class HoldRequestComponent implements OnInit {
 
 
   moveClick(): void {
-    this.isLoading = true;
-    const filteredSelected = this.selection.selected.filter((item: any) =>
-      this.dataSource.filteredData.includes(item)
-    );
-    const selectedOfferIds = filteredSelected.map(item => item.Invoice_No);
-    this.offerIdJson = JSON.stringify(selectedOfferIds);
-    if (this.offerIdJson.length > 0) {
-      this.onboardService.MovetoQpay(this.offerIdJson, this.companyUI.companyId, this.payperiodUI.payPeriod, this.payperiodUI.payfrequencyid, this.userdetail.user_Id).subscribe({
-        next: res => {
-          //console.log(res);
-          this.datatable = res.Data;
-          //console.log(this.datatable);
-          if (this.datatable && Array.isArray(this.datatable) && this.datatable.length > 0) {
-            this.downloadExcel(this.datatable, "MovetoQpay_Validations");
-            this.BindDashBoard(this.companyUI.companyCode, this.payperiodUI.payPeriod);
-            this.isLoading = false;
-          }
-          else {
-            alert("No validations returned");
-            this.isLoading = false;
-          }
-        },
-        error: err => {
-          console.error('Error fetching data:', err.message);
-          this.isLoading = false;
-        }
-      });
-    }
-    else {
-      alert("Please select atleast one Offer Id");
-      this.isLoading = false;
+
+    this.isAnyFilteredRowSelected() ||
+      this.isAnyFilteredRowSelectedSalary() ||
+      this.isAnyFilteredRowSelectedPartial() ||
+      this.isAnyFilteredRowSelectedDBT()
+
+    if (this.selection.hasValue()) {
+      const isValid = this.validateMainTableSelection();
+
+      if (!isValid) {
+        return;
+      }
+      this.callAllSalaryApi(this.selection.selected);
       return;
     }
 
+    if (this.selectionSalary.hasValue()) {
+      this.callSalaryApi(this.selectionSalary.selected);
+      return;
+    }
 
+    if (this.selectionPartial.hasValue()) {
+      this.callPartialApi(this.selectionPartial.selected);
+      return;
+    }
+
+    if (this.selectionDBT.hasValue()) {
+      this.callDBTApi(this.selectionDBT.selected);
+      return;
+    }
   }
+
+  validateMainTableSelection(): boolean {
+
+    const selectedRows = this.selection.selected;
+
+    for (let i = 0; i < selectedRows.length; i++) {
+      const row = selectedRows[i];
+
+      const rowIndex = this.dataSource.data.indexOf(row);
+      const holdType = this.holdSelections[rowIndex];
+
+      if (!holdType) {
+        alert(`Row ${rowIndex + 1}: Hold Selection cannot be blank`);
+        return false;
+      }
+
+      if (holdType === 'SalaryHold' && !row.Hold_Salary_Status) {
+        alert(`Row ${rowIndex + 1}: Hold Status is required`);
+        return false;
+      }
+
+      if (holdType === 'PartialHold' && !row.Partial_Hold_Amount) {
+        alert(`Row ${rowIndex + 1}: Partial Hold Amount is required`);
+        return false;
+      }
+
+      if (holdType === 'DBTHold' && !row.DBT_Hold_Amount) {
+        alert(`Row ${rowIndex + 1}: DBT Hold Amount is required`);
+        return false;
+      }
+
+      // 5️⃣ Remarks
+      if (!row.Remarks || row.Remarks.trim() === '') {
+        alert(`Row ${rowIndex + 1}: Remarks cannot be blank`);
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+
+  callAllSalaryApi(rows: any) {
+    this.isLoading = true;
+    const payload = {
+      QZoneUserName: String(123),
+      HoldListData: rows.map((r, index) => {
+        const holdType = this.holdSelections[index].replace(/([A-Z]+)([A-Z][a-z])/g, '$1 $2')
+  .replace(/([a-z])([A-Z])/g, '$1 $2');
+
+        let holdAmount: any = ""; 
+        let holdStatus: string = ""; // take same text
+
+
+        if (holdType === 'Partial Hold') {
+          holdAmount = r.Partial_Hold_Amount;
+        }
+
+        if (holdType === 'DBT Hold') {
+          holdAmount = r.DBT_Hold_Amount;
+        }
+
+        if (holdType === 'Salary Hold') {
+          holdStatus = r.Hold_Salary_Status;
+        }
+
+        return {
+          Company_Code: String(this.companyUI.companyCode),
+          Pay_Period: String(this.payperiodUI.payPeriod),
+          Employee_Code: String(r.Employee_Code),
+          Invoice_no: String(r.Invoice_No),
+          Flag: String(holdType),
+          Hold_Status: String(holdStatus),
+          Hold_Amount: String(holdAmount),
+          Reason: String(r.Remarks),
+          SalaryType: String(r.SalaryType)
+        };
+      })
+    };
+
+
+    this.holdservice.SingleHoldRequest(payload).subscribe({
+      next: res => {
+        this.downloadHoldResponseExcel(res);
+
+        this.selectionSalary.clear();
+        this.isLoading = false;
+      },
+      error: err => {
+        console.error('Error', err);
+        this.isLoading = false;
+      }
+    });
+  }
+
+  downloadHoldResponseExcel(apiResponse: any) {
+    const data = apiResponse?.Data?.data;
+    if (!data) {
+      alert('No data available to download');
+      return;
+    }
+
+    const workbook: XLSX.WorkBook = XLSX.utils.book_new();
+
+    // ---- Table 0 : Salary Hold Request ----
+    if (data.Table0?.length) {
+      const ws0 = XLSX.utils.json_to_sheet(data.Table0);
+      XLSX.utils.book_append_sheet(workbook, ws0, 'Salary Hold Request');
+    }
+
+    // ---- Table 1 : Partial Hold Request ----
+    if (data.Table1?.length) {
+      const ws1 = XLSX.utils.json_to_sheet(data.Table1);
+      XLSX.utils.book_append_sheet(workbook, ws1, 'Partial Hold Request');
+    }
+
+    // ---- Table 2 : DBT Hold Request ----
+    if (data.Table2?.length) {
+      const ws2 = XLSX.utils.json_to_sheet(data.Table2);
+      XLSX.utils.book_append_sheet(workbook, ws2, 'DBT Hold Request');
+    }
+
+    // Export file
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: 'xlsx',
+      type: 'array'
+    });
+
+    const blob = new Blob([excelBuffer], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    });
+
+    saveAs(blob, 'Hold_Request_Response.xlsx');
+  }
+
+
+  callSalaryApi(rows: any[]) {
+    this.isLoading = true;
+    const payload = {
+      QZoneUserName: String(123),
+      requestdata: rows.map(r => ({
+        Company_Code: r.Company_Code,
+        PayPeriod: r.PayPeriod,
+        Employee_Code: String(r.Employee_Code),
+        InvNo: r.InvNo,
+        Hold_Status: r.Hold_Status,
+        Reason: r.Reason,
+        SalaryType: r.SalaryType
+      }))
+    };
+
+    this.holdservice.HoldRequestUpload(payload).subscribe({
+      next: res => {
+        this.isLoading = false;
+        this.selectionSalary.clear();
+
+        const validations: string[] =
+          res?.Data?.map((x: any) => x.validation) || [];
+
+        const isSuccess = validations.some(v =>
+          v.toLowerCase().includes('uploaded successfully')
+        );
+
+        if (isSuccess) {
+          this.showPopup = true;
+          this.popupMessage = validations[0];
+          return;
+        }
+
+        if (validations.length > 0) {
+          this.downloadValidationExcel(validations, "Hold_Request_Validations");
+        }
+      },
+      error: err => {
+        console.error('Error', err);
+        this.isLoading = false;
+      }
+    });
+  }
+
+  callPartialApi(rows: any[]) {
+
+    const payload = {
+      QZoneUserName: String(123),
+      PartialHoldList: rows.map(r => ({
+        InvoiceNumber: String(r.InvoiceNumber),
+        EmployeeCode: String(r.EmployeeCode),
+        HoldAmount: String(r.HoldAmount),
+        SalaryType: String(r.SalaryType),
+        HoldReason: String(r.HoldReason)
+      }))
+    };
+
+
+    this.holdservice.PartialHoldRequest(payload).subscribe({
+      next: res => {
+        const validations: string[] =
+          res?.Data?.map((x: any) => x.error_Message) || [];
+
+        const isSuccess = validations.some(v =>
+          v.toLowerCase().includes('uploaded successfully')
+        );
+
+        if (isSuccess) {
+          this.showPopup = true;
+          this.popupMessage = validations[0];
+          return;
+        }
+
+        if (validations.length > 0) {
+          this.downloadValidationExcel(validations, "Partial_Hold_Request_Validations");
+        }
+      },
+      error: err => console.error(err)
+    });
+  }
+
+
+  callDBTApi(rows: any[]) {
+    const payload = {
+      QZoneUserName: String(123),
+      DBTHoldList: rows.map(r => ({
+        InvoiceNumber: String(r.InvoiceNumber),
+        EmployeeCode: String(r.EmployeeCode),
+        HoldAmount: String(r.HoldAmount),
+        SalaryType: String(r.SalaryType),
+        HoldReason: String(r.HoldReason)
+      }))
+    };
+
+    this.holdservice.DBTHoldRequest(payload).subscribe({
+      next: res => {
+        const validations: string[] =
+          res?.Data?.map((x: any) => x.error_Message) || [];
+
+        const isSuccess = validations.some(v =>
+          v.toLowerCase().includes('uploaded successfully')
+        );
+
+        if (isSuccess) {
+          this.showPopup = true;
+          this.popupMessage = validations[0];
+          return;
+        }
+
+        if (validations.length > 0) {
+          this.downloadValidationExcel(validations, "DBT_Hold_Request_Validations");
+        }
+      },
+      error: err => console.error(err)
+    });
+  }
+
+  downloadValidationExcel(validations: string[], FileName: any) {
+
+    const excelData = validations.map((msg, index) => ({
+      Sl_No: index + 1,
+      Validation_Message: msg
+    }));
+
+    this.exportToExcel(excelData, FileName);
+  }
+
+  exportToExcel(data: any[], fileName: string) {
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Errors');
+
+    XLSX.writeFile(workbook, `${fileName}.xlsx`);
+  }
+
+
 
   onTemplateClick() {
     if (this.selectedTemplate === "") {
@@ -953,6 +1067,5 @@ export class HoldRequestComponent implements OnInit {
       )
     );
   }
-
 
 }

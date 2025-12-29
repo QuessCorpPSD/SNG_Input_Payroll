@@ -24,24 +24,31 @@ export class HoldRequestService implements IHoldRequest {
     );
   }
 
-  HoldRequestUpload(formData: FormData): Observable<APIResponse> {
+  HoldRequestUpload(payload: any): Observable<APIResponse> {
     return this.http.post<APIResponse>(
       this.env.apiUrl + 'SalaryRequestInvoice/HoldRequestUpload',
-      formData // send as FormData directly
+      payload // send as FormData directly
     );
   }
 
-  PartialHoldRequest(formData: FormData): Observable<APIResponse> {
+  PartialHoldRequest(payload: any): Observable<APIResponse> {
     return this.http.post<APIResponse>(
       this.env.apiUrl + 'SalaryRequestInvoice/PartialHoldRequest',
-      formData // send as FormData directly
+      payload // send as FormData directly
     );
   }
 
-  DBTHoldRequest(formData: FormData): Observable<APIResponse> {
+  DBTHoldRequest(payload: any): Observable<APIResponse> {
     return this.http.post<APIResponse>(
       this.env.apiUrl + 'SalaryRequestInvoice/DBTHoldRequest',
-      formData // send as FormData directly
+      payload // send as FormData directly
+    );
+  }
+
+  SingleHoldRequest(payload: any): Observable<APIResponse> {
+    return this.http.post<APIResponse>(
+      this.env.apiUrl + 'SalaryRequestInvoice/SingleHoldRequest',
+      payload // send as FormData directly
     );
   }
 }

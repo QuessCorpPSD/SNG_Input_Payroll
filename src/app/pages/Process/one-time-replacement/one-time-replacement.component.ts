@@ -47,6 +47,7 @@ export class OneTimeReplacementComponent {
   showPopup: boolean = false;
   popupMessage: string = '';
   popupSubMessage: string = '';
+  Employee_Id:string='';
 
   EmployeeList: any[] = [];
   employeeCode: string = "";
@@ -119,7 +120,7 @@ export class OneTimeReplacementComponent {
     const payload = {
       Company_id: this.selectedCompanyId.toString(),
       Pay_Frequency_Id: this.payPeriodId.toString(),
-      Employee_Code: this.employeeCode || ""
+      Employee_Code: this.Employee_Id || ""
     };
 
     this.leave.OneTimeSearch(payload).subscribe({
@@ -165,7 +166,7 @@ export class OneTimeReplacementComponent {
     const payload = {
       Company_id: this.selectedCompanyId.toString(),
       Pay_Frequency_Id: this.payPeriodId.toString(),
-      Employee_Code: this.employeeCode || ""
+      Employee_Code: this.Employee_Id || ""
     };
 
     this.leave.downloadExcel(payload).subscribe({
