@@ -12,4 +12,5 @@ export interface HoldGrid {
   Partial_Hold_Amount: string;
   DBT_Hold_Amount: string;
   Net_Pay: string;
+  Remarks:string;
 }
