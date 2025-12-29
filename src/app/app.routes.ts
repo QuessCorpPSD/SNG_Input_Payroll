@@ -159,6 +159,8 @@ import { OffercreationComponent } from './pages/gsoffer/offercreation/offercreat
 import { LFWSlabComponent } from './pages/GlobalMasters/lfwslab/lfwslab.component';
 import { TDSslabComponent } from './pages/GlobalMasters/tdsslab/tdsslab.component';
 import { StatesComponent } from './pages/GlobalMasters/state/state.component';
+import { ChildreneducationallowanceComponent } from './pages/Taxandsavings/childreneducationallowance/childreneducationallowance.component';
+import { NavigationComponent } from './pages/Taxandsavings/navigation/navigation.component';
 
 
 
@@ -271,7 +273,7 @@ export const routes: Routes = [
 
         ]
       },
-{
+      {
         path: 'salaryreleasemenu',
         component: SalaryReleaseMenuComponent,
         children: [
@@ -398,6 +400,13 @@ export const routes: Routes = [
           { path: 'salaryadvancerequest', component: SalaryadvacerequestComponent },
           { path: 'salaryadvanceapprove', component: SalaryadvanceapproveComponent },
           { path: 'salaryadvancereport', component: SalaryadvancereportComponent },
+        ]
+      },
+      {
+        path: 'taxnavigation', component: NavigationComponent,
+        children: [
+          { path: 'cea', component: ChildreneducationallowanceComponent },
+
         ]
       },
       {
