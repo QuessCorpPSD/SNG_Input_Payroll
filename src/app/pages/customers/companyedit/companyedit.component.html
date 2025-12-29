@@ -510,13 +510,13 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <label class="form-label">Tech Subscription Charges<span class="text-danger"></span></label>
+                    <label class="form-label">Portal Charges<span class="text-danger"></span></label>
                     <div class="d-flex">
-                        <select class="form-select me-2" style="width: 40%;"
+                        <select class="form-select me-4" style="width: 40%;"
                             formControlName="TechSubscriptionChargesvalue">
                             <option value="">Select</option>
-                            <option [value]="true">%</option>
-                            <option [value]="false">Rs.</option>
+                            <option [value]="true">Percentage</option>
+                            <option [value]="false">Fixed</option>
                         </select>
                         <input type="text" class="form-control" formControlName="TechSubscriptionCharges" />
                     </div>
