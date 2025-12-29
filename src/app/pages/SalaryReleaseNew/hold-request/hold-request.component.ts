@@ -1,6 +1,6 @@
 import { Component, Inject, InjectionToken, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { OnboardingGrid } from '../../../Models/OnboardingGrid';
+import { HoldGrid } from '../../../Models/SalaryRelease/Hold';
 import { IOnboardingServices } from '../../../Repository/IOnboardingService';
 import { OnboardingStateService } from '../../../onboarding-state.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
@@ -28,6 +28,9 @@ import { IHoldReleaseRequest } from '../../../Repository/SalaryRequest/Iholdrele
 import { HolemployeesalaryService } from '../../../Service/SalaryRelease/holemployeesalary.service';
 import { HoldRequestService } from '../../../Service/SalaryRequestNew/HoldRequest.service';
 import { IHoldRequest } from '../../../Repository/SalaryRequestNew/IHoldRequest';
+import { SalaryHoldGrid } from '../../../Models/SalaryRelease/SalaryHold';
+import { PartialHoldGrid } from '../../../Models/SalaryRelease/PartialHold';
+import { DBTHoldGrid } from '../../../Models/SalaryRelease/DBTHold';
 
 
 @Component({
@@ -47,7 +50,10 @@ export class HoldRequestComponent implements OnInit {
   payperiodUI: any;
   mapnameUI: any;
 
-  dataSource = new MatTableDataSource<OnboardingGrid>([]);
+  dataSource = new MatTableDataSource<HoldGrid>([]);
+  dataSourceSalary = new MatTableDataSource<SalaryHoldGrid>([]);
+  dataSourcePartial = new MatTableDataSource<PartialHoldGrid>([]);
+  dataSourceDBT = new MatTableDataSource<DBTHoldGrid>([]);
   datatable: Array<{ [key: string]: any }> = [];
   searchText: string = '';
   selectedTemplate: string = '';
@@ -61,6 +67,7 @@ export class HoldRequestComponent implements OnInit {
   isLoading = false;
   payPeriodTypefromParent: string = '';
   userdetail!: any;
+  holdSelections: { [key: number]: string } = {};
 
   displayedColumns: string[] = [
     'select',
@@ -68,6 +75,16 @@ export class HoldRequestComponent implements OnInit {
     'Bank_Name', 'Bank_Account_Number', 'IFSC_Code', 'HoldSelection', 'HoldStatus',
     'Partial_Hold_Amount', 'DBT_Hold_Amount', 'Net_Pay', 'Remarks'
   ];
+
+  displayedColumnsSalary: string[] = [
+    'select', 'Company_Code', 'PayPeriod', 'Employee_Code', 'InvNo', 'Hold_Status',
+    'Reason', 'SalaryType'];
+
+  displayedColumnsPartial: string[] = [
+    'select', 'InvoiceNumber', 'EmployeeCode', 'HoldAmount', 'SalaryType', 'HoldReason'];
+
+  displayedColumnsDBT: string[] = [
+    'select', 'InvoiceNumber', 'EmployeeCode', 'HoldAmount', 'SalaryType', 'HoldReason'];
 
   TemplateOptions = [
     { value: 'SalaryHold', Text: 'Salary Hold' },
@@ -83,8 +100,53 @@ export class HoldRequestComponent implements OnInit {
     { value: 'clear', Text: 'Clear' }
   ];
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  // @ViewChild(MatPaginator) holdpaginator!: MatPaginator;
+  // @ViewChild(MatSort) sort!: MatSort;
+  // @ViewChild(MatPaginator) partialpaginator!: MatPaginator;
+  // @ViewChild(MatSort) partialsort!: MatSort;
+  // @ViewChild(MatPaginator) salarypaginator!: MatPaginator;
+  // @ViewChild(MatSort) salarysort!: MatSort;
+  // @ViewChild(MatPaginator) dbtpaginator!: MatPaginator;
+  // @ViewChild(MatSort) dbtsort!: MatSort;
+
+  @ViewChild('holdPaginator') holdpaginator!: MatPaginator;
+  @ViewChild('partialPaginator') partialpaginator!: MatPaginator;
+  @ViewChild('salaryPaginator') salarypaginator!: MatPaginator;
+  @ViewChild('dbtPaginator') dbtpaginator!: MatPaginator;
+
   @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild('partialSort') partialsort!: MatSort;
+  @ViewChild('salarySort') salarysort!: MatSort;
+  @ViewChild('dbtSort') dbtsort!: MatSort;
+
+  TEMPLATE_HEADERS: Record<string, string[]> = {
+    SalaryHold: [
+      'Company_Code',
+      'PayPeriod',
+      'Employee_Code',
+      'InvNo',
+      'Hold_Status',
+      'Reason',
+      'SalaryType'
+    ],
+
+    PartiallyHold: [
+      'InvoiceNumber',
+      'EmployeeCode',
+      'HoldAmount',
+      'SalaryType',
+      'HoldReason'
+    ],
+
+    DBTHold: [
+      'InvoiceNumber',
+      'EmployeeCode',
+      'HoldAmount',
+      'SalaryType',
+      'HoldReason'
+    ]
+  };
+
 
   constructor(@Inject(DASH_TOKEN) private onboardService: IOnboardingServices,
     @Inject(COMM_TOKEN) private commonService: ICommonService,
@@ -118,6 +180,11 @@ export class HoldRequestComponent implements OnInit {
     //console.log(this.payperiodUI);
   }
   searchClick() {
+    this.selectedTemplate = "";
+    this.dataSource.data = [];
+    this.dataSourceSalary.data = [];
+    this.dataSourcePartial.data = [];
+    this.dataSourceDBT.data = [];
     if (!this.companyUI) {
       alert("Select Company Code");
       return;
@@ -154,10 +221,11 @@ export class HoldRequestComponent implements OnInit {
 
   }
 
-  selection = new SelectionModel<OnboardingGrid>(true, []);
+
+  selection = new SelectionModel<HoldGrid>(true, []);
   isAnyFilteredRowSelected(): boolean {
     return this.selection.selected.some(sel =>
-      this.dataSource.filteredData.some(row => row.offerId === sel.offerId)
+      this.dataSource.filteredData.some(row => row.Invoice_No === sel.Invoice_No)
     );
   }
   isAllSelected() {
@@ -178,9 +246,94 @@ export class HoldRequestComponent implements OnInit {
       this.dataSource.data.forEach((row: any) => this.selection.select(row));
   }
 
-  toggleRow(row: OnboardingGrid) {
+  toggleRow(row: HoldGrid) {
     this.selection.toggle(row);
   }
+
+  selectionSalary = new SelectionModel<SalaryHoldGrid>(true, []);
+  isAnyFilteredRowSelectedSalary(): boolean {
+    return this.selectionSalary.selected.some(sel =>
+      this.dataSourceSalary.filteredData.some(row => row.InvNo === sel.InvNo)
+    );
+  }
+  isAllSelectedSalary() {
+    const numSelected = this.selectionSalary.selected.length;
+    const numRows = this.dataSourceSalary?.data?.length;
+    return numSelected === numRows;
+  }
+
+  isPartialSelectedSalary() {
+    const numSelected = this.selectionSalary.selected.length;
+    const numRows = this.dataSourceSalary.data.length;
+    return numSelected > 0 && numSelected < numRows;
+  }
+
+  toggleAllRowsSalary() {
+    this.isAllSelectedSalary() ?
+      this.selectionSalary.clear() :
+      this.dataSourceSalary.data.forEach((row: any) => this.selectionSalary.select(row));
+  }
+
+  toggleRowSalary(row: SalaryHoldGrid) {
+    this.selectionSalary.toggle(row);
+  }
+
+  selectionPartial = new SelectionModel<PartialHoldGrid>(true, []);
+  isAnyFilteredRowSelectedPartial(): boolean {
+    return this.selectionPartial.selected.some(sel =>
+      this.dataSourcePartial.filteredData.some(row => row.InvoiceNumber === sel.InvoiceNumber)
+    );
+  }
+  isAllSelectedPartial() {
+    const numSelected = this.selectionPartial.selected.length;
+    const numRows = this.dataSourcePartial?.data?.length;
+    return numSelected === numRows;
+  }
+
+  isPartialSelectedPartial() {
+    const numSelected = this.selectionPartial.selected.length;
+    const numRows = this.dataSourcePartial.data.length;
+    return numSelected > 0 && numSelected < numRows;
+  }
+
+  toggleAllRowsPartial() {
+    this.isAllSelectedPartial() ?
+      this.selectionPartial.clear() :
+      this.dataSourcePartial.data.forEach((row: any) => this.selectionPartial.select(row));
+  }
+
+  toggleRowPartial(row: PartialHoldGrid) {
+    this.selectionPartial.toggle(row);
+  }
+
+  selectionDBT = new SelectionModel<DBTHoldGrid>(true, []);
+  isAnyFilteredRowSelectedDBT(): boolean {
+    return this.selectionDBT.selected.some(sel =>
+      this.dataSourceDBT.filteredData.some(row => row.InvoiceNumber === sel.InvoiceNumber)
+    );
+  }
+  isAllSelectedDBT() {
+    const numSelected = this.selectionDBT.selected.length;
+    const numRows = this.dataSourceDBT?.data?.length;
+    return numSelected === numRows;
+  }
+
+  isPartialSelectedDBT() {
+    const numSelected = this.selectionDBT.selected.length;
+    const numRows = this.dataSourceDBT.data.length;
+    return numSelected > 0 && numSelected < numRows;
+  }
+
+  toggleAllRowsDBT() {
+    this.isAllSelectedDBT() ?
+      this.selectionDBT.clear() :
+      this.dataSourceDBT.data.forEach((row: any) => this.selectionDBT.select(row));
+  }
+
+  toggleRowDBT(row: DBTHoldGrid) {
+    this.selectionDBT.toggle(row);
+  }
+
 
 
   BindDashBoard(companyCode: string, payPeriod: string) {
@@ -209,9 +362,9 @@ export class HoldRequestComponent implements OnInit {
               "IFSC_Code": "SBIN0007165",
               "Company_Code": "PSL00123",
               "Pay_Period": "August 2024",
-              "Hold_Salary_Status": null,
-              "Partial_Hold_Amount": null,
-              "DBT_Hold_Amount": null,
+              "Hold_Salary_Status": "NetpayHold",
+              "Partial_Hold_Amount": 10.00,
+              "DBT_Hold_Amount": 110.00,
               "Net_Pay": 1100.0000
             },
             {
@@ -224,8 +377,128 @@ export class HoldRequestComponent implements OnInit {
               "IFSC_Code": "UTIB0001836",
               "Company_Code": "PSL00123",
               "Pay_Period": "August 2024",
-              "Hold_Salary_Status": null,
-              "Partial_Hold_Amount": null,
+              "Hold_Salary_Status": 101.09,
+              "Partial_Hold_Amount": 121.98,
+              "DBT_Hold_Amount": null,
+              "Net_Pay": 700.0000
+            },
+            {
+              "Invoice_No": "TE707048",
+              "SalaryType": "Regular",
+              "Employee_Code": "2002296977",
+              "Employee_Name": "KODURI RAMAKRISHNA",
+              "Bank_Account_Number": ":41089009108",
+              "Bank_Name": "STATE BANK OF INDIA",
+              "IFSC_Code": "SBIN0007165",
+              "Company_Code": "PSL00123",
+              "Pay_Period": "August 2024",
+              "Hold_Salary_Status": "NetpayHold",
+              "Partial_Hold_Amount": 10.00,
+              "DBT_Hold_Amount": 110.00,
+              "Net_Pay": 1100.0000
+            },
+            {
+              "Invoice_No": "AN702940",
+              "SalaryType": "Regular",
+              "Employee_Code": "2002297008",
+              "Employee_Name": "SAYYAD IMARAN BASHA",
+              "Bank_Account_Number": ":924010046346139",
+              "Bank_Name": "AXIS BANK",
+              "IFSC_Code": "UTIB0001836",
+              "Company_Code": "PSL00123",
+              "Pay_Period": "August 2024",
+              "Hold_Salary_Status": 101.09,
+              "Partial_Hold_Amount": 121.98,
+              "DBT_Hold_Amount": null,
+              "Net_Pay": 700.0000
+            },
+            {
+              "Invoice_No": "TE707048",
+              "SalaryType": "Regular",
+              "Employee_Code": "2002296977",
+              "Employee_Name": "KODURI RAMAKRISHNA",
+              "Bank_Account_Number": ":41089009108",
+              "Bank_Name": "STATE BANK OF INDIA",
+              "IFSC_Code": "SBIN0007165",
+              "Company_Code": "PSL00123",
+              "Pay_Period": "August 2024",
+              "Hold_Salary_Status": "NetpayHold",
+              "Partial_Hold_Amount": 10.00,
+              "DBT_Hold_Amount": 110.00,
+              "Net_Pay": 1100.0000
+            },
+            {
+              "Invoice_No": "AN702940",
+              "SalaryType": "Regular",
+              "Employee_Code": "2002297008",
+              "Employee_Name": "SAYYAD IMARAN BASHA",
+              "Bank_Account_Number": ":924010046346139",
+              "Bank_Name": "AXIS BANK",
+              "IFSC_Code": "UTIB0001836",
+              "Company_Code": "PSL00123",
+              "Pay_Period": "August 2024",
+              "Hold_Salary_Status": 101.09,
+              "Partial_Hold_Amount": 121.98,
+              "DBT_Hold_Amount": null,
+              "Net_Pay": 700.0000
+            },
+            {
+              "Invoice_No": "TE707048",
+              "SalaryType": "Regular",
+              "Employee_Code": "2002296977",
+              "Employee_Name": "KODURI RAMAKRISHNA",
+              "Bank_Account_Number": ":41089009108",
+              "Bank_Name": "STATE BANK OF INDIA",
+              "IFSC_Code": "SBIN0007165",
+              "Company_Code": "PSL00123",
+              "Pay_Period": "August 2024",
+              "Hold_Salary_Status": "NetpayHold",
+              "Partial_Hold_Amount": 10.00,
+              "DBT_Hold_Amount": 110.00,
+              "Net_Pay": 1100.0000
+            },
+            {
+              "Invoice_No": "AN702940",
+              "SalaryType": "Regular",
+              "Employee_Code": "2002297008",
+              "Employee_Name": "SAYYAD IMARAN BASHA",
+              "Bank_Account_Number": ":924010046346139",
+              "Bank_Name": "AXIS BANK",
+              "IFSC_Code": "UTIB0001836",
+              "Company_Code": "PSL00123",
+              "Pay_Period": "August 2024",
+              "Hold_Salary_Status": 101.09,
+              "Partial_Hold_Amount": 121.98,
+              "DBT_Hold_Amount": null,
+              "Net_Pay": 700.0000
+            },
+            {
+              "Invoice_No": "TE707048",
+              "SalaryType": "Regular",
+              "Employee_Code": "2002296977",
+              "Employee_Name": "KODURI RAMAKRISHNA",
+              "Bank_Account_Number": ":41089009108",
+              "Bank_Name": "STATE BANK OF INDIA",
+              "IFSC_Code": "SBIN0007165",
+              "Company_Code": "PSL00123",
+              "Pay_Period": "August 2024",
+              "Hold_Salary_Status": "NetpayHold",
+              "Partial_Hold_Amount": 10.00,
+              "DBT_Hold_Amount": 110.00,
+              "Net_Pay": 1100.0000
+            },
+            {
+              "Invoice_No": "AN702940",
+              "SalaryType": "Regular",
+              "Employee_Code": "2002297008",
+              "Employee_Name": "SAYYAD IMARAN BASHA",
+              "Bank_Account_Number": ":924010046346139",
+              "Bank_Name": "AXIS BANK",
+              "IFSC_Code": "UTIB0001836",
+              "Company_Code": "PSL00123",
+              "Pay_Period": "August 2024",
+              "Hold_Salary_Status": 101.09,
+              "Partial_Hold_Amount": 121.98,
               "DBT_Hold_Amount": null,
               "Net_Pay": 700.0000
             }
@@ -237,7 +510,7 @@ export class HoldRequestComponent implements OnInit {
     };
 
     this.dataSource = new MatTableDataSource<any>(res.data.data.Table0);
-    this.dataSource.paginator = this.paginator;
+    this.dataSource.paginator = this.holdpaginator;
     this.dataSource.sort = this.sort;
     this.isLoading = false;
 
@@ -267,15 +540,11 @@ export class HoldRequestComponent implements OnInit {
     if (this.selectedTemplate === "") {
       this.selectedTemplate = "";
     }
-    if (this.selectedTemplate === "OfferId" || this.selectedTemplate === "ValidateOfferId" || this.selectedTemplate === "RollbackOfferId") {
-      const dataToExport = this.templateDataMap[this.selectedTemplate];
-      if (!dataToExport) {
-        console.warn('No data.');
-        return;
-      }
-      this.downloadExcel(dataToExport, "Template_" + this.selectedTemplate);
-    }
 
+    this.dataSource.data = [];
+    this.dataSourceSalary.data = [];
+    this.dataSourcePartial.data = [];
+    this.dataSourceDBT.data = [];
   }
 
 
@@ -331,77 +600,92 @@ export class HoldRequestComponent implements OnInit {
 
 
   applyFilter() {
-    this.dataSource.filter = this.searchText.trim().toLowerCase();
+    const filterValue = this.searchText.trim().toLowerCase();
+
+    this.dataSource.filter = filterValue;
+    this.dataSourceSalary.filter = filterValue;
+    this.dataSourcePartial.filter = filterValue;
+    this.dataSourceDBT.filter = filterValue;
   }
 
-
-  onImportChange(fileInput: HTMLInputElement): void {
-    //console.log(this.selectedImport);
-    if (this.selectedImport === "clear") {
-      this.selectedImport = "";
-      return;
-    }
-    if (this.selectedImport === "ImportNewJoinee") {
-      if (!this.companyUI) {
-        alert("Please select Company Code");
-        return;
-      }
-    }
-    fileInput.click();
-  }
 
   onFileChange(event: any): void {
-    const target: DataTransfer = <DataTransfer>(event.target);
 
+    const target = event.target as HTMLInputElement;
     if (!target.files || target.files.length !== 1) {
-      console.error('Please upload only one Excel file.');
+      alert('Please upload only one Excel file.');
       return;
     }
 
-    const file = target.files[0];
     this.excelFile = target.files[0];
-    const reader: FileReader = new FileReader();
+    const reader = new FileReader();
 
     reader.onload = (e: any) => {
-      const binaryStr: string = e.target.result;
-
       try {
-        const workbook: XLSX.WorkBook = XLSX.read(binaryStr, { type: 'binary' });
-        const sheetName: string = workbook.SheetNames[0];
-        const sheet: XLSX.WorkSheet = workbook.Sheets[sheetName];
-        const jsonData = XLSX.utils.sheet_to_json(sheet);
+        const workbook = XLSX.read(e.target.result, { type: 'binary' });
+        const sheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
 
-        if (this.selectedTemplate === "Importoffer") {
-          this.excelData = jsonData.map((row: any) => row.HARBOUR_ID?.toString().trim());
-          this.applyExcelFilter();
+        let expectedHeaders: string[] = [];
 
-        } else if (this.selectedImport === "RollbackOfferId") {
-          this.excelData = jsonData.map((row: any) => row.OfferID?.toString().trim());
-          this.validateOffer = JSON.stringify(this.excelData);
-          //console.log(this.validateOffer);
-          this.onboardService.PostRollbackOfferId(this.validateOffer, this.userdetail.user_Id).subscribe({
-            next: res => {
-              this.datatable = res.Data;
-              if (this.datatable && Array.isArray(this.datatable) && this.datatable.length > 0) {
-                this.downloadExcel(this.datatable, "Rollback_Validations");
-                this.BindDashBoard(this.companyUI.companyCode, this.payperiodUI.payPeriod);
-              }
-              else {
-                alert("No validations returned");
-              }
-            },
-            error: err => {
-              console.error('Error fetching data:', err.message);
-            }
-          });
+        switch (this.selectedTemplate) {
+          case 'SalaryHold':
+            expectedHeaders = this.TEMPLATE_HEADERS['SalaryHold'];
+            break;
+
+          case 'PartiallyHold':
+            expectedHeaders = this.TEMPLATE_HEADERS['PartiallyHold'];
+            break;
+
+          case 'DBTHold':
+            expectedHeaders = this.TEMPLATE_HEADERS['DBTHold'];
+            break;
+
+          default:
+            alert('Please select a valid template');
+            return;
         }
 
-      } catch (error) {
-        console.error('Error reading Excel file:', error);
+        // HEADER VALIDATION
+        const isValid = this.validateHeaders(sheet, expectedHeaders);
+        if (!isValid) {
+          target.value = '';   // reset file input
+          return;
+        }
+
+        const jsonData = XLSX.utils.sheet_to_json<any>(sheet, { defval: '' });
+        if (!this.hasAtLeastOneValidRow(jsonData)) {
+          alert('The uploaded Excel file contains no data rows.');
+          event.target.value = '';
+          return;
+        }
+
+        if (this.selectedTemplate === 'SalaryHold') {
+          const jsonData = XLSX.utils.sheet_to_json<SalaryHoldGrid>(sheet);
+          this.dataSourceSalary.data = jsonData;
+          this.dataSourceSalary.paginator = this.salarypaginator;
+          this.dataSourceSalary.sort = this.salarysort;
+        }
+        else if (this.selectedTemplate === 'PartiallyHold') {
+          const jsonData = XLSX.utils.sheet_to_json<PartialHoldGrid>(sheet);
+          this.dataSourcePartial.data = jsonData;
+          this.dataSourcePartial.paginator = this.partialpaginator;
+          this.dataSourcePartial.sort = this.partialsort;
+        }
+        else if (this.selectedTemplate === 'DBTHold') {
+          const jsonData = XLSX.utils.sheet_to_json<DBTHoldGrid>(sheet);
+          this.dataSourceDBT.data = jsonData;
+          this.dataSourceDBT.paginator = this.dbtpaginator;
+          this.dataSourceDBT.sort = this.dbtsort;
+        }
+
+      } catch (err) {
+        console.error('Error reading Excel file:', err);
+        alert('Invalid Excel file');
       }
     };
 
-    reader.readAsBinaryString(file);
+    reader.readAsBinaryString(this.excelFile);
   }
 
 
@@ -444,16 +728,6 @@ export class HoldRequestComponent implements OnInit {
     }
   }
 
-  applyExcelFilter(): void {
-    this.dataSource.filterPredicate = (data: OnboardingGrid, filter: string) => {
-      const ids = JSON.parse(filter);
-      //console.log(ids);
-      return ids.includes(data.offerId?.toString().trim());
-    };
-
-    this.dataSource.filter = JSON.stringify(this.excelData);
-    //console.log(JSON.stringify(this.excelData));
-  }
 
 
   moveClick(): void {
@@ -461,7 +735,7 @@ export class HoldRequestComponent implements OnInit {
     const filteredSelected = this.selection.selected.filter((item: any) =>
       this.dataSource.filteredData.includes(item)
     );
-    const selectedOfferIds = filteredSelected.map(item => item.offerId);
+    const selectedOfferIds = filteredSelected.map(item => item.Invoice_No);
     this.offerIdJson = JSON.stringify(selectedOfferIds);
     if (this.offerIdJson.length > 0) {
       this.onboardService.MovetoQpay(this.offerIdJson, this.companyUI.companyId, this.payperiodUI.payPeriod, this.payperiodUI.payfrequencyid, this.userdetail.user_Id).subscribe({
@@ -551,10 +825,134 @@ export class HoldRequestComponent implements OnInit {
       return;
     }
     fileInput.value = '';
+    this.dataSource.data = [];
+    this.dataSourceSalary.data = [];
+    this.dataSourcePartial.data = [];
+    this.dataSourceDBT.data = [];
     fileInput.click();
   }
 
   onExportClick() {
+    const sheets: { [sheetName: string]: any[] } = {};
 
+    if (this.dataSource?.data?.length > 0) {
+      sheets['Hold'] = this.dataSource.data;
+    }
+
+    if (this.dataSourceSalary?.data?.length > 0) {
+      sheets['Salary Hold'] = this.dataSourceSalary.data;
+    }
+
+    if (this.dataSourcePartial?.data?.length > 0) {
+      sheets['Partial Hold'] = this.dataSourcePartial.data;
+    }
+
+    if (this.dataSourceDBT?.data?.length > 0) {
+      sheets['DBT Hold'] = this.dataSourceDBT.data;
+    }
+
+    if (Object.keys(sheets).length === 0) {
+      alert('No data available to export');
+      return;
+    }
+
+    const workbook: XLSX.WorkBook = {
+      Sheets: {},
+      SheetNames: []
+    };
+
+    Object.keys(sheets).forEach(sheetName => {
+      const worksheet = XLSX.utils.json_to_sheet(sheets[sheetName]);
+      workbook.Sheets[sheetName] = worksheet;
+      workbook.SheetNames.push(sheetName);
+    });
+
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const blob = new Blob([excelBuffer], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    });
+
+    FileSaver.saveAs(blob, 'Hold_Request_Export.xlsx');
   }
+
+  onDecimalInput(event: any) {
+    let value = event.target.value;
+
+    // Remove anything that's not a digit or dot
+    value = value.replace(/[^0-9.]/g, '');
+
+    // Keep only the first dot
+    const firstDotIndex = value.indexOf('.');
+    if (firstDotIndex !== -1) {
+      const beforeDot = value.slice(0, firstDotIndex);
+      const afterDot = value.slice(firstDotIndex + 1).replace(/\./g, ''); // remove all other dots
+      value = beforeDot + '.' + afterDot;
+    }
+
+    // Split into integer and decimal parts
+    const parts = value.split('.');
+
+    // Limit integer part to 3 digits
+    if (parts[0].length > 15) {
+      parts[0] = parts[0].substring(0, 15);
+    }
+
+    // Limit decimal part to 2 digits
+    if (parts[1] && parts[1].length > 2) {
+      parts[1] = parts[1].substring(0, 2);
+    }
+
+    // Join back and set value
+    event.target.value = parts.join('.');
+  }
+
+  isAnyRowSelected(): boolean {
+    return (
+      this.isAnyFilteredRowSelected() ||
+      this.isAnyFilteredRowSelectedSalary() ||
+      this.isAnyFilteredRowSelectedPartial() ||
+      this.isAnyFilteredRowSelectedDBT()
+    );
+  }
+
+  hasAnyTableData(): boolean {
+    return (
+      this.dataSource.data.length > 0 ||
+      this.dataSourceSalary.data.length > 0 ||
+      this.dataSourcePartial.data.length > 0 ||
+      this.dataSourceDBT.data.length > 0
+    );
+  }
+
+  validateHeaders(
+    sheet: XLSX.WorkSheet,
+    expectedHeaders: string[]
+  ): boolean {
+    const range = XLSX.utils.decode_range(sheet['!ref']!);
+    const headerRow = range.s.r; // first row
+    const actualHeaders: string[] = [];
+    for (let C = range.s.c; C <= range.e.c; ++C) {
+      const cellAddress = XLSX.utils.encode_cell({ r: headerRow, c: C });
+      const cell = sheet[cellAddress];
+      actualHeaders.push(cell?.v?.toString().trim());
+    }
+    const missingHeaders = expectedHeaders.filter(
+      h => !actualHeaders.includes(h)
+    );
+    if (missingHeaders.length > 0) {
+      alert('Headers are not matched');
+      return false;
+    }
+    return true;
+  }
+
+  hasAtLeastOneValidRow(rows: any[]): boolean {
+    return rows.some(row =>
+      Object.values(row).some(
+        value => value !== null && value !== undefined && value.toString().trim() !== ''
+      )
+    );
+  }
+
+
 }

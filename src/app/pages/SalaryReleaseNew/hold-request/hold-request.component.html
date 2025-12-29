@@ -62,7 +62,7 @@
         </div>
 
         <div style="width:100%; padding-bottom: 10px; gap: 15px;" class="right-align">
-            <div>
+            <div *ngIf="hasAnyTableData()">
                 <label style="position: relative; display: inline-block;">
                     <button (click)="onExportClick()" class="select-drop">
                         Export
@@ -94,18 +94,17 @@
                     style="      border: none;      outline: none;      flex: 1;      font-size: 12px;      background-color: transparent;    " />
             </div>
 
-            <button *ngIf="isAnyFilteredRowSelected()" (click)="moveClick()"
+            <button *ngIf="isAnyRowSelected()" (click)="moveClick()"
                 style="display: inline-block; width: 130px; height: 30px; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
                 <div
                     style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Montserrat; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
                     Request</div>
             </button>
         </div>
-        <div class="card-body rounded-4 py-0">
+        <div class="card-body rounded-4 py-0" [hidden]="dataSource.data.length === 0">
             <div class="example-container mat-elevation-z8">
                 <table mat-table #searchgrid [dataSource]="dataSource" matSort class="custom-table mat-elevation-z8">
 
-                    <!-- Checkbox Column -->
                     <ng-container matColumnDef="select">
                         <mat-header-cell *matHeaderCellDef class="fixed-width-column">
                             <mat-checkbox (change)="toggleAllRows()" [checked]="selection.hasValue() && isAllSelected()"
@@ -119,96 +118,499 @@
                         </mat-cell>
                     </ng-container>
 
-                    <!-- Offer Id Column -->
+
                     <ng-container matColumnDef="Invoice_No">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header>Inoice No</mat-header-cell>
-                        <mat-cell *matCellDef="let element"><span class="offer-style">{{ element.Invoice_No
-                                }}</span></mat-cell>
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">
+                                Invoice No
+                            </div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">
+                                <span class="offer-style">{{ element.Invoice_No }}</span>
+                            </div>
+                        </mat-cell>
                     </ng-container>
 
-                    <!-- Employee Name Column -->
+
                     <ng-container matColumnDef="SalaryType">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header>Salary Type</mat-header-cell>
-                        <mat-cell *matCellDef="let element">{{ element.SalaryType }}</mat-cell>
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">
+                                Salary Type
+                            </div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.SalaryType }}
+                            </div>
+                        </mat-cell>
                     </ng-container>
 
-                    <!-- Father Name Column -->
+
                     <ng-container matColumnDef="Employee_Code">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header>Employee Code</mat-header-cell>
-                        <mat-cell *matCellDef="let element">{{ element.Employee_Code }}</mat-cell>
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center-wrap-normal">
+                                Employee Code
+                            </div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center-wrap-normal">
+                                {{ element.Employee_Code }}</div>
+                        </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="Employee_Name">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header>Employee Name</mat-header-cell>
-                        <mat-cell *matCellDef="let element">{{ element.Employee_Name }}</mat-cell>
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center-wrap-normal">
+                                Employee Name
+                            </div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center-wrap">{{ element.Employee_Name }}
+                            </div>
+                        </mat-cell>
                     </ng-container>
 
-                    <!-- Gender Column -->
+
                     <ng-container matColumnDef="Bank_Name">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header>Bank Name</mat-header-cell>
-                        <mat-cell *matCellDef="let element">{{ element.Bank_Name }}</mat-cell>
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">
+                                Bank Name
+                            </div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center-wrap">{{ element.Bank_Name }}
+                            </div>
+                        </mat-cell>
                     </ng-container>
 
-                    <!-- DOJ Column -->
+
                     <ng-container matColumnDef="Bank_Account_Number">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header>Account No</mat-header-cell>
-                        <mat-cell *matCellDef="let element">{{ element.Bank_Account_Number }}</mat-cell>
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">
+                                Account No
+                            </div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center-wrap">{{ element.Bank_Account_Number }}
+                            </div>
+                        </mat-cell>
                     </ng-container>
 
-                    <!-- DOB Column -->
+
                     <ng-container matColumnDef="IFSC_Code">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header>IFSC Code</mat-header-cell>
-                        <mat-cell *matCellDef="let element">{{ element.IFSC_Code }}</mat-cell>
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">
+                                IFSC Code
+                            </div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.IFSC_Code }}
+                            </div>
+                        </mat-cell>
                     </ng-container>
 
-                    <!-- Designation Column -->
+
                     <ng-container matColumnDef="HoldSelection">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header>Hold Selection</mat-header-cell>
-                        <mat-cell *matCellDef="let element"><select class="dbt-select">
-                                <option value="SalaryHold">Salary Hold</option>
-                                <option value="Partial Hold">Partial Hold</option>
-                                <option value="DBT Hold">DBT Hold</option>
-                            </select></mat-cell>
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center-wrap-normal">
+                                Hold Selection
+                            </div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element; let i = index">
+                            <div class="cell-center">
+                                <select class="dbt-select" [(ngModel)]="holdSelections[i]">
+                                    <option value="SalaryHold">Salary Hold</option>
+                                    <option value="PartialHold">Partial Hold</option>
+                                    <option value="DBTHold">DBT Hold</option>
+                                </select>
+                            </div>
+                        </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="HoldStatus">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header>Hold Status filter</mat-header-cell>
-                        <mat-cell *matCellDef="let element"><select class="dbt-select1">
-                                <option value="CTCHold">CTC Hold</option>
-                                <option value="Netpay Hold">Netpay Hold</option>
-                            </select></mat-cell>
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center-wrap-normal">
+                                Hold Status
+                            </div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element; let i = index">
+                            <div class="cell-center">
+                                <select class="dbt-select1" [(ngModel)]="element.Hold_Salary_Status"
+                                    [disabled]="holdSelections[i] !== 'SalaryHold'">
+                                    <option value="CTCHold">CTC Hold</option>
+                                    <option value="NetpayHold">Netpay Hold</option>
+                                </select>
+                            </div>
+                        </mat-cell>
                     </ng-container>
 
-                    <!-- Job State Column -->
+
                     <ng-container matColumnDef="Partial_Hold_Amount">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header>Partial Hold</mat-header-cell>
-                        <mat-cell *matCellDef="let element">{{ element.Partial_Hold_Amount }}</mat-cell>
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">
+                                Partial Hold
+                            </div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element; let i = index">
+                            <div class="cell-center">
+                                <input type="text" class="custom-input" [value]="element.Partial_Hold_Amount"
+                                    [disabled]="holdSelections[i] !== 'PartialHold'" (input)="onDecimalInput($event)" />
+                            </div>
+                        </mat-cell>
                     </ng-container>
 
-                    <!-- Job Location Column -->
+
                     <ng-container matColumnDef="DBT_Hold_Amount">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header>DBT Hold</mat-header-cell>
-                        <mat-cell *matCellDef="let element">{{ element.DBT_Hold_Amount }}</mat-cell>
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">
+                                DBT Hold
+                            </div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element; let i = index">
+                            <div class="cell-center">
+                                <input type="text" class="custom-input" [value]="element.DBT_Hold_Amount"
+                                    [disabled]="holdSelections[i] !== 'DBTHold'" (input)="onDecimalInput($event)" />
+                            </div>
+                        </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="Net_Pay">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header>Netpay</mat-header-cell>
-                        <mat-cell *matCellDef="let element">{{ element.Net_Pay }}</mat-cell>
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">
+                                Netpay
+                            </div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">
+                                {{ element.Net_Pay }}
+                            </div>
+                        </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="Remarks">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header>Remarks</mat-header-cell>
-                        <mat-cell *matCellDef="let element"><input class="custom-input" type="text" ></mat-cell>
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">
+                                Remarks
+                            </div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">
+                                <input class="custom-input" type="text">
+                            </div>
+                        </mat-cell>
                     </ng-container>
 
                     <!-- Header and Row Declaration -->
                     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                    <mat-row *matRowDef="let row;let i = index;  columns: displayedColumns;"></mat-row>
                 </table>
             </div>
 
-            <mat-paginator class="mat-footer-paginator" [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons
-                stickyEnd>
+            <mat-paginator #holdPaginator class="mat-footer-paginator" [pageSizeOptions]="[5, 10, 25, 100]"
+                showFirstLastButtons stickyEnd>
+            </mat-paginator>
+        </div>
+        <div class="card-body rounded-4 py-0" [hidden]="dataSourceSalary.data.length === 0">
+            <div class="example-container mat-elevation-z8">
+                <table mat-table #searchsalarygrid [dataSource]="dataSourceSalary" matSort
+                    class="custom-table mat-elevation-z8">
+
+                    <ng-container matColumnDef="select">
+                        <mat-header-cell *matHeaderCellDef class="fixed-width-column">
+                            <mat-checkbox (change)="toggleAllRowsSalary()"
+                                [checked]="selectionSalary.hasValue() && isAllSelectedSalary()"
+                                [indeterminate]="isPartialSelectedSalary()">
+                            </mat-checkbox>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element" class="fixed-width-column">
+                            <mat-checkbox (click)="$event.stopPropagation()" (change)="toggleRowSalary(element)"
+                                [checked]="selectionSalary.isSelected(element)">
+                            </mat-checkbox>
+                        </mat-cell>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="Company_Code">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">
+                                Company Code
+                            </div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">
+                                {{ element.Company_Code }}
+                            </div>
+                        </mat-cell>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="PayPeriod">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">
+                                Pay Period
+                            </div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.PayPeriod }}
+                            </div>
+                        </mat-cell>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="Employee_Code">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center-wrap-normal">
+                                Employee Code
+                            </div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center-wrap-normal">
+                                {{ element.Employee_Code }}</div>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="InvNo">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">
+                                Invoice No
+                            </div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">
+                                <span class="offer-style">{{ element.InvNo }}</span>
+                            </div>
+                        </mat-cell>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="SalaryType">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">
+                                Salary Type
+                            </div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.SalaryType }}
+                            </div>
+                        </mat-cell>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="Hold_Status">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">
+                                Hold Status
+                            </div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.Hold_Status }}
+                            </div>
+                        </mat-cell>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="Reason">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">
+                                Reason
+                            </div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.Reason }}
+                            </div>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Header and Row Declaration -->
+                    <mat-header-row *matHeaderRowDef="displayedColumnsSalary"></mat-header-row>
+                    <mat-row *matRowDef="let row;let i = index;  columns: displayedColumnsSalary;"></mat-row>
+                </table>
+            </div>
+
+            <mat-paginator #salaryPaginator class="mat-footer-paginator" [pageSizeOptions]="[5, 10, 25, 100]"
+                showFirstLastButtons stickyEnd>
+            </mat-paginator>
+        </div>
+        <div class="card-body rounded-4 py-0" [hidden]="dataSourcePartial.data.length === 0">
+            <div class="example-container mat-elevation-z8">
+                <table mat-table #searchpartialgrid [dataSource]="dataSourcePartial" matSort
+                    class="custom-table mat-elevation-z8">
+
+                    <ng-container matColumnDef="select">
+                        <mat-header-cell *matHeaderCellDef class="fixed-width-column">
+                            <mat-checkbox (change)="toggleAllRowsPartial()"
+                                [checked]="selectionPartial.hasValue() && isAllSelectedSalary()"
+                                [indeterminate]="isPartialSelectedPartial()">
+                            </mat-checkbox>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element" class="fixed-width-column">
+                            <mat-checkbox (click)="$event.stopPropagation()" (change)="toggleRowPartial(element)"
+                                [checked]="selectionPartial.isSelected(element)">
+                            </mat-checkbox>
+                        </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="InvoiceNumber">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">
+                                Invoice No
+                            </div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">
+                                <span class="offer-style">{{ element.InvoiceNumber }}</span>
+                            </div>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="EmployeeCode">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center-wrap-normal">
+                                Employee Code
+                            </div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center-wrap-normal">
+                                {{ element.EmployeeCode }}</div>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="HoldAmount">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">
+                                Hold Amount
+                            </div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">
+                                {{ element.HoldAmount }}
+                            </div>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="SalaryType">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">
+                                Salary Type
+                            </div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.SalaryType }}
+                            </div>
+                        </mat-cell>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="HoldReason">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">
+                                Reason
+                            </div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.HoldReason }}
+                            </div>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Header and Row Declaration -->
+                    <mat-header-row *matHeaderRowDef="displayedColumnsPartial"></mat-header-row>
+                    <mat-row *matRowDef="let row;let i = index;  columns: displayedColumnsPartial;"></mat-row>
+                </table>
+            </div>
+
+            <mat-paginator #partialPaginator class="mat-footer-paginator" [pageSizeOptions]="[5, 10, 25, 100]"
+                showFirstLastButtons stickyEnd>
+            </mat-paginator>
+        </div>
+        <div class="card-body rounded-4 py-0" [hidden]="dataSourceDBT.data.length === 0">
+            <div class="example-container mat-elevation-z8">
+                <table mat-table #searchdbtgrid [dataSource]="dataSourceDBT" matSort
+                    class="custom-table mat-elevation-z8">
+
+                    <ng-container matColumnDef="select">
+                        <mat-header-cell *matHeaderCellDef class="fixed-width-column">
+                            <mat-checkbox (change)="toggleAllRowsDBT()"
+                                [checked]="selectionDBT.hasValue() && isAllSelectedSalary()"
+                                [indeterminate]="isPartialSelectedDBT()">
+                            </mat-checkbox>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element" class="fixed-width-column">
+                            <mat-checkbox (click)="$event.stopPropagation()" (change)="toggleRowDBT(element)"
+                                [checked]="selectionDBT.isSelected(element)">
+                            </mat-checkbox>
+                        </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="InvoiceNumber">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">
+                                Invoice No
+                            </div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">
+                                <span class="offer-style">{{ element.InvoiceNumber }}</span>
+                            </div>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="EmployeeCode">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center-wrap-normal">
+                                Employee Code
+                            </div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center-wrap-normal">
+                                {{ element.EmployeeCode }}</div>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="HoldAmount">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">
+                                Hold Amount
+                            </div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">
+                                {{ element.HoldAmount }}
+                            </div>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="SalaryType">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">
+                                Salary Type
+                            </div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.SalaryType }}
+                            </div>
+                        </mat-cell>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="HoldReason">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">
+                                Reason
+                            </div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.HoldReason }}
+                            </div>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Header and Row Declaration -->
+                    <mat-header-row *matHeaderRowDef="displayedColumnsDBT"></mat-header-row>
+                    <mat-row *matRowDef="let row;let i = index;  columns: displayedColumnsDBT;"></mat-row>
+                </table>
+            </div>
+
+            <mat-paginator #dbtPaginator class="mat-footer-paginator" [pageSizeOptions]="[5, 10, 25, 100]"
+                showFirstLastButtons stickyEnd>
             </mat-paginator>
         </div>
     </div>

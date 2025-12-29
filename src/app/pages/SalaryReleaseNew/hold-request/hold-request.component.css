@@ -1,5 +1,5 @@
 .mat-footer-paginator {
-  position: sticky;
+  position: relative;
   bottom: 0;
   background: white;
   box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.1);
@@ -39,19 +39,21 @@
 .example-container {
   width: 100%;
   overflow-x: scroll;
+  overflow-y: scroll;
+  max-height: 400px;
 }
 
 ::ng-deep .mat-elevation-z8 {
   box-shadow: none !important;
 }
 
-::ng-deep .mat-mdc-header-cell {
+/* ::ng-deep .mat-mdc-header-cell {
   color: #A0A0A0;
   font-size: 12px;
   font-family: "Montserrat";
   font-weight: 600;
   line-height: 19.40px;
-  /* word-wrap: break-word; */
+  word-wrap: break-word;
   border-right: 1px solid #ddd;
   position: sticky;
   display: flex;
@@ -75,7 +77,39 @@
   align-items: center;
   text-align: center;
 
+} */
+
+::ng-deep .mat-mdc-header-cell {
+  color: #A0A0A0;
+  font-size: 12px;
+  font-family: "Montserrat";
+  font-weight: 600;
+  line-height: 19.4px;
+
+  border-right: 1px solid #ddd;
+  text-align: center;
+  vertical-align: middle;
+
+  white-space: nowrap;
 }
+
+::ng-deep .mat-mdc-cell {
+  font-family: "Montserrat";
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 22.4px;
+  letter-spacing: 0.24px;
+  color: #222;
+
+  border-bottom: 1px dashed #E8E8E8 !important;
+  border-right: 1px solid #ddd;
+
+  text-align: center;
+  vertical-align: middle;
+
+  white-space: nowrap;
+}
+
 
 .table-scroll {
   max-height: 450px;
@@ -239,4 +273,39 @@
   display: flex;
   align-items: center;
   border-radius: 6px;
+}
+
+.cell-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.cell-center-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  white-space: normal;
+  /* allow wrap */
+  word-wrap: break-word;
+  /* break long text */
+  overflow-wrap: anywhere;
+  /* modern wrap support */
+  width: 100%;
+}
+
+.cell-center-wrap-normal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  white-space: normal;
+  /* allow wrap */
+  word-break: normal;
+  /* break long text */
+  overflow-wrap: normal;
+  /* modern wrap support */
+  width: 100%;
 }
