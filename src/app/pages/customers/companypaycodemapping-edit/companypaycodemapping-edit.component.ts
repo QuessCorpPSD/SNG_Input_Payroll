@@ -274,6 +274,17 @@ export class CompanypaycodemappingEditComponent {
   savePaycodeDetails(): void {
     this.isLoading = true;
 
+    const invalidRowIndex = this.uploadedDataSource.data.findIndex(row =>
+  row.Company_Paycode_Pick_From_Id === null ||
+  row.Company_Paycode_Pick_From_Id === undefined ||
+  row.Company_Paycode_Pick_From_Id === ''
+);
+
+if (invalidRowIndex !== -1) {
+  alert(`Company Paycode Pick From is required`);
+  return; // stop further execution
+}
+
     const paycodeDetail = this.uploadedDataSource.data.map((row, index) => ({
       Paycode_Id: row.Paycode_Id ?? 0,
       EarnedPaycode_Code: row.EarnedPaycode_Code ?? '',
@@ -290,23 +301,25 @@ export class CompanypaycodemappingEditComponent {
       PaycodeDetail: paycodeDetail
     };
 
-    this.paycodeService.PostAddPaycodeMapping(payload).subscribe({
-      next: (res) => {
-        const parsedData = JSON.parse(res.Data);
-        const msg = parsedData[0].message;
+    console.log('payload',payload);
 
-        if (msg.toLowerCase().includes("success")) {
-          alert("Company Paycode Mapping Saved Successfully");
-        } else {
-          alert(msg);
-        }
-        this.isLoading = false;
-      },
-      error: (err) => {
-        console.error("Error saving:", err);
-        this.isLoading = false;
-      }
-    });
+    // this.paycodeService.PostAddPaycodeMapping(payload).subscribe({
+    //   next: (res) => {
+    //     const parsedData = JSON.parse(res.Data);
+    //     const msg = parsedData[0].message;
+
+    //     if (msg.toLowerCase().includes("success")) {
+    //       alert("Company Paycode Mapping Saved Successfully");
+    //     } else {
+    //       alert(msg);
+    //     }
+    //     this.isLoading = false;
+    //   },
+    //   error: (err) => {
+    //     console.error("Error saving:", err);
+    //     this.isLoading = false;
+    //   }
+    // });
   }
 
 
