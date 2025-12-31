@@ -1,8 +1,6 @@
 import { Component, Inject, InjectionToken, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { HoldGrid } from '../../../Models/SalaryRelease/Hold';
-import { IOnboardingServices } from '../../../Repository/IOnboardingService';
-import { OnboardingStateService } from '../../../onboarding-state.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { CommonModule } from '@angular/common';
@@ -14,7 +12,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonService } from '../../../Service/CommonService';
-export const DASH_TOKEN = new InjectionToken<IOnboardingServices>('DASH_TOKEN');
 export const COMM_TOKEN = new InjectionToken<ICommonService>('COMM_TOKEN');
 export const Common_TOKEN = new InjectionToken<IHoldRequest>('Common_TOKEN');
 import * as XLSX from 'xlsx';
@@ -43,9 +40,7 @@ import { saveAs } from 'file-saver';
     PayrollinputComponent, AlertpopupComponent],
   templateUrl: './hold-request.component.html',
   styleUrl: './hold-request.component.css',
-  providers: [{
-    provide: DASH_TOKEN, useClass: OnboardingServices
-  }, { provide: COMM_TOKEN, useClass: CommonService },
+  providers: [{ provide: COMM_TOKEN, useClass: CommonService },
   { provide: Common_TOKEN, useClass: HoldRequestService }]
 })
 export class HoldRequestComponent implements OnInit {
@@ -155,9 +150,8 @@ export class HoldRequestComponent implements OnInit {
   };
 
 
-  constructor(@Inject(DASH_TOKEN) private onboardService: IOnboardingServices,
+  constructor(
     @Inject(COMM_TOKEN) private commonService: ICommonService,
-    public stateService: OnboardingStateService,
     private _sessionStoreage: SessionStorageService,
     private decry: EncryptionService,
     @Inject(Common_TOKEN) private holdservice: IHoldRequest
@@ -536,46 +530,6 @@ export class HoldRequestComponent implements OnInit {
 
 
 
-  submitExcelData(): void {
-    this.showPreviewModal = false;
-    this.isLoading = true;
-    if (!this.excelFile) {
-      console.error("⚠️ No file selected.");
-      return;
-    }
-
-    const formData = new FormData();
-    if (this.excelFile) {
-      formData.append('file', this.excelFile);
-      formData.append('companyCode', this.companyUI.companyCode);
-      formData.append('companyId', this.companyUI.companyId);
-      formData.append('userId', this.userdetail.user_Id);
-      // formData.append('payPeriod', this.payperiodUI.payPeriod);
-      // formData.append('payPeriodId', this.payperiodUI.payfrequencyid);
-
-      this.onboardService.PostNewJoineeData(formData).subscribe({
-        next: res => {
-          this.datatable = res.Data;
-          console.table(this.datatable);
-          if (this.datatable && Array.isArray(this.datatable) && this.datatable.length > 0) {
-            this.downloadExcel(this.datatable, "NewJoinee_Validations");
-            this.BindDashBoard(this.companyUI.companyCode, this.payperiodUI.payPeriod);
-            this.isLoading = false;
-          } else {
-            alert("No validations returned");
-            this.isLoading = false;
-          }
-        },
-        error: err => {
-          console.error('❌ Upload failed', err);
-          this.isLoading = false;
-        }
-      });
-    }
-  }
-
-
-
   moveClick(): void {
 
     this.isAnyFilteredRowSelected() ||
@@ -653,12 +607,12 @@ export class HoldRequestComponent implements OnInit {
   callAllSalaryApi(rows: any) {
     this.isLoading = true;
     const payload = {
-      QZoneUserName: String(123),
+      QZoneUserName: String(this.userdetail.user_Id),
       HoldListData: rows.map((r, index) => {
         const holdType = this.holdSelections[index].replace(/([A-Z]+)([A-Z][a-z])/g, '$1 $2')
-  .replace(/([a-z])([A-Z])/g, '$1 $2');
+          .replace(/([a-z])([A-Z])/g, '$1 $2');
 
-        let holdAmount: any = ""; 
+        let holdAmount: any = "";
         let holdStatus: string = ""; // take same text
 
 
@@ -689,16 +643,20 @@ export class HoldRequestComponent implements OnInit {
     };
 
 
-    this.holdservice.SingleHoldRequest(payload).subscribe({
+    this.holdservice.SingleHoldRequest(payload).pipe(
+      finalize(() => {
+        this.isLoading = false;   // always runs
+      })
+    ).subscribe({
       next: res => {
         this.downloadHoldResponseExcel(res);
 
         this.selectionSalary.clear();
-        this.isLoading = false;
+
       },
       error: err => {
         console.error('Error', err);
-        this.isLoading = false;
+
       }
     });
   }
@@ -747,7 +705,7 @@ export class HoldRequestComponent implements OnInit {
   callSalaryApi(rows: any[]) {
     this.isLoading = true;
     const payload = {
-      QZoneUserName: String(123),
+      QZoneUserName: String(this.userdetail.user_Id),
       requestdata: rows.map(r => ({
         Company_Code: r.Company_Code,
         PayPeriod: r.PayPeriod,
@@ -759,9 +717,12 @@ export class HoldRequestComponent implements OnInit {
       }))
     };
 
-    this.holdservice.HoldRequestUpload(payload).subscribe({
+    this.holdservice.HoldRequestUpload(payload).pipe(
+      finalize(() => {
+        this.isLoading = false;   // always runs
+      })
+    ).subscribe({
       next: res => {
-        this.isLoading = false;
         this.selectionSalary.clear();
 
         const validations: string[] =
@@ -783,15 +744,14 @@ export class HoldRequestComponent implements OnInit {
       },
       error: err => {
         console.error('Error', err);
-        this.isLoading = false;
       }
     });
   }
 
   callPartialApi(rows: any[]) {
-
+    this.isLoading = true;
     const payload = {
-      QZoneUserName: String(123),
+      QZoneUserName: String(this.userdetail.user_Id),
       PartialHoldList: rows.map(r => ({
         InvoiceNumber: String(r.InvoiceNumber),
         EmployeeCode: String(r.EmployeeCode),
@@ -802,7 +762,11 @@ export class HoldRequestComponent implements OnInit {
     };
 
 
-    this.holdservice.PartialHoldRequest(payload).subscribe({
+    this.holdservice.PartialHoldRequest(payload).pipe(
+      finalize(() => {
+        this.isLoading = false;   // always runs
+      })
+    ).subscribe({
       next: res => {
         const validations: string[] =
           res?.Data?.map((x: any) => x.error_Message) || [];
@@ -827,8 +791,10 @@ export class HoldRequestComponent implements OnInit {
 
 
   callDBTApi(rows: any[]) {
+
+    this.isLoading = true;
     const payload = {
-      QZoneUserName: String(123),
+      QZoneUserName: String(this.userdetail.user_Id),
       DBTHoldList: rows.map(r => ({
         InvoiceNumber: String(r.InvoiceNumber),
         EmployeeCode: String(r.EmployeeCode),
@@ -838,7 +804,11 @@ export class HoldRequestComponent implements OnInit {
       }))
     };
 
-    this.holdservice.DBTHoldRequest(payload).subscribe({
+    this.holdservice.DBTHoldRequest(payload).pipe(
+      finalize(() => {
+        this.isLoading = false;   // always runs
+      })
+    ).subscribe({
       next: res => {
         const validations: string[] =
           res?.Data?.map((x: any) => x.error_Message) || [];
@@ -903,7 +873,7 @@ export class HoldRequestComponent implements OnInit {
       Flag = "DBT Hold Salary";
     }
 
-    this.holdservice.DownloadTemplate(Flag, Qzoneusername, this.userdetail.user_Id).subscribe({
+    this.holdservice.DownloadTemplate(Flag, Qzoneusername).subscribe({
       next: res => {
         const data = res?.Data?.data?.Table0 ?? [];
         if (!data.length) {

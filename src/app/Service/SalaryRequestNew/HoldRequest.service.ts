@@ -13,8 +13,8 @@ export class HoldRequestService implements IHoldRequest {
 
   constructor(private http: HttpClient) { }
 
-  DownloadTemplate(Flag: any, Qzoneusername: any, createdBy: any): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.env.apiUrl + 'SalaryRequestInvoice/SalaryReleaseTemplate/' + Flag + '/' + Qzoneusername + '/' + createdBy);
+  DownloadTemplate(Flag: any, Qzoneusername: any): Observable<APIResponse> {
+    return this.http.get<APIResponse>(this.env.apiUrl + 'SalaryRequestInvoice/SalaryReleaseTemplate/' + Flag + '/' + Qzoneusername);
   }
 
   SearchInvoiceHoldList(payload: any): Observable<APIResponse> {
