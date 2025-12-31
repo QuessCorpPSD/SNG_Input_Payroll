@@ -1,6 +1,5 @@
 import { Component, Inject, InjectionToken, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { HoldGrid } from '../../../Models/SalaryRelease/Hold';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { CommonModule } from '@angular/common';
@@ -16,42 +15,33 @@ import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
 import { SelectionModel } from '@angular/cdk/collections';
 import { finalize } from 'rxjs';
-import { IHoldReleaseRequest } from '../../../Repository/SalaryRequest/Iholdreleaserequest';
-import { HolemployeesalaryService } from '../../../Service/SalaryRelease/holemployeesalary.service';
 import { AlertpopupComponent } from '../../../common/alertpopup/alertpopup.component';
 import { saveAs } from 'file-saver';
 import { IReleaseRequest } from '../../../Repository/SalaryRequestNew/IReleaseRequest';
 import { ReleaseRequestService } from '../../../Service/SalaryRequestNew/ReleaseRequest.service';
-import { ReleaseGrid } from '../../../Models/SalaryRelease/Release';
 import { PayrollinputComponent } from '../../PayrollInput/payrollinput.component';
 import { ReleaseImportGrid } from '../../../Models/SalaryRelease/ReleaseImportGrid';
-import { SalaryReleaseComponent } from '../salary-release/salary-release.component';
-import { MatDialog } from '@angular/material/dialog';
-import { PartialReleaseComponent } from '../partial-release/partial-release.component';
-import { DBTReleaseComponent } from '../dbtrelease/dbtrelease.component';
-import { SalaryReissueComponent } from '../salary-reissue/salary-reissue.component';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { DBTReleaseGrid } from '../../../Models/SalaryRelease/DBTRelease';
+import { DBTReleaseImportGrid } from '../../../Models/SalaryRelease/DBTReleaseImport';
 
 
 
 @Component({
-  selector: 'NetpaySummary',
+  selector: 'DBTRelease',
   standalone: true,
   imports: [CommonModule, MatTableModule, MatCheckboxModule, MatPaginatorModule, MatSort,
     MatSelectModule, MatInputModule, MatFormFieldModule, ReactiveFormsModule, FormsModule,
     AlertpopupComponent, PayrollinputComponent],
-  templateUrl: './netpay-summary.component.html',
-  styleUrl: './netpay-summary.component.css',
+  templateUrl: './dbtrelease.component.html',
+  styleUrl: './dbtrelease.component.css',
   providers: [
     { provide: Common_TOKEN, useClass: ReleaseRequestService }]
 })
-export class NetpaySummaryComponent implements OnInit {
+export class DBTReleaseComponent implements OnInit {
 
-  companyUI: any;
-  payperiodUI: any;
-  mapnameUI: any;
-
-  dataSource = new MatTableDataSource<ReleaseGrid>([]);
-  dataSourceImport = new MatTableDataSource<ReleaseImportGrid>([]);
+  dataSource = new MatTableDataSource<DBTReleaseGrid>([]);
+  dataSourceImport = new MatTableDataSource<DBTReleaseImportGrid>([]);
   datatable: Array<{ [key: string]: any }> = [];
   searchText: string = '';
   selectedImport: string = '';
@@ -62,7 +52,6 @@ export class NetpaySummaryComponent implements OnInit {
   offerIdJson: string = '';
   validateOffer: string = '';
   isLoading = false;
-  payPeriodTypefromParent: string = '';
   userdetail!: any;
   holdSelections: { [key: number]: string } = {};
   popupMessage: string = '';
@@ -70,12 +59,12 @@ export class NetpaySummaryComponent implements OnInit {
   showPopup = false;
 
   displayedColumns: string[] = [
-    'select', 'Invoice_No', 'Employee_Id', 'CurrentStatus', 'Hold',
-    'PartialHold', 'DBTHold', 'SalaryRejection', 'TotalNetpay'
+    'select', 'Invoice_No', 'SalaryType', 'Employee_Code', 'Employee_Name',
+    'Bank_Account_Number', 'Bank_Name', 'IFSC_Code', 'DBT_Hold_Amount', 'Net_Pay', 'Ekyc_Status'
   ];
 
   displayedColumnsImport: string[] = [
-    'select', 'InvoiceNumber'];
+    'select', 'InvoiceNumber', 'EmployeeCode', 'PartialReleaseAmount', 'SalaryType'];
 
   @ViewChild('holdPaginator') holdpaginator!: MatPaginator;
   @ViewChild('importPaginator') importpaginator!: MatPaginator;
@@ -87,7 +76,7 @@ export class NetpaySummaryComponent implements OnInit {
 
   TEMPLATE_HEADERS: Record<string, string[]> = {
     Release: [
-      'InvoiceNumber'
+      'InvoiceNumber', 'EmployeeCode', 'PartialReleaseAmount', 'SalaryType'
     ]
   };
 
@@ -95,49 +84,14 @@ export class NetpaySummaryComponent implements OnInit {
     private _sessionStoreage: SessionStorageService,
     private decry: EncryptionService,
     @Inject(Common_TOKEN) private releaseservice: IReleaseRequest,
-    private dialog: MatDialog
+    @Inject(MAT_DIALOG_DATA) public data: {
+      invoiceNo: any;
+      companyId: any;
+      companyCode: any;
+      payPeriodId: number;
+      payPeriod: number;
+    }
   ) { }
-
-  handleCompanyEvent(company: any) {
-    this.companyUI = company;
-    if (!this.companyUI) {
-      alert("Select Company Code");
-      return;
-    }
-    //console.log(this.companyUI);
-  }
-  handlePayperiodEvent(payperiod: any) {
-    this.payperiodUI = payperiod;
-    if (!this.companyUI) {
-      alert("Select Company Code");
-      return;
-    }
-    if (!this.payperiodUI) {
-      alert("Select Pay Period");
-      return;
-    }
-    if (this.companyUI && this.payperiodUI) {
-      //this.BindDashBoard(this.companyUI.companyCode, this.payperiodUI.payPeriod)
-    }
-
-  }
-  searchClick() {
-    this.dataSource.data = [];
-    this.dataSourceImport.data = [];
-    if (!this.companyUI) {
-      alert("Select Company Code");
-      return;
-    }
-    if (!this.payperiodUI) {
-      alert("Select Pay Period");
-      return;
-    }
-
-    if (this.companyUI && this.payperiodUI) {
-
-      this.BindDashBoard(this.companyUI.companyId, this.payperiodUI.payfrequencyid)
-    }
-  }
 
   ngOnInit(): void {
     const json = this._sessionStoreage.getItem('UserProfile');
@@ -153,12 +107,12 @@ export class NetpaySummaryComponent implements OnInit {
       "userName": this.userdetail.userName,
     };
 
-    this.payPeriodTypefromParent = "All";
+    this.BindDashBoard();
 
   }
 
 
-  selection = new SelectionModel<ReleaseGrid>(true, []);
+  selection = new SelectionModel<DBTReleaseGrid>(true, []);
   isAnyFilteredRowSelected(): boolean {
     return this.selection.selected.some(sel =>
       this.dataSource.filteredData.some(row => row.Invoice_No === sel.Invoice_No)
@@ -182,11 +136,11 @@ export class NetpaySummaryComponent implements OnInit {
       this.dataSource.data.forEach((row: any) => this.selection.select(row));
   }
 
-  toggleRow(row: ReleaseGrid) {
+  toggleRow(row: DBTReleaseGrid) {
     this.selection.toggle(row);
   }
 
-  selectionImport = new SelectionModel<ReleaseImportGrid>(true, []);
+  selectionImport = new SelectionModel<DBTReleaseImportGrid>(true, []);
   isAnyFilteredRowSelectedImport(): boolean {
     return this.selectionImport.selected.some(sel =>
       this.dataSourceImport.filteredData.some(row => row.InvoiceNumber === sel.InvoiceNumber)
@@ -210,37 +164,40 @@ export class NetpaySummaryComponent implements OnInit {
       this.dataSourceImport.data.forEach((row: any) => this.selectionImport.select(row));
   }
 
-  toggleRowImport(row: ReleaseImportGrid) {
+  toggleRowImport(row: DBTReleaseImportGrid) {
     this.selection.clear();
     this.selectionImport.toggle(row);
   }
 
-  BindDashBoard(companyCode: string, payPeriod: string) {
+  BindDashBoard() {
     this.isLoading = true;
 
-    var Company_Id = this.companyUI.companyId;
-    var Pay_Period_Id = this.payperiodUI.payfrequencyid;
-    var QZoneUserName = "123";
+    var Company_Id = this.data.companyId;
+    var Pay_Period_Id = this.data.payPeriodId;
+    var Flag = "DBTHoldList";
+    var InvoiceNo = this.data.invoiceNo;
+    var QZoneUserName = this.userdetail.user_Id;
 
 
-    this.releaseservice.SearchReleaseRequest(Company_Id, Pay_Period_Id, QZoneUserName).subscribe({
-      next: res => {
-        if (!res.Data || res.Data.length === 0) {
-          alert("No data available to display.");
+    this.releaseservice.SearchAllReleaseRequest(Company_Id, Pay_Period_Id, Flag,
+      InvoiceNo, QZoneUserName).subscribe({
+        next: res => {
+          if (!res.Data || res.Data.length === 0) {
+            alert("No data available to display.");
+            this.isLoading = false;
+            return;
+          }
+
+          this.dataSource = new MatTableDataSource<any>(res.Data.data.Table0);
+          this.dataSource.paginator = this.holdpaginator;
+          this.dataSource.sort = this.sort;
           this.isLoading = false;
-          return;
+        },
+        error: err => {
+          console.error('Error fetching data:', err.message);
+          this.isLoading = false;
         }
-
-        this.dataSource = new MatTableDataSource<any>(res.Data.data.Table0);
-        this.dataSource.paginator = this.holdpaginator;
-        this.dataSource.sort = this.sort;
-        this.isLoading = false;
-      },
-      error: err => {
-        console.error('Error fetching data:', err.message);
-        this.isLoading = false;
-      }
-    });
+      });
   }
 
 
@@ -297,7 +254,6 @@ export class NetpaySummaryComponent implements OnInit {
           return;
         }
 
-        console.log('1');
 
         const jsonData = XLSX.utils.sheet_to_json<any>(sheet, { defval: '' });
         if (!this.hasAtLeastOneValidRow(jsonData)) {
@@ -306,7 +262,7 @@ export class NetpaySummaryComponent implements OnInit {
           return;
         }
 
-        const jsonDataimport = XLSX.utils.sheet_to_json<ReleaseImportGrid>(sheet);
+        const jsonDataimport = XLSX.utils.sheet_to_json<DBTReleaseImportGrid>(sheet);
         this.dataSourceImport.data = jsonDataimport;
         this.dataSourceImport.paginator = this.importpaginator;
         this.dataSourceImport.sort = this.importsort;
@@ -343,12 +299,15 @@ export class NetpaySummaryComponent implements OnInit {
     this.isLoading = true;
     const payload = {
       QZoneUserName: String(this.userdetail.user_Id),
-      InvoiceList: rows.map(r => ({
-        InvoiceNumber: String(r.Invoice_No)
+      DBTReleaseList: rows.map(r => ({
+        InvoiceNumber: String(r.Invoice_No),
+        EmployeeCode: String(r.Employee_Code),
+        DBTReleaseAmount: String(r.DBT_Hold_Amount),
+        SalaryType: String(r.SalaryType)
       }))
     };
 
-    this.releaseservice.UploadSalaryReleaseRequest(payload).pipe(
+    this.releaseservice.DBTHoldRelease(payload).pipe(
       finalize(() => {
         this.isLoading = false;   // always runs
       })
@@ -368,7 +327,7 @@ export class NetpaySummaryComponent implements OnInit {
         }
 
         if (validations.length > 0) {
-          this.downloadValidationExcel(validations, "Release_Request_Validations");
+          this.downloadValidationExcel(validations, "Salary_Release_Request_Validations");
         }
       },
       error: err => console.error(err)
@@ -379,12 +338,15 @@ export class NetpaySummaryComponent implements OnInit {
     this.isLoading = true;
     const payload = {
       QZoneUserName: String(this.userdetail.user_Id),
-      InvoiceList: rows.map(r => ({
-        InvoiceNumber: String(r.InvoiceNumber)
+      DBTReleaseList: rows.map(r => ({
+        InvoiceNumber: String(r.InvoiceNumber),
+        EmployeeCode: String(r.EmployeeCode),
+        DBTReleaseAmount: String(r.PartialReleaseAmount),
+        SalaryType: String(r.SalaryType)
       }))
     };
 
-    this.releaseservice.UploadSalaryReleaseRequest(payload).pipe(
+    this.releaseservice.DBTHoldRelease(payload).pipe(
       finalize(() => {
         this.isLoading = false;   // always runs
       })
@@ -404,7 +366,7 @@ export class NetpaySummaryComponent implements OnInit {
         }
 
         if (validations.length > 0) {
-          this.downloadValidationExcel(validations, "Release_Request_Validations");
+          this.downloadValidationExcel(validations, "Salry_Release_Request_Validations");
         }
       },
       error: err => console.error(err)
@@ -434,7 +396,7 @@ export class NetpaySummaryComponent implements OnInit {
 
   onTemplateClick() {
 
-    var Flag = 'SalaryRequest';
+    var Flag = 'DBT Hold Salary Release';
     var Qzoneusername = '123';
 
     this.releaseservice.DownloadTemplate(Flag, Qzoneusername).subscribe({
@@ -452,7 +414,7 @@ export class NetpaySummaryComponent implements OnInit {
 
         const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
         const blob = new Blob([buffer], { type: 'application/octet-stream' });
-        FileSaver.saveAs(blob, `ReleaseRequest_Template.xlsx`);
+        FileSaver.saveAs(blob, `DBT_ReleaseRequest_Template.xlsx`);
         this.isLoading = false;
       },
       error: err => {
@@ -471,34 +433,55 @@ export class NetpaySummaryComponent implements OnInit {
   }
 
   onExportClick() {
-    if (!this.companyUI) {
-      alert('Please select Company');
-      return;
-    }
-    if (!this.payperiodUI) {
-      alert('Please select Payperiod');
-      return;
-    }
-
-    this.isLoading = true;
-    var Company_id = this.companyUI.companyId;
-    var Pay_Frequency_Id = this.payperiodUI.payfrequencyid;
-    var QZoneUserName = "123"
-    this.releaseservice.ExportReleaseRequest(Company_id, Pay_Frequency_Id, QZoneUserName)
-      .pipe(
-        finalize(() => this.isLoading = false) // ✅ only one place to stop loading
-      ).subscribe({
-        next: res => {
-
-          if (res.StatusCode == 200) {
-            const data = res.Data;
-            var base64 = data.file;
-            this.downloadExcelFromBase64(base64, data.fileName)
+  
+      this.isLoading = true;
+  
+      var Company_Id = this.data.companyId;
+      var Pay_Period_Id = this.data.payPeriodId;
+      var Flag = "DBTHoldList";
+      var InvoiceNo = this.data.invoiceNo;
+      var QZoneUserName = this.userdetail.user_Id;
+  
+      this.releaseservice.SearchAllReleaseRequest(Company_Id, Pay_Period_Id, Flag,
+        InvoiceNo, QZoneUserName).pipe(
+          finalize(() => {
+            this.isLoading = false;   // always runs
+          })
+        ).subscribe({
+          next: res => {
+            const tableData = res?.Data?.data?.Table0 || [];
+  
+            if (tableData.length === 0) {
+              alert('No data available to export');
+              return;
+            }
+  
+            const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(tableData);
+  
+            const workbook: XLSX.WorkBook = {
+              Sheets: { 'DBT Release': worksheet },
+              SheetNames: ['DBT Release']
+            };
+  
+            const excelBuffer: any = XLSX.write(workbook, {
+              bookType: 'xlsx',
+              type: 'array'
+            });
+  
+            const data: Blob = new Blob([excelBuffer], {
+              type:
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
+            });
+            const dateTime = this.getDateTime();
+  
+            FileSaver.saveAs(data, `DBT_Release_${dateTime}.xlsx`);
+          },
+          error: err => {
+            console.error('Error fetching data:', err.message);
+            this.isLoading = false;
           }
-        },
-        error: error => console.error('Error:', error)
-      })
-  }
+        });
+    }
 
   onDecimalInput(event: any) {
     let value = event.target.value;
@@ -579,64 +562,20 @@ export class NetpaySummaryComponent implements OnInit {
     downloadLink.click();
   }
 
-  openHoldPopup(element: any): void {
-    this.dialog.open(SalaryReleaseComponent, {
-      width: '1100px',
-      maxHeight: '75vh',
-      data: {
-        invoiceNo: element.Invoice_No,
-        companyId: this.companyUI.companyId,
-        companyCode: this.companyUI.companyCode,
-        payPeriodId: this.payperiodUI.payfrequencyid,
-        payPeriod: this.payperiodUI.payPeriod
-      },
-      disableClose: false
-    });
+  
+  getDateTime(): string {
+    const now = new Date();
+
+    const yyyy = now.getFullYear();
+    const MM = String(now.getMonth() + 1).padStart(2, '0');
+    const dd = String(now.getDate()).padStart(2, '0');
+
+    const HH = String(now.getHours()).padStart(2, '0');
+    const mm = String(now.getMinutes()).padStart(2, '0');
+    const ss = String(now.getSeconds()).padStart(2, '0');
+
+    return `${yyyy}${MM}${dd}_${HH}${mm}${ss}`;
   }
 
-  openPartialPopup(element: any): void {
-    this.dialog.open(PartialReleaseComponent, {
-      width: '1100px',
-      maxHeight: '75vh',
-      data: {
-        invoiceNo: element.Invoice_No,
-        companyId: this.companyUI.companyId,
-        companyCode: this.companyUI.companyCode,
-        payPeriodId: this.payperiodUI.payfrequencyid,
-        payPeriod: this.payperiodUI.payPeriod
-      },
-      disableClose: false
-    });
-  }
-
-  openDBTPopup(element: any): void {
-    this.dialog.open(DBTReleaseComponent, {
-      width: '1100px',
-      maxHeight: '75vh',
-      data: {
-        invoiceNo: element.Invoice_No,
-        companyId: this.companyUI.companyId,
-        companyCode: this.companyUI.companyCode,
-        payPeriodId: this.payperiodUI.payfrequencyid,
-        payPeriod: this.payperiodUI.payPeriod
-      },
-      disableClose: false
-    });
-  }
-
-  openSalaryReissuePopup(element: any): void {
-    this.dialog.open(SalaryReissueComponent, {
-      width: '1100px',
-      maxHeight: '75vh',
-      data: {
-        invoiceNo: element.Invoice_No,
-        companyId: this.companyUI.companyId,
-        companyCode: this.companyUI.companyCode,
-        payPeriodId: this.payperiodUI.payfrequencyid,
-        payPeriod: this.payperiodUI.payPeriod
-      },
-      disableClose: false
-    });
-  }
 
 }
