@@ -327,7 +327,7 @@ export class DBTReleaseComponent implements OnInit {
         }
 
         if (validations.length > 0) {
-          this.downloadValidationExcel(validations, "Salary_Release_Request_Validations");
+          this.downloadValidationExcel(validations, "DBT_Release_Request_Validations");
         }
       },
       error: err => console.error(err)
@@ -366,7 +366,7 @@ export class DBTReleaseComponent implements OnInit {
         }
 
         if (validations.length > 0) {
-          this.downloadValidationExcel(validations, "Salry_Release_Request_Validations");
+          this.downloadValidationExcel(validations, "DBT_Release_Request_Validations");
         }
       },
       error: err => console.error(err)

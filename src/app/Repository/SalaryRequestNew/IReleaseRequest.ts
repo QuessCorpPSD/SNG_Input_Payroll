@@ -11,4 +11,5 @@ export interface IReleaseRequest {
     HoldReleaseRequest(payload:any):Observable<APIResponse>;
     PartialHoldRelease(payload:any):Observable<APIResponse>;
     DBTHoldRelease(payload:any):Observable<APIResponse>;
+    ReissueRequest(payload:any):Observable<APIResponse>;
 }

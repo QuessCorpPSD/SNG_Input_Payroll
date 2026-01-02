@@ -61,4 +61,11 @@ export class ReleaseRequestService implements IReleaseRequest {
             payload 
         );
     }
+
+    ReissueRequest(payload:any):Observable<APIResponse>{
+        return this.http.post<APIResponse>(
+            this.env.apiUrl + 'SalaryRequestInvoice/ReissueRequest',
+            payload 
+        );
+    }
 }

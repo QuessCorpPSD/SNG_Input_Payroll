@@ -40,13 +40,18 @@
                                 [routerLink]="['/forgot']">Forgot Password?</a>
                         </div>
                         <div class="button p-1">
-                            <button
-                                style="color: white;background-color:#302cb3 ;font-size: 16px; "
-                                class="sign-in btn" (click)="validateLogin()">Sign In</button>
+                            <button class="sign-in btn" style="color: white; background-color:#302cb3; font-size: 16px;"
+                                (click)="validateLogin()" [disabled]="isLoading">
+
+                                <span *ngIf="!isLoading">Sign In</span>
+
+                                <span *ngIf="isLoading" class="d-flex align-items-center gap-2">
+                                    <span class="spinner-border spinner-border-sm"></span>
+                                    Signing in...
+                                </span>
+
+                            </button>
                         </div>
-
-
-
                     </div>
                 </div>
             </div>
