@@ -53,7 +53,7 @@ export class CompanyinvoiceformatComponent {
   datatable: any;
   companyUI: any;
   InvoiceTypes: any;
-  invoiceType_Id?: number;
+  //invoiceType_Id?: number;
   invoiceType: string = "";
   InvoiceFormat: any;
   invoiceFormatId?: number;
@@ -158,11 +158,11 @@ export class CompanyinvoiceformatComponent {
     this.groupValue = rowData.group_Name;
     this.groupId = rowData.groupDetailId;
     this.Id = rowData.id;
-    this.invoiceType_Id = rowData.invoiceType_Id;
+    //this.invoiceType_Id = rowData.invoiceType_Id;
     this.invoiceType = rowData.invoiceType;
     this.invoiceFormatId = rowData.invoiceFormatId;
     this.format_Name = rowData.format_Name;
-    console.log(this.invoiceType_Id);
+    //console.log(this.invoiceType_Id);
     //this.editData = { ...rowData };
   }
   InvoicetypeOnclick(event: any) {
@@ -204,10 +204,10 @@ export class CompanyinvoiceformatComponent {
     });
   }
 
-  onInvoiceTypeChange(event: any) {
-    this.invoiceType_Id = event.target.value;
-    console.log(this.invoiceType_Id);
-  }
+  // onInvoiceTypeChange(event: any) {
+  //   this.invoiceType_Id = event.target.value;
+  //   console.log(this.invoiceType_Id);
+  // }
 
   onInvoiceFormatChange(event: any) {
     this.invoiceFormatId = event.target.value;
@@ -223,10 +223,10 @@ export class CompanyinvoiceformatComponent {
       alert("Group Name Mandatory");
       return;
     }
-    if (!this.invoiceType_Id) {
-      alert("Invoice Type Mandatory");
-      return;
-    }
+    // if (!this.invoiceType_Id) {
+    //   alert("Invoice Type Mandatory");
+    //   return;
+    // }
     if (!this.invoiceFormatId) {
       alert("Invoice Format Mandatory");
       return;
@@ -236,7 +236,7 @@ export class CompanyinvoiceformatComponent {
       mode: 'Add',
       CompanyId: this.comapnyId,
       GroupDetailId: this.siteCode,
-      InvoiceType_Id: this.invoiceType_Id,
+      //InvoiceType_Id: 0,
       InvoiceFormatId: this.invoiceFormatId
     }
 
@@ -268,7 +268,7 @@ export class CompanyinvoiceformatComponent {
       Id: this.Id,
       CompanyId: this.comapnyId,
       GroupDetailId: this.groupId,
-      InvoiceType_Id: this.invoiceType_Id || this.editData.invoiceType_Id,
+      //InvoiceType_Id:0,
       InvoiceFormatId: this.invoiceFormatId || this.editData.invoiceFormatId
     }
 

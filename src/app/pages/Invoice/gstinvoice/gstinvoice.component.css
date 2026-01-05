@@ -137,6 +137,27 @@
   /* box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.12); */
 }
 
+
+.select-drop1 {
+  font-family: "Montserrat";
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 22.4px;
+  letter-spacing: 0.24px;
+  color: #7E7E7E;
+  appearance: none;
+  -webkit-appearance: none;
+  border-radius: 10px;
+  border: 1px solid #7E7E7E;
+  width: 160px;
+  height: 40px;
+  padding: 4px 24px 4px 4px;
+  background-color: white;
+  position: relative;
+  text-align: center;
+  /* box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.12); */
+}
+
 .previewtable {
   width: auto;
   table-layout: auto;
