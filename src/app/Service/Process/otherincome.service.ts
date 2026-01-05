@@ -8,7 +8,7 @@ import { APIResponse } from '../../Models/apiresponse';
   providedIn: 'root'
 })
 export class OtherincomeService {
- env = environment;
+  env = environment;
   constructor(private http: HttpClient) {
 
   }
@@ -23,6 +23,12 @@ export class OtherincomeService {
     return this.http.post<APIResponse>(
       this.env.apiUrl + 'OtherIncome/ImportOtherIncome',
       formData
+    );
+  }
+
+  Delete(id: any, userid: any): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      this.env.apiUrl + 'OtherIncome/DeleteOtherIncome/' + id + '/' + userid,
     );
   }
 }

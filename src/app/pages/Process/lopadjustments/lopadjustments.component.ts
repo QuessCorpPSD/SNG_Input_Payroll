@@ -22,7 +22,7 @@ import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.compo
 @Component({
   selector: 'app-lopadjustments',
   standalone: true,
-  imports: [MatPaginatorModule, MatTableModule, MatIconModule, CompanyallComponent, PayPeriodComponent, CommonModule, FormsModule, ReactiveFormsModule, MatTooltipModule, AlertpopupComponent],
+  imports: [MatPaginator, MatTableModule, MatIconModule, CompanyallComponent, PayPeriodComponent, CommonModule, FormsModule, ReactiveFormsModule, MatTooltipModule, AlertpopupComponent],
   templateUrl: './lopadjustments.component.html',
   styleUrl: './lopadjustments.component.css'
 })
@@ -53,7 +53,7 @@ export class LOPAdjustmentsComponent {
 
   uploadedDataSource = new MatTableDataSource(this.uploadedData);
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild('paginator') paginator!: MatPaginator;
   lopadjusts: any;
   lopadjust: any;
 
@@ -381,6 +381,32 @@ export class LOPAdjustmentsComponent {
 
     FileSaver.saveAs(blob, `lopadjustment_Template_${Date.now()}.xlsx`);
     this.isLoading = false;
+  }
+  deleteClick(row: any) {
+    if (!confirm("Are you sure you want to delete this record?")) return;
+
+    const id = row.LOP_Adjustment_Id;
+    const userid = this.userdetail.user_Id;
+
+    this.isLoading = true;
+
+    this.service.Delete(id, userid).subscribe({
+      next: (res: any) => {
+        this.isLoading = false;
+        const msg = res?.Data?.data?.Table0?.Error_Message;
+        if (res?.StatusCode === 200 && msg.toLowercase().includes('success')) {
+          alert(msg);
+
+          this.onsearch();
+        } else {
+          alert(msg);
+        }
+      },
+      error: () => {
+        this.isLoading = false;
+        alert("Server error while deleting");
+      }
+    });
   }
 
 

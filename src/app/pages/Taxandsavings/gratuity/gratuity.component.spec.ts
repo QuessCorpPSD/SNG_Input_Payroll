@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { OtherincomeAddComponent } from './otherincome-add.component';
+import { GratuityComponent } from './gratuity.component';
 
-describe('OtherincomeAddComponent', () => {
-  let component: OtherincomeAddComponent;
-  let fixture: ComponentFixture<OtherincomeAddComponent>;
+describe('GratuityComponent', () => {
+  let component: GratuityComponent;
+  let fixture: ComponentFixture<GratuityComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [OtherincomeAddComponent]
+      imports: [GratuityComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(OtherincomeAddComponent);
+    fixture = TestBed.createComponent(GratuityComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

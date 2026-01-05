@@ -108,6 +108,7 @@
     justify-content: center;
     text-align: center;
     word-wrap: break-word;
+
 }
 
 .table-container {
@@ -258,10 +259,10 @@
 }
 
 .popup-card {
-    width: 1000px;
-    max-width: 85%;
-    height: 85vh;
-    max-height: 85vh;
+    width: 900px;
+    max-width: 80%;
+    height: 60vh;
+    max-height: 60vh;
     overflow-y: auto;
 }
 
@@ -353,13 +354,4 @@ input {
 .btn-download {
     background-color: #20c997;
     color: #fff;
-}
-
-.selected-row {
-    background-color: #e3f2fd !important;
-}
-
-::ng-deep.form-control {
-    vertical-align: middle;
-
 }

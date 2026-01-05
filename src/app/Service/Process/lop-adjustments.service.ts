@@ -32,4 +32,9 @@ export class LopAdjustmentsService {
       payload
     );
   }
+  Delete(id: any, userid: any): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      this.env.apiUrl + 'LOPAdjustmentProcess/DeleteLOPAdjustment/' + id + '/' + userid,
+    );
+  }
 }

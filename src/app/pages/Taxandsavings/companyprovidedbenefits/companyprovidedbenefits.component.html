@@ -1,0 +1,266 @@
+<div class="page-wrapper">
+    <div class="scrollable-content">
+        <mat-card-title class="main-header">
+            Company Provided Benefits
+        </mat-card-title>
+        <div class="justify-content-between align-items-center mb-3 pl-4 pt-2">
+            <div class="row g-3 align-items-end">
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Company</label>
+                    <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+                </div>
+
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Employee code</label>
+                    <select [(ngModel)]="ecode" class="form-control form-control-sm" style="height: 30px;">
+                        <option value="">Select</option>
+                        <option *ngFor="let emp of employeeMain" [value]="emp.Employee_Id">
+                            {{ emp.Employee_code }}</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3 d-flex gap-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-primary"
+                        matTooltip="Search" (click)="onsearch()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-success"
+                        matTooltip="Add" (click)="AddPOOpen()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-secondary"
+                        matTooltip="export to excel" (click)="exportToExcel()">
+                        <mat-icon>download</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
+                        matTooltip="Import" (click)="ImportClick(fileInput)">
+                        <input type="file" #fileInput style="display: none;" (change)="onFileChange($event)"
+                            accept=".xlsx, .xls" />
+                        <mat-icon>cloud_upload</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                        matTooltip="Template">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button>
+
+                </div>
+
+            </div>
+            <div class="table-container" style="top:30px;" *ngIf="isUploadGridVisible">
+                <div class="table-scroll-window">
+                    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+                        <ng-container matColumnDef="delete">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header
+                                class="fixed-width-column"></mat-header-cell>
+                            <mat-cell *matCellDef="let element" class="fixed-width-column">
+                                <img src="assets/delete.svg" style="cursor: pointer; width: 24px; height: 22px;" />
+                            </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="edit">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header
+                                class="fixed-width-column"></mat-header-cell>
+                            <mat-cell *matCellDef="let element" class="fixed-width-column">
+                                <img src="assets/Icons/edit.svg" style="cursor: pointer; width: 24px; height: 22px;" />
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Serial_No">
+                            <mat-header-cell *matHeaderCellDef>Serial No</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.serial_No }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Company_Code">
+                            <mat-header-cell *matHeaderCellDef>Company Code</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.cityID }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Employee_Code">
+                            <mat-header-cell *matHeaderCellDef>Employee Code</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.cityName }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Employee_Name">
+                            <mat-header-cell *matHeaderCellDef>Employee Name</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.cityCode }}</mat-cell>
+                        </ng-container>
+
+
+
+                        <ng-container matColumnDef="Financial_Year">
+                            <mat-header-cell *matHeaderCellDef>Financial Year</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.stateName }}</mat-cell>
+                        </ng-container>
+
+
+                        <ng-container matColumnDef="Date">
+                            <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.regionName }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Perk_Code">
+                            <mat-header-cell *matHeaderCellDef>Perk Code</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.saP_Code }}</mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="Perk_amount">
+                            <mat-header-cell *matHeaderCellDef>Perk Amount</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.saP_Code }}</mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+                    </table>
+
+
+                </div>
+
+                <mat-paginator #paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<br><br><br><br><br><br>
+
+
+<div *ngIf="isAddclicked" class="popup-overlay" (keydown.escape)="closeclick()">
+    <mat-card class="popup-card">
+        <mat-card-header class="popup-header">
+            <mat-card-title>
+                {{ isEditMode ? 'Edit Company Provided Benefits' : 'Add Company Provided Benefits' }}
+            </mat-card-title>
+
+            <button class="close-btn" matTooltip="Close" (click)="closeclick()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+        <mat-card-content class="scroll-content">
+
+            <form [formGroup]="cpbform">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Company Code<span
+                                class="text-danger">*</span></label>
+                        <companyall formControlName="Company_Code" (companyEmit)="handleCompanyEvent2($event)">
+                        </companyall>
+                        <div *ngIf="cpbform.get('Company_Code')?.invalid && cpbform.get('Company_Code')?.touched"
+                            class="text-danger">
+                            Company Code is required.
+                        </div>
+                    </div>
+
+                    <!-- Financial Year -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Financial Year<span
+                                class="text-danger">*</span></label>
+                        <select formControlName="Financial_Year" class="form-control">
+                            <option value="">Select</option>
+                            <option *ngFor="let y of year" [value]="y.Financial_Year_Id">{{y.Financial_Year_Name}}
+                            </option>
+                        </select>
+                        <div *ngIf="cpbform.get('Financial_Year')?.invalid && cpbform.get('Financial_Year')?.touched"
+                            class="text-danger">
+                            Financial Year is required.
+                        </div>
+                    </div>
+
+                    <!-- Employee Code -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Employee Code<span
+                                class="text-danger">*</span></label>
+                        <select formControlName="Employee_Code" class="form-control">
+                            <option value="">Select</option>
+                            <option *ngFor="let employee of employeeadd" [value]="employee.Employee_Id">
+                                {{ employee.Employee_code }}
+                            </option>
+                        </select>
+                        <div *ngIf="cpbform.get('Employee_Code')?.invalid && cpbform.get('Employee_Code')?.touched"
+                            class="text-danger">
+                            Employee Code is required.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-3 py-2">
+                    <!-- Employee Name -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Employee Name<span
+                                class="text-danger">*</span></label>
+                        <input formControlName="Employee_Name" class="form-control" />
+                        <div *ngIf="cpbform.get('Employee_Name')?.invalid && cpbform.get('Employee_Name')?.touched"
+                            class="text-danger">
+                            Employee Name is required.
+                        </div>
+                    </div>
+
+                    <!-- Date -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Date<span class="text-danger">*</span></label>
+                        <input type="date" formControlName="Date" class="form-control" />
+                        <div *ngIf="cpbform.get('Date')?.invalid && cpbform.get('Date')?.touched" class="text-danger">
+                            Date is required.
+                        </div>
+                    </div>
+
+                    <!-- Perk Code -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Perk Code<span class="text-danger">*</span></label>
+                        <select formControlName="Perk_Code" class="form-control">
+                            <option value="">Select</option>
+                            <option *ngFor="let perk of perkcodes" [value]="perk.Perk_Id">
+                                {{ perk.Perk_Code }}
+                        </select>
+                        <div *ngIf="cpbform.get('Perk_Code')?.invalid && cpbform.get('Perk_Code')?.touched"
+                            class="text-danger">
+                            Perk Code is required.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-3 py-2">
+                    <!-- Perk Type -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Perk Type<span class="text-danger">*</span></label>
+                        <input formControlName="Perk_Type" class="form-control" />
+                        <div *ngIf="cpbform.get('Perk_Type')?.invalid && cpbform.get('Perk_Type')?.touched"
+                            class="text-danger">
+                            Perk Type is required.
+                        </div>
+                    </div>
+
+                    <!-- Perk Amount -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Perk Amount<span class="text-danger">*</span></label>
+                        <input formControlName="Perk_Amount" class="form-control" />
+                        <div *ngIf="cpbform.get('Perk_Amount')?.invalid && cpbform.get('Perk_Amount')?.touched"
+                            class="text-danger">
+                            Perk Amount is required.
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </mat-card-content>
+
+
+        <div class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">
+
+            <button type="button" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+                           cursor: pointer; background-color: #f0f0f0; color: black;" (click)="closeclick()">
+                Cancel
+            </button>
+
+            <button type="button" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+                           cursor: pointer; background-color: blue; color: white;" (click)="saveData()">
+                {{ isEditMode ? 'Update' : 'Save' }} </button>
+
+        </div>
+
+    </mat-card>
+</div>

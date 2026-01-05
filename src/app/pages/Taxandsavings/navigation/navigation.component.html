@@ -1,17 +1,21 @@
 <div class="headerSOP">
-        <div style="width: 50%;"> <img src="../../../assets/Forward File 1.svg" /><b class="customer-sop">Tools</b>
-        </div>
+    <div style="width: 50%;"> <img src="../../../assets/Forward File 1.svg" /><b class="customer-sop">Tax & Savings</b>
+    </div>
 </div>
 <div class="contentCategory">
-        <div style="width: 100%;">
-                <div class="Categorylist">
-                        <ul class="horizontal-list">
-                                <li><a [routerLink]="['/Master/taxnavigation/cea']" class="nav-link"
-                                                routerLinkActive="selectedInput"
-                                                [routerLinkActiveOptions]="{ exact: true }">Childern Education Allowance</a></li>
+    <div style="width: 100%;">
+        <div class="Categorylist">
+            <ul class="horizontal-list">
+                <li><a [routerLink]="['/Master/taxnavigation/cea']" class="nav-link" routerLinkActive="selectedInput"
+                        [routerLinkActiveOptions]="{ exact: true }">Childern Education Allowance</a></li>
+                <li><a [routerLink]="['/Master/taxnavigation/cpb']" class="nav-link" routerLinkActive="selectedInput"
+                        [routerLinkActiveOptions]="{ exact: true }">Company Provided Benfits</a></li>
+                <li><a [routerLink]="['/Master/taxnavigation/gratuity']" class="nav-link"
+                        routerLinkActive="selectedInput" [routerLinkActiveOptions]="{ exact: true }">Gratuity</a></li>
+            
 
-                        </ul>
-                </div>
+            </ul>
         </div>
+    </div>
 </div>
 <router-outlet></router-outlet>
