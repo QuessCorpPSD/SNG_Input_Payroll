@@ -24,6 +24,18 @@ export class PayProcessRepository implements IPayProcessRepository {
         return this.http.post<APIResponse>(url, JSON.stringify(val), { headers: config });
     }
 
+    GetDate(val): Observable<APIResponse> {
+
+        const url = `${this.environment.apiUrl}PayProcess/GetProcessDate`;
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        });
+        const config = new HttpHeaders().set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
+        return this.http.post<APIResponse>(url, JSON.stringify(val), { headers: config });
+    }
+
     PayProcess(payload: any): Observable<APIResponse> {
         return this.http.post<APIResponse>(
             this.environment.apiUrl + 'PayProcess/ReProcess',

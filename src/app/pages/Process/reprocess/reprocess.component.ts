@@ -18,6 +18,7 @@ import { AlertpopupComponent } from '../../../common/alertpopup/alertpopup.compo
 import * as XLSX from 'xlsx';
 import { PayprocesstypeComponent } from '../../../common/payprocesstype/payprocesstype.component';
 import { constants } from 'node:fs';
+import { switchMap, of } from 'rxjs';
 
 
 export const Pay_TOKEN = new InjectionToken<IPayProcessRepository>('Pay_TOKEN');
@@ -67,27 +68,41 @@ export class ReprocessComponent implements OnInit {
   handlePayperiodEvent(payperiod: Payperiodclass) {
     this.payPeriod = payperiod;
 
-    
+
     if (this.selectedCompanyId != 0 || this.selectedCompanyId != undefined) {
-      
+      const requestdate = {
+        PayPeriod: this.payPeriod.payPeriod
+      };
 
-      const request = {
-        "company_Id": this.selectedCompanyId,
-        "End_At": this.selectedDate
-      }
-      
-      this._payProcessService.GetITCalenderCompany(request).subscribe({
-        next: res => {
-          
-          if (res?.Data?.actual_declared) {
-            this.actual_Or_delcare = res.Data.actual_declared;
-          } else {
-            this.actual_Or_delcare = '';
-          }
+      this._payProcessService.GetDate(requestdate)
+        .pipe(
+          switchMap(res => {
+            const date = res?.Data?.date;
 
-        },
-        error: err => { console.log(err) }
-      })
+            if (!date) {
+              this.selectedDate = '';
+              return of(null); // stop second API
+            }
+
+            this.selectedDate = date;
+
+            const request = {
+              company_Id: this.selectedCompanyId,
+              End_At: this.selectedDate
+            };
+
+            return this._payProcessService.GetITCalenderCompany(request);
+          })
+        )
+        .subscribe({
+          next: res => {
+            if (!res) return;
+
+            this.actual_Or_delcare = res?.Data?.actual_declared || '';
+          },
+          error: err => console.error(err)
+        });
+
     }
   }
 
@@ -96,7 +111,7 @@ export class ReprocessComponent implements OnInit {
     this.payPeriodType = "All";
     const now = new Date();
     const formatted = this.datePipe.transform(now, 'dd-MM-yyyy');
-    this.selectedDate = String(formatted);
+    // this.selectedDate = String(formatted);
     const json = this._sessionStoreage.getItem('UserProfile');
     if (json) {
       this.userdetail = JSON.parse(this.decry.decrypt(json));
@@ -259,7 +274,7 @@ export class ReprocessComponent implements OnInit {
     }
 
     if (!this.actual_Or_delcare) {
-      alert("Actual Or Delcare is empty");
+      alert("Actual Or Declare is empty");
       this.isLoading = false;
       return;
     }
@@ -309,7 +324,7 @@ export class ReprocessComponent implements OnInit {
             Sheets: { 'ErrorMessages': worksheet },
             SheetNames: ['ErrorMessages']
           };
-          XLSX.writeFile(workbook, 'ErrorMessages_Timesheet.xlsx');
+          XLSX.writeFile(workbook, 'ErrorMessages_Payprocess.xlsx');
 
           //this.showPopup = true;
           alert('Failed to Process.');
