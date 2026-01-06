@@ -159,6 +159,7 @@ import { OffercreationComponent } from './pages/gsoffer/offercreation/offercreat
 import { LFWSlabComponent } from './pages/GlobalMasters/lfwslab/lfwslab.component';
 import { TDSslabComponent } from './pages/GlobalMasters/tdsslab/tdsslab.component';
 import { StatesComponent } from './pages/GlobalMasters/state/state.component';
+import { BankAccountComponent } from './pages/SalaryReleaseNew/bank-account/bank-account.component';
 
 
 
@@ -275,6 +276,7 @@ export const routes: Routes = [
         path: 'salaryreleasemenu',
         component: SalaryReleaseMenuComponent,
         children: [
+          { path: 'BankAccount', component: BankAccountComponent },
           { path: 'Holdrequest', component: HoldRequestComponent },
           { path: 'Netpaysummary', component: NetpaySummaryComponent },
           { path: 'Upfrontapproval', component: UpfrontApprovalComponent },
