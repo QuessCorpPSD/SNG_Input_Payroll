@@ -42,7 +42,7 @@
                 </label>
             </div>
             <div class="right-align">
-                <payrollinput [visibleDropdowns]="[1]" [showSearchButton]="true" 
+                <payrollinput [visibleDropdowns]="[1]" [showSearchButton]="true"
                     (companyUI)="handleCompanyEvent($event)" (searchClicked)="searchClick($event)">
                 </payrollinput>
             </div>
@@ -85,7 +85,7 @@
             </div>
 
             <button *ngIf="isAnyRowSelected()" (click)="moveClick()"
-                style="display: inline-block; width: 130px; height: 30px; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
+                style="display: inline-block; width: 130px; height: 40px; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
                 <div
                     style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Montserrat; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
                     Submit for verification</div>
@@ -94,7 +94,19 @@
         <div class="card-body rounded-4 py-0" [hidden]="dataSource.data.length === 0">
             <div class="example-container mat-elevation-z8">
                 <table mat-table #searchgrid [dataSource]="dataSource" matSort class="custom-table mat-elevation-z8">
-
+                    <ng-container matColumnDef="select">
+                        <mat-header-cell *matHeaderCellDef class="fixed-width-column">
+                            <mat-checkbox (change)="toggleAllRows()"
+                                [checked]="selection.hasValue() && isAllSelected()"
+                                [indeterminate]="isPartialSelected()">
+                            </mat-checkbox>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element" class="fixed-width-column">
+                            <mat-checkbox (click)="$event.stopPropagation()" (change)="toggleRow(element)"
+                                [checked]="selection.isSelected(element)">
+                            </mat-checkbox>
+                        </mat-cell>
+                    </ng-container>
                     <ng-container matColumnDef="Employee_Id">
                         <mat-header-cell *matHeaderCellDef mat-sort-header>
                             <div class="cell-center">
@@ -132,58 +144,28 @@
                         </mat-cell>
                     </ng-container>
 
-                    <ng-container matColumnDef="EMPLOYEE CODE">
+                    <ng-container matColumnDef="IFSC_Code">
                         <mat-header-cell *matHeaderCellDef mat-sort-header>
                             <div class="cell-center">
-                                Total Employees
+                                IFSC Code
                             </div>
                         </mat-header-cell>
                         <mat-cell *matCellDef="let element">
-                            <div class="cell-center">
-                                <span class="offer-style">{{element['EMPLOYEE CODE'] }}</span>
+                            <div class="cell-center">{{ element.IFSC_Code }}
                             </div>
                         </mat-cell>
                     </ng-container>
-
-                    
-
-                    <ng-container matColumnDef="PAY PERIOD">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header>
-                            <div class="cell-center">
-                                PayPeriod
-                            </div>
-                        </mat-header-cell>
-                        <mat-cell *matCellDef="let element">
-                            <div class="cell-center">
-                                {{element['PAY PERIOD'] }}</div>
-                        </mat-cell>
-                    </ng-container>
-
-                    <ng-container matColumnDef="Map_Name">
+                    <ng-container matColumnDef="Bank_Account_Name">
                         <mat-header-cell *matHeaderCellDef mat-sort-header>
                             <div class="cell-center-wrap-normal">
-                                Map Name
+                                Bank Account Name
                             </div>
                         </mat-header-cell>
                         <mat-cell *matCellDef="let element">
-                            <div class="cell-center">{{ element.Map_Name }}
+                            <div class="cell-center-wrap-normal">{{ element.Bank_Account_Name }}
                             </div>
                         </mat-cell>
                     </ng-container>
-
-                    <ng-container matColumnDef="Amount">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header>
-                            <div class="cell-center">
-                                Amount
-                            </div>
-                        </mat-header-cell>
-                        <mat-cell *matCellDef="let element">
-                            <div class="cell-center-wrap clickable" (click)="openPartialPopup(element)">₹ {{
-                                element.Amount }}
-                            </div>
-                        </mat-cell>
-                    </ng-container>
-
                     <!-- Header and Row Declaration -->
                     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
                     <mat-row *matRowDef="let row;let i = index;  columns: displayedColumns;"></mat-row>
@@ -212,114 +194,61 @@
                             </mat-checkbox>
                         </mat-cell>
                     </ng-container>
-                    <ng-container matColumnDef="INVOICE NUMBER">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header class="invoice-col">
-                            <div class="cell-center">
-                                Invoice No
-                            </div>
-                        </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="invoice-col">
-                            <div class="cell-center">
-                                <span class="offer-style">{{ element['INVOICE NUMBER'] }}</span>
-                            </div>
-                        </mat-cell>
-                    </ng-container>
-                    <ng-container matColumnDef="COMPANY CODE">
+                    <ng-container matColumnDef="Employee_Id">
                         <mat-header-cell *matHeaderCellDef mat-sort-header>
                             <div class="cell-center">
-                                Company Code
+                                Employee Id
                             </div>
                         </mat-header-cell>
                         <mat-cell *matCellDef="let element">
-                            <div class="cell-center">{{ element['COMPANY CODE'] }}
+                            <div class="cell-center">
+                                <span class="offer-style">{{element['Employee_Id'] }}</span>
                             </div>
                         </mat-cell>
                     </ng-container>
-                    <ng-container matColumnDef="EMPLOYEE CODE">
+
+                    <ng-container matColumnDef="Bank_Name">
                         <mat-header-cell *matHeaderCellDef mat-sort-header>
                             <div class="cell-center">
-                                Employee Code
+                                Bank Name
                             </div>
                         </mat-header-cell>
                         <mat-cell *matCellDef="let element">
-                            <div class="cell-center">{{ element['EMPLOYEE CODE'] }}
+                            <div class="cell-center-wrap-normal">{{ element['Bank_Name'] }}
                             </div>
                         </mat-cell>
                     </ng-container>
-                    <ng-container matColumnDef="PAY PERIOD">
+                    <ng-container matColumnDef="Bank_Account_Number">
                         <mat-header-cell *matHeaderCellDef mat-sort-header>
                             <div class="cell-center">
-                                Pay Period
+                                Account No
                             </div>
                         </mat-header-cell>
                         <mat-cell *matCellDef="let element">
-                            <div class="cell-center">{{ element['PAY PERIOD'] }}
+                            <div class="cell-center">{{ element.Bank_Account_Number }}
                             </div>
                         </mat-cell>
                     </ng-container>
-                    <ng-container matColumnDef="ESTBNON">
+
+                    <ng-container matColumnDef="IFSC_Code">
                         <mat-header-cell *matHeaderCellDef mat-sort-header>
                             <div class="cell-center">
-                                ESTBNON
+                                IFSC Code
                             </div>
                         </mat-header-cell>
                         <mat-cell *matCellDef="let element">
-                            <div class="cell-center">{{ element['ESTBNON'] }}
+                            <div class="cell-center">{{ element.IFSC_Code }}
                             </div>
                         </mat-cell>
                     </ng-container>
-                    <ng-container matColumnDef="NBONU">
+                    <ng-container matColumnDef="Bank_Account_Name">
                         <mat-header-cell *matHeaderCellDef mat-sort-header>
-                            <div class="cell-center">
-                                NBONU
+                            <div class="cell-center-wrap-normal">
+                                Bank Account Name
                             </div>
                         </mat-header-cell>
                         <mat-cell *matCellDef="let element">
-                            <div class="cell-center">{{ element['NBONU'] }}
-                            </div>
-                        </mat-cell>
-                    </ng-container>
-                    <ng-container matColumnDef="HOLD STATUS">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header>
-                            <div class="cell-center">
-                                Hold Status
-                            </div>
-                        </mat-header-cell>
-                        <mat-cell *matCellDef="let element">
-                            <div class="cell-center">{{ element['HOLD STATUS'] }}
-                            </div>
-                        </mat-cell>
-                    </ng-container>
-                    <ng-container matColumnDef="SALARY STATUS">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header>
-                            <div class="cell-center">
-                                Salary Status
-                            </div>
-                        </mat-header-cell>
-                        <mat-cell *matCellDef="let element">
-                            <div class="cell-center">{{ element['SALARY STATUS'] }}
-                            </div>
-                        </mat-cell>
-                    </ng-container>
-                    <ng-container matColumnDef="CREDIT NOTE NUMBER">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header>
-                            <div class="cell-center">
-                                Credit Note No
-                            </div>
-                        </mat-header-cell>
-                        <mat-cell *matCellDef="let element">
-                            <div class="cell-center">{{ element['CREDIT NOTE NUMBER'] }}
-                            </div>
-                        </mat-cell>
-                    </ng-container>
-                    <ng-container matColumnDef="EMPLOYEE NAME">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header>
-                            <div class="cell-center">
-                                Employee Name
-                            </div>
-                        </mat-header-cell>
-                        <mat-cell *matCellDef="let element">
-                            <div class="cell-center">{{ element['EMPLOYEE NAME'] }}
+                            <div class="cell-center-wrap-normal">{{ element.Bank_Account_Name }}
                             </div>
                         </mat-cell>
                     </ng-container>

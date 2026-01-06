@@ -336,7 +336,7 @@ export class BankDetailsComponent implements OnInit {
         }
 
         if (validations.length > 0) {
-          this.downloadValidationExcel(validations, "Bonus_Payout_Request_Validations");
+          this.downloadValidationExcel(validations, "Bank_Details_Validations");
         }
       },
       error: err => console.error(err)
@@ -411,8 +411,8 @@ export class BankDetailsComponent implements OnInit {
           const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(tableData);
 
           const workbook: XLSX.WorkBook = {
-            Sheets: { 'Bonus Payout': worksheet },
-            SheetNames: ['Bonus Payout']
+            Sheets: { 'Bank': worksheet },
+            SheetNames: ['Bank']
           };
 
           const excelBuffer: any = XLSX.write(workbook, {

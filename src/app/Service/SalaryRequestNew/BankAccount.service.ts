@@ -32,7 +32,7 @@ export class BankAccountService implements IBankAccount {
         return this.http.get<APIResponse>(this.env.apiUrl + 'SalaryRequestInvoice/BankApprovalSearch/' + Company_Id);
     }
 
-    BankApprovalApproveReject(payload: FormData): Observable<APIResponse> {
+    BankApprovalApproveReject(payload: any): Observable<APIResponse> {
         return this.http.post<APIResponse>(
             this.env.apiUrl + 'SalaryRequestInvoice/BankApprovalApproveReject',
             payload // send as FormData directly

@@ -272,9 +272,6 @@ export class ReprocessComponent implements OnInit {
       CreatedBy: String(this.userdetail.user_Id)
     };
 
-    // ✅ Log payload to console
-    console.log('Payload to be sent:', payload);
-
     // Choose service based on option
     const serviceCall = this.selectoption === "PP"
       ? this._payProcessService.PayProcess(payload)
