@@ -117,7 +117,8 @@ export class GSTEditComponent {
       "CompanyAddress": String(form.CompanyAddress),
       "CreatedBy": this.userdetail.user_Id,
       "EntityId": Number(form.Entity),
-      "Pincode": String(form.PinCode)
+      "Pincode": String(form.PinCode),
+      "Gst_Percentage":String(form.cgstPercentage)
     };
     this.gstService.Edit(payload).subscribe({
       next: (res: any) => {
