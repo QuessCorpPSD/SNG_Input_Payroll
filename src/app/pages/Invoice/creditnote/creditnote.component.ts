@@ -189,8 +189,11 @@ export class CreditnoteComponent {
 
     const templateData = [
       {
-        COMPCODE: "",	INVOICENO: "",	EMPCODE:"",	CREDITNOTEAMOUNT:"",	CREDITNOTETYPE:"",
-        EMPLOYEESALARYSTATUS: "",	IsTaxApplicable: "",	Naration: "",	PAYCODE: ""
+        COMPCODE: "",	INVOICENO: "",REFID:"",CREDITNOTEAMOUNT:"",CREDITNOTETYPE:"",
+        CREDITNOTESTATUS:"",IsGstApplicable:"",
+        	EMPCODE:"",	PAYSEQUENCENO:"",	CHEQUENUMBER:"",PAYCODE:"",
+          EMPLOYEESALARYSTATUS:"",Naration:"",INPUTNO:"",
+          BillableDaysId:""
       }
     ];
 

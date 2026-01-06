@@ -222,7 +222,7 @@ export class PayfrequencyEditComponent {
         Pay_Sequence_Number: (row.Pay_Sequence_Number).toString(),
         Pay_Period: row.Pay_Period,
         Start_At: this.formatDate(row.Start_At),
-        End_At: this.formatDate(row.Start_At),
+        End_At: this.formatDate(row.End_At),
         Salary_Date: this.formatDate(row.Salary_Date),
         Pay_Period_Days: row.Pay_Period_Days,
         Weekly_Holidays: row.Weekly_Holidays,

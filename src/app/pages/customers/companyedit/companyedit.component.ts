@@ -425,7 +425,7 @@ export class CompanyeditComponent {
           PortalPaySlipFormat: this.companydata.Portal_Payslip_Format,
           Incharge: this.companydata.Incharge,
           RoundOffApplicable: this.companydata.Is_RoundOff_Applicable,
-          TAT: this.companydata.TATDays,
+          TAT: this.companydata.TAT,
           ValidDate: this.formatDate(this.companydata.service_tax_date),
           IncentiveDate: this.companydata.Incentive_Date,
           Deviation: this.companydata.Deviation,
