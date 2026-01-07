@@ -43,7 +43,7 @@ export class InvoiceRepository implements IInvoiceRepository {
             'Expires': '0'
         }).set('Content-Type', 'application/json')
             .set('Accept', 'application/json')
-            console.log(billableDaysModelRequest);
+        console.log(billableDaysModelRequest);
         return this.http.post<APIResponse>(this.environment.apiUrl + "BillableDays/BillableDaysUpload", billableDaysModelRequest, { headers: config })
     }
     BillableTemplateDownload(importtype): Observable<APIResponse> {
@@ -160,7 +160,7 @@ export class InvoiceRepository implements IInvoiceRepository {
         return this.http.post(this.environment.apiUrl + 'GSTInvoice/Create', payload, { responseType: 'text' })
     }
 
-   
+
     POSearch(companyId: number, payPeriodId: number): Observable<APIResponse> {
         const url = `${this.environment.apiUrl}POInvoiceInitiate/Search/${companyId}/${payPeriodId}`;
         //console.log(url);
@@ -178,8 +178,15 @@ export class InvoiceRepository implements IInvoiceRepository {
 
     UploadBillable(formData: FormData): Observable<APIResponse> {
         const url = `${this.environment.apiUrl}BillableDays/BillableDaysUpload`;
-        console.log(url);
+
         return this.http.post<APIResponse>(url, formData);
     }
+
+    POInvoiceUpload(formData: FormData): Observable<APIResponse> {
+         const url = `${this.environment.apiUrl}POInvoiceInitiate/Upload`;
+
+        return this.http.post<APIResponse>(url, formData);
+    }
+
 
 }

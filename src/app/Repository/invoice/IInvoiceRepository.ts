@@ -28,4 +28,5 @@ export interface IInvoiceRepository {
     POSearch(companyId: number, payPeriodId: number):Observable<APIResponse>;
     POInvoiceInitiate(payload: any):Observable<APIResponse>;
     ExportPOInvoice(companyId: number, payPeriodId: number): Observable<any>;
+    POInvoiceUpload(payload: FormData):Observable<APIResponse>;
 }

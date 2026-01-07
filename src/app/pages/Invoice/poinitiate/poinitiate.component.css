@@ -1,5 +1,5 @@
 .table-container {
-  width: 90%;
+  width: 100%;
   overflow-x: auto;   /* enables X scroll */
 }
 .mat-column-serial_No {

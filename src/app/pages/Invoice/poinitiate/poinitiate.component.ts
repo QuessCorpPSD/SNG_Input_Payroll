@@ -21,6 +21,8 @@ import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AlertpopupComponent } from '../../../common/alertpopup/alertpopup.component';
+import * as XLSX from 'xlsx';
+import { finalize } from 'rxjs';
 
 export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOKEN');
 @Component({
@@ -146,6 +148,7 @@ export class POInitiateComponent {
     });
   }
   downloadExcelFromBase64(base64: string, filename: string) {
+
     // this.isLoading=false;
     const source = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${base64}`;
     const downloadLink = document.createElement('a');
@@ -239,7 +242,7 @@ export class POInitiateComponent {
     this.isLoading = true;
     this._invoiceService.POSearch(this.selectedCompanyId, this.payPeriod.payfrequencyid).subscribe({
       next: res => {
-        console.log(res);
+
         this.dataSource = new MatTableDataSource<any>(Array.isArray(res.Data) ? res.Data : []);
         this.dataSource.paginator = this.PeningLot_paginator;
         this.issearch = false;
@@ -251,4 +254,145 @@ export class POInitiateComponent {
   onOptionSelected(event: InvoiceType) {
     this.invoiceType = event;
   }
+
+  onTemplateClick() {
+    const baseHeaders = ["company_code", "employee_code", "pay_period", "material_code", "input_number", "other_allowance", "action"];
+    const data: any[][] = [baseHeaders];
+    const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(data);
+
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(wb, ws, "Table");
+
+    XLSX.writeFile(wb, "PO_Initiate_Template.xlsx");
+
+  }
+
+  ImportClick(fileInput: HTMLInputElement): void {
+    fileInput.value = '';
+    fileInput.click();
+  }
+
+  onFileChange(event: Event): void {
+    this.isLoading = true;
+
+    const input = event.target as HTMLInputElement;
+    const file = input?.files?.[0];
+
+    if (!file) {
+      console.error('Please upload only one Excel file.');
+      this.isLoading = false;
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('userId', this.userdetail.user_Id);
+    formData.append('importType', '0');
+
+    this._invoiceService.POInvoiceUpload(formData).pipe(
+      finalize(() => {
+        this.isLoading = false;   // always runs
+      })
+    ).subscribe({
+      next: (res) => {
+
+        if (res?.Data?.response?.includes("Row(s) Uploaded Successfully.")) {
+
+          this.showPopup = true;
+          this.popupMessage = res?.Data?.response;
+          return;
+        }
+
+        // --- parse response defensively ---
+        const { parsed, msg } = this.tryParseResponse(res?.Data?.response);
+
+        // CASE 1: Success message inside parsed JSON array/object
+        const successMsg = 'Row(s) Uploaded Successfully.';
+        const successMatch =
+          (Array.isArray(parsed) && parsed[0]?.Error_Message?.trim() === successMsg) ||
+          (parsed && typeof parsed === 'object' && parsed?.Error_Message?.trim() === successMsg);
+
+        if (res?.StatusCode === 200 && successMatch) {
+
+          this.showPopup = true;
+          this.popupMessage = successMatch;
+          return;
+        }
+
+        // CASE 2: Plain failure string
+        if (res?.StatusCode === 200 && msg?.trim() === 'Failed to import.') {
+          alert('Failed to Import');
+          const rawErr = res?.Data?.errors?.[0];
+          let errorArray: any[] = [];
+          try {
+            if (typeof rawErr === 'string') {
+              const tryJson = JSON.parse(rawErr);
+              errorArray = Array.isArray(tryJson) ? tryJson : [tryJson];
+            } else if (Array.isArray(rawErr)) {
+              errorArray = rawErr;
+            } else if (rawErr) {
+              errorArray = [rawErr];
+            }
+          } catch {
+            errorArray = rawErr ? [{ Error_Message: String(rawErr) }] : [];
+          }
+
+          const exportData = errorArray.map((item: any) => ({
+            Error_Message: item?.Error_Message || item?.Error_Message || item?.Error_Message || ''
+          }));
+
+          const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+          const workbook: XLSX.WorkBook = {
+            Sheets: { ErrorMessages: worksheet },
+            SheetNames: ['ErrorMessages']
+          };
+          XLSX.writeFile(workbook, 'ErrorMessages_PoInitiate.xlsx');
+
+          return;
+        }
+
+        // CASE 3: Anything else → show whatever we have
+        const fallback =
+          msg ||
+          (Array.isArray(parsed) ? JSON.stringify(parsed) :
+            (parsed && typeof parsed === 'object' && parsed.Error_Message) ? parsed.Error_Message :
+              (parsed ? JSON.stringify(parsed) : ''));
+
+        if (fallback) {
+          alert(fallback);
+        } else {
+          alert('Error while processing response.');
+        }
+
+      },
+
+      error: err => {
+        console.error('❌ Upload failed', err);
+
+      }
+    });
+
+  }
+
+  tryParseResponse(r: any): { parsed: any; msg: string } {
+    if (r == null) return { parsed: null, msg: '' };
+
+    if (Array.isArray(r)) return { parsed: r, msg: '' };
+    if (typeof r === 'object') return { parsed: r, msg: '' };
+
+    // string
+    if (typeof r === 'string') {
+      try {
+        const p = JSON.parse(r);
+        return { parsed: p, msg: '' };
+      } catch {
+        return { parsed: null, msg: r };
+      }
+    }
+
+    return { parsed: null, msg: String(r) };
+  }
+
+
 }
