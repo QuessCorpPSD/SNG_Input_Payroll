@@ -73,11 +73,12 @@ export class CompanyeditComponent {
   showPopup = false;
 
   @ViewChild('fileInput') fileInput: any;
-  constructor(private fb: FormBuilder, private dialogRef: MatDialogRef<CompanyeditComponent>, private dialog: MatDialog, private company: CompanyserviceService, @Inject(MAT_DIALOG_DATA) public companyView: any, private _decrypt: EncryptionService, private _sessionStoreage: SessionStorageService) { }
+  constructor(private fb: FormBuilder, private dialogRef: MatDialogRef<CompanyeditComponent>, private dialog: MatDialog, private company: CompanyserviceService, @Inject(MAT_DIALOG_DATA) public companyView: any, private _decrypt: EncryptionService, private _sessionStoreage: SessionStorageService) { console.log('data', this.companyView) }
 
   get invoiceType() {
     return this.CompanyAddForm.get('InvoiceType')?.value;
   }
+
 
   ngOnInit() {
     const userdetail = this._sessionStoreage.getItem('UserProfile');
@@ -107,7 +108,7 @@ export class CompanyeditComponent {
       Zone: [''],
       CompanyGroupCode: ['', Validators.required],
       CompanyGroupName: [''],
-      PayrollType: ['flexi', Validators.required],
+      PayrollType: ['1', Validators.required],
       WBSCode: ['', Validators.required],
       ClientSince: ['', Validators.required],
       ContractStartType: ['', Validators.required],
@@ -117,11 +118,11 @@ export class CompanyeditComponent {
 
       // Invoice
       // InvoiceType: ['Multiple', Validators.required],
-      InsuranceApplicable: ['yes'],
-      InvoiceType: [''],
+      InsuranceApplicable: ['1'],
+      InvoiceType: ['1'],
 
       // Radio - PO Wise Batch (Yes/No)
-      POWiseBatch: ['no'],
+      POWiseBatch: ['0'],
 
       // Dropdowns
       AttendanceCycleForm: ['', Validators.required],
@@ -131,7 +132,7 @@ export class CompanyeditComponent {
       IsNewJoinee: [true],
 
       // Other Text Inputs
-      MonthDays: ['yes'],
+      MonthDays: ['1'],
       // City: [''],
       // State: [''],
       // PinCode: [''],
@@ -144,8 +145,8 @@ export class CompanyeditComponent {
       // Website: [''],
       // Address: [''],
       // ESICode: [''],
-      WorkDaysbased: [''],
-      CTC: ['Monthly'],
+      WorkDaysbased: ['1'],
+      CTC: ['0'],
       BankName: ['', Validators.required],
       AccountNo: ['', Validators.required],
       SwiftCode: ['', Validators.required],
@@ -153,17 +154,18 @@ export class CompanyeditComponent {
       BranchCode: ['', Validators.required],
       BankCode: ['', Validators.required],
       BankAddress: ['', Validators.required],
-      OnboardingCategory: ['',],
-      OnboardingCharges: [''],
-      OnboardingChargesValue: ['1'],
-      InedgeCategory: [''],
-      InedgeCharges: [''],
+      OnboardingCategory: ['1'],
+      OnboardingCharges: ['1'],
+      OnboardingChargesValue: [true],
+      InedgeCategory: ['1'],
+      InedgeCharges: ['1'],
       InedgeChargesValue: ['1'],
       IncentiveType: [''],
-      QdemyCharges: [''],
+      QdemyCharges: ['1'],
       QdemyChargesValue: ['1'],
-      POApplicable: ['yes'],
-      TechSubscriptionCharges: [''],
+      Portal_Type: [''],
+      POApplicable: ['1'],
+      TechSubscriptionCharges: ['1'],
       TechSubscriptionChargesvalue: ['1'],
       FDuesBasedon: ['1'],
       SourcingOBApplicable: ['0'],
@@ -174,12 +176,12 @@ export class CompanyeditComponent {
       SubSegment: [''],
       PaySlipFormats: [''],
       BillingType: [''],
-      Modeofpayment: [''],
+      Modeofpayment: ['0'],
       PortalPaySlipFormat: [''],
       Incharge: [''],
       RoundOffApplicable: ['0'],
       TAT: [''],
-      ValidDate: [''],
+      ValidDate: ['', Validators.required],
       IncentiveDate: [''],
       Deviation: ['0'],
       SalarySMS: ['1'],
@@ -189,7 +191,7 @@ export class CompanyeditComponent {
       ProfitCenterCode: [''],
       Particulars: [''],
       SapCustomerCode: ['', Validators.required],
-      IsNonInvoice: ['Invoice'],
+      IsNonInvoice: ['0'],
       HeaderFooter: [false],
       MinimumWagesApplicability: [true],
       WorkingDaysServiceFee: [false],
@@ -213,12 +215,30 @@ export class CompanyeditComponent {
       Is40BillingMode: [false],
       IsCurrencyConversion: [false],
       BillingModel: [''],
-      BankAdvice: [''],
+      BankAdvice: ['', Validators.required],
       ServiceChargeClubbing: [''],
       DGPSF: ['', Validators.required],
       Sector: ['', Validators.required],
       ReimbrusementDate: [''],
-      ReimbursementType: ['']
+      ReimbursementType: [''],
+      OT_weekend_type: [''],
+      Weekend_Value: [{ value: '', disabled: true }],
+      Weekend_Formula: [{ value: '', disabled: true }],
+      weekday_type: [''],
+      Weekday_Value: [{ value: '', disabled: true }],
+      Weekday_Formula: [{ value: '', disabled: true }],
+      Nightshift_type: [''],
+      Nightshift_Value: [{ value: '', disabled: true }],
+      Nightshift_Formula: [{ value: '', disabled: true }],
+      Holiday_type: [''],
+      Holiday_Value: [{ value: '', disabled: true }],
+      Holiday_Formula: [{ value: '', disabled: true }],
+      adhoc_service_fee: [''],
+      adhoc_service_formula: [''],
+      Invoicebilling_type: [''],
+      Po_days_daily: ['']
+
+
     })
     this.CompanyAddForm.get('AccountNo')?.disable();
     this.CompanyAddForm.get('SwiftCode')?.disable();
@@ -227,6 +247,128 @@ export class CompanyeditComponent {
     this.CompanyAddForm.get('BranchCode')?.disable();
     this.CompanyAddForm.get('BankCode')?.disable();
     this.CompanyAddForm.get('CompanyCode')?.disable();
+    this.CompanyAddForm.get('OT_weekend_type')?.valueChanges.subscribe(value => {
+      const valueCtrl = this.CompanyAddForm.get('Weekend_Value');
+      const formulaCtrl = this.CompanyAddForm.get('Weekend_Formula');
+
+      valueCtrl?.reset();
+      formulaCtrl?.reset();
+
+      valueCtrl?.clearValidators();
+      formulaCtrl?.clearValidators();
+
+      valueCtrl?.disable();
+      formulaCtrl?.disable();
+
+      if (value === '1') { // Fixed
+        valueCtrl?.enable();
+        valueCtrl?.setValidators(Validators.required);
+      }
+
+      if (value === '2') { // Formula
+        formulaCtrl?.enable();
+        formulaCtrl?.setValidators(Validators.required);
+      }
+
+      valueCtrl?.updateValueAndValidity();
+      formulaCtrl?.updateValueAndValidity();
+    });
+
+    this.CompanyAddForm.get('weekday_type')?.valueChanges.subscribe(value => {
+      const valueCtrl = this.CompanyAddForm.get('Weekday_Value');
+      const formulaCtrl = this.CompanyAddForm.get('Weekday_Formula');
+
+      valueCtrl?.reset();
+      formulaCtrl?.reset();
+
+      valueCtrl?.clearValidators();
+      formulaCtrl?.clearValidators();
+
+      valueCtrl?.disable();
+      formulaCtrl?.disable();
+
+      if (value === '1') {
+        valueCtrl?.enable();
+        valueCtrl?.setValidators(Validators.required);
+      }
+
+      if (value === '2') {
+        formulaCtrl?.enable();
+        formulaCtrl?.setValidators(Validators.required);
+      }
+
+      valueCtrl?.updateValueAndValidity();
+      formulaCtrl?.updateValueAndValidity();
+    });
+
+    this.CompanyAddForm.get('Nightshift_type')?.valueChanges.subscribe(value => {
+      const valueCtrl = this.CompanyAddForm.get('Nightshift_Value');
+      const formulaCtrl = this.CompanyAddForm.get('Nightshift_Formula');
+
+      valueCtrl?.reset();
+      formulaCtrl?.reset();
+
+      valueCtrl?.clearValidators();
+      formulaCtrl?.clearValidators();
+
+      valueCtrl?.disable();
+      formulaCtrl?.disable();
+
+      if (value === '1') {
+        valueCtrl?.enable();
+        valueCtrl?.setValidators(Validators.required);
+      }
+
+      if (value === '2') {
+        formulaCtrl?.enable();
+        formulaCtrl?.setValidators(Validators.required);
+      }
+
+      valueCtrl?.updateValueAndValidity();
+      formulaCtrl?.updateValueAndValidity();
+    });
+
+    this.CompanyAddForm.get('Holiday_type')?.valueChanges.subscribe(value => {
+      const valueCtrl = this.CompanyAddForm.get('Holiday_Value');
+      const formulaCtrl = this.CompanyAddForm.get('Holiday_Formula');
+
+      valueCtrl?.reset();
+      formulaCtrl?.reset();
+
+      valueCtrl?.clearValidators();
+      formulaCtrl?.clearValidators();
+
+      valueCtrl?.disable();
+      formulaCtrl?.disable();
+
+      if (value === '1') {
+        valueCtrl?.enable();
+        valueCtrl?.setValidators(Validators.required);
+      }
+
+      if (value === '2') {
+        formulaCtrl?.enable();
+        formulaCtrl?.setValidators(Validators.required);
+      }
+
+      valueCtrl?.updateValueAndValidity();
+      formulaCtrl?.updateValueAndValidity();
+    });
+
+  }
+  allowDecimalOnly(event: any) {
+    const input = event.target;
+    input.value = input.value.replace(/[^0-9.]/g, '');
+
+    // allow only ONE decimal point
+    const parts = input.value.split('.');
+    if (parts.length > 2) {
+      input.value = parts[0] + '.' + parts.slice(1).join('');
+    }
+
+    this.CompanyAddForm.get('adhoc_service_fee')?.setValue(input.value, {
+      emitEvent: false
+    });
   }
 
   BindGetCompanyName() {
@@ -404,7 +546,7 @@ export class CompanyeditComponent {
           BankName: this.companydata.Bank_Id,
           OnboardingCategory: this.companydata.OnBoarding_Category,
           OnboardingCharges: this.companydata.Absorption_Fee,
-          OnboardingChargesValue: this.companydata.Absorption_Fee_Criteria_Type,
+          // OnboardingChargesValue: this.companydata.Absorption_Fee_Criteria_Type,
           InedgeCategory: this.companydata.InEdge_Category,
           InedgeCharges: this.companydata.Inedge_charges,
           InedgeChargesValue: this.companydata.Inedge_charges_Criteria_Type,
@@ -425,12 +567,12 @@ export class CompanyeditComponent {
           PortalPaySlipFormat: this.companydata.Portal_Payslip_Format,
           Incharge: this.companydata.Incharge,
           RoundOffApplicable: this.companydata.Is_RoundOff_Applicable,
-          TAT: this.companydata.TATDays,
+          TAT: this.companydata.TAT,
           ValidDate: this.formatDate(this.companydata.service_tax_date),
           IncentiveDate: this.companydata.Incentive_Date,
           Deviation: this.companydata.Deviation,
           SalarySMS: this.companydata.Salary_SMS,
-          EffectiveDate: this.formatDate(this.companydata.Effective_Date),
+          // EffectiveDate: this.formatDate(this.companydata.Effective_Date),
           SalesPerson: this.companydata.Sales_Person,
           BranchLocation: this.companydata.Branch_Location,
           ProfitCenterCode: this.companydata.Profit_Center_Code,
@@ -468,6 +610,21 @@ export class CompanyeditComponent {
           BankAdvice: this.companydata.BankAdviceId,
           ServiceChargeClubbing: this.companydata.ServiceChargeClubbing,
           BillingModel: this.companydata.Is40BillingModel,
+          OT_weekend_type: this.companydata.OT_WEEKEND_TYPE,
+          Weekend_Value: this.companydata.OT_WEEKEND_VLAUE,
+          Weekend_Formula: this.companydata.OT_WEEKEND_FORMULA,
+          weekday_type: this.companydata.OT_WEEK_DAY_TYPE,
+          Weekday_Value: this.companydata.OT_WEEK_DAY_VLAUE,
+          Weekday_Formula: this.companydata.OT_WEEK_DAY_FORMULA,
+          Nightshift_type: this.companydata.OT_NIGHT_SHIFT_TYPE,
+          Nightshift_Value: this.companydata.OT_NIGHT_SHIFT_VLAUE,
+          Nightshift_Formula: this.companydata.OT_NIGHT_SHIFT_FORMULA,
+          Holiday_type: this.companydata.OT_HOLIDAY_TYPE,
+          Holiday_Value: this.companydata.OT_HOLIDAY_VLAUE,
+          Holiday_Formula: this.companydata.OT_HOLIDAY_FORMULA,
+          adhoc_service_fee: this.companydata.Adhoc_Service_Fee,
+          adhoc_service_formula: this.companydata.Adhoc_Service_Formula,
+          Invoicebilling_type: this.companydata.Invoice_Billing_Type,
 
         });
         this.OnEntitychange({ target: { value: this.companydata.Business_Unit_Name_Id } });
@@ -676,10 +833,29 @@ export class CompanyeditComponent {
         Branch: formValue?.Branch?.toString() ?? "",
         BranchCode: formValue?.BranchCode?.toString() ?? "",
         BankCode: formValue?.BankCode?.toString() ?? "",
-        BankAdviceId: formValue?.BankAdvice?.toString() ?? "0"
+        BankAdviceId: formValue?.BankAdvice?.toString() ?? "0",
+        Portal_Type: formValue?.Portal_Type ?? "",
+        OT_WEEK_DAY_TYPE: formValue.weekday_type ?? null,
+        OT_WEEK_DAY_VLAUE: formValue.Weekday_Value ?? '',
+        OT_WEEK_DAY_FORMULA: formValue.Weekday_Formula ?? '',
+
+        OT_NIGHT_SHIFT_TYPE: formValue.Nightshift_type ?? null,
+        OT_NIGHT_SHIFT_VLAUE: formValue.Nightshift_Value ?? '',
+        OT_NIGHT_SHIFT_FORMULA: formValue.Nightshift_Formula ?? '',
+
+        OT_WEEKEND_TYPE: formValue.OT_weekend_type ?? null,
+        OT_WEEKEND_VLAUE: formValue.Weekend_Value ?? '',
+        OT_WEEKEND_FORMULA: formValue.Weekend_Formula ?? '',
+
+        OT_HOLIDAY_TYPE: formValue.Holiday_type ?? null,
+        OT_HOLIDAY_VLAUE: formValue.Holiday_Value ?? '',
+        OT_HOLIDAY_FORMULA: formValue.Holiday_Formula ?? '',
+
+        Adhoc_Service_Fee: formValue.adhoc_service_fee ?? '',
+        Adhoc_Service_Formula: formValue.adhoc_service_formula ?? ''
       }
     };
-
+    console.log('payload', JSON.stringify(payload));
     this.company.updateCompany(payload).subscribe({
       next: res => {
         const msg1 = res.Data.data.Table0[0].Message;

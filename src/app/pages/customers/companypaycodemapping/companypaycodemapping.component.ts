@@ -1,7 +1,7 @@
 import { Component, Inject, InjectionToken, ViewChild } from '@angular/core';
 import { CompanypaycodemappingEditComponent } from '../companypaycodemapping-edit/companypaycodemapping-edit.component';
 import { CompanypaycodemappingAddComponent } from '../companypaycodemapping-add/companypaycodemapping-add.component';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -21,7 +21,7 @@ export const Pay_TOKEN = new InjectionToken<ICompanypaycodemapping>('Pay_TOKEN')
 @Component({
   selector: 'app-companypaycodemapping',
   standalone: true,
-  imports: [MatTableModule, MatIconModule, MatPaginator, CompanyallComponent, CommonModule, MatTooltipModule, AlertpopupComponent],
+  imports: [MatTableModule, MatIconModule, MatPaginator, CompanyallComponent, CommonModule, MatTooltipModule, AlertpopupComponent, FormsModule],
   templateUrl: './companypaycodemapping.component.html',
   styleUrl: './companypaycodemapping.component.css',
   providers: [
@@ -32,6 +32,7 @@ export const Pay_TOKEN = new InjectionToken<ICompanypaycodemapping>('Pay_TOKEN')
   ]
 })
 export class CompanypaycodemappingComponent {
+
   message: string = '';
   popupMessage: string = '';
   popupSubMessage: string = '';
@@ -55,6 +56,7 @@ export class CompanypaycodemappingComponent {
   selectedCompanyCode: any;
   @ViewChild("paginator") paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  searchText: any;
 
   constructor(private dialog: MatDialog,
     @Inject(Pay_TOKEN) private service: ICompanypaycodemapping,
@@ -90,6 +92,26 @@ export class CompanypaycodemappingComponent {
 
   onRowClick(row: any) {
     this.selectedRow = row;
+  }
+  ngOnInit(): void {
+    this.dataSource.filterPredicate = (data: any, filter: string) => {
+      const searchText = filter.toLowerCase();
+
+      return (
+        data.Company_Code?.toLowerCase().includes(searchText) ||
+        data.Paycode_Code?.toLowerCase().includes(searchText) ||
+        data.Description?.toLowerCase().includes(searchText) ||
+        data.PayType?.toLowerCase().includes(searchText) ||
+        data.Taxable?.toLowerCase().includes(searchText) ||
+        data.EarnedPaycode_Code?.toLowerCase().includes(searchText) ||
+        data.Pick_From?.toLowerCase().includes(searchText) ||
+        data.Formula?.toLowerCase().includes(searchText)
+      );
+    };
+  }
+  applyFilters() {
+    const filterValue = this.searchText?.trim().toLowerCase();
+    this.dataSource.filter = filterValue;
   }
 
   EditOpen() {

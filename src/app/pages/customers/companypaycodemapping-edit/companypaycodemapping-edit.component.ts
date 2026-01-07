@@ -59,7 +59,7 @@ export class CompanypaycodemappingEditComponent {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private decry: EncryptionService,
     private _sessionStoreage: SessionStorageService,
-  ) { }
+  ) { console.log('data', this.data) }
 
   ngOnInit(): void {
     const json = this._sessionStoreage.getItem('UserProfile');
@@ -275,51 +275,55 @@ export class CompanypaycodemappingEditComponent {
     this.isLoading = true;
 
     const invalidRowIndex = this.uploadedDataSource.data.findIndex(row =>
-  row.Company_Paycode_Pick_From_Id === null ||
-  row.Company_Paycode_Pick_From_Id === undefined ||
-  row.Company_Paycode_Pick_From_Id === ''
-);
+      row.Company_Paycode_Pick_From_Id === null ||
+      row.Company_Paycode_Pick_From_Id === undefined ||
+      row.Company_Paycode_Pick_From_Id === ''
+    );
 
-if (invalidRowIndex !== -1) {
-  alert(`Company Paycode Pick From is required`);
-  return; // stop further execution
-}
+    if (invalidRowIndex !== -1) {
+      alert(`Company Paycode Pick From is required`);
+      return; // stop further execution
+    }
 
     const paycodeDetail = this.uploadedDataSource.data.map((row, index) => ({
       Paycode_Id: row.Paycode_Id ?? 0,
       EarnedPaycode_Code: row.EarnedPaycode_Code ?? '',
       Company_Paycode_Pick_From_Id: row.Company_Paycode_Pick_From_Id ?? 0,
       Company_Paycode_Mapping_Detail_Id: row.Company_Paycode_Mapping_Detail_Id ?? 0,
+      Pay_Structure_Detail_Id: row.Pay_Structure_Detail_Id ?? 0,
       SNo: row.SNo,
+      Execution_Order: row.SNo,
       Formula: row.Formula ?? null
     }));
 
     const payload = {
       Company_Id: this.selectedCompanyId,
+      Company_Paycode_Mapping_Id: this.data.row.Company_Paycode_Mapping_Id,
+      Pay_Structure_Id: this.data.row.Pay_Structure_Id,
       User_Id: this.userdetail.user_Id,
       Mode: "Edit",
       PaycodeDetail: paycodeDetail
     };
 
-    console.log('payload',payload);
+    console.log('payload', JSON.stringify(payload));
 
-    // this.paycodeService.PostAddPaycodeMapping(payload).subscribe({
-    //   next: (res) => {
-    //     const parsedData = JSON.parse(res.Data);
-    //     const msg = parsedData[0].message;
+    this.paycodeService.PostAddPaycodeMapping(payload).subscribe({
+      next: (res) => {
+        const msg = res.Data.data.Table0[0].Error_Message;
+        if (msg.toLowerCase().includes('success')) {
+          alert(msg);
+          this.onClose();
+        } else {
+          alert(msg);
+        }
+        this.isLoading = false;
+      },
 
-    //     if (msg.toLowerCase().includes("success")) {
-    //       alert("Company Paycode Mapping Saved Successfully");
-    //     } else {
-    //       alert(msg);
-    //     }
-    //     this.isLoading = false;
-    //   },
-    //   error: (err) => {
-    //     console.error("Error saving:", err);
-    //     this.isLoading = false;
-    //   }
-    // });
+      error: (err) => {
+        console.error("Error saving:", err);
+        this.isLoading = false;
+      }
+    });
   }
 
 
