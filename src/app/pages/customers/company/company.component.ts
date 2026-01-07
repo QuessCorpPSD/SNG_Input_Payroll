@@ -41,6 +41,7 @@ export class CompanyComponent {
   CompanyCodeName: any;
   userdetail: any;
   CompanyCode: any;
+  searchText: any;
 
   constructor(private dialog: MatDialog, private company: CompanyserviceService, private _decrypt: EncryptionService, private _sessionStoreage: SessionStorageService) { }
 
@@ -79,8 +80,37 @@ export class CompanyComponent {
     this.selectedCompanyId = company.companyId;
   }
 
+  ngOnInit(): void {
+    const userdetail = this._sessionStoreage.getItem('UserProfile');
+    this.userdetail = JSON.parse(this._decrypt.decrypt(userdetail!));
+    this.companyForm = new FormGroup({
+      CompanyCode: new FormControl(''),
+      CompanyCodeName: new FormControl(''),
+    })
+    this.dataSource.filterPredicate = (data: any, filter: string) => {
+      const searchText = filter.toLowerCase();
 
-
+      return (
+        data.Company_Code?.toLowerCase().includes(searchText) ||
+        data.Company_Name?.toLowerCase().includes(searchText) ||
+        data.Auto_Company_code?.toLowerCase().includes(searchText) ||
+        data.input_date?.toString().includes(searchText) ||
+        data.output_date?.toString().includes(searchText) ||
+        data.Active?.toLowerCase().includes(searchText) ||
+        data.Segment?.toLowerCase().includes(searchText) ||
+        data.SubSegment?.toLowerCase().includes(searchText) ||
+        data.Businessunit_Name?.toLowerCase().includes(searchText) ||
+        data.Businessunit_Location?.toLowerCase().includes(searchText) ||
+        data.Sap_Customer_Code?.toString().includes(searchText) ||
+        data.Profit_Center_Code?.toLowerCase().includes(searchText) ||
+        data.WorkingHours?.toString().includes(searchText)
+      );
+    };
+  }
+  applyFilters() {
+    const filterValue = this.searchText?.trim().toLowerCase();
+    this.dataSource.filter = filterValue;
+  }
   setUpCustomFilter() {
     this.uploadedDataSource.filterPredicate = (data, filter: string): boolean => {
       const search = JSON.parse(filter);
@@ -114,7 +144,7 @@ export class CompanyComponent {
     this.isLoading = true;
     this.showTable = true;
 
-    const companyCode = this.CompanyCode||0;
+    const companyCode = this.CompanyCode || 0;
     this.company.searchCompany(companyCode).subscribe({
       next: (res) => {
         this.isLoading = false;
@@ -167,14 +197,7 @@ export class CompanyComponent {
     });
   }
 
-  ngOnInit(): void {
-    const userdetail = this._sessionStoreage.getItem('UserProfile');
-    this.userdetail = JSON.parse(this._decrypt.decrypt(userdetail!));
-    this.companyForm = new FormGroup({
-      CompanyCode: new FormControl(''),
-      CompanyCodeName: new FormControl(''),
-    })
-  }
+
 
   AddCompanyMasterOpen() {
     const dialogRef = this.dialog.open(CompanyaddComponent, {
