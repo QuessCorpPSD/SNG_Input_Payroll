@@ -186,8 +186,9 @@ export class PoactiveinactivereportComponent {
       poType: this.ddPOType,
       poYear: this.ddYear,
       vertical: this.ddVertical,
-      userId: this.userdetail.user_Id
+      userId: String(this.userdetail.user_Id)
     };
+    console.log('POActiveReportParams',JSON.stringify(POActiveReportParams));
     this.poreportService.GetAllActiveInactivePO(POActiveReportParams).subscribe({
       next: res => {
         //console.log(res.Data);
@@ -218,7 +219,7 @@ export class PoactiveinactivereportComponent {
       poType: this.ddPOType,
       poYear: this.ddYear,
       vertical: this.ddVertical,
-      userId: this.userdetail.user_Id
+      userId: String(this.userdetail.user_Id)
     };
     this.poreportService.GetAllActiveInactivePO(POActiveReportParams).subscribe({
       next: res => {

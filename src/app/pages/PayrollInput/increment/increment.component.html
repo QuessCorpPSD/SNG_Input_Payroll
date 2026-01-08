@@ -55,7 +55,7 @@
                 style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Montserrat; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
                 Submit</div>
         </button>
-         <div *ngIf="isLoading" class="loading-overlay">
+        <div *ngIf="isLoading" class="loading-overlay">
             <img src="assets/Loading.gif" alt="Loading...">
         </div>
         <div *ngIf="showPreviewModal" class="modal-overlay">
@@ -78,10 +78,9 @@
                 </div>
             </div>
         </div>
-            <div *ngIf="showPopup" class="overlay">
-        <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
-            (close)="showPopup = false"></app-alertpopup>
+        <div *ngIf="showPopup" class="overlay">
+            <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage"
+                class="centered-popup" (close)="showPopup = false"></app-alertpopup>
+        </div>
     </div>
-    <div *ngIf="isLoading" class="loader-overlay">
-        <img src="/assets/Loading.gif" alt="" />
-    </div>
+</div>

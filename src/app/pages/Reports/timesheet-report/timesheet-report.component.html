@@ -10,14 +10,18 @@
                     <label class="form-label text-muted small">Company Code</label>
                     <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
                 </div>
-
-                <div class="col-md-3">
+<div class="col-md-3">
+                    <label class="form-label text-muted small">Pay Period</label>
+                    <PayPeriod [selectedCompanyId]="companyId" [payPeriodType]="payPeriodTypefromParentall"
+                        (payperiodEmit)="handlePayperiodEvent($event)"></PayPeriod>
+                </div>
+                <div class="col-md-3" style="display: none;">
                     <label class="form-label text-muted small">Site Name</label>
                     <groupname [selectedCompanyId]="companyId" (sitenameEmit)="groupnameEvent($event)">
                     </groupname>
                 </div>
 
-                <div class="col-md-2">
+                <div class="col-md-2" style="display: none;">
                     <label class="form-label text-muted small">Location</label>
                     <select class="form-select form-select-sm small-input" [(ngModel)]="selectedLocation"
                         name="location"> 
@@ -27,17 +31,17 @@
                 </div>
 
 
-                <div class="col-md-3">
+                <!-- <div class="col-md-3">
                     <label class="form-label text-muted small">Pay Period</label>
                     <select class="form-select form-select-sm small-input" [(ngModel)]="selectedYear" name="year">
                         <option value="">Select Year</option>
                         <option *ngFor="let y of years" [value]="y.year">{{ y.year }}</option>
                     </select>
-                </div>
+                </div> -->
                 <div class="col-md-3">
-                    <label class="form-label text-muted small">Pay Period</label>
+                    <label class="form-label text-muted small">Status</label>
                     <select class="form-select form-select-sm small-input" [(ngModel)]="selectedStatus" name="status"> >
-                        <option value="-1">All</option>
+                        <option value="-1" selected>All</option>
                         <option value="1">Pending TS</option>
                         <option value="2">Submitted TS</option>
                         <option value="4">Invoice Audited</option>

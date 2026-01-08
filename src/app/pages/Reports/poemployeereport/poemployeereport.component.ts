@@ -37,23 +37,27 @@ export class PoemployeereportComponent {
   isLoading = false;
   showGrid = false;
   POEmployeeData: any[] = [];
-  txtEmployeeId: string="";
-  ddEmployeeType: string="0";
+  txtEmployeeId: string = "";
+  ddEmployeeType: string = "0";
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   constructor(@Inject(Report_TOKEN) private poreportService: IPOReportService,
     private _sessionStoreage: SessionStorageService,
-     private decry:EncryptionService,
+    private decry: EncryptionService,
   ) { }
-  
+
   searchClick() {
-    this.isLoading=true;
+    this.isLoading = true;
     this.BindDashBoard(this.txtEmployeeId, this.ddEmployeeType);
   }
 
   BindDashBoard(employeeId: string, employeeType: string) {
-
+    if (!employeeId) {
+      alert('Please enter Employee Id');
+      this.isLoading = false;
+      return;
+    }
     this.poreportService.GetAllPOEmployeeReport(employeeId, employeeType).subscribe({
       next: res => {
         if (!res.Data || res.Data.length === 0) {
@@ -62,7 +66,7 @@ export class PoemployeereportComponent {
           return;
         }
         //console.log(res.Data);
-        this.showGrid=true;
+        this.showGrid = true;
         this.POEmployeeData = res.Data;
         this.isLoading = false;
       },
@@ -74,6 +78,12 @@ export class PoemployeereportComponent {
   }
 
   ExportClick() {
+    this.isLoading = true;
+    if (!this.txtEmployeeId) {
+      alert('Please enter Employee Id');
+      this.isLoading = false;
+      return;
+    }
     this.poreportService.GetAllPOEmployeeReport(this.txtEmployeeId, this.ddEmployeeType).subscribe({
       next: res => {
         if (!res.Data || res.Data.length === 0) {
@@ -82,9 +92,9 @@ export class PoemployeereportComponent {
           return;
         }
         //console.log(res.Data);
-        this.showGrid=true;
+        this.showGrid = false;
         this.POEmployeeData = res.Data;
-        this.downloadExcel(this.POEmployeeData, "PO_Employee_Report_"+this.txtEmployeeId);
+        this.downloadExcel(this.POEmployeeData, "PO_Employee_Report_" + this.txtEmployeeId);
         this.isLoading = false;
       },
       error: err => {
@@ -110,7 +120,7 @@ export class PoemployeereportComponent {
     FileSaver.saveAs(blob, fileName);
   }
 
-    ClearClick(): void {
+  ClearClick(): void {
     window.location.reload();
   }
 }

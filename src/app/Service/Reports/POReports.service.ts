@@ -34,7 +34,7 @@ export class POReportService implements IPOReportService {
         return this.http.post<APIResponse>(url, POActiveReportParams);
     }
 
-    GetAllMonthWisePOReport(txtFromDate: Date, txtToDate: Date): Observable<APIResponse> {
+    GetAllMonthWisePOReport(txtFromDate: string, txtToDate: string): Observable<APIResponse> {
         const url = `${this.environment.apiUrl}Reports/GetAllMonthWisePOReport/${txtFromDate}/${txtToDate}`;
         //console.log(url);
         return this.http.get<APIResponse>(url);

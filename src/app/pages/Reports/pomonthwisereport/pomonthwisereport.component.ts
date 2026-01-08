@@ -39,8 +39,8 @@ export class PomonthwisereportComponent {
 
   isLoading = false;
   POEmployeeData: any[] = [];
-  txtFromDate = new Date;
-  txtToDate = new Date;
+  txtFromDate ='';
+  txtToDate = '';
 
   constructor(@Inject(Report_TOKEN) private poreportService: IPOReportService,
     private _sessionStoreage: SessionStorageService,
@@ -49,7 +49,18 @@ export class PomonthwisereportComponent {
 
 
   ExportClick() {
+
+    if (!this.txtFromDate) {
+      alert('Please select From date');
+      return;
+    }
+
+    if (!this.txtToDate) {
+      alert('Please select To date');
+      return;
+    }
     this.isLoading = true;
+
     this.poreportService.GetAllMonthWisePOReport(this.txtFromDate, this.txtToDate).pipe(
       finalize(() => this.isLoading = false) // ✅ only one place to stop loading
     )
@@ -70,7 +81,7 @@ export class PomonthwisereportComponent {
       });
   }
 
-    downloadExcelFromBase64(base64: string, filename: string) {
+  downloadExcelFromBase64(base64: string, filename: string) {
     const source = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${base64}`;
     const downloadLink = document.createElement('a');
     downloadLink.href = source;

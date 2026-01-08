@@ -24,6 +24,7 @@ mat-footer-paginator {
   flex-direction: column;
   gap: 8px;
   padding-top: 20px;
+  overflow: auto;
 }
 
 .fixed-width-column {
@@ -41,54 +42,41 @@ mat-footer-paginator {
   overflow: auto;
   border: 1px solid #ddd;
 }
-
-::ng-deep .mat-elevation-z8 {
+.mat-elevation-z8 {
   box-shadow: none !important;
 }
-
-::ng-deep .mat-mdc-header-cell {
-  color: #A0A0A0;
-  font-size: 12px;
-  font-family: "Montserrat";
-  font-weight: 600;
-  line-height: 19.40px;
-  word-wrap: break-word;
-  border-right: 1px solid #ddd;
-  position: sticky;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+/* TABLE OUTER BORDER */
+.mat-mdc-table {
+  border-top: 1px solid #ddd;
+  border-left: 1px solid #ddd;
+  border-collapse: separate;
+  border-spacing: 0;
 }
 
-::ng-deep .mat-mdc-cell {
-  font-family: "Montserrat";
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 22.4px;
-  letter-spacing: 0.24px;
-  color: #222;
-  border-bottom: 1px dashed #E8E8E8 !important;
-  border-right: 1px solid #ddd;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+/* HEADER ROW TOP BORDER */
+.mat-mdc-header-row {
+  border-top: 1px solid #ddd;
+}
 
+/* FIRST COLUMN LEFT BORDER */
+.mat-mdc-header-cell:first-child,
+.mat-mdc-cell:first-child {
+  border-left: 1px solid #ddd;
+}
+
+/* EXISTING BORDERS (you already had these) */
+.mat-mdc-header-cell {
+  border-right: 1px solid #ddd;
+}
+
+.mat-mdc-cell {
+  border-right: 1px solid #ddd;
+  border-bottom: 1px dashed #E8E8E8;
 }
 
 .table-scroll {
-  max-height: 450px;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
-::ng-deep .mat-header-row {
-  position: sticky;
-  top: 0;
-  background: white;
-  z-index: 10;
+ overflow: auto;
+  border: 1px solid #ddd; 
 }
 
 .offer-style {
@@ -121,7 +109,7 @@ mat-footer-paginator {
 }
 
 .previewtable {
-  width: auto;
+  width: 100%;
   table-layout: auto;
   border-collapse: collapse;
   font-family: "Montserrat";

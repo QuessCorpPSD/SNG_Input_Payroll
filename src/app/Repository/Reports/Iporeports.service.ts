@@ -6,5 +6,5 @@ export interface IPOReportService {
     GetPOYears (): Observable<APIResponse>;
     GetVerticals (userId: string, potype: string): Observable<APIResponse>;
     GetAllActiveInactivePO(POActiveReportParams: any): Observable<APIResponse>;
-    GetAllMonthWisePOReport(txtFromDate: Date, txtToDate: Date): Observable<APIResponse>;
+    GetAllMonthWisePOReport(txtFromDate: string, txtToDate: string): Observable<APIResponse>;
 }

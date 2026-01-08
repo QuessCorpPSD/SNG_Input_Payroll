@@ -355,7 +355,6 @@ export const routes: Routes = [
           { path: 'pomonthwisereport', component: PomonthwisereportComponent },
           { path: 'app-qits-billing-report', component: QITSBillingReportComponent },
           { path: 'app-timesheet-report', component: TimesheetReportComponent },
-          { path: 'poactiveinactivereport', component: PoactiveinactivereportComponent },
           { path: 'app-invoice-report', component: InvoiceReportComponent },
           { path: 'app-netpayreport', component: NetpayreportComponent },
           { path: 'payregisterentitywise', component: PayregisterentitywiseComponent },

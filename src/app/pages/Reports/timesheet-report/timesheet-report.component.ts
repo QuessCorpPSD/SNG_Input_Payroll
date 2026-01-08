@@ -13,6 +13,8 @@ import { TimesheetSummaryService } from '../../../Service/Reports/itimesheetsumm
 import FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 import { APIResponse } from '../../../Models/apiresponse';
+import { Payperiodclass } from '../../../Models/Common';
+import { PayPeriodComponent } from '../../../common/payperiod/payperiod.component';
 
 @Component({
   selector: 'app-timesheet-report',
@@ -24,7 +26,8 @@ import { APIResponse } from '../../../Models/apiresponse';
     MatIconModule,
     MatInputModule,
     FormsModule,
-    ReactiveFormsModule],
+    ReactiveFormsModule,
+  PayPeriodComponent],
 
   providers: [
     { provide: Common_TOKEN, useClass: TimesheetSummaryService }
@@ -33,37 +36,43 @@ import { APIResponse } from '../../../Models/apiresponse';
   styleUrl: './timesheet-report.component.css'
 })
 export class TimesheetReportComponent {
-   companyId: any;   
-  siteId:any;  
+  companyId: any;
+  siteId: any;
   selectedCompanyCode: any;
   selectedSiteName: any;
   years: any[] = [];
   selectedYear: any;
   Location: any[] = [];
   selectedLocation: string = '';
-selectedStatus: any;
-  constructor(private timesheetService: TimesheetSummaryService ) {}
+  selectedStatus: any;
+  payPeriodTypefromParentall: string = '';
+  selectedPP?: any;
+  constructor(private timesheetService: TimesheetSummaryService) { }
 
 
- handleCompanyEvent(event: any) {
-  this.companyId = event.companyId;
-  this.selectedCompanyCode = event.companyCode;
+  handleCompanyEvent(event: any) {
+    this.companyId = event.companyId;
+    this.selectedCompanyCode = event.companyCode;
 
-  // If siteId already exists, load locations
-  if (this.siteId) {
-    this.BindLocation();
+    // If siteId already exists, load locations
+    if (this.siteId) {
+      this.BindLocation();
+    }
   }
-}
 
-groupnameEvent(event: any) {
-  this.siteId = event.siteCode;
-  this.selectedSiteName = event.siteName;
-
-  // If companyId already exists, load locations
-  if (this.companyId) {
-    this.BindLocation();
+  handlePayperiodEvent(payperiod: Payperiodclass) {
+    this.selectedPP = String(payperiod.payfrequencyid);
   }
-}
+
+  groupnameEvent(event: any) {
+    this.siteId = event.siteCode;
+    this.selectedSiteName = event.siteName;
+
+    // If companyId already exists, load locations
+    if (this.companyId) {
+      this.BindLocation();
+    }
+  }
 
 
   BindYear() {
@@ -78,7 +87,7 @@ groupnameEvent(event: any) {
     });
   }
 
-   BindLocation() {
+  BindLocation() {
     this.timesheetService.GetLocation(this.companyId, this.siteId).subscribe({
       next: res => {
         console.log('Location response:', res);
@@ -91,63 +100,76 @@ groupnameEvent(event: any) {
   }
 
   ngOnInit(): void {
-    this.BindYear();
+
+    this.payPeriodTypefromParentall = "All";
+    //this.BindYear();
   }
 
-      Download() {
-        this.timesheetService.GetAllTimesheetSummaryReport(
-          this.companyId.toString(),
-          this.siteId,
-          this.selectedLocation,
-          this.selectedYear,
-          this.selectedStatus,
-        ).subscribe({
-          next: (res: APIResponse) => {
-            const tables = res?.Data?.data;
-            if (!tables || !tables.Table0) {
-              console.warn("No Table0 found in API response.");
-              return;
-            }
-    
-            const tableName = "Employee Info";
-            const tableData = tables.Table0 || [];
-    
-            const finalData: any[][] = [];
-    
-    
-            finalData.push(["Timesheet Summary Report"]);
-    
-            finalData.push([tableName]);
-    
-            if (tableData[0]) {
-              finalData.push(Object.keys(tableData[0]));
-            }
-    
-            tableData.forEach((row) => {
-              finalData.push(Object.values(row));
-            });
-    
-            const worksheet: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(finalData);
-    
-            const workbook: XLSX.WorkBook = {
-              Sheets: { "Timesheet Summary Report": worksheet },
-              SheetNames: ["Timesheet Summary Report"]
-            };
-    
-            const today = new Date();
-            const dateStr = today.toISOString().split("T")[0];
-            const fileName = `TimesheetSummary_${dateStr}.xlsx`;
-    
-            const excelBuffer: any = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
-            const blob: Blob = new Blob([excelBuffer], {
-              type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-            });
-            FileSaver.saveAs(blob, fileName);
-          },
-          error: (err) => {
-            console.error("Download error:", err);
-          }
+  Download() {
+    if (!this.companyId) {
+      alert('Please select Company');
+      return;
+    }
+
+    if (!this.selectedPP) {
+      alert('Please select Payperiod');
+      return;
+    }
+
+
+    this.timesheetService.GetAllTimesheetSummaryReport(
+      this.companyId.toString(),
+      this.siteId,
+      this.selectedLocation,
+      this.selectedPP,
+      this.selectedStatus,
+    ).subscribe({
+      next: (res: APIResponse) => {
+        const tables = res?.Data?.data;
+        if (!tables || !tables.Table0) {
+          console.warn("No Table0 found in API response.");
+          return;
+        }
+
+        const tableName = "Employee Info";
+        const tableData = tables.Table0 || [];
+
+        const finalData: any[][] = [];
+
+
+        finalData.push(["Timesheet Summary Report"]);
+
+        finalData.push([tableName]);
+
+        if (tableData[0]) {
+          finalData.push(Object.keys(tableData[0]));
+        }
+
+        tableData.forEach((row) => {
+          finalData.push(Object.values(row));
         });
+
+        const worksheet: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(finalData);
+
+        const workbook: XLSX.WorkBook = {
+          Sheets: { "Timesheet Summary Report": worksheet },
+          SheetNames: ["Timesheet Summary Report"]
+        };
+
+        const today = new Date();
+        const dateStr = today.toISOString().split("T")[0];
+        const fileName = `TimesheetSummary_${dateStr}.xlsx`;
+
+        const excelBuffer: any = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+        const blob: Blob = new Blob([excelBuffer], {
+          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        });
+        FileSaver.saveAs(blob, fileName);
+      },
+      error: (err) => {
+        console.error("Download error:", err);
       }
+    });
+  }
 
 }

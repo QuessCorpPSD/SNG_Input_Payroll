@@ -15,6 +15,7 @@ import { OnboardingStateService } from '../../../onboarding-state.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { PayrollinputComponent } from "../payrollinput.component";
+import { finalize } from 'rxjs';
 
 const activationservice = InjectionToken<IActivationLwdService>;
 
@@ -95,11 +96,21 @@ export class ActivationLWDComponent {
   templateDataMap: { [key: string]: any[] } = {};
 
   onTemplateChange(templateValue: Event): void {
+
+    if(!this.companyUI)
+    {
+      alert('Please select Company');
+      return;
+    }
     const value = (templateValue.target as HTMLSelectElement).value;
 
     if (this.companyUI && this.companyUI.companyCode !== '') {
       this.isLoading = true;
-      this._activationservice.GetEmployeeActivationLwd(this.companyUI.companyCode, value).subscribe({
+      this._activationservice.GetEmployeeActivationLwd(this.companyUI.companyCode, value).pipe(
+            finalize(() => {
+              this.isLoading = false;   // always runs
+            })
+          ).subscribe({
         next: res => {
           this.activationlwddetails = res.Data;
 
@@ -144,6 +155,12 @@ export class ActivationLWDComponent {
 
 
   onImportChange(event: any): void {
+
+    if(!this.companyUI)
+    {
+      alert('Please select Company');
+      return;
+    }
 
     this.lastSelectedTemplate = event.value;
     this.fileUploaded = false;
@@ -338,7 +355,11 @@ export class ActivationLWDComponent {
         formData.append('FLAG', String(0));
 
         
-          this._activationservice.UploadEmployeeActivation(formData).subscribe({
+          this._activationservice.UploadEmployeeActivation(formData).pipe(
+            finalize(() => {
+              this.isLoading = false;   // always runs
+            })
+          ).subscribe({
             next: res => {
               this.UploadedResponse = res;
 
