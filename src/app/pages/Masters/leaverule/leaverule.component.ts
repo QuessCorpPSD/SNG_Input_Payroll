@@ -948,7 +948,7 @@ export class LeaveruleComponent {
       }));
 
     const requestPayload = {
-      Created_By: this.userdetail.user_Id,
+      Created_By: this.userdetail.user_Id.toString(),
       Mode: 'Edit', // or 'UPDATE'
       leaverulemaster: leaverulePayload
     };

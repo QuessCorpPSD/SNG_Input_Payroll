@@ -182,6 +182,33 @@ export class POInitiateComponent {
       }
     })
   }
+
+  InitiationRequest(): void {
+
+    if (this.selectedCompanyId == undefined) {
+      alert("Select Company ");
+      return;
+    }
+
+    if (this.payPeriod == undefined) {
+      alert("Select PayPeriod ");
+      return;
+    }
+
+    this.isLoading = true;
+
+    this._invoiceService.RequestPOInvoice(this.selectedCompanyId, this.payPeriod.payfrequencyid).subscribe({
+      next: res => {
+        if (res.Data.file != "No") {
+          this.downloadExcelFromBase64(res.Data.file, res.Data.fileName)
+        }
+      },
+      error: err => {
+        console.log(err);
+      }
+    })
+  }
+
   toggleRow(event) {
 
   }

@@ -176,6 +176,11 @@ export class InvoiceRepository implements IInvoiceRepository {
             environment.apiUrl + `POInvoiceInitiate/POInvoiceInitiateExport/${companyId}/${payPeriodId}`);
     }
 
+    RequestPOInvoice(companyId: number, payPeriodId: number): Observable<any> {
+        return this.http.get<APIResponse>(
+            environment.apiUrl + `POInvoiceInitiate/POInvoiceRequest/${companyId}/${payPeriodId}`);
+    }
+
     UploadBillable(formData: FormData): Observable<APIResponse> {
         const url = `${this.environment.apiUrl}BillableDays/BillableDaysUpload`;
 

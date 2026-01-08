@@ -34,6 +34,7 @@ export const Pay_TOKEN = new InjectionToken<IEmployeeservice>('Pay_TOKEN');
 export class EmployeeComponent {
   selectedCompanyId: any;
   selectedCompanyCode: any;
+  empid: any;
   employee!: FormGroup
   message: string = '';
   popupMessage: string = '';
@@ -87,7 +88,7 @@ export class EmployeeComponent {
     this.popupMessage = '';
     this.popupSubMessage = '';
   }
-  
+
   BindEmployeeCode() {
     const payload = { CompanyId: this.selectedCompanyId?.toString() };
 
@@ -115,8 +116,8 @@ export class EmployeeComponent {
 
     const form = this.employee.getRawValue();
     const Companyid = this.selectedCompanyId;
-    const eactive = form.EActive;
-    this.service.search(Companyid, eactive).subscribe({
+    const empid = this.empid || 0;
+    this.service.search(Companyid, empid).subscribe({
       next: (res) => {
         this.isLoading = false;
         this.employeedata = res?.Data?.data?.Table0;
