@@ -103,12 +103,12 @@ export class SalaryadvanceapproveComponent {
     this.service.Search(Companyid, PayPeriod).subscribe({
       next: (res) => {
         console.log('API Response:', res.Data);
-        this.salary = res.Data;
-        this.salarys = res.Data.message;
+        this.salary = res.Data.data.Table0;
+        // this.salarys = res.Data.message;
 
-        if (this.salarys) {
-          alert(this.salarys)
-        }
+        // if (this.salarys) {
+        //   alert(this.salarys)
+        // }
         if (this.salary && this.salary.length > 0) {
           this.dataSource = new MatTableDataSource(this.salary);
           this.dataSource.paginator = this.paginator;
@@ -116,6 +116,7 @@ export class SalaryadvanceapproveComponent {
           this.uploadDisplayedColumns = ['Action', 'SNo', 'CompanyCode', 'Pay Period', 'Employee Code', 'Employee Name', 'Pay Code', 'Amount', 'Salary Advance Status', 'Request Type', 'No of Installments'];
         } else {
           this.dataSource.data = [];
+          alert("No Data");
         }
       },
       error: (err) => {
