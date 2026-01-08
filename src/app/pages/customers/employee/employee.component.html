@@ -9,6 +9,11 @@
                     <label class="form-label text-muted small">Company Code</label>
                     <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
                 </div>
+                 <div class="col-md-3">
+                    <label class="form-label text-muted small">Employee Code</label>
+                    <input class="form-control form-control-sm" [(ngModel)]="empid">
+                  
+                </div>
 
                 <div class="col-auto">
                     <div class="d-flex align-items-center gap-2">

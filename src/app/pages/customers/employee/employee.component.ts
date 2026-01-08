@@ -57,6 +57,7 @@ export class EmployeeComponent {
   UploadedResponseSalary: any;
 
   @ViewChild('paginator') paginator!: MatPaginator;
+  empid: any;
   constructor(private dialog: MatDialog, @Inject(Pay_TOKEN) private service: IEmployeeservice, private decry: EncryptionService,
     private _sessionStoreage: SessionStorageService, private fb: FormBuilder) { }
 
@@ -87,7 +88,7 @@ export class EmployeeComponent {
     this.popupMessage = '';
     this.popupSubMessage = '';
   }
-  
+
   BindEmployeeCode() {
     const payload = { CompanyId: this.selectedCompanyId?.toString() };
 
@@ -113,10 +114,9 @@ export class EmployeeComponent {
     this.isLoading = true;
     this.isUploadGridVisible = true;
 
-    const form = this.employee.getRawValue();
     const Companyid = this.selectedCompanyId;
-    const eactive = form.EActive;
-    this.service.search(Companyid, eactive).subscribe({
+    const empid = this.empid || 0;
+    this.service.search(Companyid, empid).subscribe({
       next: (res) => {
         this.isLoading = false;
         this.employeedata = res?.Data?.data?.Table0;

@@ -658,8 +658,8 @@
                     <label class="form-label">Sourcing/OB Applicable<span class="text-danger"></span></label>
                     <select class="form-select" formControlName="SourcingOBApplicable">
                         <option [value]="">--select---</option>
-                        <option [value]="true">Yes</option>
-                        <option [value]="false">No</option>
+                        <option [value]="1">Yes</option>
+                        <option [value]="0">No</option>
 
                     </select>
                 </div>
@@ -1206,7 +1206,7 @@
                 </div>
 
                 <div class="col-md-3">
-                    <label class="form-label">Holiday Type<span class="text-danger">*</span></label>
+                    <label class="form-label">Holiday Type</label>
                     <select class="form-select" formControlName="Holiday_type">
                         <option value="">Select</option>
                         <option [value]="1">Fixed</option>
@@ -1277,6 +1277,26 @@
                     <label class="form-label">PO Days Daily<span class="text-danger"></span></label>
                     <input type="text" class="form-control" formControlName="Po_days_daily" />
                 </div>
+                <div class="col-md-3">
+                    <label class="form-label">Upload Contract Details<span class="text-danger"></span></label>
+                    <span class="upload-link" (click)="triggerFileUpload()">
+                        Upload
+                    </span>
+
+                    <!-- Hidden file input -->
+                    <input type="file" #fileInput style="display:none" (change)="onFileSelected($event)">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Upload Service Tax Details<span class="text-danger"></span></label>
+                    <!-- <input type="date" class="form-control" formControlName="ValidDate" /> -->
+                    <span class="upload-link" (click)="triggerFileUploadServiceTax()">
+                        Upload
+                    </span>
+                    <!-- Hidden file input -->
+                    <input type="file" #fileInputServiceTax style="display:none"
+                        (change)="onFileSelectedServiceTax($event)">
+                </div>
+
             </div>
         </mat-card-content>
         <mat-card-footer class="footer">
