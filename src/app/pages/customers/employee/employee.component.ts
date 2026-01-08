@@ -56,9 +56,8 @@ export class EmployeeComponent {
   uploadedDataSource = new MatTableDataSource(this.uploadedData);
   UploadedResponse: any;
   UploadedResponseSalary: any;
-
   @ViewChild('paginator') paginator!: MatPaginator;
-  empid: any;
+  
   constructor(private dialog: MatDialog, @Inject(Pay_TOKEN) private service: IEmployeeservice, private decry: EncryptionService,
     private _sessionStoreage: SessionStorageService, private fb: FormBuilder) { }
 
