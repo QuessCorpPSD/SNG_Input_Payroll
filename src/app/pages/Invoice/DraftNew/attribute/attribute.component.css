@@ -1,0 +1,238 @@
+.drag-row {
+    width: 350px;
+    height: 450px;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  justify-content: flex-start;
+  align-items: flex-start;
+
+}
+
+.example {
+  width: 350px;
+  min-height: 250px;
+  padding: 5px;
+  
+
+
+}
+.example-list {
+  width: 320px;         /* or 50% */
+  height: 250px;    /* important */
+  overflow-y: auto;     /* enable scroll */
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 6px;
+  background: #fafafa;
+}
+.template-btn {
+  height: 32px;
+  padding: 0 16px;
+  background: #302cb3;
+  color: white;
+  font-size: 12px;
+  font-family: 'Nunito Sans';
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.close-btn {
+  height: 32px;
+  padding: 5px;
+  background: #302cb3;
+  color: white;
+  font-size: 12px;
+  font-family: 'Nunito Sans';
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* pushes button to right */
+  width: 100%;
+  padding: 8px 12px;
+}
+.popup-add {
+  position: fixed;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2000; /* above main popup */
+}
+
+.example-box {
+  padding: 10px;
+  margin: 6px 0;
+  background: white;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  cursor: move;
+}
+
+.cdk-drag-preview {
+  border-radius: 4px;
+  box-shadow: 0px 5px 10px rgba(0,0,0,0.25);
+}
+
+
+.drag-drop-container {
+  width: 90%;
+  margin: auto;
+  vertical-align: top;
+}
+
+.drag-drop-list {
+  border: solid 1px;
+  height: 220px;
+  overflow-y: auto;
+  display: block;
+  margin-top: 10px;
+  background: #f4f6f8;
+  color: #fff;
+  border-radius: 10px;
+}
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+              0 8px 10px 1px rgba(0, 0, 0, 0.14),
+              0 3px 14px 2px rgba(0, 0, 0, 0.12),
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.drag-drop-box:last-child {
+  border: none;
+}
+
+.drag-drop-list.cdk-drop-list-dragging .drag-drop-box:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+.drag-drop-box {
+    
+  padding: 10px 12px;
+  margin: 6px ;
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #d4d7ff;
+  cursor: grab;
+  color: #2a2a2a;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+
+}
+
+.drag-drop-box:hover {
+  background: #d4d7ff;
+  border-color: #b5b9ff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.drag-drop-box:active {
+  cursor: grabbing;
+  transform: scale(0.98);
+}
+
+
+/*.drag-drop-box {
+  padding: 10px;
+  margin: 6px 0;
+  background: white;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  cursor: move;
+  color: black;
+   padding: 5px;
+  margin: 10px;
+  font-size: 12px; 
+  background:#ffffff;
+  border-radius: 1px;
+  border-color: 1px solid #ddd;
+  color: #4324bf;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  cursor: move; */
+  /* box-shadow: 0 8px 6px -6px #000;
+} */
+ .drag-drop-box-selected:hover {
+  background: #d4d7ff;
+  border-color: #b5b9ff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.drag-drop-box-selected:active {
+  cursor: grabbing;
+  transform: scale(0.98);
+}
+.drag-drop-box-selected {
+ padding: 10px 12px;
+  margin: 6px ;
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #d4d7ff;
+  cursor: grab;
+  color: #2a2a2a;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* box-shadow: 0 8px 6px -6px #000; */
+}
+
+@media (min-width: 768px) {
+  .drag-drop-container {
+    margin: 0;
+  }
+  .dualListLeft, .dualListRight {
+    display: flex;
+  }
+
+  .listboxform-wrap {
+    padding-top: 3em;
+    padding-bottom: 3em;
+  }
+}
+
+@media (min-width: 480px) {
+
+}
+ 
+@media (max-width: 768px) {
+  .listbox-title {
+    font-size: 1.3rem;
+  }
+}
+.container{
+    margin-bottom: 8px;
+    width: 100%;
+    background-color: #a1a1a1;
+    height: 300px;
+    overflow-y: scroll;
+  }

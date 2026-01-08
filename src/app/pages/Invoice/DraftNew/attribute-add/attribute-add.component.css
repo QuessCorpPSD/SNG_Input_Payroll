@@ -1,0 +1,90 @@
+.drag-row {
+    width: 350px;
+    height: 450px;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  justify-content: flex-start;
+  align-items: flex-start;
+
+}
+
+.example {
+  width: 350px;
+  min-height: 250px;
+  padding: 5px;
+  
+
+
+}
+.example-list {
+  width: 320px;         /* or 50% */
+  height: 250px;    /* important */
+  overflow-y: auto;     /* enable scroll */
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 6px;
+  background: #fafafa;
+}
+.template-btn {
+  height: 32px;
+  padding: 0 16px;
+  background: #302cb3;
+  color: white;
+  font-size: 12px;
+  font-family: 'Nunito Sans';
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+input.form-control {
+  border: 1px solid #ced4da !important;
+}
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.close-btn {
+  height: 32px;
+  padding: 5px;
+  background: #302cb3;
+  color: white;
+  font-size: 12px;
+  font-family: 'Nunito Sans';
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* pushes button to right */
+  width: 100%;
+  padding: 8px 12px;
+}
+
+.example-box {
+  padding: 10px;
+  margin: 6px 0;
+  background: white;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  cursor: move;
+}
+
+.cdk-drag-preview {
+  border-radius: 4px;
+  box-shadow: 0px 5px 10px rgba(0,0,0,0.25);
+}

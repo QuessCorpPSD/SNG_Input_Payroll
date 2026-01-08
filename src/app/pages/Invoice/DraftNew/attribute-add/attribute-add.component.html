@@ -1,0 +1,64 @@
+<mat-card style="width: 750px; margin: 500px;">
+    <mat-card-header>
+        <div style="
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 20px;
+    ">{{Company_Code}}
+
+            <!-- Title -->
+            <div style="
+        color: #302CB3; 
+        font-family: Nunito Sans; 
+        font-size: 22px; 
+        font-weight: 700;
+      ">
+               Add Attribute
+              
+            </div>
+                  
+  
+  
+
+
+            <!-- Close Button -->
+            <button mat-icon-button class="close-btn" (click)="closeclick()">
+                <mat-icon>close</mat-icon>
+            </button>
+
+        </div>
+    </mat-card-header>
+
+    <mat-card-content
+        style="width: 750px; height: 300px;padding-top: 5px;display: flex;  flex-direction: row; align-items: left; gap: 16px; align-self: stretch;border-radius: 0 0 10px 10px; border-top: 1px solid var(--Card-Box-border-color, #D6D6D6); background: #FFF;">
+  
+        <div class="example">
+            <table class="table table-borderless">
+                <tr>
+                    <td>
+                        Attribute Name
+                    </td>
+                    <td>
+                         <input type="text" [(ngModel)]="attributeName" class="form-control form-control-sm w-75"/>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center" ><button class="template-btn" style="margin-top: 3px;" (click)="AttributeAdd()">Add</button>        </td>
+                </tr>
+            </table>
+          
+        </div>
+
+        
+
+    </mat-card-content>
+    <mat-card-footer style="display: flex; justify-content: center; padding: 16px 0;">         
+            
+    </mat-card-footer>
+</mat-card>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>

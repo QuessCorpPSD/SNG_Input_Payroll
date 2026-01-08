@@ -159,6 +159,7 @@ import { OffercreationComponent } from './pages/gsoffer/offercreation/offercreat
 import { LFWSlabComponent } from './pages/GlobalMasters/lfwslab/lfwslab.component';
 import { TDSslabComponent } from './pages/GlobalMasters/tdsslab/tdsslab.component';
 import { StatesComponent } from './pages/GlobalMasters/state/state.component';
+import { DraftinvoicenewComponent } from './pages/Invoice/DraftNew/draftinvoicenew/draftinvoicenew.component';
 
 
 
@@ -299,7 +300,7 @@ export const routes: Routes = [
           { path: 'creditnoteapprove', component: CreditnoteapproveComponent },
           { path: 'creditnoteupdate', component: CreditnoteupdateComponent },
           { path: 'companyinvoiceformat', component: CompanyinvoiceformatComponent },
-
+          { path: 'draftinvoicenew', component: DraftinvoicenewComponent }
         ]
       },
 
