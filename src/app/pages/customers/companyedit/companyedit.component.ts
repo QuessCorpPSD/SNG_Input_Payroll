@@ -96,7 +96,6 @@ export class CompanyeditComponent {
     this.BindBankAdvice();
     this.BindServiceClubbing();
     this.BindBillingModel();
-    this.BindCompanyId();
     this.CompanyAddForm = this.fb.group({
 
       // Basic Info
@@ -222,17 +221,17 @@ export class CompanyeditComponent {
       ReimbrusementDate: [''],
       ReimbursementType: [''],
       OT_weekend_type: [''],
-      Weekend_Value: [{ value: '', disabled: true }],
-      Weekend_Formula: [{ value: '', disabled: true }],
+      Weekend_Value: [{ value: '' }],
+      Weekend_Formula: [{ value: '' }],
       weekday_type: [''],
-      Weekday_Value: [{ value: '', disabled: true }],
-      Weekday_Formula: [{ value: '', disabled: true }],
+      Weekday_Value: [{ value: '' }],
+      Weekday_Formula: [{ value: '' }],
       Nightshift_type: [''],
-      Nightshift_Value: [{ value: '', disabled: true }],
-      Nightshift_Formula: [{ value: '', disabled: true }],
+      Nightshift_Value: [{ value: '' }],
+      Nightshift_Formula: [{ value: '' }],
       Holiday_type: [''],
-      Holiday_Value: [{ value: '', disabled: true }],
-      Holiday_Formula: [{ value: '', disabled: true }],
+      Holiday_Value: [{ value: '' }],
+      Holiday_Formula: [{ value: '' }],
       adhoc_service_fee: [''],
       adhoc_service_formula: [''],
       Invoicebilling_type: [''],
@@ -247,113 +246,108 @@ export class CompanyeditComponent {
     this.CompanyAddForm.get('BranchCode')?.disable();
     this.CompanyAddForm.get('BankCode')?.disable();
     this.CompanyAddForm.get('CompanyCode')?.disable();
+
+    // WEEKEND
     this.CompanyAddForm.get('OT_weekend_type')?.valueChanges.subscribe(value => {
       const valueCtrl = this.CompanyAddForm.get('Weekend_Value');
       const formulaCtrl = this.CompanyAddForm.get('Weekend_Formula');
 
-      valueCtrl?.reset();
-      formulaCtrl?.reset();
-
       valueCtrl?.clearValidators();
       formulaCtrl?.clearValidators();
 
-      valueCtrl?.disable();
-      formulaCtrl?.disable();
-
-      if (value === '1') { // Fixed
+      if (value === '1') {
         valueCtrl?.enable();
+        formulaCtrl?.disable();
         valueCtrl?.setValidators(Validators.required);
-      }
-
-      if (value === '2') { // Formula
+      } else if (value === '2') {
         formulaCtrl?.enable();
+        valueCtrl?.disable();
         formulaCtrl?.setValidators(Validators.required);
+      } else {
+        valueCtrl?.disable();
+        formulaCtrl?.disable();
       }
 
-      valueCtrl?.updateValueAndValidity();
-      formulaCtrl?.updateValueAndValidity();
+      valueCtrl?.updateValueAndValidity({ emitEvent: false });
+      formulaCtrl?.updateValueAndValidity({ emitEvent: false });
     });
 
+    // WEEKDAY
     this.CompanyAddForm.get('weekday_type')?.valueChanges.subscribe(value => {
       const valueCtrl = this.CompanyAddForm.get('Weekday_Value');
       const formulaCtrl = this.CompanyAddForm.get('Weekday_Formula');
 
-      valueCtrl?.reset();
-      formulaCtrl?.reset();
-
       valueCtrl?.clearValidators();
       formulaCtrl?.clearValidators();
 
-      valueCtrl?.disable();
-      formulaCtrl?.disable();
-
       if (value === '1') {
         valueCtrl?.enable();
+        formulaCtrl?.disable();
         valueCtrl?.setValidators(Validators.required);
-      }
-
-      if (value === '2') {
+      } else if (value === '2') {
         formulaCtrl?.enable();
+        valueCtrl?.disable();
         formulaCtrl?.setValidators(Validators.required);
+      } else {
+        valueCtrl?.disable();
+        formulaCtrl?.disable();
       }
 
-      valueCtrl?.updateValueAndValidity();
-      formulaCtrl?.updateValueAndValidity();
+      valueCtrl?.updateValueAndValidity({ emitEvent: false });
+      formulaCtrl?.updateValueAndValidity({ emitEvent: false });
     });
 
+    // NIGHTSHIFT
     this.CompanyAddForm.get('Nightshift_type')?.valueChanges.subscribe(value => {
       const valueCtrl = this.CompanyAddForm.get('Nightshift_Value');
       const formulaCtrl = this.CompanyAddForm.get('Nightshift_Formula');
 
-      valueCtrl?.reset();
-      formulaCtrl?.reset();
-
       valueCtrl?.clearValidators();
       formulaCtrl?.clearValidators();
 
-      valueCtrl?.disable();
-      formulaCtrl?.disable();
-
       if (value === '1') {
         valueCtrl?.enable();
+        formulaCtrl?.disable();
         valueCtrl?.setValidators(Validators.required);
-      }
-
-      if (value === '2') {
+      } else if (value === '2') {
         formulaCtrl?.enable();
+        valueCtrl?.disable();
         formulaCtrl?.setValidators(Validators.required);
+      } else {
+        valueCtrl?.disable();
+        formulaCtrl?.disable();
       }
 
-      valueCtrl?.updateValueAndValidity();
-      formulaCtrl?.updateValueAndValidity();
+      valueCtrl?.updateValueAndValidity({ emitEvent: false });
+      formulaCtrl?.updateValueAndValidity({ emitEvent: false });
     });
 
+    // HOLIDAY
     this.CompanyAddForm.get('Holiday_type')?.valueChanges.subscribe(value => {
       const valueCtrl = this.CompanyAddForm.get('Holiday_Value');
       const formulaCtrl = this.CompanyAddForm.get('Holiday_Formula');
 
-      valueCtrl?.reset();
-      formulaCtrl?.reset();
-
       valueCtrl?.clearValidators();
       formulaCtrl?.clearValidators();
 
-      valueCtrl?.disable();
-      formulaCtrl?.disable();
-
       if (value === '1') {
         valueCtrl?.enable();
+        formulaCtrl?.disable();
         valueCtrl?.setValidators(Validators.required);
-      }
-
-      if (value === '2') {
+      } else if (value === '2') {
         formulaCtrl?.enable();
+        valueCtrl?.disable();
         formulaCtrl?.setValidators(Validators.required);
+      } else {
+        valueCtrl?.disable();
+        formulaCtrl?.disable();
       }
 
-      valueCtrl?.updateValueAndValidity();
-      formulaCtrl?.updateValueAndValidity();
+      valueCtrl?.updateValueAndValidity({ emitEvent: false });
+      formulaCtrl?.updateValueAndValidity({ emitEvent: false });
     });
+    this.BindCompanyId();
+
 
   }
   allowDecimalOnly(event: any) {
@@ -516,6 +510,7 @@ export class CompanyeditComponent {
           return;
         }
 
+
         this.companydata = table[0];
         this.companyBind = table3;
         this.CompanyAddForm.patchValue({
@@ -610,23 +605,36 @@ export class CompanyeditComponent {
           BankAdvice: this.companydata.BankAdviceId,
           ServiceChargeClubbing: this.companydata.ServiceChargeClubbing,
           BillingModel: this.companydata.Is40BillingModel,
-          OT_weekend_type: this.companydata.OT_WEEKEND_TYPE,
-          Weekend_Value: this.companydata.OT_WEEKEND_VLAUE,
-          Weekend_Formula: this.companydata.OT_WEEKEND_FORMULA,
-          weekday_type: this.companydata.OT_WEEK_DAY_TYPE,
-          Weekday_Value: this.companydata.OT_WEEK_DAY_VLAUE,
-          Weekday_Formula: this.companydata.OT_WEEK_DAY_FORMULA,
-          Nightshift_type: this.companydata.OT_NIGHT_SHIFT_TYPE,
-          Nightshift_Value: this.companydata.OT_NIGHT_SHIFT_VLAUE,
-          Nightshift_Formula: this.companydata.OT_NIGHT_SHIFT_FORMULA,
-          Holiday_type: this.companydata.OT_HOLIDAY_TYPE,
-          Holiday_Value: this.companydata.OT_HOLIDAY_VLAUE,
-          Holiday_Formula: this.companydata.OT_HOLIDAY_FORMULA,
+          OT_weekend_type: String(this.companydata.OT_WEEKEND_TYPE),
+          weekday_type: String(this.companydata.OT_WEEK_DAY_TYPE),
+          Nightshift_type: String(this.companydata.OT_NIGHT_SHIFT_TYPE),
+          Holiday_type: String(this.companydata.OT_HOLIDAY_TYPE),
           adhoc_service_fee: this.companydata.Adhoc_Service_Fee,
           adhoc_service_formula: this.companydata.Adhoc_Service_Formula,
           Invoicebilling_type: this.companydata.Invoice_Billing_Type,
 
+
         });
+        console.log(typeof this.companydata.OT_WEEK_DAY_TYPE); // should be "string"
+
+        this.CompanyAddForm.get('OT_weekend_type')?.updateValueAndValidity({ emitEvent: true });
+        this.CompanyAddForm.get('weekday_type')?.updateValueAndValidity({ emitEvent: true });
+        this.CompanyAddForm.get('Nightshift_type')?.updateValueAndValidity({ emitEvent: true });
+        this.CompanyAddForm.get('Holiday_type')?.updateValueAndValidity({ emitEvent: true });
+        this.CompanyAddForm.patchValue({
+          Weekend_Value: this.companydata.OT_WEEKEND_VLAUE,
+          Weekend_Formula: this.companydata.OT_WEEKEND_FORMULA,
+
+          Weekday_Value: this.companydata.OT_WEEK_DAY_VLAUE,
+          Weekday_Formula: this.companydata.OT_WEEK_DAY_FORMULA,
+
+          Nightshift_Value: this.companydata.OT_NIGHT_SHIFT_VLAUE,
+          Nightshift_Formula: this.companydata.OT_NIGHT_SHIFT_FORMULA,
+
+          Holiday_Value: this.companydata.OT_HOLIDAY_VLAUE,
+          Holiday_Formula: this.companydata.OT_HOLIDAY_FORMULA
+        });
+
         this.OnEntitychange({ target: { value: this.companydata.Business_Unit_Name_Id } });
         this.onBankChange({ target: { value: this.companydata.Bank_Id } });
 
@@ -684,6 +692,7 @@ export class CompanyeditComponent {
 
     if (this.CompanyAddForm.invalid) {
       this.CompanyAddForm.markAllAsTouched();
+      alert('Please fill all the required fields')
       return;
     }
 
@@ -716,10 +725,10 @@ export class CompanyeditComponent {
         Output_Date: "2",
         Work_Days_Based_On: formValue?.WorkDaysbased?.toString() ?? "",
         CTC: formValue?.CTC?.toString() ?? "",
-        Sourcing_Fee_Criteria_Type: "",
-        Sourcing_Fee: formValue?.SourcingOBApplicable?.toString() ?? "",
-        Absorption_Fee_Criteria_Type: "",
-        Absorption_Fee: "",
+        Sourcing_Fee_Criteria_Type: formValue?.SourcingOBApplicable?.toString() ?? "",
+        Sourcing_Fee: "0",
+        Absorption_Fee_Criteria_Type: formValue?.SourcingOBApplicable?.toString() ?? "",
+        Absorption_Fee: "0",
         Incentive_Type: formValue?.IncentiveType?.toString() ?? "",
         Is_PO_Applicable: formValue?.POApplicable?.toString() ?? "",
         Salary_SMS: formValue?.SalarySMS?.toString() ?? "",
@@ -835,24 +844,23 @@ export class CompanyeditComponent {
         BankCode: formValue?.BankCode?.toString() ?? "",
         BankAdviceId: formValue?.BankAdvice?.toString() ?? "0",
         Portal_Type: formValue?.Portal_Type ?? "",
-        OT_WEEK_DAY_TYPE: formValue.weekday_type ?? null,
-        OT_WEEK_DAY_VLAUE: formValue.Weekday_Value ?? '',
-        OT_WEEK_DAY_FORMULA: formValue.Weekday_Formula ?? '',
+        OT_WEEK_DAY_TYPE: Number(formValue.weekday_type) || 0,
+        OT_WEEK_DAY_VLAUE: String(formValue.Weekday_Value ?? ""),
+        OT_WEEK_DAY_FORMULA: String(formValue.Weekday_Formula ?? ""),
 
-        OT_NIGHT_SHIFT_TYPE: formValue.Nightshift_type ?? null,
-        OT_NIGHT_SHIFT_VLAUE: formValue.Nightshift_Value ?? '',
-        OT_NIGHT_SHIFT_FORMULA: formValue.Nightshift_Formula ?? '',
+        OT_NIGHT_SHIFT_TYPE: Number(formValue.Nightshift_type) || 0,
+        OT_NIGHT_SHIFT_VLAUE: String(formValue.Nightshift_Value ?? ""),
+        OT_NIGHT_SHIFT_FORMULA: String(formValue.Nightshift_Formula ?? ""),
 
-        OT_WEEKEND_TYPE: formValue.OT_weekend_type ?? null,
-        OT_WEEKEND_VLAUE: formValue.Weekend_Value ?? '',
-        OT_WEEKEND_FORMULA: formValue.Weekend_Formula ?? '',
+        OT_WEEKEND_TYPE: Number(formValue.OT_weekend_type) || 0,
+        OT_WEEKEND_VLAUE: String(formValue.Weekend_Value ?? ""),
+        OT_WEEKEND_FORMULA: String(formValue.Weekend_Formula ?? ""),
 
-        OT_HOLIDAY_TYPE: formValue.Holiday_type ?? null,
-        OT_HOLIDAY_VLAUE: formValue.Holiday_Value ?? '',
-        OT_HOLIDAY_FORMULA: formValue.Holiday_Formula ?? '',
-
-        Adhoc_Service_Fee: formValue.adhoc_service_fee ?? '',
-        Adhoc_Service_Formula: formValue.adhoc_service_formula ?? ''
+        OT_HOLIDAY_TYPE: Number(formValue.Holiday_type) || 0,
+        OT_HOLIDAY_VLAUE: String(formValue.Holiday_Value ?? ""),
+        OT_HOLIDAY_FORMULA: String(formValue.Holiday_Formula ?? ""),
+        Adhoc_Service_Fee: formValue.adhoc_service_fee ?? "",
+        Adhoc_Service_Formula: formValue.adhoc_service_formula ?? ""
       }
     };
     console.log('payload', JSON.stringify(payload));

@@ -58,6 +58,7 @@ export class EmployeeComponent {
   UploadedResponseSalary: any;
 
   @ViewChild('paginator') paginator!: MatPaginator;
+  empid: any;
   constructor(private dialog: MatDialog, @Inject(Pay_TOKEN) private service: IEmployeeservice, private decry: EncryptionService,
     private _sessionStoreage: SessionStorageService, private fb: FormBuilder) { }
 
@@ -114,7 +115,6 @@ export class EmployeeComponent {
     this.isLoading = true;
     this.isUploadGridVisible = true;
 
-    const form = this.employee.getRawValue();
     const Companyid = this.selectedCompanyId;
     const empid = this.empid || 0;
     this.service.search(Companyid, empid).subscribe({
