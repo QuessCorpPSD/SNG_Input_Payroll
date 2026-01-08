@@ -69,8 +69,8 @@ export class CompanyaddComponent {
   showPopupvalidate = false;
   showPopup = false;
 
-  constructor(private fb: FormBuilder, private dialogRef: MatDialogRef<CompanyaddComponent>, 
-    private dialog: MatDialog, private company: CompanyserviceService, 
+  constructor(private fb: FormBuilder, private dialogRef: MatDialogRef<CompanyaddComponent>,
+    private dialog: MatDialog, private company: CompanyserviceService,
     private _decrypt: EncryptionService, private _sessionStoreage: SessionStorageService) { }
   get invoiceType() {
     return this.CompanyAddForm.get('InvoiceType')?.value;
@@ -158,6 +158,7 @@ export class CompanyaddComponent {
       IncentiveType: [''],
       QdemyCharges: [''],
       QdemyChargesValue: ['1'],
+      Portal_Type: [''],
       POApplicable: ['1'],
       TechSubscriptionCharges: [''],
       TechSubscriptionChargesvalue: ['1'],
@@ -214,7 +215,25 @@ export class CompanyaddComponent {
       DGPSF: ['', Validators.required],
       Sector: ['', Validators.required],
       ReimbrusementDate: [''],
-      ReimbursementType: ['']
+      ReimbursementType: [''],
+      OT_weekend_type: [''],
+      Weekend_Value: [{ value: '', disabled: true }],
+      Weekend_Formula: [{ value: '', disabled: true }],
+      weekday_type: [''],
+      Weekday_Value: [{ value: '', disabled: true }],
+      Weekday_Formula: [{ value: '', disabled: true }],
+      Nightshift_type: [''],
+      Nightshift_Value: [{ value: '', disabled: true }],
+      Nightshift_Formula: [{ value: '', disabled: true }],
+      Holiday_type: [''],
+      Holiday_Value: [{ value: '', disabled: true }],
+      Holiday_Formula: [{ value: '', disabled: true }],
+      adhoc_service_fee: [''],
+      adhoc_service_formula: [''],
+      Invoicebilling_type: [''],
+      Po_days_daily: ['']
+
+
     })
     this.CompanyAddForm.get('AccountNo')?.disable();
     this.CompanyAddForm.get('SwiftCode')?.disable();
@@ -223,7 +242,130 @@ export class CompanyaddComponent {
     this.CompanyAddForm.get('BranchCode')?.disable();
     this.CompanyAddForm.get('BankCode')?.disable();
     this.CompanyAddForm.get('CompanyCode')?.disable();
+    this.CompanyAddForm.get('OT_weekend_type')?.valueChanges.subscribe(value => {
+      const valueCtrl = this.CompanyAddForm.get('Weekend_Value');
+      const formulaCtrl = this.CompanyAddForm.get('Weekend_Formula');
+
+      valueCtrl?.reset();
+      formulaCtrl?.reset();
+
+      valueCtrl?.clearValidators();
+      formulaCtrl?.clearValidators();
+
+      valueCtrl?.disable();
+      formulaCtrl?.disable();
+
+      if (value === '1') { // Fixed
+        valueCtrl?.enable();
+        valueCtrl?.setValidators(Validators.required);
+      }
+
+      if (value === '2') { // Formula
+        formulaCtrl?.enable();
+        formulaCtrl?.setValidators(Validators.required);
+      }
+
+      valueCtrl?.updateValueAndValidity();
+      formulaCtrl?.updateValueAndValidity();
+    });
+
+    this.CompanyAddForm.get('weekday_type')?.valueChanges.subscribe(value => {
+      const valueCtrl = this.CompanyAddForm.get('Weekday_Value');
+      const formulaCtrl = this.CompanyAddForm.get('Weekday_Formula');
+
+      valueCtrl?.reset();
+      formulaCtrl?.reset();
+
+      valueCtrl?.clearValidators();
+      formulaCtrl?.clearValidators();
+
+      valueCtrl?.disable();
+      formulaCtrl?.disable();
+
+      if (value === '1') {
+        valueCtrl?.enable();
+        valueCtrl?.setValidators(Validators.required);
+      }
+
+      if (value === '2') {
+        formulaCtrl?.enable();
+        formulaCtrl?.setValidators(Validators.required);
+      }
+
+      valueCtrl?.updateValueAndValidity();
+      formulaCtrl?.updateValueAndValidity();
+    });
+
+    this.CompanyAddForm.get('Nightshift_type')?.valueChanges.subscribe(value => {
+      const valueCtrl = this.CompanyAddForm.get('Nightshift_Value');
+      const formulaCtrl = this.CompanyAddForm.get('Nightshift_Formula');
+
+      valueCtrl?.reset();
+      formulaCtrl?.reset();
+
+      valueCtrl?.clearValidators();
+      formulaCtrl?.clearValidators();
+
+      valueCtrl?.disable();
+      formulaCtrl?.disable();
+
+      if (value === '1') {
+        valueCtrl?.enable();
+        valueCtrl?.setValidators(Validators.required);
+      }
+
+      if (value === '2') {
+        formulaCtrl?.enable();
+        formulaCtrl?.setValidators(Validators.required);
+      }
+
+      valueCtrl?.updateValueAndValidity();
+      formulaCtrl?.updateValueAndValidity();
+    });
+
+    this.CompanyAddForm.get('Holiday_type')?.valueChanges.subscribe(value => {
+      const valueCtrl = this.CompanyAddForm.get('Holiday_Value');
+      const formulaCtrl = this.CompanyAddForm.get('Holiday_Formula');
+
+      valueCtrl?.reset();
+      formulaCtrl?.reset();
+
+      valueCtrl?.clearValidators();
+      formulaCtrl?.clearValidators();
+
+      valueCtrl?.disable();
+      formulaCtrl?.disable();
+
+      if (value === '1') {
+        valueCtrl?.enable();
+        valueCtrl?.setValidators(Validators.required);
+      }
+
+      if (value === '2') {
+        formulaCtrl?.enable();
+        formulaCtrl?.setValidators(Validators.required);
+      }
+
+      valueCtrl?.updateValueAndValidity();
+      formulaCtrl?.updateValueAndValidity();
+    });
+
   }
+  allowDecimalOnly(event: any) {
+    const input = event.target;
+    input.value = input.value.replace(/[^0-9.]/g, '');
+
+    // allow only ONE decimal point
+    const parts = input.value.split('.');
+    if (parts.length > 2) {
+      input.value = parts[0] + '.' + parts.slice(1).join('');
+    }
+
+    this.CompanyAddForm.get('adhoc_service_fee')?.setValue(input.value, {
+      emitEvent: false
+    });
+  }
+
 
   BindGetCompanyName() {
     this.company.getCompanySearch().subscribe({
@@ -510,9 +652,29 @@ export class CompanyaddComponent {
         Branch: formValue?.Branch ?? "",
         BranchCode: formValue?.BranchCode ?? "",
         BankCode: formValue?.BankCode ?? "",
-        BankAdviceId: formValue?.BankAdvice ?? ""
+        BankAdviceId: formValue?.BankAdvice ?? "",
+        Portal_Type: formValue?.Portal_Type ?? "",
+        OT_WEEK_DAY_TYPE: formValue.weekday_type ?? null,
+        OT_WEEK_DAY_VLAUE: formValue.Weekday_Value ?? '',
+        OT_WEEK_DAY_FORMULA: formValue.Weekday_Formula ?? '',
+
+        OT_NIGHT_SHIFT_TYPE: formValue.Nightshift_type ?? null,
+        OT_NIGHT_SHIFT_VLAUE: formValue.Nightshift_Value ?? '',
+        OT_NIGHT_SHIFT_FORMULA: formValue.Nightshift_Formula ?? '',
+
+        OT_WEEKEND_TYPE: formValue.OT_weekend_type ?? null,
+        OT_WEEKEND_VLAUE: formValue.Weekend_Value ?? '',
+        OT_WEEKEND_FORMULA: formValue.Weekend_Formula ?? '',
+
+        OT_HOLIDAY_TYPE: formValue.Holiday_type ?? null,
+        OT_HOLIDAY_VLAUE: formValue.Holiday_Value ?? '',
+        OT_HOLIDAY_FORMULA: formValue.Holiday_Formula ?? '',
+
+        Adhoc_Service_Fee: formValue.adhoc_service_fee ?? '',
+        Adhoc_Service_Formula: formValue.adhoc_service_formula ?? ''
       }
     };
+    console.log('payload', JSON.stringify(payload))
     this.company.createCompany(payload).subscribe({
       next: res => {
         const msg = res.Data.message
