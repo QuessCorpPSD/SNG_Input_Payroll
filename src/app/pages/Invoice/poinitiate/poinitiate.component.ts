@@ -23,6 +23,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AlertpopupComponent } from '../../../common/alertpopup/alertpopup.component';
 import * as XLSX from 'xlsx';
 import { finalize } from 'rxjs';
+import * as FileSaver from 'file-saver';
 
 export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOKEN');
 @Component({
@@ -59,6 +60,7 @@ export class POInitiateComponent {
   companyUI: any;
   showPopup: boolean = false;
   popupMessage: string = "";
+  datatable: any;
 
   displayColumns = ['action', 'serial_No', 'map_name', 'CTC', 'head_Count', 'input_Number', 'group_Name', 'service_Charge_Type', 'address_Code', 'msP_Amount']
   constructor(@Inject(Invoice_TOKEN) private _invoiceService: IInvoiceRepository, private _decrypt: EncryptionService,
@@ -199,15 +201,35 @@ export class POInitiateComponent {
 
     this._invoiceService.RequestPOInvoice(this.selectedCompanyId, this.payPeriod.payfrequencyid).subscribe({
       next: res => {
-        if (res.Data.file != "No") {
-          this.downloadExcelFromBase64(res.Data.file, res.Data.fileName)
-        }
+         this.datatable = res.Data.data.Table0;
+          console.table(this.datatable);
+          if (this.datatable && Array.isArray(this.datatable) && this.datatable.length > 0) {
+            this.downloadExcel(this.datatable, "invoice_request");
+            this.isLoading = false;
+          } else {
+            alert("No data found");
+            this.isLoading = false;
+          }
       },
       error: err => {
         console.log(err);
       }
     })
   }
+
+   downloadExcel(data: any[], templateId: string): void {
+      //console.log("export");
+      const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
+      const workbook: XLSX.WorkBook = {
+        Sheets: { 'Sheet1': worksheet },
+        SheetNames: ['Sheet1']
+      };
+  
+      const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+      const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+      const fileName = `${templateId}.xlsx`;
+      FileSaver.saveAs(blob, fileName);
+    }
 
   toggleRow(event) {
 
