@@ -45,11 +45,26 @@ export class EmployeeInformationComponent {
 
     this.rowData = data.rowData;
   }
-  formatDate(date: string): string {
-    const [day, month, year] = date.split('-');
-    return `${year}-${month}-${day}`; // Converts DD-MM-YYYY to YYYY-MM-DD
-  }
+  
+  formatDate(date?: string): string {
+    if (!date) {
+      return '';
+    }
 
+    // If ISO format like 1753-01-01T00:00:00
+    if (date.includes('T')) {
+      return date.split('T')[0];
+    }
+
+    // If DD-MM-YYYY
+    const parts = date.split('-');
+    if (parts.length !== 3) {
+      return '';
+    }
+
+    const [day, month, year] = parts;
+    return `${year}-${month}-${day}`;
+  }
 
   ngOnInit(): void {
     const json = this._sessionStoreage.getItem('UserProfile');
@@ -97,8 +112,6 @@ export class EmployeeInformationComponent {
     this.BindSprstatus();
     this.BindReligion();
   }
-
-
 
   BindSprstatus() {
     this.service.Getsprstatus().subscribe({
