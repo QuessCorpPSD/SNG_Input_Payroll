@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Inject, InjectionToken, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SessionStorageService } from '../../Shared/SessionStorageService';
-import { RouterModule,RouterLink, RouterOutlet, RouterLinkActive, Router } from '@angular/router';
+import { RouterModule, RouterLink, RouterOutlet, RouterLinkActive, Router } from '@angular/router';
 import { CompanyComponent } from '../../common/company/company.component';
 import { PayPeriodComponent } from '../../common/payperiod/payperiod.component';
 import { GroupnameComponent } from '../../common/groupname/groupname.component';
@@ -10,11 +10,14 @@ import { InputTypeComponent } from '../../common/input-type/input-type.component
 import { CityComponent } from '../../common/city/city.component';
 import { Cityclass, Company, Groupnameclass, InputTypeclass, Mapnameclass, Payperiodclass } from '../../Models/Common';
 import { OnboardingStateService } from '../../onboarding-state.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'payrollinput',
   standalone: true,
-  imports: [CommonModule, RouterModule, CompanyComponent, PayPeriodComponent, GroupnameComponent, MapnameComponent, InputTypeComponent, CityComponent  ],
+  imports: [CommonModule, RouterModule, CompanyComponent, PayPeriodComponent,
+    GroupnameComponent, MapnameComponent, InputTypeComponent, CityComponent,
+    FormsModule],
   templateUrl: './payrollinput.component.html',
   styleUrl: './payrollinput.component.css'
 })
@@ -23,15 +26,18 @@ export class PayrollinputComponent implements OnInit {
   @Input() visibleDropdowns: number[] = [];
   @Input() showSearchButton: boolean = false;
   @Input() payPeriodTypefromParent: string = "";
+  @Input() showDateRange: boolean = false;
 
   @Output() companyUI = new EventEmitter<Company>();
   @Output() payperiodUI = new EventEmitter<Payperiodclass>();
   @Output() mapnameUI = new EventEmitter<Mapnameclass>();
   @Output() inputTypeUI = new EventEmitter<InputTypeclass>();
-  @Output() searchClicked = new EventEmitter<void>();
+  @Output() searchClicked = new EventEmitter<any>();
   @Output() sitenameUI = new EventEmitter<Groupnameclass>();
   @Output() citynameUI = new EventEmitter<Cityclass>();
   @Output() payPeriodType = new EventEmitter<string>();
+  @Output() dateRangeChanged = new EventEmitter<{ fromDate: string; toDate: string }>();
+
 
   selectedCC?: number;
   selectedCN?: string;
@@ -51,6 +57,8 @@ export class PayrollinputComponent implements OnInit {
   payPeriod: any;
   mapName: any;
   sitename: any;
+  fromDate!: string;
+  toDate!: string;
 
   ngOnInit(): void {
     this.payPeriodTypetoChild = this.payPeriodTypefromParent;
@@ -91,6 +99,16 @@ export class PayrollinputComponent implements OnInit {
     //console.log(mapname);
   }
   searchClick() {
-    this.searchClicked.emit();
+    this.searchClicked.emit({
+      fromDate: this.fromDate,
+      toDate: this.toDate
+    });
+  }
+
+  onDateChange() {
+    this.dateRangeChanged.emit({
+      fromDate: this.fromDate,
+      toDate: this.toDate
+    });
   }
 }
