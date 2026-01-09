@@ -1,0 +1,23 @@
+<div style="display: flex; gap: 10px;">
+    <!-- Bonus Payout -->
+    <div (click)="selectMenu('BankDetails')" style="cursor: pointer; padding: 10px;">
+        <div [style.color]="activeMenu === 'BankDetails' ? '#302CB3' : '#A0A0A0'"
+            style="font-size: 14px; font-family: Montserrat;">
+            Bank Details Upload
+        </div>
+        <div style="height: 2px;" [style.background]="activeMenu === 'BankDetails' ? '#302CB3' : 'transparent'"></div>
+    </div>
+    <!-- Deduction Payout -->
+    <div (click)="selectMenu('BankApproval')" style="cursor: pointer; padding: 10px;">
+        <div [style.color]="activeMenu === 'BankApproval' ? '#302CB3' : '#A0A0A0'"
+            style="font-size: 14px; font-family: Montserrat;">
+            Bank Approval
+        </div>
+        <div style="height: 2px;" [style.background]="activeMenu === 'BankApproval' ? '#302CB3' : 'transparent'">
+        </div>
+    </div>
+</div>
+<div>
+    <bankdetails *ngIf="activeMenu === 'BankDetails'"></bankdetails>
+    <bankapproval *ngIf="activeMenu === 'BankApproval'"></bankapproval>
+</div>

@@ -1,1 +1,23 @@
-<p>yearly-payout works!</p>
+<div style="display: flex; gap: 10px;">
+    <!-- Bonus Payout -->
+    <div (click)="selectMenu('bonus')" style="cursor: pointer; padding: 10px;">
+        <div [style.color]="activeMenu === 'bonus' ? '#302CB3' : '#A0A0A0'"
+            style="font-size: 14px; font-family: Montserrat;">
+            Bonus Payout
+        </div>
+        <div style="height: 2px;" [style.background]="activeMenu === 'bonus' ? '#302CB3' : 'transparent'"></div>
+    </div>
+    <!-- Deduction Payout -->
+    <div (click)="selectMenu('deduction')" style="cursor: pointer; padding: 10px;">
+        <div [style.color]="activeMenu === 'deduction' ? '#302CB3' : '#A0A0A0'"
+            style="font-size: 14px; font-family: Montserrat;">
+            Deduction Payout
+        </div>
+        <div style="height: 2px;" [style.background]="activeMenu === 'deduction' ? '#302CB3' : 'transparent'">
+        </div>
+    </div>
+</div>
+<div>
+    <bonuspayout *ngIf="activeMenu === 'bonus'"></bonuspayout>
+    <deductionpayout *ngIf="activeMenu === 'deduction'"></deductionpayout>
+</div>

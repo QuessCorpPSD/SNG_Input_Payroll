@@ -59,9 +59,21 @@ export class CreditnotebalancereportComponent {
   ngOnInit() {
     const today = new Date().toISOString().split('T')[0];
     this.StartDate = today;
-    this.EndDate = today;
+    this.EndDate =today;
   }
 
+  
+  onStartChange(event: any) {
+    this.StartDate = event.target.value;
+    // const [year, month, day] = inputDate.split("-");
+    // this.StartDate = `${day}/${month}/${year}`;
+  }
+
+  onEndChange(event: any) {
+    this.EndDate = event.target.value;
+    // const [year, month, day] = inputDateend.split("-");
+    // this.EndDate = `${day}/${month}/${year}`;
+  }
   exportToExcel(): void {
 
     if (!this.selectedCompanyId) {
@@ -73,14 +85,15 @@ export class CreditnotebalancereportComponent {
 
     const payload = {
       CompanyId: this.selectedCompanyId,
-      FromDate: this.StartDate?.split('-').reverse().join('-'),
-      ToDate: this.EndDate?.split('-').reverse().join('-')
+      FromDate: this.StartDate,
+      ToDate: this.EndDate
     }
 
     this.balanceReprort.Exporttoexcel(payload).subscribe({
       next: (res) => {
         try {
-          const jsonData = res.Data.data;
+          console.log(res);
+          const jsonData = res.Data.data.Table0;
           const msg = res.Data.message;
 
           if (!jsonData || jsonData.length === 0) {
