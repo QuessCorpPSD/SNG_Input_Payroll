@@ -45,6 +45,7 @@ export class SalaryadvacerequestComponent {
   dynamicColumns: string[] = [];
   @ViewChild(MatSort) sort!: MatSort;
   salarys: any;
+  isLoading=false;
 
   constructor(@Inject(Salary_TOKEN) private service: SalaryadvancerequestService, private decry: EncryptionService,
     private _sessionStoreage: SessionStorageService, private dialog: MatDialog,) { }
@@ -111,14 +112,15 @@ export class SalaryadvacerequestComponent {
     this.service.Search(Companyid, PayPeriod).subscribe({
       next: (res) => {
         console.log('API Response:', res.Data);
-        this.salary = res.Data;
-        this.salarys = res.Data.message;
+        this.salary = res.Data.data.Table0;
+        // this.salarys = res.Data.message;
 
-        if (this.salarys) {
-          alert(this.salarys)
-        }
+        // if (this.salarys) {
+        //   alert(this.salarys)
+        // }
         if (this.salary && this.salary.length > 0) {
           this.dataSource = new MatTableDataSource(this.salary);
+          console.log(this.dataSource);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
           this.uploadDisplayedColumns = ['Action', 'SNo', 'CompanyCode', 'Pay Period', 'Employee Code', 'Employee Name', 'Pay Code', 'Amount', 'Salary Advance Status', 'Request Type', 'No of Installments'];
@@ -221,6 +223,7 @@ export class SalaryadvacerequestComponent {
     fileInput.click();
   }
   onFileChange(event: Event): void {
+    this.isLoading=true;
     const input = event.target as HTMLInputElement;
     const file = input?.files?.[0];
 
