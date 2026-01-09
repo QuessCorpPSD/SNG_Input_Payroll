@@ -35,6 +35,7 @@ export class SalaryadvancereportComponent {
   payperiodId: any;
   payperiods: string = '';
   selectedCompanyCode: any;
+  isLoading=false;
   handleCompanyEvent(company) {
     this.selectedCompanyId = company.companyId;
     this.selectedCompanyCode = company.companyCode
@@ -76,7 +77,7 @@ export class SalaryadvancereportComponent {
       alert('Please select a pay period.');
       return;
     }
-
+    this.isLoading=true;
     const Companyid = this.selectedCompanyId;
     const PayPeriod = this.payperiodId;
 
@@ -86,24 +87,17 @@ export class SalaryadvancereportComponent {
       next: (res) => {
         try {
           console.log('🔍 API Response:', res);
-
-          const jsonData = res?.Data;
-
-          // ✅ Check if Data is null or empty
+          const jsonData = res?.Data.data.Table0;
+          
           if (!jsonData) {
-            // show meaningful alert if backend returns message
-            const msg =
-              res?.Data && res.Data.trim() !== ''
-                ? res.Data
-                : 'No data found or server returned empty response.';
-
-            alert(msg);
+            alert('No data found.');
+            this.isLoading=false;
             return;
           }
 
-          // ✅ Check if Data is not an array or empty
           if (!Array.isArray(jsonData) || jsonData.length === 0) {
             alert('No data available for the selected company and pay period.');
+            this.isLoading=false;
             return;
           }
 
@@ -117,14 +111,17 @@ export class SalaryadvancereportComponent {
           const fileName = `salary_Advancereport_${timestamp}.xlsx`;
 
           XLSX.writeFile(wb, fileName);
+          this.isLoading=false;
         } catch (err) {
           console.error('Error exporting to Excel:', err);
           alert('An error occurred while exporting data.');
+          this.isLoading=false;
         }
       },
       error: (err) => {
         console.error('Error loading data for export', err);
         alert('Failed to load data from server.');
+        this.isLoading=false;
       },
     });
   }
