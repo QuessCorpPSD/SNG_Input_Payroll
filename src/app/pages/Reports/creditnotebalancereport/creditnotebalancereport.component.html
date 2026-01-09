@@ -13,11 +13,13 @@
                 </div>
                 <div class="col-md-3">
                     <label class="form-label text-muted small">Start Date</label>
-                    <input type="date" class="form-control" [ngModel]='StartDate' />
+                    <input type="date"  [(ngModel)]="StartDate"  class="w-100 custom-height rounded-1 select-drop" appearance="outline"
+                        style="background-color: white;height:30px;" (change)="onStartChange($event)" />
                 </div>
                 <div class="col-md-3">
                     <label class="form-label text-muted small">End Date</label>
-                    <input type="date" class="form-control" [ngModel]='EndDate' />
+                    <input type="date" [(ngModel)]="EndDate"  class="w-100 custom-height rounded-1 select-drop" appearance="outline"
+                        style="background-color: white;height:30px;" (change)="onEndChange($event)" />
                 </div>
                 <div class="col-md-2" style="padding-top: 25px;">
                     <div class="d-flex gap-2">
