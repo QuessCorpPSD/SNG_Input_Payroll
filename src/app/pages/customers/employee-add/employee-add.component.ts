@@ -101,6 +101,19 @@ export class EmployeeAddComponent {
     return `${year}-${month}-${day}`; // Converts DD-MM-YYYY to YYYY-MM-DD
   }
 
+  formatDateTime(date: string): string {
+    return date.split('T')[0];
+  }
+
+  normalizeBloodGroup(value: string): string | null {
+    if (!value) return null;
+
+    return value
+      .replace('ve', '')  
+      .replace('VE', '')
+      .trim();
+  }
+
   ngOnInit(): void {
     const json = this._sessionStoreage.getItem('UserProfile');
     if (json) {
@@ -110,8 +123,8 @@ export class EmployeeAddComponent {
     }
 
     this.selectedCompanyId = this.rowData.Company_Id;
-
-    // Initialize the form
+    console.log("row",this.rowData)
+        // Initialize the form
     this.employeeForm = this.fb.group({
       empid: [this.rowData.Employee_Code, Validators.required],
       CompanyCode: [this.rowData.Company_Code, Validators.required],
@@ -140,20 +153,20 @@ export class EmployeeAddComponent {
       usergroup: [this.rowData.User_Group_Id || ''],
       designation: [this.rowData.Designation_Id || ''],
       ikyalocation: [this.rowData.IKYA_Location || ''],
-      DateOfResignation: [this.rowData.Resignation_Date ? this.formatDate(this.rowData.Resignation_Date) : ''],
+      DateOfResignation: [this.rowData.Resignation_Date ? this.formatDateTime(this.rowData.Resignation_Date) : ''],
       DMSId: [this.rowData.DMS_Id || ''],
       Billingdesignation: [this.rowData.Billing_Designation_Name || ''],
       FandFPayPeriod: [this.rowData.F_Resign_Period || ''],
       ETDSSequence: [this.rowData.ETDS_Sequence || ''],
       PT: [this.rowData.PT || ''],
       ResignPayPeriod: [this.rowData.Resign_Period || ''],
-      Contractexpirydate: [this.rowData.Contract_Expiry_Date ? this.formatDate(this.rowData.Contract_Expiry_Date) : ''],
+      Contractexpirydate: [this.rowData.Contract_Expiry_Date ? this.formatDateTime(this.rowData.Contract_Expiry_Date) : ''],
       Active: [this.rowData.EActive === true ? true : false, Validators.required],
-      Lastworkingdays: [this.rowData.Last_Working_Day || ''],
+      Lastworkingdays: [this.rowData.Last_Working_Day ? this.formatDateTime(this.rowData.Last_Working_Day) : ''],
       groupname: [Number(this.rowData.Group_Detail_Id) || 0],
       Metrocity: [this.rowData.Is_Metro_City || ''],
       blacklisted: [this.rowData.is_black_listed === true ? true : false],
-      ROL: [this.rowData.Abscond_Reporting_Date || ''],
+      ROL: [this.rowData.Reason_Of_Leaving || ''],
       Hiringstatus: [this.rowData.Hiring_Status || ''],
       PF: [this.rowData.Is_PF_Applicable === true ? true : false, Validators.required || ''],
       Reportmanager: [this.rowData.Report_Manager || ''],
@@ -161,22 +174,22 @@ export class EmployeeAddComponent {
       ESI: [this.rowData.ESI_Number || ''],
       blank: [''],
       Reportheademail: [this.rowData.Reporting_Head_Email || ''],
-      Rejoineedate: [this.rowData.Rejoining_Date ? this.formatDate(this.rowData.Rejoining_Date) : ''],
+      Rejoineedate: [this.rowData.Rejoining_Date ? this.formatDateTime(this.rowData.Rejoining_Date) : ''],
       Insurance: [this.rowData.Is_Insurance_Applicable === true ? true : false],
       Businesshead: [this.rowData.Business_Head || ''],
       Rejoinmonth: [this.rowData.Rejoin_Month || ''],
       stoppayment: [this.rowData.Stop_Payment === true ? true : false],
       axpertid: [this.rowData.Axpert_Id || ''],
-      bloodgroup: [this.rowData.Blood_Group || ''],
+      bloodgroup: [this.normalizeBloodGroup(this.rowData.Blood_Group) || ''],
       employmenttype: [this.rowData.EMPLOYMENT_TYPE || ''],
       TaxRegime: [this.rowData.New_Tax_Regime || ''],
       Vertical: [this.rowData.Vertical_Name || ''],
       Product: [this.rowData.ProductId || ''],
       Channel: [this.rowData.ChannelId || ''],
       subvertical: [this.rowData.SubVerticalId || ''],
-      Abscondreportingdate: [this.rowData.Abscond_Reporting_Date ? this.formatDate(this.rowData.Abscond_Reporting_Date) : ''],
+      Abscondreportingdate: [this.rowData.Abscond_Reporting_Date ? this.formatDateTime(this.rowData.Abscond_Reporting_Date) : ''],
       DOD: [this.rowData.Date_Of_Death ? this.formatDate(this.rowData.Date_Of_Death) : ''],
-      invoicelegalentity: [this.rowData.legalEntityId, Validators.required],
+      invoicelegalentity: [this.rowData.Invoice_Legal_Entity, Validators.required],
     });
 
     this.BindSprstatus();
@@ -250,9 +263,7 @@ export class EmployeeAddComponent {
     this.service.GetBusinessunit().subscribe({
       next: (res) => {
         this.Businessunit = res.Data.data.Table0;
-      },
-      error: (err) => {
-        console.error('Error fetching material status', err);
+      console.log('business',this.Businessunit)
       }
     });
   }
@@ -316,10 +327,7 @@ export class EmployeeAddComponent {
     this.service.GetBloodGroup().subscribe({
       next: (res) => {
         this.Bloodgroup = res.Data?.data ?? [];
-      },
-      error: (err) => {
-        console.error("Error fetching blood group", err);
-        this.Bloodgroup = [];
+
       }
     });
 
