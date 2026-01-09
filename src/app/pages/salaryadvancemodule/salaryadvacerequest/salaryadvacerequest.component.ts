@@ -45,7 +45,7 @@ export class SalaryadvacerequestComponent {
   dynamicColumns: string[] = [];
   @ViewChild(MatSort) sort!: MatSort;
   salarys: any;
-  isLoading=false;
+  isLoading = false;
 
   constructor(@Inject(Salary_TOKEN) private service: SalaryadvancerequestService, private decry: EncryptionService,
     private _sessionStoreage: SessionStorageService, private dialog: MatDialog,) { }
@@ -105,6 +105,7 @@ export class SalaryadvacerequestComponent {
       alert('Please select Payperiod')
       return;
     }
+    this.isLoading = true;
     const Companyid = this.selectedCompanyId;
     const PayPeriod = this.payperiodId;
 
@@ -112,24 +113,24 @@ export class SalaryadvacerequestComponent {
     this.service.Search(Companyid, PayPeriod).subscribe({
       next: (res) => {
         console.log('API Response:', res.Data);
-        this.salary = res.Data.data.Table0;
-        // this.salarys = res.Data.message;
-
-        // if (this.salarys) {
-        //   alert(this.salarys)
-        // }
-        if (this.salary && this.salary.length > 0) {
+        if (res.StatusCode === 200 && Array.isArray(res.Data.data.Table0) && res.Data.data.Table0.length > 0) {
+          this.salary = res.Data.data.Table0;
           this.dataSource = new MatTableDataSource(this.salary);
           console.log(this.dataSource);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
           this.uploadDisplayedColumns = ['Action', 'SNo', 'CompanyCode', 'Pay Period', 'Employee Code', 'Employee Name', 'Pay Code', 'Amount', 'Salary Advance Status', 'Request Type', 'No of Installments'];
-        } else {
+          this.isLoading = false;
+        }
+        else {
           this.dataSource.data = [];
+          alert("No Records Found");
+          this.isLoading = false;
         }
       },
       error: (err) => {
         console.error('Error loading salary release data', err);
+        this.isLoading = false;
       },
     });
   }
@@ -145,7 +146,7 @@ export class SalaryadvacerequestComponent {
 
       return;
     }
-
+    this.isLoading = true;
     const Companyid = this.selectedCompanyId;
     const PayPeriod = this.payperiodId;
 
@@ -161,10 +162,11 @@ export class SalaryadvacerequestComponent {
 
           if (this.salarys) {
             alert(this.salarys);
+            this.isLoading = false;
           }
 
           if (!jsonData || !Array.isArray(jsonData) || jsonData.length === 0) {
-
+            this.isLoading = false;
             return;
           }
 
@@ -184,11 +186,13 @@ export class SalaryadvacerequestComponent {
 
         } catch (err) {
           console.error('Error exporting to Excel:', err);
+          this.isLoading = false;
 
         }
       },
       error: (err) => {
         console.error('Error loading data for export', err);
+        this.isLoading = false;
       },
     });
   }
@@ -223,7 +227,7 @@ export class SalaryadvacerequestComponent {
     fileInput.click();
   }
   onFileChange(event: Event): void {
-    this.isLoading=true;
+    this.isLoading = true;
     const input = event.target as HTMLInputElement;
     const file = input?.files?.[0];
 
@@ -241,109 +245,60 @@ export class SalaryadvacerequestComponent {
 
     this.service.BulkPOUpload(formData).subscribe({
       next: (res) => {
-        console.log('📥 API Response:', res);
+        this.isLoading = false;
 
-        // ✅ handle case when Data is null
-        if (!res || !res.Data) {
-          console.warn('ℹ️ No data returned from server yet.');
-          alert('Upload request processed. Server did not return any data.');
+        if (!res?.Data) {
+          alert('No data returned from server.');
           return;
         }
 
-        const response = res.Data.response;
+        const responseMessage = res.Data.response;
 
-        // ✅ Defensive check before accessing response
-        if (response && response.includes("Row(s) Uploaded Successfully.")) {
+        // ✅ Success case
+        if (responseMessage?.includes('Rows Uploaded Successfully')) {
           alert('✅ Rows uploaded successfully.');
           return;
         }
 
-        const { parsed, msg } = this.tryParseResponse(response);
+        let errorList: any[] = [];
 
-        const successMsg = 'Data uploaded successfully.';
-        const successMatch =
-          (Array.isArray(parsed) && parsed[0]?.Message?.trim() === successMsg) ||
-          (parsed && typeof parsed === 'object' && parsed?.Message?.trim() === successMsg);
-
-        if (res?.StatusCode === 200 && successMatch) {
-          alert('✅ Data uploaded successfully.');
-          return;
-        }
-
-        if (res?.StatusCode === 200 && msg?.trim() === 'Failed to import.') {
-          const rawErr = res.Data.errors?.[0];
-          let errorArray: any[] = [];
-
+        if (Array.isArray(res.Data.errors) && res.Data.errors.length > 0) {
           try {
-            if (typeof rawErr === 'string') {
-              const tryJson = JSON.parse(rawErr);
-              errorArray = Array.isArray(tryJson) ? tryJson : [tryJson];
-            } else if (Array.isArray(rawErr)) {
-              errorArray = rawErr;
-            } else if (rawErr) {
-              errorArray = [rawErr];
-            }
-          } catch {
-            errorArray = rawErr ? [{ Error_Message: String(rawErr) }] : [];
+            // errors[0] is a JSON string → parse it
+            errorList = JSON.parse(res.Data.errors[0]);
+          } catch (e) {
+            console.error('Error parsing error messages', e);
           }
+        }
 
-          const exportData = errorArray.map((item: any) => ({
-            Error_Message: item?.Error_Message || ''
-          }));
-
-          const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
-          const workbook: XLSX.WorkBook = {
-            Sheets: { ErrorMessages: worksheet },
-            SheetNames: ['ErrorMessages']
-          };
-          XLSX.writeFile(workbook, 'ErrorMessages_salaryadvancerelease.xlsx');
-
+        if (errorList.length === 0) {
+          alert('Upload failed but no detailed errors found.');
           return;
         }
 
-        // ✅ Fallback if no specific case matched
-        const fallback =
-          msg ||
-          (Array.isArray(parsed) ? JSON.stringify(parsed) :
-            (parsed && typeof parsed === 'object' && parsed.Error_Message) ? parsed.Error_Message :
-              (parsed ? JSON.stringify(parsed) : ''));
+        const excelData = errorList.map((e, index) => ({
+          SlNo: index + 1,
+          ErrorMessage: e.Error_Message
+        }));
 
-        if (fallback) {
-          alert(fallback);
-        } else {
-          // ⚙️ Handle case where API returns message but no data (your current case)
-          if (res?.Message) {
-            alert(`ℹ️ ${res.Message}`);
-          } else {
-            alert('Error while processing response.');
-          }
-        }
+        const worksheet: XLSX.WorkSheet =
+          XLSX.utils.json_to_sheet(excelData);
 
+        const workbook: XLSX.WorkBook = {
+          Sheets: { Errors: worksheet },
+          SheetNames: ['Errors']
+        };
+
+        XLSX.writeFile(workbook, 'ErrorMessages_salaryadvancerelease.xlsx');
       },
+
       error: (err) => {
+        this.isLoading = false;
         console.error('❌ Upload failed', err);
-        alert('Upload failed due to a network or server error.');
+        alert('Upload failed due to a server or network error.');
       }
     });
-  }
 
-  tryParseResponse(r: any): { parsed: any; msg: string } {
-    if (r == null) return { parsed: null, msg: '' };
-
-    if (Array.isArray(r)) return { parsed: r, msg: '' };
-    if (typeof r === 'object') return { parsed: r, msg: '' };
-
-    // string
-    if (typeof r === 'string') {
-      try {
-        const p = JSON.parse(r);
-        return { parsed: p, msg: '' };
-      } catch {
-        return { parsed: null, msg: r };
-      }
-    }
-
-    return { parsed: null, msg: String(r) };
   }
 
 

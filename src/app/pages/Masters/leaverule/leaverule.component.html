@@ -54,7 +54,7 @@
                         <mat-icon>cloud_upload</mat-icon>
                     </button>
 
-                    <button *ngIf="(dataSource?.data?.length || 0) > 0"
+                    <button *ngIf="(dataSource.data.length || 0) > 0"
                         class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
                         (click)="ExportClick()" matTooltip="Excel Export">
                         <mat-icon>table_chart</mat-icon>
