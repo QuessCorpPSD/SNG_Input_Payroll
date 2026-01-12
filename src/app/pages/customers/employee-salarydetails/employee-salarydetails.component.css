@@ -130,8 +130,8 @@
     border-right: 1px solid #ddd;
     display: flex;
     justify-content: left;
-    align-items: center;
-    text-align: center;
+    /* align-items: center;
+    text-align: center; */
     padding: 0 10px;
     height: 30px;
     min-width: 140px;

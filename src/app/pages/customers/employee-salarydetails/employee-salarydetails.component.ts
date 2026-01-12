@@ -80,8 +80,7 @@ export class EmployeeSalarydetailsComponent {
     });
   }
   formatDate(date: string): string {
-    const [day, month, year] = date.split('-');
-    return `${year}-${month}-${day}`; // Converts DD-MM-YYYY to YYYY-MM-DD
+    return date.split('T')[0];
   }
 
   loadSalaryDetails() {
@@ -96,7 +95,7 @@ export class EmployeeSalarydetailsComponent {
       this.employeesalary.patchValue({
         empcode: first.Employee_Code ?? '',
         Effectivedate: this.formatDate(first.Effective_Date)?.substring(0, 10) ?? '',
-        appliedon: first.Applied_On ?? this.formatDate(first.Applied_On)?.substring(0, 10) ?? '',
+        appliedon:  this.formatDate(first.Applied_On)?.substring(0, 10) ?? '',
       });
 
       this.dataSource.data = salaryData;

@@ -23,6 +23,10 @@ export class EmployeeService implements IEmployeeservice {
     return this.http.get<APIResponse>(
       this.env.apiUrl + 'Employee/GetCategory');
   }
+  Getworkpass(): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      this.env.apiUrl + 'Employee/GetWorkpass');
+  }
   GetMaterialStatus(): Observable<APIResponse> {
     return this.http.get<APIResponse>(
       this.env.apiUrl + 'Employee/MaritalStatus');
@@ -150,7 +154,7 @@ export class EmployeeService implements IEmployeeservice {
       payload
     );
   }
-    GetInvoiceLegalEntity(): Observable<APIResponse> {
+  GetInvoiceLegalEntity(): Observable<APIResponse> {
     return this.http.get<APIResponse>(
       this.env.apiUrl + 'Employee/GetLegalEntity');
   }
