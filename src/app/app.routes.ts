@@ -461,6 +461,7 @@ export const routes: Routes = [
 
   { path: 'Login', loadComponent: () => import('./layout/loginmaster/loginmaster.component').then((c) => c.LoginmasterComponent) },
   { path: 'forgot', loadComponent: () => import('./pages/forgot/forgot.component').then((c) => c.ForgotComponent) },
+  { path: 'upfrontfinalapprove', loadComponent: () => import('./pages/SalaryReleaseNew/upfront-final-approve/upfront-final-approve.component').then((c) => c.UpfrontFinalApproveComponent) },
   { path: '**', redirectTo: 'Login', pathMatch: 'full' }
 
   //, canActivate: [AuthGuard]
