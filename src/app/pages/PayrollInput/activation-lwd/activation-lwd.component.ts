@@ -363,15 +363,15 @@ export class ActivationLWDComponent {
             next: res => {
               this.UploadedResponse = res;
 
-              if (this.UploadedResponse.statuscode === 200 && this.UploadedResponse.data.response === 'Import Successfully Done.') {
+              if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.Data.response === 'Import Successfully Done.') {
                 alert('Import Successfully Done.');
                 this.isLoading = false;
                 this.showPopup = true;
                 this.popupMessage = 'Import Successfully Done.';
               }
-              else if (this.UploadedResponse.statuscode === 200 && this.UploadedResponse.data.response === 'Failed to import.') {
+              else if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.Data.response === 'Failed to import.') {
 
-                const errorArray = JSON.parse(this.UploadedResponse.data.errors[0]);
+                const errorArray = JSON.parse(this.UploadedResponse.Data.errors[0]);
                 const exportData = errorArray.map((item: any) => ({
                   MESSAGE: item.MESSAGE || item.Message || ''
                 }));
@@ -384,7 +384,7 @@ export class ActivationLWDComponent {
                 XLSX.writeFile(workbook, 'ErrorMessages_EmpActivationLwd.xlsx');
                 this.isLoading = false;
                 this.showPopup = true;
-                this.popupMessage = 'Import Failed.';
+                alert('Failed to import.');
 
               }
               else {
@@ -393,6 +393,8 @@ export class ActivationLWDComponent {
               }
             },
             error: err => {
+              alert('Error while processing response.');
+                this.isLoading = false;
               console.error('❌ Upload failed', err);
             }
           });        
