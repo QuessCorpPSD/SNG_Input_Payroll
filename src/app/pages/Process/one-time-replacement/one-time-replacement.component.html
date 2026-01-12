@@ -79,12 +79,12 @@
                             <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center"
                                 matTooltip="Edit">
                                 <mat-icon>edit</mat-icon>
-                            </button> -->
+                            </button> 
                         </mat-cell>
                     </ng-container> -->
                     <!-- SNo -->
                     <ng-container matColumnDef="SNo">
-                        <mat-header-cell *matHeaderCellDef ><strong>SNo</strong></mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef><strong>SNo</strong></mat-header-cell>
                         <mat-cell *matCellDef="let row">{{ row['SNo'] }}</mat-cell>
                     </ng-container>
 
@@ -151,15 +151,14 @@
                     </ng-container>
 
                     <!-- Arrear Pay Sequence Number Column -->
-                    <ng-container matColumnDef="Arrear_Pay_Sequence_Number">
+
                     <!-- Arrear_Pay_Sequence_Number -->
-                    <!-- <ng-container matColumnDef="Arrear_Pay_Sequence_Number">
+                    <ng-container matColumnDef="Arrear_Pay_Sequence_Number">
                         <mat-header-cell *matHeaderCellDef><strong>Arrear Pay Sequence Number</strong></mat-header-cell>
                         <mat-cell *matCellDef="let row" [style.display]="showArrearPaySequenceColumn ? '' : 'none'">{{
                             row['Arrear_Pay_Sequence_Number'] }}</mat-cell>
                     </ng-container>
-                        <mat-cell *matCellDef="let row">{{ row['Arrear_Pay_Sequence_Number'] }}</mat-cell>
-                    </ng-container> -->
+
 
                     <!-- Arrear Pay Period Column -->
                     <ng-container matColumnDef="Arrear_Pay_Period">
@@ -175,27 +174,22 @@
                     <mat-row *matRowDef="let row; columns: uploadDisplayedColumns;"></mat-row>
 
                 </mat-table>
-
-                <div *ngIf="uploadedData.length === 0" class="text-center p-4">
-                    <p class="text-muted">No data to display</p>
-                </div>
-
             </div>
-
-            <mat-paginator #paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
-                showFirstLastButtons>
+            <div *ngIf="uploadedData.length === 0" class="text-center p-4">
+                <p class="text-muted">No data to display</p>
+            </div>
+            <mat-paginator #paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
             </mat-paginator>
-
         </div>
-
-        <div *ngIf="isLoading" class="loading-overlay">
-            <img src="assets/Loading.gif" alt="Loading...">
-        </div>
-
-
-        <div *ngIf="showPopup" class="overlay"></div>
-        <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
-            (close)="closePopup()">
-        </app-alertpopup>
     </div>
 </div>
+
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>
+
+
+<div *ngIf="showPopup" class="overlay"></div>
+<app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+    (close)="closePopup()">
+</app-alertpopup>

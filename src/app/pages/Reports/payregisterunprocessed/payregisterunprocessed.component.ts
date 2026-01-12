@@ -34,7 +34,6 @@ export class PayregisterunprocessedComponent {
   payPeriodTypetoChild?: string;
   payPeriodTypefromParentall: string = '';
   selectedPP?: any;
-  selectedPP?: any;
   isLoading: boolean = false;
 
   constructor(private payregisterService: PayregisterunprocessedService) { }
@@ -65,8 +64,6 @@ export class PayregisterunprocessedComponent {
     }
 
     this.payregisterService.GetExporttoExcel(
-      this.companyId,
-      this.selectedPP
       this.companyId,
       this.selectedPP
     ).subscribe({
