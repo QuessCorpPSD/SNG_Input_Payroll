@@ -62,11 +62,13 @@
 
                     <!-- Action -->
                     <ng-container matColumnDef="Action">
-                        <mat-header-cell *matHeaderCellDef>Action</mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef><strong>Action</strong></mat-header-cell>
                         <mat-cell *matCellDef="let row">
-                            <button class="btn btn-sm" matTooltip="Delete">
+                            <div class="header"></div>
+                            <button class="btn btn-sm" matTooltip="Delete" (click)="onDeleteITAdjustment(row)">
                                 <mat-icon>delete</mat-icon>
                             </button>
+
                         </mat-cell>
                     </ng-container>
 

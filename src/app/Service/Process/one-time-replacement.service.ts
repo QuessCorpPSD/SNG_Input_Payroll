@@ -38,6 +38,7 @@ export class OneTimeReplacementService implements IOneTimeReplacement {
       payload
     );
   }
-
-
+  deleteOneTimeReplacement(One_Time_Replacement_Id: any, user_Id: any,): Observable<APIResponse> {
+    return this.http.get<APIResponse>(this.env.apiUrl + 'OnetimeReplacement/DeleteOnetimeReplacement' + '/' + One_Time_Replacement_Id + '/' + user_Id)
+  }
 }

@@ -33,7 +33,7 @@ export class PayregisterunprocessedComponent {
   selectedCompanyCode: any;
   payPeriodTypetoChild?: string;
   payPeriodTypefromParentall: string = '';
-  selectedPP?: string;
+  selectedPP?: any;
   isLoading: boolean = false;
 
   constructor(private payregisterService: PayregisterunprocessedService) { }
@@ -54,20 +54,16 @@ export class PayregisterunprocessedComponent {
   Download() {
     this.isLoading = true;
     if (!this.companyId) {
-      alert('Please select Company Code');
-      this.isLoading = false;
-      return;
+      this.companyId = 0;
     }
 
     if (!this.selectedPP) {
-      alert('Please select Payperiod');
-      this.isLoading = false;
-      return;
+      this.selectedPP = 0;
     }
 
     this.payregisterService.GetExporttoExcel(
-      this.companyId.toString(),
-      String(this.selectedPP)
+      this.companyId,
+      this.selectedPP
     ).subscribe({
       next: (res: APIResponse) => {
         const tables = res?.Data?.data;
@@ -120,7 +116,7 @@ export class PayregisterunprocessedComponent {
         this.isLoading = false;
       },
       error: (err) => {
-        this.isLoading = false;
+        // this.isLoading = false;
         console.error("Download error:", err);
       }
     });

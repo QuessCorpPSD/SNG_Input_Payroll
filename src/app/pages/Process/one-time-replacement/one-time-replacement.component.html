@@ -71,14 +71,15 @@
                     <ng-container matColumnDef="Action">
                         <mat-header-cell *matHeaderCellDef><strong>Action</strong></mat-header-cell>
                         <mat-cell *matCellDef="let row">
+                            <div class="header"></div>
                             <button class="btn btn-sm d-flex align-items-center justify-content-center"
-                                matTooltip="Delete">
+                                matTooltip="Delete" (click)="onDeleteRow(row)">
                                 <mat-icon>delete</mat-icon>
                             </button>
-                            <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                            <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center"
                                 matTooltip="Edit">
                                 <mat-icon>edit</mat-icon>
-                            </button>
+                            </button> -->
                         </mat-cell>
                     </ng-container>
                     <!-- SNo -->
@@ -142,22 +143,27 @@
                     </ng-container>
 
                     <!-- Type -->
+                    <!-- Type Column -->
                     <ng-container matColumnDef="Type">
                         <mat-header-cell *matHeaderCellDef><strong>Type</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row">{{ row['Type'] }}</mat-cell>
+                        <mat-cell *matCellDef="let row" [style.display]="showTypeColumn ? '' : 'none'">{{ row['Type']
+                            }}</mat-cell>
                     </ng-container>
 
-                    <!-- Arrear_Pay_Sequence_Number -->
+                    <!-- Arrear Pay Sequence Number Column -->
                     <ng-container matColumnDef="Arrear_Pay_Sequence_Number">
                         <mat-header-cell *matHeaderCellDef><strong>Arrear Pay Sequence Number</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row">{{ row['Arrear_Pay_Sequence_Number'] }}</mat-cell>
+                        <mat-cell *matCellDef="let row" [style.display]="showArrearPaySequenceColumn ? '' : 'none'">{{
+                            row['Arrear_Pay_Sequence_Number'] }}</mat-cell>
                     </ng-container>
 
-                    <!-- Arrear_Pay_Period -->
+                    <!-- Arrear Pay Period Column -->
                     <ng-container matColumnDef="Arrear_Pay_Period">
                         <mat-header-cell *matHeaderCellDef><strong>Arrear Pay Period</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row">{{ row['Arrear_Pay_Period'] }}</mat-cell>
+                        <mat-cell *matCellDef="let row" [style.display]="showArrearPayPeriodColumn ? '' : 'none'">{{
+                            row['Arrear_Pay_Period'] }}</mat-cell>
                     </ng-container>
+
 
 
 
@@ -172,7 +178,7 @@
 
             </div>
 
-            <mat-paginator [length]="uploadedData.length" [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"
+            <mat-paginator #paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
                 showFirstLastButtons>
             </mat-paginator>
 

@@ -221,7 +221,7 @@ export class PaytransactionComponent {
 
           // Check if Data is not an array or empty
           if (!Array.isArray(jsonData) || jsonData.length === 0) {
-          alert('No data available for the selected company and pay period.');
+            alert('No data available for the selected company and pay period.');
             return;
           }
 
@@ -403,5 +403,37 @@ export class PaytransactionComponent {
       data: { example: 'Hello from parent!' }
     });
   }
+  onDeletePayTransaction(row: any) {
+    if (!confirm('Are you sure you want to delete this Row?')) {
+      return;
+    }
+
+    this.isLoading = true;
+
+    const id = row.Pay_Transaction_Id;
+    const userId = this.userdetail.user_Id;
+
+    this.payTransaction.DeletePayTransaction(id, userId).subscribe({
+      next: (res: any) => {
+        this.isLoading = false;
+
+        const msg = res?.Data?.data?.Table0?.Error_Message;
+
+        if (res?.StatusCode === 200 && msg?.toLowerCase().includes('success')) {
+          alert(msg);
+          this.onsearch();
+        } else {
+          alert(msg);
+          this.onsearch();
+        }
+      },
+      error: () => {
+        this.isLoading = false;
+        alert('Delete failed');
+      }
+    });
+  }
+
+
 
 }

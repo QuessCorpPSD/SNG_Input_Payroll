@@ -32,5 +32,7 @@ export class PaytransactionService implements IPayTransactionService {
   GetPayCode(payload: any): Observable<APIResponse> {
     return this.http.post<APIResponse>(this.env.apiUrl + 'PayTransaction/GetEmployeeDetailsByCompanyID', payload)
   }
-
+  DeletePayTransaction(Pay_Transaction_Id: any, user_Id: any,): Observable<APIResponse> {
+    return this.http.get<APIResponse>(this.env.apiUrl + 'ITAdjustment/DeletePayTransaction' + '/' + Pay_Transaction_Id + '/' + user_Id)
+  }
 }

@@ -24,7 +24,7 @@ import { AddOneTimeReplacementComponent } from '../add-one-time-replacement/add-
   selector: 'app-one-time-replacement',
   standalone: true,
   imports: [
-    CommonModule, MatIconModule, MatTooltipModule, MatTableModule, MatPaginatorModule,
+    CommonModule, MatIconModule, MatTooltipModule, MatTableModule, MatPaginator,
     MatCardModule, FormsModule, CompanyallComponent, PayPeriodComponent, AlertpopupComponent, ReactiveFormsModule
   ],
   templateUrl: './one-time-replacement.component.html',
@@ -51,6 +51,9 @@ export class OneTimeReplacementComponent {
   EmployeeList: any[] = [];
   employeeCode: string = "";
   onetimeform!: FormGroup;
+  showTypeColumn: boolean = true;
+  showArrearPaySequenceColumn: boolean = true;
+  showArrearPayPeriodColumn: boolean = true;
   constructor(
     private dialog: MatDialog,
     private leave: OneTimeReplacementService,
@@ -72,14 +75,14 @@ export class OneTimeReplacementComponent {
     'Paycode_Code',
     'Amount',
     'Mode_Of_Entry',
-    'Type',
-    'Arrear_Pay_Sequence_Number',
-    'Arrear_Pay_Period'
+    // 'Type',
+    // 'Arrear_Pay_Sequence_Number',
+    // 'Arrear_Pay_Period'
   ];
 
   uploadedDataSource = new MatTableDataSource<any>(this.uploadedData);
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild('paginator') paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   showAlertPopup(message: string, subMessage: string = '') {
@@ -121,10 +124,12 @@ export class OneTimeReplacementComponent {
       Pay_Frequency_Id: this.payPeriodId.toString(),
       Employee_Code: this.employeeCode || ""
     };
+    console.log('Payload for OneTimeSearch:', payload);
 
     this.leave.OneTimeSearch(payload).subscribe({
       next: (res) => {
 
+        console.log('Response from OneTimeSearch:', res)
         const lopadjusts = res.Data?.data?.Table0 ?? []; // records
 
 
@@ -132,7 +137,7 @@ export class OneTimeReplacementComponent {
           alert("No data available.");
           this.uploadedDataSource.data = [];
           this.isLoading = false;
-          return; // stop here
+          return;
         }
 
         this.uploadedData = res.Data?.data?.Table0;
@@ -181,12 +186,12 @@ export class OneTimeReplacementComponent {
         }
 
 
-          const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(jsonData);
-          const wb: XLSX.WorkBook = XLSX.utils.book_new();
-          XLSX.utils.book_append_sheet(wb, ws, "OneTimeReplacement");
+        const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(jsonData);
+        const wb: XLSX.WorkBook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "OneTimeReplacement");
 
-          const timestamp = new Date().toISOString().split('T')[0];
-          const fileName = `one_time_replacement_${timestamp}.xlsx`;
+        const timestamp = new Date().toISOString().split('T')[0];
+        const fileName = `one_time_replacement_${timestamp}.xlsx`;
 
         XLSX.writeFile(wb, fileName);
 
@@ -329,4 +334,33 @@ export class OneTimeReplacementComponent {
     this.payPeriodId = payperiod.payfrequencyid;
     this.payperiods = payperiod.payPeriod;
   }
+  
+  onDeleteRow(row: any) {
+    if (!confirm('Are you sure you want to delete this row?')) {
+      return;
+    }
+    const id = row.One_Time_Replacement_Id;
+    const userId = this.userdetail.user_Id;
+    this.leave.deleteOneTimeReplacement(id, userId).subscribe({
+      next: (res: any) => {
+        this.isLoading = false;
+        const msg = res?.Data?.data?.Table0?.Error_Message;
+
+        if (res?.StatusCode === 200 && msg.toLowerCase().includes('success')) {
+          alert(msg);
+          this.onSearchClick();
+        } else {
+          alert(msg);
+          this.onSearchClick();
+        }
+      },
+      error: () => {
+        this.isLoading = false;
+        alert('Delete failed');
+      }
+    });
+  }
+
+
+
 }
