@@ -64,7 +64,7 @@ export class ITAdjustmentComponent {
     this.showPopup = true;
   }
 
-  // Method to close popup
+
   closePopup() {
     this.showPopup = false;
     this.popupMessage = '';
@@ -297,7 +297,7 @@ export class ITAdjustmentComponent {
           return;
         }
 
-        // ✅ Fallback if no specific case matched
+
         const fallback =
           msg ||
           (Array.isArray(parsed) ? JSON.stringify(parsed) :
@@ -307,7 +307,7 @@ export class ITAdjustmentComponent {
         if (fallback) {
           alert(fallback);
         } else {
-          // ⚙️ Handle case where API returns message but no data (your current case)
+
           if (res?.Message) {
             alert(`ℹ️ ${res.Message}`);
           } else {
@@ -319,7 +319,7 @@ export class ITAdjustmentComponent {
       },
       error: (err) => {
         this.isLoading = false;
-        console.error('❌ Upload failed', err);
+        console.error(' Upload failed', err);
         alert('Upload failed due to a network or server error.');
       }
     });
@@ -331,7 +331,7 @@ export class ITAdjustmentComponent {
     if (Array.isArray(r)) return { parsed: r, msg: '' };
     if (typeof r === 'object') return { parsed: r, msg: '' };
 
-    // string
+
     if (typeof r === 'string') {
       try {
         const p = JSON.parse(r);
@@ -370,6 +370,37 @@ export class ITAdjustmentComponent {
     FileSaver.saveAs(blob, `ITAdjustment_Template_${Date.now()}.xlsx`);
     this.isLoading = false;
   }
+  onDeleteITAdjustment(row: any) {
+    if (!confirm('Are you sure you want to delete this row?')) {
+      return;
+    }
+
+    this.isLoading = true;
+
+    const id = row.IT_Adjustment_Id;
+    const userId = this.userdetail.user_Id;
+
+    this.service.DeleteITAdjustment(id, userId).subscribe({
+      next: (res: any) => {
+        this.isLoading = false;
+
+        const msg = res?.Data?.data?.Table0?.Error_Message;
+
+        if (res?.StatusCode === 200 && msg?.toLowerCase().includes('success')) {
+          alert(msg);
+          this.onsearch();   
+        } else {
+          alert(msg);
+          this.onsearch();
+        }
+      },
+      error: () => {
+        this.isLoading = false;
+        alert('Delete failed');
+      }
+    });
+  }
+
 
 
 }

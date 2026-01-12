@@ -50,6 +50,7 @@
       height: 32px !important;
       z-index: 1;
       width: 100%;
+      vertical-align: middle;
   }
 
   /* Body Cells */
@@ -291,4 +292,32 @@
   .btn-download {
       background-color: #20c997;
       color: #fff;
+  }
+
+  .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      width: 100%;
+  }
+
+  ::ng-deep .mat-mdc-table {
+      display: table !important;
+      table-layout: auto !important;
+      width: max-content !important;
+      min-width: 100% !important;
+  }
+
+  ::ng-deep .mat-mdc-header-row,
+  ::ng-deep .mat-mdc-row {
+      display: table-row !important;
+      height: 50px !important;
+  }
+
+  ::ng-deep .mat-mdc-header-cell,
+  ::ng-deep .mat-mdc-cell {
+      display: table-cell !important;
+      width: auto !important;
+      white-space: nowrap;
   }

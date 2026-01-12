@@ -1,0 +1,579 @@
+<div class="page-wrapper">
+    <div class="scrollable-content">
+
+        <mat-card-title
+            style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 600;padding-top: 12px;">HRA
+            Calculation</mat-card-title>
+            
+        <div class="container py-2">
+            <div class="row g-3 align-items-end">
+
+                <div class="col-md-3">
+                    <label for="companySelect" class="form-label text-muted small">Company Code<span
+                            style="color: red;">*</span></label>
+                    <companyall id="companySelect" (companyEmit)="handleCompanyEvent($event)"></companyall>
+                </div>
+
+
+                <!-- Financial Year Dropdown -->
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Financial Year</label>
+                    <select [(ngModel)]="fyear" class="form-control form-control-sm" style="height: 30px;"
+                        (ngModelChange)="onFinancialYearChange($event)">
+                        <option value="">Select</option>
+                        <option *ngFor="let y of year" [value]="y.Financial_Year_Id">
+                            {{ y.Financial_Year_Name }}
+                        </option>
+                    </select>
+                </div>
+                
+
+                <!-- Employee Code Dropdown -->
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Employee Code</label>
+                    <select [(ngModel)]="selectedEmployeeId" class="form-control form-control-sm" style="height: 30px;">
+                        <option value="">Select</option>
+                        <option *ngFor="let emp of employees" [value]="emp.Employee_Id">
+                            {{ emp.Employee_Code }}
+                        </option>
+                    </select>
+                </div>
+
+
+
+                <div class="col-md-3 d-flex gap-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
+                        matTooltip="Search" (click)="onsearch()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                    <button class="btn btn-success btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="Add" (click)="AddPOOpen()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-secondary"
+                        matTooltip="ExportToExcel" (click)="exportToExcel()">
+                        <mat-icon>download</mat-icon>
+                    </button>
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                        matTooltip="Template">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button>
+                    <!-- Upload Button -->
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
+                        matTooltip="Upload" (click)="ImportClick(fileInput)">
+                        <mat-icon>cloud_upload</mat-icon>
+                    </button>
+
+                    <!-- Hidden File Input -->
+                    <input type="file" #fileInput style="display: none;" accept=".xlsx,.xls"
+                        (change)="onFileChange($event)" />
+
+
+                </div>
+
+            </div>
+            <div class="d-flex align-items-center justify-content-end" style="padding-top: 10px; padding-right: 40px;">
+                <!-- Search Box -->
+                <div style="display: inline-flex; align-items: center;
+                   border-radius: 10px;
+               border: 1px solid #7E7E7E;
+               width: 260px;
+               height: 30px;
+               background-color: white;
+               padding: 0 10px;">
+                    <i style="margin-right: 6px; display: flex; align-items: center;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M8.30883 9.01596C7.539 9.63177 6.5625 10 5.5 10C3.01472 10 1 7.98528 1 5.5C1 3.01472 3.01472 1 5.5 1C7.98528 1 10 3.01472 10 5.5C10 6.56251 9.63176.53901 9.01594 8.30885L10.8535 10.1465C11.0488 10.3417 11.0488 10.6583 10.8535 10.8536C10.6583 11.0488 10.3417 11.0488 10.1464 10.8536L8.30883 9.01596ZM2 5.5C2 3.567 3.567 2 5.5 2C7.433 2 9 3.567 9 5.5C9 6.44299 8.62707 7.29888 8.02066 7.92823C8.00355 7.94139 7.98711 7.95579 7.97144 7.97146C7.95578 7.98712 7.94137 8.00357 7.92822 8.02067C7.29887 8.62708 6.44299 9 5.5 9C3.567 9 2 7.433 2 5.5Z"
+                                fill="#7E7E7E" />
+                        </svg>
+                    </i>
+                    <input type="text" [(ngModel)]="searchText" (keyup)="applyFilters()" placeholder="Search" style="border: none; outline: none; width: 100%;
+                   font-size: 12px; background-color: transparent;" />
+                </div>
+            </div>
+            <div class="table-container" style="top:30px;">
+                <div class="table-scroll-window">
+
+                    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+                        <!-- Delete -->
+                        <ng-container matColumnDef="delete">
+                            <mat-header-cell *matHeaderCellDef class="fixed-width-column"></mat-header-cell>
+                            <mat-cell *matCellDef="let element" class="fixed-width-column">
+                                <img src="assets/delete.svg" style="cursor:pointer;width:24px;height:22px" />
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Edit -->
+                        <ng-container matColumnDef="edit">
+                            <mat-header-cell *matHeaderCellDef class="fixed-width-column"></mat-header-cell>
+                            <mat-cell *matCellDef="let element" class="fixed-width-column">
+                                <img src="assets/Icons/edit.svg" style="cursor:pointer;width:24px;height:22px" />
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- SNo -->
+                        <ng-container matColumnDef="SNo">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>SNo</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.SNo }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Company Code -->
+                        <ng-container matColumnDef="CompanyCode">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Company Code</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.CompanyCode }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Employee Code -->
+                        <ng-container matColumnDef="EmployeeCode">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Employee Code</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.EmployeeCode }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Employee Name -->
+                        <ng-container matColumnDef="EmployeeName">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Employee Name</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.EmployeeName }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Date of Joining -->
+                        <ng-container matColumnDef="DateOfJoining">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Date of Joining</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.DateOfJoining | date:
+                                'dd-MM-yyyy'}}</mat-cell>
+                        </ng-container>
+
+                        <!-- From Date -->
+                        <ng-container matColumnDef="FromDate">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>From Date</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.FromDate | date: 'dd-MM-yyyy' }}</mat-cell>
+                        </ng-container>
+
+                        <!-- To Date -->
+                        <ng-container matColumnDef="ToDate">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>To Date</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.ToDate | date: 'dd-MM-yyyy' }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Pay Period -->
+                        <ng-container matColumnDef="PayPeriod">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Pay Period</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.PayPeriod }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Monthly Rental Paid -->
+                        <ng-container matColumnDef="MonthlyRentalPaid">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Monthly Rental Paid</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.MonthlyRentalPaid }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Working Location -->
+                        <ng-container matColumnDef="WorkingLocation">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Working Location</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.WorkingLocation }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Type -->
+                        <ng-container matColumnDef="Type">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Type</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Type }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Residing Location -->
+                        <ng-container matColumnDef="ResidingLocation">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Residing Location</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.ResidingLocation }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Metro -->
+                        <ng-container matColumnDef="Metro">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Metro</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Metro }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Total Exemption -->
+                        <ng-container matColumnDef="TotalExemption">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Total Exemption</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.TotalExemption }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Table Header and Row -->
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+                    </table>
+
+
+                </div>
+
+                <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<br><br><br><br><br><br>
+
+<div *ngIf="isAddclicked" class="popup-overlay" (keydown.escape)="closeclick()">
+    <mat-card class="popup-card">
+        <mat-card-header class="popup-header">
+            <mat-card-title class="d-flex justify-content-center align-items-center">
+                {{ isEditMode ? 'Edit HRA
+                Calculation ' : 'Add HRA
+                Calculation' }}
+            </mat-card-title>
+
+            <button class="close-btn" matTooltip="Close" (click)="closeclick()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+
+        <mat-card-content class="scroll-content">
+
+            <form [formGroup]="HRAForm">
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-3">
+                        <label for="companySelect" class="form-label text-muted small">
+                            Company Code <span style="color: red;">*</span>
+                        </label>
+
+                        <companyall formControlName="Company_Code" (companyEmit)="handleCompanyEvent2($event)">
+                        </companyall>
+
+                        <div *ngIf="HRAForm.get('Company_Code')?.touched && HRAForm.get('Company_Code')?.hasError('required')"
+                            class="text-danger small mt-1">
+                            Company Code is required
+                        </div>
+                    </div>
+
+                    <!-- Financial Year Section -->
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">
+                            Financial Year <span class="text-danger">*</span>
+                        </label>
+
+                        <select formControlName="financialYear" class="form-control">
+                            <option value="" disabled selected>Select</option>
+                            <option *ngFor="let y of popupYear" [value]="y.Financial_Year_Id">
+                                {{ y.Financial_Year_Name }}
+                            </option>
+                        </select>
+
+                        <div *ngIf="HRAForm.get('financialYear')?.touched && HRAForm.get('financialYear')?.hasError('required')"
+                            class="text-danger small mt-1">
+                            Financial Year is required
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="Date" class="form-label text-muted small">
+                            Date <span class="text-danger">*</span>
+                        </label>
+                        <input id="Date" type="date" class="form-control" formControlName="Date" />
+                        <div *ngIf="HRAForm.get('Date')?.touched && HRAForm.get('Date')?.hasError('required')"
+                            class="text-danger small mt-1">
+                            Date is required
+                        </div>
+                    </div>
+
+                    <!-- Employee Code -->
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">
+                            Employee Code <span class="text-danger">*</span>
+                        </label>
+
+                        <select formControlName="Employee_Code" class="form-control"
+                            (change)="onEmployeeSelectionChange()">
+                            <option value="">Select</option>
+                            <option *ngFor="let emp of popupEmployees" [value]="emp.Employee_Id">
+                                {{ emp.Employee_Code }}
+                            </option>
+                        </select>
+
+                        <div *ngIf="HRAForm.get('Employee_Code')?.touched && HRAForm.get('Employee_Code')?.hasError('required')"
+                            class="text-danger small mt-1">
+                            Employee Code is required
+                        </div>
+                    </div>
+                    <!-- Employee Name -->
+                    <div class="col-md-3">
+                        <label for="EmployeeName" class="form-label text-muted small">
+                            Employee Name
+                        </label>
+                        <input id="EmployeeName" type="text" class="form-control" formControlName="Employee_Name" />
+                    </div>
+
+                    <!-- Date of Joining -->
+                    <div class="col-md-3">
+                        <label for="dateOfJoining" class="form-label text-muted small">
+                            Date of Joining
+                        </label>
+                        <input id="dateOfJoining" type="date" class="form-control" formControlName="DateOfJoining" />
+                        <div *ngIf="HRAForm.get('DateOfJoining')?.touched && HRAForm.get('DateOfJoining')?.hasError('required')"
+                            class="text-danger small mt-1">
+                            Date of Joining is required
+                        </div>
+                    </div>
+
+                    <!-- Work Location -->
+                    <div class="col-md-3">
+                        <label for="WorkLocation" class="form-label text-muted small">
+                            Work Location
+                        </label>
+
+                        <input id="WorkLocation" type="text" class="form-control" formControlName="Work_Location"
+                            [disabled]="true" />
+
+                        <div *ngIf="HRAForm.get('Work_Location')?.touched && HRAForm.get('Work_Location')?.hasError('required')"
+                            class="text-danger small mt-1">
+                            Work Location is required
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="residingLocation" class="form-label text-muted small">
+                            Residing Location <span class="text-danger">*</span>
+                        </label>
+                        <input id="residingLocation" type="text" class="form-control"
+                            formControlName="Residing_Location" />
+                        <div *ngIf="HRAForm.get('Residing_Location')?.touched && HRAForm.get('Residing_Location')?.hasError('required')"
+                            class="text-danger small mt-1">
+                            Residing Location is required
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">
+                            Type <span class="text-danger">*</span>
+                        </label>
+                        <select formControlName="Type" class="form-control">
+                            <option value="">Select</option>
+                            <option *ngFor="let t of types" [value]="t.Declaration_Type_Id">
+                                {{ t.Declaration_Type_Name }}
+                            </option>
+                        </select>
+
+                        <div *ngIf="HRAForm.get('Type')?.touched && HRAForm.get('Type')?.hasError('required')"
+                            class="text-danger small mt-1">
+                            Type is required
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">
+                            Metro <span class="text-danger">*</span>
+                        </label>
+
+                        <div class="d-flex">
+                            <div class="form-check me-3">
+                                <input type="radio" formControlName="Metro" value="Yes" />
+                                <label class=" form-label text-muted small mb-0">
+                                    Yes
+                                </label>
+                            </div>
+                            <div class="form-check me-3">
+                                <input type="radio" formControlName="Metro" value="No" />
+                                <label class=" form-label text-muted small mb-0">
+                                    No
+                                </label>
+                            </div>
+                        </div>
+
+                        <div *ngIf="HRAForm.get('Metro')?.touched && HRAForm.get('Metro')?.hasError('required')"
+                            class="text-danger small mt-1">
+                            Metro is required
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="fromDate" class="form-label text-muted small">
+                            From Date <span class="text-danger">*</span>
+                        </label>
+                        <input id="fromDate" type="date" class="form-control" formControlName="FromDate" />
+                        <div *ngIf="HRAForm.get('FromDate')?.touched && HRAForm.get('FromDate')?.hasError('required')"
+                            class="text-danger small mt-1">
+                            From Date is required
+                        </div>
+                    </div>
+
+                    <!-- To Date -->
+                    <div class="col-md-3">
+                        <label for="toDate" class="form-label text-muted small">
+                            To Date <span class="text-danger">*</span>
+                        </label>
+                        <input id="toDate" type="date" class="form-control" formControlName="ToDate" />
+                        <div *ngIf="HRAForm.get('ToDate')?.touched && HRAForm.get('ToDate')?.hasError('required')"
+                            class="text-danger small mt-1">
+                            To Date is required
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="monthlyRentPaid" class="form-label text-muted small">
+                            Monthly Rent Paid <span class="text-danger">*</span>
+                        </label>
+                        <input id="monthlyRentPaid" type="number" class="form-control"
+                            formControlName="MonthlyRentPaid" />
+                        <div *ngIf="HRAForm.get('MonthlyRentPaid')?.touched && HRAForm.get('MonthlyRentPaid')?.hasError('required')"
+                            class="text-danger small mt-1">
+                            Monthly Rent Paid is required
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="totalExemption" class="form-label text-muted small">
+                            Total Exemption
+                        </label>
+                        <input id="totalExemption" type="number" class="form-control"
+                            formControlName="TotalExemption" />
+
+                    </div>
+
+
+                </div>
+            </form>
+
+            <div class="col-md-3 d-flex gap-2 py-4">
+                <!-- Delete -->
+                <div class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Delete"
+                    (click)="deleteRow()">
+                    <img src="assets/delete.svg" style="cursor: pointer; width: 24px; height: 22px;" />
+                </div>
+
+                <!-- Add -->
+                <div class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Add"
+                    (click)="addRow()">
+                    <mat-icon>add</mat-icon>
+                </div>
+            </div>
+
+            <div class="table-container" style="top:30px;">
+
+                <div class="table-scroll-window">
+                    <table mat-table [dataSource]="dataSource1" class="mat-elevation-z8">
+
+                        <!-- SNo -->
+                        <ng-container matColumnDef="SNo">
+                            <mat-header-cell *matHeaderCellDef>SNo</mat-header-cell>
+                            <mat-cell *matCellDef="let element; let i = index" class="form-control">
+                                {{ i + 1 }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- PayPeriod -->
+                        <ng-container matColumnDef="PayPeriod">
+                            <mat-header-cell *matHeaderCellDef>
+                                <label class="form-label text-muted small">PayPeriod</label>
+                            </mat-header-cell>
+
+                            <mat-cell *matCellDef="let element" class="form-control">
+                                <PayPeriod [selectedCompanyId]="CompanyId" [payPeriodType]="payPeriodType"
+                                    (payperiodEmit)="handlePayperiodEvent($event)">
+                                </PayPeriod>
+                            </mat-cell>
+                        </ng-container>
+
+
+                        <!-- Fixed Basic + DA -->
+                        <ng-container matColumnDef="Fixed Basic + DA">
+                            <mat-header-cell *matHeaderCellDef>Fixed Basic + DA</mat-header-cell>
+                            <mat-cell *matCellDef="let element" class="form-control">
+                                <input [(ngModel)]="element['Fixed Basic + DA']" />
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Earned Basic + DA -->
+                        <ng-container matColumnDef="Earned Basic + DA">
+                            <mat-header-cell *matHeaderCellDef>Earned Basic + DA</mat-header-cell>
+                            <mat-cell *matCellDef="let element" class="form-control">
+                                <input [(ngModel)]="element['Earned Basic + DA']" />
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Fixed HRA -->
+                        <ng-container matColumnDef="Fixed HRA">
+                            <mat-header-cell *matHeaderCellDef>Fixed HRA</mat-header-cell>
+                            <mat-cell *matCellDef="let element" class="form-control">
+                                <input [(ngModel)]="element['Fixed HRA']" />
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Earned HRA -->
+                        <ng-container matColumnDef="Earned HRA">
+                            <mat-header-cell *matHeaderCellDef>Earned HRA</mat-header-cell>
+                            <mat-cell *matCellDef="let element" class="form-control">
+                                <input [(ngModel)]="element['Earned HRA']" />
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- HRA Recevied -->
+                        <ng-container matColumnDef="HRA Recevied">
+                            <mat-header-cell *matHeaderCellDef>HRA Recevied</mat-header-cell>
+                            <mat-cell *matCellDef="let element" class="form-control">
+                                <input [(ngModel)]="element['HRA Recevied']" />
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Rent Paid -->
+                        <ng-container matColumnDef="Rent Paid">
+                            <mat-header-cell *matHeaderCellDef>Rent Paid</mat-header-cell>
+                            <mat-cell *matCellDef="let element" class="form-control">
+                                <input [(ngModel)]="element['Rent Paid']" />
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Rent Paid-10% Basic -->
+                        <ng-container matColumnDef="Rent Paid-10% Basic">
+                            <mat-header-cell *matHeaderCellDef>Rent Paid-10% Basic</mat-header-cell>
+                            <mat-cell *matCellDef="let element" class="form-control">
+                                <input [(ngModel)]="element['Rent Paid-10% Basic']" />
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- 40 or 50% Basic -->
+                        <ng-container matColumnDef="40 or 50% Basic">
+                            <mat-header-cell *matHeaderCellDef>40 or 50% Basic</mat-header-cell>
+                            <mat-cell *matCellDef="let element" class="form-control">
+                                <input [(ngModel)]="element['40 or 50% Basic']" />
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- HRA Exemption -->
+                        <ng-container matColumnDef="HRA Exemption">
+                            <mat-header-cell *matHeaderCellDef>HRA Exemption</mat-header-cell>
+                            <mat-cell *matCellDef="let element" class="form-control">
+                                <input [(ngModel)]="element['HRA Exemption']" />
+                            </mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="displayedColumns1"></mat-header-row>
+
+                        <mat-row *matRowDef="let row; let i = index; columns: displayedColumns1;" (click)="selectRow(i)"
+                            [class.selected-row]="selectedRowIndex === i">
+                        </mat-row>
+
+                    </table>
+
+
+                </div>
+                <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+            </div>
+        </mat-card-content>
+
+
+        <div class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">
+
+            <button type="button" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+                           cursor: pointer; background-color: #f0f0f0; color: black;" (click)="closeclick()">
+                Cancel
+            </button>
+
+            <button type="button"
+                style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white;"
+                (click)="onSaveHRA()">
+                {{ isEditMode ? 'Update' : 'Save' }}
+            </button>
+
+        </div>
+
+    </mat-card>
+</div>

@@ -33,4 +33,7 @@ export class ITadjustmentsService {
       formData
     );
   }
+  DeleteITAdjustment(IT_Adjustment_Id: any, user_Id: any,): Observable<APIResponse> {
+    return this.http.get<APIResponse>(this.env.apiUrl + 'ITAdjustment/DeleteITAdjustment' + '/' + IT_Adjustment_Id + '/' + user_Id)
+  }
 }

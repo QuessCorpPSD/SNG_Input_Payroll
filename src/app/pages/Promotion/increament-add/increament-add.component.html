@@ -1,0 +1,228 @@
+<form [formGroup]="incrementForm" novalidate>
+    <mat-card class="custom-card">
+        <mat-card-header class="sticky-header">
+
+            <mat-card-title style="color: #302CB3;padding-top: 12px;">Increament Details</mat-card-title>
+            <span class="spacer"></span>
+            <button class="close-btn" matTooltip="Close" (click)="onClose()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+        <div class="container py-2">
+            <mat-card-content>
+
+                <!-- ROW 1 -->
+                <div class="row g-3 mb-3">
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Company Code</label>
+                        <!-- <companyall (companyEmit)="handleCompanyEvent($event)"></companyall> -->
+                        <input type="text" class="form-control form-control-sm" formControlName="companyCode">
+                        <small class="text-danger" *ngIf="showErrors && incrementForm.get('companyCode')?.invalid">
+                            Company Code is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Company Name</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="companyName">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Payroll Type</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="payrollType">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Employee ID<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control form-control-sm" formControlName="employeeId">
+                        <small class="text-danger" *ngIf="showErrors && incrementForm.get('employeeId')?.invalid">
+                            Employee ID is required
+                        </small>
+
+                    </div>
+                </div>
+
+                <!-- ROW 2 -->
+                <div class="row g-3 mb-3">
+
+
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Employee Name</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="employeeName">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">Date Of Join<span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" formControlName="dateOfJoin" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Pay Category</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="payCategory">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">New Pay Category<span
+                                class="text-danger">*</span></label>
+                        <input type="text" class="form-control form-control-sm" formControlName="newPayCategory">
+                        <!-- <select class="form-select form-select-sm" formControlName="newPayCategory">
+                            <option>Select</option>
+                        </select> -->
+                        <small class="text-danger" *ngIf="showErrors && incrementForm.get('newPayCategory')?.invalid">
+                            New Pay Category is required
+                        </small>
+
+                    </div>
+                </div>
+
+                <!-- ROW 3 -->
+                <div class="row g-3 mb-3">
+
+
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Annually/Monthly</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="annualMonthly">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Old CTC</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="oldCtc">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">New CTC<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control form-control-sm" formControlName="newCtc">
+                        <small class="text-danger" *ngIf="showErrors && incrementForm.get('newCtc')?.invalid">
+                            New CTC is required
+                        </small>
+
+                    </div>
+
+
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Salary Month<span
+                                class="text-danger">*</span></label>
+                        <!-- <select class="form-select form-select-sm" formControlName="salaryMonth">
+                            <option>Select</option>
+                        </select> -->
+
+                        <input type="text" class="form-control form-control-sm" formControlName="salaryMonth">
+                        <small class="text-danger" *ngIf="showErrors && incrementForm.get('salaryMonth')?.invalid">
+                            Salary Month is required
+                        </small>
+
+                    </div>
+                </div>
+
+                <!-- ROW 4 -->
+
+
+                <!-- ROW 5 -->
+                <div class="row g-3 mb-3">
+                    <div class="col-md-3">
+                        <label class="form-label">Revision Date<span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" formControlName="revisionDate" />
+                        <small class="text-danger" *ngIf="showErrors && incrementForm.get('revisionDate')?.invalid">
+                            Revision Date is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">Effective Date<span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" formControlName="effectiveDate" />
+                        <small class="text-danger" *ngIf="showErrors && incrementForm.get('effectiveDate')?.invalid">
+                            Effective Date is required
+                        </small>
+
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Pay Seq No</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="paySeqNo">
+                    </div>
+                    <div class="col-md-3 d-flex align-items-center">
+                        <label for="postCf" class="form-label text-muted small mb-0 me-2">Post CF</label>
+                        <mat-checkbox formControlName="postCf"></mat-checkbox>
+                    </div>
+                </div>
+
+
+                <!-- TABLE -->
+                <div class="container py-2">
+                    <div class="table-container">
+                        <div class="table-scroll-window">
+                            <table mat-table [dataSource]="dataSource1" class="mat-elevation-z8">
+
+                                <!-- SNo -->
+                                <ng-container matColumnDef="SNo">
+                                    <mat-header-cell *matHeaderCellDef>SNo</mat-header-cell>
+                                    <mat-cell *matCellDef="let row; let i = index" class="form-control">
+                                        {{ i + 1 }}
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- PayPeriod -->
+                                <ng-container matColumnDef="Paycode_Code">
+                                    <mat-header-cell *matHeaderCellDef>Paycode</mat-header-cell>
+                                    <mat-cell *matCellDef="let row" class="form-control">{{row.Paycode_Code}}
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Fixed Basic + DA -->
+                                <ng-container matColumnDef="PayDescription">
+                                    <mat-header-cell *matHeaderCellDef>PayDescription</mat-header-cell>
+                                    <mat-cell *matCellDef="let row" class="form-control">{{row.Description}}
+
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Old_Amount">
+                                    <mat-header-cell *matHeaderCellDef>Old Amount</mat-header-cell>
+                                    <mat-cell *matCellDef="let row" class="form-control">
+                                        {{row.Old_Amount}}
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Earned Basic + DA -->
+                                <ng-container matColumnDef="Amount">
+                                    <mat-header-cell *matHeaderCellDef>Amount</mat-header-cell>
+                                    <mat-cell *matCellDef="let row" class="form-control">
+                                        {{row.Amount}}
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Fixed HRA -->
+                                <ng-container matColumnDef="Difference">
+                                    <mat-header-cell *matHeaderCellDef>Difference</mat-header-cell>
+                                    <mat-cell *matCellDef="let row" class="form-control">{{row.Difference}}
+                                    </mat-cell>
+                                </ng-container>
+
+                                <mat-header-row *matHeaderRowDef="displayedColumns1"></mat-header-row>
+
+                                <mat-row *matRowDef="let row; let i = index; columns: displayedColumns1;"
+                                    (click)="selectRow(i)" [class.selected-row]="selectedRowIndex === i">
+                                </mat-row>
+                            </table>
+                        </div>
+                        <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+                    </div>
+                </div>
+
+                <!-- BUTTONS -->
+                <div class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">
+
+                    <button type="button" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+                           cursor: pointer; background-color: #f0f0f0; color: black;" (click)="onCancel()">
+                        Cancel
+                    </button>
+
+                    <!-- <button type="button" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+                           cursor: pointer; background-color: blue; color: white;">
+                        Save</button> -->
+
+                </div>
+
+            </mat-card-content>
+        </div>
+
+
+
+    </mat-card>
+</form>

@@ -1,0 +1,495 @@
+<div class="page-wrapper">
+    <div class="scrollable-content">
+
+        <mat-card-title
+            style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 600;padding-top: 14px;">Income/Loss
+            On House Property</mat-card-title>
+        <div class="container py-2">
+            <div class="row g-3 align-items-end">
+
+                <div class="col-md-3">
+                    <label for="companySelect" class="form-label text-muted small">Company Code<span
+                            style="color: red;">*</span></label>
+                    <companyall id="companySelect" (companyEmit)="handleCompanyEvent($event)"></companyall>
+                </div>
+
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Employee Code</label>
+                    <select class="form-control form-control-sm" style="height: 30px;"
+                        [(ngModel)]="selectedEmployeeCode">
+                        <option value="">Select</option>
+                        <option *ngFor="let emply of empCode" [value]="emply.Employee_Id">
+                            {{ emply.Employee_code }}
+                        </option>
+                    </select>
+                </div>
+
+
+                <div class="col-md-3 d-flex gap-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
+                        matTooltip="Search" (click)="onsearch()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-secondary"
+                        matTooltip="ExportToExcel" (click)="exportToExcel()">
+                        <mat-icon>download</mat-icon>
+                    </button>
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                        matTooltip="Template">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button>
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
+                        matTooltip="Upload" (click)="fileInput.click()"> <!-- Trigger the file input on click -->
+                        <mat-icon>cloud_upload</mat-icon>
+                    </button>
+
+                    <!-- Hidden file input to handle file selection -->
+                    <input type="file" #fileInput style="display: none;" (change)="onFileChange($event)"
+                        accept=".xlsx, .xls" />
+
+                    <button class="btn btn-success btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="Add" (click)="AddPOOpen()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+
+            </div>
+            <div class="d-flex align-items-center justify-content-end" style="padding-top: 10px; padding-right: 40px;">
+                <!-- Search Box -->
+                <div style="display: inline-flex; align-items: center;
+                   border-radius: 10px;
+               border: 1px solid #7E7E7E;
+               width: 260px;
+               height: 30px;
+               background-color: white;
+               padding: 0 10px;">
+                    <i style="margin-right: 6px; display: flex; align-items: center;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M8.30883 9.01596C7.539 9.63177 6.5625 10 5.5 10C3.01472 10 1 7.98528 1 5.5C1 3.01472 3.01472 1 5.5 1C7.98528 1 10 3.01472 10 5.5C10 6.56251 9.63176.53901 9.01594 8.30885L10.8535 10.1465C11.0488 10.3417 11.0488 10.6583 10.8535 10.8536C10.6583 11.0488 10.3417 11.0488 10.1464 10.8536L8.30883 9.01596ZM2 5.5C2 3.567 3.567 2 5.5 2C7.433 2 9 3.567 9 5.5C9 6.44299 8.62707 7.29888 8.02066 7.92823C8.00355 7.94139 7.98711 7.95579 7.97144 7.97146C7.95578 7.98712 7.94137 8.00357 7.92822 8.02067C7.29887 8.62708 6.44299 9 5.5 9C3.567 9 2 7.433 2 5.5Z"
+                                fill="#7E7E7E" />
+                        </svg>
+                    </i>
+                    <input type="text" [(ngModel)]="searchText" (keyup)="applyFilters()" placeholder="Search" style="border: none; outline: none; width: 100%;
+                   font-size: 12px; background-color: transparent;" />
+                </div>
+            </div>
+            <div class="table-container" style="top:30px;">
+                <div class="table-scroll-window">
+
+                    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+                        <!-- Delete -->
+                        <ng-container matColumnDef="delete">
+                            <mat-header-cell *matHeaderCellDef class="fixed-width-column"></mat-header-cell>
+                            <mat-cell *matCellDef="let element" class="fixed-width-column">
+                                <img src="assets/delete.svg" style="cursor:pointer;width:24px;height:22px"
+                                    (click)="onDeleteRow(element)" />
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Edit -->
+                        <ng-container matColumnDef="edit">
+                            <mat-header-cell *matHeaderCellDef class="fixed-width-column"></mat-header-cell>
+                            <mat-cell *matCellDef="let element" class="fixed-width-column">
+                                <img src="assets/Icons/edit.svg" style="cursor:pointer;width:24px;height:22px"
+                                    (click)="EditClick(element)" />
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- SNo -->
+                        <ng-container matColumnDef="SNo">
+                            <mat-header-cell *matHeaderCellDef>SNo</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Serial_No }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Company Code -->
+                        <ng-container matColumnDef="CompanyCode">
+                            <mat-header-cell *matHeaderCellDef>Company Code</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Company_Code }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Employee Id -->
+                        <ng-container matColumnDef="EmployeeId">
+                            <mat-header-cell *matHeaderCellDef>Employee Id</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Employee_Id }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Employee Name -->
+                        <ng-container matColumnDef="EmployeeName">
+                            <mat-header-cell *matHeaderCellDef>Employee Name</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Employee_Name }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Financial Year -->
+                        <ng-container matColumnDef="FinancialYear">
+                            <mat-header-cell *matHeaderCellDef>Financial Year</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Financial_Year_Name }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Type -->
+                        <ng-container matColumnDef="Type">
+                            <mat-header-cell *matHeaderCellDef>Type</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Declaration_Type_Name }}</mat-cell>
+                        </ng-container>
+
+                        <!-- Date -->
+                        <ng-container matColumnDef="Date">
+                            <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{element.Declaration_Date | date:'dd-MM-yyyy'}}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Eligible Let Out Exemption -->
+                        <ng-container matColumnDef="EligibleLetOutExemption">
+                            <mat-header-cell *matHeaderCellDef>Eligible Let Out Exemption</mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                {{ element.Eligible_Let_Out_Exemption }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Eligible House Exemption -->
+                        <ng-container matColumnDef="EligibleHouseExemption">
+                            <mat-header-cell *matHeaderCellDef>Eligible House Exemption</mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                {{ element.Eligible_Housing_Exemption }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+                    </table>
+                </div>
+
+                <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<br><br><br><br><br><br>
+
+<div *ngIf="isAddclicked" class="popup-overlay" (keydown.escape)="closeclick()">
+    <mat-card class="popup-card">
+        <mat-card-header class="popup-header">
+            <mat-card-title class="d-flex justify-content-center align-items-center">
+                {{ isEditMode ? 'Edit Income/Loss On House Property ' : 'Add Income/Loss On House Property' }}
+            </mat-card-title>
+
+            <button class="close-btn" matTooltip="Close" (click)="closeclick()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+
+        <mat-card-content class="scroll-content">
+
+            <form [formGroup]="incomeForm" (ngSubmit)="$event.preventDefault()">
+
+                <div class="row g-3 align-items-end">
+
+                    <div class="col-md-3">
+                        <label for="companySelect" class="form-label text-muted small">
+                            Company Code <span style="color: red;">*</span>
+                        </label>
+
+                        <!-- ADD MODE -->
+                        <ng-container *ngIf="!isEditMode">
+                            <companyall formControlName="Company_Code" (companyEmit)="handleCompanyEvent2($event)">
+                            </companyall>
+                        </ng-container>
+
+                        <!-- EDIT MODE -->
+                        <ng-container *ngIf="isEditMode">
+                            <input formControlName="Company_Code" class="form-control" readonly />
+                        </ng-container>
+
+
+                        <div *ngIf="incomeForm.get('Company_Code')?.touched && incomeForm.get('Company_Code')?.hasError('required')"
+                            class="text-danger small mt-1">
+                            Company Code is required
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">
+                            Financial Year <span class="text-danger">*</span>
+                        </label>
+
+                        <select formControlName="financialYear" class="form-control">
+                            <option value="" disabled selected>Select</option>
+                            <option *ngFor="let y of popupYear" [value]="y.Financial_Year_Id">
+                                {{ y.Financial_Year_Name }}
+                            </option>
+                        </select>
+
+                        <div *ngIf="incomeForm.get('financialYear')?.touched && incomeForm.get('financialYear')?.hasError('required')"
+                            class="text-danger small mt-1">
+                            Financial Year is required
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">
+                            Employee Code <span class="text-danger">*</span>
+                        </label>
+
+                        <select formControlName="Employee_Code" class="form-control">
+                            <option value="">Select</option>
+                            <option *ngFor="let emp of popupEmployees" [value]="emp.Employee_Id">
+                                {{ emp.Employee_Code }}
+                            </option>
+                        </select>
+
+                        <div *ngIf="incomeForm.get('Employee_Code')?.touched && incomeForm.get('Employee_Code')?.hasError('required')"
+                            class="text-danger small mt-1">
+                            Employee Code is required
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="EmployeeName" class="form-label text-muted small">
+                            Employee Name
+                        </label>
+                        <input id="EmployeeName" type="text" class="form-control" formControlName="Employee_Name" />
+                    </div>
+
+
+                    <div class="col-md-3">
+                        <label for="incomeHouseDate" class="form-label text-muted small">
+                            Date <span class="text-danger">*</span>
+                        </label>
+                        <input id="incomeHouseDate" type="date" class="form-control" formControlName="Date" />
+                        <div *ngIf="incomeForm.get('Date')?.touched && incomeForm.get('Date')?.hasError('required')"
+                            class="text-danger small mt-1">
+                            Date is required
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">
+                            Type <span class="text-danger">*</span>
+                        </label>
+
+                        <select formControlName="type" class="form-control">
+                            <option value="">Select</option>
+                            <!-- Loop through the Table0 data and bind options dynamically -->
+                            <option *ngFor="let item of typeList" [value]="item.Declaration_Type_Id">
+                                {{ item.Declaration_Type_Name }}
+                            </option>
+                        </select>
+
+                        <div *ngIf="incomeForm.get('type')?.touched && incomeForm.get('type')?.hasError('required')"
+                            class="text-danger small mt-1">
+                            Type is required
+                        </div>
+                    </div>
+                    <div class="self-occupied-heading">
+                        Let Out Property
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="incomeHouseProperty" class="form-label text-muted small">
+                            Income on House Property
+                        </label>
+
+                        <input id="incomeHouseProperty" type="number" class="form-control"
+                            formControlName="Income_House_Property" (blur)="calculateHouseProperty()" />
+
+                        <div *ngIf="incomeForm.get('Income_House_Property')?.touched 
+              && incomeForm.get('Income_House_Property')?.hasError('required')" class="text-danger small mt-1">
+                            Income on House Property is required
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-3">
+                        <label for="municipalTaxPaid" class="form-label text-muted small">
+                            Municipal Tax Paid
+                        </label>
+
+                        <input id="municipalTaxPaid" type="number" class="form-control"
+                            formControlName="Municipal_Tax_Paid" (blur)="calculateHouseProperty()" />
+
+                        <div *ngIf="incomeForm.get('Municipal_Tax_Paid')?.touched 
+              && incomeForm.get('Municipal_Tax_Paid')?.hasError('required')" class="text-danger small mt-1">
+                            Municipal Tax Paid is required
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="netIncomeHouseProperty" class="form-label text-muted small">
+                            Net Income on House Property
+                        </label>
+                        <input id="netIncomeHouseProperty" type="number" class="form-control"
+                            formControlName="Net_Income_House_Property" readonly />
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="insuranceChargePaid" class="form-label text-muted small">
+                            Insurance Charge Paid
+                        </label>
+
+                        <input id="insuranceChargePaid" type="number" class="form-control"
+                            formControlName="Insurance_Charge_Paid" (blur)="calculateHouseProperty()" />
+
+
+                        <div *ngIf="incomeForm.get('Insurance_Charge_Paid')?.touched && incomeForm.get('Insurance_Charge_Paid')?.hasError('required')"
+                            class="text-danger small mt-1">
+                            Insurance Charge Paid is required
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="netAnnualValue" class="form-label text-muted small">
+                            Net Annual Value
+                        </label>
+
+                        <input id="netAnnualValue" type="number" class="form-control" formControlName="Net_Annual_Value"
+                            readonly />
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="noOfLetOutProperty" class="form-label text-muted small">
+                            No. of Let Out Property
+                        </label>
+
+                        <input id="noOfLetOutProperty" type="number" class="form-control"
+                            formControlName="No_Of_Let_Out_Property" />
+
+                        <div *ngIf="incomeForm.get('No_Of_Let_Out_Property')?.touched && incomeForm.get('No_Of_Let_Out_Property')?.hasError('required')"
+                            class="text-danger small mt-1">
+                            No. of Let Out Property is required
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="repairCollection" class="form-label text-muted small">
+                            Repair & Collection 30% of the Annual Value
+                        </label>
+
+
+                        <input id="repairCollection" type="number" class="form-control"
+                            formControlName="Repair_Collection_30" readonly />
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="letOutEligibleInterest" class="form-label text-muted small">
+                            Let Out Eligible Interest
+                        </label>
+
+                        <input type="number" class="form-control" formControlName="Let_Out_Eligible_Interest"
+                            (blur)="calculateHouseProperty()" />
+
+
+                        <div *ngIf="incomeForm.get('Let_Out_Eligible_Interest')?.touched && incomeForm.get('Let_Out_Eligible_Interest')?.hasError('required')"
+                            class="text-danger small mt-1">
+                            Let Out Eligible Interest is required
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="letOutEffectiveDate" class="form-label text-muted small">
+                            Let Out Effective Date
+                        </label>
+                        <input id="letOutEffectiveDate" type="date" class="form-control"
+                            formControlName="Let_Out_Effective_Date" />
+                        <div *ngIf="incomeForm.get('Let_Out_Effective_Date')?.touched && incomeForm.get('Let_Out_Effective_Date')?.hasError('required')"
+                            class="text-danger small mt-1">
+                            Let Out Effective Date is required
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="eligibleLetOutExemption" class="form-label text-muted small">
+                            Eligible Let out Exemption
+                        </label>
+                        <input id="eligibleLetOutExemption" type="text" class="form-control"
+                            formControlName="Eligible_Let_Out_Exemption" />
+                    </div>
+                    <div class="self-occupied-heading">
+                        Self Occupied Property
+                    </div>
+
+
+                    <div class="col-md-3">
+                        <label for="noOfProperty" class="form-label text-muted small">
+                            No of Property
+                        </label>
+
+                        <input id="noOfProperty" type="number" class="form-control" formControlName="No_Of_Property" />
+
+                        <div *ngIf="incomeForm.get('No_Of_Property')?.touched && incomeForm.get('No_Of_Property')?.hasError('required')"
+                            class="text-danger small mt-1">
+                            No of Property is required
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="interestOnHousingLoan" class="form-label text-muted small">
+                            Interest on Housing Loan
+                        </label>
+
+                        <input type="number" class="form-control" formControlName="Interest_on_Housing_Loan"
+                            (blur)="calculateHouseProperty()" />
+
+
+
+                        <div *ngIf="incomeForm.get('Interest_on_Housing_Loan')?.touched && incomeForm.get('Interest_on_Housing_Loan')?.hasError('required')"
+                            class="text-danger small mt-1">
+                            Interest on Housing Loan is required
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="selfOccupiedEffectiveDate" class="form-label text-muted small">
+                            Self occupied Effective Date
+                        </label>
+                        <input id="selfOccupiedEffectiveDate" type="date" class="form-control"
+                            formControlName="Self_Occupied_Effective_Date" />
+                        <div *ngIf="incomeForm.get('Self_Occupied_Effective_Date')?.touched && incomeForm.get('Self_Occupied_Effective_Date')?.hasError('required')"
+                            class="text-danger small mt-1">
+                            Self occupied Effective Date is required
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="eligibleInterest" class="form-label text-muted small">
+                            Eligible Interest on Housing Loan
+                        </label>
+                        <input id="eligibleInterest" type="number" class="form-control"
+                            formControlName="Eligible_Interest_Housing_Loan" readonly />
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="additionExemption" class="form-label text-muted small">
+                            Addition Exemption
+                        </label>
+                        <input type="number" class="form-control" formControlName="Addition_Exemption"
+                            (blur)="calculateHouseProperty()" />
+
+
+                        <div *ngIf="incomeForm.get('Addition_Exemption')?.touched && incomeForm.get('Addition_Exemption')?.hasError('required')"
+                            class="text-danger small mt-1">
+                            Addition Exemption is required
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="eligibleHousingExemption" class="form-label text-muted small">
+                            Eligible Housing Exemption
+                        </label>
+                        <input id="eligibleHousingExemption" type="number" class="form-control"
+                            formControlName="Eligible_Housing_Exemption" readonly />
+                    </div>
+                </div>
+            </form>
+            <div class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">
+
+                <button type="button" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+                           cursor: pointer; background-color: #f0f0f0; color: black;" (click)="closeclick()">
+                    Cancel
+                </button>
+
+                <button type="button" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+         cursor: pointer; background-color: blue; color: white;" (click)="SaveData()">
+                    {{ isEditMode ? 'Update' : 'Save' }}
+                </button>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

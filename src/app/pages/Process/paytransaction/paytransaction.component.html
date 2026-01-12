@@ -89,12 +89,13 @@
                     <ng-container matColumnDef="Action">
                         <mat-header-cell *matHeaderCellDef><strong>Action</strong></mat-header-cell>
                         <mat-cell *matCellDef="let row">
-                            <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                            <div class="header"></div>
+                            <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center"
                                 matTooltip="Edit">
                                 <mat-icon>edit</mat-icon>
-                            </button>
+                            </button> -->
                             <button class="btn btn-sm d-flex align-items-center justify-content-center"
-                                matTooltip="Delete">
+                                matTooltip="Delete" (click)="onDeletePayTransaction(row)">
                                 <mat-icon>delete</mat-icon>
                             </button>
                         </mat-cell>

@@ -34,6 +34,7 @@ export class PayregisterunprocessedComponent {
   payPeriodTypetoChild?: string;
   payPeriodTypefromParentall: string = '';
   selectedPP?: any;
+  selectedPP?: any;
   isLoading: boolean = false;
 
   constructor(private payregisterService: PayregisterunprocessedService) { }
@@ -64,6 +65,8 @@ export class PayregisterunprocessedComponent {
     }
 
     this.payregisterService.GetExporttoExcel(
+      this.companyId,
+      this.selectedPP
       this.companyId,
       this.selectedPP
     ).subscribe({
@@ -118,7 +121,7 @@ export class PayregisterunprocessedComponent {
         this.isLoading = false;
       },
       error: (err) => {
-        this.isLoading = false;
+        // this.isLoading = false;
         console.error("Download error:", err);
       }
     });

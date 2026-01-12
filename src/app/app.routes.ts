@@ -159,6 +159,13 @@ import { OffercreationComponent } from './pages/gsoffer/offercreation/offercreat
 import { LFWSlabComponent } from './pages/GlobalMasters/lfwslab/lfwslab.component';
 import { TDSslabComponent } from './pages/GlobalMasters/tdsslab/tdsslab.component';
 import { StatesComponent } from './pages/GlobalMasters/state/state.component';
+import { ChildreneducationallowanceComponent } from './pages/Taxandsavings/childreneducationallowance/childreneducationallowance.component';
+import { NavigationComponent } from './pages/Taxandsavings/navigation/navigation.component';
+import { IncomeLossOnHousePropertyComponent } from './pages/Taxandsavings/income-loss-on-house-property/income-loss-on-house-property.component';
+import { IncreamentComponent } from './pages/Promotion/increament/increament.component';
+import { PromotionNavigationComponent } from './pages/Promotion/promotion-navigation/promotion-navigation.component';
+import { HRAcalculationComponent } from './pages/Taxandsavings/hracalculation/hracalculation.component';
+
 import { BankAccountComponent } from './pages/SalaryReleaseNew/bank-account/bank-account.component';
 
 
@@ -272,7 +279,7 @@ export const routes: Routes = [
 
         ]
       },
-{
+      {
         path: 'salaryreleasemenu',
         component: SalaryReleaseMenuComponent,
         children: [
@@ -399,6 +406,25 @@ export const routes: Routes = [
           { path: 'salaryadvancerequest', component: SalaryadvacerequestComponent },
           { path: 'salaryadvanceapprove', component: SalaryadvanceapproveComponent },
           { path: 'salaryadvancereport', component: SalaryadvancereportComponent },
+        ]
+      },
+      {
+        path: 'taxnavigation', component: NavigationComponent,
+        children: [
+          { path: 'cea', component: ChildreneducationallowanceComponent },
+          { path: 'IncomeLoss', component: IncomeLossOnHousePropertyComponent },
+          { path: 'HRAcalculation', component: HRAcalculationComponent },
+
+
+        ]
+      },
+
+      {
+        path: 'PromationNavigation', component: PromotionNavigationComponent,
+        children: [
+          { path: 'Increament', component: IncreamentComponent },
+
+
         ]
       },
       {
