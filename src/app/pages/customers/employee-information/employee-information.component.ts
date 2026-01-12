@@ -33,6 +33,7 @@ export class EmployeeInformationComponent {
   fundlevy: any;
   religion: any;
   userdetail: any;
+  workpass: any;
 
   constructor(
     private dialogRef: MatDialogRef<EmployeeInformationComponent>,
@@ -45,7 +46,7 @@ export class EmployeeInformationComponent {
 
     this.rowData = data.rowData;
   }
-  
+
   formatDate(date?: string): string {
     if (!date) {
       return '';
@@ -83,7 +84,7 @@ export class EmployeeInformationComponent {
       placeOfIssue: [this.rowData.Place_Of_Issue ?? '', Validators.required],
       gunLicenseNo: [this.rowData.Gun_License_No ?? '', Validators.required],
       drivingLicenseNo: [this.rowData.Driving_License_Number ?? '', Validators.required],
-      nricFinNo: [this.rowData.Total_CTC ?? '', Validators.required],
+      nricFinNo: [this.rowData.NRIC_FIN_NUMBER ?? '', Validators.required],
       fundLevy: [this.rowData.FUND_LEVY ?? '', Validators.required],
       sprStatus: [this.rowData.spr_status_id ?? '', Validators.required],
 
@@ -111,11 +112,17 @@ export class EmployeeInformationComponent {
 
     this.BindSprstatus();
     this.BindReligion();
+    this.Bindworkpass();
   }
 
   BindSprstatus() {
     this.service.Getsprstatus().subscribe({
       next: res => { this.sprstatus = res.Data.data }
+    });
+  }
+  Bindworkpass() {
+    this.service.Getworkpass().subscribe({
+      next: res => { this.workpass = res.Data.data.Table0 }
     });
   }
   BindReligion() {

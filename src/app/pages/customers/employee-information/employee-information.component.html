@@ -104,7 +104,7 @@
                     </small>
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-4" style="display:none">
                     <label class="form-label small">Spr Status<span style="color:red">*</span></label>
                     <select class="form-select form-select-sm" formControlName="sprStatus">
                         <option value="" disabled>Select</option>
@@ -129,10 +129,7 @@
                         Approved Date is required
                     </small>
                 </div>
-            </div>
 
-            <!-- Row 4 -->
-            <div class="row g-3 mb-3">
                 <div class="col-md-4">
                     <label class="form-label small">VISA Number<span style="color:red">*</span></label>
                     <input class="form-control form-control-sm" formControlName="visaNumber">
@@ -143,7 +140,10 @@
                         VISA Number is required
                     </small>
                 </div>
+            </div>
 
+            <!-- Row 4 -->
+            <div class="row g-3 mb-3">
                 <div class="col-md-4">
                     <label class="form-label small">Insurance Number<span style="color:red">*</span></label>
                     <input class="form-control form-control-sm" formControlName="insuranceNumber">
@@ -165,10 +165,7 @@
                         VISA Start Date is required
                     </small>
                 </div>
-            </div>
 
-            <!-- Row 5 -->
-            <div class="row g-3 mb-3">
 
                 <div class="col-md-4">
                     <label class="form-label small">VISA End Date<span style="color:red">*</span></label>
@@ -180,11 +177,21 @@
                         VISA End Date is required
                     </small>
                 </div>
+            </div>
+
+            <!-- Row 5 -->
+            <div class="row g-3 mb-3">
 
                 <div class="col-md-4">
-                    <label class="form-label small">Work Pass Id<span style="color:red">*</span></label>
-                    <input class="form-control form-control-sm" formControlName="workPassId">
+                    <label class="form-label small">Work Pass<span style="color:red">*</span></label>
+                    <!-- <input class="form-control form-control-sm" formControlName="workPassId"> -->
+                    <select class="form-select form-select-sm" formControlName="workPassId">
+                        <option value="0" disabled>Select</option>
+                        <option *ngFor="let wp of workpass" [value]="wp.WORK_PASS_ID">
+                            {{ wp.PASS }} - {{ wp.FULL_FORM }}
+                        </option>
 
+                    </select>
                     <small
                         *ngIf="infoForm.get('workPassId')?.invalid && (infoForm.get('workPassId')?.touched || submitted)"
                         style="color:red">
@@ -196,7 +203,7 @@
                     <label class="form-label small">Religion</label>
                     <select class="form-select form-select-sm" formControlName="religion">
                         <option value="" disabled>Select</option>
-                         <option *ngFor="let r of religion " [value]="r">
+                        <option *ngFor="let r of religion " [value]="r">
                             {{r}}</option>
                     </select>
                 </div>
