@@ -1,0 +1,309 @@
+<div class="page-wrapper">
+    <div class="scrollable-content">
+        <mat-card-title class="main-header">
+            Previous Employemnt Tax Details
+        </mat-card-title>
+        <div class="container py-2">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Company Code</label>
+                    <companyall (companyEmit)="handleCompany($event)"></companyall>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Employee Code</label>
+                    <select [(ngModel)]="EmpCode" class="form-control">
+                        <option value="">Select</option>
+                        <option *ngFor="let e of empCode" [value]="e.Employee_Id">
+                            {{ e.Employee_code }}
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-md-2 d-flex gap-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
+                        matTooltip="Search" (click)="onSearch()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                    <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="export to excel" (click)="exportToExcel()">
+                        <mat-icon>download</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
+                        matTooltip="Import" (click)="ImportClick(fileInput)">
+                        <!-- <input type="file" #fileInput style="display: none;" (change)="onFileChange($event)"
+                            accept=".xlsx, .xls" /> -->
+                        <mat-icon>cloud_upload</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                        matTooltip="Template">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-add" matTooltip="Add"
+                        (click)="AddPetdOpen()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                    <input type="file" #fileInput style="display: none;" (click)="fileInput.value=''"
+                        (change)="onFileChange($event)" accept=".xlsx, .xls" />
+                    <!--  <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Template"
+        (click)="DownloadTemplate()">
+        <mat-icon>cloud_download</mat-icon>
+      </button> -->
+                </div>
+
+            </div>
+            <div class="table-container" style="top:30px;" *ngIf="showTable">
+                <div class="table-scroll-window">
+                    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+                        <ng-container matColumnDef="delete">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header
+                                class="fixed-width-column"></mat-header-cell>
+                            <mat-cell *matCellDef="let element" class="fixed-width-column">
+                                <img src="assets/delete.svg" style="cursor: pointer; width: 24px; height: 22px;"
+                                    (click)="deletePetd(element)" />
+                            </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="edit">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header
+                                class="fixed-width-column"></mat-header-cell>
+                            <mat-cell *matCellDef="let element" class="fixed-width-column">
+                                <img src="assets/Icons/edit.svg" style="cursor: pointer; width: 24px; height: 22px;"
+                                    (click)="editPetd(element)" />
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="sno">
+                            <mat-header-cell *matHeaderCellDef>SNo</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.SNo }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="companyCode">
+                            <mat-header-cell *matHeaderCellDef>Company Code</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Company_Code }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="employeeCode">
+                            <mat-header-cell *matHeaderCellDef>Employee Code</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Employee_Code }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="employeeName">
+                            <mat-header-cell *matHeaderCellDef>Employee Name</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Employee_Name }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="dateOfJoining">
+                            <mat-header-cell *matHeaderCellDef>Date of Joining</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Date_Of_Joining }}</mat-cell>
+                        </ng-container>
+
+
+                        <ng-container matColumnDef="financialYear">
+                            <mat-header-cell *matHeaderCellDef>Financial Year</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Financial_Year_Name }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="date">
+                            <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Date }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="income">
+                            <mat-header-cell *matHeaderCellDef>Income(After Exemption 10)</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Income_After_Exemption_10 }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="totalTaxPaid">
+                            <mat-header-cell *matHeaderCellDef>Total Tax paid</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Total_Tax_Paid }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="type">
+                            <mat-header-cell *matHeaderCellDef>Type</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Type }}</mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+                    </table>
+                </div>
+                <div *ngIf="dataSource.data.length===0" class="text-center p-4">
+                    <p class="text-muted">No data to display</p>
+                </div>
+                <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons
+                    style="border-top: 1px solid #ddd;"></mat-paginator>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="isAddclicked" class="popup-overlay" (keydown.escape)="closeclick()">
+    <mat-card class="custom-card">
+        <mat-card-header class="sticky-header">
+            <mat-card-title>
+                {{ isEditMode ? 'Edit Previous Employment Tax Details' : 'Add Previous Employment Tax Details' }}
+            </mat-card-title>
+
+            <button class="close-btn" matTooltip="Close" (click)="closeclick()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+        <mat-card-content class="scroll-content">
+
+            <form [formGroup]="addpetdform">
+                <br>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Company Code<span class="text-danger">*</span></label>
+                        <!-- <input type="text" class="form-control" formControlName="POform" /> -->
+                        <companyall (companyEmit)="handleCompanyEvent($event)" formControlName="CompanyCode">
+                        </companyall>
+                        <div class="text-danger small" *ngIf="addpetdform.get('CompanyCode')?.touched 
+             && addpetdform.get('CompanyCode')?.hasError('required')">
+                            companycode is required
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Date<span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" formControlName="Date" />
+                        <div class="text-danger small" *ngIf="addpetdform.get('Date')?.touched 
+             && addpetdform.get('Date')?.hasError('required')">
+                            Date is required
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Employee Code<span class="text-danger">*</span></label>
+                        <select formControlName="EmployeeCode" class="form-control">
+                            <option value="">Select</option>
+                            <option *ngFor="let e of employeeCodes" [value]="e.Employee_Id">
+                                {{ e.Employee_code }}
+                            </option>
+                        </select>
+                        <div class="text-danger small" *ngIf="addpetdform.get('EmployeeCode')?.touched 
+             && addpetdform.get('EmployeeCode')?.hasError('required')">
+                            Employeecode is required
+                        </div>
+                    </div>
+
+                </div>
+                <!-- Row 2 -->
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Employee Name</label>
+                        <input type="text" class="form-control" formControlName="EmployeeName" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Financial Year<span class="text-danger">*</span></label>
+                        <select class="form-select" formControlName="FinancialYear">
+                            <option value="">-- Select --</option>
+                            <option *ngFor="let p of financialYear" [value]="p.Financial_Year_Id">
+                                {{p.Financial_Year_Name}}
+                            </option>
+                        </select>
+                        <div class="text-danger small" *ngIf="addpetdform.get('FinancialYear')?.touched 
+             && addpetdform.get('FinancialYear')?.hasError('required')">
+                            FinancialYear is required
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Income After Exemption10<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" formControlName="Income" />
+                        <div class="text-danger small" *ngIf="addpetdform.get('Income')?.touched 
+             && addpetdform.get('Income')?.hasError('required')">
+                            Income is required
+                        </div>
+                    </div>
+
+                </div>
+                <!-- Row 3 -->
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Tax Paid<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" formControlName="TaxPaid" />
+                        <div class="text-danger small" *ngIf="addpetdform.get('TaxPaid')?.touched 
+             && addpetdform.get('TaxPaid')?.hasError('required')">
+                            TaxPaid is required
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Total Tax Paid<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" formControlName="TotalTaxPaid" />
+                        <div class="text-danger small" *ngIf="addpetdform.get('TotalTaxPaid')?.touched 
+             && addpetdform.get('TotalTaxPaid')?.hasError('required')">
+                            TotalTaxPaid is required
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">PF Paid<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" formControlName="PFPaid" />
+                        <div class="text-danger small" *ngIf="addpetdform.get('PFPaid')?.touched 
+             && addpetdform.get('PFPaid')?.hasError('required')">
+                            PFPaid is required
+                        </div>
+                    </div>
+                </div>
+                <!-- row-4 -->
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Surcharge<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" formControlName="Surcharge" />
+                        <div class="text-danger small" *ngIf="addpetdform.get('Surcharge')?.touched 
+             && addpetdform.get('Surcharge')?.hasError('required')">
+                            Surchage is required
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Education Cess<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" formControlName="EducationCess" />
+                        <div class="text-danger small" *ngIf="addpetdform.get('EducationCess')?.touched 
+             && addpetdform.get('ClaimDate')?.hasError('required')">
+                            EducationCess is required
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">PT Paid<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" formControlName="PTPaid" />
+                        <div class="text-danger small" *ngIf="addpetdform.get('PTPaid')?.touched 
+             && addpetdform.get('PTPaid')?.hasError('required')">
+                            PTPaid is required
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Type<span class="text-danger">*</span></label>
+                        <select class="form-select" formControlName="Type">
+                            <option value="">-- Select --</option>
+                            <option *ngFor="let p of type" [value]="p.Declaration_Type_Id">
+                                {{p.Declaration_Type_Name}}
+                            </option>
+                        </select>
+                        <div class="text-danger small" *ngIf="addpetdform.get('Type')?.touched 
+             && addpetdform.get('Type')?.hasError('required')">
+                            Type is required
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">
+                <button type="button"
+                    style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;"
+                    (click)="closeclick()">
+                    Cancel
+                </button>
+
+                <button type="button"
+                    style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white;"
+                    (click)="savePetd()">
+                    {{ isEditMode ? 'Update' : 'Save' }}
+                </button>
+            </div>
+        </mat-card-content>
+
+    </mat-card>
+</div>

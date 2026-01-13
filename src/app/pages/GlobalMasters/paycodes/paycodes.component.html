@@ -43,25 +43,46 @@
                 </div>
             </div>
         </div>
+        <div class="d-flex align-items-center justify-content-end" style="padding-top: 10px; padding-right: 40px;"
+            *ngIf="showTable">
+            <!-- Search Box -->
+            <div style="display: inline-flex; align-items: center;
+                   border-radius: 10px;
+               border: 1px solid #7E7E7E;
+               width: 260px;
+               height: 30px;
+               background-color: white;
+               padding: 0 10px;">
+                <i style="margin-right: 6px; display: flex; align-items: center;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M8.30883 9.01596C7.539 9.63177 6.5625 10 5.5 10C3.01472 10 1 7.98528 1 5.5C1 3.01472 3.01472 1 5.5 1C7.98528 1 10 3.01472 10 5.5C10 6.56251 9.63176.53901 9.01594 8.30885L10.8535 10.1465C11.0488 10.3417 11.0488 10.6583 10.8535 10.8536C10.6583 11.0488 10.3417 11.0488 10.1464 10.8536L8.30883 9.01596ZM2 5.5C2 3.567 3.567 2 5.5 2C7.433 2 9 3.567 9 5.5C9 6.44299 8.62707 7.29888 8.02066 7.92823C8.00355 7.94139 7.98711 7.95579 7.97144 7.97146C7.95578 7.98712 7.94137 8.00357 7.92822 8.02067C7.29887 8.62708 6.44299 9 5.5 9C3.567 9 2 7.433 2 5.5Z"
+                            fill="#7E7E7E" />
+                    </svg>
+                </i>
+                <input type="text" [(ngModel)]="searchText" (keyup)="applyFilters()" placeholder="Search" style="border: none; outline: none; width: 100%;
+                   font-size: 12px; background-color: transparent;" />
+            </div>
+        </div>
 
         <div class="table-wrapper1" style="padding-top: 2%;" *ngIf="showTable">
             <div class="table-scroll">
                 <mat-table [dataSource]="dataSource" class="mat-elevation-z8 custom-table">
 
                     <!--  Action -->
-                    <!-- <ng-container matColumnDef="Action">
+                    <ng-container matColumnDef="Action">
                         <mat-header-cell *matHeaderCellDef class="action"><strong>Action</strong></mat-header-cell>
                         <mat-cell *matCellDef="let row" class="action">
                             <button class="btn btn-sm d-flex align-items-center justify-content-center"
-                                matTooltip="Edit">
+                                matTooltip="Edit" (click)="editPaycodeOpen(row)">
                                 <mat-icon>edit</mat-icon>
                             </button>
-                            <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                            <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center"
                                 matTooltip="Delete">
                                 <mat-icon>delete</mat-icon>
-                            </button>
+                            </button> -->
                         </mat-cell>
-                    </ng-container> -->
+                    </ng-container>
 
                     <!-- 🔹 Sl.No -->
                     <ng-container matColumnDef="slNo">
@@ -153,128 +174,9 @@
                         <mat-cell *matCellDef="let row">{{ row.Posting_Key }}</mat-cell>
                     </ng-container>
 
-                    <!-- 🔹 Filter Header Row -->
-                    <!-- <ng-container matColumnDef="Actionfilter">
-                        <mat-header-cell *matHeaderCellDef class="action"></mat-header-cell>
-                    </ng-container> -->
-
-                    <ng-container matColumnDef="slNoFilter">
-                        <mat-header-cell *matHeaderCellDef class="sno"></mat-header-cell>
-                    </ng-container>
-
-                    <ng-container matColumnDef="payCodeFilter">
-                        <mat-header-cell *matHeaderCellDef>
-                            <input matInput placeholder="Search Pay Code" [(ngModel)]="filterValues.Paycode_Code"
-                                (keyup)="applyFilter()" />
-                        </mat-header-cell>
-                    </ng-container>
-
-                    <ng-container matColumnDef="descriptionFilter">
-                        <mat-header-cell *matHeaderCellDef class="description">
-                            <input matInput placeholder="Search Description" [(ngModel)]="filterValues.Description"
-                                (keyup)="applyFilter()" />
-                        </mat-header-cell>
-                    </ng-container>
-
-                    <ng-container matColumnDef="printAsFilter">
-                        <mat-header-cell *matHeaderCellDef class="printas">
-                            <input matInput placeholder="Search Print As" [(ngModel)]="filterValues.Print_As"
-                                (keyup)="applyFilter()" />
-                        </mat-header-cell>
-                    </ng-container>
-
-                    <ng-container matColumnDef="payTypeFilter">
-                        <mat-header-cell *matHeaderCellDef>
-                            <input matInput placeholder="Search Pay Type" [(ngModel)]="filterValues.PayType"
-                                (keyup)="applyFilter()" />
-                        </mat-header-cell>
-                    </ng-container>
-
-                    <ng-container matColumnDef="taxableFilter">
-                        <mat-header-cell *matHeaderCellDef>
-                            <input matInput placeholder="Search Taxable" [(ngModel)]="filterValues.IsTaxable"
-                                (keyup)="applyFilter()" />
-                        </mat-header-cell>
-                    </ng-container>
-
-                    <ng-container matColumnDef="projectTaxFilter">
-                        <mat-header-cell *matHeaderCellDef>
-                            <input matInput placeholder="Search Project Tax" [(ngModel)]="filterValues.IsProjectTax"
-                                (keyup)="applyFilter()" />
-                        </mat-header-cell>
-                    </ng-container>
-
-                    <ng-container matColumnDef="marginalTaxFilter">
-                        <mat-header-cell *matHeaderCellDef>
-                            <input matInput placeholder="Search Marginal Tax" [(ngModel)]="filterValues.IsMarginalTax"
-                                (keyup)="applyFilter()" />
-                        </mat-header-cell>
-                    </ng-container>
-
-
-                    <ng-container matColumnDef="payCodeTypeFilter">
-                        <mat-header-cell *matHeaderCellDef>
-                            <input matInput placeholder="Search Pay Code Type" [(ngModel)]="filterValues.PayCode_Type"
-                                (keyup)="applyFilter()" />
-                        </mat-header-cell>
-                    </ng-container>
-
-
-                    <ng-container matColumnDef="lopApplicableFilter">
-                        <mat-header-cell *matHeaderCellDef>
-                            <input matInput placeholder="Search LOP Applicable"
-                                [(ngModel)]="filterValues.Is_LOP_Applicable" (keyup)="applyFilter()" />
-                        </mat-header-cell>
-                    </ng-container>
-
-
-                    <ng-container matColumnDef="pfApplicableFilter">
-                        <mat-header-cell *matHeaderCellDef>
-                            <input matInput placeholder="Search PF Applicable"
-                                [(ngModel)]="filterValues.Is_PF_Applicable" (keyup)="applyFilter()" />
-                        </mat-header-cell>
-                    </ng-container>
-
-                    <ng-container matColumnDef="esiApplicableFilter">
-                        <mat-header-cell *matHeaderCellDef>
-                            <input matInput placeholder="Search ESI Applicable"
-                                [(ngModel)]="filterValues.Is_ESI_Applicable " (keyup)="applyFilter()" />
-                        </mat-header-cell>
-                    </ng-container>
-
-                    <ng-container matColumnDef="ptApplicableFilter">
-                        <mat-header-cell *matHeaderCellDef>
-                            <input matInput placeholder="Search PT Applicable"
-                                [(ngModel)]="filterValues.Is_PT_Applicable" (keyup)="applyFilter()" />
-                        </mat-header-cell>
-                    </ng-container>
-
-                    <ng-container matColumnDef="pageTypeFilter">
-                        <mat-header-cell *matHeaderCellDef>
-                            <input matInput placeholder="Search Page Type" [(ngModel)]="filterValues.Page_Type"
-                                (keyup)="applyFilter()" />
-                        </mat-header-cell>
-                    </ng-container>
-
-                    <ng-container matColumnDef="accountNumberFilter">
-                        <mat-header-cell *matHeaderCellDef>
-                            <input matInput placeholder="Search Account Number"
-                                [(ngModel)]="filterValues.Account_Number" (keyup)="applyFilter()" />
-                        </mat-header-cell>
-                    </ng-container>
-
-                    <ng-container matColumnDef="postingKeyFilter">
-                        <mat-header-cell *matHeaderCellDef>
-                            <input matInput placeholder="Search Posting Key" [(ngModel)]="filterValues.Posting_Key"
-                                (keyup)="applyFilter()" />
-                        </mat-header-cell>
-                    </ng-container>
 
                     <!-- Header Rows -->
                     <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
-
-                    <mat-header-row *matHeaderRowDef="uploadFilteredColumns"></mat-header-row>
-
 
                     <!-- Data Rows -->
                     <mat-row *matRowDef="let row; columns: uploadDisplayedColumns"></mat-row>

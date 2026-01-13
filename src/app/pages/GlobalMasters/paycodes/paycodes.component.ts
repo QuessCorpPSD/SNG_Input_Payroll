@@ -41,38 +41,62 @@ export class PaycodesComponent implements AfterViewInit {
   paycode: any;
   PayType: any;
   Taxable: any;
-
   isLoading: boolean = false;
   showPopup: boolean = false;
   popupMessage: string = '';
   popupSubMessage: string = '';
+  searchText: string = "";
 
   constructor(@Inject(Paycode_TOKEN) private payCode: PaycodeserviceService, private dialog: MatDialog) { }
 
   showTable = false;
 
-  uploadDisplayedColumns: string[] = ['slNo', 'payCode', 'description', 'printAs', 'payType', 'taxable', 'projectTax', 'marginalTax', 'payCodeType', 'lopApplicable', 'pfApplicable', 'esiApplicable', 'ptApplicable', 'pageType', 'accountNumber', 'postingKey'];
-
-  uploadFilteredColumns: string[] = ['slNoFilter', 'payCodeFilter', 'descriptionFilter', 'printAsFilter', 'payTypeFilter', 'taxableFilter', 'projectTaxFilter', 'marginalTaxFilter', 'payCodeTypeFilter', 'lopApplicableFilter', 'pfApplicableFilter', 'esiApplicableFilter', 'ptApplicableFilter', 'pageTypeFilter', 'accountNumberFilter', 'postingKeyFilter'];
+  uploadDisplayedColumns: string[] = ['Action', 'slNo', 'payCode', 'description', 'printAs', 'payType', 'taxable', 'projectTax', 'marginalTax', 'payCodeType', 'lopApplicable', 'pfApplicable', 'esiApplicable', 'ptApplicable', 'pageType', 'accountNumber', 'postingKey'];
 
   uploadedData: any[] = [];
 
   uploadedDataSource = new MatTableDataSource<any>(this.uploadedData);
 
-  filterValues: any = {
-    slNo: '', payCode: '', description: '', payType: '', taxable: '', accountNumber: ''
-  };
-
   @ViewChild('paginator') paginator!: MatPaginator;
+
+  ngAfterViewInit() {
+    this.uploadedDataSource.paginator = this.paginator;
+  }
 
   ngOnInit(): void {
     this.BindPayType();
+    this.dataSource.filterPredicate = (data: any, filter: string) => {
+      const searchText = filter.toLowerCase();
+
+      return (
+        data.Paycode_Code?.toLowerCase().includes(searchText) ||
+        data.Description?.toLowerCase().includes(searchText) ||
+        data.Print_As?.toLowerCase().includes(searchText) ||
+        data.PayType?.toLowerCase().includes(searchText) ||
+        data.IsTaxable?.toString().includes(searchText) ||
+        data.IsProjectTax?.toString().includes(searchText) ||
+        data.IsMarginalTax?.toString().includes(searchText) ||
+        data.PayCode_Type?.toString().includes(searchText) ||
+        data.Is_LOP_Applicable?.toString().includes(searchText) ||
+        data.Is_PF_Applicable?.toString().includes(searchText) ||
+        data.Is_ESI_Applicable?.toString().includes(searchText) ||
+        data.Is_PT_Applicable?.toString().includes(searchText) ||
+        data.Page_Type?.toString().includes(searchText) ||
+        data.Account_Number?.toString().includes(searchText) ||
+        data.Posting_Key?.toString().includes(searchText)
+
+
+        // data.From_Value?.toString().includes(searchText) ||
+        // data.To_Value?.toString().includes(searchText)
+      );
+    };
 
     this.Paycodeform = new FormGroup({
       payCode: new FormControl('', Validators.required),
       payType: new FormControl(''),
       taxable: new FormControl(''),
     });
+
   }
 
 
@@ -87,42 +111,16 @@ export class PaycodesComponent implements AfterViewInit {
     this.popupMessage = '';
     this.popupSubMessage = '';
   }
+
   BindPayType() {
     this.payCode.GetPayType().subscribe({
       next: res => { this.paytype = res.Data }
     });
   }
 
-  ngAfterViewInit() {
-   // this.uploadedDataSource.paginator = this.paginator;
-    this.setUpCustomFilter();
-  }
-
-  setUpCustomFilter() {
-    this.dataSource.filterPredicate = (data, filter: string): boolean => {
-      const search = JSON.parse(filter);
-      return (
-        data.payCode?.toLowerCase().includes(search.payCode) &&
-        data.description?.toLowerCase().includes(search.description) &&
-        data.payType?.toLowerCase().includes(search.payType) &&
-        data.taxable?.toLowerCase().includes(search.taxable) &&
-        data.accountNumber?.toLowerCase().includes(search.accountNumber)
-      );
-    };
-  }
-
-  applyFilter() {
-    this.dataSource.filter = JSON.stringify({
-      payCode: this.filterValues.payCode.trim().toLowerCase(),
-      description: this.filterValues.description.trim().toLowerCase(),
-      payType: this.filterValues.payType.trim().toLowerCase(),
-      taxable: this.filterValues.taxable.trim().toLowerCase(),
-      accountNumber: this.filterValues.accountNumber.trim().toLowerCase(),
-    });
-
-    // if (this.uploadedDataSource.paginator) {
-    //   this.uploadedDataSource.paginator.firstPage();
-    // }
+  applyFilters() {
+    const filterValue = this.searchText?.trim().toLowerCase();
+    this.dataSource.filter = filterValue;
   }
 
   PayCodeSearch() {
@@ -141,6 +139,7 @@ export class PaycodesComponent implements AfterViewInit {
       next: (res) => {
         this.isLoading = false;
         this.paySearch = res.Data.data.Table0;
+        console.log(this.paySearch);
         if (this.paySearch && this.paySearch.length > 0) {
           this.dataSource = new MatTableDataSource(this.paySearch);
           this.dataSource.paginator = this.paginator;
@@ -159,7 +158,7 @@ export class PaycodesComponent implements AfterViewInit {
       },
     });
   }
-  
+
 
   exportToExcel(): void {
     this.isLoading = true;
@@ -168,13 +167,11 @@ export class PaycodesComponent implements AfterViewInit {
       "PayTypeId": 0,
       "IsTaxable": 0,
       "PayId": 0
-
     }
-
 
     this.payCode.SearchPayCode(payload).subscribe({
       next: (res) => {
-        this.isLoading=false;
+        this.isLoading = false;
         try {
           const jsonData = res?.Data?.data?.Table0;
           if (!Array.isArray(jsonData) || jsonData.length === 0) {
@@ -206,11 +203,31 @@ export class PaycodesComponent implements AfterViewInit {
 
 
   AddPOOpen() {
-    this.dialog.open(PaycodeaddComponent, {
+    const dialogRef = this.dialog.open(PaycodeaddComponent, {
       width: '90%',
       height: '84vh',
       disableClose: true,
       data: { example: 'Hello from parent!' }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'updated') {
+        this.PayCodeSearch();
+      }
+    });
+  }
+
+  editPaycodeOpen(row: any) {
+    const dialogRef = this.dialog.open(PaycodeaddComponent, {
+      width: '90%',
+      height: '84vh',
+      disableClose: true,
+      data: { mode: 'edit', row: row }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'updated') {
+        this.PayCodeSearch();
+      }
     });
   }
 }

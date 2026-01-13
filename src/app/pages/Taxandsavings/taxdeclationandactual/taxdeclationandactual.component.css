@@ -1,0 +1,362 @@
+.mat-footer-paginator {
+    position: sticky;
+    bottom: 0;
+    background: white;
+    box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+}
+
+.page-wrapper {
+    display: flex;
+    align-items: flex-start;
+    height: auto;
+
+}
+
+.scrollable-content {
+    flex: 1 1 auto;
+    overflow-x: auto;
+    overflow-y: auto;
+    padding-left: 10px;
+}
+
+.main-header {
+    color: #302CB3;
+    font-size: 22px;
+    font-family: Montserrat;
+    font-weight: 600;
+    padding-top: 10px;
+}
+
+.right-align {
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 20px;
+    width: 100%;
+}
+
+.custom-mat-table {
+    border: 1px solid #ddd;
+}
+
+.custom-mat-table th,
+.custom-mat-table td {
+    padding: 3px 5px;
+    white-space: nowrap;
+}
+
+.fixed-width-column {
+    width: 50px;
+    min-width: 30px;
+    max-width: 75px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+::ng-deep .mat-elevation-z8 {
+    box-shadow: none !important;
+}
+
+::ng-deep .mat-mdc-table {
+    display: table !important;
+    table-layout: auto !important;
+    width: max-content !important;
+    min-width: 100% !important;
+}
+
+::ng-deep .mat-mdc-header-row,
+::ng-deep .mat-mdc-row {
+    display: table-row !important;
+    height: 50px !important;
+}
+
+::ng-deep .mat-mdc-header-cell,
+::ng-deep .mat-mdc-cell {
+    display: table-cell !important;
+    width: auto !important;
+    white-space: nowrap;
+}
+
+::ng-deep .mat-mdc-header-cell {
+    position: sticky !important;
+    top: 0;
+    z-index: 10;
+    background: white;
+    color: #A0A0A0;
+    font-size: 12px;
+    font-family: "Montserrat";
+    font-weight: 500;
+    line-height: 19.40px;
+    word-wrap: break-word;
+    border-right: 1px solid #ddd;
+    text-align: center;
+    vertical-align: middle;
+}
+
+::ng-deep .mat-mdc-cell {
+    font-family: "Montserrat";
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 22.4px;
+    letter-spacing: 0.24px;
+    color: #222;
+    border-bottom: 1px dashed #E8E8E8 !important;
+    border-right: 1px solid #ddd;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    word-wrap: break-word;
+
+}
+
+.table-container {
+    width: 100%;
+    border: 1px solid #ddd;
+    background: white;
+    margin-top: 20px;
+}
+
+/* This is your scroll window */
+.table-scroll-window {
+    max-height: 450px;
+    /* Set your desired height */
+    overflow-x: auto;
+    /* Horizontal scroll */
+    overflow-y: auto;
+    /* Vertical scroll */
+    width: 100%;
+    position: relative;
+}
+
+.filter-row {
+    position: sticky;
+    top: 56px;
+    z-index: 9;
+    background: white;
+}
+
+.header-row {
+    position: sticky !important;
+    top: 0;
+    background: white !important;
+    z-index: 100;
+}
+
+.offer-style {
+    border-radius: 6px;
+    border: 1px solid #C7F5BB;
+    background: #E9FFE3;
+    height: 22px;
+    width: 87px;
+    text-align: center;
+}
+
+.select-drop {
+    font-family: "Montserrat";
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 22.4px;
+    letter-spacing: 0.24px;
+    color: #7E7E7E;
+    appearance: none;
+    -webkit-appearance: none;
+    border-radius: 10px;
+    border: 1px solid #7E7E7E;
+    width: 120px;
+    height: 40px;
+    padding: 4px 24px 4px 4px;
+    background-color: white;
+    position: relative;
+    text-align: center;
+    /* box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.12); */
+}
+
+.previewtable {
+    width: auto;
+    table-layout: auto;
+    border-collapse: collapse;
+    font-family: "Montserrat";
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 22.4px;
+    letter-spacing: 0.24px;
+    color: #7E7E7E;
+    border: 1px solid #E8E8E8;
+    /* 🔹 Full table border */
+}
+
+.previewtable th,
+.previewtable td {
+    font-family: "Montserrat";
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 22.4px;
+    letter-spacing: 0.24px;
+    white-space: nowrap;
+    padding: 8px;
+    border: 1px solid #E8E8E8;
+    /* 🔹 Cell border */
+    text-align: left;
+}
+
+.previewtable th {
+    font-family: "Montserrat";
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 22.4px;
+    letter-spacing: 0.24px;
+    background-color: #f9f9f9;
+    /* Optional for visibility */
+    color: #A0A0A0;
+}
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.centered-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+}
+
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    /* dark background */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    /* stay above everything */
+}
+
+.popup-card {
+    width: 900px;
+    max-width: 80%;
+    height: 70vh;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+select {
+    width: 100%;
+    padding: 6px 8px;
+    border-radius: 4px;
+    border: 1px solid #A0A0A0;
+    font-size: 12px;
+    font-family: "Montserrat";
+    color: #222;
+    appearance: outline;
+}
+
+input {
+    width: 100%;
+    padding: 6px 8px;
+    border-radius: 4px;
+    border: 1px solid #A0A0A0;
+    font-size: 12px;
+    font-family: "Montserrat";
+    color: #222;
+    appearance: outline;
+}
+
+.popup-header {
+    position: relative;
+    /* border-bottom: 1px solid #89898B; */
+    padding: 16px 20px;
+}
+
+/* Close button fixed top-right */
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.close-btn mat-icon {
+    font-size: 22px;
+    color: #000;
+}
+
+/* Optional hover effect */
+.close-btn:hover mat-icon {
+    color: #302CB3;
+}
+
+.d-flex {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    /* Adds space between checkboxes */
+}
+
+.form-check {
+    display: flex;
+    align-items: center;
+}
+
+.form-check input {
+    margin-right: 5px;
+    /* Adds space between checkbox and label */
+}
+
+.form-label {
+    font-size: 12px;
+    color: #6c757d;
+}
+
+.text-muted {
+    color: #6c757d;
+}
+
+.text-danger {
+    color: red;
+}
+
+.btn-upload {
+    background-color: #6f42c1;
+    color: #fff;
+}
+
+.btn-download {
+    background-color: #20c997;
+    color: #fff;
+}
+
+
+.container.py-2 {
+    overflow-y: hidden;
+}
