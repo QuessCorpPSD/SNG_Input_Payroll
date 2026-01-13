@@ -1,0 +1,321 @@
+<div class="page-wrapper">
+    <div class="scrollable-content">
+        <mat-card-title class="main-header">
+            Tax Declaration & Actual
+        </mat-card-title>
+        <div class="container py-2">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Company</label>
+                    <companyall (companyEmit)="handleCompany($event)"></companyall>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Employee Code</label>
+                    <select [(ngModel)]="EmpCode" class="form-control">
+                        <option value="">Select</option>
+                        <option *ngFor="let e of empCode" [value]="e.Employee_Id">
+                            {{ e.Employee_code }}
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-md-3 d-flex gap-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-primary"
+                        matTooltip="Search" (click)="onSearch()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-success"
+                        matTooltip="Add" (click)="AddPOOpen()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-secondary"
+                        matTooltip="export to excel" (click)="exportToExcel()">
+                        <mat-icon>download</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
+                        matTooltip="Import" (click)="ImportClick(fileInput)">
+                        <!-- <input type="file" #fileInput style="display: none;" (change)="onFileChange($event)"
+                            accept=".xlsx, .xls" /> -->
+                        <mat-icon>cloud_upload</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                        matTooltip="Template">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button>
+
+                    <input type="file" #fileInput style="display: none;" (click)="fileInput.value=''"
+                        (change)="onFileChange($event)" accept=".xlsx, .xls" />
+
+                </div>
+
+            </div>
+            <div class="table-container" style="top:30px;" *ngIf="showTable">
+                <div class="table-scroll-window">
+                    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+                        <ng-container matColumnDef="delete">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header
+                                class="fixed-width-column"></mat-header-cell>
+                            <mat-cell *matCellDef="let element" class="fixed-width-column">
+                                <img src="assets/delete.svg" style="cursor: pointer; width: 24px; height: 22px;"
+                                    (click)="deleteTax(element)">
+                            </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="edit">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header
+                                class="fixed-width-column"></mat-header-cell>
+                            <mat-cell *matCellDef="let element" class="fixed-width-column">
+                                <img src="assets/Icons/edit.svg" style="cursor: pointer; width: 24px; height: 22px;"
+                                    (click)="editPetd(element)" />
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Serial_No">
+                            <mat-header-cell *matHeaderCellDef>SNo</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.serial_No }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Company_Code">
+                            <mat-header-cell *matHeaderCellDef>Company Code</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.cityID }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Employee_Code">
+                            <mat-header-cell *matHeaderCellDef>Employee Code</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.cityName }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Employee_Name">
+                            <mat-header-cell *matHeaderCellDef>Employee Name</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.cityCode }}</mat-cell>
+                        </ng-container>
+
+
+
+                        <ng-container matColumnDef="Financial_Year">
+                            <mat-header-cell *matHeaderCellDef>Financial Year</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.stateName }}</mat-cell>
+                        </ng-container>
+
+
+                        <ng-container matColumnDef="Date">
+                            <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.regionName }}</mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Tax_code">
+                            <mat-header-cell *matHeaderCellDef>Tax Code</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.saP_Code }}</mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="Type">
+                            <mat-header-cell *matHeaderCellDef>Type</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.saP_Code }}</mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="amount">
+                            <mat-header-cell *matHeaderCellDef>Amount</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.saP_Code }}</mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                    </table>
+                </div>
+                <div *ngIf="dataSource.data.length===0" class="text-center p-4">
+                    <p class="text-muted">No data to display</p>
+                </div>
+
+                <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons style="border-top: 1px solid #ddd;"></mat-paginator>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<br><br><br><br><br><br>
+
+
+<div *ngIf="isAddclicked" class="popup-overlay" (keydown.escape)="closeclick()">
+    <mat-card class="popup-card">
+        <mat-card-header class="popup-header">
+            <mat-card-title>
+                {{ isEditMode ? 'Edit Tax Declaration & Actual' : 'Add Tax Declaration & Actual' }}
+            </mat-card-title>
+            <button class="close-btn" matTooltip="Close" (click)="closeclick()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+        <mat-card-content class="scroll-content">
+            <form [formGroup]="taxForm">
+                <!-- New Fields for Tax Declaration -->
+                <div class="row g-3">
+                    <!-- Company Code -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Company Code<span
+                                class="text-danger">*</span></label>
+                        <companyall (companyEmit)="handleCompanyEvent($event)" formControlName="CompanyCode"></companyall>
+                        <div *ngIf="taxForm.get('CompanyCode')?.invalid && taxForm.get('CompanyCode')?.touched"
+                            class="text-danger">
+                            Company Code is required.
+                        </div>
+                    </div>
+
+                    <!-- Date -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Date<span class="text-danger">*</span></label>
+                        <input type="date" formControlName="Date" class="form-control" />
+                        <div *ngIf="taxForm.get('Date')?.invalid && taxForm.get('Date')?.touched" class="text-danger">
+                            Date is required.
+                        </div>
+                    </div>
+
+                    <!-- Financial Year -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Financial Year<span
+                                class="text-danger">*</span></label>
+                        <select formControlName="FinancialYear" class="form-control">
+                            <option value="">Select</option>
+                            <option *ngFor="let p of financialYear" [value]="p.Financial_Year_Id">
+                                {{p.Financial_Year_Name}}
+                            </option>
+                        </select>
+                        <div *ngIf="taxForm.get('FinancialYear')?.invalid && taxForm.get('FinancialYear')?.touched"
+                            class="text-danger">
+                            Financial Year is required.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Fields -->
+                <div class="row g-3 py-2">
+                    <!-- Type -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Type<span class="text-danger">*</span></label>
+                        <select formControlName="Type" class="form-control">
+                            <option value="">Select</option>
+                            <option *ngFor="let p of type" [value]="p.Declaration_Type_Id">
+                                {{p.Declaration_Type_Name}}
+                            </option>
+                        </select>
+                        <div *ngIf="taxForm.get('Type')?.invalid && taxForm.get('Type')?.touched" class="text-danger">
+                            Type is required.
+                        </div>
+                    </div>
+
+                    <!-- Employee Code -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Employee Code<span
+                                class="text-danger">*</span></label>
+                        <select formControlName="EmployeeCode" class="form-control">
+                            <option value="">Select</option>
+                            <option *ngFor="let e of employeeCodes" [value]="e.Employee_Id">
+                                {{ e.Employee_Code }}
+                            </option>
+                        </select>
+                        <div *ngIf="taxForm.get('EmployeeCode')?.invalid && taxForm.get('EmployeeCode')?.touched"
+                            class="text-danger">
+                            Employee Code is required.
+                        </div>
+                    </div>
+
+                    <!-- Employee Name -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Employee Name</label>
+                        <input type="text" formControlName="EmployeeName" class="form-control" readonly />
+                        <div *ngIf="taxForm.get('EmployeeName')?.invalid && taxForm.get('EmployeeName')?.touched"
+                            class="text-danger">
+                            Employee Name is required.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-3 py-2">
+                    <!-- Tax Code -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Tax Code<span class="text-danger">*</span></label>
+                        <select formControlName="TaxCode" class="form-control">
+                            <option value="">Select</option>
+                            <option *ngFor="let p of taxCode" [value]="p.Tax_Id">
+                                {{p.Tax_Id}}
+                            </option>
+                        </select>
+                        <div *ngIf="taxForm.get('TaxCode')?.invalid && taxForm.get('TaxCode')?.touched"
+                            class="text-danger">
+                            Tax Code is required.
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Description</label>
+                        <input type="text" formControlName="Description" class="form-control" />
+                    </div>
+
+                    <!-- Section -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Section</label>
+                        <input type="text" formControlName="Section" class="form-control" />
+                    </div>
+                </div>
+
+                <div class="row g-3 py-2">
+                    <!-- Formula -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Formula</label>
+                        <input type="text" formControlName="Formula" class="form-control" />
+                    </div>
+
+                    <!-- Amount -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Amount<span class="text-danger">*</span></label>
+                        <input type="text" formControlName="Amount" class="form-control" />
+                        <div *ngIf="taxForm.get('Amount')?.invalid && taxForm.get('Amount')?.touched"
+                            class="text-danger">
+                            Amount is required.
+                        </div>
+                    </div>
+
+                    <!-- Eligible Amount -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Eligible Amount</label>
+                        <input type="number" formControlName="EligibleAmount" class="form-control" readonly />
+                    </div>
+                </div>
+
+                <div class="row g-3 py-2">
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Citizen Category</label>
+                        <select formControlName="CitizenCategory" class="form-control">
+                            <option value="">Select</option>
+                            <option value="INDIAN">INDIAN</option>
+                            <option value="NRI">NRI</option>
+                            <option value="OTHERS">OTHERS</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4" style="display: none;">
+                        <label class="form-label text-muted small">No of Children</label>
+                        <input type="number" formControlName="children" class="form-control" />
+                    </div>
+                </div>
+            </form>
+
+            <div class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">
+                <button type="button"
+                    style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;"
+                    (click)="closeclick()">
+                    Cancel
+                </button>
+
+                <button type="button"
+                    style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white;"
+                    (click)="saveTax()">
+                    {{ isEditMode ? 'Update' : 'Save' }}
+                </button>
+            </div>
+        </mat-card-content>
+
+    </mat-card>
+</div>
