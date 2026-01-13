@@ -2,8 +2,8 @@
     <mat-card class="custom-card">
         <mat-card-header class="sticky-header">
 
-            <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;">Add Pay
-                Code</mat-card-title>
+            <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;">{{
+                isEditMode ? 'Edit Paycode' : 'Add Paycode' }}</mat-card-title>
             <span class=" spacer"></span>
             <button mat-icon-button (click)="onClose()" class="no-border-icon">
                 <mat-icon>close</mat-icon>
@@ -39,21 +39,21 @@
                     <label class="form-label">LOP Applicable<span class="text-danger"></span></label>
                     <select class="form-select" formControlName="LOPApplicable">
                         <option value="1">Yes</option>
-                        <option value="2">No</option>
+                        <option value="0">No</option>
                     </select>
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">PF Applicable<span class="text-danger"></span></label>
                     <select class="form-select" formControlName="PFApplicable">
                         <option value="1">Yes</option>
-                        <option value="2">No</option>
+                        <option value="0">No</option>
                     </select>
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">ESI Applicable<span class="text-danger"></span></label>
                     <select class="form-select" formControlName="ESIApplicable">
                         <option value="1">Yes</option>
-                        <option value="2">No</option>
+                        <option value="0">No</option>
                     </select>
                 </div>
             </div>
@@ -63,7 +63,7 @@
                     <label class="form-label">PT Applicable<span class="text-danger">*</span></label>
                     <select class="form-select" formControlName="PTApplicable">
                         <option value="1">Yes</option>
-                        <option value="2">No</option>
+                        <option value="0">No</option>
                     </select>
                 </div>
                 <div class="col-md-4">
@@ -93,13 +93,13 @@
                     </label>
 
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="static" value="Static"
+                        <input class="form-check-input" type="radio" id="static" value="1"
                             formControlName="PayCodeType" />
                         <label class="form-check-label" for="static">Static</label>
                     </div>
 
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="adhoc" value="Adhoc"
+                        <input class="form-check-input" type="radio" id="adhoc" value="0"
                             formControlName="PayCodeType" />
                         <label class="form-check-label" for="adhoc">Adhoc</label>
                     </div>
@@ -116,11 +116,11 @@
                         Taxable <span class="text-danger"></span>
                     </label>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="yes" value="Yes" formControlName="Taxable" />
+                        <input class="form-check-input" type="radio" id="yes" value="1" formControlName="Taxable" />
                         <label class="form-check-label" for="yes">Yes</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="no" value="No" formControlName="Taxable" />
+                        <input class="form-check-input" type="radio" id="no" value="0" formControlName="Taxable" />
                         <label class="form-check-label" for="no">No</label>
                     </div>
                 </div>
@@ -129,13 +129,13 @@
                         Project Tax <span class="text-danger"></span>
                     </label>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="yes" value="Yes"
-                            formControlName="ProjectTax " />
+                        <input class="form-check-input" type="radio" id="yes" value="1"
+                            formControlName="ProjectTax" />
                         <label class="form-check-label" for="yes">Yes</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="no" value="No"
-                            formControlName="Project Tax " />
+                        <input class="form-check-input" type="radio" id="no" value="0"
+                            formControlName="ProjectTax" />
                         <label class="form-check-label" for="no">No</label>
                     </div>
                 </div>
@@ -145,12 +145,12 @@
                         Marginal Tax <span class="text-danger"></span>
                     </label>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="yes" value="Yes"
+                        <input class="form-check-input" type="radio" id="yes" value="1"
                             formControlName="MarginalTax" />
                         <label class="form-check-label" for="yes">Yes</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="no" value="No" formControlName="MarginalTax" />
+                        <input class="form-check-input" type="radio" id="no" value="0" formControlName="MarginalTax" />
                         <label class="form-check-label" for="no">No</label>
                     </div>
                 </div>
@@ -159,8 +159,12 @@
                     <label class="form-label d-block">
                         Pay Type <span class="text-danger">*</span>
                     </label>
+                    <select class="form-select form-select-sm" formControlName="PayType">
+                        <option value="">--Select--</option>
+                        <option *ngFor="let pay of paytype" [value]="pay.PayType_Id">{{pay.PayType}}</option>
+                    </select>
 
-                    <div class="form-check form-check-inline">
+                    <!-- <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" id="earning" value="Earning"
                             formControlName="PayType" />
                         <label class="form-check-label" for="earning">Earning</label>
@@ -186,7 +190,7 @@
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" id="loan" value="Loan" formControlName="PayType" />
                         <label class="form-check-label" for="loan">Loan</label>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </mat-card-content>
@@ -198,10 +202,14 @@
                     Cancel
                 </button>
 
-                <button type="button" (click)="onSavePayCode()" style="border: none; border-radius: 7px; width: 80px; height: 30px;
-                    cursor: pointer; background-color: blue; color: white;">
-                    Save
+                <button type="button" (click)="isEditMode ? onUpdatePayCode() : onSavePayCode()" style="    border: none;    border-radius: 7px;    width: 80px;    height: 30px;
+    cursor: pointer;
+    background-color: blue;
+    color: white;
+  ">
+                    {{ isEditMode ? 'Update' : 'Save' }}
                 </button>
+
             </div>
         </mat-card-footer>
     </mat-card>
