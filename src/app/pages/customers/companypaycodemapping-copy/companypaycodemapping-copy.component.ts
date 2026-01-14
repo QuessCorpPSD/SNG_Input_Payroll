@@ -176,11 +176,23 @@ export class CompanypaycodemappingCopyComponent {
 
   onPaycodeSelect(paycodeId: number, pageRelativeIndex: number) {
     const rowIndex = this.getAbsoluteIndex(pageRelativeIndex);
-    const selectedPaycode = this.paycodeList.find(pc => pc.Paycode_Id === paycodeId);
+    const row = this.uploadedData[rowIndex];
+
+    const isDuplicate = this.uploadedData.some(
+      (r, index) => index !== rowIndex && r.Paycode_Id === paycodeId
+    );
+
+    if (isDuplicate) {
+      alert('This paycode is already selected in another row.');
+      return;
+    }
+
+    const selectedPaycode = this.paycodeList.find(
+      pc => pc.Paycode_Id === paycodeId
+    );
 
     if (!selectedPaycode) return;
 
-    const row = this.uploadedData[rowIndex];
     row.Paycode_Id = selectedPaycode.Paycode_Id;
     row.Paycode_Code = selectedPaycode.Paycode_Code;
     row.Description = selectedPaycode.Description;
@@ -198,9 +210,10 @@ export class CompanypaycodemappingCopyComponent {
 
 
     row.Company_Paycode_Pick_From_Id = selectedPaycode.Company_Paycode_Pick_From_Id;
-    row.Company_Paycode_Pick_From_Value = selectedPaycode.Company_Paycode_Pick_From_Value;
-    row.isEmpty = false;
+    row.Company_Paycode_Pick_From_Value =
+      selectedPaycode.Company_Paycode_Pick_From_Value;
 
+    row.isEmpty = false;
     this.uploadedDataSource.data = [...this.uploadedData];
   }
 
@@ -288,13 +301,39 @@ export class CompanypaycodemappingCopyComponent {
   onClose(): void {
     this.dialogRef.close();
   }
-
+  isRowBound(row: any): boolean {
+    return !!row.Paycode_Id && !!row.Description;
+  }
   savePaycodeDetails(): void {
     if (!this.selectedCompanyIdbind) {
       alert('Please select company');
       return
     }
     this.isLoading = true;
+    const data = this.uploadedDataSource.data;
+    const unboundRows = data.filter(
+      row => row.Paycode_Id && !this.isRowBound(row)
+    );
+
+    if (unboundRows.length > 0) {
+      alert(
+        `${unboundRows.length} row(s) are not properly mapped.\n` +
+        `Please map the paycode or delete those row(s).`
+      );
+      return;
+
+
+    }
+    const invalidRowIndex = this.uploadedDataSource.data.findIndex(row =>
+      row.Company_Paycode_Pick_From_Id === null ||
+      row.Company_Paycode_Pick_From_Id === undefined ||
+      row.Company_Paycode_Pick_From_Id === ''
+    );
+
+    if (invalidRowIndex !== -1) {
+      alert(`Company Paycode Pick From is required`);
+      return;
+    }
 
     const paycodeDetail = this.uploadedDataSource.data.map((row, index) => ({
       Paycode_Id: row.Paycode_Id ?? 0,
@@ -306,7 +345,7 @@ export class CompanypaycodemappingCopyComponent {
     }));
 
     const payload = {
-      Company_Id: this.selectedCompanyId,
+      Company_Id: this.selectedCompanyIdbind,
       User_Id: this.userdetail.user_Id,
       Mode: "Copy",
       PaycodeDetail: paycodeDetail
@@ -314,22 +353,21 @@ export class CompanypaycodemappingCopyComponent {
 
     this.paycodeService.PostAddPaycodeMapping(payload).subscribe({
       next: (res) => {
-        const parsedData = JSON.parse(res.Data.data);
-        const errormsg = parsedData[0].Error_Message;
+        const msg = res.Data.data.Table0[0].Error_Message;
 
-        if (errormsg.toLowerCase().includes("successfully")) {
-          alert("Company Paycode Mapping Created Successfully");
+        if (msg.toLowerCase().includes("success")) {
+          alert(msg);
           this.isLoading = false;
-          this.onClose()
+          this.onClose();
         } else {
-          alert(errormsg);
+          alert(msg);
           this.isLoading = false;
           this.onClose();
         }
-      },
-      error: (err) => {
-        console.error("Error saving mapping:", err);
-        this.isLoading = false;
+        error: (err) => {
+          console.error("Error saving:", err);
+          this.isLoading = false;
+        }
       }
     });
   }
