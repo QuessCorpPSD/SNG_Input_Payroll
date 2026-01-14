@@ -26,7 +26,7 @@ export const Increment_TOKEN = new InjectionToken<IIncrementService>('Increment_
 @Component({
   selector: 'app-increament',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatTooltipModule, MatTableModule, MatPaginatorModule, MatCardModule, FormsModule, CompanyallComponent, PayPeriodComponent],
+  imports: [CommonModule, MatIconModule, MatTooltipModule, MatTableModule, MatPaginatorModule, MatCardModule, FormsModule, CompanyallComponent],
   templateUrl: './increament.component.html',
   styleUrl: './increament.component.css',
   providers: [
@@ -186,6 +186,8 @@ export class IncreamentComponent {
     const employeeId = this.selectedEmployeeId || 0;
     const payPeriodId = this.payPeriodId || 0;
 
+    console.log(payPeriodId);
+    console.log(employeeId);
     this.leave.Search(companyId, employeeId, payPeriodId).subscribe({
       next: (res: any) => {
         this.isLoading = false;

@@ -417,11 +417,9 @@ export const routes: Routes = [
           { path: 'cea', component: ChildreneducationallowanceComponent },
           { path: "ltacalculation", component: LtacalculationComponent },
           { path: "previousemploymenttaxdetails", component: PreviousemploymenttaxdetailsComponent },
-          { path: "taxanddeclarationactual", component: TaxdeclationandactualComponent }
+          { path: "taxanddeclarationactual", component: TaxdeclationandactualComponent },
           { path: 'IncomeLoss', component: IncomeLossOnHousePropertyComponent },
           { path: 'HRAcalculation', component: HRAcalculationComponent },
-
-
         ]
       },
 

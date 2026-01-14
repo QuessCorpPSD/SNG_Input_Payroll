@@ -14,7 +14,7 @@
                 <!-- Pay Period -->
                 <div class="col-md-3">
                     <label class="form-label text-muted small">PayPeriod</label>
-                    <select class="form-control form-control-sm">
+                    <select class="form-control form-control-sm" [(ngModel)]="payPeriodId">
                         <option value="">Select</option>
                         <option *ngFor="let period of PayPeriodList" [value]="period.Pay_Frequency_Detail_Id">
                             {{ period.Pay_Period }}
@@ -25,7 +25,7 @@
                 <!-- Employee Code -->
                 <div class="col-md-3 small-input">
                     <label class="form-label text-muted small">Employee Code</label>
-                    <select class="form-control form-control-sm">
+                    <select class="form-control form-control-sm" [(ngModel)]="selectedEmployeeId">
                         <option value="">Select</option>
                         <option *ngFor="let emp of EmployeeList" [value]="emp.Employee_Id">
                             {{ emp.Employee_Code }} - {{ emp.Employee_Name }}
