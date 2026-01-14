@@ -169,11 +169,23 @@ export class CompanypaycodemappingEditComponent {
 
   onPaycodeSelect(paycodeId: number, pageRelativeIndex: number) {
     const rowIndex = this.getAbsoluteIndex(pageRelativeIndex);
-    const selectedPaycode = this.paycodeList.find(pc => pc.Paycode_Id === paycodeId);
+    const row = this.uploadedData[rowIndex];
+
+    const isDuplicate = this.uploadedData.some(
+      (r, index) => index !== rowIndex && r.Paycode_Id === paycodeId
+    );
+
+    if (isDuplicate) {
+      alert('This paycode is already selected in another row.');
+      return;
+    }
+
+    const selectedPaycode = this.paycodeList.find(
+      pc => pc.Paycode_Id === paycodeId
+    );
 
     if (!selectedPaycode) return;
 
-    const row = this.uploadedData[rowIndex];
     row.Paycode_Id = selectedPaycode.Paycode_Id;
     row.Paycode_Code = selectedPaycode.Paycode_Code;
     row.Description = selectedPaycode.Description;
@@ -191,11 +203,13 @@ export class CompanypaycodemappingEditComponent {
 
 
     row.Company_Paycode_Pick_From_Id = selectedPaycode.Company_Paycode_Pick_From_Id;
-    row.Company_Paycode_Pick_From_Value = selectedPaycode.Company_Paycode_Pick_From_Value;
-    row.isEmpty = false;
+    row.Company_Paycode_Pick_From_Value =
+      selectedPaycode.Company_Paycode_Pick_From_Value;
 
+    row.isEmpty = false;
     this.uploadedDataSource.data = [...this.uploadedData];
   }
+
 
 
   onPickFromSelect(selectedId: number, pageRelativeIndex: number) {
@@ -270,10 +284,25 @@ export class CompanypaycodemappingEditComponent {
   onClose(): void {
     this.dialogRef.close();
   }
-
+  isRowBound(row: any): boolean {
+    return !!row.Paycode_Id && !!row.Description;
+  }
   savePaycodeDetails(): void {
     this.isLoading = true;
+    const data = this.uploadedDataSource.data;
+    const unboundRows = data.filter(
+      row => row.Paycode_Id && !this.isRowBound(row)
+    );
 
+    if (unboundRows.length > 0) {
+      alert(
+        `${unboundRows.length} row(s) are not properly mapped.\n` +
+        `Please map the paycode or delete those row(s).`
+      );
+      return;
+
+
+    }
     const invalidRowIndex = this.uploadedDataSource.data.findIndex(row =>
       row.Company_Paycode_Pick_From_Id === null ||
       row.Company_Paycode_Pick_From_Id === undefined ||
@@ -282,7 +311,7 @@ export class CompanypaycodemappingEditComponent {
 
     if (invalidRowIndex !== -1) {
       alert(`Company Paycode Pick From is required`);
-      return; // stop further execution
+      return;
     }
 
     const paycodeDetail = this.uploadedDataSource.data.map((row, index) => ({

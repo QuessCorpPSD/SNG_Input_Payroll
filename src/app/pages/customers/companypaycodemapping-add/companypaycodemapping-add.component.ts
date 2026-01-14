@@ -87,7 +87,7 @@ export class CompanypaycodemappingAddComponent {
     this.selectedCompanyId = company.companyId;
     this.selectedCompanyCode = company.companyCode;
   }
-  
+
   showAlertPopup(message: string, subMessage: string = '') {
     this.popupMessage = message;
     this.popupSubMessage = subMessage;
@@ -208,8 +208,29 @@ export class CompanypaycodemappingAddComponent {
   }
 
   onPaycodeSelect(paycodeId: number, rowIndex: number) {
-    const selectedPaycode = this.paycodeList.find(pc => pc.Paycode_Id === paycodeId);
+    const absoluteIndex =
+      rowIndex + (this.paginator.pageIndex * this.paginator.pageSize);
 
+    // 🔴 DUPLICATE CHECK (other rows)
+    const isDuplicate = this.uploadedData.some(
+      (row, index) =>
+        index !== absoluteIndex && row.Paycode_Id === paycodeId
+    );
+
+    if (isDuplicate) {
+      alert('This paycode is already selected in another row.');
+
+      // ❌ Clear current selection
+      this.uploadedData[absoluteIndex].Paycode_Id = null;
+      this.uploadedData[absoluteIndex].Paycode_Code = null;
+
+      this.uploadedDataSource.data = [...this.uploadedData];
+      return;
+    }
+
+    const selectedPaycode = this.paycodeList.find(
+      pc => pc.Paycode_Id === paycodeId
+    );
     if (selectedPaycode) {
       const absoluteIndex = rowIndex + (this.paginator.pageIndex * this.paginator.pageSize);
 
@@ -274,10 +295,40 @@ export class CompanypaycodemappingAddComponent {
     this.selectedRowIndex = null;
   }
 
-
+  isRowBound(row: any): boolean {
+    return !!row.Paycode_Id && !!row.Description;
+  }
 
   savePaycodeDetails() {
     this.isLoading = true;
+   const data = this.uploadedDataSource.data;
+
+  // 🔹 Check unbound or empty rows
+  const unboundRows = data.filter(row => !this.isRowBound(row));
+
+  if (unboundRows.length > 0) {
+    alert(
+      `${unboundRows.length} row(s) are not properly mapped.\n` +
+      `Please map the paycode or delete those row(s).`
+    );
+    this.isLoading = false;
+    return;
+  }
+
+  // 🔹 Validate mandatory Pick From if required
+  const invalidRowIndex = data.findIndex(row =>
+    row.Company_Paycode_Pick_From_Id === null ||
+    row.Company_Paycode_Pick_From_Id === undefined ||
+    row.Company_Paycode_Pick_From_Id === ''
+  );
+
+  if (invalidRowIndex !== -1) {
+    alert(`Company Paycode Pick From is required`);
+    this.isLoading = false;
+    return;
+  }
+
+
     const paycodeDetail = this.uploadedDataSource.data.map(row => ({
       Paycode_Id: row.Paycode_Id,
       EarnedPaycode_Code: row.Earnedpaycode ?? '',
@@ -295,15 +346,14 @@ export class CompanypaycodemappingAddComponent {
 
     this.paycodeService.PostAddPaycodeMapping(payloadCreate).subscribe({
       next: (res) => {
-        const parsedData = JSON.parse(res.Data.data);
-        const errormsg = parsedData[0].Error_Message;
+        const msg = res.Data.data.Table0[0].Error_Message;
 
-        if (errormsg.toLowerCase().includes("success")) {
-          alert("Company Paycode Mapping Created Successfully");
+        if (msg.toLowerCase().includes("success")) {
+          alert(msg);
           this.isLoading = false;
           this.onClose();
         } else {
-          alert(errormsg);
+          alert(msg);
           this.isLoading = false;
           this.onClose();
         }
