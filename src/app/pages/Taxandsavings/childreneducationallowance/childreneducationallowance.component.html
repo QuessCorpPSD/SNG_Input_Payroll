@@ -1,50 +1,68 @@
 <div class="page-wrapper">
     <div class="scrollable-content">
-        <div class="justify-content-between align-items-center mb-3">
+        <mat-card-title class="main-header">
+            Children Education Allowance
+        </mat-card-title>
+        <div class="justify-content-between align-items-center mb-3 pl-4 pt-2">
             <div class="row g-3 align-items-end">
 
                 <div class="col-md-3">
-                    <label class="form-label text-muted small">City Name</label>
-                    <input type="text" class="form-control form-control-sm" style="height: 10px;"
-                        placeholder="Enter City Name" />
+                    <label class="form-label text-muted small">Company</label>
+                    <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
                 </div>
 
                 <div class="col-md-3">
-                    <label class="form-label text-muted small">State</label>
-                    <!-- <state (stateEmit)="stateEvent2($event)"></state> -->
+                    <label class="form-label text-muted small">Financial Year</label>
+                    <select [(ngModel)]="fyear" class="form-control form-control-sm" style="height: 30px;"
+                        (ngModelChange)="onFinancialYearChange($event)">
+                        <option value="">Select</option>
+                        <option *ngFor="let y of year" [value]="y.Financial_Year_Id">{{y.Financial_Year_Name}}</option>
+
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Employee code</label>
+                    <select [(ngModel)]="ecode" class="form-control form-control-sm">
+                        <option value="">Select</option>
+                        <option *ngFor="let emp of employeeMain" [value]="emp.Employee_Id">
+                            {{ emp.Employee_Code }}
+                        </option>
+                    </select>
 
                 </div>
 
                 <div class="col-md-3 d-flex gap-2">
-                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Search">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-primary"
+                        matTooltip="Search" (click)="onsearch()">
                         <mat-icon>search</mat-icon>
                     </button>
-                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Add"
-                        (click)="AddPOOpen()">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-success"
+                        matTooltip="Add" (click)="AddPOOpen()">
                         <mat-icon>add</mat-icon>
                     </button>
-                    <!-- 
-      <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="export to excel">
-        <mat-icon>table_chart</mat-icon>
-      </button>
 
-      <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Import"
-        (click)="FileUpload(fileInput)">
-        <input type="file" #fileInput style="display: none;" (change)="onFileChange($event)" accept=".xlsx, .xls" />
-        <mat-icon>cloud_upload</mat-icon>
-      </button>
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-secondary"
+                        matTooltip="export to excel" (click)="exportToExcel()">
+                        <mat-icon>download</mat-icon>
+                    </button>
 
-      <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Template"
-        (click)="DownloadTemplate()">
-        <mat-icon>cloud_download</mat-icon>
-      </button> -->
+                    <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
+                        matTooltip="Import">
+                       
+                        <mat-icon>cloud_upload</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                        matTooltip="Template">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button> -->
 
                 </div>
-
             </div>
-            <div class="table-container" style="top:30px;">
+            <div class="table-container" style="top:30px;" *ngIf="isUploadGridVisible">
                 <div class="table-scroll-window">
                     <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
                         <ng-container matColumnDef="delete">
                             <mat-header-cell *matHeaderCellDef mat-sort-header
                                 class="fixed-width-column"></mat-header-cell>
@@ -60,109 +78,66 @@
                             </mat-cell>
                         </ng-container>
 
-                        <ng-container matColumnDef="serial_No">
-                            <mat-header-cell *matHeaderCellDef>serial_No</mat-header-cell>
-                            <mat-cell *matCellDef="let element">{{ element.serial_No }}</mat-cell>
+                        <ng-container matColumnDef="Serial_No">
+                            <mat-header-cell *matHeaderCellDef>Serial No</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.SNo }}</mat-cell>
                         </ng-container>
 
-                        <ng-container matColumnDef="cityID">
-                            <mat-header-cell *matHeaderCellDef>cityID</mat-header-cell>
-                            <mat-cell *matCellDef="let element">{{ element.cityID }}</mat-cell>
+                        <ng-container matColumnDef="Company_Code">
+                            <mat-header-cell *matHeaderCellDef>Company Code</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Company_Code }}</mat-cell>
                         </ng-container>
 
-                        <ng-container matColumnDef="cityName">
-                            <mat-header-cell *matHeaderCellDef>City Name</mat-header-cell>
-                            <mat-cell *matCellDef="let element">{{ element.cityName }}</mat-cell>
+                        <ng-container matColumnDef="Employee_Code">
+                            <mat-header-cell *matHeaderCellDef>Employee Code</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Employee_Code }}</mat-cell>
                         </ng-container>
 
-                        <ng-container matColumnDef="cityCode">
-                            <mat-header-cell *matHeaderCellDef>City Code</mat-header-cell>
-                            <mat-cell *matCellDef="let element">{{ element.cityCode }}</mat-cell>
+                        <ng-container matColumnDef="Employee_Name">
+                            <mat-header-cell *matHeaderCellDef>Employee Name</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Employee_Name }}</mat-cell>
                         </ng-container>
 
-                        <ng-container matColumnDef="stateId">
-                            <mat-header-cell *matHeaderCellDef>stateId</mat-header-cell>
-                            <mat-cell *matCellDef="let element">{{ element.stateId }}</mat-cell>
+                        <ng-container matColumnDef="Date_of_Joining">
+                            <mat-header-cell *matHeaderCellDef>Date of Joining</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Date_Of_Joining }}</mat-cell>
                         </ng-container>
 
-                        <ng-container matColumnDef="stateName">
-                            <mat-header-cell *matHeaderCellDef>State Name</mat-header-cell>
+                        <ng-container matColumnDef="Financial_Year">
+                            <mat-header-cell *matHeaderCellDef>Financial Year</mat-header-cell>
                             <mat-cell *matCellDef="let element">{{ element.stateName }}</mat-cell>
                         </ng-container>
 
-                        <ng-container matColumnDef="country">
-                            <mat-header-cell *matHeaderCellDef>country</mat-header-cell>
-                            <mat-cell *matCellDef="let element">{{ element.country }}</mat-cell>
+                        <ng-container matColumnDef="From_Date">
+                            <mat-header-cell *matHeaderCellDef>From Date</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.From_Date }}</mat-cell>
                         </ng-container>
 
-                        <ng-container matColumnDef="regionId">
-                            <mat-header-cell *matHeaderCellDef>regionId</mat-header-cell>
-                            <mat-cell *matCellDef="let element">{{ element.regionId }}</mat-cell>
+                        <ng-container matColumnDef="To_Date">
+                            <mat-header-cell *matHeaderCellDef>To Date</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.To_Date }}</mat-cell>
                         </ng-container>
 
-                        <ng-container matColumnDef="regionName">
-                            <mat-header-cell *matHeaderCellDef>regionName</mat-header-cell>
-                            <mat-cell *matCellDef="let element">{{ element.regionName }}</mat-cell>
+                        <ng-container matColumnDef="Date">
+                            <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Declaration_Date }}</mat-cell>
                         </ng-container>
 
-                        <ng-container matColumnDef="saP_Code">
-                            <mat-header-cell *matHeaderCellDef>SAP Code</mat-header-cell>
-                            <mat-cell *matCellDef="let element">{{ element.saP_Code }}</mat-cell>
+                        <ng-container matColumnDef="Tuition_Eligibility">
+                            <mat-header-cell *matHeaderCellDef>Tuition Eligibility</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Is_Tuition_Eligible }}</mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="Hostel_Eligibility">
+                            <mat-header-cell *matHeaderCellDef>Hostel Eligibility</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{ element.Is_Hostel_Eligible }}</mat-cell>
                         </ng-container>
 
-                        <ng-container matColumnDef="isActive">
-                            <mat-header-cell *matHeaderCellDef>isActive</mat-header-cell>
-                            <mat-cell *matCellDef="let element">{{ element.isActive }}</mat-cell>
-                        </ng-container>
-
-                        <ng-container matColumnDef="pin_Code">
-                            <mat-header-cell *matHeaderCellDef>PIN Code</mat-header-cell>
-                            <mat-cell *matCellDef="let element">{{ element.pin_Code}}</mat-cell>
-                        </ng-container>
-
-                        <ng-container matColumnDef="taluk">
-                            <mat-header-cell *matHeaderCellDef>Taluk</mat-header-cell>
-                            <mat-cell *matCellDef="let element">{{ element.taluk }}</mat-cell>
-                        </ng-container>
-
-                        <ng-container matColumnDef="district">
-                            <mat-header-cell *matHeaderCellDef>District</mat-header-cell>
-                            <mat-cell *matCellDef="let element">{{ element.district }}</mat-cell>
-                        </ng-container>
-
-                        <ng-container matColumnDef="circle">
-                            <mat-header-cell *matHeaderCellDef>Circle</mat-header-cell>
-                            <mat-cell *matCellDef="let element">{{ element.circle }}</mat-cell>
-                        </ng-container>
-
-                        <ng-container matColumnDef="ikya_Location">
-                            <mat-header-cell *matHeaderCellDef>Ikya Location</mat-header-cell>
-                            <mat-cell *matCellDef="let element">{{ element.ikya_Location }}</mat-cell>
-                        </ng-container>
-                        <ng-container matColumnDef="esI_SUB_CODE">
-                            <mat-header-cell *matHeaderCellDef>esI_SUB_CODE</mat-header-cell>
-                            <mat-cell *matCellDef="let element">{{ element.esI_SUB_CODE }}</mat-cell>
-                        </ng-container>
-                        <ng-container matColumnDef="esI_SUB_CODE_NAME">
-                            <mat-header-cell *matHeaderCellDef>esI_SUB_CODE_NAME</mat-header-cell>
-                            <mat-cell *matCellDef="let element">{{ element.esI_SUB_CODE_NAME }}</mat-cell>
-                        </ng-container>
-                        <ng-container matColumnDef="tier">
-                            <mat-header-cell *matHeaderCellDef>tier</mat-header-cell>
-                            <mat-cell *matCellDef="let element">{{ element.tier }}</mat-cell>
-                        </ng-container>
-                        <ng-container matColumnDef="esiC_Implementation">
-                            <mat-header-cell *matHeaderCellDef>esiC_Implementation</mat-header-cell>
-                            <mat-cell *matCellDef="let element">{{ element.esiC_Implementation }}</mat-cell>
-                        </ng-container>
-                        <ng-container matColumnDef="zone">
-                            <mat-header-cell *matHeaderCellDef>zone</mat-header-cell>
-                            <mat-cell *matCellDef="let element">{{ element.zone }}</mat-cell>
-                        </ng-container>
                         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
                         <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
 
                     </table>
+
+
                 </div>
 
                 <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
@@ -179,205 +154,250 @@
     <mat-card class="popup-card">
         <mat-card-header class="popup-header">
             <mat-card-title>
-                {{ isEditMode ? 'Edit City' : 'Add City' }}
+                {{ isEditMode ? 'Edit Children Education Allowance' : 'Add Children Education Allowance' }}
             </mat-card-title>
 
-            <button class="close-btn" matTooltip="Close">
+            <button class="close-btn" matTooltip="Close" (click)="closeclick()">
                 <mat-icon>close</mat-icon>
             </button>
         </mat-card-header>
         <mat-card-content class="scroll-content">
 
             <form [formGroup]="ceaform">
-                <br>
-                <div class="row g-3 align-items-end">
-
-                    <div class="col-md-4">
-                        <div
-                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
-                            City Code<span class="text-danger">*</span></div>
-                        <div style="padding-top: 5px;">
-                            <input formControlName="City_Code" type="text" placeholder="Enter City Code" />
-                        </div>
-                        <div *ngIf="ceaform.get('City_Code')?.touched && ceaform.get('City_Code')?.hasError('required')"
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Company Code<span
+                                class="text-danger">*</span></label>
+                        <companyall formControlName="Company_Code" (companyEmit)="handleCompanyEvent($event)">
+                        </companyall>
+                        <div *ngIf="ceaform.get('Company_Code')?.invalid && ceaform.get('Company_Code')?.touched"
                             class="text-danger">
-                            City Code is required
+                            Company Code is required.
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div
-                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
-                            City Name<span class="text-danger">*</span></div>
-                        <div style="padding-top: 5px;">
-                            <input formControlName="City_Name" type="text" placeholder="Enter City Name" />
-                        </div>
-                        <div *ngIf="ceaform.get('City_Name')?.touched && ceaform.get('City_Name')?.hasError('required')"
+
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Financial Year<span
+                                class="text-danger">*</span></label>
+                        <select formControlName="Financial_Year" class="form-control">
+                            <option value="">Select</option>
+                            <option *ngFor="let y of yearadd" [value]="y.Financial_Year_Id">
+                                {{ y.Financial_Year_Name }}
+                            </option>
+                        </select>
+
+                        <div *ngIf="ceaform.get('Financial_Year')?.invalid && ceaform.get('Financial_Year')?.touched"
                             class="text-danger">
-                            City Name is required
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div
-                            style="width: 160px; height: 12.35px; color: #89898B; font-size: 10px; font-family: Montserrat; font-weight: 500;">
-                            State<span class="text-danger">*</span>
-                        </div>
-                        <div style="padding-top: 5px;">
-                            <!-- Capture the emitted state object -->
-                            <!-- <state formControlName="state" (stateEmit)="stateEvent2($event)"></state> -->
-                            <input formControlName="SAP_Code" type="text" placeholder="Enter SAP Code" />
-
+                            Financial Year is required.
                         </div>
                     </div>
 
-                    <div class="col-md-4">
-                        <div
-                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
-                            SAP Code</div>
-                        <div style="padding-top: 5px;">
-                            <input formControlName="SAP_Code" type="text" placeholder="Enter SAP Code" />
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div
-                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
-                            Pin Code<span class="text-danger">*</span></div>
-                        <div style="padding-top: 5px;">
-                            <input formControlName="Pin_Code" type="text" placeholder="Enter Pin Code" />
-                        </div>
-                        <div *ngIf="ceaform.get('Pin_Code')?.touched && ceaform.get('Pin_Code')?.hasError('required')"
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Employee Code<span
+                                class="text-danger">*</span></label>
+                        <select formControlName="Employee_Code" class="form-control">
+                            <option value="">Select</option>
+                            <option *ngFor="let emp of employeePopup" [value]="emp.Employee_Id">
+                                {{ emp.Employee_Code }}
+                            </option>
+                        </select>
+
+                        <div *ngIf="ceaform.get('Employee_Code')?.invalid && ceaform.get('Employee_Code')?.touched"
                             class="text-danger">
-                            Pin Code is required
+                            Employee Code is required.
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div
-                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
-                            Taluk<span class="text-danger">*</span></div>
-                        <div style="padding-top: 5px;">
-                            <input formControlName="Taluk" type="text" placeholder="Enter Taluk" />
-                        </div>
-                        <div *ngIf="ceaform.get('Taluk')?.touched && ceaform.get('Taluk')?.hasError('required')"
+
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Employee Name<span
+                                class="text-danger">*</span></label>
+                        <input formControlName="Employee_Name" class="form-control" />
+                        <div *ngIf="ceaform.get('Employee_Name')?.invalid && ceaform.get('Employee_Name')?.touched"
                             class="text-danger">
-                            Taluk is required
+                            Employee Name is required.
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div
-                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
-                            District<span class="text-danger">*</span></div>
-                        <div style="padding-top: 5px;">
-                            <input formControlName="District" type="text" placeholder="Enter City Name" />
+                </div>
+
+                <div class="row g-3 py-2">
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Date<span class="text-danger">*</span></label>
+                        <input type="date" formControlName="Date" class="form-control"
+                            (change)="onDateOrChildrenChange()" />
+                        <div *ngIf="ceaform.get('Date')?.invalid && ceaform.get('Date')?.touched" class="text-danger">
+                            Date is required.
                         </div>
-                        <div *ngIf="ceaform.get('District')?.touched && ceaform.get('District')?.hasError('required')"
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Number Of Children<span
+                                class="text-danger">*</span></label>
+                        <select formControlName="Number_Of_Children" class="form-control"
+                            (change)="onDateOrChildrenChange()">
+                            <option>Select</option>
+                            <option [value]="1">1</option>
+                            <option [value]="2">2</option>
+                        </select>
+                        <div *ngIf="ceaform.get('Number_Of_Children')?.invalid && ceaform.get('Number_Of_Children')?.touched"
                             class="text-danger">
-                            District is required
+                            Number of Children is required.
                         </div>
                     </div>
 
-                    <div class="col-md-4">
-                        <div
-                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
-                            Circle</div>
-                        <div style="padding-top: 5px;">
-                            <select formControlName="circle" class="w-100 custom-height rounded-1 select-drop"
-                                appearance="outline" style="background-color: white;height:30px;">
-                                <option value="">Select</option>
-                                <!-- <option *ngFor="let type of circle" [ngValue]="type">
-                                    {{ type.ptCircle_Name }}
-                                </option> -->
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div
-                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
-                            ESI SubCode</div>
-                        <div style="padding-top: 5px;">
-                            <input formControlName="ESI_SubCode" type="text" placeholder="Enter City Name" />
-                        </div>
-                        <div *ngIf="ceaform.get('ESI_SubCode')?.touched && ceaform.get('ESI_SubCode')?.hasError('required')"
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Date of Joining<span
+                                class="text-danger">*</span></label>
+                        <input type="date" formControlName="Date_Of_Joining" class="form-control" />
+                        <div *ngIf="ceaform.get('Date_Of_Joining')?.invalid && ceaform.get('Date_Of_Joining')?.touched"
                             class="text-danger">
-                            ESI SubCode is required
+                            Date of Joining is required.
                         </div>
                     </div>
 
-                    <div class="col-md-4">
-                        <div
-                            style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
-                            ESI SubCode Name</div>
-                        <div style="padding-top: 5px;">
-                            <input formControlName="ESI_SubCode_Name" type="text"
-                                placeholder="Enter ESI SubCode Name" />
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">From Date<span class="text-danger">*</span></label>
+                        <input type="date" formControlName="From_Date" class="form-control" />
+                        <div *ngIf="ceaform.get('From_Date')?.invalid && ceaform.get('From_Date')?.touched"
+                            class="text-danger-sm">
+                            From Date is required.
                         </div>
-                        <div *ngIf="ceaform.get('ESI_SubCode_Name')?.touched && ceaform.get('ESI_SubCode_Name')?.hasError('required')"
+                    </div>
+                </div>
+
+                <div class="row g-3 py-2">
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">To Date<span class="text-danger">*</span></label>
+                        <input type="date" formControlName="To_Date" class="form-control" />
+                        <div *ngIf="ceaform.get('To_Date')?.invalid && ceaform.get('To_Date')?.touched"
                             class="text-danger">
-                            ESI SubCode Name is required
+                            To Date is required.
                         </div>
                     </div>
 
-                    <div class="col-md-4">
-                        <div style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B);
-           font-size: 10px; font-family: Montserrat; font-weight: 500;">
-                            ESIC Implementation
-                        </div>
-
-                        <div style="padding-top: 5px;">
-                            <select formControlName="ESIC_Implementation" class="form-control form-control-sm"
-                                style="height: 30px;">
-
-                                <option value="">Select</option>
-                                <option value="Fully Implemented">Fully Implemented</option>
-                                <option value="Partially Implemented">Partially Implemented</option>
-                                <option value="Not Implemented">Not Implemented</option>
-
-                            </select>
-                        </div>
-
-                        <div *ngIf="ceaform.get('ESIC_Implementation')?.touched &&
-           ceaform.get('ESIC_Implementation')?.hasError('required')" class="text-danger">
-                            ESIC Implementation is required
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Type<span class="text-danger">*</span></label><br />
+                        <div class="d-flex">
+                            <div class="form-check me-3">
+                                <input type="checkbox" formControlName="Hostel" id="hostel" />
+                                <label class="form-label text-muted small" for="hostel">Hostel</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" formControlName="Tuition" id="tuition" />
+                                <label class="form-label text-muted small" for="tuition">Tuition</label>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="col-md-4">
-                        <div style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B);
-           font-size: 10px; font-family: Montserrat; font-weight: 500;">
-                            Zone
-                        </div>
-
-                        <div style="padding-top: 5px;">
-                            <select formControlName="Zone" class="form-control form-control-sm" style="height: 30px;">
-
-                                <option value="">Select</option>
-                                <option value="Zone A">Zone A</option>
-                                <option value="Zone B">Zone B</option>
-                                <option value="Zone C">Zone C</option>
-                                <option value="Zone D">Zone D</option>
-
-                            </select>
-                        </div>
-
-                        <div *ngIf="ceaform.get('ESIC_Implementation')?.touched &&
-           ceaform.get('ESIC_Implementation')?.hasError('required')" class="text-danger">
-                            ESIC Implementation is required
-                        </div>
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Eligible Amount</label>
+                        <input formControlName="Eligible_Amount" class="form-control" />
                     </div>
 
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Claimed Amount<span
+                                class="text-danger">*</span></label>
+                        <input formControlName="Claimed_Amount" class="form-control" />
+                        <div *ngIf="ceaform.get('Claimed_Amount')?.invalid && ceaform.get('Claimed_Amount')?.touched"
+                            class="text-danger">
+                            <div *ngIf="ceaform.get('Claimed_Amount')?.errors?.['required']">Claimed Amount is required.
+                            </div>
+                            <div *ngIf="ceaform.get('Claimed_Amount')?.errors?.['exceeded']">Claimed Amount cannot
+                                exceed Eligible Amount.</div>
+                        </div>
+                    </div>
 
                 </div>
             </form>
+
+            <div>
+                <div class="col-md-3 d-flex gap-2 py-2">
+                    <div class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Add"
+                        (click)="AddOpen()">
+                        <mat-icon>add</mat-icon>
+                    </div>
+
+                    <div class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Delete"
+                        (click)="deleteSelectedRow()">
+                        <mat-icon>delete</mat-icon>
+                    </div>
+                </div>
+
+                <div class="table-container" style="top:30px;">
+                    <div class="table-scroll-window">
+                        <form [formGroup]="ceaform">
+                            <table mat-table [dataSource]="dataSource1" matSort class="mat-elevation-z8">
+                                <ng-container matColumnDef="sno">
+                                    <mat-header-cell *matHeaderCellDef><strong>SNo</strong></mat-header-cell>
+                                    <mat-cell *matCellDef="let row; let i = index" class="form-control"
+                                        (click)="selectRow(i)">
+                                        {{ i + 1 }}
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="studentName">
+                                    <mat-header-cell *matHeaderCellDef><strong>Name of the
+                                            student</strong></mat-header-cell>
+                                    <mat-cell *matCellDef="let row; let i = index" class="form-control">
+                                        <input [(ngModel)]="row.studentName" [ngModelOptions]="{standalone: true}"
+                                            placeholder="Enter name" />
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="schoolName">
+                                    <mat-header-cell *matHeaderCellDef><strong>School name</strong></mat-header-cell>
+                                    <mat-cell *matCellDef="let row; let i = index" class="form-control">
+                                        <input [(ngModel)]="row.schoolName" [ngModelOptions]="{standalone: true}"
+                                            placeholder="Enter school name" />
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="hostelName">
+                                    <mat-header-cell *matHeaderCellDef><strong>Hostel name</strong></mat-header-cell>
+                                    <mat-cell *matCellDef="let row; let i = index" class="form-control">
+                                        <input [(ngModel)]="row.hostelName" [ngModelOptions]="{standalone: true}"
+                                            placeholder="Enter hostel name" />
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="phoneNumber">
+                                    <mat-header-cell *matHeaderCellDef><strong>Phone number</strong></mat-header-cell>
+                                    <mat-cell *matCellDef="let row; let i = index" class="form-control">
+                                        <input [(ngModel)]="row.phoneNumber" [ngModelOptions]="{standalone: true}"
+                                            placeholder="Enter phone number" />
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="exemptionAmount">
+                                    <mat-header-cell *matHeaderCellDef><strong>Exemption
+                                            Amount</strong></mat-header-cell>
+                                    <mat-cell *matCellDef="let row; let i = index" class="form-control">
+                                        <input [(ngModel)]="row.exemptionAmount" [ngModelOptions]="{standalone: true}"
+                                            placeholder="Enter amount" />
+                                    </mat-cell>
+                                </ng-container>
+
+                                <mat-header-row *matHeaderRowDef="displayedColumns1"></mat-header-row>
+                                <mat-row *matRowDef="let row; let i = index; columns: displayedColumns1"
+                                    (click)="selectRow(i)" [class.selected-row]="selectedRowIndex === i">
+                                </mat-row>
+                            </table>
+                        </form>
+                    </div>
+                    <mat-paginator #paginator1 [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+                </div>
+            </div>
         </mat-card-content>
 
 
         <div class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">
 
             <button type="button" style="border: none; border-radius: 7px; width: 80px; height: 30px;
-                           cursor: pointer; background-color: #f0f0f0; color: black;">
+                           cursor: pointer; background-color: #f0f0f0; color: black;" (click)="closeclick()">
                 Cancel
             </button>
 
             <button type="button" style="border: none; border-radius: 7px; width: 80px; height: 30px;
-                           cursor: pointer; background-color: blue; color: white;">
+                           cursor: pointer; background-color: blue; color: white;" (click)="saveData()">
                 {{ isEditMode ? 'Update' : 'Save' }} </button>
 
         </div>

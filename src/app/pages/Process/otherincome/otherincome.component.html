@@ -42,32 +42,24 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
-
-<!-- <div class="table-wrapper1" *ngIf="isUploadGridVisible" style="min-width: 960px;" padding-top12px>
-
-
+        <div class="table-wrapper1" *ngIf="isUploadGridVisible">
             <div class="table-scroll">
                 <mat-table [dataSource]="dataSource" matSort class="custom-table mat-elevation-z8 auto-fit-table">
 
                     <ng-container matColumnDef="Action">
-                        <mat-header-cell *matHeaderCellDef
-                            style="width: 80px!important; min-width: 80px !important;"><strong>Action</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row" style="width: 80px!important; min-width: 80px !important;">
+                        <mat-header-cell *matHeaderCellDef><strong>Action</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">
                             <button class="btn btn-sm d-flex align-items-center justify-content-center"
-                                matTooltip="Delete">
-                                <mat-icon>delete</mat-icon> -->
-<!-- </button> -->
-<!-- <button class="btn btn-sm d-flex align-items-center justify-content-center"
-                                matTooltip="Edit">
-                                <mat-icon>edit</mat-icon>
-                            </button> -->
-<!-- </mat-cell>
-                    </ng-container> -->
+                                matTooltip="Delete" (click)="deleteClick(row)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                            <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="Edit">
+                        <mat-icon>edit</mat-icon>
+                    </button> -->
+                        </mat-cell>
+                    </ng-container>
 
-<!-- ========== SNO COLUMN ========== -->
-<!-- <ng-container matColumnDef="SNo">
+                    <ng-container matColumnDef="SNo">
                         <mat-header-cell *matHeaderCellDef style="width: 80px!important; min-width: 80px !important;">
                             <strong>SNo</strong>
                         </mat-header-cell>
@@ -75,11 +67,10 @@
                             style="width: 80px!important; min-width: 80px !important;">
                             {{ i + 1 }}
                         </mat-cell>
-                    </ng-container> -->
+                    </ng-container>
 
 
-<!-- ========== COMPANY CODE COLUMN ========== -->
-<!-- <ng-container matColumnDef="CompanyCode">
+                    <ng-container matColumnDef="CompanyCode">
                         <mat-header-cell *matHeaderCellDef><strong>Company Code</strong></mat-header-cell>
                         <mat-cell *matCellDef="let row">{{ row['Company_Code'] }}</mat-cell>
                     </ng-container>
@@ -117,64 +108,27 @@
                     <ng-container matColumnDef="Pay Period">
                         <mat-header-cell *matHeaderCellDef><strong>Pay Period</strong></mat-header-cell>
                         <mat-cell *matCellDef="let row">{{ row['Pay_Period'] }}</mat-cell>
-                    </ng-container> -->
+                    </ng-container>
 
 
-<!-- HEADER ROW -->
-<!-- <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row> -->
+                    <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
 
-<!-- DATA ROWS -->
-<!-- <mat-row *matRowDef="let row; let i = index; columns: uploadDisplayedColumns"></mat-row>
+                    <mat-row *matRowDef="let row; let i = index; columns: uploadDisplayedColumns"></mat-row>
 
                 </mat-table>
             </div>
 
             <div *ngIf="dataSource.data.length === 0" class="text-center p-4">
                 <p class="text-muted">No data to display</p>
-            </div> -->
+            </div>
 
-<!-- <mat-paginator [length]="uploadedData.length" [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"
-                showFirstLastButtons aria-label="Select page">
+            <mat-paginator #paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+                aria-label="Select page">
             </mat-paginator>
-        </div> -->
-<div class="row py-1" style="padding-left: 30px; padding-right: 30px;">
-    <table class="table table-bordered">
+        </div>
 
-        <tr>
-            <th><span class="span-text-header">SNo</span></th> <!-- New SNo column header -->
-            <th><span class="span-text-header">Company Code</span></th>
-            <th><span class="span-text-header">Employee Code</span></th>
-            <th><span class="span-text-header">Employee Name</span></th>
-            <th><span class="span-text-header">Band Name</span></th>
-            <th><span class="span-text-header">Gender</span></th>
-            <th><span class="span-text-header">Incentive Pay Period</span></th>
-            <th><span class="span-text-header">Pay Period</span></th>
-        </tr>
-
-
-        <tbody *ngIf="paginatedData">
-            <tr *ngFor="let item of paginatedData; let i = index" style="height: 30px; vertical-align: middle;">
-                <td><span class="span-text-detail">{{ i + 1 }}</span></td> <!-- Serial Number -->
-                <td><span class="span-text-detail">{{ item.Company_Code }}</span></td>
-                <td><span class="span-text-detail">{{ item.Employee_Code }}</span></td>
-                <td><span class="span-text-detail">{{ item.Employee_Name }}</span></td>
-                <td><span class="span-text-detail">{{ item.Band_name }}</span></td>
-                <td><span class="span-text-detail">{{ item.Gender }}</span></td>
-                <td><span class="span-text-detail">{{ item.Increment_Pay_Period }}</span></td>
-                <td><span class="span-text-detail">{{ item.Pay_Period }}</span></td>
-            </tr>
-        </tbody>
-
-
-    </table>
-
-    <div style="margin-bottom: 5%;">
-        <mat-paginator [length]="filteredRows.length" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20, 50]"
-            (page)="onPageChange($event)">
-        </mat-paginator>
     </div>
 </div>
-
 
 
 

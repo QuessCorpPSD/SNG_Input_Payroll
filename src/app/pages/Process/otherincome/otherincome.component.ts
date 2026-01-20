@@ -1,5 +1,4 @@
 import { Component, ViewChild } from '@angular/core';
-import { OtherincomeAddComponent } from '../otherincome-add/otherincome-add.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -21,7 +20,7 @@ import { AlertpopupComponent } from '../../../common/alertpopup/alertpopup.compo
 @Component({
   selector: 'app-otherincome',
   standalone: true,
-  imports: [MatPaginatorModule, MatTableModule, MatIconModule, CompanyallComponent, CommonModule, FormsModule, MatTooltipModule, PayPeriodComponent, AlertpopupComponent],
+  imports: [MatPaginator, MatTableModule, MatIconModule, CompanyallComponent, CommonModule, FormsModule, MatTooltipModule, PayPeriodComponent, AlertpopupComponent],
   templateUrl: './otherincome.component.html',
   styleUrl: './otherincome.component.css'
 })
@@ -50,10 +49,10 @@ export class OtherincomeComponent {
 
   pageSize = 10;
   currentPage = 0;
+  isUploadGridVisible = false;
 
   constructor(private dialog: MatDialog, private decry: EncryptionService, private service: OtherincomeService,
     private _sessionStoreage: SessionStorageService) { }
-  isUploadGridVisible = false;
 
   uploadDisplayedColumns: string[] = [
     'Action', 'SNo', 'CompanyCode', 'Employee Code', 'Employee Name', 'Band Name', 'Gender', 'Incentive Pay Period', 'Pay Period'
@@ -64,7 +63,7 @@ export class OtherincomeComponent {
 
   uploadedDataSource = new MatTableDataSource(this.uploadedData);
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild('paginator') paginator!: MatPaginator;
 
   showAlertPopup(message: string, subMessage: string = '') {
     this.popupMessage = message;
@@ -91,14 +90,14 @@ export class OtherincomeComponent {
   }
 
 
-  AddPOOpen() {
-    this.dialog.open(OtherincomeAddComponent, {
-      width: '83%',
-      height: '81vh',
-      disableClose: true,
-      data: { example: 'Hello from parent!' }
-    });
-  }
+  // AddPOOpen() {
+  //   this.dialog.open(OtherincomeAddComponent, {
+  //     width: '83%',
+  //     height: '81vh',
+  //     disableClose: true,
+  //     data: { example: 'Hello from parent!' }
+  //   });
+  // }
 
 
   onsearch() {
@@ -124,21 +123,15 @@ export class OtherincomeComponent {
     this.service.Search(payload).subscribe({
       next: (res) => {
         this.isLoading = true;
+        this.itadjusts = res.Data.data?.Table0 ?? [];
+        this.itadjust = res.Data.message;
 
-
-        this.itadjusts = res.Data.data?.Table0 ?? []; // records
-        this.itadjust = res.Data.message; // message from API
-
-        // 🔥 SHOW this.showAlertPopup ONLY WHEN NO DATA IS RETURNED
         if (!this.itadjusts || this.itadjusts.length === 0) {
-          alert(this.itadjust || "No data available.");
+          alert(this.itadjust);
           this.dataSource.data = [];
           this.isLoading = false;
-
-          return; // stop here
         }
 
-        // 🔥 IF DATA EXISTS → load table
         this.dataSource = new MatTableDataSource(this.itadjusts);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
@@ -350,6 +343,32 @@ export class OtherincomeComponent {
     this.pageSize = event.pageSize;
     this.currentPage = event.pageIndex;
     this.setPaginatedData();
+  }
+  deleteClick(row: any) {
+    if (!confirm("Are you sure you want to delete this record?")) return;
+
+    const id = row.Other_Income_Id;
+    const userid = this.userdetail.user_Id;
+
+    this.isLoading = true;
+
+    this.service.Delete(id, userid).subscribe({
+      next: (res: any) => {
+        this.isLoading = false;
+        const msg = res.Data.message;
+        if (res?.StatusCode === 200 && msg.toLowercase().includes('success')) {
+          alert(msg);
+
+          this.onsearch();
+        } else {
+          alert(msg);
+        }
+      },
+      error: () => {
+        this.isLoading = false;
+        alert("Server error while deleting");
+      }
+    });
   }
 
 

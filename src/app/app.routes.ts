@@ -161,6 +161,8 @@ import { TDSslabComponent } from './pages/GlobalMasters/tdsslab/tdsslab.componen
 import { StatesComponent } from './pages/GlobalMasters/state/state.component';
 import { ChildreneducationallowanceComponent } from './pages/Taxandsavings/childreneducationallowance/childreneducationallowance.component';
 import { NavigationComponent } from './pages/Taxandsavings/navigation/navigation.component';
+import { CompanyprovidedbenefitsComponent } from './pages/Taxandsavings/companyprovidedbenefits/companyprovidedbenefits.component';
+import { GratuityComponent } from './pages/Taxandsavings/gratuity/gratuity.component';
 import { LtacalculationComponent } from './pages/Taxandsavings/ltacalculation/ltacalculation.component';
 import { PreviousemploymenttaxdetailsComponent } from './pages/Taxandsavings/previousemploymenttaxdetails/previousemploymenttaxdetails.component';
 import { TaxdeclationandactualComponent } from './pages/Taxandsavings/taxdeclationandactual/taxdeclationandactual.component';
@@ -419,6 +421,8 @@ export const routes: Routes = [
         path: 'taxnavigation', component: NavigationComponent,
         children: [
           { path: 'cea', component: ChildreneducationallowanceComponent },
+          { path: 'cpb', component: CompanyprovidedbenefitsComponent },
+          { path: 'gratuity', component: GratuityComponent },
           { path: "ltacalculation", component: LtacalculationComponent },
           { path: "previousemploymenttaxdetails", component: PreviousemploymenttaxdetailsComponent },
           { path: "taxanddeclarationactual", component: TaxdeclationandactualComponent },
