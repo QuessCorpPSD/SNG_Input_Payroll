@@ -170,6 +170,8 @@ import { PromotionNavigationComponent } from './pages/Promotion/promotion-naviga
 import { HRAcalculationComponent } from './pages/Taxandsavings/hracalculation/hracalculation.component';
 
 import { BankAccountComponent } from './pages/SalaryReleaseNew/bank-account/bank-account.component';
+import { ReportComponent } from './pages/Reports/report/report.component';
+import { CPFsummaryComponent } from './pages/Reports/cpfsummary/cpfsummary.component';
 
 
 
@@ -378,7 +380,9 @@ export const routes: Routes = [
           { path: 'billingubr', component: BillingubrComponent },
           { path: 'otherIncomeProcessReport', component: OtherIncomeProcessReportComponent },
           { path: 'employeReportProcess', component: EmployeeReportProcessComponent },
-          { path: 'IncreamnetReport', component: IncrementReportComponent }
+          { path: 'IncreamnetReport', component: IncrementReportComponent },
+          { path: 'Report', component: ReportComponent },
+          { path: 'cpfsummary', component: CPFsummaryComponent }
         ]
       },
       {
@@ -417,7 +421,7 @@ export const routes: Routes = [
           { path: 'cea', component: ChildreneducationallowanceComponent },
           { path: "ltacalculation", component: LtacalculationComponent },
           { path: "previousemploymenttaxdetails", component: PreviousemploymenttaxdetailsComponent },
-          { path: "taxanddeclarationactual", component: TaxdeclationandactualComponent }
+          { path: "taxanddeclarationactual", component: TaxdeclationandactualComponent },
           { path: 'IncomeLoss', component: IncomeLossOnHousePropertyComponent },
           { path: 'HRAcalculation', component: HRAcalculationComponent },
 
@@ -433,6 +437,7 @@ export const routes: Routes = [
 
         ]
       },
+
       {
         path: 'navigationglobal', component: GlobalmasternavigationComponent,
         children: [

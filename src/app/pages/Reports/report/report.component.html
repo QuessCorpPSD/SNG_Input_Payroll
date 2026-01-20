@@ -1,0 +1,110 @@
+<div class="page-wrapper" style="padding-top: 2%;">
+    <div class="scrollable-content">
+        <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 600;">
+            Reports
+        </mat-card-title>
+
+        <div class="container">
+            <div class="row g-3">
+
+                <!-- LEFT SIDE: Report Dropdown -->
+                <div class="col-md-3 col-sm-12">
+                    <label class="form-label text-muted small">Reports</label>
+                    <select class="form-select form-select-sm" (change)="onReportChange($event)">
+                        <option value="">Select</option>
+                        <option *ngFor="let r of reportlist" [value]="r.value">
+                            {{ r.name }}
+                        </option>
+
+                    </select>
+                </div>
+
+                <div class="col-md-9 col-sm-12">
+
+                    <div class="row g-3 align-items-end flex-wrap" [ngSwitch]="selectedReport">
+
+
+                        <!-- PAID INVOICE -->
+                        <ng-container *ngSwitchCase="'Paid Invoice Report'">
+                            <div class="col-md-4 col-sm-6">
+                                <label class="form-label text-muted small">Date</label>
+                                <input type="date" class="form-control form-control-sm" [(ngModel)]="Date">
+                            </div>
+                        </ng-container>
+
+                        <!-- UNPAID INVOICE -->
+                        <ng-container *ngSwitchCase="'Unpaid Invoice Report'">
+                            <div class="col-md-4 col-sm-6">
+                                <label class="form-label text-muted small">Company Code</label>
+                                <companyall (companyEmit)="handleCompanyEvent1($event)"></companyall>
+                            </div>
+                        </ng-container>
+
+                        <!-- SOA REPORT -->
+                        <ng-container *ngSwitchCase="'SOA Report'">
+                            <div class="col-md-4 col-sm-6">
+                                <label class="form-label text-muted small">Company Code</label>
+                                <companyall (companyEmit)="handleCompanyEvent2($event)"></companyall>
+                            </div>
+
+                            <div class="col-md-4 col-sm-6">
+                                <label class="form-label text-muted small">Pay Period</label>
+                                <PayPeriod [selectedCompanyId]="CompanyIdsoa" [payPeriodType]="payPeriodType"
+                                    (payperiodEmit)="handlePayperiodEvent($event)">
+                                </PayPeriod>
+                            </div>
+                        </ng-container>
+
+                        <!-- CLIENT LEDGER -->
+                        <ng-container *ngSwitchCase="'Client Ledger Report'">
+                            <div class="col-md-3 col-sm-6">
+                                <label class="form-label text-muted small">Company Code</label>
+                                <companyall (companyEmit)="handleCompanyEvent3($event)"></companyall>
+                            </div>
+
+                            <div class="col-md-3 col-sm-6">
+                                <label class="form-label text-muted small">Pay Period</label>
+                                <PayPeriod [selectedCompanyId]="CompanyIdclient" [payPeriodType]="payPeriodType"
+                                    (payperiodEmit)="handlePayperiodEvent2($event)">
+                                </PayPeriod>
+                            </div>
+
+                            <div class="col-md-3 col-sm-6">
+                                <label class="form-label text-muted small">From Date</label>
+                                <input type="date" class="form-control form-control-sm" [(ngModel)]="fromDate">
+                            </div>
+
+                            <div class="col-md-3 col-sm-6">
+                                <label class="form-label text-muted small">To Date</label>
+                                <input type="date" class="form-control form-control-sm" [(ngModel)]="toDate">
+                            </div>
+                        </ng-container>
+
+                        <!-- CLIENT TDS -->
+                        <ng-container *ngSwitchCase="'Client TDS Slab Master'">
+                            <div class="col-md-4 col-sm-6">
+                                <label class="form-label text-muted small">Company Code</label>
+                                <companyall (companyEmit)="handleCompanyEvent4($event)"></companyall>
+                            </div>
+                        </ng-container>
+
+
+
+
+                    </div>
+
+                </div>
+                <div class="col-md-2" *ngIf="selectedReport">
+                    <button class="btn btn-sm btn-secondary d-flex align-items-center justify-content-center"
+                        (click)="exportToExcel()">
+                        <mat-icon>download</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div *ngIf="isLoading" class="loading-overlay">
+        <img src="assets/Loading.gif" alt="Loading...">
+    </div>

@@ -5,6 +5,7 @@ export interface APIResponse {
   Message: string
   Data: any
   Error: any
+  data:any
     
 }
 
