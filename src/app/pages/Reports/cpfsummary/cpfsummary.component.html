@@ -1,0 +1,45 @@
+<div class="page-wrapper" style="padding-top: 2%;">
+    <div class="scrollable-content">
+
+
+        <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 600; ">CPF
+            Summary</mat-card-title>
+
+        <div class="container py-2">
+            <div class="row g-3 align-items-end">
+
+                <div class="col-md-3 ">
+                    <label class="form-label text-muted small">Entity</label>
+                    <select class="form-select form-select-sm" [(ngModel)]="Entity">
+                        <option *ngFor="let p of entitySearch" [value]="p.Entity_Id">
+                            {{ p.Entity_Name }}
+                        </option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Pay Period</label>
+                    <select class="form-select form-select-sm" [(ngModel)]="PayPeriod">
+                        <option *ngFor="let pp of Payperiod" [ngValue]="pp">
+                            {{ pp.pay_Period }}
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-md-3 d-flex gap-2">
+
+                    <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="Export to Excel" (click)="exportToTxt()">
+                        <mat-icon>download</mat-icon>
+                    </button>
+
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>
