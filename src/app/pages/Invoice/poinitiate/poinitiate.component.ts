@@ -128,14 +128,12 @@ export class POInitiateComponent {
 
     this._invoiceService.POInvoiceInitiate(POInvoiceInitiateRequest).subscribe({
       next: (res) => {
-        const parsedData = JSON.parse(res.Data);
-        const errormsg = parsedData[0].Error_Message;
-
-        if (errormsg.toLowerCase().includes("successfully")) {
+        const msg = res.Data[0].Error_Message;
+        if (msg.toLowerCase().includes("success")) {
           this.showPopup = true;
-          this.popupMessage = "Invoice Initiated Successfully";
+          this.popupMessage = msg;
         } else {
-          alert(errormsg);
+          alert(msg);
         }
 
         this.isLoading = false;
@@ -201,15 +199,15 @@ export class POInitiateComponent {
 
     this._invoiceService.RequestPOInvoice(this.selectedCompanyId, this.payPeriod.payfrequencyid).subscribe({
       next: res => {
-         this.datatable = res.Data.data.Table0;
-          console.table(this.datatable);
-          if (this.datatable && Array.isArray(this.datatable) && this.datatable.length > 0) {
-            this.downloadExcel(this.datatable, "invoice_request");
-            this.isLoading = false;
-          } else {
-            alert("No data found");
-            this.isLoading = false;
-          }
+        this.datatable = res.Data.data.Table0;
+        console.table(this.datatable);
+        if (this.datatable && Array.isArray(this.datatable) && this.datatable.length > 0) {
+          this.downloadExcel(this.datatable, "invoice_request");
+          this.isLoading = false;
+        } else {
+          alert("No data found");
+          this.isLoading = false;
+        }
       },
       error: err => {
         console.log(err);
@@ -217,19 +215,19 @@ export class POInitiateComponent {
     })
   }
 
-   downloadExcel(data: any[], templateId: string): void {
-      //console.log("export");
-      const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
-      const workbook: XLSX.WorkBook = {
-        Sheets: { 'Sheet1': worksheet },
-        SheetNames: ['Sheet1']
-      };
-  
-      const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-      const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
-      const fileName = `${templateId}.xlsx`;
-      FileSaver.saveAs(blob, fileName);
-    }
+  downloadExcel(data: any[], templateId: string): void {
+    //console.log("export");
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
+    const workbook: XLSX.WorkBook = {
+      Sheets: { 'Sheet1': worksheet },
+      SheetNames: ['Sheet1']
+    };
+
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+    const fileName = `${templateId}.xlsx`;
+    FileSaver.saveAs(blob, fileName);
+  }
 
   toggleRow(event) {
 

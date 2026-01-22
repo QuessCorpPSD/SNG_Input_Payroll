@@ -654,19 +654,19 @@ export class CompanyaddComponent {
         BankCode: formValue?.BankCode ?? "",
         BankAdviceId: formValue?.BankAdvice ?? "",
         Portal_Type: formValue?.Portal_Type ?? "",
-        OT_WEEK_DAY_TYPE: formValue.weekday_type ?? null,
+        OT_WEEK_DAY_TYPE: formValue.weekday_type ?? "0",
         OT_WEEK_DAY_VLAUE: formValue.Weekday_Value ?? '',
         OT_WEEK_DAY_FORMULA: formValue.Weekday_Formula ?? '',
 
-        OT_NIGHT_SHIFT_TYPE: formValue.Nightshift_type ?? null,
+        OT_NIGHT_SHIFT_TYPE: formValue.Nightshift_type ?? "0",
         OT_NIGHT_SHIFT_VLAUE: formValue.Nightshift_Value ?? '',
         OT_NIGHT_SHIFT_FORMULA: formValue.Nightshift_Formula ?? '',
 
-        OT_WEEKEND_TYPE: formValue.OT_weekend_type ?? null,
+        OT_WEEKEND_TYPE: formValue.OT_weekend_type ?? "0",
         OT_WEEKEND_VLAUE: formValue.Weekend_Value ?? '',
         OT_WEEKEND_FORMULA: formValue.Weekend_Formula ?? '',
 
-        OT_HOLIDAY_TYPE: formValue.Holiday_type ?? null,
+        OT_HOLIDAY_TYPE: formValue.Holiday_type ?? "0",
         OT_HOLIDAY_VLAUE: formValue.Holiday_Value ?? '',
         OT_HOLIDAY_FORMULA: formValue.Holiday_Formula ?? '',
 
