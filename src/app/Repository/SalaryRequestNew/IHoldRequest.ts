@@ -8,4 +8,5 @@ export interface IHoldRequest {
     PartialHoldRequest(payload:any): Observable<APIResponse>;
     DBTHoldRequest(payload:any): Observable<APIResponse>;
     SingleHoldRequest(payload:any):Observable<APIResponse>;
+    HoldReason(Qzoneusername: any): Observable<APIResponse>;
 }

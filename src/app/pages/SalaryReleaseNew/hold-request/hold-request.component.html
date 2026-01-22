@@ -218,7 +218,9 @@
                         </mat-header-cell>
                         <mat-cell *matCellDef="let element; let i = index">
                             <div class="cell-center">
-                                <select class="dbt-select" [(ngModel)]="holdSelections[i]">
+                                <select class="dbt-select" [(ngModel)]="element.holdType"
+                                    [ngModelOptions]="{ standalone: true }">
+                                    <option value="">Select</option>
                                     <option value="SalaryHold">Salary Hold</option>
                                     <option value="PartialHold">Partial Hold</option>
                                     <option value="DBTHold">DBT Hold</option>
@@ -235,13 +237,12 @@
                         </mat-header-cell>
                         <mat-cell *matCellDef="let element; let i = index">
                             <div class="cell-center">
-                                <select class="dbt-select1"
-                                 [(ngModel)]="element.Hold_Salary_Status"
-                                    [disabled]="holdSelections[i] !== 'SalaryHold'"
-                                    [ngClass]="{ 'disabled-control': holdSelections[i] !== 'SalaryHold' }">
+                                <select class="dbt-select1" [(ngModel)]="element.Hold_Salary_Status"
+                                    [disabled]="element.holdType !== 'SalaryHold'"
+                                    [ngClass]="{ 'disabled-control': element.holdType !== 'SalaryHold' }"
+                                    [ngModelOptions]="{ standalone: true }">
                                     <option value="CTC">CTC</option>
                                     <option value="Netpay">Netpay</option>
-                                    <option value="STATUTORY">STATUTORY</option>
                                 </select>
                             </div>
                         </mat-cell>
@@ -256,10 +257,11 @@
                         </mat-header-cell>
                         <mat-cell *matCellDef="let element; let i = index">
                             <div class="cell-center">
-                                <input type="text" class="custom-input" [(ngModel)]="element.Partial_Hold_Amount"
-                                    [disabled]="holdSelections[i] !== 'PartialHold'" 
-                                    [ngClass]="{ 'disabled-control': holdSelections[i] !== 'PartialHold' }"
-                                    (input)="onDecimalInput($event)" />
+                                 <input type="text" class="custom-input" [(ngModel)]="element.Partial_Hold_Amount"
+                                    [disabled]="element.holdType !== 'SalaryHold' && element.holdType !== 'PartialHold'"
+                                    [ngClass]="{ 'disabled-control': element.holdType !== 'SalaryHold' && element.holdType !== 'PartialHold' }"
+                                    (input)="onDecimalInput($event)" [ngModelOptions]="{ standalone: true }" />
+
                             </div>
                         </mat-cell>
                     </ng-container>
@@ -274,9 +276,10 @@
                         <mat-cell *matCellDef="let element; let i = index">
                             <div class="cell-center">
                                 <input type="text" class="custom-input" [(ngModel)]="element.DBT_Hold_Amount"
-                                    [disabled]="holdSelections[i] !== 'DBTHold'" 
-                                    [ngClass]="{ 'disabled-control': holdSelections[i] !== 'DBTHold' }"
-                                    (input)="onDecimalInput($event)" />
+                                    [disabled]="element.holdType !== 'DBTHold'"
+                                    [ngClass]="{ 'disabled-control': element.holdType !== 'DBTHold' }"
+                                    (input)="onDecimalInput($event)" [ngModelOptions]="{ standalone: true }" />
+
                             </div>
                         </mat-cell>
                     </ng-container>
@@ -300,9 +303,15 @@
                                 Remarks
                             </div>
                         </mat-header-cell>
-                        <mat-cell *matCellDef="let element">
+                        <mat-cell *matCellDef="let element" class="fixed-width-column3">
                             <div class="cell-center">
-                                <input class="custom-input" type="text" [(ngModel)]="element.Remarks" >
+                                <!-- <input class="custom-input" type="text" [(ngModel)]="element.Remarks"> -->
+                                <select class="custom-input1" [(ngModel)]="element.Remarks">
+                                    <option value="">Select</option>
+                                    <option *ngFor="let upload of holdreasonlist" [value]="upload.value">
+                                        {{ upload.name }}
+                                    </option>
+                                </select>
                             </div>
                         </mat-cell>
                     </ng-container>

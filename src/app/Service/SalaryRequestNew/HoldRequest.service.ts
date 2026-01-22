@@ -51,4 +51,8 @@ export class HoldRequestService implements IHoldRequest {
       payload // send as FormData directly
     );
   }
+
+  HoldReason(Qzoneusername: any): Observable<APIResponse> {
+    return this.http.get<APIResponse>(this.env.apiUrl + 'SalaryRequestInvoice/GetCommonDropDownList/HoldReason/' + Qzoneusername);
+  }
 }

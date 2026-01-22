@@ -70,6 +70,7 @@ export class HoldRequestComponent implements OnInit {
   popupMessage: string = '';
   popupSubMessage: string = '';
   showPopup = false;
+  holdreasonlist: any;
 
   displayedColumns: string[] = [
     'select',
@@ -215,8 +216,25 @@ export class HoldRequestComponent implements OnInit {
       "userName": this.userdetail.userName,
     };
 
-    this.payPeriodTypefromParent = "All";
+    this.payPeriodTypefromParent = "SalaryRelease";
+    this.BindHoldReason(this.userdetail.user_Id);
 
+  }
+
+  BindHoldReason(userName: string): void {
+    // this.isLoading = true; 
+    this.holdservice.HoldReason(userName).subscribe({
+      next: (res) => {
+        if (res && res.Data) {
+          this.holdreasonlist = res.Data;
+        }
+        // this.isLoading = false; 
+      },
+      error: (err) => {
+        console.error('Error fetching upload types:', err);
+        // this.isLoading = false; 
+      }
+    });
   }
 
 
@@ -363,7 +381,19 @@ export class HoldRequestComponent implements OnInit {
           return;
         }
 
+        const tableData = res.Data.data.Table0;
+
+        if (!tableData.length) {
+          alert('No data found');
+          this.isLoading = false;
+          return;
+        }
+
         this.dataSource = new MatTableDataSource<any>(res.Data.data.Table0);
+        this.dataSource.data.forEach(row => {
+          row.Remarks = row.Remarks ?? '';
+          row.holdType = row.holdType ?? '';
+        });
         this.dataSource.paginator = this.holdpaginator;
         this.dataSource.sort = this.sort;
         this.isLoading = false;
@@ -571,24 +601,24 @@ export class HoldRequestComponent implements OnInit {
       const row = selectedRows[i];
 
       const rowIndex = this.dataSource.data.indexOf(row);
-      const holdType = this.holdSelections[rowIndex];
+      //const holdType = this.holdSelections[rowIndex];
 
-      if (!holdType) {
+      if (!row.holdType) {
         alert(`Row ${rowIndex + 1}: Hold Selection cannot be blank`);
         return false;
       }
 
-      if (holdType === 'SalaryHold' && !row.Hold_Salary_Status) {
+      if (row.holdType === 'SalaryHold' && !row.Hold_Salary_Status) {
         alert(`Row ${rowIndex + 1}: Hold Status is required`);
         return false;
       }
 
-      if (holdType === 'PartialHold' && !row.Partial_Hold_Amount) {
+      if (row.holdType === 'PartialHold' && !row.Partial_Hold_Amount) {
         alert(`Row ${rowIndex + 1}: Partial Hold Amount is required`);
         return false;
       }
 
-      if (holdType === 'DBTHold' && !row.DBT_Hold_Amount) {
+      if (row.holdType === 'DBTHold' && !row.DBT_Hold_Amount) {
         alert(`Row ${rowIndex + 1}: DBT Hold Amount is required`);
         return false;
       }
@@ -606,15 +636,58 @@ export class HoldRequestComponent implements OnInit {
 
   callAllSalaryApi(rows: any) {
     this.isLoading = true;
+    // const payload = {
+    //   QZoneUserName: String(this.userdetail.user_Id),
+    //   HoldListData: rows.map((r, index) => {
+    //     const holdType = this.holdSelections[index].replace(/([A-Z]+)([A-Z][a-z])/g, '$1 $2')
+    //       .replace(/([a-z])([A-Z])/g, '$1 $2');
+
+    //     let holdAmount: any = "";
+    //     let holdStatus: string = ""; // take same text
+
+
+    //     if (holdType === 'Partial Hold') {
+    //       holdAmount = r.Partial_Hold_Amount;
+    //     }
+
+    //     if (holdType === 'DBT Hold') {
+    //       holdAmount = r.DBT_Hold_Amount;
+    //     }
+
+    //     if (holdType === 'Salary Hold') {
+    //       holdStatus = r.Hold_Salary_Status;
+    //     }
+
+    //     return {
+    //       Company_Code: String(this.companyUI.companyCode),
+    //       Pay_Period: String(this.payperiodUI.payPeriod),
+    //       Employee_Code: String(r.Employee_Code),
+    //       Invoice_no: String(r.Invoice_No),
+    //       Flag: String(holdType),
+    //       Hold_Status: String(holdStatus),
+    //       Hold_Amount: String(holdAmount),
+    //       Reason: String(r.Remarks),
+    //       SalaryType: String(r.SalaryType)
+    //     };
+    //   })
+    // };
+
     const payload = {
       QZoneUserName: String(this.userdetail.user_Id),
-      HoldListData: rows.map((r, index) => {
-        const holdType = this.holdSelections[index].replace(/([A-Z]+)([A-Z][a-z])/g, '$1 $2')
+      HoldListData: rows.flatMap((r, index) => {
+
+        if (!r.holdType) {
+          return [];
+        }
+
+        const holdType = r.holdType
+          .replace(/([A-Z]+)([A-Z][a-z])/g, '$1 $2')
           .replace(/([a-z])([A-Z])/g, '$1 $2');
 
-        let holdAmount: any = "";
-        let holdStatus: string = ""; // take same text
+        const result: any[] = [];
 
+        let holdAmount = '';
+        let holdStatus = '';
 
         if (holdType === 'Partial Hold') {
           holdAmount = r.Partial_Hold_Amount;
@@ -628,7 +701,7 @@ export class HoldRequestComponent implements OnInit {
           holdStatus = r.Hold_Salary_Status;
         }
 
-        return {
+        result.push({
           Company_Code: String(this.companyUI.companyCode),
           Pay_Period: String(this.payperiodUI.payPeriod),
           Employee_Code: String(r.Employee_Code),
@@ -638,10 +711,30 @@ export class HoldRequestComponent implements OnInit {
           Hold_Amount: String(holdAmount),
           Reason: String(r.Remarks),
           SalaryType: String(r.SalaryType)
-        };
+        });
+
+        if (
+          holdType === 'Salary Hold' &&
+          r.Partial_Hold_Amount !== '' &&
+          r.Partial_Hold_Amount != null &&
+          Number(r.Partial_Hold_Amount) > 0
+        ) {
+          result.push({
+            Company_Code: String(this.companyUI.companyCode),
+            Pay_Period: String(this.payperiodUI.payPeriod),
+            Employee_Code: String(r.Employee_Code),
+            Invoice_no: String(r.Invoice_No),
+            Flag: 'Partial Hold',
+            Hold_Status: '',
+            Hold_Amount: String(r.Partial_Hold_Amount),
+            Reason: String(r.Remarks),
+            SalaryType: String(r.SalaryType)
+          });
+        }
+
+        return result;
       })
     };
-
 
     this.holdservice.SingleHoldRequest(payload).pipe(
       finalize(() => {
@@ -649,9 +742,10 @@ export class HoldRequestComponent implements OnInit {
       })
     ).subscribe({
       next: res => {
+        console.log('res', JSON.stringify(res));
         this.downloadHoldResponseExcel(res);
-
-        this.selectionSalary.clear();
+        this.dataSource.data = [];
+        this.selection.clear();
 
       },
       error: err => {
@@ -662,7 +756,7 @@ export class HoldRequestComponent implements OnInit {
   }
 
   downloadHoldResponseExcel(apiResponse: any) {
-    const data = apiResponse?.Data?.data;
+    const data = apiResponse?.data?.data;
     if (!data) {
       alert('No data available to download');
       return;
@@ -723,16 +817,18 @@ export class HoldRequestComponent implements OnInit {
       })
     ).subscribe({
       next: res => {
-        this.selectionSalary.clear();
+
 
         const validations: string[] =
-          res?.Data?.map((x: any) => x.validation) || [];
+          res?.data?.map((x: any) => x.validation) || [];
 
         const isSuccess = validations.some(v =>
           v.toLowerCase().includes('uploaded successfully')
         );
 
         if (isSuccess) {
+          this.selectionSalary.clear();
+          this.dataSourceSalary.data = [];
           this.showPopup = true;
           this.popupMessage = validations[0];
           return;
@@ -768,14 +864,18 @@ export class HoldRequestComponent implements OnInit {
       })
     ).subscribe({
       next: res => {
+
+
         const validations: string[] =
-          res?.Data?.map((x: any) => x.error_Message) || [];
+          res?.data?.map((x: any) => x.error_Message) || [];
 
         const isSuccess = validations.some(v =>
           v.toLowerCase().includes('uploaded successfully')
         );
 
         if (isSuccess) {
+          this.selectionPartial.clear();
+          this.dataSourcePartial.data = [];
           this.showPopup = true;
           this.popupMessage = validations[0];
           return;
@@ -810,14 +910,17 @@ export class HoldRequestComponent implements OnInit {
       })
     ).subscribe({
       next: res => {
+
         const validations: string[] =
-          res?.Data?.map((x: any) => x.error_Message) || [];
+          res?.data?.map((x: any) => x.error_Message) || [];
 
         const isSuccess = validations.some(v =>
           v.toLowerCase().includes('uploaded successfully')
         );
 
         if (isSuccess) {
+          this.selectionDBT.clear();
+          this.dataSourceDBT.data = [];
           this.showPopup = true;
           this.popupMessage = validations[0];
           return;
@@ -875,7 +978,7 @@ export class HoldRequestComponent implements OnInit {
 
     this.holdservice.DownloadTemplate(Flag, Qzoneusername).subscribe({
       next: res => {
-        const data = res?.Data?.data?.Table0 ?? [];
+        const data = res?.data?.data?.Table0 ?? [];
         if (!data.length) {
           return;
         }

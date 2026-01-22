@@ -231,6 +231,14 @@ export class NetpaySummaryComponent implements OnInit {
           return;
         }
 
+         const tableData = res.Data.data.Table0;
+
+        if (!tableData.length) {
+          alert('No data found');
+          this.isLoading = false;
+          return;
+        }
+
         this.dataSource = new MatTableDataSource<any>(res.Data.data.Table0);
         this.dataSource.paginator = this.holdpaginator;
         this.dataSource.sort = this.sort;
@@ -297,8 +305,7 @@ export class NetpaySummaryComponent implements OnInit {
           return;
         }
 
-        console.log('1');
-
+        
         const jsonData = XLSX.utils.sheet_to_json<any>(sheet, { defval: '' });
         if (!this.hasAtLeastOneValidRow(jsonData)) {
           alert('The uploaded Excel file contains no data rows.');
@@ -362,6 +369,8 @@ export class NetpaySummaryComponent implements OnInit {
         );
 
         if (isSuccess) {
+          this.selection.clear();
+          this.dataSource.data = [];
           this.showPopup = true;
           this.popupMessage = validations[0];
           return;
@@ -398,6 +407,8 @@ export class NetpaySummaryComponent implements OnInit {
         );
 
         if (isSuccess) {
+         this.selectionImport.clear();
+          this.dataSourceImport.data = [];
           this.showPopup = true;
           this.popupMessage = validations[0];
           return;
