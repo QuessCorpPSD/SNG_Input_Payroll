@@ -36,4 +36,10 @@ export class FormualService implements IFormulaRepository {
       payload
     );
   }
+  PaycodeSearch(payload: any): Observable<APIResponse> {
+    return this.http.post<APIResponse>(
+      this.env.apiUrl + 'Paycode/Search' , payload,
+    );
+  }
+
 }

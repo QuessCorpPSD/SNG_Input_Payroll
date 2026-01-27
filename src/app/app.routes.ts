@@ -457,15 +457,14 @@ export const routes: Routes = [
           { path: 'Formula', component: FormulaComponent },
           { path: 'city', component: CityComponent },
           { path: 'states', component: StatesComponent },
-          { path: 'Formula', component: FormulaComponent },
           { path: 'ESIslab', component: ESIslabComponent },
 
-          { path: 'Formula', component: FormulaComponent },
+          
           { path: "professionaltax", component: ProfessionaltaxComponent },
           { path: "providentfund", component: ProvidentfundComponent },
           { path: "computationrule", component: ComputationruleComponent },
           { path: "providentfund", component: ProvidentfundComponent },
-          { path: 'Formula', component: FormulaComponent },
+          
           { path: 'lfw', component: LFWSlabComponent },
           { path: 'tds', component: TDSslabComponent }
         ]

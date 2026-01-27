@@ -1,5 +1,5 @@
-<form [formGroup]="addformula" novalidate *ngIf="!Edit">
-
+<!-- <form [formGroup]="addformula" novalidate *ngIf="!Edit"> -->
+<div *ngIf="!Edit">
     <mat-card class="custom-card">
         <mat-card-header class="sticky-header">
             <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;"> Add
@@ -56,7 +56,7 @@
                 </div>
 
                 <label class="form-label text-muted small mb-0">Description:</label>
-                <input type="text" class="form-control form-control-sm" style="width:250px;"
+                <input type="text" class="form-control form-control-sm" style="width:250px;" disabled=""
                     [(ngModel)]="Description">
 
 
@@ -87,7 +87,7 @@
             </button>
         </div>
     </mat-card>
-</form>
+</div>
 <form [formGroup]="editFormula" novalidate *ngIf="Edit">
 
     <mat-card class="custom-card">

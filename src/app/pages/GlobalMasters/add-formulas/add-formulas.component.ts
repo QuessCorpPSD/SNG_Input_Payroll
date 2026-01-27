@@ -182,16 +182,29 @@ export class AddFormulasComponent {
     this.formula.payCode().subscribe({
       next: (res: any) => {
         if (res?.Data) {
+         // console.log(" Pay Code Data:", res);
           this.payCode = res.Data;
+          
         }
       },
       error: err => console.error(" Pay Code API Error:", err)
     });
   }
 
-  ChangepayCode(paycodeId: number) {
-    this.selectedPayCode = paycodeId;
+  ChangepayCode(pf: any) {
+    this.selectedPayCode = pf;
     this.val_paycode = false;
+    
+    var payload = { "PayId": this.selectedPayCode
+     };
+    this.formula.PaycodeSearch(payload).subscribe({
+      next: (res: any) => {
+        if (res?.Data?.data?.Table0 && res.Data.data.Table0.length > 0) {
+          this.Description = res.Data.data.Table0[0].Description || "";
+        }
+      },
+      error: err => console.error(" Pay Code Search API Error:", err)
+    });
   }
 
 

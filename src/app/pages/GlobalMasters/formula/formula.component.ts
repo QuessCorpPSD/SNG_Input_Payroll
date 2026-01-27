@@ -11,7 +11,7 @@ import { PaycodeComponent } from "../../../common/paycode/paycode.component";
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import * as XLSX from 'xlsx';
-import { FormualService } from '../../../Repository/GlobalMasters/formula.service';
+import { FormualService } from '../../../Service/GlobalMasters/formula.service';
 import { IFormulaRepository } from '../../../Repository/GlobalMasters/IFormulaRepository';
 import { MatCardModule } from "@angular/material/card";
 import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.component";
