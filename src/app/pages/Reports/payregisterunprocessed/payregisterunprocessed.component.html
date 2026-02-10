@@ -1,11 +1,11 @@
-<div style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;">
-    PayRegister</div>
+<div class="page-wrapper">
+    <div class="scrollable-content">
 
-<div class="container-fluid">
-    <div  class="row py-2">
-        <br />
-        <form>
-            <div class="row align-items-end ">
+        <div style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;">
+            PayRegister</div>
+
+        <div class="container py-2">
+            <div class="row gap-3 align-items-end ">
                 <div class="col-md-3 ">
                     <label class="form-label text-muted small">Company Code</label>
                     <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
@@ -17,14 +17,18 @@
                 </div>
                 <div class="col-md-2" style="padding-top: 25px;">
                     <div class="d-flex gap-2">
-                        <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                        <button style="display: none!important;" class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center" 
                             matTooltip="Download" (click)="Download()">
+                            <mat-icon>download</mat-icon>
+                        </button>
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center btn-secondary"
+                            (click)="exportToExcel()" matTooltip="Template">
                             <mat-icon>download</mat-icon>
                         </button>
                     </div>
                 </div>
             </div>
-        </form>
+        </div>
     </div>
 </div>
 <div *ngIf="isLoading" class="loading-overlay">

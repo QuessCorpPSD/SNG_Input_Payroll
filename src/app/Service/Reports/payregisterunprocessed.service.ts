@@ -16,5 +16,14 @@ export class PayregisterunprocessedService implements IpayregisterunprocessedSer
   GetExporttoExcel(CompanyId: any, PayperiodId: any): Observable<APIResponse> {
     return this.http.get<APIResponse>(this.environment.apiUrl + 'PayregisterUnprocessed/Exporttoexcel/' + CompanyId + '/' + PayperiodId);
   }
+  payregisterDownload(payload: any): Observable<APIResponse> {
+    return this.http.post<APIResponse>(
+      `${this.environment.apiUrl}PayregisterUnprocessed/payregisterDownload`,
+      payload
+    );
+  }
+
+
+
 
 }
