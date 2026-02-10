@@ -132,7 +132,7 @@ export class PayregisterunprocessedComponent {
     }
 
     if (!this.selectedPP) {
-      alert('Please select PayP');
+      alert('Please select Pay Period');
       return;
     }
 
@@ -152,7 +152,7 @@ export class PayregisterunprocessedComponent {
           const fileName = res?.Data?.fileName || 'PayRegister';
           this.downloadExcelFromBase64(base64String, fileName, 'xlsx');
         } else {
-          alert('No template data available.');
+          alert('No data available selected pay period.');
         }
 
         this.isLoading = false;
