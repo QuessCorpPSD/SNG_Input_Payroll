@@ -302,7 +302,7 @@ export class IncreamentComponent {
             SheetNames: ['ErrorMessages']
           };
 
-          XLSX.writeFile(workbook, 'ErrorMessages_Employee.xlsx');
+          XLSX.writeFile(workbook, 'ErrorMessages_increment.xlsx');
           return;
         }
 
