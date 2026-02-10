@@ -35,7 +35,7 @@ export class PayregisterunprocessedComponent {
   payPeriodTypefromParentall: string = '';
   selectedPP?: any;
   isLoading: boolean = false;
-
+  selectedPPName?: any
   constructor(private payregisterService: PayregisterunprocessedService) { }
 
   ngOnInit(): void {
@@ -49,6 +49,7 @@ export class PayregisterunprocessedComponent {
 
   handlePayperiodEvent(payperiod: Payperiodclass) {
     this.selectedPP = String(payperiod.payfrequencyid);
+    this.selectedPPName = String(payperiod.payPeriod);
   }
 
   Download() {
@@ -123,6 +124,77 @@ export class PayregisterunprocessedComponent {
       }
     });
 
+  }
+  exportToExcel(): void {
+    if (!this.companyId) {
+      alert('Please select Company Code');
+      return;
+    }
+
+    if (!this.selectedPP) {
+      alert('Please select PayP');
+      return;
+    }
+
+    const payload = {
+      companyId: this.companyId,
+      payPeriodId: this.selectedPP,
+      payPeriod: this.selectedPPName
+    };
+
+    this.isLoading = true;
+
+    this.payregisterService.payregisterDownload(payload).subscribe({
+      next: (res) => {
+        const base64String = res.Data.file;
+
+        if (base64String) {
+          const fileName = res?.Data?.fileName || 'PayRegister';
+          this.downloadExcelFromBase64(base64String, fileName, 'xlsx');
+        } else {
+          alert('No template data available.');
+        }
+
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Error downloading file:', err);
+        alert('Failed to download template');
+        this.isLoading = false;
+      }
+    });
+  }
+
+
+  downloadExcelFromBase64(
+    base64String: string,
+    fileName: string,
+    fileType: string
+  ): void {
+    try {
+      const byteCharacters = atob(base64String);
+      const byteNumbers = Array.from(byteCharacters, char =>
+        char.charCodeAt(0)
+      );
+      const byteArray = new Uint8Array(byteNumbers);
+
+      const blob = new Blob([byteArray], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      });
+
+      const downloadLink = document.createElement('a');
+      downloadLink.href = URL.createObjectURL(blob);
+      downloadLink.download = `${fileName}.${fileType}`;
+
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+
+      URL.revokeObjectURL(downloadLink.href);
+    } catch (error) {
+      console.error('Error downloading from base64:', error);
+      alert('Failed to process download file');
+    }
   }
 
 }
