@@ -130,21 +130,27 @@ export class BandDetailsComponent {
 
 
   exportToExcel() {
+    this.bandService.GetAllBandDetails(this.selectedCompanyId || 0).subscribe({
+      next: (res) => {
+        const data = res?.Data;
+        if (!data || data === 0) {
+          alert("No data available to export");
+          return;
+        }
 
-    if (!this.uploadedData || this.uploadedData.length === 0) {
-      alert("No data available to export");
-      return;
-    }
+        const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
 
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.uploadedData);
+        const wb: XLSX.WorkBook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "BandDetails");
 
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "BandDetails");
+        const today = new Date().toISOString().split('T')[0];
+        const fileName = `Band_Details_${today}.xlsx`;
 
-    const today = new Date().toISOString().split('T')[0];
-    const fileName = `Band_Details_${today}.xlsx`;
-
-    XLSX.writeFile(wb, fileName);
+        XLSX.writeFile(wb, fileName);
+      }, error: (err) => {
+        console.error(err);
+      }
+    })
   }
 
   ngOnInit(): void {

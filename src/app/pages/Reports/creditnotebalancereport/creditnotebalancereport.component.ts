@@ -59,10 +59,10 @@ export class CreditnotebalancereportComponent {
   ngOnInit() {
     const today = new Date().toISOString().split('T')[0];
     this.StartDate = today;
-    this.EndDate =today;
+    this.EndDate = today;
   }
 
-  
+
   onStartChange(event: any) {
     this.StartDate = event.target.value;
     // const [year, month, day] = inputDate.split("-");
@@ -93,12 +93,12 @@ export class CreditnotebalancereportComponent {
       next: (res) => {
         try {
           console.log(res);
-          const jsonData = res.Data.data.Table0;
+          const jsonData = res?.Data?.data?.Table0 || res.Data.data;
           const msg = res.Data.message;
 
           if (!jsonData || jsonData.length === 0) {
             this.isLoading = false;
-            alert(res.Data.message);
+            alert(msg);
             return;
           }
 
@@ -116,11 +116,13 @@ export class CreditnotebalancereportComponent {
         } catch (err) {
           this.isLoading = false;
           console.error('Error exporting to Excel:', err);
+          alert("Server Error,Please try again later");
         }
       },
       error: (err) => {
         this.isLoading = false;
         console.error('Error loading data for export', err);
+        alert("Server Error,Please try again later");
       },
     });
   }
