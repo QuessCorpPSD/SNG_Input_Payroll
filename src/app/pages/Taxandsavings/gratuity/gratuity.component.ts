@@ -7,12 +7,13 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CompanyallComponent } from '../../../common/CompanyAll/companyall.component';
-import { IGratuity } from '../../../Repository/TaxandSavings/IGratuity';
-import { GratuityService } from '../../../Service/Taxandsavings/gratuity.service';
+
 import { MatSort } from '@angular/material/sort';
 import * as XLSX from 'xlsx';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
+import { IGratuity } from '../../../Repository/TaxAndSavings/IGratuity';
+import { GratuityService } from '../../../Service/TaxAndSavings/gratuity.service';
 
 export const Pay_TOKEN = new InjectionToken<IGratuity>('Pay_TOKEN');
 

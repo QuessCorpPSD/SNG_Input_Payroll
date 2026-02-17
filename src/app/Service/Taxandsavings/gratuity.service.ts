@@ -3,7 +3,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
 import { APIResponse } from '../../Models/apiresponse';
-import { IGratuity } from '../../Repository/TaxandSavings/IGratuity';
+import { IGratuity } from '../../Repository/TaxAndSavings/IGratuity';
+
 
 @Injectable({
   providedIn: 'root'

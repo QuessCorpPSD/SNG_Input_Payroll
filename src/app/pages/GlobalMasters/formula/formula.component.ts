@@ -121,20 +121,29 @@ export class FormulaComponent {
     });
   }
   exportToExcel() {
-    this.isLoading = true;
-    const data = this.uploadedDataSource.data;
-    if (!data || data.length === 0) {
-      alert("No data available to export");
-      this.isLoading = false;
+    if (!this.paycodeUI.paycode_Id) {
+      alert("Please select Formula");
       return;
     }
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Formula");
-    const today = new Date().toISOString().split('T')[0];
-    const fileName = `Formula_${today}.xlsx`;
-    XLSX.writeFile(wb, fileName);
-    this.isLoading = false;
+    this.isLoading = true;
+
+    this.formula.GetFormulaSearch(this.paycodeUI.paycode_Id).subscribe({
+      next: res => {
+        const data = res.Data.data;
+        if (!data || data.length === 0) {
+          alert("No Records found");
+          this.isLoading = false;
+          return;
+        }
+        const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
+        const wb: XLSX.WorkBook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Formula");
+        const today = new Date().toISOString().split('T')[0];
+        const fileName = `Formula_${today}.xlsx`;
+        XLSX.writeFile(wb, fileName);
+        this.isLoading = false;
+      }
+    });
   }
 
   AddPOOpen() {

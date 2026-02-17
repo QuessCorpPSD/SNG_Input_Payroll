@@ -327,7 +327,7 @@ export class OtherincomeComponent {
     };
 
     const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    this.showAlertPopup('downloaded successfully')
+    alert('downloaded successfully')
     const blob = new Blob([buffer], { type: 'application/octet-stream' });
 
     FileSaver.saveAs(blob, `otherincome_Template_${Date.now()}.xlsx`);
