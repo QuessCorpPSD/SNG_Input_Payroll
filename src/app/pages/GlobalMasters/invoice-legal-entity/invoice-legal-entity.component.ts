@@ -107,7 +107,7 @@ export class InvoiceLegalEntityComponent {
         }));
 
 
-        this.uploadedDataSource =  new MatTableDataSource(this.uploadedData);
+        this.uploadedDataSource = new MatTableDataSource(this.uploadedData);
         this.uploadedDataSource.paginator = this.paginator;
         this.uploadedDataSource.sort = this.sort;
 
@@ -124,26 +124,35 @@ export class InvoiceLegalEntityComponent {
   }
 
   ngAfterViewInit() {
-    
-     this.uploadedDataSource.paginator = this.paginator;
+
+    this.uploadedDataSource.paginator = this.paginator;
     this.uploadedDataSource.sort = this.sort;
   }
 
   exportToExcel(): void {
-    if (!this.uploadedData || this.uploadedData.length === 0) {
-      alert("No data available to export");
-      return;
-    }
 
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.uploadedData);
+    this.invoiceService.InvoiceSearch().subscribe({
+      next: (res: any) => {
+        this.isLoading = false;
 
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Invoice Legal Entity');
+        let table = res?.Data?.data?.Table0 || [];
+        if (!table || table === 0) {
+          alert("No data available to export");
+          return;
+        }
 
-    const fileName = `InvoiceLegalEntity_${new Date().toISOString().split("T")[0]}.xlsx`;
+        const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(table);
 
-    XLSX.writeFile(wb, fileName);
-    }
+        const wb: XLSX.WorkBook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Invoice Legal Entity');
+
+        const fileName = `InvoiceLegalEntity_${new Date().toISOString().split("T")[0]}.xlsx`;
+
+        XLSX.writeFile(wb, fileName);
+      }
+    });
+
+  }
 
   AddPOOpen() {
     this.dialog.open(AddInvoiceLegalEntityComponent, {

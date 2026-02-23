@@ -104,21 +104,27 @@ export class VendorComponent {
   }
 
   exportToExcel(): void {
-    this.isLoading = true;
-    const data = this.dataSource.data;
+    this.vendorService.VendorSearch().subscribe({
+      next: (res) => {
+        this.isLoading = false;
 
-    if (!data || data.length === 0) {
-      this.isLoading = false;
-      alert("No data available to export");
-      return;
-    }
+        const vendor = res.Data.data.Table0;
 
-    const ws = XLSX.utils.json_to_sheet(data);
-    const wb = XLSX.utils.book_new();
+        if (!vendor || vendor === 0) {
+          this.isLoading = false;
+          alert("No data available to export");
+          return;
+        }
 
-    XLSX.utils.book_append_sheet(wb, ws, 'Vendor Master');
-    XLSX.writeFile(wb, `VendorMaster_${new Date().toISOString().split("T")[0]}.xlsx`);
-    this.isLoading = false;
+        const ws = XLSX.utils.json_to_sheet(vendor);
+        const wb = XLSX.utils.book_new();
+
+        XLSX.utils.book_append_sheet(wb, ws, 'Vendor Master');
+        XLSX.writeFile(wb, `VendorMaster_${new Date().toISOString().split("T")[0]}.xlsx`);
+        this.isLoading = false;
+      }
+    });
+
   }
 
   AddPOOpen() {

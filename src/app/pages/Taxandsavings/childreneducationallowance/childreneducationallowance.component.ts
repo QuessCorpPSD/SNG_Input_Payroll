@@ -8,11 +8,11 @@ import { MatTableDataSource, MatTableModule } from "@angular/material/table";
 import { CompanyallComponent } from "../../../common/CompanyAll/companyall.component";
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSort } from '@angular/material/sort';
-import { IChildreneducationallowance } from '../../../Repository/TaxandSavings/IChildreneducationallowance.service';
-import { ChildreneducationallowanceService } from '../../../Service/Taxandsavings/childreneducationallowance.service';
 import * as XLSX from 'xlsx';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
+import { IChildreneducationallowance } from '../../../Repository/TaxAndSavings/IChildreneducationallowance.service';
+import { ChildreneducationallowanceService } from '../../../Service/TaxAndSavings/childreneducationallowance.service';
 
 export const Pay_TOKEN = new InjectionToken<IChildreneducationallowance>('Pay_TOKEN');
 

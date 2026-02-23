@@ -7,12 +7,12 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CompanyallComponent } from '../../../common/CompanyAll/companyall.component';
-import { ICompanyProvidedBenefits } from '../../../Repository/TaxandSavings/Icompanyprovidedbenefits';
-import { CompanyprovidedbenefitsService } from '../../../Service/Taxandsavings/companyprovidedbenefits.service';
 import { MatSort } from '@angular/material/sort';
 import * as XLSX from 'xlsx';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
+import { ICompanyProvidedBenefits } from '../../../Repository/TaxAndSavings/Icompanyprovidedbenefits';
+import { CompanyprovidedbenefitsService } from '../../../Service/TaxAndSavings/companyprovidedbenefits.service';
 export const Pay_TOKEN = new InjectionToken<ICompanyProvidedBenefits>('Pay_TOKEN');
 
 @Component({

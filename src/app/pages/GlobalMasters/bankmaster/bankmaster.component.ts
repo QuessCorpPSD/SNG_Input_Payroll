@@ -172,22 +172,37 @@ export class BankmasterComponent implements AfterViewInit {
 
   exportToExcel() {
     this.isLoading = true;
-    if (!this.uploadedData || this.uploadedData.length === 0) {
-      this.isLoading = false;
-      alert("No data available to export!");
-      return;
-    }
 
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.uploadedData);
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    this.bankService.Search().subscribe({
+      next: (res: any) => {
+        const table = res?.Data?.data?.Table0 || [];
 
-    XLSX.utils.book_append_sheet(wb, ws, "BankMaster");
+        if (!Array.isArray(table) || table.length === 0) {
+          this.isLoading = false;
+          alert("No data available to export!");
+          return;
+        }
 
-    const timestamp = new Date().toISOString().split("T")[0];
-    const fileName = `Bank_Master_${timestamp}.xlsx`;
-    XLSX.writeFile(wb, fileName);
-    this.isLoading = false;
+        const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(table);
+        const wb: XLSX.WorkBook = XLSX.utils.book_new();
+
+        XLSX.utils.book_append_sheet(wb, ws, "BankMaster");
+
+        const timestamp = new Date().toISOString().split("T")[0];
+        const fileName = `Bank_Master_${timestamp}.xlsx`;
+
+        XLSX.writeFile(wb, fileName);
+        this.isLoading = false;
+      },
+
+      error: (err) => {
+        this.isLoading = false;
+        console.error("Export failed", err);
+        alert("Export failed. Please try again.");
+      }
+    });
   }
+
 
   AddBankOpen() {
     this.dialog.open(BankmasteraddComponent, {

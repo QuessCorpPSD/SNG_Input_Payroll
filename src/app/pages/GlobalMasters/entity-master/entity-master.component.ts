@@ -29,7 +29,7 @@ import { MatCardModule } from "@angular/material/card";
     MatSortModule,
     AlertpopupComponent,
     MatCardModule
-],
+  ],
   templateUrl: './entity-master.component.html',
   styleUrls: ['./entity-master.component.css']
 })
@@ -40,7 +40,7 @@ export class EntityMasterComponent {
   showTable: boolean = false;
   entityName: string = "";
 
- 
+
   isLoading: boolean = false;
   showPopup: boolean = false;
   popupMessage: string = '';
@@ -73,7 +73,7 @@ export class EntityMasterComponent {
     this.uploadedDataSource.sort = this.sort;
   }
 
-  
+
   showAlertPopup(message: string, subMessage: string = '') {
     this.popupMessage = message;
     this.popupSubMessage = subMessage;
@@ -86,7 +86,7 @@ export class EntityMasterComponent {
     this.popupSubMessage = '';
   }
 
-  
+
   onSearchClick() {
     this.showTable = true;
     this.isLoading = true;
@@ -139,24 +139,29 @@ export class EntityMasterComponent {
     });
   }
 
- 
+
   exportToExcelLocal() {
-    if (!this.uploadedData || this.uploadedData.length === 0) {
-      alert("No data available to export!");
-      return;
-    }
+    this.entityService.EntitySearch().subscribe({
+      next: (res: any) => {
 
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.uploadedData);
+        const data=res.Data.data.Table0;
+        if (!data || data === 0) {
+          alert("No data available to export!");
+          return;
+        }
 
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "FilteredEntityMaster");
+        const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
 
-    const timestamp = new Date().toISOString().split("T")[0];
-    const fileName = `Entity_Master_${timestamp}.xlsx`;
+        const wb: XLSX.WorkBook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "FilteredEntityMaster");
 
-    XLSX.writeFile(wb, fileName);
+        const timestamp = new Date().toISOString().split("T")[0];
+        const fileName = `Entity_Master_${timestamp}.xlsx`;
 
-   
+        XLSX.writeFile(wb, fileName);
+      }
+    });
+
   }
 
   AddPOOpen() {
