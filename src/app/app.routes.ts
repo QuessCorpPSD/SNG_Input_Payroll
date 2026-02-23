@@ -174,6 +174,8 @@ import { HRAcalculationComponent } from './pages/Taxandsavings/hracalculation/hr
 import { BankAccountComponent } from './pages/SalaryReleaseNew/bank-account/bank-account.component';
 import { ReportComponent } from './pages/Reports/report/report.component';
 import { CPFsummaryComponent } from './pages/Reports/cpfsummary/cpfsummary.component';
+import { DownloadbatchComponent } from './pages/SalaryReleaseNew/downloadbatch/downloadbatch.component';
+import { BatchcreationprocessComponent } from './pages/SalaryReleaseNew/batchcreationprocess/batchcreationprocess.component';
 import { SalaryReleaseProcessComponent } from './pages/SalaryReleaseNew/salary-release-process/salary-release-process.component';
 import { SalaryReleaseStatusComponent } from './pages/SalaryReleaseNew/salary-release-status/salary-release-status.component';
 import { SalaryReleaseApproveComponent } from './pages/SalaryReleaseNew/salary-release-approve/salary-release-approve.component';
@@ -297,6 +299,9 @@ export const routes: Routes = [
           { path: 'Holdrequest', component: HoldRequestComponent },
           { path: 'Netpaysummary', component: NetpaySummaryComponent },
           { path: 'Upfrontapproval', component: UpfrontApprovalComponent },
+          { path: 'Yearlypayout', component: YearlyPayoutComponent },
+          { path: 'downloadbatch', component: DownloadbatchComponent },
+          { path: 'batchcreation', component: BatchcreationprocessComponent },
           { path: 'Yearlypayout', component: YearlyPayoutComponent },
           { path: 'SalaryReleaseProcess', component: SalaryReleaseProcessComponent },
           { path: 'SalaryReleaseStatus', component: SalaryReleaseStatusComponent },
@@ -466,10 +471,12 @@ export const routes: Routes = [
           { path: 'ESIslab', component: ESIslabComponent },
 
 
+
           { path: "professionaltax", component: ProfessionaltaxComponent },
           { path: "providentfund", component: ProvidentfundComponent },
           { path: "computationrule", component: ComputationruleComponent },
           { path: "providentfund", component: ProvidentfundComponent },
+
 
           { path: 'lfw', component: LFWSlabComponent },
           { path: 'tds', component: TDSslabComponent }
