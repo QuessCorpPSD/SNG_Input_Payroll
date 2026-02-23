@@ -79,11 +79,11 @@ export class InitiateComponent implements OnInit {
         alert("Select PayPeriod ");
         return;
       }
-      if(this.invoiceType==undefined)
-      {
-        alert("Select Invoice Type ");
-        return;
-      }
+      // if(this.invoiceType==undefined)
+      // {
+      //   alert("Select Invoice Type ");
+      //   return;
+      // }
      if(this.selection.selected.length==0)
      {
       alert("Please Select atleast one row");
@@ -93,10 +93,12 @@ export class InitiateComponent implements OnInit {
      this.isLoading=true;
       const request={
         "invoiceInitiations":this.selection.selected,
-        "TaxTypeId":this.invoiceType.geN_iID,
+         "TaxTypeId": 0,// this.invoiceType.geN_iID,
         "payPeriod_Id":this.payPeriod.payfrequencyid,
         "CreatedBy":this.userdetail.user_Id,
       }
+      console.log(request);
+      
       this._invoiceService.InvoiceInitiate(request).subscribe({
         next:res=>{ console.log(res);
           alert(res.Data.error_Message);
@@ -130,11 +132,6 @@ export class InitiateComponent implements OnInit {
       if(this.payPeriod==undefined)
       {
         alert("Select PayPeriod ");
-        return;
-      }
-      if(this.invoiceType==undefined)
-      {
-        alert("Select Invoice Type ");
         return;
       }
       this.isLoading=true;
@@ -225,11 +222,12 @@ export class InitiateComponent implements OnInit {
         alert("Select PayPeriod ");
         return;
       }
-      if(this.invoiceType==undefined)
-      {
-        alert("Select Invoice Type ");
-        return;
-      }
+      // if(this.invoiceType==undefined)
+      // {
+      //   alert("Select Invoice Type ");
+      //   return;
+      // }
+
       // const request={
       //   "companyId":this.selectedCompanyId,
       //   "Pay_Period":this.payPeriod.payPeriod,
@@ -243,7 +241,7 @@ export class InitiateComponent implements OnInit {
         "PayPeriod_Id": this.payPeriod.payfrequencyid,
         "PayPeriod": this.payPeriod.payPeriod,
         "ActionType": "Search",
-        "Invoice_Billing_Type": this.companyUI.invoice_Billing_Type,
+        "Invoice_Billing_Type": "1",
         "CreatedBy": this.userdetail.user_Id
       }
       this._invoiceService.InitialSearch(request).subscribe({
@@ -260,6 +258,6 @@ export class InitiateComponent implements OnInit {
       });
     }
     onOptionSelected(event:InvoiceType){
-     this.invoiceType =event;
+     //this.invoiceType =event.geN_iID;
     }
 }

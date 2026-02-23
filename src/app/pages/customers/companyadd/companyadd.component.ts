@@ -216,16 +216,16 @@ export class CompanyaddComponent {
       Sector: ['', Validators.required],
       ReimbrusementDate: [''],
       ReimbursementType: [''],
-      OT_weekend_type: [''],
+      OT_weekend_type: [0],
       Weekend_Value: [{ value: '', disabled: true }],
       Weekend_Formula: [{ value: '', disabled: true }],
-      weekday_type: [''],
+      weekday_type: [0],
       Weekday_Value: [{ value: '', disabled: true }],
       Weekday_Formula: [{ value: '', disabled: true }],
-      Nightshift_type: [''],
+      Nightshift_type: [0],
       Nightshift_Value: [{ value: '', disabled: true }],
       Nightshift_Formula: [{ value: '', disabled: true }],
-      Holiday_type: [''],
+      Holiday_type: [0],
       Holiday_Value: [{ value: '', disabled: true }],
       Holiday_Formula: [{ value: '', disabled: true }],
       adhoc_service_fee: [''],
@@ -322,7 +322,18 @@ export class CompanyaddComponent {
       valueCtrl?.updateValueAndValidity();
       formulaCtrl?.updateValueAndValidity();
     });
+    this.CompanyAddForm.get('DigitalPlatformConsent')?.valueChanges.subscribe(value => {
+      const valueCtrl = this.CompanyAddForm.get('DGPSF');
+      if (value === '1') {
+        valueCtrl?.enable();
+        valueCtrl?.setValidators(Validators.required);
+      } else {
+        valueCtrl?.disable();
+        valueCtrl?.clearValidators();
+      }
 
+
+    })
     this.CompanyAddForm.get('Holiday_type')?.valueChanges.subscribe(value => {
       const valueCtrl = this.CompanyAddForm.get('Holiday_Value');
       const formulaCtrl = this.CompanyAddForm.get('Holiday_Formula');
@@ -654,19 +665,19 @@ export class CompanyaddComponent {
         BankCode: formValue?.BankCode ?? "",
         BankAdviceId: formValue?.BankAdvice ?? "",
         Portal_Type: formValue?.Portal_Type ?? "",
-        OT_WEEK_DAY_TYPE: formValue.weekday_type ?? "0",
+        OT_WEEK_DAY_TYPE: Number(formValue.weekday_type) ?? 0,
         OT_WEEK_DAY_VLAUE: formValue.Weekday_Value ?? '',
         OT_WEEK_DAY_FORMULA: formValue.Weekday_Formula ?? '',
 
-        OT_NIGHT_SHIFT_TYPE: formValue.Nightshift_type ?? "0",
+        OT_NIGHT_SHIFT_TYPE: Number(formValue.Nightshift_type) ?? 0,
         OT_NIGHT_SHIFT_VLAUE: formValue.Nightshift_Value ?? '',
         OT_NIGHT_SHIFT_FORMULA: formValue.Nightshift_Formula ?? '',
 
-        OT_WEEKEND_TYPE: formValue.OT_weekend_type ?? "0",
+        OT_WEEKEND_TYPE: Number(formValue.OT_weekend_type) ?? 0,
         OT_WEEKEND_VLAUE: formValue.Weekend_Value ?? '',
         OT_WEEKEND_FORMULA: formValue.Weekend_Formula ?? '',
 
-        OT_HOLIDAY_TYPE: formValue.Holiday_type ?? "0",
+        OT_HOLIDAY_TYPE: Number(formValue.Holiday_type) ?? 0,
         OT_HOLIDAY_VLAUE: formValue.Holiday_Value ?? '',
         OT_HOLIDAY_FORMULA: formValue.Holiday_Formula ?? '',
 
@@ -677,8 +688,8 @@ export class CompanyaddComponent {
     console.log('payload', JSON.stringify(payload))
     this.company.createCompany(payload).subscribe({
       next: res => {
-        const msg = res.Data.message
-        this.showAlertPopup(msg);
+        const msg = res.Data.Message
+        alert(msg);
         this.isLoading = false;
         this.onClose();
         this.dialogRef.close('refresh');

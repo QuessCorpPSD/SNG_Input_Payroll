@@ -290,7 +290,7 @@
             </div>
             <div class="row g-3 mb-3">
                 <div class="col-md-3">
-                    <label class="form-label">Attendance Cycle Form<span class="text-danger">*</span></label>
+                    <label class="form-label">Attendance Cycle From<span class="text-danger">*</span></label>
                     <input type="text" class="form-control" formControlName="AttendanceCycleForm" />
                     <div class="text-danger small" *ngIf="CompanyAddForm.get('AttendanceCycleForm')?.touched 
              && CompanyAddForm.get('AttendanceCycleForm')?.hasError('required')">
@@ -666,7 +666,6 @@
                 <div class="col-md-4">
                     <label class="form-label">Segment<span class="text-danger">*</span></label>
                     <select class="form-select" formControlName="Segment">
-                        <option value="">--select---</option>
                         <option *ngFor="let p of segmentName" [value]="p.value">{{p.name}} </option>
                     </select>
                     <div class="text-danger small" *ngIf="CompanyAddForm.get('Segment')?.touched 
@@ -1078,7 +1077,7 @@
                 <div class="col-md-3">
                     <label class="form-label">OT Weekend Type</label>
                     <select class="form-select" formControlName="OT_weekend_type">
-                        <option value="">Select</option>
+                        <option [value]="0">Select</option>
                         <option [value]="1">Fixed</option>
                         <option [value]="2">Formula</option>
                     </select>
@@ -1122,7 +1121,7 @@
                 <div class="col-md-3">
                     <label class="form-label">Weekday Type</label>
                     <select class="form-select" formControlName="weekday_type">
-                        <option value="">Select</option>
+                        <option [value]="0">Select</option>
                         <option [value]="1">Fixed</option>
                         <option [value]="2">Formula</option>
                     </select>
@@ -1167,7 +1166,7 @@
                 <div class="col-md-3">
                     <label class="form-label">Night Shift Type</label>
                     <select class="form-select" formControlName="Nightshift_type">
-                        <option value="">Select</option>
+                        <option [value]="0">Select</option>
                         <option [value]="1">Fixed</option>
                         <option [value]="2">Formula</option>
                     </select>
@@ -1208,7 +1207,7 @@
                 <div class="col-md-3">
                     <label class="form-label">Holiday Type</label>
                     <select class="form-select" formControlName="Holiday_type">
-                        <option value="">Select</option>
+                        <option [value]="0">Select</option>
                         <option [value]="1">Fixed</option>
                         <option [value]="2">Formula</option>
                     </select>

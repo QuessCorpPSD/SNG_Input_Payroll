@@ -220,16 +220,16 @@ export class CompanyeditComponent {
       Sector: ['', Validators.required],
       ReimbrusementDate: [''],
       ReimbursementType: [''],
-      OT_weekend_type: [''],
+      OT_weekend_type: [0],
       Weekend_Value: [{ value: '' }],
       Weekend_Formula: [{ value: '' }],
-      weekday_type: [''],
+      weekday_type: [0],
       Weekday_Value: [{ value: '' }],
       Weekday_Formula: [{ value: '' }],
-      Nightshift_type: [''],
+      Nightshift_type: [0],
       Nightshift_Value: [{ value: '' }],
       Nightshift_Formula: [{ value: '' }],
-      Holiday_type: [''],
+      Holiday_type: [0],
       Holiday_Value: [{ value: '' }],
       Holiday_Formula: [{ value: '' }],
       adhoc_service_fee: [''],
@@ -296,7 +296,16 @@ export class CompanyeditComponent {
       valueCtrl?.updateValueAndValidity({ emitEvent: false });
       formulaCtrl?.updateValueAndValidity({ emitEvent: false });
     });
-
+    this.CompanyAddForm.get('DigitalPlatformConsent')?.valueChanges.subscribe(value => {
+      const valueCtrl = this.CompanyAddForm.get('DGPSF');
+      if (value === '1') {
+        valueCtrl?.enable();
+        valueCtrl?.setValidators(Validators.required);
+      } else {
+        valueCtrl?.disable();
+        valueCtrl?.clearValidators();
+      }
+    })
     // NIGHTSHIFT
     this.CompanyAddForm.get('Nightshift_type')?.valueChanges.subscribe(value => {
       const valueCtrl = this.CompanyAddForm.get('Nightshift_Value');
@@ -567,7 +576,7 @@ export class CompanyeditComponent {
           IncentiveDate: this.companydata.Incentive_Date,
           Deviation: this.companydata.Deviation,
           SalarySMS: this.companydata.Salary_SMS,
-          // EffectiveDate: this.formatDate(this.companydata.Effective_Date),
+          EffectiveDate: this.formatDate(this.companydata.Effective_Date),
           SalesPerson: this.companydata.Sales_Person,
           BranchLocation: this.companydata.Branch_Location,
           ProfitCenterCode: this.companydata.Profit_Center_Code,

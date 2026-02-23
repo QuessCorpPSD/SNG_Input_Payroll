@@ -12,7 +12,7 @@
             <PayPeriod [selectedCompanyId]="selectedCompanyId" [payPeriodType]="payPeriodType"
                 (payperiodEmit)="handlePayperiodEvent($event)"></PayPeriod>
         </div>
-        <div class="col-2">
+        <div class="col-2" style="display: none;">
             <label class="form-label text-muted small">Invoice Type</label>
             <invoicetype (invoicetypeEmit)="onOptionSelected($event)"></invoicetype>
         </div>
