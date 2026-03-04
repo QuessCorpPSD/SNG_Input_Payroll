@@ -174,6 +174,8 @@ import { HRAcalculationComponent } from './pages/Taxandsavings/hracalculation/hr
 import { BankAccountComponent } from './pages/SalaryReleaseNew/bank-account/bank-account.component';
 import { ReportComponent } from './pages/Reports/report/report.component';
 import { CPFsummaryComponent } from './pages/Reports/cpfsummary/cpfsummary.component';
+import { SalaryReleaseApproveComponent } from './pages/SalaryReleaseNew/salary-release-approve/salary-release-approve.component';
+import { ServicechargenewComponent } from './pages/customers/servicechargenew/servicechargenew/servicechargenew.component';
 
 
 
@@ -294,7 +296,8 @@ export const routes: Routes = [
           { path: 'Holdrequest', component: HoldRequestComponent },
           { path: 'Netpaysummary', component: NetpaySummaryComponent },
           { path: 'Upfrontapproval', component: UpfrontApprovalComponent },
-          { path: 'Yearlypayout', component: YearlyPayoutComponent }
+          { path: 'Yearlypayout', component: YearlyPayoutComponent },
+          { path: 'SalaryReleaseApprove', component: SalaryReleaseApproveComponent }
         ]
       },
       {
@@ -341,7 +344,8 @@ export const routes: Routes = [
           { path: "clientaddress", component: ClientaddressComponent },
           { path: "itcalender", component: ITcalenderComponent },
           { path: "companypaycodemapping", component: CompanypaycodemappingComponent },
-          { path: "ServiceCharge", component: ServiceChargeComponent },
+          { path: "ServiceCharge", component: ServicechargenewComponent },
+          // { path: "ServiceChargenew", component: ServicechargenewComponent },
           { path: "employee", component: EmployeeComponent },
           { path: "cancelledinvoicerepository", component: CancelledinvoicerepositoryComponent },
           { path: "Company", component: CompanyComponent },
@@ -459,12 +463,12 @@ export const routes: Routes = [
           { path: 'states', component: StatesComponent },
           { path: 'ESIslab', component: ESIslabComponent },
 
-          
+
           { path: "professionaltax", component: ProfessionaltaxComponent },
           { path: "providentfund", component: ProvidentfundComponent },
           { path: "computationrule", component: ComputationruleComponent },
           { path: "providentfund", component: ProvidentfundComponent },
-          
+
           { path: 'lfw', component: LFWSlabComponent },
           { path: 'tds', component: TDSslabComponent }
         ]

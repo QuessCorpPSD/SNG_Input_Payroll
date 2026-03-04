@@ -60,19 +60,19 @@ export class InvoiceCultureAddpoComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  TypeOfInvoiceList: { id: number, code: string }[] = [
-    { id: 27, code: "LEAEN" },
-    { id: 35, code: "INCET" },
-    { id: 51, code: "OTPAY" },
-    { id: 95, code: "LWFR" },
-    { id: 105, code: "SERCG" },
-    { id: 121, code: "BONUS" },
-    { id: 129, code: "WMCOC" },
-    { id: 343, code: "SADIN" },
-    { id: 1003, code: "ARREAR" },
-    { id: 1000, code: "SALARY" },
-    { id: 1005, code: "OTHER" }
-  ];
+  // TypeOfInvoiceList: { id: number, code: string }[] = [
+  //   { id: 27, code: "LEAEN" },
+  //   { id: 35, code: "INCET" },
+  //   { id: 51, code: "OTPAY" },
+  //   { id: 95, code: "LWFR" },
+  //   { id: 105, code: "SERCG" },
+  //   { id: 121, code: "BONUS" },
+  //   { id: 129, code: "WMCOC" },
+  //   { id: 343, code: "SADIN" },
+  //   { id: 1003, code: "ARREAR" },
+  //   { id: 1000, code: "SALARY" },
+  //   { id: 1005, code: "OTHER" }
+  // ];
 
   userdetail: any;
   selectedFile: any;
@@ -80,6 +80,8 @@ export class InvoiceCultureAddpoComponent implements AfterViewInit {
   popupMessage: string = '';
   popupSubMessage: string = '';
   mapnameUI: any;
+  typeInvoiceList: any;
+  isPaycodesLoaded = false;
 
   constructor(
     private fb: FormBuilder,
@@ -135,14 +137,63 @@ export class InvoiceCultureAddpoComponent implements AfterViewInit {
 
     // this.InvoiceCultureForm = this.fb.group({});
 
-    this.TypeOfInvoiceList.forEach(item => {
-      this.InvoiceCultureForm.addControl(item.code, this.fb.control(false));
+    this.typeInvoiceList?.forEach(item => {
+      this.InvoiceCultureForm.addControl(item.Paycode_Id.toString(), this.fb.control(false));
+    });
+
+    this.InvoiceCultureForm?.get('InvoiceType')?.valueChanges.subscribe((invoiceType: any) => {
+      // run only after user selects
+      if (!invoiceType) return;
+
+      if (invoiceType.invoiceType_Id == 2) {
+        // SPLIT → enable checkboxes
+        this.enablePaycodeCheckboxes();
+      } else if (invoiceType.invoiceType_Id == 1) {
+        // REGULAR → disable checkboxes
+        this.disablePaycodeCheckboxes();
+      }
     });
 
     this.setupFormListeners();
   }
+
+  loadPaycodes(): void {
+    this.poService.getAllPaycode(this.selectedCC).subscribe({
+      next: (res) => {
+        this.typeInvoiceList = res?.Data || [];
+
+        // Create checkbox controls dynamically
+        this.typeInvoiceList.forEach(t => {
+          const controlName = t.Paycode_Id.toString();
+          if (!this.InvoiceCultureForm.contains(controlName)) {
+            this.InvoiceCultureForm.addControl(controlName, new FormControl(false));
+          }
+        });
+        this.isPaycodesLoaded = true;
+      },
+      error: (err) => {
+        console.error('Error loading invoice types', err);
+      }
+    });
+  }
+
+  enablePaycodeCheckboxes() {
+    this.typeInvoiceList.forEach(t => {
+      this.InvoiceCultureForm.get(t.Paycode_Id.toString())?.enable();
+    });
+  }
+
+  disablePaycodeCheckboxes() {
+    this.typeInvoiceList.forEach(t => {
+      const control = this.InvoiceCultureForm.get(t.Paycode_Id.toString());
+      control?.disable();
+      control?.setValue(false); // clear selection
+    });
+  }
+
+
   getSelectedInvoiceTypes() {
-    return this.TypeOfInvoiceList
+    return this.typeInvoiceList
       .filter(x => this.InvoiceCultureForm.get(x.code)?.value === true)
       .map(x => ({
         id: x.id,
@@ -271,12 +322,16 @@ export class InvoiceCultureAddpoComponent implements AfterViewInit {
   }
 
   onCheckboxChange() {
-    this.checkInvoiceTypeSelection();
+    const selectedCount = this.typeInvoiceList.filter(t =>
+      this.InvoiceCultureForm.get(t.Paycode_Id.toString())?.value
+    ).length;
+
+    this.showInvoiceTypeError = selectedCount === 0;
   }
 
   checkInvoiceTypeSelection() {
-    const selectedCount = this.TypeOfInvoiceList.filter(t =>
-      this.InvoiceCultureForm.get(t.code)?.value
+    const selectedCount = this.typeInvoiceList.filter(t =>
+      this.InvoiceCultureForm.get(t.Paycode_Id.toString())?.value
     ).length;
     this.showInvoiceTypeError = selectedCount === 0;
   }
@@ -309,6 +364,7 @@ export class InvoiceCultureAddpoComponent implements AfterViewInit {
     console.log('Company selected:', company);
     this.companyUI = company;
     this.selectedCC = Number(company.companyId) || 0;
+    this.loadPaycodes();
 
     this.InvoiceCultureForm.patchValue({
       CompanyCode: this.selectedCC
@@ -372,7 +428,7 @@ export class InvoiceCultureAddpoComponent implements AfterViewInit {
       InvoiceTypeName: 'Standard',
       InvoiceCategoryName: 'Standard'
     });
-    this.TypeOfInvoiceList.forEach(t => this.InvoiceCultureForm.get(t.code)?.setValue(false));
+    this.typeInvoiceList.forEach(t => this.InvoiceCultureForm.get(t.Paycode_Code)?.setValue(false));
     this.showTypeOfInvoice = false;
     this.selectedCC = 0;
     this.selectedMN = '';
@@ -436,8 +492,8 @@ export class InvoiceCultureAddpoComponent implements AfterViewInit {
         return;
       }
 
-      const selectedTypeOfInvoice = this.TypeOfInvoiceList
-        .filter(t => this.InvoiceCultureForm.get(t.code)?.value);
+      const selectedTypeOfInvoice = this.typeInvoiceList
+        .filter(t => this.InvoiceCultureForm.get(t.Paycode_Code)?.value);
 
       if (selectedTypeOfInvoice.length === 0) {
         this.isLoading = false;

@@ -118,8 +118,6 @@ export class ServicePercentageComponent {
       inedgeFeeType: ['', Validators.required],
       inedgeCharge: ['', Validators.required]
     });
-
-
     this.loadMapNames();
   }
 

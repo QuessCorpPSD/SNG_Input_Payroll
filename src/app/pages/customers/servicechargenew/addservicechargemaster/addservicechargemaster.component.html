@@ -714,7 +714,8 @@
                 <div class="same-col shift-right fixed-type-wrapper col-6 ryt_inputbox"
                     *ngIf="selectedSlab === 'fixed'">
                     <label class="form-label text-muted small">Fixed Type</label>
-                    <select class="form-select form-select-sm fixed-type-select" [(ngModel)]="selectedFixedType">
+                    <select class="form-select form-select-sm fixed-type-select" [(ngModel)]="selectedFixedType"
+                        (change)="fixedslabChange()">
                         <option value="">Select</option>
                         <option value="ctc">CTC</option>
                         <option value="headcount">Headcount</option>
@@ -742,7 +743,6 @@
                 <form [formGroup]="ctcForm">
 
                     <br />
-
                     <mat-card-content>
 
                         <!-- ROW 1 -->
@@ -883,25 +883,24 @@
             </div>
 
             <!-- FIXED HEADCOUNT -->
+
             <div *ngIf="selectedFixedType === 'headcount'">
                 <!-- <app-slab-fix-head-count></app-slab-fix-head-count> -->
 
                 <form [formGroup]="headCountForm">
                     <br />
-
-
                     <!-- BODY -->
                     <mat-card-content>
-
                         <div class="form-grid">
-
                             <!-- Map Name -->
                             <div>
                                 <label class="form-label text-muted small mb-0">
                                     Map Name <span class="text-danger">*</span>
                                 </label>
-                                <input type="text" class="form-control form-control-sm" formControlName="mapName">
-                                <small class="text-danger" *ngIf="showErrors && headCountForm.get('mapName')?.invalid">
+                                <select class="form-select form-select-sm" formControlName="mapName">
+                                    <option value="">Select</option>
+                                </select>
+                                <small class="text-danger" *ngIf="showErrors && ctcForm.get('mapName')?.invalid">
                                     Map Name is required
                                 </small>
                             </div>
@@ -911,12 +910,13 @@
                                 <label class="form-label text-muted small mb-0">
                                     Is Map Name Required <span class="text-danger">*</span>
                                 </label>
-                                <input type="text" class="form-control form-control-sm"
-                                    formControlName="isMapNameRequired">
-                                <small class="text-danger"
-                                    *ngIf="showErrors && headCountForm.get('isMapNameRequired')?.invalid">
-                                    This field is required
+                                <select class="form-select form-select-sm" formControlName="isMapNameRequired">
+                                    <option value="">Select</option>
+                                </select>
+                                <small class="text-danger" *ngIf="showErrors && ctcForm.get('isMapNameRequired')?.invalid">
+                                    Map Name is required
                                 </small>
+
                             </div>
 
                             <!-- Slab -->
@@ -925,7 +925,7 @@
                                     Slab <span class="text-danger">*</span>
                                 </label>
                                 <input type="text" class="form-control form-control-sm" formControlName="slab">
-                                <small class="text-danger" *ngIf="showErrors && headCountForm.get('slab')?.invalid">
+                                <small class="text-danger" *ngIf="showErrors && ctcForm.get('slab')?.invalid">
                                     Slab is required
                                 </small>
                             </div>
@@ -936,7 +936,7 @@
                                     Value <span class="text-danger">*</span>
                                 </label>
                                 <input type="text" class="form-control form-control-sm" formControlName="value">
-                                <small class="text-danger" *ngIf="showErrors && headCountForm.get('value')?.invalid">
+                                <small class="text-danger" *ngIf="showErrors && ctcForm.get('value')?.invalid">
                                     Value is required
                                 </small>
                             </div>
@@ -947,8 +947,7 @@
                                     Effective Date <span class="text-danger">*</span>
                                 </label>
                                 <input type="date" class="form-control form-control-sm" formControlName="startDate">
-                                <small class="text-danger"
-                                    *ngIf="showErrors && headCountForm.get('startDate')?.invalid">
+                                <small class="text-danger" *ngIf="showErrors && ctcForm.get('startDate')?.invalid">
                                     Effective Date is required
                                 </small>
                             </div>
