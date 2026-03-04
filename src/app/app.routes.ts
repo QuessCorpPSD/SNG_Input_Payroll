@@ -180,8 +180,6 @@ import { DownloadbatchComponent } from './pages/SalaryReleaseNew/downloadbatch/d
 import { BatchcreationprocessComponent } from './pages/SalaryReleaseNew/batchcreationprocess/batchcreationprocess.component';
 import { SalaryReleaseProcessComponent } from './pages/SalaryReleaseNew/salary-release-process/salary-release-process.component';
 import { SalaryReleaseStatusComponent } from './pages/SalaryReleaseNew/salary-release-status/salary-release-status.component';
-import { SalaryReleaseApproveComponent } from './pages/SalaryReleaseNew/salary-release-approve/salary-release-approve.component';
-
 
 
 export const routes: Routes = [
@@ -302,7 +300,7 @@ export const routes: Routes = [
           { path: 'Netpaysummary', component: NetpaySummaryComponent },
           { path: 'Upfrontapproval', component: UpfrontApprovalComponent },
           { path: 'Yearlypayout', component: YearlyPayoutComponent },
-          { path: 'SalaryReleaseApprove', component: SalaryReleaseApproveComponent }
+          { path: 'SalaryReleaseApprove', component: SalaryReleaseApproveComponent },
           { path: 'Yearlypayout', component: YearlyPayoutComponent },
           { path: 'downloadbatch', component: DownloadbatchComponent },
           { path: 'batchcreation', component: BatchcreationprocessComponent },
