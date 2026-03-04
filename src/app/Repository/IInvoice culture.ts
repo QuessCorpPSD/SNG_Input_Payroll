@@ -10,7 +10,8 @@ export interface Iinvoiceculture {
     postInvoiceCulture(payload: any): Observable<APIResponse>
     InvoiceCategory(): Observable<APIResponse>
     InvoiceCategory(): Observable<APIResponse>
-    UploadInvoiceCulture(formData:FormData): Observable<APIResponse>
-    ExportToExcel(userId: number):Observable<APIResponse>
+    UploadInvoiceCulture(formData: FormData): Observable<APIResponse>
+    ExportToExcel(userId: number): Observable<APIResponse>
+    getAllPaycode(companyId: number): Observable<APIResponse>
 }
 

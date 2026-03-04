@@ -67,6 +67,12 @@ export class InvoiceCultureService implements Iinvoiceculture {
     return this.http.get<APIResponse>(
       environment.apiUrl + `InvoiceCulture/InvoiceCultureExport/` + userId);
   }
+
+  getAllPaycode(companyId: number): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      `${environment.apiUrl}InvoiceCulture/GetAllPayCodeFromCompany/${companyId}`
+    );
+  }
 }
 
 

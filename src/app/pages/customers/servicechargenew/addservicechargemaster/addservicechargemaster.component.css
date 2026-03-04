@@ -286,15 +286,28 @@
     display: block;
 }
 
-.ryt_inputbox{
+.ryt_inputbox {
     padding-left: 24px !important;
     max-width: 405px;
     padding-right: 1px !important;
     width: 405px;
 }
 
-.lft_inputbox{
+.lft_inputbox {
     padding-left: 1px;
     max-width: 310px !important;
     width: 310px !important;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 18px;
+    row-gap: 14px;
+}
+
+
+.form-grid input,
+.form-grid select {
+    width: 250px !important;
 }

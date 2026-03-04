@@ -1,33 +1,21 @@
-import { CommonModule, } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, Inject } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-
-import { AddServicefeeComponent } from '../add-servicefee/add-servicefee.component';
-import { SupplementaryFeeComponent } from '../supplementary-fee/supplementary-fee.component';
-import { SourcingFeeComponent } from '../sourcing-fee/sourcing-fee.component';
-import { NAPSserviceFeeComponent } from '../napsservice-fee/napsservice-fee.component';
-
-import { ServiceFixedComponent } from '../service-fixed/service-fixed.component';
-import { ServiceBillToRateComponent } from '../service-bill-to-rate/service-bill-to-rate.component';
-import { ServiceSlabComponent } from '../service-slab/service-slab.component';
-import { ServicePercentageComponent } from '../service-percentage/service-percentage.component';
-
-import { SupplementaryFixedComponent } from '../supplementary-fixed/supplementary-fixed.component';
-import { SupplementaryPercentageComponent } from '../supplementary-percentage/supplementary-percentage.component';
-
-import { NapsserviceFixedComponent } from '../napsservice-fixed/napsservice-fixed.component';
-import { NapsservicePercentageComponent } from '../napsservice-percentage/napsservice-percentage.component';
+import { MapnameComponent } from '../../../../common/Mapname/mapname/mapname.component';
 import { ServiceChargeService } from '../../../../Service/CUSTOMER/service-charge.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { EncryptionService } from '../../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../../Shared/SessionStorageService';
-import { MapnameComponent } from '../../../../common/Mapname/mapname/mapname.component';
+import { AddServiceChargeComponent } from '../../ServiceChargeMaster/add-service-charge/add-service-charge.component';
+import { AddServicefeeComponent } from '../../ServiceChargeMaster/add-servicefee/add-servicefee.component';
+import { ServiceBillToRateComponent } from '../../ServiceChargeMaster/service-bill-to-rate/service-bill-to-rate.component';
+import { ServiceSlabComponent } from '../../ServiceChargeMaster/service-slab/service-slab.component';
 
 interface serviceChargemaster {
   Company_Service_Charge_Master_Id: number
@@ -85,9 +73,8 @@ interface serviceChargemaster {
 }
 
 
-
 @Component({
-  selector: 'app-add-service-charge',
+  selector: 'app-addservicechargemaster',
   standalone: true,
   imports: [
     CommonModule,
@@ -102,23 +89,20 @@ interface serviceChargemaster {
     ReactiveFormsModule,
     // ServiceFixedComponent,
     ServiceBillToRateComponent,
-    ServiceSlabComponent,
+    // ServiceSlabComponent,
     // ServicePercentageComponent,
     // SupplementaryFixedComponent,
     // SupplementaryPercentageComponent,
     MapnameComponent,
-    ReactiveFormsModule
     //NapsserviceFixedComponent,
     //NapsservicePercentageComponent,
     //SourcingFeeComponent,
     //NAPSserviceFeeComponent,
   ],
-  templateUrl: './add-service-charge.component.html',
-  styleUrl: './add-service-charge.component.css'
+  templateUrl: './addservicechargemaster.component.html',
+  styleUrl: './addservicechargemaster.component.css'
 })
-
-
-export class AddServiceChargeComponent {
+export class AddservicechargemasterComponent {
   serviceFeeTypes: any;
   selectedService: any;
   supplementaryTypes: any;
@@ -324,24 +308,21 @@ export class AddServiceChargeComponent {
 
     if (this.showSlab) {
       this.openSlabSection();
-      if (this.selectedFixedType === 'ctc') {
+      if (this.selectedFixedType == 'ctc') {
         this.ctcForm = this.fb.group({
           mapName: ['', Validators.required],
           type: ['', Validators.required],
           paycode: ['', Validators.required],
-
           fromValue: ['', Validators.required],
           toValue: ['', Validators.required],
           value: ['', Validators.required],
-
           capValue: ['', Validators.required],
           prorate: ['', Validators.required],
           startDate: ['', Validators.required],
-
           slabCalcType: ['', Validators.required]
         });
       }
-      if (this.selectedFixedType === 'headcount') {
+      if (this.selectedFixedType == 'headcount') {
         this.headCountForm = this.fb.group({
           mapName: ['', Validators.required],
           isMapNameRequired: ['', Validators.required],
@@ -394,12 +375,14 @@ export class AddServiceChargeComponent {
     if (this.invoiceForm.invalid) return;
 
     const f = this.invoiceForm.value;
+    console.log("master", this.selectedMasterId);
+    console.log("subid", this.selectedService)
 
     const ServiceChargemaster: serviceChargemaster[] = [];
 
     ServiceChargemaster.push({
-      Company_Service_Charge_Master_Id: 0,
-      Company_Service_Charge_Type_Id: 0,
+      Company_Service_Charge_Master_Id: Number(this.selectedMasterId),
+      Company_Service_Charge_Type_Id: Number(this.selectedService),
       Service_Charge_Slab_Item_Id: 0,
       Service_Charge_Slab_Inner_Item_Id: 0,
       Slab_Id: 0,
@@ -493,8 +476,8 @@ export class AddServiceChargeComponent {
     const ServiceChargemaster: serviceChargemaster[] = [];
 
     ServiceChargemaster.push({
-      Company_Service_Charge_Master_Id: 0,
-      Company_Service_Charge_Type_Id: 0,
+      Company_Service_Charge_Master_Id: Number(this.selectedMasterId),
+      Company_Service_Charge_Type_Id: Number(this.selectedService),
       Service_Charge_Slab_Item_Id: 0,
       Service_Charge_Slab_Inner_Item_Id: 0,
       Slab_Id: 0,
@@ -579,8 +562,6 @@ export class AddServiceChargeComponent {
     this.serviceChargeService.GetCostCenterMapping().subscribe({
       next: (res: any) => {
         this.mapNameList = res?.Data || [];
-
-
       },
       error: () => {
         alert("Failed to load Map Names");
@@ -635,6 +616,18 @@ export class AddServiceChargeComponent {
 
   }
 
+  fixedslabChange() {
+    if (this.selectedFixedType == 'headcount') {
+      this.headCountForm = this.fb.group({
+        mapName: ['', Validators.required],
+        isMapNameRequired: ['', Validators.required],
+        slab: ['', Validators.required],
+        value: ['', Validators.required],
+        startDate: ['', Validators.required]
+      });
+    }
+  }
+
   onSuppFixedReset() {
     this.suppFixForm.reset();
     this.showErrors = false;
@@ -686,14 +679,96 @@ export class AddServiceChargeComponent {
   }
 
   onSlabCtcSubmit() {
-    this.showErrors = true;
+    alert("true");
 
     if (this.ctcForm.invalid) {
       return;
     }
+    this.showErrors = true;
 
-    console.log("Slab Fixed CTC Submitted:", this.ctcForm.value);
-    this.dialogRef.close(this.ctcForm.value);
+
+    const f = this.ctcForm.value;
+
+    const ServiceChargemaster: serviceChargemaster[] = [];
+
+    ServiceChargemaster.push({
+      Company_Service_Charge_Master_Id: 0,
+      Company_Service_Charge_Type_Id: 0,
+      Service_Charge_Slab_Item_Id: Number(this.selectedSlab),
+      Service_Charge_Slab_Inner_Item_Id: 0,
+      Slab_Id: 0,
+      Cost_Center_Mapping_Id: this.mapnameUI.mapNameId,
+      Map_Name: f.mapName,
+      Invoicing_Type: false,
+      Service_Charge_Name: "",
+      PayCode_Code: f.paycode,
+      MaxAmount: 0,
+      Type: f.type,
+      Value: f.value.toString(),
+      Effective_Date: f.startDate,
+      IsBillToRate: 0,
+      IsCTC: 0,
+      IsHeadCount: 0,
+      IsAttendanceProrated: f.prorate,
+      IsCriteriaApplicable: 0,
+      Criteria: "",
+      IsReplacementClauseApplicable: 0,
+      Replacement: 0,
+      IsSourcingWaitingPeriod_Id: 0,
+      SourcingValue: 0,
+      TATDays: 0,
+      IsMapNameRequired: 0,
+      Category_Id: 0,
+      Invoice_Map_Name_Id: 0,
+      Compliance_Fee: 0,
+      RandStad_Fee: 0,
+      UnitType_Id: 0,
+      Discount_Type_Id: 0,
+      Discount_Amount: 0,
+      Type_Id: 0,
+      Pay_Code_Id: 0,
+      From: f.fromValue,
+      To: f.toValue,
+      Slab_Calculation_Type_Id: f.slabCalcType,
+      Cap_Value: f.capValue,
+      Upfront_Charge: 0,
+      Upfront_PayCode: 0,
+      Upfront_Type_Id: 0,
+      Insurance_Amount: "",
+      MarginalPayCodeId: 0,
+      QDemyFee: 0,
+      InEdgeFee: 0,
+      IsNewjoineeProrate: 0,
+      IsFAndFProrate: 0,
+      IsFAndFArrearProrate: 0,
+      IsNewJoineeArrearProrate: 0,
+      QDemyFee_Type_Id: 0,
+      InEdgeFee_Type_Id: 0
+    });
+
+    const request = {
+      Created_By: this.userdetail.user_Id?.toString(),
+      Mode: "ADD",
+      CompanyId: this.selectedCompanyId,
+      ServiceChargemaster: ServiceChargemaster
+    }
+
+    console.log(JSON.stringify(request));
+    this.serviceChargeService.SaveServiceCharge(request).subscribe({
+      next: (res: any) => {
+        console.log(res);
+        if (res?.StatusCode === 200) {
+          alert(res?.Data?.message || "Service Charge saved successfully");
+          this.dialogRef.close(true);
+        } else {
+          alert("Save failed");
+        }
+      },
+      error: () => alert("Failed")
+    });
+
+    // console.log("Slab Fixed CTC Submitted:", this.ctcForm.value);
+    // this.dialogRef.close(this.ctcForm.value);
   }
 
   onSlabCtcReset() {
@@ -707,6 +782,86 @@ export class AddServiceChargeComponent {
     if (this.headCountForm.invalid) {
       return; // stop and show errors
     }
+
+    const f = this.headCountForm.value;
+
+    const ServiceChargemaster: serviceChargemaster[] = [];
+
+    ServiceChargemaster.push({
+      Company_Service_Charge_Master_Id: 0,
+      Company_Service_Charge_Type_Id: 0,
+      Service_Charge_Slab_Item_Id: 0,
+      Service_Charge_Slab_Inner_Item_Id: 0,
+      Slab_Id: 0,
+      Cost_Center_Mapping_Id: this.mapnameUI.mapNameId,
+      Map_Name: f.mapName,
+      Invoicing_Type: false,
+      Service_Charge_Name: "",
+      PayCode_Code: "",
+      MaxAmount: 0,
+      Type: 0,
+      Value: f.value.toString(),
+      Effective_Date: f.startDate,
+      IsBillToRate: 0,
+      IsCTC: 0,
+      IsHeadCount: 0,
+      IsAttendanceProrated: f.prorate,
+      IsCriteriaApplicable: 0,
+      Criteria: "",
+      IsReplacementClauseApplicable: 0,
+      Replacement: 0,
+      IsSourcingWaitingPeriod_Id: 0,
+      SourcingValue: 0,
+      TATDays: 0,
+      IsMapNameRequired: f.isMapNameRequired,
+      Category_Id: 0,
+      Invoice_Map_Name_Id: 0,
+      Compliance_Fee: 0,
+      RandStad_Fee: 0,
+      UnitType_Id: 0,
+      Discount_Type_Id: 0,
+      Discount_Amount: 0,
+      Type_Id: 0,
+      Pay_Code_Id: 0,
+      From: 0,
+      To: 0,
+      Slab_Calculation_Type_Id: f.slab,
+      Cap_Value: 0,
+      Upfront_Charge: 0,
+      Upfront_PayCode: 0,
+      Upfront_Type_Id: 0,
+      Insurance_Amount: "",
+      MarginalPayCodeId: 0,
+      QDemyFee: 0,
+      InEdgeFee: 0,
+      IsNewjoineeProrate: 0,
+      IsFAndFProrate: 0,
+      IsFAndFArrearProrate: 0,
+      IsNewJoineeArrearProrate: 0,
+      QDemyFee_Type_Id: 0,
+      InEdgeFee_Type_Id: 0
+    });
+
+    const request = {
+      Created_By: this.userdetail.user_Id?.toString(),
+      Mode: "ADD",
+      CompanyId: this.selectedCompanyId,
+      ServiceChargemaster: ServiceChargemaster
+    }
+
+    console.log(JSON.stringify(request));
+    this.serviceChargeService.SaveServiceCharge(request).subscribe({
+      next: (res: any) => {
+        console.log(res);
+        if (res?.StatusCode === 200) {
+          alert(res?.Data?.message || "Service Charge saved successfully");
+          this.dialogRef.close(true);
+        } else {
+          alert("Save failed");
+        }
+      },
+      error: () => alert("Failed")
+    });
 
     console.log("Slab Fix HeadCount Submitted:", this.headCountForm.value);
     this.dialogRef.close(this.headCountForm.value);
@@ -737,6 +892,86 @@ export class AddServiceChargeComponent {
     if (this.slabPerHeadForm.invalid) {
       return; // show error and stop
     }
+
+    const f = this.slabPerHeadForm.value;
+
+    const ServiceChargemaster: serviceChargemaster[] = [];
+
+    ServiceChargemaster.push({
+      Company_Service_Charge_Master_Id: 0,
+      Company_Service_Charge_Type_Id: 0,
+      Service_Charge_Slab_Item_Id: 0,
+      Service_Charge_Slab_Inner_Item_Id: 0,
+      Slab_Id: 0,
+      Cost_Center_Mapping_Id: this.mapnameUI.mapNameId,
+      Map_Name: f.mapName,
+      Invoicing_Type: false,
+      Service_Charge_Name: "",
+      PayCode_Code: "",
+      MaxAmount: 0,
+      Type: 0,
+      Value: f.value.toString(),
+      Effective_Date: f.startDate,
+      IsBillToRate: 0,
+      IsCTC: 0,
+      IsHeadCount: 0,
+      IsAttendanceProrated: f.prorate,
+      IsCriteriaApplicable: 0,
+      Criteria: "",
+      IsReplacementClauseApplicable: 0,
+      Replacement: 0,
+      IsSourcingWaitingPeriod_Id: 0,
+      SourcingValue: 0,
+      TATDays: 0,
+      IsMapNameRequired: f.isMapNameRequired,
+      Category_Id: 0,
+      Invoice_Map_Name_Id: 0,
+      Compliance_Fee: 0,
+      RandStad_Fee: 0,
+      UnitType_Id: 0,
+      Discount_Type_Id: 0,
+      Discount_Amount: 0,
+      Type_Id: 0,
+      Pay_Code_Id: 0,
+      From: 0,
+      To: 0,
+      Slab_Calculation_Type_Id: f.slab,
+      Cap_Value: 0,
+      Upfront_Charge: 0,
+      Upfront_PayCode: 0,
+      Upfront_Type_Id: 0,
+      Insurance_Amount: "",
+      MarginalPayCodeId: 0,
+      QDemyFee: 0,
+      InEdgeFee: 0,
+      IsNewjoineeProrate: 0,
+      IsFAndFProrate: 0,
+      IsFAndFArrearProrate: 0,
+      IsNewJoineeArrearProrate: 0,
+      QDemyFee_Type_Id: 0,
+      InEdgeFee_Type_Id: 0
+    });
+
+    const request = {
+      Created_By: this.userdetail.user_Id?.toString(),
+      Mode: "ADD",
+      CompanyId: this.selectedCompanyId,
+      ServiceChargemaster: ServiceChargemaster
+    }
+
+    console.log(JSON.stringify(request));
+    this.serviceChargeService.SaveServiceCharge(request).subscribe({
+      next: (res: any) => {
+        console.log(res);
+        if (res?.StatusCode === 200) {
+          alert(res?.Data?.message || "Service Charge saved successfully");
+          this.dialogRef.close(true);
+        } else {
+          alert("Save failed");
+        }
+      },
+      error: () => alert("Failed")
+    });
 
     console.log("Slab Percentage Head Count Submitted:", this.slabPerHeadForm.value);
     this.dialogRef.close(this.slabPerHeadForm.value);
@@ -816,4 +1051,5 @@ export class AddServiceChargeComponent {
   onClose(): void {
     this.dialogRef.close();
   }
+
 }

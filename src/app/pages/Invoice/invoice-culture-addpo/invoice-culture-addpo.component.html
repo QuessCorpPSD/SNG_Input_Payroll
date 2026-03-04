@@ -81,9 +81,9 @@
           <label class="lbl form-label">Type of Invoice <span class="req">*</span></label>
           <div class="type-scroll">
             <div class="checkbox-grid">
-              <mat-checkbox *ngFor="let t of TypeOfInvoiceList" [formControlName]="t.code" class="cb"
+              <mat-checkbox *ngFor="let t of typeInvoiceList" [formControlName]="t.Paycode_Id.toString()" class="cb"
                 (change)="onCheckboxChange()">
-                {{ t.code }}
+                {{ t.Paycode_Code }}
               </mat-checkbox>
             </div>
           </div>
