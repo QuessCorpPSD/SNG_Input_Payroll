@@ -664,7 +664,6 @@ export class AddEpoComponent implements OnInit {
         ExtDuration: this.isExtensionClicked ? this.calculateExtensionDuration().toString() : ""
       };
 
-      console.log('payload', JSON.stringify(payload));
       // this.isLoading = false;
       // return;
       this.poService.SaveEmployeePO(payload).subscribe({
