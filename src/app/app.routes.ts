@@ -302,7 +302,7 @@ export const routes: Routes = [
           { path: 'Netpaysummary', component: NetpaySummaryComponent },
           { path: 'Upfrontapproval', component: UpfrontApprovalComponent },
           { path: 'Yearlypayout', component: YearlyPayoutComponent },
-          { path: "NEFTCulture", component: BankInvoiceNEFTCultureComponent }
+          { path: "NEFTCulture", component: BankInvoiceNEFTCultureComponent },
           { path: 'Yearlypayout', component: YearlyPayoutComponent },
           { path: 'SalaryReleaseApprove', component: SalaryReleaseApproveComponent },
           { path: 'Yearlypayout', component: YearlyPayoutComponent },
