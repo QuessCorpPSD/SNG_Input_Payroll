@@ -18,7 +18,8 @@ import { combineLatest } from 'rxjs';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.component";
-
+import FileSaver from 'file-saver';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-add-epo',
@@ -591,6 +592,7 @@ export class AddEpoComponent implements OnInit {
 
 
   saveEmployeePO(): Promise<void> {
+
     // if (this.POAddForm.invalid) {
     //   this.showAlert('Please fill all required fields');
     //   return;
@@ -624,6 +626,8 @@ export class AddEpoComponent implements OnInit {
           flag = 4; // Extension
         }
       }
+
+
 
       const formValue = this.POAddForm.getRawValue();
       const payload = {
@@ -660,7 +664,7 @@ export class AddEpoComponent implements OnInit {
         ExtDuration: this.isExtensionClicked ? this.calculateExtensionDuration().toString() : ""
       };
 
-
+      console.log('payload', JSON.stringify(payload));
       // this.isLoading = false;
       // return;
       this.poService.SaveEmployeePO(payload).subscribe({
@@ -699,18 +703,98 @@ export class AddEpoComponent implements OnInit {
                 }
               });
             } else {
+
+              if (poSaveResponse?.StatusCode === 200 && poSaveResponse?.Data?.response === 'Failed to import.') {
+
+                const rawErr = poSaveResponse?.Data?.errors?.[0];
+                let errorArray: any[] = [];
+
+                try {
+                  if (typeof rawErr === 'string') {
+                    const tryJson = JSON.parse(rawErr);
+                    errorArray = Array.isArray(tryJson) ? tryJson : [tryJson];
+                  }
+                  else if (Array.isArray(rawErr)) {
+                    errorArray = rawErr;
+                  }
+                  else if (rawErr) {
+                    errorArray = [rawErr];
+                  }
+                } catch {
+                  errorArray = rawErr ? [{ Result: String(rawErr) }] : [];
+                }
+
+                const exportData = errorArray.map((item: any) => ({
+                  Error_Message: item?.Result || ''
+                }));
+
+                const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+                const workbook: XLSX.WorkBook = {
+                  Sheets: { ErrorMessages: worksheet },
+                  SheetNames: ['ErrorMessages']
+                };
+
+                XLSX.writeFile(workbook, 'ErrorMessages_EmployeePO.xlsx');
+
+                this.showPopup = true;
+                this.popupMessage = 'Import Failed.';
+                this.isLoading = false;
+                return;
+              }
+              else {
+                this.showPopup = true;
+                this.popupMessage = poSaveResponse.Data?.response;
+                this.isLoading = false;
+                return;
+                resolve();
+              }
+            }
+          }
+          else {
+            if (poSaveResponse?.StatusCode === 200 && poSaveResponse?.Data?.response === 'Failed to import.') {
+
+              const rawErr = poSaveResponse?.Data?.errors?.[0];
+              let errorArray: any[] = [];
+
+              try {
+                if (typeof rawErr === 'string') {
+                  const tryJson = JSON.parse(rawErr);
+                  errorArray = Array.isArray(tryJson) ? tryJson : [tryJson];
+                }
+                else if (Array.isArray(rawErr)) {
+                  errorArray = rawErr;
+                }
+                else if (rawErr) {
+                  errorArray = [rawErr];
+                }
+              } catch {
+                errorArray = rawErr ? [{ Result: String(rawErr) }] : [];
+              }
+
+              const exportData = errorArray.map((item: any) => ({
+                Error_Message: item?.Result || ''
+              }));
+
+              const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+              const workbook: XLSX.WorkBook = {
+                Sheets: { ErrorMessages: worksheet },
+                SheetNames: ['ErrorMessages']
+              };
+
+              XLSX.writeFile(workbook, 'ErrorMessages_EmployeePO.xlsx');
+
+              this.showPopup = true;
+              this.popupMessage = 'Import Failed.';
+              this.isLoading = false;
+              return;
+            }
+            else {
               this.showPopup = true;
               this.popupMessage = poSaveResponse.Data?.response;
               this.isLoading = false;
               return;
               resolve();
             }
-          }
-          else {
-            this.showPopup = true;
-            this.popupMessage = poSaveResponse?.Data?.response;
-            this.isLoading = false;
-            return;
           }
 
         },
@@ -952,7 +1036,7 @@ export class AddEpoComponent implements OnInit {
             return;
           }
           this.POAddForm.get('Duration')?.setValue(newduration);
-          
+
           if (QUANTITYTYPE != '') {
             const payloadqty = {
               PO_ID: String(this.selectedPoId),
@@ -963,7 +1047,7 @@ export class AddEpoComponent implements OnInit {
               QUANTITYTYPE: QUANTITYTYPE
             };
 
-            
+
             this.poService.GetPoEmpCalculation(payloadqty).subscribe({
               next: res => {
                 const poquantity = res?.Data?.poquantity || '';
@@ -978,7 +1062,7 @@ export class AddEpoComponent implements OnInit {
             });
 
             setTimeout(() => {
-              
+
             }, 500);
 
             if (PORate != '') {
