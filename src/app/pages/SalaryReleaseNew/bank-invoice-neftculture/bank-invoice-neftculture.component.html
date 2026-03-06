@@ -1,0 +1,241 @@
+<div class="row gap-3 py-2">
+    <div class="justify-content-between align-items-center mb-3">
+        <div class="d-flex gap-2" style="padding-left: 20px;">
+
+
+            <div class="container py-2">
+                <div class="row g-3 align-items-end">
+                    <mat-card-title
+                        style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 600;">Bank Invoice
+                        NEFT Culture
+                    </mat-card-title>
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Company Code</label>
+                        <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+                        <!-- <select class="form-select form-select-sm" formControlName="CompanyCode"
+                            placeholder="Select Company Type">
+                            <option value="">--Select--</option>
+                            <option *ngFor="let pay of paytype" [value]="pay.PayType_Id">{{pay.PayType}}</option>
+                        </select> -->
+                    </div>
+                    <div class="col-md-2 d-flex gap-2">
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
+                            matTooltip="Search" (click)="searchClick()">
+                            <mat-icon>search</mat-icon>
+                        </button>
+                        <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                            matTooltip="export to excel" (click)="exportToExcel()">
+                            <mat-icon>download</mat-icon>
+                        </button>
+                        <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
+                            matTooltip="import">
+                            <mat-icon>cloud_upload</mat-icon>
+                        </button>
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                            matTooltip="downlaod">
+                            <mat-icon>cloud_download</mat-icon>
+                        </button> -->
+                        <button class="btn  btn-sm d-flex align-items-center justify-content-center btn-success"
+                            matTooltip="Add" (click)="AddPOOpen()">
+                            <mat-icon>add</mat-icon>
+                        </button>
+                        <!-- <input type="file" #fileInput style="display: none;" (click)="fileInput.value=''"
+                        (change)="onFileChange($event)" accept=".xlsx, .xls" /> -->
+                    </div>
+                    <div *ngIf="isLoading" class="loading-overlay">
+                        <img src="assets/Loading.gif" alt="Loading...">
+                    </div>
+                    <div class="card-body rounded-4 py-0" *ngIf="istablevisible">
+                        <div class="example-container mat-elevation-z8">
+                            <table mat-table [dataSource]="dataSource" matSort class="custom-table mat-elevation-z8">
+
+
+
+                                <ng-container matColumnDef="SNo">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+                                        <div class="cell-left-wrap-normal">
+                                            SNo
+                                        </div>
+                                    </mat-header-cell>
+                                    <mat-cell *matCellDef="let element">
+                                        <div class="cell-left-wrap-normal">{{ element.SNo }}
+                                        </div>
+                                    </mat-cell>
+                                </ng-container>
+
+
+                                <ng-container matColumnDef="Company_Code">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+                                        <div class="cell-left-wrap-normal">
+                                            Company Code
+                                        </div>
+                                    </mat-header-cell>
+                                    <mat-cell *matCellDef="let element">
+                                        <div class="cell-left-wrap-normal">{{ element.Company_Code }}
+                                        </div>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Client_Name">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+                                        <div class="cell-left-wrap-normal">
+                                            Client Name
+                                        </div>
+                                    </mat-header-cell>
+                                    <mat-cell *matCellDef="let element">
+                                        <div class="cell-left-wrap-normal">
+                                            {{ element.Client_Name }}</div>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Bank_Name">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+                                        <div class="cell-left-wrap-normal">
+                                            Bank Culture Type
+                                        </div>
+                                    </mat-header-cell>
+                                    <mat-cell *matCellDef="let element">
+                                        <div class="cell-left-wrap-normal">{{ element.Bank_Name}}
+                                        </div>
+                                    </mat-cell>
+                                </ng-container>
+                                <!-- Header and Row Declaration -->
+                                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                                <mat-row *matRowDef="let row;let i = index;  columns: displayedColumns;"></mat-row>
+                            </table>
+                        </div>
+
+                        <mat-paginator #holdPaginator class="mat-footer-paginator" [pageSizeOptions]="[5, 10, 25, 100]"
+                            showFirstLastButtons stickyEnd>
+                        </mat-paginator>
+                    </div>
+                    
+                </div>
+            </div>
+            <div *ngIf="isAddclicked" class="popup-overlay" (keydown.escape)="closeclick()">
+                <mat-card class="popup-card">
+                    <mat-card-header class="popup-header">
+                        <mat-card-title class="d-flex justify-content-center align-items-center">
+                            Add Bank NEFT Culture
+                        </mat-card-title>
+
+                        <button class="close-btn" matTooltip="Close" (click)="closeclick()">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </mat-card-header>
+
+                    <mat-card-content class="scroll-content">
+
+                        <form [formGroup]="NEFT">
+                            <div class="row g-3 mb-3 align-items-end">
+
+                                <!-- Company Code -->
+                                <div class="col-md-4">
+                                    <div style="
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+                ">
+
+                                        <label class="form-label text-muted small">
+                                            Company Code<span class="text-danger">*</span>
+                                        </label>
+
+                                        <CompanyPicker class="w-100" (companyEmit)="handleCompanyEvent2($event)">
+                                        </CompanyPicker>
+
+                                    </div>
+
+                                    <div *ngIf="NEFT.get('CompanyCode')?.touched 
+                && NEFT.get('CompanyCode')?.hasError('required')" class="text-danger small mt-1">
+                                        Company Code is required
+                                    </div>
+                                </div>
+
+                                <!-- Company Name -->
+                                <div class="col-md-5">
+                                    <label class="form-label text-muted small">
+                                        Company Name
+                                    </label>
+
+                                    <input type="text" class="form-control form-control-sm"
+                                        formControlName="CompanyName" readonly>
+                                </div>
+
+                            </div>
+                        </form>
+                        <div class="card-body rounded-4 py-0">
+                            <div class="table-scroll">
+                                <div class="example-container mat-elevation-z8">
+                                    <table mat-table #searchsalarygrid [dataSource]="dataSource2" matSort
+                                        class="custom-table mat-elevation-z8">
+
+                                        <ng-container matColumnDef="select">
+                                            <mat-header-cell *matHeaderCellDef class="fixed-width-column">
+                                                <mat-checkbox (change)="masterToggle()" [checked]="isAllSelected()"
+                                                    [indeterminate]="selection.hasValue() && !isAllSelected()">
+                                                </mat-checkbox>
+
+                                            </mat-header-cell>
+                                            <mat-cell *matCellDef="let element" class="fixed-width-column">
+                                                <mat-checkbox (click)="$event.stopPropagation()"
+                                                    (change)="selection.toggle(element)"
+                                                    [checked]="selection.isSelected(element)">
+                                                </mat-checkbox>
+
+                                            </mat-cell>
+                                        </ng-container>
+
+
+                                        <ng-container matColumnDef="Bank_Name">
+                                            <mat-header-cell *matHeaderCellDef mat-sort-header>
+                                                <div class="cell-center">
+                                                    Bank Name
+                                                </div>
+                                            </mat-header-cell>
+                                            <mat-cell *matCellDef="let element">
+                                                <div class="cell-center">
+                                                    {{ element.Bank_Name }}
+                                                </div>
+                                            </mat-cell>
+                                        </ng-container>
+
+                                        <!-- Header and Row Declaration -->
+                                        <mat-header-row *matHeaderRowDef="displayedColumns2"></mat-header-row>
+                                        <mat-row
+                                            *matRowDef="let row;let i = index;  columns: displayedColumns2;"></mat-row>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <mat-paginator #salaryPaginator class="mat-footer-paginator"
+                                [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons stickyEnd>
+                            </mat-paginator>
+                        </div>
+                    </mat-card-content>
+                    <mat-card-footer class="footer">
+                        <div class="d-flex justify-content-end"
+                            style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;padding-top: 10px;">
+                            <button type="button" (click)="closeclick()" style="border: none; border-radius: 7px; width: 80px; height: 30px;font-size: 12px;
+                    cursor: pointer; background-color: #f0f0f0; color: black;">
+                                Cancel
+                            </button>
+
+                            <button type="button" (click)="onSave()" style="    border: none;    border-radius: 7px;    width: 80px;    height: 30px;
+    cursor: pointer;
+    background-color: blue;
+    color: white;
+    font-size: 12px;
+  ">
+                                Save
+                            </button>
+
+                        </div>
+                    </mat-card-footer>
+                </mat-card>
+            </div>
+            <!-- <div *ngIf="showPopup" class="overlay">
+    <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+        (close)="showPopup = false"></app-alertpopup>
+</div> -->

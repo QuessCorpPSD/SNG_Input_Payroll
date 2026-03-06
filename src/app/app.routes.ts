@@ -174,6 +174,8 @@ import { HRAcalculationComponent } from './pages/Taxandsavings/hracalculation/hr
 import { BankAccountComponent } from './pages/SalaryReleaseNew/bank-account/bank-account.component';
 import { ReportComponent } from './pages/Reports/report/report.component';
 import { CPFsummaryComponent } from './pages/Reports/cpfsummary/cpfsummary.component';
+import { BankInvoiceNEFTCultureComponent } from './pages/SalaryReleaseNew/bank-invoice-neftculture/bank-invoice-neftculture.component';
+
 import { SalaryReleaseApproveComponent } from './pages/SalaryReleaseNew/salary-release-approve/salary-release-approve.component';
 import { ServicechargenewComponent } from './pages/customers/servicechargenew/servicechargenew/servicechargenew.component';
 import { DownloadbatchComponent } from './pages/SalaryReleaseNew/downloadbatch/downloadbatch.component';
@@ -299,6 +301,8 @@ export const routes: Routes = [
           { path: 'Holdrequest', component: HoldRequestComponent },
           { path: 'Netpaysummary', component: NetpaySummaryComponent },
           { path: 'Upfrontapproval', component: UpfrontApprovalComponent },
+          { path: 'Yearlypayout', component: YearlyPayoutComponent },
+          { path: "NEFTCulture", component: BankInvoiceNEFTCultureComponent }
           { path: 'Yearlypayout', component: YearlyPayoutComponent },
           { path: 'SalaryReleaseApprove', component: SalaryReleaseApproveComponent },
           { path: 'Yearlypayout', component: YearlyPayoutComponent },
@@ -476,10 +480,12 @@ export const routes: Routes = [
 
 
 
+
           { path: "professionaltax", component: ProfessionaltaxComponent },
           { path: "providentfund", component: ProvidentfundComponent },
           { path: "computationrule", component: ComputationruleComponent },
           { path: "providentfund", component: ProvidentfundComponent },
+
 
 
 
