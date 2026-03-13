@@ -17,6 +17,10 @@ import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
 import { Router } from '@angular/router';
+import { finalize } from 'rxjs';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatOptionModule } from '@angular/material/core';
 
 
 interface ChildDetail {
@@ -34,7 +38,9 @@ interface ChildDetail {
   imports: [
     CommonModule, ReactiveFormsModule, FormsModule, MatIconModule,
     MatCheckboxModule, MatTableModule, MatPaginatorModule, MatSortModule,
-    CompanyallComponent, MapnameComponent, MatCardModule
+    CompanyallComponent, MapnameComponent, MatCardModule, MatSelectModule,
+    MatFormFieldModule, MatOptionModule
+
   ],
   templateUrl: './invoice-culture-addpo.component.html',
   styleUrls: ['./invoice-culture-addpo.component.css']
@@ -56,6 +62,9 @@ export class InvoiceCultureAddpoComponent implements AfterViewInit {
   dataSource = new MatTableDataSource<any>([]);
   displayedColumns: string[] = [];
   datatable: Array<{ [key: string]: any }> = [];
+  searchText: string = '';
+  filteredList: any[] = [];
+  InvoiceTypeNameCC: string = '';
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -106,7 +115,6 @@ export class InvoiceCultureAddpoComponent implements AfterViewInit {
   }
 
   handleMapNameEvent(mapname: any) {
-    console.log('MapName selected:', mapname);
     this.mapnameUI = mapname;
     this.selectedMN = mapname.mapName;
 
@@ -131,7 +139,7 @@ export class InvoiceCultureAddpoComponent implements AfterViewInit {
       Description: [''],
       CostCenterMapping: [1, Validators.required],
       StateName: [''],
-      InvoiceTypeName: ['Standard', Validators.required],
+      InvoiceTypeName: ['', Validators.required],
       InvoiceCategoryName: ['Standard', Validators.required]
     });
 
@@ -160,7 +168,8 @@ export class InvoiceCultureAddpoComponent implements AfterViewInit {
   loadPaycodes(): void {
     this.poService.getAllPaycode(this.selectedCC).subscribe({
       next: (res) => {
-        this.typeInvoiceList = res?.Data || [];
+
+        this.typeInvoiceList = res?.Data?.data?.Table0 || [];
 
         // Create checkbox controls dynamically
         this.typeInvoiceList.forEach(t => {
@@ -194,16 +203,14 @@ export class InvoiceCultureAddpoComponent implements AfterViewInit {
 
   getSelectedInvoiceTypes() {
     return this.typeInvoiceList
-      .filter(x => this.InvoiceCultureForm.get(x.code)?.value === true)
+      .filter(x => this.InvoiceCultureForm.get(x.Paycode_Id.toString())?.value === true)
       .map(x => ({
-        id: x.id,
-        code: x.code
+        id: x.Paycode_Id,
+        code: x.Paycode_Code
       }));
   }
   SaveData() {
-    this.isLoading = true;
-    console.log("Selva" + JSON.stringify(this.InvoiceCultureForm.value));
-    console.log()
+
     if (this.InvoiceCultureForm.invalid) {
       this.InvoiceCultureForm.markAllAsTouched();
       return;
@@ -248,10 +255,21 @@ export class InvoiceCultureAddpoComponent implements AfterViewInit {
       parentDetail: parentDetail,
       childDetail: childDetail
     }
-    console.log(InvoiceCultureAdd);
-    this.poService.postInvoiceCulture(InvoiceCultureAdd).subscribe({
+
+    if (parentDetail.InvoiceType === 'SPLIT') {
+      if (childDetail.length === 0) {
+        alert('Please select at least one invoice type');
+        return;
+      }
+    }
+
+    this.isLoading = true;
+    this.poService.postInvoiceCulture(InvoiceCultureAdd).pipe(
+      finalize(() => {
+        this.isLoading = false;
+      })
+    ).subscribe({
       next: (res) => {
-        console.log(res);
         if (res.Data.message == "Invoice Culture/Structure Already Exists") {
           this.isLoading = false;
           alert(res.Data.message);
@@ -275,7 +293,6 @@ export class InvoiceCultureAddpoComponent implements AfterViewInit {
     });
   }
   downloadExcel(data: any[], templateId: string): void {
-    //console.log("export");
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
     const workbook: XLSX.WorkBook = {
       Sheets: { 'Sheet1': worksheet },
@@ -361,7 +378,6 @@ export class InvoiceCultureAddpoComponent implements AfterViewInit {
   }
 
   handleCompanyEvent(company: any) {
-    console.log('Company selected:', company);
     this.companyUI = company;
     this.selectedCC = Number(company.companyId) || 0;
     this.loadPaycodes();
@@ -378,7 +394,6 @@ export class InvoiceCultureAddpoComponent implements AfterViewInit {
     this.isLoading = true;
     this.poService.ServiceChargeMaster().subscribe({
       next: (res: any) => {
-        console.log('ServiceCharges', res);
         this.ServiceChargeOptions = Array.isArray(res.Data) ? res.Data : [];
         this.isLoading = false;
       },
@@ -394,7 +409,6 @@ export class InvoiceCultureAddpoComponent implements AfterViewInit {
     this.isLoading = true;
     this.poService.InvoiceType().subscribe({
       next: (res: any) => {
-        console.log('InvoiceTypes', res);
         this.InvoiceTypeList = Array.isArray(res.Data) ? res.Data : [];
         this.isLoading = false;
       },
@@ -410,7 +424,6 @@ export class InvoiceCultureAddpoComponent implements AfterViewInit {
     this.isLoadingCategories = true;
     this.poService.InvoiceCategory().subscribe({
       next: (res: any) => {
-        console.log('InvoiceCategories', res);
         this.InvoiceCategoryList = Array.isArray(res.Data) ? res.Data : [];
         this.isLoadingCategories = false;
       },
@@ -565,13 +578,11 @@ export class InvoiceCultureAddpoComponent implements AfterViewInit {
         UserId: this.userdetail?.userId?.toString() || 'U12345'
       };
 
-      console.log('Final Payload:', JSON.stringify(payload, null, 2));
 
       // Send API Request
       this.poService.postInvoiceCulture(payload).subscribe({
         next: (res: any) => {
           this.isLoading = false;
-          console.log('API Response:', res);
 
           if (res.StatusCode === 200 || res.success) {
             this.showPopup = true;
@@ -614,5 +625,22 @@ export class InvoiceCultureAddpoComponent implements AfterViewInit {
 
   onClose() {
     this.dialogRef.close();
+  }
+
+  onInvoiceTypeChange(event: any) {
+    this.typeInvoiceList.forEach(t => this.InvoiceCultureForm.get(t.Paycode_Code)?.setValue(false));
+    const selectedId = event.target.value;
+    const selected = this.InvoiceTypeList.find(
+      (x: any) => x.invoiceType_Id == selectedId
+    );
+    this.InvoiceTypeNameCC = selected?.invoiceType || '';
+
+    this.typeInvoiceList.forEach((t: any) => {
+      const control = this.InvoiceCultureForm.get(t.Paycode_Id.toString());
+      if (control) {
+        control.setValue(false);
+      }
+    });
+
   }
 }

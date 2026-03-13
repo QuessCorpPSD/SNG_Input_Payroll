@@ -122,7 +122,6 @@ export class InvoiceCultureComponent implements AfterViewInit {
 
     this.invoiceService.InvoicecultureSearch(this.comapnyId).subscribe({
       next: (res: any) => {
-        console.log(res.Data);
         this.isLoading = false;
 
         if (res.StatusCode === 200 && Array.isArray(res.Data) && res.Data.length > 0) {
@@ -202,7 +201,6 @@ export class InvoiceCultureComponent implements AfterViewInit {
 
       this.invoiceService.UploadInvoiceCulture(formData).subscribe({
         next: (res) => {
-          console.log(res);
           this.datatable = res.Data;
           console.table(this.datatable);
           if (this.datatable && Array.isArray(this.datatable) && this.datatable.length > 0) {
@@ -221,7 +219,6 @@ export class InvoiceCultureComponent implements AfterViewInit {
     }
   }
   downloadExcel(data: any[], templateId: string): void {
-    //console.log("export");
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
     const workbook: XLSX.WorkBook = {
       Sheets: { 'Sheet1': worksheet },
@@ -272,10 +269,8 @@ export class InvoiceCultureComponent implements AfterViewInit {
         parentDetail: parentDetail,
         childDetail: childDetail
       }
-      console.log(InvoiceCultureAdd);
       this.invoiceService.postInvoiceCulture(InvoiceCultureAdd).subscribe({
         next: (res) => {
-          console.log(res);
           const errormsg = res.Data.data.Table0[0].Error_Message;
           alert(errormsg);
           this.isLoading = true;
@@ -301,7 +296,6 @@ export class InvoiceCultureComponent implements AfterViewInit {
         finalize(() => this.isLoading = false)
       ).subscribe({
         next: res => {
-          //console.log(res);
           if (res.StatusCode == 200) {
             const data = res.Data;
             var base64 = data.file;

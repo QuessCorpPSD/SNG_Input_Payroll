@@ -49,7 +49,8 @@
         <!-- Invoice Type -->
         <div class="col-md-6">
           <label class="form-label text-muted small">Invoice Type <span class="req">*</span></label>
-          <select class="form-select form-select-sm" formControlName="InvoiceType">
+          <select class="form-select form-select-sm" formControlName="InvoiceType"
+            (change)="onInvoiceTypeChange($event)">
             <option value="">Select..</option>
             <option *ngFor="let t of InvoiceTypeList" [value]="t.invoiceType_Id">{{ t.invoiceType }}</option>
           </select>
@@ -77,14 +78,24 @@
 
       <!-- Type of Invoice -->
       <div class="row g-3 mb-3">
-        <div class="col full-width" *ngIf="selectedCC > 0">
+        <div class="col full-width" *ngIf="selectedCC > 0 && InvoiceTypeNameCC=== 'SPLIT'">
           <label class="lbl form-label">Type of Invoice <span class="req">*</span></label>
           <div class="type-scroll">
-            <div class="checkbox-grid">
+            <!-- <div class="checkbox-grid">
               <mat-checkbox *ngFor="let t of typeInvoiceList" [formControlName]="t.Paycode_Id.toString()" class="cb"
                 (change)="onCheckboxChange()">
                 {{ t.Paycode_Code }}
               </mat-checkbox>
+            </div> -->
+            <!-- <input matInput [(ngModel)]="searchText" (input)="filterList()"> -->
+
+            <div class="checkbox-container">
+              <div class="checkbox-grid">
+                <mat-checkbox *ngFor="let t of typeInvoiceList" [formControlName]="t.Paycode_Id.toString()" class="cb"
+                  (change)="onCheckboxChange()">
+                  {{ t.Paycode_Code }}
+                </mat-checkbox>
+              </div>
             </div>
           </div>
           <div *ngIf="showInvoiceTypeError && InvoiceCultureForm.touched" class="error-message">
@@ -92,7 +103,6 @@
           </div>
         </div>
       </div>
-
     </mat-card-content>
 
     <br />
