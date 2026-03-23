@@ -21,6 +21,7 @@ import { promotionIncrementService } from '../../../Service/Promotion/increment.
 import * as XLSX from 'xlsx';
 import FileSaver from 'file-saver';
 import { IIncrementService } from '../../../Repository/iincrement.service';
+import { finalize } from 'rxjs';
 export const Increment_TOKEN = new InjectionToken<IIncrementService>('Increment_TOKEN');
 
 @Component({
@@ -121,7 +122,7 @@ export class IncreamentComponent {
   }
 
   view(row: any) {
-    console.log('View clicked for:', row);
+
   }
   ViewOpen(row: any) {
     this.dialog.open(IncreamentADDComponent, {
@@ -149,7 +150,6 @@ export class IncreamentComponent {
     this.leave.GetPayperiod(this.selectedCompanyId).subscribe({
       next: (res: any) => {
         this.PayPeriodList = res.Data.data.Table0;
-        console.log('PayPeriodList', this.PayPeriodList);
       },
       error: (err) => {
         console.error('Pay Period API Error', err);
@@ -165,7 +165,6 @@ export class IncreamentComponent {
     this.leave.GetEmployeeCode(this.selectedCompanyId).subscribe({
       next: (res: any) => {
         this.EmployeeList = res.Data.data.Table0;
-        console.log('EmployeeList', this.EmployeeList);
       },
       error: (err) => {
         console.error('Employee API Error', err);
@@ -186,14 +185,11 @@ export class IncreamentComponent {
     const employeeId = this.selectedEmployeeId || 0;
     const payPeriodId = this.payPeriodId || 0;
 
-    console.log(payPeriodId);
-    console.log(employeeId);
     this.leave.Search(companyId, employeeId, payPeriodId).subscribe({
       next: (res: any) => {
         this.isLoading = false;
 
         const tableData = res?.Data?.data?.Table0 || [];
-        console.log('Increment Data:', tableData);
 
         if (tableData.length > 0) {
           this.uploadedData = tableData;
@@ -282,9 +278,14 @@ export class IncreamentComponent {
     formData.append('file', file);
     formData.append('CreatedBy', this.userdetail.user_Id); // backend expects this
 
-    this.leave.BulkPOUpload(formData).subscribe({
-      next: (res: any) => {
+    this.leave.BulkPOUpload(formData).pipe(
+      finalize(() => {
         this.isLoading = false;
+      })
+
+    ).subscribe({
+      next: (res: any) => {
+
 
         if (res?.Data?.response === 'Failed to import.' && res.Data.errors?.length) {
           // Show alert
@@ -313,7 +314,6 @@ export class IncreamentComponent {
         }
       },
       error: (err) => {
-        this.isLoading = false;
         console.error('Upload failed', err);
         alert('Upload failed due to a network or server error.');
       }
@@ -365,12 +365,6 @@ export class IncreamentComponent {
 
     FileSaver.saveAs(blob, `Increament_Template.xlsx`)
   }
-
-
-
-
-
-
 }
 
 

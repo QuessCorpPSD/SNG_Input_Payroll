@@ -212,7 +212,7 @@ export class PayfrequencyAddComponent {
     this.service.Addsave(payload).subscribe({
       next: res => {
         this.isLoading = false;
-        const sucessmsg = res.Data.data.Table0?.[0].Error_Message;
+        const sucessmsg = res.Data?.message;
         if (sucessmsg.includes("Success")) {
           this.isLoading = false;
           alert(sucessmsg);

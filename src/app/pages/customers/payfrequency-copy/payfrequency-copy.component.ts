@@ -15,14 +15,16 @@ import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { PayfrequencyService } from '../../../Service/CUSTOMER/payfrequency.service';
 import { IPayfrequencyservice } from '../../../Repository/customer/IPayfrequency';
 import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.component";
+import { finalize } from 'rxjs';
 export const Pay_TOKEN = new InjectionToken<IPayfrequencyservice>('Pay_TOKEN');
 
 @Component({
-  selector: 'app-payfrequency-edit',
+  selector: 'app-payfrequency-copy',
   standalone: true,
-  imports: [MatCardModule, MatPaginatorModule, MatTableModule, MatIconModule, CommonModule, FormsModule, ReactiveFormsModule, MatTooltipModule, AlertpopupComponent],
-  templateUrl: './payfrequency-edit.component.html',
-  styleUrl: './payfrequency-edit.component.css',
+  imports: [MatCardModule, MatPaginatorModule, MatTableModule, MatIconModule, CommonModule, FormsModule, ReactiveFormsModule, MatTooltipModule, AlertpopupComponent,
+    CompanyallComponent],
+  templateUrl: './payfrequency-copy.component.html',
+  styleUrl: './payfrequency-copy.component.css',
   providers: [
     {
       provide: Pay_TOKEN,
@@ -30,13 +32,14 @@ export const Pay_TOKEN = new InjectionToken<IPayfrequencyservice>('Pay_TOKEN');
     }
   ]
 })
-export class PayfrequencyEditComponent {
+export class PayfrequencyCopyComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  BillingpayeditForm!: FormGroup;
+  BillingpaycopyForm!: FormGroup;
   uploadDisplayedColumns: string[] = ['SNo', 'Paysequenceno', 'Payperiod', 'Startat', 'Endat', 'Salarydate', 'Payperioddays', 'Weeklyholidays', 'Monthlyholidays', 'WorkingHolidays'];
   uploadedData: any[] = [];
   uploadedDataSource = new MatTableDataSource(this.uploadedData);
   selectedCompanyId: any;
+  selectedGroupId: number | null = null;
   selectedCompanyCode: any;
   selectedRowIndex: number | null = null;
   userdetail: any;
@@ -50,10 +53,11 @@ export class PayfrequencyEditComponent {
   popupSubMessage: string = '';
   showPopup = false;
   isLoading: boolean = false;
+  isDatechanged: boolean = false;
 
   constructor(
     private fb: FormBuilder,
-    private dialogRef: MatDialogRef<PayfrequencyEditComponent>,
+    private dialogRef: MatDialogRef<PayfrequencyCopyComponent>,
     @Inject(MAT_DIALOG_DATA) public editData: any,
     @Inject(Pay_TOKEN) private service: IPayfrequencyservice,
     private decry: EncryptionService,
@@ -68,6 +72,7 @@ export class PayfrequencyEditComponent {
   handleCompanyEvent(company: any): void {
     this.selectedCompanyId = company.companyId;
     this.selectedCompanyCode = company.companyCode;
+    this.BindGrouptype();
   }
 
   showAlertPopup(message: string, subMessage: string = '') {
@@ -98,14 +103,21 @@ export class PayfrequencyEditComponent {
   }
   onWeeklyHolidayChange(event: Event, row: any) {
     const input = event.target as HTMLInputElement;
-    const value = input.value;
+    let value = input.value;
 
-    const numericValue = value.replace(/[^0-9]/g, '');
-
-    row.Weekly_Holidays = numericValue;
+    let numericValue = value.replace(/[^0-9]/g, '');
 
     const payPeriodDays = Number(row.Pay_Period_Days) || 0;
-    const weeklyHolidays = Number(row.Weekly_Holidays) || 0;
+
+    let weeklyHolidays = Number(numericValue) || 0;
+
+    if (weeklyHolidays > payPeriodDays) {
+      weeklyHolidays = payPeriodDays;
+    }
+
+    row.Weekly_Holidays = weeklyHolidays;
+    input.value = weeklyHolidays.toString();
+
     row.Working_Days = payPeriodDays - weeklyHolidays;
   }
 
@@ -118,8 +130,48 @@ export class PayfrequencyEditComponent {
       return;
     }
 
+    const groupId = this.BillingpaycopyForm.get('group')?.value;
+    if (groupId === null || groupId === undefined) {
+      alert("Please select Group.");
+      return;
+    }
 
+    if (this.BillingpaycopyForm.invalid) {
+      alert('Please select Start Date and End Date.');
+      return;
+    }
+
+    const startdate = this.BillingpaycopyForm.get('startdate')?.value;
+    const enddate = this.BillingpaycopyForm.get('Enddate')?.value;
+    this.dataSource = new MatTableDataSource<any>([]);
+
+    this.isLoading = true;
+
+    this.service.GetAdddata(startdate, enddate).pipe(
+      finalize(() => {
+        this.isLoading = false;
+      })
+    ).subscribe({
+      next: (res) => {
+        this.billingpay = res.Data.data.Table0;
+        this.billingpays = res.Data.message;
+
+        if (!this.billingpay || this.billingpay.length === 0) {
+          alert(this.billingpays);
+          this.dataSource = new MatTableDataSource<any>([]);
+          return;
+        }
+
+        this.dataSource = new MatTableDataSource<any>(this.billingpay);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+      },
+      error: (err) => {
+        console.error('Error loading salary release data', err);
+      }
+    });
   }
+
 
 
   ngOnInit(): void {
@@ -129,34 +181,58 @@ export class PayfrequencyEditComponent {
     } else {
       console.warn('UserProfile not found in session storage');
     }
-    this.BillingpayeditForm = this.fb.group({
-      Companycode: [{ value: '', disabled: true }, Validators.required],
-      Group: [{ value: '', disabled: true }],
-      GroupId: [''],
-      startdate: [{ value: '', disabled: true }, Validators.required],
-      Enddate: [{ value: '', disabled: true }, Validators.required]
+    this.BillingpaycopyForm = this.fb.group({
+      // Companycode: [{ value: '', disabled: true }, Validators.required],
+      // Group: [{ value: '', disabled: true }],
+      // GroupId: [''],
+      startdate: [{ value: '', disabled: false }, Validators.required],
+      Enddate: [{ value: '', disabled: false }, Validators.required],
+      group: [null, Validators.required]
     });
 
     if (this.editData) {
-      this.selectedCompanyId = this.editData.Company_Id;
 
-      this.BillingpayeditForm.patchValue({
-        Companycode: this.editData.Company_Code,
-        Group: this.editData.Group,
-        GroupId: this.editData.Group_Id,
-        startdate: this.editData.Starting_Date,
-        Enddate: this.editData.Ending_Date
+      this.BillingpaycopyForm.patchValue({
+        // Companycode: this.editData.Company_Code,
+        // Group: this.editData.Group,
+        // GroupId: this.editData.Group_Id,
+        startdate: this.formatDate(this.editData.Starting_Date),
+        Enddate: this.formatDate(this.editData.Ending_Date)
       });
 
       this.loadBillingPayTable();
     }
+    this.BillingpaycopyForm.get('startdate')?.valueChanges.subscribe(() => {
+      this.onDateChange();
+    });
+
+    this.BillingpaycopyForm.get('Enddate')?.valueChanges.subscribe(() => {
+      this.onDateChange();
+    });
   }
+
+  BindGrouptype() {
+    const companyid = this.selectedCompanyId;
+    this.service.Getgrouptype(companyid).subscribe({
+      next: res => {
+        this.Grouptype = res.Data.data.Table0;
+      }
+    });
+  }
+
   loadBillingPayTable() {
     this.dataSource = new MatTableDataSource<any>([]);
 
     const companyId = this.editData.Company_Id;
+    const startdate = this.BillingpaycopyForm.get('startdate')?.value;
+    const enddate = this.BillingpaycopyForm.get('Enddate')?.value;
 
-    this.service.Search(companyId).subscribe({
+    this.isLoading = true;
+    this.service.CopySearch(companyId, startdate, enddate).pipe(
+      finalize(() => {
+        this.isLoading = false;
+      })
+    ).subscribe({
       next: (res) => {
         this.billingpay = res.Data.data.Table0;
 
@@ -179,37 +255,38 @@ export class PayfrequencyEditComponent {
     return `${year}-${month}-${day}`; // Converts DD-MM-YYYY to YYYY-MM-DD
   }
   onSave() {
-    this.isLoading = true;
 
     if (!this.selectedCompanyId) {
-      this.isLoading = false;
       alert("Please select company.");
       return;
     }
 
-    if (this.BillingpayeditForm.invalid) {
-      this.isLoading = false;
+    const groupId = this.BillingpaycopyForm.get('group')?.value;
+    if (groupId === null || groupId === undefined) {
+      alert("Please select Group.");
+      return;
+    }
+
+    if (this.BillingpaycopyForm.invalid) {
       alert("Please fill Start and End dates.");
       return;
     }
 
     if (this.dataSource.data.length === 0) {
-      this.isLoading = false;
       alert("No rows available to save.");
       return;
     }
 
-    const startdate = this.BillingpayeditForm.get('startdate')?.value;
-    const enddate = this.BillingpayeditForm.get('Enddate')?.value;
-    const groupId = this.BillingpayeditForm.get('GroupId')?.value;
+    const startdate = this.BillingpaycopyForm.get('startdate')?.value;
+    const enddate = this.BillingpaycopyForm.get('Enddate')?.value;
     const row = this.dataSource.data[0];
 
     const payload = {
       createdBy: this.userdetail?.user_Id,
-      mode: "Edit",
+      mode: "Copy",
 
       parentDetail: {
-        Pay_Frequency_Id: row.Pay_Frequency_Id,
+        Pay_Frequency_Id: 0,
         Group_Id: groupId,
         Company_Id: this.selectedCompanyId,
         Starting_Date: this.formatDate(startdate),
@@ -217,38 +294,47 @@ export class PayfrequencyEditComponent {
       },
 
       ChildDetail: this.dataSource.data.map((row: any) => ({
-        Pay_Frequency_Detail_Id: row.Pay_Frequency_Detail_Id,
-        Pay_Frequency_Id: row.Pay_Frequency_Id,
+        Pay_Frequency_Detail_Id: 0,
+        Pay_Frequency_Id: 0,
         Pay_Sequence_Number: (row.Pay_Sequence_Number).toString(),
         Pay_Period: row.Pay_Period,
-        Start_At: this.formatDate(row.Start_At),
-        End_At: this.formatDate(row.End_At),
-        Salary_Date: this.formatDate(row.Salary_Date),
+        Start_At: this.formatDate(row.Start_At ?? row.FirstDay),
+        End_At: this.formatDate(row.End_At ?? row.LastDay),
+        Salary_Date: this.formatDate(row.Salary_Date ?? row.SalaryDate),
         Pay_Period_Days: row.Pay_Period_Days,
-        Weekly_Holidays: row.Weekly_Holidays,
-        Monthly_Holidays: row.Monthly_Holidays,
+        Weekly_Holidays: row.Weekly_Holidays ?? row.Weekly_Holyday,
+        Monthly_Holidays: row.Monthly_Holidays ?? row.Monthly_Holyday,
         Other_Holidays: row.Other_Holidays,
         Working_Days: row.Working_Days
       }))
     };
 
-    this.service.Addsave(payload).subscribe({
-      next: res => {
-        const sucessmsg=res.Data.data.Table0?.[0].Error_Message;
-        if(sucessmsg.includes("Success")){
+    this.isLoading = true;
+    this.service.Addsave(payload).pipe(
+      finalize(() => {
         this.isLoading = false;
-        alert(sucessmsg);
-        this.dialogRef.close('edit');
-        }else{
+      })
+    ).subscribe({
+      next: res => {
+        const sucessmsg = res.Data?.message;
+        if (sucessmsg.includes("Success")) {
+          alert(sucessmsg);
+          this.dialogRef.close('edit');
+        } else {
           alert(res.Data.message);
         }
       },
       error: err => {
-        this.isLoading = false;
         alert("Failed to save!");
         console.error(err);
       }
     });
-    this.isLoading = false;
   }
+
+  onDateChange() {
+    this.isDatechanged = true;
+    this.dataSource = new MatTableDataSource<any>([]);
+  }
+
 }
+

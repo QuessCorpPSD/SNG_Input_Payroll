@@ -14,6 +14,8 @@ import * as XLSX from 'xlsx';
 import { PayfrequencyService } from '../../../Service/CUSTOMER/payfrequency.service';
 import { IPayfrequencyservice } from '../../../Repository/customer/IPayfrequency';
 import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.component";
+import { PayfrequencyCopyComponent } from '../payfrequency-copy/payfrequency-copy.component';
+import { finalize } from 'rxjs';
 export const Pay_TOKEN = new InjectionToken<IPayfrequencyservice>('Pay_TOKEN');
 
 @Component({
@@ -120,6 +122,24 @@ export class PayfrequencyComponent {
     });
   }
 
+  CopyOpen() {
+    if (!this.selectedRow) {
+      alert('Please select a row to Copy');
+      return;
+    }
+
+    const dialogRef = this.dialog.open(PayfrequencyCopyComponent, {
+      width: '80%',
+      height: '95vh',
+      disableClose: true,
+      data: this.selectedRow
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'edit') {
+        this.onsearch();
+      }
+    });
+  }
 
   onsearch() {
     if (!this.selectedCompanyId) {
@@ -132,8 +152,13 @@ export class PayfrequencyComponent {
     const Companyid = this.selectedCompanyId;
 
     this.dataSource = new MatTableDataSource<any>([]);
+    this.isLoading = true;
 
-    this.service.Search(Companyid).subscribe({
+    this.service.Search(Companyid).pipe(
+      finalize(() => {
+        this.isLoading = false;
+      })
+    ).subscribe({
       next: (res) => {
         this.billingpay = res.Data.data.Table0;
         this.billingpays = res.Data.message;

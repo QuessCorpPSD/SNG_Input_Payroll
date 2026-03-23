@@ -72,7 +72,6 @@ export class ClientbillablereportsdatewiseComponent {
 
     this.service.Exporttoexcel(Entityid, fromdate, todate).subscribe({
       next: (res) => {
-        console.log('export', res)
         try {
           const jsonData = res.Data.data.Table0;
           this.data = res.Data.message;

@@ -272,16 +272,16 @@ export class PaytransactionComponent {
           return;
         }
 
-        if (res?.Data?.response?.includes("Row(s) Uploaded Successfully.")) {
+        if (res?.Data?.response?.includes("Rows Uploaded Successfully.")) {
           this.isLoading = false;
-          this.showAlertPopup("Row(s) Uploaded Successfully.")
+          this.showAlertPopup(res?.Data?.response)
           return;
         }
         // --- parse response defensively ---
         const { parsed, msg } = this.tryParseResponse(res?.Data?.response);
 
         // CASE 1: Success message inside parsed JSON array/object
-        const successMsg = 'Row(s) Uploaded Successfully.';
+        const successMsg = 'Rows Uploaded Successfully.';
         const successMatch =
           (Array.isArray(parsed) && parsed[0]?.Error_Message?.trim() === successMsg) ||
           (parsed && typeof parsed === 'object' && parsed?.Error_Message?.trim() === successMsg);
@@ -322,7 +322,7 @@ export class PaytransactionComponent {
             Sheets: { ErrorMessages: worksheet },
             SheetNames: ['ErrorMessages']
           };
-          XLSX.writeFile(workbook, 'ErrorMessages_MAINPO.xlsx');
+          XLSX.writeFile(workbook, 'ErrorMessages_PayTransaction.xlsx');
           this.isLoading = false;
           return;
         }
@@ -376,20 +376,20 @@ export class PaytransactionComponent {
         PAYCODE: "",
         BAND: "",
         EMPID: "",
+        GST_APPLICABLE: '',
         AMOUNT: '',
-        REMARKS: ''
+        REMARKS: ''        
       }
     ];
 
     const workSheet = XLSX.utils.json_to_sheet(templateData);
 
     const workbook: XLSX.WorkBook = {
-      Sheets: { 'PayTransaction': workSheet },
-      SheetNames: ['PayTransaction']
+      Sheets: { 'Table': workSheet },
+      SheetNames: ['Table']
     };
 
     const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    this.showAlertPopup('Downloaded Successfully')
     const blob = new Blob([buffer], { type: 'application/octet-stream' });
 
     FileSaver.saveAs(blob, `PayTransaction_${Date.now()}.xlsx`)

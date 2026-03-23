@@ -16,6 +16,9 @@ export class PayfrequencyService implements IPayfrequencyservice {
   Search(companyId: any): Observable<APIResponse> {
     return this.http.get<APIResponse>(this.env.apiUrl + 'PayFrequency/Search/' + companyId);
   }
+  CopySearch(companyId: any, Startdate: any, enddate: any): Observable<APIResponse> {
+    return this.http.get<APIResponse>(this.env.apiUrl + 'PayFrequency/CopySearch/' + companyId + '/' + Startdate + '/' + enddate);
+  }
   Exporttoexcel(companyId: any): Observable<APIResponse> {
     return this.http.get<APIResponse>(this.env.apiUrl + 'PayFrequency/ExportToExcel/' + companyId);
   }
