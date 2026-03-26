@@ -15,6 +15,7 @@ import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { PayfrequencyService } from '../../../Service/CUSTOMER/payfrequency.service';
 import { IPayfrequencyservice } from '../../../Repository/customer/IPayfrequency';
 import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.component";
+import { finalize } from 'rxjs';
 export const Pay_TOKEN = new InjectionToken<IPayfrequencyservice>('Pay_TOKEN');
 
 @Component({
@@ -155,8 +156,14 @@ export class PayfrequencyEditComponent {
     this.dataSource = new MatTableDataSource<any>([]);
 
     const companyId = this.editData.Company_Id;
+    const startdate = this.formatDate(this.BillingpayeditForm.get('startdate')?.value);
+    const enddate = this.formatDate(this.BillingpayeditForm.get('Enddate')?.value);
 
-    this.service.Search(companyId).subscribe({
+    this.service.CopySearch(companyId, startdate, enddate).pipe(
+      finalize(() => {
+        this.isLoading = false;
+      })
+    ).subscribe({
       next: (res) => {
         this.billingpay = res.Data.data.Table0;
 
@@ -234,12 +241,12 @@ export class PayfrequencyEditComponent {
 
     this.service.Addsave(payload).subscribe({
       next: res => {
-        const sucessmsg=res.Data.data.Table0?.[0].Error_Message;
-        if(sucessmsg.includes("Success")){
-        this.isLoading = false;
-        alert(sucessmsg);
-        this.dialogRef.close('edit');
-        }else{
+        const sucessmsg = res.Data.data.Table0?.[0].Error_Message;
+        if (sucessmsg.includes("Success")) {
+          this.isLoading = false;
+          alert(sucessmsg);
+          this.dialogRef.close('edit');
+        } else {
           alert(res.Data.message);
         }
       },
