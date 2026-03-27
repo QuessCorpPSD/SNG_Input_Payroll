@@ -12,6 +12,7 @@ import { BillingpayfrequencyService } from '../../../Service/invoice/billingpayf
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { IBillingpayfrequency } from '../../../Repository/invoice/IBillingpayfrequency';
+import { finalize } from 'rxjs';
 export const Pay_TOKEN = new InjectionToken<IBillingpayfrequency>('Pay_TOKEN');
 
 @Component({
@@ -136,8 +137,14 @@ export class BillingpayfrequencyEditComponent {
     this.dataSource = new MatTableDataSource<any>([]);
 
     const companyId = this.editData.Company_Id;
+    const startdate = this.formatDate(this.BillingpayeditForm.get('startdate')?.value);
+    const enddate = this.formatDate(this.BillingpayeditForm.get('Enddate')?.value);
 
-    this.service.Search(companyId).subscribe({
+    this.service.CopySearch(companyId, startdate, enddate).pipe(
+      finalize(() => {
+        this.isLoading = false;
+      })
+    ).subscribe({
       next: (res) => {
         this.billingpay = res.Data.data.Table0;
 
@@ -183,33 +190,7 @@ export class BillingpayfrequencyEditComponent {
     const startdate = this.BillingpayeditForm.get('startdate')?.value;
     const enddate = this.BillingpayeditForm.get('Enddate')?.value;
     const groupId = this.BillingpayeditForm.get('GroupId')?.value;
-    // const payload = {
-    //   CreatedBy: this.userdetail?.user_Id ?? 0,
-    //   Mode: "Add",
-
-    //   ParentDetail: {
-    //     Pay_Frequency_Id: 0,
-    //     Group_Id: groupId.toString(),
-    //     Company_Id: this.selectedCompanyId,
-    //     Starting_Date: startdate,
-    //     Ending_Date: enddate
-    //   },
-
-    //   ChildDetail: this.dataSource.data.map((row: any) => ({
-    //     Pay_Frequency_Detail_Id: 0,
-    //     Pay_Frequency_Id: 0,
-    //     Pay_Sequence_Number: Number(row.Pay_Sequence_Number),
-    //     Pay_Period: row.Pay_Period,
-    //     Start_At: row.Start_At,
-    //     End_At: row.End_At,
-    //     Salary_Date: row.Salary_Date,
-    //     Pay_Period_Days: Number(row.Pay_Period_Days),
-    //     Weekly_Holidays: Number(row.Weekly_Holidays),
-    //     Monthly_Holidays: Number(row.Monthly_Holidays),
-    //     Other_Holidays: Number(row.Other_Holidays),
-    //     Working_Days: Number(row.Working_Days)
-    //   }))
-    // };
+    
     const row = this.dataSource.data[0];
 
     const BillingPayFrequencyRequest = {
@@ -240,10 +221,7 @@ export class BillingpayfrequencyEditComponent {
       }))
     };
 
-    console.log("SENDING PAYLOAD:", JSON.stringify(BillingPayFrequencyRequest));
-    //  console.log(BillingPayFrequencyRequest);
-
-
+    
     this.service.Addsave(BillingPayFrequencyRequest).subscribe({
       next: res => {
         this.isLoading = false;

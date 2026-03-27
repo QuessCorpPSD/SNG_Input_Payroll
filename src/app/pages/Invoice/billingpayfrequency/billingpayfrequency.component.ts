@@ -14,6 +14,7 @@ import { BillingpayfrequencyService } from '../../../Service/invoice/billingpayf
 import * as XLSX from 'xlsx';
 import { MatCardModule } from "@angular/material/card";
 import { IBillingpayfrequency } from '../../../Repository/invoice/IBillingpayfrequency';
+import { BillingpayfrequencyCopyComponent } from '../billingpayfrequency-copy/billingpayfrequency-copy.component';
 export const Pay_TOKEN = new InjectionToken<IBillingpayfrequency>('Pay_TOKEN');
 
 @Component({
@@ -105,6 +106,24 @@ export class BillingpayfrequencyComponent {
     });
   }
 
+CopyOpen() {
+    if (!this.selectedRow) {
+      alert('Please select a row to Copy');
+      return;
+    }
+
+    const dialogRef = this.dialog.open(BillingpayfrequencyCopyComponent, {
+      width: '80%',
+      height: '95vh',
+      disableClose: true,
+      data: this.selectedRow
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'edit') {
+        this.onsearch();
+      }
+    });
+  }
 
 
   onsearch() {

@@ -8,13 +8,16 @@ import { IBillingpayfrequency } from '../../Repository/invoice/IBillingpayfreque
 @Injectable({
   providedIn: 'root'
 })
-export class BillingpayfrequencyService implements IBillingpayfrequency{
+export class BillingpayfrequencyService implements IBillingpayfrequency {
   env = environment;
   constructor(private http: HttpClient) { }
 
 
   Search(companyId: any): Observable<APIResponse> {
     return this.http.get<APIResponse>(this.env.apiUrl + 'BillingPayFrequency/Search/' + companyId);
+  }
+  CopySearch(companyId: any, Startdate: any, enddate: any): Observable<APIResponse> {
+    return this.http.get<APIResponse>(this.env.apiUrl + 'BillingPayFrequency/CopySearch/' + companyId + '/' + Startdate + '/' + enddate);
   }
   Exporttoexcel(companyId: any): Observable<APIResponse> {
     return this.http.get<APIResponse>(this.env.apiUrl + 'BillingPayFrequency/ExportToExcel/' + companyId);
@@ -25,7 +28,7 @@ export class BillingpayfrequencyService implements IBillingpayfrequency{
   GetAdddata(Startdate: Date, enddate: Date): Observable<APIResponse> {
     return this.http.get<APIResponse>(this.env.apiUrl + 'BillingPayFrequency/GetData/' + Startdate + '/' + enddate);
   }
-   Addsave(BillingPayFrequencyRequest: any): Observable<APIResponse> {
+  Addsave(BillingPayFrequencyRequest: any): Observable<APIResponse> {
     return this
       .http.post<APIResponse>(
         this.env.apiUrl + 'BillingPayFrequency/Create',
