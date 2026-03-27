@@ -288,8 +288,8 @@ export class BillingpayfrequencyCopyComponent {
         Pay_Frequency_Id: 0,
         Group_Id: groupId,
         Company_Id: this.selectedCompanyId,
-        Starting_Date: this.formatDate(startdate),
-        Ending_Date: this.formatDate(enddate)
+        Starting_Date: startdate,
+        Ending_Date: enddate
       },
 
       ChildDetail: this.dataSource.data.map((row: any) => ({
