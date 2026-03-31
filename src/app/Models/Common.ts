@@ -18,17 +18,17 @@ export interface Mapnameclass {
   mapName: any
 }
 
-export interface InputTypeclass{
+export interface InputTypeclass {
   inputId: number
   inputType: string
 }
 
-export interface Groupnameclass{
+export interface Groupnameclass {
   siteCode: string
   siteName: string
 }
 
-export interface Cityclass{
+export interface Cityclass {
   city_Id: string
   city_Name: string
 }
@@ -40,6 +40,11 @@ export interface State {
 
 export interface Paycodelist {
   paycode_Id: number
-  paycode_Code: string	
+  paycode_Code: string
   description: string
+}
+
+export interface PricingType {
+  invoiceTypeID: number
+  invoiceType: string
 }

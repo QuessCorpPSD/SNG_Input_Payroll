@@ -102,9 +102,8 @@ export class PoCreateComponent {
   // }
 
   potypeEvent(potype: any) {
-    //console.log(potype)
-    this.PricingType = potype.company_Id;
-    console.log(this.PricingType);
+    
+    this.PricingType = potype.invoiceTypeID;
     // this.PricingType = this.PricingType;
   }
 
@@ -322,8 +321,7 @@ export class PoCreateComponent {
     this.poRespository.BulkPOUpload(formData).subscribe({
       next: (res) => {
 
-        console.log('response', JSON.stringify(res?.Data));
-
+        
         if (res?.Data?.response?.includes("Row(s) Uploaded Successfully.")) {
           this.showPopup = true;
 

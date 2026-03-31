@@ -1,92 +1,117 @@
-/* ====== General Styling ====== */
-.selectedInput {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 600;
-    color: #222222;
-    border-bottom: 1px solid #222222;
-}
+  .selectedInput {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      color: #222222;
+      border-bottom: 1px solid #222222;
+      /* or whatever color you want */
+  }
 
-::ng-deep .nav-link.inactive-link {
-    color: #8e9294 !important;
-    background-color: transparent !important;
-}
+  ::ng-deep .nav-link.inactive-link {
+      color: #8e9294 !important;
+      background-color: transparent !important;
+  }
 
-.customer-sop {
-    font-size: 20px;
-    color: #292929;
-    position: static;
-}
+  .customer-sop {
+      font-size: 20px;
+      color: #292929;
+      position: static;
+  }
 
-.headerSOP {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 5px 5px;
-    background-color: white;
-}
+  .headerSOP {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 5px;
+      background-color: white;
+  }
 
-.contentCategory {
-    width: 100%;
-    background-color: #fff;
-}
 
-/* ====== Scrollable Horizontal Menu ====== */
-.Categorylist {
-    width: 100%;
-    background-color: #fff;
-    border-bottom: 1px solid #ddd;
-    overflow-x: auto;                /* enable horizontal scroll */
-    overflow-y: hidden;              /* hide vertical scroll */
-    white-space: nowrap;             /* prevent wrapping */
-    scrollbar-width: thin;           /* thin scrollbar for Firefox */
-    -webkit-overflow-scrolling: touch; /* smooth scroll on mobile */
-}
+  .contentCategory {
+      width: 100%;
+      background-color: #fff;
+  }
 
-/* Hide scrollbar visually (optional but cleaner look) */
-.Categorylist::-webkit-scrollbar {
-    display: none;
-}
-.Categorylist {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;     /* Firefox */
-}
+  .horizontal-list {
+      display: flex;
+      gap: 5px;
+      /* spacing between items */
+      list-style: none;
+      /* remove default bullets */
+      padding: 0;
+      margin: 0;
 
-.horizontal-list {
-    display: inline-flex;       /* inline-flex keeps items in one row */
-    gap: 10px;
-    list-style: none;
-    padding: 5px 10px;
-    margin: 0;
-}
+      overflow-x: auto;
+      /* ✅ enables horizontal scroll */
+      white-space: nowrap;
+      /* ✅ prevents items from wrapping */
+      -webkit-overflow-scrolling: touch;
+      /* ✅ smooth scroll on mobile */
+  }
 
-.horizontal-list li {
-    display: inline-block;
-    flex-shrink: 0;             /* prevent shrinking */
-    padding: 8px 10px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    font-family: 'Montserrat';
-    font-size: 14px;
-    color: #A59999;
-}
+  .horizontal-list::-webkit-scrollbar {
+      height: 6px;
+      /* optional: smaller scrollbar */
+  }
 
-/* ====== Hover and Selected States ====== */
-li:hover {
-    background-color: #f0f0f0;
-}
+  .horizontal-list::-webkit-scrollbar-thumb {
+      background: #ccc;
+      border-radius: 4px;
+  }
 
-.selected {
-    background-color: #f0f0f0;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    color: #222222;
-    font-size: 15px;
-}
+  .horizontal-list li {
+      cursor: pointer;
+      padding: 5px;
+      transition: background 0.3s;
+      flex: 0 0 auto;
+      /* ✅ ensures items don’t shrink or wrap */
+  }
 
-.selectedGreen {
-    background-color: #EBFFEF;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    color: #222222;
-    font-size: 15px;
-}
+
+  .Categorylist {
+      width: 100%;
+      height: 90%;
+      background-color: #fff;
+      box-sizing: border-box;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      text-align: left;
+      font-size: 14px;
+      color: #a59999;
+      font-family: 'Montserrat';
+      overflow-y: auto;
+      scrollbar-width: none;
+      border-bottom: 1px solid #ddd;
+  }
+
+  li {
+      font-size: 16px;
+      padding: 8px 0;
+      font-family: 'Montserrat';
+      font-size: 14px;
+      color: #A59999;
+      transition: background-color 0.3s;
+  }
+
+  li:hover {
+      background-color: none;
+      background-color: #f0f0f0;
+  }
+
+  .selected {
+      background-color: none;
+      background-color: #f0f0f0;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      color: #222222;
+      font-size: 15px;
+  }
+
+  .selectedGreen {
+      background-color: none;
+      background-color: #EBFFEF;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      color: #222222;
+      font-size: 15px;
+  }
