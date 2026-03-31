@@ -182,6 +182,8 @@ import { DownloadbatchComponent } from './pages/SalaryReleaseNew/downloadbatch/d
 import { BatchcreationprocessComponent } from './pages/SalaryReleaseNew/batchcreationprocess/batchcreationprocess.component';
 import { SalaryReleaseProcessComponent } from './pages/SalaryReleaseNew/salary-release-process/salary-release-process.component';
 import { SalaryReleaseStatusComponent } from './pages/SalaryReleaseNew/salary-release-status/salary-release-status.component';
+import { BankInvoiceNavigationComponent } from './pages/BankInvoice/bank-invoice-navigation/bank-invoice-navigation.component';
+import { BankAdviceSplitCultureComponent } from './pages/BankInvoice/bank-advice-split-culture/bank-advice-split-culture.component';
 
 
 export const routes: Routes = [
@@ -496,6 +498,12 @@ export const routes: Routes = [
       {
         path: 'onboarding', component: OffercreationComponent,
 
+      },
+      {
+        path: 'bankinvoicenavigation', component: BankInvoiceNavigationComponent,
+        children: [
+          { path: 'bankadvicesplitculture', component: BankAdviceSplitCultureComponent }
+        ]
       },
       //   { path: 'UI', component: SopComponent },
       { path: '**', redirectTo: '/Home', pathMatch: 'full' }
