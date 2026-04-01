@@ -106,7 +106,9 @@
 
   </div>
 </div>
-
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>
 <div *ngIf="showPopup" class="overlay">
   <app-alertpopup [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
     (close)="showPopup=false">
