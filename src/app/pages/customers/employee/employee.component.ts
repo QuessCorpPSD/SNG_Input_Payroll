@@ -57,7 +57,7 @@ export class EmployeeComponent {
   UploadedResponse: any;
   UploadedResponseSalary: any;
   @ViewChild('paginator') paginator!: MatPaginator;
-  
+
   constructor(private dialog: MatDialog, @Inject(Pay_TOKEN) private service: IEmployeeservice, private decry: EncryptionService,
     private _sessionStoreage: SessionStorageService, private fb: FormBuilder) { }
 
@@ -118,7 +118,6 @@ export class EmployeeComponent {
     const empid = this.empid || 0;
     this.service.search(Companyid, empid).subscribe({
       next: (res) => {
-        this.isLoading = false;
         this.employeedata = res?.Data?.data?.Table0;
 
         if (!this.employeedata) {
@@ -126,12 +125,12 @@ export class EmployeeComponent {
           alert(res.Data.message)
         }
         if (this.employeedata && this.employeedata.length > 0) {
-          this.isLoading = false;
           this.dataSource = new MatTableDataSource(this.employeedata);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
           this.uploadDisplayedColumns = [
             'Action', 'SNo', 'EMPNO', 'EMPNAME', 'CompanyCode', 'DOB', 'Active', 'ORIHIREDDATE', 'SEX', 'Department', 'OCCUPATIONCODE'];
+          this.isLoading = false;
         } else {
           this.isLoading = false;
           this.dataSource.data = [];

@@ -1,1 +1,175 @@
-<p>bank-advice-split-culture works!</p>
+<div class="page-wrapper">
+
+    <div class="scrollable-content">
+
+        <div style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;">
+            Bank Advice Split Culture
+        </div>
+
+        <div class="container py-2">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Company Code/Name</label>
+                    <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+                </div>
+                
+                <div class="col-md-2 d-flex gap-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
+                        matTooltip="Search" (click)="onsearch()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+
+                    <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="Template" (click)="TemplateClick()">
+                        <mat-icon>download</mat-icon>
+                    </button>
+                    <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="import" style="display: none;">
+                        <mat-icon>cloud_upload</mat-icon>
+                    </button>
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="download" style="display: none;">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button> -->
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-add" matTooltip="Add"
+                        (click)="AddCompanyMasterOpen()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="table-wrapper1" style="padding-top: 10px;" *ngIf="showTable">
+            <div class="table-scroll">
+                <mat-table [dataSource]="dataSource" class="mat-elevation-z8 custom-table">
+
+                    <!--  Action -->
+                    <ng-container matColumnDef="Action">
+                        <mat-header-cell *matHeaderCellDef><strong>Action</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                            <div class="action-wrapper">
+                                <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                    matTooltip="View" (click)="EditCompanyMasterOpen(row)">
+                                    <mat-icon>visibility</mat-icon>
+                                </button>
+                                <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center" style="display: none;"
+                                    matTooltip="Delete" (click)="deleteCompany(row)">
+                                    <mat-icon>delete</mat-icon>
+                                </button> -->
+                            </div>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- 🔹 Sl.No -->
+                    <ng-container matColumnDef="slNo">
+                        <mat-header-cell *matHeaderCellDef class="sno"><strong>Sl.No</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="sno">{{ row.SNo }}</mat-cell>
+                    </ng-container>
+
+                    <!-- 🔹 Pay Code -->
+                    <ng-container matColumnDef="vendorCode">
+                        <mat-header-cell *matHeaderCellDef><strong>Vendor Code</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Company_Code }}</mat-cell>
+                    </ng-container>
+
+                    <!-- 🔹 Description -->
+                    <ng-container matColumnDef="companyName">
+                        <mat-header-cell *matHeaderCellDef class="description"><strong>Company
+                                Name</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="description">{{ row.Company_Name }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="companyCode">
+                        <mat-header-cell *matHeaderCellDef class="printas"><strong>Company
+                                Code</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="printas">{{ row.Auto_Company_code }}</mat-cell>
+                    </ng-container>
+
+                    <!-- 🔹 Pay Type -->
+                    <ng-container matColumnDef="inputDate">
+                        <mat-header-cell *matHeaderCellDef><strong>Input Date</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.input_date }}</mat-cell>
+                    </ng-container>
+
+                    <!-- 🔹 Taxable -->
+                    <ng-container matColumnDef="outputDate">
+                        <mat-header-cell *matHeaderCellDef><strong>Output Date</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.output_date }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="active">
+                        <mat-header-cell *matHeaderCellDef><strong>Active</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Active }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="segment">
+                        <mat-header-cell *matHeaderCellDef><strong>Segment</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Segment }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="subSegment">
+                        <mat-header-cell *matHeaderCellDef><strong>Sub Segment</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.SubSegment }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="businessUnitName">
+                        <mat-header-cell *matHeaderCellDef class="unitname"><strong>Business Unit
+                                Name</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="unitname">{{ row.Businessunit_Name }}</mat-cell>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="businessUnitLocation">
+                        <mat-header-cell *matHeaderCellDef class="unitlocation"><strong>Business Unit
+                                Location</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="unitlocation">{{ row.Businessunit_Location }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="sapCustomerCode">
+                        <mat-header-cell *matHeaderCellDef class="sapcode"><strong>Sap Customer
+                                Code</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="sapcode">{{ row.Sap_Customer_Code }}</mat-cell>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="profitCenterCode">
+                        <mat-header-cell *matHeaderCellDef><strong>Profit Center Code</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Profit_Center_Code }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="workingHours">
+                        <mat-header-cell *matHeaderCellDef><strong>Working Hours</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.WorkingHours }}</mat-cell>
+                    </ng-container>
+
+                    <!-- 🔹 Filter Header Row -->
+                    <ng-container matColumnDef="Actionfilter">
+                        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="slNoFilter">
+                        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    </ng-container>
+
+                    <!-- Header Rows -->
+                    <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+
+                    <!-- <mat-header-row *matHeaderRowDef="uploadFilteredColumns"></mat-header-row> -->
+
+
+                    <!-- Data Rows -->
+                    <mat-row *matRowDef="let row; columns: uploadDisplayedColumns"></mat-row>
+
+                </mat-table>
+            </div>
+
+            <div *ngIf="dataSource.data.length===0" class="text-center p-4">
+                <p class="text-muted">No data to display</p>
+            </div>
+            <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        </div>
+    </div>
+</div>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets\Loading.gif" alt="Loading...">
+</div>
+<app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+    (close)="showPopup = false">
+</app-alertpopup>

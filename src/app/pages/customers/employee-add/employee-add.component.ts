@@ -109,7 +109,7 @@ export class EmployeeAddComponent {
     if (!value) return null;
 
     return value
-      .replace('ve', '')  
+      .replace('ve', '')
       .replace('VE', '')
       .trim();
   }
@@ -123,8 +123,7 @@ export class EmployeeAddComponent {
     }
 
     this.selectedCompanyId = this.rowData.Company_Id;
-    console.log("row",this.rowData)
-        // Initialize the form
+    // Initialize the form
     this.employeeForm = this.fb.group({
       empid: [this.rowData.Employee_Code, Validators.required],
       CompanyCode: [this.rowData.Company_Code, Validators.required],
@@ -137,7 +136,7 @@ export class EmployeeAddComponent {
       gender: [this.rowData.Gender === true ? true : false, Validators.required],
       materialstatus: [this.rowData.Marital_Status, Validators.required],
       DOB: [this.rowData.Date_Of_Birth ? this.formatDate(this.rowData.Date_Of_Birth) : '', Validators.required],
-      disability: [this.rowData.Disability === true ? true : false, Validators.required],
+      disability: [this.rowData.Disability === 'True' ? true : false, Validators.required],
       Mapname: [this.rowData.Cost_Center_Mapping_Id || ''],
       DOJ: [this.rowData.Date_Of_Joining ? this.formatDate(this.rowData.Date_Of_Joining) : '', Validators.required],
       paycategory: [Number(this.rowData.Pay_Category_Id), Validators.required],
@@ -161,24 +160,24 @@ export class EmployeeAddComponent {
       PT: [this.rowData.PT || ''],
       ResignPayPeriod: [this.rowData.Resign_Period || ''],
       Contractexpirydate: [this.rowData.Contract_Expiry_Date ? this.formatDateTime(this.rowData.Contract_Expiry_Date) : ''],
-      Active: [this.rowData.EActive === true ? true : false, Validators.required],
+      Active: [this.rowData.EActive === 'True' ? true : false, Validators.required],
       Lastworkingdays: [this.rowData.Last_Working_Day ? this.formatDateTime(this.rowData.Last_Working_Day) : ''],
       groupname: [Number(this.rowData.Group_Detail_Id) || 0],
       Metrocity: [this.rowData.Is_Metro_City || ''],
       blacklisted: [this.rowData.is_black_listed === true ? true : false],
       ROL: [this.rowData.Reason_Of_Leaving || ''],
       Hiringstatus: [this.rowData.Hiring_Status || ''],
-      PF: [this.rowData.Is_PF_Applicable === true ? true : false, Validators.required || ''],
+      PF: [this.rowData.Is_PF_Applicable === 'True' ? true : false, Validators.required || ''],
       Reportmanager: [this.rowData.Report_Manager || ''],
       Deputeeid: [this.rowData.Deputee_Id || ''],
       ESI: [this.rowData.ESI_Number || ''],
       blank: [''],
       Reportheademail: [this.rowData.Reporting_Head_Email || ''],
       Rejoineedate: [this.rowData.Rejoining_Date ? this.formatDateTime(this.rowData.Rejoining_Date) : ''],
-      Insurance: [this.rowData.Is_Insurance_Applicable === true ? true : false],
+      Insurance: [this.rowData.Is_Insurance_Applicable === 'True' ? true : false],
       Businesshead: [this.rowData.Business_Head || ''],
       Rejoinmonth: [this.rowData.Rejoin_Month || ''],
-      stoppayment: [this.rowData.Stop_Payment === true ? true : false],
+      stoppayment: [this.rowData.Stop_Payment === 'True' ? true : false],
       axpertid: [this.rowData.Axpert_Id || ''],
       bloodgroup: [this.normalizeBloodGroup(this.rowData.Blood_Group) || ''],
       employmenttype: [this.rowData.EMPLOYMENT_TYPE || ''],
@@ -263,7 +262,6 @@ export class EmployeeAddComponent {
     this.service.GetBusinessunit().subscribe({
       next: (res) => {
         this.Businessunit = res.Data.data.Table0;
-      console.log('business',this.Businessunit)
       }
     });
   }
