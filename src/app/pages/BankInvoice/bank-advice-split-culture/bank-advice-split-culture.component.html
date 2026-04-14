@@ -1,18 +1,15 @@
 <div class="page-wrapper">
-
     <div class="scrollable-content">
-
         <div style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;">
             Bank Advice Split Culture
         </div>
-
         <div class="container py-2">
             <div class="row g-3 align-items-end">
                 <div class="col-md-3">
                     <label class="form-label text-muted small">Company Code/Name</label>
                     <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
                 </div>
-                
+
                 <div class="col-md-2 d-flex gap-2">
                     <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
                         matTooltip="Search" (click)="onsearch()">
@@ -23,6 +20,12 @@
                         matTooltip="Template" (click)="TemplateClick()">
                         <mat-icon>download</mat-icon>
                     </button>
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
+                        (click)="ImportClick(fileInput)" matTooltip="Upload">
+                        <mat-icon>cloud_upload</mat-icon>
+                    </button>
+                    <input type="file" #fileInput style="display:none;" (click)="fileInput.value=''"
+                        (change)="onFileChange($event)" accept=".xlsx,.xls" />
                     <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="import" style="display: none;">
                         <mat-icon>cloud_upload</mat-icon>
                     </button>
@@ -46,100 +49,59 @@
                         <mat-cell *matCellDef="let row">
                             <div class="action-wrapper">
                                 <button class="btn btn-sm d-flex align-items-center justify-content-center"
-                                    matTooltip="View" (click)="EditCompanyMasterOpen(row)">
-                                    <mat-icon>visibility</mat-icon>
+                                    matTooltip="Edit" (click)="EditCompanyMasterOpen(row)">
+                                    <mat-icon>edit</mat-icon>
                                 </button>
-                                <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center" style="display: none;"
-                                    matTooltip="Delete" (click)="deleteCompany(row)">
+                                <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                    matTooltip="Delete" (click)="confirmDelete(row)">
                                     <mat-icon>delete</mat-icon>
-                                </button> -->
+                                </button>
                             </div>
                         </mat-cell>
                     </ng-container>
 
-                    <!-- 🔹 Sl.No -->
-                    <ng-container matColumnDef="slNo">
+                    <ng-container matColumnDef="SNo">
                         <mat-header-cell *matHeaderCellDef class="sno"><strong>Sl.No</strong></mat-header-cell>
                         <mat-cell *matCellDef="let row" class="sno">{{ row.SNo }}</mat-cell>
                     </ng-container>
 
-                    <!-- 🔹 Pay Code -->
-                    <ng-container matColumnDef="vendorCode">
-                        <mat-header-cell *matHeaderCellDef><strong>Vendor Code</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row">{{ row.Company_Code }}</mat-cell>
+                    <ng-container matColumnDef="Company_Id">
+                        <mat-header-cell *matHeaderCellDef><strong>Company_Id</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Company_Id }}</mat-cell>
                     </ng-container>
 
-                    <!-- 🔹 Description -->
-                    <ng-container matColumnDef="companyName">
+                    <ng-container matColumnDef="Bank_Culture_Id">
+                        <mat-header-cell *matHeaderCellDef><strong>Bank_Culture_Id</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Bank_Culture_Id }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Company_Code">
                         <mat-header-cell *matHeaderCellDef class="description"><strong>Company
-                                Name</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row" class="description">{{ row.Company_Name }}</mat-cell>
-                    </ng-container>
-
-                    <ng-container matColumnDef="companyCode">
-                        <mat-header-cell *matHeaderCellDef class="printas"><strong>Company
                                 Code</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row" class="printas">{{ row.Auto_Company_code }}</mat-cell>
+                        <mat-cell *matCellDef="let row" class="description">{{ row.Company_Code }}</mat-cell>
                     </ng-container>
 
-                    <!-- 🔹 Pay Type -->
-                    <ng-container matColumnDef="inputDate">
-                        <mat-header-cell *matHeaderCellDef><strong>Input Date</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row">{{ row.input_date }}</mat-cell>
-                    </ng-container>
-
-                    <!-- 🔹 Taxable -->
-                    <ng-container matColumnDef="outputDate">
-                        <mat-header-cell *matHeaderCellDef><strong>Output Date</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row">{{ row.output_date }}</mat-cell>
-                    </ng-container>
-
-                    <ng-container matColumnDef="active">
-                        <mat-header-cell *matHeaderCellDef><strong>Active</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row">{{ row.Active }}</mat-cell>
-                    </ng-container>
-
-                    <ng-container matColumnDef="segment">
-                        <mat-header-cell *matHeaderCellDef><strong>Segment</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row">{{ row.Segment }}</mat-cell>
-                    </ng-container>
-
-                    <ng-container matColumnDef="subSegment">
-                        <mat-header-cell *matHeaderCellDef><strong>Sub Segment</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row">{{ row.SubSegment }}</mat-cell>
-                    </ng-container>
-
-                    <ng-container matColumnDef="businessUnitName">
-                        <mat-header-cell *matHeaderCellDef class="unitname"><strong>Business Unit
+                    <ng-container matColumnDef="Client_Name">
+                        <mat-header-cell *matHeaderCellDef class="printas"><strong>Client
                                 Name</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row" class="unitname">{{ row.Businessunit_Name }}</mat-cell>
+                        <mat-cell *matCellDef="let row" class="printas">{{ row.Client_Name }}</mat-cell>
                     </ng-container>
 
-
-                    <ng-container matColumnDef="businessUnitLocation">
-                        <mat-header-cell *matHeaderCellDef class="unitlocation"><strong>Business Unit
-                                Location</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row" class="unitlocation">{{ row.Businessunit_Location }}</mat-cell>
+                    <ng-container matColumnDef="City_Name">
+                        <mat-header-cell *matHeaderCellDef><strong>City Name</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.City_Name }}</mat-cell>
                     </ng-container>
 
-                    <ng-container matColumnDef="sapCustomerCode">
-                        <mat-header-cell *matHeaderCellDef class="sapcode"><strong>Sap Customer
-                                Code</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row" class="sapcode">{{ row.Sap_Customer_Code }}</mat-cell>
+                    <ng-container matColumnDef="Map_Name">
+                        <mat-header-cell *matHeaderCellDef><strong>Map Name</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Map_Name }}</mat-cell>
                     </ng-container>
 
-
-                    <ng-container matColumnDef="profitCenterCode">
-                        <mat-header-cell *matHeaderCellDef><strong>Profit Center Code</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row">{{ row.Profit_Center_Code }}</mat-cell>
+                    <ng-container matColumnDef="Culture_Type_Text">
+                        <mat-header-cell *matHeaderCellDef><strong>Culture Type</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Culture_Type_Text }}</mat-cell>
                     </ng-container>
 
-                    <ng-container matColumnDef="workingHours">
-                        <mat-header-cell *matHeaderCellDef><strong>Working Hours</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row">{{ row.WorkingHours }}</mat-cell>
-                    </ng-container>
-
-                    <!-- 🔹 Filter Header Row -->
                     <ng-container matColumnDef="Actionfilter">
                         <mat-header-cell *matHeaderCellDef></mat-header-cell>
                     </ng-container>
@@ -173,3 +135,190 @@
 <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
     (close)="showPopup = false">
 </app-alertpopup>
+<div class="popup-overlay" *ngIf="addpopup" (click)="addpopup=false">
+    <div class="popup-container" (click)="$event.stopPropagation()">
+        <div class="popup">
+            <!-- HEADER (FIXED) -->
+            <div class="popup-header">
+                <div>
+                    <div class="header-title">Add</div>
+                    <div class="header-subtitle">
+                        Bank Advice Split Culture
+                    </div>
+                </div>
+                <button class="close-btn" (click)="closePopup()">✖</button>
+            </div>
+            <div class="popup-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Company Code/Name</label>
+                        <companyall (companyEmit)="handleCompanyEventPopup($event)"></companyall>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Split Type</label>
+                        <mat-form-field class="w-100 custom-height rounded-1" appearance="outline"
+                            style="background-color: white;height:30px;">
+                            <input style="color: #222;font-family: Montserrat; font-size: 12px; font-weight: 500;"
+                                type="text" matInput placeholder="Select Split Type" [matAutocomplete]="auto" />
+                            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn"
+                                (optionSelected)="onOptionSelected($event.option.value)">
+                                <mat-option style="font-size: 11px;line-height: 20px;"
+                                    *ngFor="let option of filteredOptions$ | async" [value]="option">
+                                    {{ option.displayName }}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row" style="padding-top: 1%;">
+                    <div class="col-md-12">
+                        <table mat-table [dataSource]="popupDataSource" class="custom-table mat-elevation-z8">
+                            <ng-container matColumnDef="Action" class="sno">
+                                <mat-header-cell *matHeaderCellDef>
+                                </mat-header-cell>
+                                <mat-cell *matCellDef="let element">
+                                    <mat-checkbox>
+                                        <mat-checkbox (change)="selection.toggle(element)"
+                                            [checked]="selection.isSelected(element)">
+                                        </mat-checkbox>
+                                    </mat-checkbox>
+                                </mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="Map_Name_Id">
+                                <mat-header-cell *matHeaderCellDef>
+                                    <div class="cell-center">Map_Name_Id</div>
+                                </mat-header-cell>
+                                <mat-cell *matCellDef="let element">
+                                    <div class="cell-center">{{ element.Map_Name_Id }}</div>
+                                </mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="Map_Name">
+                                <mat-header-cell *matHeaderCellDef>
+                                    <div class="cell-center">Map Name</div>
+                                </mat-header-cell>
+                                <mat-cell *matCellDef="let element">
+                                    <div class="cell-center-wrap-normal">
+                                        {{ element.Map_Name }}
+                                    </div>
+                                </mat-cell>
+                            </ng-container>
+                            <mat-header-row *matHeaderRowDef="popupDisplayedColumns"></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: popupDisplayedColumns;"></mat-row>
+                        </table>
+                        <mat-paginator #addPaginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
+                            showFirstLastButtons>
+                        </mat-paginator>
+                    </div>
+                </div>
+            </div>
+            <div class="popup-footer">
+                <button class="py-1" (click)="onSave()"
+                    style="display: inline-block; width: 130px; height: 30px; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background:#302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 20px; display: inline-flex; border: none;">
+                    <div
+                        style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
+                        Save</div>
+                </button>
+                <button class="py-1" (click)="closePopup()"
+                    style="display: inline-block; width: 130px; height: 30px; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background:#FFFFFF; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
+                    <div
+                        style="color: var(--background, #302CB3); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
+                        Cancel</div>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="popup-overlay" *ngIf="editPopup" (click)="editPopup=false">
+    <div class="popup-container" (click)="$event.stopPropagation()">
+        <div class="popup">
+            <!-- HEADER (FIXED) -->
+            <div class="popup-header">
+                <div>
+                    <div class="header-title">Edit</div>
+                    <div class="header-subtitle">
+                        Bank Advice Split Culture
+                    </div>
+                </div>
+                <button class="close-btn" (click)="closeEditPopup()">✖</button>
+            </div>
+            <div class="popup-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Company Code/Name</label>
+                        <input type="text" class="form-control" [value]="selectedCompanyDisplay" readonly
+                            style="height:30px;" />
+
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Split Type</label>
+
+                        <mat-form-field class="w-100 custom-height rounded-1" appearance="outline"
+                            style="background-color: white;height:30px;">
+                            <input matInput placeholder="Select Split Type" [matAutocomplete]="auto"
+                                [(ngModel)]="selectedSplitTypeEdit" />
+                            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn"
+                                (optionSelected)="onOptionEditSelected($event.option.value)">
+                                <mat-option *ngFor="let option of filteredOptions$ | async" [value]="option">
+                                    {{ option.displayName }}
+                                </mat-option>
+                            </mat-autocomplete>
+
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row" style="padding-top: 1%;">
+                    <div class="col-md-12">
+                        <table mat-table [dataSource]="popupEditDataSource" class="custom-table mat-elevation-z8">
+                            <ng-container matColumnDef="Action" class="sno">
+                                <mat-header-cell *matHeaderCellDef>
+                                </mat-header-cell>
+                                <mat-cell *matCellDef="let element">
+                                    <mat-checkbox (change)="selectionEdit.toggle(element)"
+                                        [checked]="selectionEdit.isSelected(element)">
+                                    </mat-checkbox>
+                                </mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="Map_Name_Id">
+                                <mat-header-cell *matHeaderCellDef>
+                                    <div class="cell-center">Map_Name_Id</div>
+                                </mat-header-cell>
+                                <mat-cell *matCellDef="let element">
+                                    <div class="cell-center">{{ element.Map_Name_Id }}</div>
+                                </mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="Map_Name">
+                                <mat-header-cell *matHeaderCellDef>
+                                    <div class="cell-center">Map Name</div>
+                                </mat-header-cell>
+                                <mat-cell *matCellDef="let element">
+                                    <div class="cell-center-wrap-normal">
+                                        {{ element.Map_Name }}
+                                    </div>
+                                </mat-cell>
+                            </ng-container>
+                            <mat-header-row *matHeaderRowDef="popupDisplayedColumns"></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: popupDisplayedColumns;"></mat-row>
+                        </table>
+                        <mat-paginator #editPaginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
+                            showFirstLastButtons>
+                        </mat-paginator>
+                    </div>
+                </div>
+            </div>
+            <div class="popup-footer">
+                <button class="py-1" (click)="onUpdate()"
+                    style="display: inline-block; width: 130px; height: 30px; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background:#302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 20px; display: inline-flex; border: none;">
+                    <div
+                        style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
+                        Update</div>
+                </button>
+                <button class="py-1" (click)="closeEditPopup()"
+                    style="display: inline-block; width: 130px; height: 30px; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background:#FFFFFF; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
+                    <div
+                        style="color: var(--background, #302CB3); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
+                        Cancel</div>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
