@@ -268,3 +268,28 @@
       transform: translate(-50%, -50%);
       z-index: 1000;
   }
+
+  .btn-search {
+      background-color: #0d6efd;
+      color: #fff;
+  }
+
+  .btn-add {
+      background-color: #28a745;
+      color: #fff;
+  }
+
+  .btn-edit {
+      background-color: #fd7e14;
+      color: #fff;
+  }
+
+  .btn-upload {
+      background-color: #6f42c1;
+      color: #fff;
+  }
+
+  .btn-download {
+      background-color: #20c997;
+      color: #fff;
+  }
