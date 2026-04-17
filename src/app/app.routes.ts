@@ -184,6 +184,7 @@ import { SalaryReleaseProcessComponent } from './pages/SalaryReleaseNew/salary-r
 import { SalaryReleaseStatusComponent } from './pages/SalaryReleaseNew/salary-release-status/salary-release-status.component';
 import { BankInvoiceNavigationComponent } from './pages/BankInvoice/bank-invoice-navigation/bank-invoice-navigation.component';
 import { BankAdviceSplitCultureComponent } from './pages/BankInvoice/bank-advice-split-culture/bank-advice-split-culture.component';
+import { MulticommercialComponent } from './pages/GlobalMasters/multicommercial/multicommercial.component';
 
 
 export const routes: Routes = [
@@ -365,6 +366,7 @@ export const routes: Routes = [
           { path: "employee", component: EmployeeComponent },
           { path: "cancelledinvoicerepository", component: CancelledinvoicerepositoryComponent },
           { path: "Company", component: CompanyComponent },
+          { path: "multicommercial", component: MulticommercialComponent },
 
         ]
       },

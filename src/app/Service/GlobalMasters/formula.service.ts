@@ -38,7 +38,33 @@ export class FormualService implements IFormulaRepository {
   }
   PaycodeSearch(payload: any): Observable<APIResponse> {
     return this.http.post<APIResponse>(
-      this.env.apiUrl + 'Paycode/Search' , payload,
+      this.env.apiUrl + 'Paycode/Search', payload,
+    );
+  }
+
+  MultiCommercialPaycodes(): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      this.env.apiUrl + 'Common/GetMultiCommercialPaycodes',
+    );
+  }
+
+  CreateMCFormula(payload: any): Observable<APIResponse> {
+    console.log('Payload', payload);
+    return this.http.post<APIResponse>(
+      this.env.apiUrl + 'Formula/CreateMC',
+      payload
+    );
+  }
+
+  PayrollType(): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      this.env.apiUrl + 'Formula/GetPayrollType/',
+    );
+  }
+
+  GetMCFormulaSearch(): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      this.env.apiUrl + 'Formula/MCSearch',
     );
   }
 

@@ -1,0 +1,118 @@
+<div class="page-wrapper" style="padding-top: 2%;">
+    <div class="scrollable-content">
+
+        <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;">
+            Multi Commercial Formula
+        </mat-card-title>
+
+        <div class="container py-2">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3 small-input">
+                    <input class="form-control form-control-sm" [(ngModel)]="formulaname" (input)="applyFilter()"
+                        placeholder="search" />
+                </div>
+                <div class="col-md-3 d-flex gap-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
+                        matTooltip="Search" (click)="Search()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-secondary"
+                        matTooltip="Export to Excel" (click)="exportToExcel()">
+                        <mat-icon>download</mat-icon>
+                    </button>
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-success"
+                        matTooltip="Add" (click)="AddPOOpen()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="table-wrapper1" style="min-width: 960px;" *ngIf="showTable">
+            <div class="table-scroll">
+
+                <mat-table [dataSource]="uploadedDataSource" matSort
+                    class="custom-table mat-elevation-z8 auto-fit-table">
+
+                    <ng-container matColumnDef="Action">
+                        <mat-header-cell *matHeaderCellDef class="Action"><strong>Action</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="Action">
+                            <div class="header">
+                                <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                    matTooltip="Delete" (click)="deleteFormula(row)">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                                <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                    matTooltip="Edit" (click)="openEdit(row)">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                            </div>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="SI No">
+                        <mat-header-cell *matHeaderCellDef class="SNo"><strong>SI No</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="SNo">{{ row.SNo }}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="Formula_Id" style="display: none;">
+                        <mat-header-cell *matHeaderCellDef><strong>Formula_Id</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Formula_Id }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Company Code">
+                        <mat-header-cell *matHeaderCellDef><strong>Company Code</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Company_Code }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Pay Category">
+                        <mat-header-cell *matHeaderCellDef><strong>Pay Category</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Paycateory}}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Description">
+                        <mat-header-cell *matHeaderCellDef><strong>Description</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Formula_Name }}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="Formula">
+                        <mat-header-cell *matHeaderCellDef><strong>Formula</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Formula }}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="Formula Name">
+                        <mat-header-cell *matHeaderCellDef><strong>Formula Name</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Formula_Name }}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="PayrollType">
+                        <mat-header-cell *matHeaderCellDef><strong>Payroll Type</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.PayrollType }}</mat-cell>
+                    </ng-container>
+
+                    <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: uploadDisplayedColumns;"></mat-row>
+
+                </mat-table>
+
+                <div *ngIf="uploadedDataSource.data.length===0" class="text-center p-4">
+                    <p class="text-muted">No data to display</p>
+                </div>
+
+            </div>
+
+            <mat-paginator [length]="uploadedDataSource.data.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
+                showFirstLastButtons aria-label="select page">
+            </mat-paginator>
+
+        </div>
+
+    </div>
+</div>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>
+
+
+<app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+    (close)="closePopup()">
+</app-alertpopup>
