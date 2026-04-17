@@ -3,7 +3,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { data } from 'jquery';
 import { MatDialog } from '@angular/material/dialog';
 import { A11yModule } from "@angular/cdk/a11y";
 import { FormControl, FormGroup, FormsModule } from '@angular/forms';
