@@ -127,4 +127,9 @@ export class CommonService implements ICommonService {
     return this.http.get<APIResponse>(this.environment.apiUrl + "Common/GetPaycodes")
   }
 
+  GetPayperiodbyCompanySalaryRelease(companyId: any): Observable<APIResponse> {
+    const url = `${this.environment.apiUrl}Common/GetSalaryReleasePayperiod/${companyId}/SalaryRelease`;
+    return this.http.get<APIResponse>(url);
+  }
+
 }

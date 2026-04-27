@@ -1012,6 +1012,10 @@ export class HoldRequestComponent implements OnInit {
       return;
     }
     fileInput.value = '';
+    this.selection.clear();
+    this.selectionSalary.clear();
+    this.selectionPartial.clear();
+    this.selectionDBT.clear();
     this.dataSource.data = [];
     this.dataSourceSalary.data = [];
     this.dataSourcePartial.data = [];

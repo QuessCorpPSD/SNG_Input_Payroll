@@ -314,7 +314,8 @@ export const routes: Routes = [
           { path: 'Yearlypayout', component: YearlyPayoutComponent },
           { path: 'SalaryReleaseProcess', component: SalaryReleaseProcessComponent },
           { path: 'SalaryReleaseStatus', component: SalaryReleaseStatusComponent },
-          { path: 'SalaryReleaseApproval', component: SalaryReleaseApproveComponent }
+          { path: 'SalaryReleaseApproval', component: SalaryReleaseApproveComponent },
+          { path: 'bankadvicesplitculture', component: BankAdviceSplitCultureComponent }
         ]
       },
       {
@@ -501,12 +502,12 @@ export const routes: Routes = [
         path: 'onboarding', component: OffercreationComponent,
 
       },
-      {
-        path: 'bankinvoicenavigation', component: BankInvoiceNavigationComponent,
-        children: [
-          { path: 'bankadvicesplitculture', component: BankAdviceSplitCultureComponent }
-        ]
-      },
+      // {
+      //   path: 'bankinvoicenavigation', component: BankInvoiceNavigationComponent,
+      //   children: [
+      //     { path: 'bankadvicesplitculture', component: BankAdviceSplitCultureComponent }
+      //   ]
+      // },
       //   { path: 'UI', component: SopComponent },
       { path: '**', redirectTo: '/Home', pathMatch: 'full' }
 

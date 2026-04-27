@@ -76,7 +76,7 @@ export class SalaryReleaseComponent implements OnInit {
 
   TEMPLATE_HEADERS: Record<string, string[]> = {
     Release: [
-      'Company_Code','Employee_Code','PayPeriod','InvNo','SalaryType','ProvisionalInvoiceNumber'
+      'Company_Code', 'Employee_Code', 'PayPeriod', 'InvNo', 'SalaryType', 'ProvisionalInvoiceNumber'
     ]
   };
 
@@ -301,10 +301,10 @@ export class SalaryReleaseComponent implements OnInit {
       QZoneUserName: String(this.userdetail.user_Id),
       HoldReleaseList: rows.map(r => ({
         Company_Code: String(this.data.companyCode),
-        Employee_Code: String(r.Invoice_No),
+        Employee_Code: String(r.Employee_Code),
         PayPeriod: String(this.data.payPeriod),
         InvNo: String(r.Invoice_No),
-        SalaryType: String(r.Invoice_No),
+        SalaryType: String(r.SalaryType),
         ProvisionalInvoiceNumber: ""
       }))
     };
@@ -323,6 +323,8 @@ export class SalaryReleaseComponent implements OnInit {
         );
 
         if (isSuccess) {
+          this.selection.clear();
+          this.dataSource.data = [];
           this.showPopup = true;
           this.popupMessage = validations[0];
           return;
@@ -364,6 +366,8 @@ export class SalaryReleaseComponent implements OnInit {
         );
 
         if (isSuccess) {
+          this.selectionImport.clear();
+          this.dataSourceImport.data = [];
           this.showPopup = true;
           this.popupMessage = validations[0];
           return;
@@ -433,59 +437,61 @@ export class SalaryReleaseComponent implements OnInit {
     fileInput.value = '';
     this.dataSource.data = [];
     this.dataSourceImport.data = [];
+    this.selection.clear();
+    this.selectionImport.clear();
     fileInput.click();
   }
 
   onExportClick() {
-  
-      this.isLoading = true;
-  
-      var Company_Id = this.data.companyId;
-      var Pay_Period_Id = this.data.payPeriodId;
-      var Flag = "HoldList";
-      var InvoiceNo = this.data.invoiceNo;
-      var QZoneUserName = this.userdetail.user_Id;
-  
-      this.releaseservice.SearchAllReleaseRequest(Company_Id, Pay_Period_Id, Flag,
-        InvoiceNo, QZoneUserName).pipe(
-          finalize(() => {
-            this.isLoading = false;   // always runs
-          })
-        ).subscribe({
-          next: res => {
-            const tableData = res?.Data?.data?.Table0 || [];
-  
-            if (tableData.length === 0) {
-              alert('No data available to export');
-              return;
-            }
-  
-            const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(tableData);
-  
-            const workbook: XLSX.WorkBook = {
-              Sheets: { 'Salary Release': worksheet },
-              SheetNames: ['Salary Release']
-            };
-  
-            const excelBuffer: any = XLSX.write(workbook, {
-              bookType: 'xlsx',
-              type: 'array'
-            });
-  
-            const data: Blob = new Blob([excelBuffer], {
-              type:
-                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
-            });
-            const dateTime = this.getDateTime();
-  
-            FileSaver.saveAs(data, `Salary_Release_${dateTime}.xlsx`);
-          },
-          error: err => {
-            console.error('Error fetching data:', err.message);
-            this.isLoading = false;
+
+    this.isLoading = true;
+
+    var Company_Id = this.data.companyId;
+    var Pay_Period_Id = this.data.payPeriodId;
+    var Flag = "HoldList";
+    var InvoiceNo = this.data.invoiceNo;
+    var QZoneUserName = this.userdetail.user_Id;
+
+    this.releaseservice.SearchAllReleaseRequest(Company_Id, Pay_Period_Id, Flag,
+      InvoiceNo, QZoneUserName).pipe(
+        finalize(() => {
+          this.isLoading = false;   // always runs
+        })
+      ).subscribe({
+        next: res => {
+          const tableData = res?.Data?.data?.Table0 || [];
+
+          if (tableData.length === 0) {
+            alert('No data available to export');
+            return;
           }
-        });
-    }
+
+          const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(tableData);
+
+          const workbook: XLSX.WorkBook = {
+            Sheets: { 'Salary Release': worksheet },
+            SheetNames: ['Salary Release']
+          };
+
+          const excelBuffer: any = XLSX.write(workbook, {
+            bookType: 'xlsx',
+            type: 'array'
+          });
+
+          const data: Blob = new Blob([excelBuffer], {
+            type:
+              'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
+          });
+          const dateTime = this.getDateTime();
+
+          FileSaver.saveAs(data, `Salary_Release_${dateTime}.xlsx`);
+        },
+        error: err => {
+          console.error('Error fetching data:', err.message);
+          this.isLoading = false;
+        }
+      });
+  }
 
   onDecimalInput(event: any) {
     let value = event.target.value;

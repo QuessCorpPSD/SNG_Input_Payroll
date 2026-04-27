@@ -157,7 +157,7 @@ export class PayregisteruploadComponent {
 
         const sheetNameMap: any = {
           Table0: 'PayRegister',
-          Table1: 'Investment',
+          Table1: 'PayRegister',
           Table2: 'HRA',
           Table3: 'LTA',
           Table4: 'IncomeLossOnHouseProperty',

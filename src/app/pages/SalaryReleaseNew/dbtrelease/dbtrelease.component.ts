@@ -19,7 +19,6 @@ import { AlertpopupComponent } from '../../../common/alertpopup/alertpopup.compo
 import { saveAs } from 'file-saver';
 import { IReleaseRequest } from '../../../Repository/SalaryRequestNew/IReleaseRequest';
 import { ReleaseRequestService } from '../../../Service/SalaryRequestNew/ReleaseRequest.service';
-import { PayrollinputComponent } from '../../PayrollInput/payrollinput.component';
 import { ReleaseImportGrid } from '../../../Models/SalaryRelease/ReleaseImportGrid';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DBTReleaseGrid } from '../../../Models/SalaryRelease/DBTRelease';
@@ -32,7 +31,7 @@ import { DBTReleaseImportGrid } from '../../../Models/SalaryRelease/DBTReleaseIm
   standalone: true,
   imports: [CommonModule, MatTableModule, MatCheckboxModule, MatPaginatorModule, MatSort,
     MatSelectModule, MatInputModule, MatFormFieldModule, ReactiveFormsModule, FormsModule,
-    AlertpopupComponent, PayrollinputComponent],
+    AlertpopupComponent],
   templateUrl: './dbtrelease.component.html',
   styleUrl: './dbtrelease.component.css',
   providers: [
@@ -321,6 +320,10 @@ export class DBTReleaseComponent implements OnInit {
         );
 
         if (isSuccess) {
+          this.selection.clear();
+          this.selectionImport.clear();
+          this.dataSource.data = [];
+          this.dataSourceImport.data = [];
           this.showPopup = true;
           this.popupMessage = validations[0];
           return;
@@ -360,6 +363,10 @@ export class DBTReleaseComponent implements OnInit {
         );
 
         if (isSuccess) {
+          this.selection.clear();
+          this.selectionImport.clear();
+          this.dataSource.data = [];
+          this.dataSourceImport.data = [];
           this.showPopup = true;
           this.popupMessage = validations[0];
           return;
@@ -429,59 +436,61 @@ export class DBTReleaseComponent implements OnInit {
     fileInput.value = '';
     this.dataSource.data = [];
     this.dataSourceImport.data = [];
+    this.selection.clear();
+    this.selectionImport.clear();
     fileInput.click();
   }
 
   onExportClick() {
-  
-      this.isLoading = true;
-  
-      var Company_Id = this.data.companyId;
-      var Pay_Period_Id = this.data.payPeriodId;
-      var Flag = "DBTHoldList";
-      var InvoiceNo = this.data.invoiceNo;
-      var QZoneUserName = this.userdetail.user_Id;
-  
-      this.releaseservice.SearchAllReleaseRequest(Company_Id, Pay_Period_Id, Flag,
-        InvoiceNo, QZoneUserName).pipe(
-          finalize(() => {
-            this.isLoading = false;   // always runs
-          })
-        ).subscribe({
-          next: res => {
-            const tableData = res?.Data?.data?.Table0 || [];
-  
-            if (tableData.length === 0) {
-              alert('No data available to export');
-              return;
-            }
-  
-            const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(tableData);
-  
-            const workbook: XLSX.WorkBook = {
-              Sheets: { 'DBT Release': worksheet },
-              SheetNames: ['DBT Release']
-            };
-  
-            const excelBuffer: any = XLSX.write(workbook, {
-              bookType: 'xlsx',
-              type: 'array'
-            });
-  
-            const data: Blob = new Blob([excelBuffer], {
-              type:
-                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
-            });
-            const dateTime = this.getDateTime();
-  
-            FileSaver.saveAs(data, `DBT_Release_${dateTime}.xlsx`);
-          },
-          error: err => {
-            console.error('Error fetching data:', err.message);
-            this.isLoading = false;
+
+    this.isLoading = true;
+
+    var Company_Id = this.data.companyId;
+    var Pay_Period_Id = this.data.payPeriodId;
+    var Flag = "DBTHoldList";
+    var InvoiceNo = this.data.invoiceNo;
+    var QZoneUserName = this.userdetail.user_Id;
+
+    this.releaseservice.SearchAllReleaseRequest(Company_Id, Pay_Period_Id, Flag,
+      InvoiceNo, QZoneUserName).pipe(
+        finalize(() => {
+          this.isLoading = false;   // always runs
+        })
+      ).subscribe({
+        next: res => {
+          const tableData = res?.Data?.data?.Table0 || [];
+
+          if (tableData.length === 0) {
+            alert('No data available to export');
+            return;
           }
-        });
-    }
+
+          const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(tableData);
+
+          const workbook: XLSX.WorkBook = {
+            Sheets: { 'DBT Release': worksheet },
+            SheetNames: ['DBT Release']
+          };
+
+          const excelBuffer: any = XLSX.write(workbook, {
+            bookType: 'xlsx',
+            type: 'array'
+          });
+
+          const data: Blob = new Blob([excelBuffer], {
+            type:
+              'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
+          });
+          const dateTime = this.getDateTime();
+
+          FileSaver.saveAs(data, `DBT_Release_${dateTime}.xlsx`);
+        },
+        error: err => {
+          console.error('Error fetching data:', err.message);
+          this.isLoading = false;
+        }
+      });
+  }
 
   onDecimalInput(event: any) {
     let value = event.target.value;
@@ -562,7 +571,7 @@ export class DBTReleaseComponent implements OnInit {
     downloadLink.click();
   }
 
-  
+
   getDateTime(): string {
     const now = new Date();
 

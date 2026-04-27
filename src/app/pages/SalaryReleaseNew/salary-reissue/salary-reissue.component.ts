@@ -19,7 +19,6 @@ import { AlertpopupComponent } from '../../../common/alertpopup/alertpopup.compo
 import { saveAs } from 'file-saver';
 import { IReleaseRequest } from '../../../Repository/SalaryRequestNew/IReleaseRequest';
 import { ReleaseRequestService } from '../../../Service/SalaryRequestNew/ReleaseRequest.service';
-import { PayrollinputComponent } from '../../PayrollInput/payrollinput.component';
 import { ReleaseImportGrid } from '../../../Models/SalaryRelease/ReleaseImportGrid';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SalaryReissueGrid } from '../../../Models/SalaryRelease/SalaryReissue';
@@ -31,7 +30,7 @@ import { SalaryReissueGrid } from '../../../Models/SalaryRelease/SalaryReissue';
   standalone: true,
   imports: [CommonModule, MatTableModule, MatCheckboxModule, MatPaginatorModule, MatSort,
     MatSelectModule, MatInputModule, MatFormFieldModule, ReactiveFormsModule, FormsModule,
-    AlertpopupComponent, PayrollinputComponent],
+    AlertpopupComponent],
   templateUrl: './salary-reissue.component.html',
   styleUrl: './salary-reissue.component.css',
   providers: [
@@ -59,8 +58,8 @@ export class SalaryReissueComponent implements OnInit {
 
   displayedColumns: string[] = [
     'select', 'Invoice_No', 'SalaryType', 'Employee_Code', 'Employee_Name',
-    'Bank_Account_Number', 'Bank_Name', 'IFSC_Code', 'Net_Pay', 'Ekyc_Status', 
-    'Rejected_Bank_Name', 'Rejected_IFSC_Code','Rejected_Account_No'
+    'Bank_Account_Number', 'Bank_Name', 'IFSC_Code', 'Net_Pay', 'Ekyc_Status',
+    'Rejected_Bank_Name', 'Rejected_IFSC_Code', 'Rejected_Account_No'
   ];
 
   displayedColumnsImport: string[] = [
@@ -285,7 +284,7 @@ export class SalaryReissueComponent implements OnInit {
   moveClick(): void {
 
     this.isAnyFilteredRowSelected() //||
-      //this.isAnyFilteredRowSelectedImport()
+    //this.isAnyFilteredRowSelectedImport()
 
     if (this.selection.hasValue()) {
       this.callAllSalaryApi(this.selection.selected);
@@ -325,6 +324,8 @@ export class SalaryReissueComponent implements OnInit {
         );
 
         if (isSuccess) {
+          this.selection.clear();
+          this.dataSource.data = [];
           this.showPopup = true;
           this.popupMessage = validations[0];
           return;

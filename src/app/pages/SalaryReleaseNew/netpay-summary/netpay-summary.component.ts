@@ -153,7 +153,7 @@ export class NetpaySummaryComponent implements OnInit {
       "userName": this.userdetail.userName,
     };
 
-    this.payPeriodTypefromParent = "All";
+    this.payPeriodTypefromParent = "SalaryRelease";
 
   }
 
@@ -231,7 +231,7 @@ export class NetpaySummaryComponent implements OnInit {
           return;
         }
 
-         const tableData = res.Data.data.Table0;
+        const tableData = res.Data.data.Table0;
 
         if (!tableData.length) {
           alert('No data found');
@@ -305,7 +305,7 @@ export class NetpaySummaryComponent implements OnInit {
           return;
         }
 
-        
+
         const jsonData = XLSX.utils.sheet_to_json<any>(sheet, { defval: '' });
         if (!this.hasAtLeastOneValidRow(jsonData)) {
           alert('The uploaded Excel file contains no data rows.');
@@ -407,7 +407,7 @@ export class NetpaySummaryComponent implements OnInit {
         );
 
         if (isSuccess) {
-         this.selectionImport.clear();
+          this.selectionImport.clear();
           this.dataSourceImport.data = [];
           this.showPopup = true;
           this.popupMessage = validations[0];
@@ -478,6 +478,8 @@ export class NetpaySummaryComponent implements OnInit {
     fileInput.value = '';
     this.dataSource.data = [];
     this.dataSourceImport.data = [];
+    this.selection.clear();
+    this.selectionImport.clear();
     fileInput.click();
   }
 

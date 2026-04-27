@@ -305,7 +305,7 @@ export class PartialReleaseComponent implements OnInit {
       QZoneUserName: String(this.userdetail.user_Id),
       PartialReleaseList: rows.map(r => ({
         InvoiceNumber: String(r.Invoice_No),
-        EmployeeCode: String(r.EmployeeCode),
+        EmployeeCode: String(r.callAllSalaryApi),
         PartialReleaseAmount: String(r.Partial_Hold_Amount),
         SalaryType: String(r.SalaryType)
       }))
@@ -325,6 +325,8 @@ export class PartialReleaseComponent implements OnInit {
         );
 
         if (isSuccess) {
+          this.selection.clear();
+          this.dataSource.data = [];
           this.showPopup = true;
           this.popupMessage = validations[0];
           return;
@@ -363,6 +365,8 @@ export class PartialReleaseComponent implements OnInit {
         );
 
         if (isSuccess) {
+          this.selectionImport.clear();
+          this.dataSourceImport.data = [];
           this.showPopup = true;
           this.popupMessage = validations[0];
           return;
@@ -432,6 +436,8 @@ export class PartialReleaseComponent implements OnInit {
     fileInput.value = '';
     this.dataSource.data = [];
     this.dataSourceImport.data = [];
+    this.selection.clear();
+    this.selectionImport.clear();
     fileInput.click();
   }
 
