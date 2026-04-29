@@ -106,6 +106,7 @@ export class AddservicechargemasterComponent {
   serviceFeeTypes: any;
   selectedService: any;
   supplementaryTypes: any;
+  sourcingTypes: any;
   userdetail: any;
   mapnameUI: any;
   mapNameList: any[] = [];
@@ -124,6 +125,7 @@ export class AddservicechargemasterComponent {
   // MAIN SECTION VISIBILITIES
   showServiceFeeSection = false;
   showSupplementSection = false;
+  showSourcingSection = false;
 
   // SERVICE FEE SUB SECTIONS
   showFixed = false;
@@ -141,7 +143,8 @@ export class AddservicechargemasterComponent {
   selectedCompanyCode?: string;
   selectedSupplementary: any;
   invoiceForm!: FormGroup;
-  percentageForm!: FormGroup
+  percentageForm!: FormGroup;
+  SourcingForm!: FormGroup;
   showErrors = false;
   suppPerForm!: FormGroup;
   billRateForm!: FormGroup;
@@ -198,6 +201,7 @@ export class AddservicechargemasterComponent {
       x => x.Service_Charge_Master_Id == this.selectedMasterId
     );
 
+    console.log(selected)
     if (!selected) return;
 
     const name = selected.Service_Charge_Master_Name.toLowerCase();
@@ -209,6 +213,25 @@ export class AddservicechargemasterComponent {
     else if (name === "supplementary fee") {
       this.showSupplementSection = true;
       this.loadSupplementaryTypes();
+    } else if (name === "sourcing fee") {
+      this.showSourcingSection = true;
+      this.SourcingForm = this.fb.group({
+        mapName: [''],
+        type: ['', Validators.required],
+        paycode: ['', Validators.required],
+        value: ['', Validators.required],
+        replacement_clause: ['', Validators.required],
+        replacement: ['', Validators.required],
+        source_wait: ['', Validators.required],
+        source_value: ['', Validators.required],
+        criteria_value: ['', Validators.required],
+        tat_days: ['', Validators.required],
+        tat_days_type: ['', Validators.required],
+        startDate: ['', Validators.required],
+        category: ['', Validators.required],
+      });
+      this.loadSourcingTypes();
+      this.loadMapNames();
     }
   }
 
@@ -281,8 +304,6 @@ export class AddservicechargemasterComponent {
         inedgeFeeType: ['', Validators.required],
         inedgeCharge: ['', Validators.required]
       });
-
-
       this.loadMapNames();
 
     }
@@ -605,16 +626,7 @@ export class AddservicechargemasterComponent {
     this.suppFixForm.get(input.getAttribute('formControlName')!)?.setValue(input.value);
   }
 
-  onSuppFixedSubmit() {
-    this.showErrors = true;
 
-    if (this.suppFixForm.invalid) {
-      return;
-    }
-
-    console.log("Supplementary Fixed Form Submitted:", this.suppFixForm.value);
-
-  }
 
   fixedslabChange() {
     if (this.selectedFixedType == 'headcount') {
@@ -633,6 +645,17 @@ export class AddservicechargemasterComponent {
     this.showErrors = false;
   }
 
+  onSuppFixedSubmit() {
+    this.showErrors = true;
+
+    if (this.suppFixForm.invalid) {
+      return;
+    }
+
+    console.log("Supplementary Fixed Form Submitted:", this.suppFixForm.value);
+
+  }
+
   onSuppPerSubmit() {
     this.showErrors = true;
 
@@ -648,6 +671,111 @@ export class AddservicechargemasterComponent {
     this.suppPerForm.reset();
     this.showErrors = false;
   }
+
+  onSourceReset() {
+    this.SourcingForm.reset();
+    this.showErrors = false;
+  }
+
+  onSourceSubmit() {
+    this.showErrors = true;
+    const json = this._sessionStoreage.getItem('UserProfile');
+    if (json) {
+      this.userdetail = JSON.parse(this.decry.decrypt(json));
+    }
+    console.log(this.userdetail)
+    if (this.SourcingForm.invalid) {
+      console.log(this.SourcingForm)
+      return; // show errors and stop
+    }
+
+    if (!this.mapnameUI) {
+      alert("Please select Map Name");
+      return;
+    }
+
+    const f = this.SourcingForm.value;
+    const Sourcingmaster: any[] = [];
+
+    Sourcingmaster.push({
+      Company_Service_Charge_Master_Id: Number(this.selectedMasterId),
+      Company_Service_Charge_Type_Id: Number(f.type),
+      Service_Charge_Slab_Item_Id: 0,
+      Service_Charge_Slab_Inner_Item_Id: 0,
+      Slab_Id: 0,
+      Cost_Center_Mapping_Id: this.mapnameUI.mapNameId,
+      Map_Name: this.mapnameUI.mapName,
+      Invoicing_Type: false,
+      Service_Charge_Name: "",
+      PayCode_Code: f.paycode,
+      MaxAmount: 0,
+      Type: 0,
+      Value: f.value.toString(),
+      Effective_Date: f.startDate,
+      IsBillToRate: 0,
+      IsCTC: 0,
+      IsHeadCount: 0,
+      IsAttendanceProrated: f.prorate,
+      IsCriteriaApplicable: 0,
+      Criteria: f.criteria_value,
+      IsReplacementClauseApplicable: f.replacement_clause,
+      Replacement: f.replacement,
+      IsSourcingWaitingPeriod_Id: f.source_wait,
+      SourcingValue: f.source_value,
+      TATDays: f.tat_days,
+      IsMapNameRequired: 0,
+      Category_Id: f.category,
+      Invoice_Map_Name_Id: 0,
+      Compliance_Fee: f.complianceFee,
+      RandStad_Fee: f.randstadFee,
+      UnitType_Id: 0,
+      Discount_Type_Id: 0,
+      Discount_Amount: 0,
+      Type_Id: 0,
+      Pay_Code_Id: 0,
+      From: 0,
+      To: 0,
+      Slab_Calculation_Type_Id: 0,
+      Cap_Value: 0,
+      Upfront_Charge: f.upfrontFee,
+      Upfront_PayCode: f.upfrontPayCode,
+      Upfront_Type_Id: f.upfrontFeeType,
+      Insurance_Amount: f.insuranceAmount,
+      MarginalPayCodeId: 0,
+      QDemyFee: f.qdemyCharge,
+      InEdgeFee: f.inedgeCharge,
+      IsNewjoineeProrate: f.newJoineeProrate,
+      IsFAndFProrate: f.ffProrate,
+      IsFAndFArrearProrate: f.ffArrearprorate,
+      IsNewJoineeArrearProrate: f.newJoineeArrearprorate,
+      QDemyFee_Type_Id: f.qdemyFeeType,
+      InEdgeFee_Type_Id: f.inedgeFeeType,
+      TATDaysType:f.tat_days_type
+    });
+
+    const request = {
+      Created_By: this.userdetail.user_Id?.toString(),
+      Mode: "ADD",
+      CompanyId: this.selectedCompanyId,
+      ServiceChargemaster: Sourcingmaster
+    }
+
+    console.log(JSON.stringify(request));
+
+    this.serviceChargeService.SaveSourcingType(request).subscribe({
+      next: (res: any) => {
+        console.log(res);
+        if (res?.StatusCode === 200) {
+          alert(res?.Data?.message || "Sourcing Type saved successfully");
+          this.dialogRef.close(true);
+        } else {
+          alert("Save failed");
+        }
+      },
+      error: () => alert("Failed")
+    });
+  }
+
 
   getBillingCategories() {
     this.serviceChargeService.GetCostCenterMapping().subscribe({
@@ -996,6 +1124,22 @@ export class AddservicechargemasterComponent {
     });
   }
 
+  loadSourcingTypes() {
+
+    const masterId = 3; // Supplementary Fee master ID
+
+    this.serviceChargeService.GetServicechargetype(masterId).subscribe({
+      next: (res: any) => {
+        this.sourcingTypes = res?.Data?.data?.Table0 || [];
+      },
+      error: (err) => {
+        console.error("Failed to load supplementary fee types", err);
+      }
+    });
+  }
+
+
+
   // -------------------------------------------------------
   // CHILD → SERVICE FEE SELECTED TYPE
   // -------------------------------------------------------
@@ -1035,6 +1179,7 @@ export class AddservicechargemasterComponent {
   resetAllSections() {
     this.showServiceFeeSection = false;
     this.showSupplementSection = false;
+    this.showSourcingSection = false;
     this.resetSubSections();
   }
 

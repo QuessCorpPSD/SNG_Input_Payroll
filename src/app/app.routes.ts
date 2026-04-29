@@ -185,6 +185,7 @@ import { SalaryReleaseStatusComponent } from './pages/SalaryReleaseNew/salary-re
 import { BankInvoiceNavigationComponent } from './pages/BankInvoice/bank-invoice-navigation/bank-invoice-navigation.component';
 import { BankAdviceSplitCultureComponent } from './pages/BankInvoice/bank-advice-split-culture/bank-advice-split-culture.component';
 import { MulticommercialComponent } from './pages/GlobalMasters/multicommercial/multicommercial.component';
+import { IRFormReportComponent } from './pages/Reports/ir-form-report/ir-form-report.component';
 
 
 export const routes: Routes = [
@@ -386,6 +387,7 @@ export const routes: Routes = [
         children: [
           { path: 'payregisterunprocessed', component: PayregisterunprocessedComponent },
           { path: 'payslip', component: PayslipComponent },
+          { path: 'form-download', component: IRFormReportComponent },
           { path: 'app-invoice-leave-balance-report', component: InvoiceLeaveBalanceReportComponent },
           { path: 'app-leave-balance-report', component: LeaveBalanceReportComponent },
           { path: 'poactiveinactivereport', component: PoactiveinactivereportComponent },

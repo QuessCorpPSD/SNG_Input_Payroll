@@ -46,4 +46,11 @@ export class ServiceChargeService implements IServiceCharge {
       request
     );
   }
+
+   SaveSourcingType(request: any): Observable<APIResponse> {
+    return this.http.post<APIResponse>(
+      environment.apiUrl + 'ServiceCharge/Create',
+      request
+    );
+  }
 }
