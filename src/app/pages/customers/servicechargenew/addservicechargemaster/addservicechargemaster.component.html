@@ -913,7 +913,8 @@
                                 <select class="form-select form-select-sm" formControlName="isMapNameRequired">
                                     <option value="">Select</option>
                                 </select>
-                                <small class="text-danger" *ngIf="showErrors && ctcForm.get('isMapNameRequired')?.invalid">
+                                <small class="text-danger"
+                                    *ngIf="showErrors && ctcForm.get('isMapNameRequired')?.invalid">
                                     Map Name is required
                                 </small>
 
@@ -1419,6 +1420,140 @@
                         </button>
 
                         <button type="button" (click)="onSuppPerSubmit()"
+                            style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white;">
+                            Save
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Sourcing BODY -->
+        <div class="col-md-12" *ngIf="showSourcingSection">
+            <form [formGroup]="SourcingForm" novalidate>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Type *</label>
+                        <select class="form-select form-select-sm" formControlName="type">
+                            <option value="">Select</option>
+                            <option *ngFor="let type of sourcingTypes" [value]="type.Service_Charge_Type_Id">
+                                {{ type.Service_Charge_Type_Name }}
+                            </option>
+                        </select>
+                        <small class="text-danger" *ngIf="showErrors && SourcingForm.get('type')?.invalid">
+                            Type is required
+                        </small>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Paycode *</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="paycode" />
+                        <small class="text-danger" *ngIf="showErrors && SourcingForm.get('paycode')?.invalid">
+                            Paycode is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Value *</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="value"
+                            (input)="allowNumbersOnly($event)" />
+                        <small class="text-danger" *ngIf="showErrors && SourcingForm.get('value')?.invalid">
+                            Value is required
+                        </small>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Map Name *</label>
+                        <mapname [selectedCompanyId]="selectedCompanyId" (mapnameEmit)="handleMapNameEvent($event)">
+                        </mapname>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Replacement Clause Applicable *</label>
+                        <select class="form-select form-select-sm" formControlName="replacement_clause">
+                            <option value="">Select</option>
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </select>
+                        <small class="text-danger"
+                            *ngIf="showErrors && SourcingForm.get('replacement_clause')?.invalid">
+                            Replacement Clause Applicable is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Replacement *</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="replacement"
+                            (input)="allowNumbersOnly($event)" />
+                        <small class="text-danger" *ngIf="showErrors && SourcingForm.get('replacement')?.invalid">
+                            Replacement is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Sourcing Waiting *</label>
+                        <select class="form-select form-select-sm" formControlName="source_wait">
+                            <option value="">Select</option>
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </select>
+                        <small class="text-danger" *ngIf="showErrors && SourcingForm.get('source_wait')?.invalid">
+                            Sourcing Waiting is required
+                        </small>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Sourcing Value *</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="source_value"
+                            (input)="allowNumbersOnly($event)" />
+                        <small class="text-danger" *ngIf="showErrors && SourcingForm.get('source_value')?.invalid">
+                            Sourcing Value is required
+                        </small>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Criteria Value *</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="criteria_value"
+                            (input)="allowNumbersOnly($event)" />
+                        <small class="text-danger" *ngIf="showErrors && SourcingForm.get('criteria_value')?.invalid">
+                            Criteria Value is required
+                        </small>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">TAT Days *</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="tat_days"
+                            (input)="allowNumbersOnly($event)" />
+                        <small class="text-danger" *ngIf="showErrors && SourcingForm.get('tat_days')?.invalid">
+                            TAT Days is required
+                        </small>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">TAT Days Type *</label>
+                        <select class="form-select form-select-sm" formControlName="tat_days_type">
+                            <option value="">Select</option>
+                            <option value="1512">DOJ</option>
+                            <option value="1513">Working Days</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Effective Date <span
+                                class="text-danger">*</span></label>
+                        <input type="date" class="form-control form-control-sm" formControlName="startDate">
+                        <small class="text-danger"
+                            *ngIf="showErrors && SourcingForm.get('startDate')?.invalid">Effective Date Required</small>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Category</label>
+                        <select class="form-select form-select-sm" formControlName="category">
+                            <option value="">Select</option>
+                            <option value="1066">Regular</option>
+                            <option value="1067">Seperate</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row" style="text-align: end;">
+                    <div class="col-12">
+                        <button type="button" (click)="onSourceReset()"
+                            style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;margin-right:10px">
+                            Cancel
+                        </button>
+
+                        <button type="button" (click)="onSourceSubmit()"
                             style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white;">
                             Save
                         </button>
