@@ -283,9 +283,10 @@ export class AddservicechargemasterComponent {
       if (json) {
         this.userdetail = JSON.parse(this.decry.decrypt(json));
       }
+      
       this.percentageForm = this.fb.group({
         mapName: [null],
-        paycode: ['', Validators.required],
+        paycode: ['FCTC', Validators.required],
         value: ['', Validators.required],
         capValue: ['', Validators.required],
         maxAmount: ['', Validators.required],
