@@ -1,0 +1,36 @@
+<div style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;">
+    SG PayRegister</div>
+
+<div class="container-fluid">
+    <div class="row py-2">
+        <br />
+        <form>
+            <div class="row align-items-end ">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Pay Period</label>
+
+                    <select class="form-select form-select-sm" [(ngModel)]="PayPeriod" name="payPeriod">
+
+                        <option [ngValue]="null">-- Select --</option>
+
+                        <option *ngFor="let pp of Payperiod" [ngValue]="pp.pay_Period">
+                            {{ pp.pay_Period }}
+                        </option>
+
+                    </select>
+                </div>
+                <div class="col-md-2" style="padding-top: 25px;">
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                            matTooltip="Download" (click)="Download()">
+                            <mat-icon>download</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>

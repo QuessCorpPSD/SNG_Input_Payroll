@@ -20,7 +20,7 @@ export const PayPeriodUnlock_TOKEN = new InjectionToken<IPayPeriodUnlock>('PayPe
   selector: 'app-payperiodunlock',
   standalone: true,
   imports: [MatIconModule, MatTooltipModule, MatTableModule, MatPaginatorModule, MatCardTitle,
-    FormsModule,CommonModule
+    FormsModule, CommonModule
   ],
   templateUrl: './pay-period-unlock.component.html',
   styleUrl: './pay-period-unlock.component.css',
@@ -38,14 +38,15 @@ export class PayPeriodUnlockComponent implements AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   payPeriodUnlockSearch: any;
   pagetype: any;
+  searchText: string = "";
 
   constructor(@Inject(PayPeriodUnlock_TOKEN) private payperiodunlock: PayPeriodUnlockService, private dialog: MatDialog) { }
 
   showTable = false;
 
-  uploadDisplayedColumns: string[] = ['Serial_No', 'Company_Code', 'Pay_Period', 'UserName', 'USER_ID',  'CreatedOn'];
+  uploadDisplayedColumns: string[] = ['Serial_No', 'Company_Code', 'Pay_Period', 'UserName', 'USER_ID', 'CreatedOn','release'];
 
-  uploadFilteredColumns: string[] = ['Serial_NoFilter', 'Company_CodeFilter', 'Pay_PeriodFilter', 'UserNameFilter', 'USER_IDFilter',  'CreatedOnFilter'];
+  uploadFilteredColumns: string[] = ['Serial_NoFilter', 'Company_CodeFilter', 'Pay_PeriodFilter', 'UserNameFilter', 'USER_IDFilter', 'CreatedOnFilter'];
 
   uploadedData: any[] = []; //  No mock data, ready for API hookup
 
@@ -59,6 +60,19 @@ export class PayPeriodUnlockComponent implements AfterViewInit {
 
   ngOnInit(): void {
     this.BindGrid();
+    this.dataSource.filterPredicate = (data: any, filter: string) => {
+      const filterText = filter.trim().toLowerCase();
+      return Object.values(data).some((value: any) =>
+        String(value ?? '')
+          .toLowerCase()
+          .includes(filterText)
+      );
+    };
+  }
+
+  applyFilters() {
+    const filterValue = this.searchText?.trim().toLowerCase();
+    this.dataSource.filter = filterValue;
   }
 
   BindGrid() {
@@ -72,7 +86,7 @@ export class PayPeriodUnlockComponent implements AfterViewInit {
           this.dataSource = new MatTableDataSource(this.payPeriodUnlockSearch);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
-          this.displayedColumns = ['Serial_No', 'Company_Code', 'Pay_Period', 'UserName', 'USER_ID',  'CreatedOn'];
+          this.displayedColumns = ['Serial_No', 'Company_Code', 'Pay_Period', 'UserName', 'USER_ID', 'CreatedOn'];
         } else {
           this.dataSource.data = [];
           alert('No data found')
@@ -84,7 +98,7 @@ export class PayPeriodUnlockComponent implements AfterViewInit {
     });
   }
 
-   ngAfterViewInit() {
+  ngAfterViewInit() {
     this.uploadedDataSource.paginator = this.paginator;
     this.setUpCustomFilter();
   }

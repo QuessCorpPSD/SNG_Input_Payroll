@@ -6,7 +6,29 @@
         </div> -->
         <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 600;">Pay Period
             Unlock
-        </mat-card-title>        
+        </mat-card-title>
+
+        <div class="d-flex align-items-center justify-content-end" style="padding-top: 10px; padding-right: 40px;"
+            *ngIf="showTable">
+            <!-- Search Box -->
+            <div style="display: inline-flex; align-items: center;
+                   border-radius: 10px;
+               border: 1px solid #7E7E7E;
+               width: 260px;
+               height: 30px;
+               background-color: white;
+               padding: 0 10px;">
+                <i style="margin-right: 6px; display: flex; align-items: center;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M8.30883 9.01596C7.539 9.63177 6.5625 10 5.5 10C3.01472 10 1 7.98528 1 5.5C1 3.01472 3.01472 1 5.5 1C7.98528 1 10 3.01472 10 5.5C10 6.56251 9.63176.53901 9.01594 8.30885L10.8535 10.1465C11.0488 10.3417 11.0488 10.6583 10.8535 10.8536C10.6583 11.0488 10.3417 11.0488 10.1464 10.8536L8.30883 9.01596ZM2 5.5C2 3.567 3.567 2 5.5 2C7.433 2 9 3.567 9 5.5C9 6.44299 8.62707 7.29888 8.02066 7.92823C8.00355 7.94139 7.98711 7.95579 7.97144 7.97146C7.95578 7.98712 7.94137 8.00357 7.92822 8.02067C7.29887 8.62708 6.44299 9 5.5 9C3.567 9 2 7.433 2 5.5Z"
+                            fill="#7E7E7E" />
+                    </svg>
+                </i>
+                <input type="text" [(ngModel)]="searchText" (keyup)="applyFilters()" placeholder="Search" style="border: none; outline: none; width: 100%;
+                   font-size: 12px; background-color: transparent;" />
+            </div>
+        </div>
 
         <div class="table-wrapper1" style="padding-top: 2%;" *ngIf="showTable">
             <div class="table-scroll">
@@ -14,86 +36,49 @@
 
                     <!-- 🔹 Sl.No -->
                     <ng-container matColumnDef="Serial_No">
-                        <mat-header-cell *matHeaderCellDef class="sno"><strong>Sl.No</strong></mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef class="sno">Sl.No</mat-header-cell>
                         <mat-cell *matCellDef="let row" class="sno">{{ row.Serial_No }}</mat-cell>
                     </ng-container>
 
                     <!-- 🔹 Pay Code -->
                     <ng-container matColumnDef="Company_Code">
-                        <mat-header-cell *matHeaderCellDef  class="CompanyCode"><strong>Company Code</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row"  class="CompanyCode">{{ row.Company_Code }}</mat-cell>
+                        <mat-header-cell *matHeaderCellDef class="CompanyCode">Company
+                            Code</mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="CompanyCode">{{ row.Company_Code }}</mat-cell>
                     </ng-container>
 
                     <!-- 🔹 Description -->
                     <ng-container matColumnDef="Pay_Period">
-                        <mat-header-cell *matHeaderCellDef
-                            class="PayPeriod"><strong>Pay Period</strong></mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef class="PayPeriod">Pay
+                            Period</mat-header-cell>
                         <mat-cell *matCellDef="let row" class="PayPeriod">{{ row.Pay_Period }}</mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="UserName">
-                        <mat-header-cell *matHeaderCellDef class="UserName"><strong>Name</strong></mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef class="UserName">Name</mat-header-cell>
                         <mat-cell *matCellDef="let row" class="UserName">{{ row.UserName }}</mat-cell>
                     </ng-container>
 
                     <!-- 🔹 Pay Type -->
                     <ng-container matColumnDef="USER_ID">
-                        <mat-header-cell *matHeaderCellDef class="USERID"><strong>Login Id</strong></mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef class="USERID">Login Id</mat-header-cell>
                         <mat-cell *matCellDef="let row" class="USERID">{{ row.USER_ID }}</mat-cell>
                     </ng-container>
 
-                     <ng-container matColumnDef="CreatedOn">
-                        <mat-header-cell *matHeaderCellDef class="CreatedOn"><strong>Last Triggered</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row" >{{ row.CreatedOn }}</mat-cell>
+                    <ng-container matColumnDef="CreatedOn">
+                        <mat-header-cell *matHeaderCellDef class="CreatedOn">Last
+                            Triggered</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.CreatedOn }}</mat-cell>
                         <mat-cell *matCellDef="let row" class="">{{ row.CreatedOn }}</mat-cell>
                     </ng-container>
-                    <ng-container matColumnDef="Allow_Reprocess_Id" style="display: none;">
-                        <mat-header-cell *matHeaderCellDef><strong>Allow_Reprocess_Id</strong></mat-header-cell>
+                    <ng-container matColumnDef="release" style="display: none;">
+                        <mat-header-cell *matHeaderCellDef>Release</mat-header-cell>
                         <mat-cell *matCellDef="let row">{{ row.Allow_Reprocess_Id }}</mat-cell>
-                    </ng-container>                    
-                    <ng-container matColumnDef="Serial_NoFilter">
-                        <mat-header-cell *matHeaderCellDef class="sno"></mat-header-cell>
-                    </ng-container>
-                    <ng-container matColumnDef="Company_CodeFilter">
-                        <mat-header-cell *matHeaderCellDef class="CompanyCode">
-                            <input matInput placeholder="Company Code" [(ngModel)]="filterValues.Company_Code"
-                                (keyup)="applyFilter()" />
-                        </mat-header-cell>
                     </ng-container>
 
-                    <ng-container matColumnDef="Pay_PeriodFilter">
-                        <mat-header-cell *matHeaderCellDef class="PayPeriod">
-                            <input matInput placeholder="Pay Period" [(ngModel)]="filterValues.Pay_Period"
-                                (keyup)="applyFilter()" />
-                        </mat-header-cell>
-                    </ng-container>
-
-                    <ng-container matColumnDef="UserNameFilter">
-                        <mat-header-cell *matHeaderCellDef class="UserName">
-                            <input matInput placeholder="Name" [(ngModel)]="filterValues.UserName"
-                                (keyup)="applyFilter()" />
-                        </mat-header-cell>
-                    </ng-container>
-
-                    <ng-container matColumnDef="USER_IDFilter">
-                        <mat-header-cell *matHeaderCellDef class="UserID">
-                            <input matInput placeholder="Login id" [(ngModel)]="filterValues.USER_ID"
-                                (keyup)="applyFilter()" class="UserID" />
-                        </mat-header-cell>
-                    </ng-container>
-                    
-                    <ng-container matColumnDef="CreatedOnFilter">
-                        <mat-header-cell *matHeaderCellDef class="CreatedOn">
-                            <input matInput placeholder="Last triggered" [(ngModel)]="filterValues.CreatedOn"
-                                (keyup)="applyFilter()" />
-                        </mat-header-cell>
-                    </ng-container>
 
                     <!-- Header Rows -->
                     <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
-
-                    <mat-header-row *matHeaderRowDef="uploadFilteredColumns"></mat-header-row>
-
 
                     <!-- Data Rows -->
                     <mat-row *matRowDef="let row; columns: uploadDisplayedColumns"></mat-row>
@@ -104,7 +89,8 @@
                 <p class="text-muted">No data to display</p>
             </div>
 
-            <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+            <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+                style="border-top: 1px solid #ddd;"></mat-paginator>
         </div>
 
     </div>

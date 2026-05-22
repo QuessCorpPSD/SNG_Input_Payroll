@@ -174,8 +174,11 @@ import { HRAcalculationComponent } from './pages/Taxandsavings/hracalculation/hr
 import { BankAccountComponent } from './pages/SalaryReleaseNew/bank-account/bank-account.component';
 import { ReportComponent } from './pages/Reports/report/report.component';
 import { CPFsummaryComponent } from './pages/Reports/cpfsummary/cpfsummary.component';
-import { SalaryReleaseApproveComponent } from './pages/SalaryReleaseNew/salary-release-approve/salary-release-approve.component';
+// import { SalaryReleaseApproveComponent } from './pages/SalaryReleaseNew/salary-release-approve/salary-release-approve.component';
 import { ServicechargenewComponent } from './pages/customers/servicechargenew/servicechargenew/servicechargenew.component';
+import { ComponentFixture } from '@angular/core/testing';
+import { UsercreationComponent } from './pages/admin/usercreation/usercreation.component';
+import { SgpayregisterComponent } from './pages/Reports/sgpayregister/sgpayregister.component';
 
 
 
@@ -195,8 +198,10 @@ export const routes: Routes = [
         path: 'Admin',
         component: AdminnavigationComponent,
         children: [
-          { path: 'companypermission', component: CompanypermissionComponent },
-          { path: 'payperiodunlock', component: PayPeriodUnlockComponent }
+          // { path: 'companypermission', component: CompanypermissionComponent },
+          { path: 'payperiodunlock', component: PayPeriodUnlockComponent },
+          { path: "companypermission", component: CompanypermissionComponent },
+          { path: "UserCreation", component: UsercreationComponent }
         ]
       },
       {
@@ -297,7 +302,7 @@ export const routes: Routes = [
           { path: 'Netpaysummary', component: NetpaySummaryComponent },
           { path: 'Upfrontapproval', component: UpfrontApprovalComponent },
           { path: 'Yearlypayout', component: YearlyPayoutComponent },
-          { path: 'SalaryReleaseApprove', component: SalaryReleaseApproveComponent }
+          // { path: 'SalaryReleaseApprove', component: SalaryReleaseApproveComponent }
         ]
       },
       {
@@ -367,6 +372,7 @@ export const routes: Routes = [
         component: ReportsComponent,
         children: [
           { path: 'payregisterunprocessed', component: PayregisterunprocessedComponent },
+          { path: "sp-payregister", component: SgpayregisterComponent },
           { path: 'payslip', component: PayslipComponent },
           { path: 'app-invoice-leave-balance-report', component: InvoiceLeaveBalanceReportComponent },
           { path: 'app-leave-balance-report', component: LeaveBalanceReportComponent },

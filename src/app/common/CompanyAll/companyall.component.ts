@@ -11,6 +11,7 @@ import { Company } from '../../Models/Common';
 import { SessionStorageService } from '../../Shared/SessionStorageService';
 import { EncryptionService } from '../../Shared/encryption.service';
 import { OnboardingStateService } from "../../onboarding-state.service";
+import { MatIconModule } from '@angular/material/icon';
 export const COMM_TOKEN = new InjectionToken<ICommonService>('COMM_TOKEN');
 
 @Component({
@@ -20,33 +21,33 @@ export const COMM_TOKEN = new InjectionToken<ICommonService>('COMM_TOKEN');
     ReactiveFormsModule,
     MatAutocompleteModule,
     MatInputModule,
-    MatFormFieldModule],
+    MatFormFieldModule, MatIconModule],
   templateUrl: './companyall.component.html',
   styleUrl: './companyall.component.css',
   encapsulation: ViewEncapsulation.None,
-    providers: [
-      {
-  
-        provide: COMM_TOKEN,
-        useClass: CommonService,
-  
-      },
-      {
-        provide: NG_VALUE_ACCESSOR,
-        useExisting: forwardRef(() => CompanyallComponent),
-        multi: true
-      }
-    ]
+  providers: [
+    {
+
+      provide: COMM_TOKEN,
+      useClass: CommonService,
+
+    },
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => CompanyallComponent),
+      multi: true
+    }
+  ]
 })
 export class CompanyallComponent {
-searchText: string = '';
+  searchText: string = '';
   myControl = new FormControl<string | Company>('');
   companyCode: Company[] = [];
   filteredOptions$!: Observable<Company[]>;
-  selectedOption?: Company;
+  selectedOption?: Company | null;
   userdetail!: any;
-@Input() disabled: boolean = false;
-  @Output() companyEmit = new EventEmitter<Company>();
+  @Input() disabled: boolean = false;
+  @Output() companyEmit = new EventEmitter<Company | null>();
 
   constructor(@Inject(COMM_TOKEN) private _commonService: ICommonService
     , private _sessionStoreage: SessionStorageService, private decry: EncryptionService, private stateService: OnboardingStateService) {
@@ -72,12 +73,12 @@ searchText: string = '';
 
   setDisabledState?(isDisabled: boolean): void {
   }
- ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(changes: SimpleChanges): void {
     if (changes['disabled']) {
       if (this.disabled) {
-        this.myControl.disable({ emitEvent: false });  
+        this.myControl.disable({ emitEvent: false });
       } else {
-        this.myControl.enable({ emitEvent: false });  
+        this.myControl.enable({ emitEvent: false });
       }
     }
   }
@@ -124,12 +125,28 @@ searchText: string = '';
     );
   }
 
-  displayFn = (option: any): string => option?.displayName ?? option.displayName;
+  displayFn = (option: Company | null): string => option?.displayName ?? '';
 
   onOptionSelected(option: any) {
     this.selectedOption = option;
-    this.onChange(option); // update parent form
+    this.myControl.setValue(option);
+
+    this.onChange(option);
     this.onTouched();
-    this.companyEmit.emit(this.selectedOption);
+    this.companyEmit.emit(option);
+  }
+
+  clearSelection(input: HTMLInputElement) {
+    this.selectedOption = null;
+
+    this.myControl.setValue(null);
+
+    this.onChange(null);
+    this.onTouched();
+    this.companyEmit.emit(null);
+
+    input.blur();
+
+    console.log('Selection cleared:', this.selectedOption, this.myControl.value);
   }
 }

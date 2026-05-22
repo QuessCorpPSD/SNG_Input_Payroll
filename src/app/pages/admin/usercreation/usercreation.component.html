@@ -1,0 +1,253 @@
+<div class="page-wrapper" style="padding-top: 10px;">
+    <div class="scrollable-content">
+        <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 600;">
+            User Creation
+        </mat-card-title>
+        <div class="container py-2">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">User Name</label>
+                    <input type="text" class="form-control form-control-sm" [(ngModel)]="UserName" />
+                    <!-- <select class="form-select form-select-sm" [(ngModel)]="EmployeeId">
+                        <option value="">--Select--</option>
+                        <option *ngFor="let pay of employee" [value]="pay.USER_ID">{{pay.EmployeeID}}-{{pay.USERNAME}}
+                        </option>
+                    </select> -->
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small" n style="white-space: nowrap;">Role</label>
+                    <select class="form-select form-select-sm" [(ngModel)]="Role">
+                        <option value="">--Select--</option>
+                        <option *ngFor="let pay of roles" [value]="pay.RoleId">{{pay.RoleName}}</option>
+                    </select>
+                </div>
+                <div class="col-md-1">
+                    <label class="form-label text-muted small">InActive</label>
+                    <mat-checkbox [(ngModel)]="inactive"></mat-checkbox>
+                </div>
+                <div class="col-md-2 d-flex gap-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
+                        matTooltip="Search" (click)="onsearch()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                    <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="export to excel" (click)="exportToExcel()">
+                        <mat-icon>download</mat-icon>
+                    </button>
+                    <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center" (click)="unLock()">
+                        Unlock
+                    </button>
+                    <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="import">
+                            <mat-icon>cloud_upload</mat-icon>
+                        </button>
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                            matTooltip="downlaod">
+                            <mat-icon>cloud_download</mat-icon>
+                        </button> -->
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-add" matTooltip="Add"
+                        (click)="addOpen()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="table-wrapper1" *ngIf="showTable">
+            <div class="table-scroll">
+                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 custom-table">
+
+                    <!-- Action -->
+                    <ng-container matColumnDef="action">
+                        <mat-header-cell *matHeaderCellDef>Action</mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                            <button mat-icon-button style="border: none; background: none; color: inherit;"
+                                (click)="openEdit(row)">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                            <button mat-icon-button style="border: none; background: none; color: inherit;"
+                                (click)="onDelete(row)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </mat-cell>
+                    </ng-container>
+                    <!-- 🔹 Sl.No -->
+                    <ng-container matColumnDef="slNo">
+                        <mat-header-cell *matHeaderCellDef>Sl.No</mat-header-cell>
+                        <mat-cell *matCellDef="let row; let i = index">
+                            {{ i + 1 }}
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- 🔹 Pay Code -->
+                    <ng-container matColumnDef="name">
+                        <mat-header-cell *matHeaderCellDef>User Name</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.USERNAME }}</mat-cell>
+                    </ng-container>
+
+                    <!-- 🔹 Description -->
+                    <ng-container matColumnDef="employeeid">
+                        <mat-header-cell *matHeaderCellDef>Employee Id</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.EmployeeID }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="emailid">
+                        <mat-header-cell *matHeaderCellDef>Email Id</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.EMAIL_ID }}</mat-cell>
+                    </ng-container>
+
+                    <!-- 🔹 Pay Type -->
+                    <ng-container matColumnDef="reportingto">
+                        <mat-header-cell *matHeaderCellDef>Reporting To</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.REPORTING_TO }}</mat-cell>
+                    </ng-container>
+
+                    <!-- 🔹 Taxable -->
+                    <ng-container matColumnDef="roles">
+                        <mat-header-cell *matHeaderCellDef>Roles</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.ROLES }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="activeStatus">
+                        <mat-header-cell *matHeaderCellDef>Permission Access</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.IS_PERMISSION? 'Yes' : 'No' }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="pendingStatus">
+                        <mat-header-cell *matHeaderCellDef>Permission Access</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.IS_PERMISSION? 'Yes' : 'No' }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="approverRemarks">
+                        <mat-header-cell *matHeaderCellDef>Approver Remarks</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.APPROVER_REMARKS }}</mat-cell>
+                    </ng-container>
+
+                    <!-- Header Rows -->
+                    <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+
+                    <!-- Data Rows -->
+                    <mat-row *matRowDef="let row; columns: uploadDisplayedColumns"></mat-row>
+
+                </table>
+            </div>
+
+            <div *ngIf="dataSource.data.length === 0" class="text-center p-4">
+                <p class="text-muted">No data to display</p>
+            </div>
+
+            <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+                style="border: 1px solid #ddd;"></mat-paginator>
+        </div>
+
+    </div>
+</div>
+<div *ngIf="isAddclicked" class="popup-overlay" (keydown.escape)="closeclick()">
+    <mat-card class="popup-card">
+        <mat-card-header class="popup-header">
+            <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 600;">
+                {{ isEditMode ? 'Edit User' : 'Add User' }}
+            </mat-card-title>
+
+            <button class="close-btn" matTooltip="Close" (click)="closeclick()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+        <mat-card-content class="scroll-content">
+
+            <form [formGroup]="addUserForm" novalidate>
+                <!-- Row 1 -->
+                <div class="row g-3 mb-3">
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Name</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="Name" />
+
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small" n style="white-space: nowrap;">Emp No</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="EmpNo" />
+                        <!-- <select class="form-select form-select-sm" formControlName="BusinessUnitName">
+                            <option value="">--Select--</option>
+                            <option *ngFor="let pay of BusinessUnit" [value]="pay.Entity_Id">{{pay.Entity_Name}}
+                            </option>
+                        </select> -->
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Email Id<span class="text-danger"></span></label>
+                        <input type="text" class="form-control form-control-sm" formControlName="email" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small" n style="white-space: nowrap;">Reporting To</label>
+                        <!-- <input type="text" class="form-control form-control-sm" formControlName="ReportingTo" /> -->
+                        <select class="form-select form-select-sm" formControlName="ReportingTo">
+                            <option value="">--Select--</option>
+                            <option *ngFor="let pay of reportingto" [value]="pay.Reporting_To">{{pay.Name}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row g-3 mb-3">
+
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small" n style="white-space: nowrap;">Roles</label>
+                        <!-- <input type="text" class="form-control form-control-sm" formControlName="ReportingTo" /> -->
+                        <select class="form-select form-select-sm" formControlName="Roles">
+                            <option value="">--Select--</option>
+                            <option *ngFor="let pay of roles" [value]="pay.RoleId">{{pay.RoleName}}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small" n style="white-space: nowrap;">Access Type</label>
+                        <!-- <input type="text" class="form-control form-control-sm" formControlName="ReportingTo" /> -->
+                        <select class="form-select form-select-sm" formControlName="AccessType">
+                            <option value="">--Select--</option>
+                            <option *ngFor="let pay of accesstypes" [value]="pay.Access_Type_Id">
+                                {{pay.Access_Type_Name}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small" n style="white-space: nowrap;">Is Active</label>
+                        <!-- <input type="text" class="form-control form-control-sm" formControlName="ReportingTo" /> -->
+                        <mat-checkbox formControlName="IsActive"></mat-checkbox>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small" n style="white-space: nowrap;">Is Pending</label>
+                        <!-- <input type="text" class="form-control form-control-sm" formControlName="ReportingTo" /> -->
+                        <mat-checkbox formControlName="IsPending"></mat-checkbox>
+                    </div>
+                </div>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small" n style="white-space: nowrap;">Approver
+                            Remarks</label>
+                        <textarea class="form-control" rows="5" formControlName="ApproverRemarks">    </textarea>
+                    </div>
+                </div>
+            </form>
+
+        </mat-card-content>
+        <mat-card-footer class="footer">
+            <div class="d-flex justify-content-end mt-3">
+                <div class="btn-1"
+                    style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
+
+                    <button type="Cancel"
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;"
+                        (click)="closeclick()">
+                        Cancel
+                    </button>
+
+                    <button type="submit"
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white; "
+                        (click)="onSave()">
+                        {{ isEditMode ? 'Update' : 'Save' }}
+                    </button>
+                </div>
+            </div>
+        </mat-card-footer>
+
+    </mat-card>
+</div>
+
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>
