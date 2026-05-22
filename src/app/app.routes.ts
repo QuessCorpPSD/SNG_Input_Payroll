@@ -178,6 +178,10 @@ import { BankInvoiceNEFTCultureComponent } from './pages/SalaryReleaseNew/bank-i
 
 import { SalaryReleaseApproveComponent } from './pages/SalaryReleaseNew/salary-release-approve/salary-release-approve.component';
 import { ServicechargenewComponent } from './pages/customers/servicechargenew/servicechargenew/servicechargenew.component';
+import { ComponentFixture } from '@angular/core/testing';
+import { UsercreationComponent } from './pages/admin/usercreation/usercreation.component';
+import { SgpayregisterComponent } from './pages/Reports/sgpayregister/sgpayregister.component';
+
 import { DownloadbatchComponent } from './pages/SalaryReleaseNew/downloadbatch/downloadbatch.component';
 import { BatchcreationprocessComponent } from './pages/SalaryReleaseNew/batchcreationprocess/batchcreationprocess.component';
 import { SalaryReleaseProcessComponent } from './pages/SalaryReleaseNew/salary-release-process/salary-release-process.component';
@@ -204,8 +208,10 @@ export const routes: Routes = [
         path: 'Admin',
         component: AdminnavigationComponent,
         children: [
-          { path: 'companypermission', component: CompanypermissionComponent },
-          { path: 'payperiodunlock', component: PayPeriodUnlockComponent }
+          // { path: 'companypermission', component: CompanypermissionComponent },
+          { path: 'payperiodunlock', component: PayPeriodUnlockComponent },
+          { path: "companypermission", component: CompanypermissionComponent },
+          { path: "UserCreation", component: UsercreationComponent }
         ]
       },
       {
@@ -387,6 +393,7 @@ export const routes: Routes = [
         component: ReportsComponent,
         children: [
           { path: 'payregisterunprocessed', component: PayregisterunprocessedComponent },
+          { path: "sp-payregister", component: SgpayregisterComponent },
           { path: 'payslip', component: PayslipComponent },
           { path: 'form-download', component: IRFormReportComponent },
           { path: 'app-invoice-leave-balance-report', component: InvoiceLeaveBalanceReportComponent },

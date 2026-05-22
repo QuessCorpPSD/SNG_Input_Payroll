@@ -386,6 +386,7 @@ export class ServicechargenewComponent {
       serviceChargeId: row.Service_Charge_Id,
       // ServiceCharge: []
     };
+    console.log("Delete payload:", JSON.stringify(payload));
 
     this.serviceChargeServiceNew.SaveServiceCharge(payload).subscribe({
       next: (res: any) => {
