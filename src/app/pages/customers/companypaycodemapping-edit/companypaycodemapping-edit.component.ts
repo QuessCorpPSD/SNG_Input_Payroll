@@ -59,7 +59,7 @@ export class CompanypaycodemappingEditComponent {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private decry: EncryptionService,
     private _sessionStoreage: SessionStorageService,
-  ) { console.log('data', this.data) }
+  ) { }
 
   ngOnInit(): void {
     const json = this._sessionStoreage.getItem('UserProfile');
@@ -177,6 +177,22 @@ export class CompanypaycodemappingEditComponent {
 
     if (isDuplicate) {
       alert('This paycode is already selected in another row.');
+
+      row.Paycode_Id = '';
+      row.Paycode_Code = '';
+      row.Description = '';
+      row.PayType = '';
+      row.Formula = '';
+      row.Taxable = '';
+      row.LOP_Applicable = '';
+      row.PF_Applicable = '';
+      row.EarnedPaycode_Code = '';
+      row.Company_Paycode_Pick_From_Id = null;
+      row.Company_Paycode_Pick_From_Value = '';
+
+      row.isEmpty = true;
+
+      this.uploadedDataSource.data = [...this.uploadedData];
       return;
     }
 
@@ -185,7 +201,6 @@ export class CompanypaycodemappingEditComponent {
     );
 
     if (!selectedPaycode) return;
-
     row.Paycode_Id = selectedPaycode.Paycode_Id;
     row.Paycode_Code = selectedPaycode.Paycode_Code;
     row.Description = selectedPaycode.Description;
@@ -195,18 +210,17 @@ export class CompanypaycodemappingEditComponent {
     row.LOP_Applicable = selectedPaycode.Is_LOP_Applicable;
     row.PF_Applicable = selectedPaycode.Is_PF_Applicable;
 
-    if (selectedPaycode.Is_LOP_Applicable) {
-      row.EarnedPaycode_Code = 'E' + selectedPaycode.Paycode_Code;
-    } else {
-      row.EarnedPaycode_Code = selectedPaycode.EarnedPaycode_Code;
-    }
+    row.EarnedPaycode_Code = selectedPaycode.Is_LOP_Applicable
+      ? 'E' + selectedPaycode.Paycode_Code
+      : selectedPaycode.EarnedPaycode_Code;
 
-
-    row.Company_Paycode_Pick_From_Id = selectedPaycode.Company_Paycode_Pick_From_Id;
+    row.Company_Paycode_Pick_From_Id =
+      selectedPaycode.Company_Paycode_Pick_From_Id;
     row.Company_Paycode_Pick_From_Value =
       selectedPaycode.Company_Paycode_Pick_From_Value;
 
     row.isEmpty = false;
+
     this.uploadedDataSource.data = [...this.uploadedData];
   }
 
@@ -320,9 +334,9 @@ export class CompanypaycodemappingEditComponent {
       Company_Paycode_Pick_From_Id: row.Company_Paycode_Pick_From_Id ?? 0,
       Company_Paycode_Mapping_Detail_Id: row.Company_Paycode_Mapping_Detail_Id ?? 0,
       Pay_Structure_Detail_Id: row.Pay_Structure_Detail_Id ?? 0,
-      SNo: row.SNo,
-      Execution_Order: row.SNo,
-      Formula: row.Formula ?? null
+      SNo: index + 1,
+      Execution_Order: index + 1,
+      Formula: row.Formula ?? ''
     }));
 
     const payload = {
@@ -333,8 +347,6 @@ export class CompanypaycodemappingEditComponent {
       Mode: "Edit",
       PaycodeDetail: paycodeDetail
     };
-
-    console.log('payload', JSON.stringify(payload));
 
     this.paycodeService.PostAddPaycodeMapping(payload).subscribe({
       next: (res) => {
