@@ -19,6 +19,7 @@ import { MapnameComponent } from "../../../common/Mapname/mapname/mapname.compon
 import { GroupnameComponent } from "../../../common/groupname/groupname.component";
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { EncryptionService } from '../../../Shared/encryption.service';
+import { finalize } from 'rxjs';
 
 
 @Component({
@@ -74,6 +75,7 @@ export class GstinvoiceaddComponent {
   mapNameId: any;
   selectedMap: any;
   taxableAmount: number = 0;
+  isLoading: boolean = false;
 
 
   constructor(private dialogRef: MatDialogRef<GstinvoiceaddComponent>, private gst: InvoiceRepository, private _decrypt: EncryptionService, private _sessionStoreage: SessionStorageService,) { }
@@ -410,9 +412,13 @@ export class GstinvoiceaddComponent {
       CALCRG: formValue?.CallCharges?.toString() ?? null,
       CALRT: formValue?.CallRate?.toString() ?? null
     };
-
+    this.isLoading = true;
     console.log("payload", JSON.stringify(payload));
-    this.gst.addGstInvoice(payload).subscribe({
+    this.gst.addGstInvoice(payload).pipe(
+      finalize(() => {
+        this.isLoading = false;
+      })
+    ).subscribe({
       next: (res: string) => {
         const message = res.replace(/<br\s*\/?>/gi, '\n')
         if (message.includes('InvoiceID')) {
@@ -484,7 +490,7 @@ export class GstinvoiceaddComponent {
         NetAmount: netamount
       },
       { emitEvent: false }
-    );   
+    );
   }
 
 }
