@@ -193,5 +193,8 @@ export class InvoiceRepository implements IInvoiceRepository {
         return this.http.post<APIResponse>(url, formData);
     }
 
+     GetGSTPercentage(): Observable<APIResponse> {
+        return this.http.get<APIResponse>(this.environment.apiUrl + "GSTInvoice/GetGSTPercentage")
+    }
 
 }

@@ -19,12 +19,12 @@
                         <div class="accordion-content">
                             <div class="row g-3 mb-2">
                                 <div class="col-md-3">
-                                    <label class="form-label">Invoice Number<span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" formControlName="InvoiceNumber">
-                                    <div class="text-danger small" *ngIf="addGstInvoice.get('InvoiceNumber')?.touched 
+                                    <label class="form-label">Invoice Number</label>
+                                    <input type="text" class="form-control" formControlName="InvoiceNumber" readonly>
+                                    <!-- <div class="text-danger small" *ngIf="addGstInvoice.get('InvoiceNumber')?.touched 
              && addGstInvoice.get('InvoiceNumber')?.hasError('required')">
                                         InvoiceNumber is required
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label">Company Code<span class="text-danger">*</span></label>
@@ -43,7 +43,7 @@
                                 <div class="col-md-3">
                                     <label class="form-label">Group Detail<span class="text-danger"></span></label>
                                     <groupname [selectedCompanyId]="selectedCompanyId"
-                                        (sitenameEmit)="groupnameEvent($event)" formControlName="GroupDetail">
+                                        (sitenameEmit)="groupnameEvent($event)">
                                     </groupname>
                                 </div>
                             </div>
@@ -52,7 +52,7 @@
                                     <label class="form-label">Cost Center Mapping<span
                                             class="text-danger">*</span></label>
                                     <mapname [selectedCompanyId]="selectedCompanyId"
-                                        (mapnameEmit)="mapnameEvent($event)" formControlName="CostCenterMapping" >
+                                        (mapnameEmit)="mapnameEvent($event)">
                                     </mapname>
                                     <div class="text-danger small" *ngIf="addGstInvoice.get('CostCenterMapping')?.touched 
              && addGstInvoice.get('CostCenterMapping')?.hasError('required')">
@@ -65,8 +65,7 @@
 
                                 <div class="col-md-3">
                                     <label class="form-label">Financial Year<span class="text-danger">*</span></label>
-                                    <financial-year (financialEmit)="handleFinancialYear($event)"
-                                        formControlName="FinancialYear">
+                                    <financial-year (financialEmit)="handleFinancialYear($event)">
                                     </financial-year>
                                     <div class="text-danger small" *ngIf="addGstInvoice.get('FinancialYear')?.touched 
              && addGstInvoice.get('FinancialYear')?.hasError('required')">
@@ -76,7 +75,7 @@
                                 <div class="col-md-3">
                                     <label class="form-label">Pay Period<span class="text-danger">*</span></label>
                                     <PayPeriod [selectedCompanyId]="selectedCompanyId" [payPeriodType]="payPeriodType"
-                                        (payperiodEmit)="handlePayperiodEvent($event)" formControlName="PayPeriod">
+                                        (payperiodEmit)="handlePayperiodEvent($event)">
                                     </PayPeriod>
                                     <div class="text-danger small" *ngIf="addGstInvoice.get('PayPeriod')?.touched 
              && addGstInvoice.get('PayPeriod')?.hasError('required')">
@@ -129,9 +128,12 @@
                 <div class="my-accordion">
                     <mat-expansion-panel class="panel-border" [expanded]="true">
                         <mat-expansion-panel-header class="panel-header">
-                            <mat-panel-title>Taxable Amounts</mat-panel-title>
-                            <!-- <label
-                                style="color: brown;display: flex;justify-content: flex-start;align-items: flex-start;">Total</label> -->
+                            <mat-panel-title>Taxable Amounts
+                                <span class="taxable-total" *ngIf="taxableAmount > 0">
+                                    Total : {{ taxableAmount | number:'1.2-2' }}
+                                </span>
+                            </mat-panel-title>
+
                         </mat-expansion-panel-header>
 
                         <div class="accordion-content">
@@ -203,11 +205,11 @@
                                     </div>
                                 </div>
                                 <div class="col-md-3">
-                                    <label class="form-label">Service Fee Amount</label>
+                                    <label class="form-label">Sourcing Fee Amount</label>
                                     <div class="input-wrapper">
                                         <span class="prefix-box">₹</span>
                                         <input type="number" class="form-control custom-input" placeholder="0"
-                                            formControlName="ServiceFeeAmount">
+                                            formControlName="SourcingFeeAmount">
                                     </div>
                                 </div>
                             </div>
@@ -216,7 +218,8 @@
                                     <label class="form-label">InEdge Charges<span class="text-danger"></span></label>
                                     <div class="input-wrapper">
                                         <span class="prefix-box">₹</span>
-                                        <input type="number" class="form-control custom-input" placeholder="0">
+                                        <input type="number" class="form-control custom-input" placeholder="0"
+                                            formControlName="InEdgeCharges">
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -288,7 +291,8 @@
                                     <label class="form-label">Upfront Charges<span class="text-danger"></span></label>
                                     <div class="input-wrapper">
                                         <span class="prefix-box">₹</span>
-                                        <input type="number" class="form-control custom-input">
+                                        <input type="number" class="form-control custom-input"
+                                            formControlName="UpfrontCharges">
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -325,16 +329,14 @@
                                     <label class="form-label">BGV Billing<span class="text-danger"></span></label>
                                     <div class="input-wrapper">
                                         <span class="prefix-box">₹</span>
-                                        <input type="number" class="form-control custom-input"
+                                        <input type="number" class="form-control custom-input" placeholder="0"
                                             formControlName="BGVBilling">
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label">Assessment Fee</label>
                                     <div class="input-wrapper">
-                                        <span class="prefix-box">
-                                            <mat-icon class="small-icon">edit</mat-icon>
-                                        </span>
+                                        <span class="prefix-box">₹</span>
                                         <input type="number" class="form-control custom-input" placeholder="0"
                                             formControlName="AssessmentFee">
                                     </div>
@@ -342,7 +344,7 @@
                                 <div class="col-md-3">
                                     <label class="form-label">Discount 1</label>
                                     <div class="input-wrapper">
-                                        <span class="prefix-box">₹</span>
+                                        <span class="prefix-box">-</span>
                                         <input type="number" class="form-control custom-input" placeholder="0"
                                             formControlName="Discount1">
                                     </div>
@@ -350,9 +352,7 @@
                                 <div class="col-md-3">
                                     <label class="form-label">Discount 2</label>
                                     <div class="input-wrapper">
-                                        <span class="prefix-box">
-                                            <mat-icon class="small-icon">edit</mat-icon>
-                                        </span>
+                                        <span class="prefix-box">-</span>
                                         <input type="number" class="form-control custom-input" placeholder="0"
                                             formControlName="Discount2">
                                     </div>
@@ -362,9 +362,7 @@
                                 <div class="col-md-3">
                                     <label class="form-label">ID Card Billing<span class="text-danger"></span></label>
                                     <div class="input-wrapper">
-                                        <span class="prefix-box">
-                                            <mat-icon class="small-icon">edit</mat-icon>
-                                        </span>
+                                        <span class="prefix-box">₹</span>
                                         <input type="number" class="form-control custom-input" placeholder="0"
                                             formControlName="IDCardBilling">
                                     </div>
@@ -372,9 +370,7 @@
                                 <div class="col-md-3">
                                     <label class="form-label">Email Id</label>
                                     <div class="input-wrapper">
-                                        <span class="prefix-box">
-                                            <mat-icon class="small-icon">edit</mat-icon>
-                                        </span>
+                                        <span class="prefix-box">₹</span>
                                         <input type="number" class="form-control custom-input" placeholder="0"
                                             formControlName="EmailId">
                                     </div>
@@ -382,9 +378,7 @@
                                 <div class="col-md-3">
                                     <label class="form-label">Registartion Fee</label>
                                     <div class="input-wrapper">
-                                        <span class="prefix-box">
-                                            <mat-icon class="small-icon">edit</mat-icon>
-                                        </span>
+                                        <span class="prefix-box">₹</span>
                                         <input type="number" class="form-control custom-input" placeholder="0"
                                             formControlName="RegistartionFee">
                                     </div>
@@ -392,9 +386,7 @@
                                 <div class="col-md-3">
                                     <label class="form-label">Trainer Fee</label>
                                     <div class="input-wrapper">
-                                        <span class="prefix-box">
-                                            <mat-icon class="small-icon">edit</mat-icon>
-                                        </span>
+                                        <span class="prefix-box">₹</span>
                                         <input type="number" class="form-control custom-input" placeholder="0"
                                             formControlName="TrainerFee">
                                     </div>
@@ -404,9 +396,7 @@
                                 <div class="col-md-3">
                                     <label class="form-label">GOVT GRANTS_DBT<span class="text-danger"></span></label>
                                     <div class="input-wrapper">
-                                        <span class="prefix-box">
-                                            <mat-icon class="small-icon">edit</mat-icon>
-                                        </span>
+                                        <span class="prefix-box">₹</span>
                                         <input type="number" class="form-control custom-input" placeholder="0"
                                             formControlName="GOVTGRANTS_DBT">
                                     </div>
@@ -414,9 +404,7 @@
                                 <div class="col-md-3">
                                     <label class="form-label">PRE KIT</label>
                                     <div class="input-wrapper">
-                                        <span class="prefix-box">
-                                            <mat-icon class="small-icon">edit</mat-icon>
-                                        </span>
+                                        <span class="prefix-box">₹</span>
                                         <input type="number" class="form-control custom-input" placeholder="0"
                                             formControlName="PREKIT">
                                     </div>
@@ -432,9 +420,7 @@
                                 <div class="col-md-3">
                                     <label class="form-label">Education Fee</label>
                                     <div class="input-wrapper">
-                                        <span class="prefix-box">
-                                            <mat-icon class="small-icon">edit</mat-icon>
-                                        </span>
+                                        <span class="prefix-box">₹</span>
                                         <input type="number" class="form-control custom-input" placeholder="0"
                                             formControlName="EducationFee">
                                     </div>
@@ -444,9 +430,7 @@
                                 <div class="col-md-3">
                                     <label class="form-label">Notice Period Recovery</label>
                                     <div class="input-wrapper">
-                                        <span class="prefix-box">
-                                            <mat-icon class="small-icon">edit</mat-icon>
-                                        </span>
+                                        <span class="prefix-box">-</span>
                                         <input type="number" class="form-control custom-input" placeholder="0"
                                             formControlName="NoticePeriodRecovery">
                                     </div>
@@ -454,9 +438,7 @@
                                 <div class="col-md-3">
                                     <label class="form-label">Laptop Rental</label>
                                     <div class="input-wrapper">
-                                        <span class="prefix-box">
-                                            <mat-icon class="small-icon">edit</mat-icon>
-                                        </span>
+                                        <span class="prefix-box">₹</span>
                                         <input type="number" class="form-control custom-input" placeholder="0"
                                             formControlName="LaptopRental">
                                     </div>
@@ -464,9 +446,7 @@
                                 <div class="col-md-3">
                                     <label class="form-label">DRA Deduction</label>
                                     <div class="input-wrapper">
-                                        <span class="prefix-box">
-                                            <mat-icon class="small-icon">edit</mat-icon>
-                                        </span>
+                                        <span class="prefix-box">-</span>
                                         <input type="number" class="form-control custom-input" placeholder="0"
                                             formControlName="DRADeduction">
                                     </div>
@@ -474,9 +454,7 @@
                                 <div class="col-md-3">
                                     <label class="form-label">Other Deduction<span class="text-danger"></span></label>
                                     <div class="input-wrapper">
-                                        <span class="prefix-box">
-                                            <mat-icon class="small-icon">edit</mat-icon>
-                                        </span>
+                                        <span class="prefix-box">-</span>
                                         <input type="number" class="form-control custom-input" placeholder="0"
                                             formControlName="OtherDeduction">
                                     </div>
@@ -486,9 +464,7 @@
                                 <div class="col-md-3">
                                     <label class="form-label">Call Charges</label>
                                     <div class="input-wrapper">
-                                        <span class="prefix-box">
-                                            <mat-icon class="small-icon">edit</mat-icon>
-                                        </span>
+                                        <span class="prefix-box">₹</span>
                                         <input type="number" class="form-control custom-input" placeholder="0"
                                             formControlName="CallCharges">
                                     </div>
@@ -496,9 +472,7 @@
                                 <div class="col-md-3">
                                     <label class="form-label">Call Rate</label>
                                     <div class="input-wrapper">
-                                        <span class="prefix-box">
-                                            <mat-icon class="small-icon">edit</mat-icon>
-                                        </span>
+                                        <span class="prefix-box">₹</span>
                                         <input type="number" class="form-control custom-input" placeholder="0"
                                             formControlName="CallRate">
                                     </div>
@@ -522,7 +496,8 @@
                                 <div class="col-md-3">
                                     <label class="form-label">GST%<span class="text-danger">*</span></label>
                                     <div class="gst-wrapper">
-                                        <input type="number" formControlName="GST" class="gst-input" placeholder="0">
+                                        <input type="number" formControlName="GST" class="gst-input" placeholder="0"
+                                            readonly>
 
                                         <span class="gst-suffix">%</span>
                                         <div class="text-danger small" *ngIf="addGstInvoice.get('GST')?.touched 
@@ -538,7 +513,7 @@
                                             <mat-icon class="small-icon">edit</mat-icon>
                                         </span>
                                         <input type="number" class="form-control custom-input" placeholder="0"
-                                            formControlName="GSTAmount">
+                                            formControlName="GSTAmount" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -657,7 +632,7 @@
                                     </div>
                                     <div class="input-wrapper">
                                         <span class="prefix-box">-</span>
-                                        <input type="number" class="form-control" placeholder="0"
+                                        <input type="number" class="form-control custom-input" placeholder="0"
                                             formControlName="NetAdjustmentAmount">
                                     </div>
                                 </div>
@@ -679,7 +654,8 @@
                                         <span class="prefix-box">
                                             <mat-icon class="small-icon">edit</mat-icon>
                                         </span>
-                                        <input type="text" class="form-control" formControlName="NetAdjNote">
+                                        <input type="text" class="form-control" class="form-control custom-input"
+                                            formControlName="NetAdjNote">
                                     </div>
                                 </div>
 
@@ -688,8 +664,9 @@
                                     <label class="form-label">Net Amount</label>
                                     <div class="input-wrapper">
                                         <span class="prefix-box">₹</span>
-                                        <input type="text" class="form-control" value="0.00"
-                                            style="background: yellow; font-weight: 600;" formControlName="NetAmount">
+                                        <input type="text" class="form-control custom-input" value="0.00"
+                                            style="background: yellow; font-weight: 600;" formControlName="NetAmount"
+                                            readonly>
                                     </div>
                                 </div>
                             </div>
@@ -800,12 +777,8 @@
                         <div class="accordion-content">
                             <div class="row g-3 mb-2">
                                 <div class="col-md-3">
-                                    <label class="form-label">Status<span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" formControlName="Status">
-                                    <div class="text-danger small" *ngIf="addGstInvoice.get('Status')?.touched 
-             && addGstInvoice.get('Status')?.hasError('required')">
-                                        Status is required
-                                    </div>
+                                    <label class="form-label">Status</label>
+                                    <input type="text" class="form-control" formControlName="Status" readonly>
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label">Remarks</label>

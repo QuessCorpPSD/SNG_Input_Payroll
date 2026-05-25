@@ -60,6 +60,7 @@ export class GstinvoiceaddComponent {
   CTCDeductionType: any;
   BillingType: any;
   NetDeductionType: any;
+  GstPercentage: any;
   selectedFinancialYear: any;
   PayCode: any;
   payperiodId: any;
@@ -72,6 +73,8 @@ export class GstinvoiceaddComponent {
   companyId: number = 0;
   mapNameId: any;
   selectedMap: any;
+  taxableAmount: number = 0;
+
 
   constructor(private dialogRef: MatDialogRef<GstinvoiceaddComponent>, private gst: InvoiceRepository, private _decrypt: EncryptionService, private _sessionStoreage: SessionStorageService,) { }
 
@@ -81,6 +84,8 @@ export class GstinvoiceaddComponent {
     this.addGstInvoice.patchValue({
       CompanyName: company.companyName
     });
+
+    this.BindGstPercentage();
   }
 
   handleFinancialYear(year) {
@@ -102,7 +107,6 @@ export class GstinvoiceaddComponent {
   mapnameEvent(event) {
     this.mapNameId = event.mapNameId;
     this.selectedMap = event.mapName;
-    console.log("mapnameEvent", this.mapNameId);
     this.addGstInvoice.patchValue({
       CostCenterMapping: event.mapNameId
     });
@@ -127,8 +131,11 @@ export class GstinvoiceaddComponent {
     this.payPeriodType = "All";
     const today = new Date();
     const formattedToday = today.toISOString().split('T')[0];
+
+
     this.addGstInvoice = new FormGroup({
-      InvoiceNumber: new FormControl('', Validators.required),
+      InvoiceNumber: new FormControl({ value: '', disabled: true }),
+      Status: new FormControl({ value: 'Created', disabled: true }),
       companyCode: new FormControl('', Validators.required),
       CompanyName: new FormControl('', Validators.required),
       GroupDetail: new FormControl(''),
@@ -145,7 +152,7 @@ export class GstinvoiceaddComponent {
       AbsorptionFee: new FormControl(""),
       AbsorptionAmt: new FormControl(""),
       SourcingFee: new FormControl(""),
-      ServiceFeeAmount: new FormControl(""),
+      SourcingFeeAmount: new FormControl(""),
       InEdgeCharges: new FormControl(""),
       InEdgeChargesNote: new FormControl(""),
       CTCAdjustmentAmount: new FormControl(""),
@@ -203,7 +210,6 @@ export class GstinvoiceaddComponent {
       WONumber: new FormControl(""),
       WODate: new FormControl(""),
       InvoiceNotes: new FormControl(""),
-      Status: new FormControl("", Validators.required),
       Remarks: new FormControl(""),
       DiscrepancyReason: new FormControl(""),
       DiscrepancyBy: new FormControl(""),
@@ -212,13 +218,16 @@ export class GstinvoiceaddComponent {
       Location: new FormControl(""),
       State: new FormControl(""),
     });
+
+    this.addGstInvoice.valueChanges.subscribe(() => {
+      this.calculateAmount();
+    });
   }
 
   BindGstInvoiceType() {
     this.gst.getGSTInvoiceType().subscribe({
       next: res => { this.invoiceType = res.Data }
     });
-    console.log(this.invoiceType)
   }
 
   BindCTCDeductionType() {
@@ -239,6 +248,19 @@ export class GstinvoiceaddComponent {
     });
   };
 
+  BindGstPercentage() {
+    this.gst.GetGSTPercentage().subscribe({
+      next: (res: any) => {
+
+        this.GstPercentage = res.Data[0].gst_Percentage;
+
+        this.addGstInvoice.patchValue({
+          GST: this.GstPercentage
+        });
+
+      }
+    });
+  }
   CreateGSTInvoice() {
 
     if (this.addGstInvoice.invalid) {
@@ -389,11 +411,11 @@ export class GstinvoiceaddComponent {
       CALRT: formValue?.CallRate?.toString() ?? null
     };
 
-    console.log("payload", JSON.stringify(payload))
+    console.log("payload", JSON.stringify(payload));
     this.gst.addGstInvoice(payload).subscribe({
       next: (res: string) => {
         const message = res.replace(/<br\s*\/?>/gi, '\n')
-        if (message.includes('Invoice ID')) {
+        if (message.includes('InvoiceID')) {
           alert(message)
           this.onClose();
         }
@@ -411,6 +433,58 @@ export class GstinvoiceaddComponent {
 
   onClose() {
     this.dialogRef.close();
+  }
+
+  calculateAmount() {
+
+    const addValues =
+      Number(this.addGstInvoice.get('Amount')?.value || 0) +
+      Number(this.addGstInvoice.get('ServiceChargeAmount')?.value || 0) +
+      Number(this.addGstInvoice.get('AbsorptionAmt')?.value || 0) +
+      Number(this.addGstInvoice.get('SourcingFeeAmount')?.value || 0) +
+      Number(this.addGstInvoice.get('InEdgeCharges')?.value || 0) +
+      Number(this.addGstInvoice.get('OnboardingCharge')?.value || 0) +
+      Number(this.addGstInvoice.get('UpfrontCharges')?.value || 0) +
+      Number(this.addGstInvoice.get('BGVBilling')?.value || 0) +
+      Number(this.addGstInvoice.get('AssessmentFee')?.value || 0) +
+      Number(this.addGstInvoice.get('IDCardBilling')?.value || 0) +
+      Number(this.addGstInvoice.get('EmailId')?.value || 0) +
+      Number(this.addGstInvoice.get('RegistartionFee')?.value || 0) +
+      Number(this.addGstInvoice.get('TrainerFee')?.value || 0) +
+      Number(this.addGstInvoice.get('GOVTGRANTS_DBT')?.value || 0) +
+      Number(this.addGstInvoice.get('PREKIT')?.value || 0) +
+      Number(this.addGstInvoice.get('VMSFEE')?.value || 0) +
+      Number(this.addGstInvoice.get('EducationFee')?.value || 0) +
+      Number(this.addGstInvoice.get('LaptopRental')?.value || 0);
+
+    const minusValues =
+      Number(this.addGstInvoice.get('CTCAdjustmentAmount')?.value || 0) +
+      Number(this.addGstInvoice.get('Discount1')?.value || 0) +
+      Number(this.addGstInvoice.get('Discount2')?.value || 0) +
+      Number(this.addGstInvoice.get('NoticePeriodRecovery')?.value || 0) +
+      Number(this.addGstInvoice.get('DRADeduction')?.value || 0) +
+      Number(this.addGstInvoice.get('OtherDeduction')?.value || 0);
+
+    this.taxableAmount = addValues - minusValues;
+
+    const gstPercentage =
+      Number(this.addGstInvoice.get('GST')?.value || 0);
+
+    const gstAmount = (this.taxableAmount * gstPercentage) / 100;
+
+    const netamount = Number(
+      (
+        Number(this.taxableAmount) + Number(gstAmount)
+      ).toFixed(2)
+    );
+
+    this.addGstInvoice.patchValue(
+      {
+        GSTAmount: gstAmount.toFixed(2),
+        NetAmount: netamount
+      },
+      { emitEvent: false }
+    );   
   }
 
 }

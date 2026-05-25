@@ -257,3 +257,9 @@ input[type="date"].form-control-sm {
     border: 1px solid #ccc;
     font-weight: 600;
 }
+
+.taxable-total {
+    color: brown;
+    font-weight: bold;
+    margin-left: 5px;
+}
