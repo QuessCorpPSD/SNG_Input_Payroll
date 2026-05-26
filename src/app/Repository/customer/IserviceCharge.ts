@@ -8,5 +8,8 @@ export interface IServiceCharge {
     GetServicechargetype(companyid: any): Observable<APIResponse>;
     SaveServiceCharge(request: any): Observable<APIResponse>;
     GetSearch(companyId: number): Observable<APIResponse>;
-    SaveSourcingType(request: any): Observable<APIResponse>
+    SaveSourcingType(request: any): Observable<APIResponse>;
+    LoadUnitType(): Observable<APIResponse>;
+    loadEmployee(companyid: any, employeeid: any): Observable<APIResponse>;
+    deleteServiceCharge(payload: any): Observable<APIResponse>;
 }

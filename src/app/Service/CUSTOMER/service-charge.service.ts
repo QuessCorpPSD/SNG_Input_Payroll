@@ -47,10 +47,28 @@ export class ServiceChargeService implements IServiceCharge {
     );
   }
 
-   SaveSourcingType(request: any): Observable<APIResponse> {
+  SaveSourcingType(request: any): Observable<APIResponse> {
     return this.http.post<APIResponse>(
       environment.apiUrl + 'ServiceCharge/Create',
       request
     );
   }
+
+  LoadUnitType(): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      environment.apiUrl + 'ServiceCharge/GetUnitType');
+  }
+
+  loadEmployee(companyid: any, employeeid: any): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      this.env.apiUrl + 'Employee/SearchDetails/' + companyid + '/' + employeeid);
+  }
+
+  deleteServiceCharge(payload: any): Observable<APIResponse> {
+    return this.http.post<APIResponse>(
+      environment.apiUrl + 'ServiceCharge/ServiceChargeDelete',payload);
+  }
+
+
+
 }
