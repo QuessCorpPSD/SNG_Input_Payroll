@@ -21,6 +21,9 @@ import { ServiceBillToRateComponent } from '../../ServiceChargeMaster/service-bi
 import { ServiceSlabComponent } from '../../ServiceChargeMaster/service-slab/service-slab.component';
 import { FormControl } from '@angular/forms';
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import * as XLSX from 'xlsx';
+import FileSaver from 'file-saver';
+import { COMM_TOKEN } from '../../../PayrollInput/onboarding/onboarding.component';
 
 interface serviceChargemaster {
   Company_Service_Charge_Master_Id: number
@@ -236,8 +239,6 @@ export class AddservicechargemasterComponent {
   onMasterSelected() {
     this.resetAllSections();
     const id = Number(this.selectedMasterId);
-
-    console.log(id);
     if (id === 1) {
       this.showServiceFeeSection = true;
       this.loadServiceFeeTypes();
@@ -267,15 +268,14 @@ export class AddservicechargemasterComponent {
       this.loadSourcingTypes();
       this.loadMapNames();
     }
-    else if (id === 7) {
-      this.showBillToRate = true;
-      this.loadBillToRateTypes();
-    }
+    // else if (id === 7) {
+    //   this.showBillToRate = true;
+    //   this.loadBillToRateTypes();
+    // }
 
   }
 
   onServiceFeeChange() {
-    console.log(this.selectedService);
     this.resetSubSections();
 
     this.showFixed = this.selectedService == 1;
@@ -349,22 +349,33 @@ export class AddservicechargemasterComponent {
     }
 
     if (this.showBill) {
-      this.billRateForm = this.fb.group({
-        billingCategory: ['', Validators.required],
-        unitPrice: ['', Validators.required],
-        unitType: ['', Validators.required],
-
-        invoiceCategory: ['', Validators.required],
-        mapName: ['', Validators.required],
-        startDate: ['', Validators.required],
-
-        discountType: ['', Validators.required],
-        discountAmount: ['', Validators.required],
-        prorate: ['', Validators.required]
+      this.loadUnitType();
+      this.loadEmployeeCode();
+      this.filteredEmpCode = this.empCode;
+      this.billToRateForm = this.fb.group({
+        employeeCode: ['', Validators.required],
+        UnitPrice: ['', Validators.required],
+        UnitType: ['', Validators.required],
+        EffectiveDate: ['', Validators.required],
+        DiscountType: ['', Validators.required],
+        DiscountAmount: ['', Validators.required]
       });
+      // this.billRateForm = this.fb.group({
+      //   billingCategory: ['', Validators.required],
+      //   unitPrice: ['', Validators.required],
+      //   unitType: ['', Validators.required],
 
-      this.loadMapNames();
-      this.getBillingCategories();
+      //   invoiceCategory: ['', Validators.required],
+      //   mapName: ['', Validators.required],
+      //   startDate: ['', Validators.required],
+
+      //   discountType: ['', Validators.required],
+      //   discountAmount: ['', Validators.required],
+      //   prorate: ['', Validators.required]
+      // });
+
+      // this.loadMapNames();
+      // this.getBillingCategories();
     }
 
     if (this.showSlab) {
@@ -423,7 +434,6 @@ export class AddservicechargemasterComponent {
   }
 
   handleMapNameEvent(mapname: any) {
-    console.log(mapname);
     this.mapnameUI = mapname;
   }
 
@@ -437,8 +447,6 @@ export class AddservicechargemasterComponent {
     if (this.invoiceForm.invalid) return;
 
     const f = this.invoiceForm.value;
-    console.log("master", this.selectedMasterId);
-    console.log("subid", this.selectedService)
 
     const ServiceChargemaster: serviceChargemaster[] = [];
 
@@ -504,11 +512,9 @@ export class AddservicechargemasterComponent {
       ServiceChargemaster: ServiceChargemaster
     }
 
-    console.log(JSON.stringify(request));
     this.serviceChargeService.SaveServiceCharge(request).subscribe({
       next: (res: any) => {
         this.isLoading = false;
-        console.log(res);
         if (res?.StatusCode === 200) {
           alert(res?.Data?.message || "Service Charge saved successfully");
           // this.dialogRef.close(true);
@@ -610,12 +616,9 @@ export class AddservicechargemasterComponent {
       CompanyId: this.selectedCompanyId,
       ServiceChargemaster: ServiceChargemaster
     }
-
-    console.log(JSON.stringify(request));
     this.serviceChargeService.SaveServiceCharge(request).subscribe({
       next: (res: any) => {
         this.isLoading = false;
-        console.log(res);
         if (res?.StatusCode === 200) {
           alert(res?.Data?.message || "Service Charge saved successfully");
           this.showPercentage = false;
@@ -731,26 +734,26 @@ export class AddservicechargemasterComponent {
   }
 
 
-  onBillToRateChange() {
-    // this.resetBillSections();
-    this.showBillToRateTable =
-      this.selectedBillToRate == 1 ||
-      this.selectedBillToRate == 2;
+  // onBillToRateChange() {
+  //   // this.resetBillSections();
+  //   this.showBillToRateTable =
+  //     this.selectedBillToRate == 1 ||
+  //     this.selectedBillToRate == 2;
 
-    if (this.showBillToRateTable) {
-      this.loadUnitType();
-      this.loadEmployeeCode();
-      this.filteredEmpCode = this.empCode;
-      this.billToRateForm = this.fb.group({
-        employeeCode: ['', Validators.required],
-        UnitPrice: ['', Validators.required],
-        UnitType: ['', Validators.required],
-        EffectiveDate: ['', Validators.required],
-        DiscountType: ['', Validators.required],
-        DiscountAmount: ['', Validators.required]
-      });
-    }
-  }
+  //   if (this.showBillToRateTable) {
+  //     this.loadUnitType();
+  //     this.loadEmployeeCode();
+  //     this.filteredEmpCode = this.empCode;
+  //     this.billToRateForm = this.fb.group({
+  //       employeeCode: ['', Validators.required],
+  //       UnitPrice: ['', Validators.required],
+  //       UnitType: ['', Validators.required],
+  //       EffectiveDate: ['', Validators.required],
+  //       DiscountType: ['', Validators.required],
+  //       DiscountAmount: ['', Validators.required]
+  //     });
+  //   }
+  // }
   allowNumbersOnly(event: any) {
     const input = event.target as HTMLInputElement;
     input.value = input.value.replace(/[^0-9.]/g, '');
@@ -782,8 +785,6 @@ export class AddservicechargemasterComponent {
       return;
     }
 
-    console.log("Supplementary Fixed Form Submitted:", this.suppFixForm.value);
-
   }
 
   onSuppPerSubmit() {
@@ -793,7 +794,6 @@ export class AddservicechargemasterComponent {
       return; // show errors and stop
     }
 
-    console.log("Supplementary Percentage Submitted:", this.suppPerForm.value);
     this.dialogRef.close(this.suppPerForm.value);
   }
 
@@ -819,9 +819,7 @@ export class AddservicechargemasterComponent {
     if (json) {
       this.userdetail = JSON.parse(this._decrypt.decrypt(json));
     }
-    console.log(this.userdetail)
     if (this.SourcingForm.invalid) {
-      console.log(this.SourcingForm)
       return; // show errors and stop
     }
 
@@ -896,12 +894,9 @@ export class AddservicechargemasterComponent {
       ServiceChargemaster: Sourcingmaster
     }
 
-    console.log(JSON.stringify(request));
-
     this.serviceChargeService.SaveSourcingType(request).subscribe({
       next: (res: any) => {
         this.isLoading = false;
-        console.log(res);
         if (res?.StatusCode === 200) {
           alert(res?.Data?.message || "Sourcing Type saved successfully");
           this.showSourcingSection = false;
@@ -1027,11 +1022,9 @@ export class AddservicechargemasterComponent {
       ServiceChargemaster: ServiceChargemaster
     }
 
-    console.log(JSON.stringify(request));
     this.serviceChargeService.SaveServiceCharge(request).subscribe({
       next: (res: any) => {
         this.isLoading = false;
-        console.log(res);
         if (res?.StatusCode === 200) {
           alert(res?.Data?.message || "Service Charge saved successfully");
           this.selectedFixedType = "";
@@ -1133,11 +1126,9 @@ export class AddservicechargemasterComponent {
       ServiceChargemaster: ServiceChargemaster
     }
 
-    console.log(JSON.stringify(request));
     this.serviceChargeService.SaveServiceCharge(request).subscribe({
       next: (res: any) => {
         this.isLoading = false;
-        console.log(res);
         if (res?.StatusCode === 200) {
           alert(res?.Data?.message || "Service Charge saved successfully");
           this.selectedFixedType = "";
@@ -1157,7 +1148,6 @@ export class AddservicechargemasterComponent {
       }
     });
 
-    console.log("Slab Fix HeadCount Submitted:", this.headCountForm.value);
     this.dialogRef.close(this.headCountForm.value);
   }
 
@@ -1171,7 +1161,6 @@ export class AddservicechargemasterComponent {
 
     if (this.ctcForm.invalid) return;
 
-    console.log("Slab Percentage CTC Submitted:", this.ctcForm.value);
     this.selectedPercentageType = "";
     this.dialogRef.close(this.ctcForm.value);
   }
@@ -1255,11 +1244,9 @@ export class AddservicechargemasterComponent {
       ServiceChargemaster: ServiceChargemaster
     }
 
-    console.log(JSON.stringify(request));
     this.serviceChargeService.SaveServiceCharge(request).subscribe({
       next: (res: any) => {
         this.isLoading = false;
-        console.log(res);
         if (res?.StatusCode === 200) {
           alert(res?.Data?.message || "Service Charge saved successfully");
           // this.dialogRef.close(true);
@@ -1356,11 +1343,9 @@ export class AddservicechargemasterComponent {
       ServiceChargemaster: ServiceChargemaster
     }
 
-    console.log(JSON.stringify(request));
     this.serviceChargeService.SaveServiceCharge(request).subscribe({
       next: (res: any) => {
         this.isLoading = false;
-        console.log(res);
         if (res?.StatusCode === 200) {
           alert(res?.Data?.message || "Service Charge saved successfully");
           this.selectedPercentageType = "";
@@ -1380,7 +1365,6 @@ export class AddservicechargemasterComponent {
       }
     });
 
-    console.log("Slab Percentage Head Count Submitted:", this.slabPerHeadForm.value);
     this.dialogRef.close(this.slabPerHeadForm.value);
   }
 
@@ -1475,6 +1459,175 @@ export class AddservicechargemasterComponent {
 
   onClose(): void {
     this.dialogRef.close();
+  }
+
+  downloadTemplate() {
+    const templateData = [
+      {
+        COMPANY_CODE: this.selectedCompanyCode,
+        EMPLOYEE_CODE: "",
+        EFFECTIVE_DATE: "",
+        UNIT_PRICE: "",
+        UNIT_TYPE: "",
+        DISCOUNT_TYPE: "",
+        DISCOUNT_AMOUNT: ""
+
+      }
+    ];
+
+    const workSheet = XLSX.utils.json_to_sheet(templateData);
+
+    const workbook: XLSX.WorkBook = {
+      Sheets: { 'Table': workSheet },
+      SheetNames: ['Table']
+    };
+
+    const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const blob = new Blob([buffer], { type: 'application/octet-stream' });
+
+    const today = new Date();
+
+    const formattedDate =
+      today.getDate().toString().padStart(2, '0') + '_' +
+      (today.getMonth() + 1).toString().padStart(2, '0') + '_' +
+      today.getFullYear();
+
+    FileSaver.saveAs(blob, `ServiceFeeBillToRate_${formattedDate}.xlsx`);
+  }
+
+
+  ImportClick(fileInput: HTMLInputElement): void {
+    alert("1")
+    fileInput.click();
+  }
+
+  onFileChange(event: Event): void {
+    this.isLoading = true;
+    const input = event.target as HTMLInputElement;
+    const file = input?.files?.[0];
+
+    if (!file) {
+      alert("Please upload only one Excel file")
+      this.isLoading = false;
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('CreatedBy', this.userdetail.user_Id);
+
+    this.serviceChargeService.upload(formData).subscribe({
+      next: (res) => {
+
+        if (!res || !res.Data) {
+          alert("Upload request Processed.Server did not return any data")
+          this.isLoading = false;
+          return;
+        }
+
+        if (res?.Data?.response?.includes("Uploaded Successfully.")) {
+          this.isLoading = false;
+          alert(res?.Data?.response)
+          return;
+        }
+
+        // --- parse response defensively ---
+        const { parsed, msg } = this.tryParseResponse(res?.Data?.response);
+
+        // CASE 1: Success message inside parsed JSON array/object
+        const successMsg = 'Row(s) Uploaded Successfully.';
+        const successMatch =
+          (Array.isArray(parsed) && parsed[0]?.Error_Message?.trim() === successMsg) ||
+          (parsed && typeof parsed === 'object' && parsed?.Error_Message?.trim() === successMsg);
+
+        if (res?.StatusCode === 200 && successMatch) {
+          this.isLoading = false;
+          return;
+        }
+
+        // CASE 2: Plain failure string
+        if (res?.StatusCode === 200) {
+          // Optional debug
+          // alert('1');
+          this.isLoading = false;
+          // errors[0] may be a JSON string, an array, or a plain string/object
+          const rawErr = res?.Data?.errors?.[0];
+          let errorArray: any[] = [];
+          try {
+            if (typeof rawErr === 'string') {
+              const tryJson = JSON.parse(rawErr);
+              errorArray = Array.isArray(tryJson) ? tryJson : [tryJson];
+            } else if (Array.isArray(rawErr)) {
+              errorArray = rawErr;
+            } else if (rawErr) {
+              errorArray = [rawErr];
+            }
+          } catch {
+            errorArray = rawErr ? [{ Error_Message: String(rawErr) }] : [];
+          }
+
+          const exportData = errorArray.map((item: any) => ({
+            Error_Message: item?.Error_Message || item?.Error_Message || item?.Error_Message || ''
+          }));
+
+          const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+          const workbook: XLSX.WorkBook = {
+            Sheets: { ErrorMessages: worksheet },
+            SheetNames: ['ErrorMessages']
+          };
+          XLSX.writeFile(workbook, 'ErrorMessages_ServiceFeeBilltoRate.xlsx');
+          this.isLoading = false;
+          return;
+        }
+
+        // CASE 3: Anything else → show whatever we have
+        // CASE: Data is array with Error_Message (e.g. "No rows to Upload")
+        if (Array.isArray(res.Data) && res.Data[0]?.Error_Message) {
+          alert(res.Data[0].Error_Message)
+          this.isLoading = false;
+          return;
+        }
+
+        // CASE 3: Anything else → fallback
+        const fallback =
+          msg ||
+          (Array.isArray(parsed) ? JSON.stringify(parsed) :
+            (parsed && typeof parsed === 'object' && parsed.Error_Message) ? parsed.Error_Message :
+              (parsed ? JSON.stringify(parsed) : ''));
+
+        if (fallback) {
+          alert(fallback)
+        } else {
+          alert('Error while processing response.')
+        }
+
+        this.isLoading = false;
+
+      },
+      error: (err) => {
+        this.isLoading = false;
+        alert("Upload Failed")
+      }
+    });
+  }
+
+  tryParseResponse(r: any): { parsed: any; msg: string } {
+    if (r == null) return { parsed: null, msg: '' };
+
+    if (Array.isArray(r)) return { parsed: r, msg: '' };
+    if (typeof r === 'object') return { parsed: r, msg: '' };
+
+    // string
+    if (typeof r === 'string') {
+      try {
+        const p = JSON.parse(r);
+        return { parsed: p, msg: '' };
+      } catch {
+        return { parsed: null, msg: r };
+      }
+    }
+
+    return { parsed: null, msg: String(r) };
   }
 
 }
