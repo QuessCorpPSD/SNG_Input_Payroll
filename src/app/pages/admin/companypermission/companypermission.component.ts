@@ -437,6 +437,42 @@ export class CompanypermissionComponent {
     });
   }
 
+  // loadEditCompanies(row: any) {
+
+  //   const userid = row.User_Id || 0;
+
+  //   const payload = {
+  //     Userid: userid,
+  //     Businessunitnameid: row.BUSINESS_UNIT_NAME_ID || 0,
+  //     CompanyPermissionId: row.Company_Permission_Id || 0
+  //   };
+
+  //   this.service.EditDetails(payload).subscribe((res: any) => {
+
+  //     const apiData = res?.Data?.data?.Table0 || [];
+
+  //     console.log("Edit API Data:", apiData);
+
+  //     const selectedIds = apiData.map((x: any) => x.COMPANY_ID);
+
+  //     const updatedData = (this.uploadedDataSourceadd.data || []).map((item: any) => {
+
+  //       return {
+  //         ...item,
+  //         selected: selectedIds.includes(item.COMPANY_ID)
+  //       };
+  //     });
+
+  //     // Selected rows first
+  //     updatedData.sort((a: any, b: any) => {
+  //       return Number(b.selected) - Number(a.selected);
+  //     });
+
+  //     // IMPORTANT
+  //     this.uploadedDataSourceadd.data = [...updatedData];
+  //   });
+  // }
+
   onDelete(row: any) {
 
     if (!confirm("Are you sure you want to delete this record?")) {

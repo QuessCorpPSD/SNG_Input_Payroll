@@ -34,7 +34,8 @@
                         matTooltip="export to excel" (click)="exportToExcel()">
                         <mat-icon>download</mat-icon>
                     </button>
-                    <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center" (click)="unLock()">
+                    <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                        (click)="unLock()">
                         Unlock
                     </button>
                     <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center" matTooltip="import">
@@ -72,15 +73,15 @@
                     <!-- 🔹 Sl.No -->
                     <ng-container matColumnDef="slNo">
                         <mat-header-cell *matHeaderCellDef>Sl.No</mat-header-cell>
-                        <mat-cell *matCellDef="let row; let i = index">
-                            {{ i + 1 }}
+                        <mat-cell *matCellDef="let row;">
+                            {{row.Serial_No}}
                         </mat-cell>
                     </ng-container>
 
                     <!-- 🔹 Pay Code -->
                     <ng-container matColumnDef="name">
                         <mat-header-cell *matHeaderCellDef>User Name</mat-header-cell>
-                        <mat-cell *matCellDef="let row">{{ row.USERNAME }}</mat-cell>
+                        <mat-cell *matCellDef="let row">{{ row.UserName }}</mat-cell>
                     </ng-container>
 
                     <!-- 🔹 Description -->
@@ -91,41 +92,43 @@
 
                     <ng-container matColumnDef="emailid">
                         <mat-header-cell *matHeaderCellDef>Email Id</mat-header-cell>
-                        <mat-cell *matCellDef="let row">{{ row.EMAIL_ID }}</mat-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Mail_Id }}</mat-cell>
                     </ng-container>
 
                     <!-- 🔹 Pay Type -->
                     <ng-container matColumnDef="reportingto">
                         <mat-header-cell *matHeaderCellDef>Reporting To</mat-header-cell>
-                        <mat-cell *matCellDef="let row">{{ row.REPORTING_TO }}</mat-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Reporting_To }}</mat-cell>
                     </ng-container>
 
                     <!-- 🔹 Taxable -->
                     <ng-container matColumnDef="roles">
                         <mat-header-cell *matHeaderCellDef>Roles</mat-header-cell>
-                        <mat-cell *matCellDef="let row">{{ row.ROLES }}</mat-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Role_Name }}</mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="activeStatus">
                         <mat-header-cell *matHeaderCellDef>Permission Access</mat-header-cell>
-                        <mat-cell *matCellDef="let row">{{ row.IS_PERMISSION? 'Yes' : 'No' }}</mat-cell>
+                        <mat-cell *matCellDef="let row">{{ row.ActiveStatus }}</mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="pendingStatus">
                         <mat-header-cell *matHeaderCellDef>Permission Access</mat-header-cell>
-                        <mat-cell *matCellDef="let row">{{ row.IS_PERMISSION? 'Yes' : 'No' }}</mat-cell>
+                        <mat-cell *matCellDef="let row">{{ row.PendingStatus}}</mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="approverRemarks">
                         <mat-header-cell *matHeaderCellDef>Approver Remarks</mat-header-cell>
-                        <mat-cell *matCellDef="let row">{{ row.APPROVER_REMARKS }}</mat-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Approver_Remarks }}</mat-cell>
                     </ng-container>
 
                     <!-- Header Rows -->
                     <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
 
                     <!-- Data Rows -->
-                    <mat-row *matRowDef="let row; columns: uploadDisplayedColumns"></mat-row>
+                    <mat-row *matRowDef="let row; columns: uploadDisplayedColumns" (click)="selectRow(row)"
+                        [class.selected-row]="selectedUserId === row.User_Id">
+                    </mat-row>
 
                 </table>
             </div>

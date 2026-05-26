@@ -17,6 +17,7 @@ import * as FileSaver from 'file-saver';
 import { ICompanyPermission } from '../../../Repository/Admin/ICompanyPermission.service';
 import { IUserManagement } from '../../../Repository/Admin/IUserManagement.service';
 import { UserCreationService } from '../../../Service/Admin/user-creation.service';
+import { finalize } from 'rxjs/operators';
 export const Pay_Token = new InjectionToken<IUserManagement>('Pay_Token');
 
 @Component({
@@ -48,7 +49,7 @@ export class UsercreationComponent {
   isAddclicked: boolean = false;
   showForm = false;
   editIndex: number | null = null;
-  UserName: any;
+  UserName: string = "";
   Role: any;
   roles: any;
   accesstypes: any;
@@ -57,6 +58,7 @@ export class UsercreationComponent {
   searchText: string = '';
   selectedUserId: any;
   password: any;
+  search: any;
 
   constructor(private _decrypt: EncryptionService, private _sessionStoreage: SessionStorageService, private dialog: MatDialog, @Inject(Pay_Token) private service: UserCreationService,) { }
 
@@ -85,6 +87,8 @@ export class UsercreationComponent {
     this.userdetail = JSON.parse(this._decrypt.decrypt(userdetail!));
     this.payPeriodType = "All";
     this.bindRoles();
+    this.bindreportingto();
+    this.bindaccesstype();
     this.addUserForm = new FormGroup({
       Name: new FormControl(""),
       EmpNo: new FormControl(""),
@@ -109,8 +113,6 @@ export class UsercreationComponent {
   addOpen() {
     this.isAddclicked = true;
     this.bindRoles();
-    this.bindreportingto();
-    this.bindaccesstype();
     this.isEditMode = false;
     this.editIndex = null;
     this.addUserForm.reset();
@@ -131,9 +133,12 @@ export class UsercreationComponent {
 
   bindreportingto() {
     this.isLoading = true;
-    this.service.bindReportingTo().subscribe({
-      next: res => {
+    this.service.bindReportingTo().pipe(
+      finalize(() => {
         this.isLoading = false;
+      })
+    ).subscribe({
+      next: res => {
         this.reportingto = res?.Data?.data?.Table0 || [];
       },
     })
@@ -141,9 +146,12 @@ export class UsercreationComponent {
 
   bindaccesstype() {
     this.isLoading = true;
-    this.service.bindAccessType().subscribe({
-      next: res => {
+    this.service.bindAccessType().pipe(
+      finalize(() => {
         this.isLoading = false;
+      })
+    ).subscribe({
+      next: res => {
         this.accesstypes = res?.Data?.data?.Table0 || [];
       },
     })
@@ -155,30 +163,44 @@ export class UsercreationComponent {
     const IsCheck = 1;
     const payload = {
       UserId: 0,
-      UserName: String(this.UserName.trim()) || null,
+      UserName: String(this.UserName?.trim()) || "",
       RoleId: this.Role ? Number(this.Role) || 0 : 0,
-      IsCheck: this.inactive ? 1 : 0
+      IsCheck: this.inactive ? 1 : 0 || 1
     };
     this.service.Search(payload).subscribe({
-      next: res => {
+      next: (res) => {
         this.isLoading = false;
-        this.uploadedData = res?.Data?.data?.Table0 || [];
-        this.uploadedDataSource.data = this.uploadedData;
-        this.uploadedDataSource.paginator = this.paginator;
-        if (this.uploadedData.length === 0) {
-          alert('No data found');
+        this.search = res.Data.data.Table0;
+        console.log(this.search);
+        if (this.search && this.search.length > 0) {
+          this.dataSource = new MatTableDataSource(this.search);
+          this.dataSource.paginator = this.paginator;
+          // this.dataSource.sort = this.sort;
+          this.uploadDisplayedColumns = [
+            'action', 'slNo', 'name', 'employeeid', 'emailid', 'reportingto', 'roles', 'activeStatus', 'pendingStatus', 'approverRemarks'];
+        } else {
+          this.isLoading = false;
+          this.dataSource.data = [];
+          alert('No data found for the selected criteria');
         }
       },
-      error: err => {
+      error: (err) => {
+        console.error('Error loading salary release data', err);
         this.isLoading = false;
-        console.error("Error fetching data:", err);
-        alert('Error fetching data');
-      }
+        alert('Failed to load salary release data');
+      },
     });
   }
   applyFilters() {
     const filterValue = this.searchText?.trim().toLowerCase();
     this.uploadedDataSource.filter = filterValue;
+  }
+
+  selectRow(row: any) {
+
+    this.selectedUserId = row.User_Id;
+
+    console.log("Selected User ID:", this.selectedUserId);
   }
 
   exportToExcel() {
@@ -256,13 +278,13 @@ export class UsercreationComponent {
   }
 
   openEdit(row: any) {
-    this.showForm = true;
+    this.isAddclicked = true;
     this.isEditMode = true;
     this.editIndex = row['Id'] || null;
     this.selectedUserId = row['User_Id'];
     this.password = row['Password'];
     this.addUserForm.patchValue({
-      name: row['Name'] || '',
+      Name: row['UserName'] || '',
       EmpNo: row['EmployeeID'] || '',
       email: row['Mail_Id'] || '',
       ReportingTo: row['Reporting_ToId'],
@@ -272,8 +294,8 @@ export class UsercreationComponent {
       IsPending: row['Is_Pending'] === true ? '1' : '0',
       ApproverRemarks: row['Approver_Remarks'] || ''
     });
-    this.addUserForm.get('name')?.disable();
-    this.addUserForm.get('empNo')?.disable();
+    this.addUserForm.get('Name')?.disable();
+    this.addUserForm.get('EmpNo')?.disable();
     this.addUserForm.get('email')?.disable();
     this.addUserForm.get('Roles')?.disable();
   }
@@ -311,7 +333,7 @@ export class UsercreationComponent {
         const msg = res?.Data?.message || "";
         const code = res?.Data?.statusCode;
 
-        if ((res?.StatusCode === 200 && msg) || code === "400") {
+        if ((res?.Data?.statusCode === 200 && msg) || code === "400") {
           alert(msg);
           this.closeclick();
           this.onsearch();
@@ -353,7 +375,7 @@ export class UsercreationComponent {
         next: (res: any) => {
           const msg = res?.Data?.message || "";
           const code = res?.Data?.statusCode;
-          if ((res?.StatusCode === 200 && msg) || code === "400") {
+          if ((res?.Data?.statusCode === 200) || code === "400") {
             alert(msg || "User deleted");
             this.onsearch();
           }
@@ -371,32 +393,41 @@ export class UsercreationComponent {
   }
 
   unLock() {
-    if (!this.uploadedData || this.uploadedData.length === 0) {
+    // Check search data available
+    if (!this.dataSource.data || this.dataSource.data.length === 0) {
       alert("Please search user first.");
       return;
     }
 
-    // Check row selected
     if (!this.selectedUserId) {
       alert("Please select one user to unlock.");
       return;
     }
-    const form = this.addUserForm.getRawValue();
+
+    // Find selected row
+    const row = this.dataSource.data.find(
+      (x: any) => x.User_Id === this.selectedUserId
+    );
+
+    if (!row) {
+      alert("Selected row not found.");
+      return;
+    }
 
     const payload = {
       createdBy: this.userdetail.user_Id,
       mode: "UnLockUser",
       UserDetails: {
-        User_Id: this.isEditMode ? this.selectedUserId : 0,
-        Name: form.Name || '',
-        Password: this.isEditMode ? this.password : '',
+        User_Id: row.User_Id,
+        Name: row.Name || '',
+        Password: row.Password || '',
         Salt: '',
-        Mail_Id: form.email || '',
-        Reporting_To: form.ReportingTo ? String(form.ReportingTo) : '',
-        Role_Id: form.Roles ? Number(form.Roles) : '',
-        Access_Type_Id: form.AccessType ? Number(form.AccessType) : '',
-        EmployeeID: form.EmpNo ? Number(form.EmpNo) : '',
-        IsActive: form.IsActive ? Number(form.IsActive) : 0,
+        Mail_Id: row.Mail_Id || '',
+        Reporting_To: row.Reporting_ToId || '',
+        Role_Id: row.Role_Id || '',
+        Access_Type_Id: row.Access_Type_Id || '',
+        EmployeeID: row.EmployeeID || '',
+        IsActive: 0,
       }
     };
 
@@ -406,17 +437,17 @@ export class UsercreationComponent {
     this.service.UnLockUser(payload).subscribe({
       next: (res: any) => {
         this.isLoading = false;
-        const msg = res?.Data?.message || "";
+        const msg = res?.Data?.data?.Table0[0]?.Error_Message || "";
         const code = res?.Data?.statusCode;
 
-        if ((res?.StatusCode === 200 && msg) || code === "400") {
+        if ((res?.Data?.statusCode === 200) || code === "400") {
           alert(msg);
           this.closeclick();
           this.onsearch();
+          this.selectedUserId = null;
 
         } else {
           console.warn("⚠️ Success condition FAILED");
-          alert("Save failed");
         }
       },
 

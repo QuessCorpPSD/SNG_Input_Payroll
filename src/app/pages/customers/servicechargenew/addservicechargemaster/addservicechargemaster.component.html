@@ -68,6 +68,29 @@
                     (percentageSelected)="selectSupplementType('percentage')">
                 </app-supplementary-fee> -->
             </div>
+
+            <!-- Bill to Rate DROPDOWN -->
+            <div class="col-md-4 same-col" *ngIf="showBillToRate">
+                <!-- <app-add-servicefee
+                (fixedSelected)="showFixedSection()"
+                (percentageSelected)="showPercentageSection()"
+                (billSelected)="showBillToRateSection()"
+                (slabSelected)="showSlabSection()">
+              </app-add-servicefee> -->
+                <div class="col-md-4 same-col">
+                    <label class="form-label text-muted small">Billing To Rate</label>
+
+                    <select class="form-select form-select-sm" [(ngModel)]="selectedBillToRate"
+                        (change)="onBillToRateChange()">
+                        <option value="">Select</option>
+
+                        <option *ngFor="let type of billToRateTypes" [value]="type.Service_Charge_Type_Id">
+                            {{ type.Service_Charge_Type_Name }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+
         </div>
 
         <!-- SERVICE FEE BODY -->
@@ -1562,5 +1585,130 @@
             </form>
         </div>
 
+        <div class="col-12" *ngIf="showBillToRateTable">
+            <!-- <app-supplementary-percentage></app-supplementary-percentage> -->
+            <form [formGroup]="billToRateForm">
+                <!-- ROW 1 -->
+                <div class="row g-3 mb-3">
+                    <!-- <div class="col-md-4">
+                        <label class="form-label text-muted small">Employee Code<span
+                                class="text-danger">*</span></label>
+                        <select class="form-select form-select-sm" formControlName="employeeCode">
+                            <option value="">Select</option>
+                            <option *ngFor="let item of empCode" [ngValue]="item">
+                                {{ item.Employee_Code }}
+                            </option>
+                        </select>
+                        <small class="text-danger" *ngIf="showErrors && billToRateForm.get('employeeCode')?.invalid">
+                            employeeCode is required
+                        </small>
+                    </div> -->
+                    <div class="col-md-4">
+
+                        <label class="form-label text-muted small">
+                            Employee Code
+                            <span class="text-danger">*</span>
+                        </label>
+
+                        <mat-form-field appearance="outline" class="w-100 hover-clear-field">
+                            <input matInput type="text" placeholder="Search Employee" formControlName="employeeCode"
+                                [matAutocomplete]="auto" (input)="filterEmployee($event)">
+
+                            <mat-icon matSuffix class="clear-icon" (click)="clearSearch()">
+                                close
+                            </mat-icon>
+
+                            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn"
+                                (optionSelected)="onEmployeeSelected($event.option.value)">
+                                <mat-option *ngFor="let item of filteredEmpCode" [value]="item">
+                                    {{ item.Employee_Code }}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                        <small class="text-danger" *ngIf="showErrors && billToRateForm.get('employeeCode')?.invalid">
+                            employeeCode is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Unit Price<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control form-control-sm" formControlName="UnitPrice"
+                            (input)="allowNumbersOnly($event)" />
+                        <small class="text-danger" *ngIf="showErrors && billToRateForm.get('UnitPrice')?.invalid">
+                            Unit Price is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Unit Type<span class="text-danger">*</span></label>
+                        <select class="form-select form-select-sm" formControlName="UnitType">
+                            <option value="">Select</option>
+                            <option *ngFor="let item of unitTypeList" [value]="item.UnitType_Id">
+                                {{ item.Unit_Type }}
+                            </option>
+                        </select>
+                        <small class="text-danger" *ngIf="showErrors && billToRateForm.get('UnitType')?.invalid">
+                            Unit Type is required
+                        </small>
+                    </div>
+                </div>
+
+                <!-- ROW 2 -->
+                <div class="row g-3 mb-3">
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Effective Date<span
+                                class="text-danger">*</span></label>
+                        <input type="date" class="form-control form-control-sm" formControlName="EffectiveDate" />
+                        <small class="text-danger" *ngIf="showErrors && billToRateForm.get('EffectiveDate')?.invalid">
+                            Effective Date is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Discount Type</label>
+                        <select class="form-select form-select-sm" formControlName="DiscountType">
+                            <option value="">Select</option>
+                            <option value="1160">Fixed</option>
+                            <option value="1161">Percentage</option>
+                        </select>
+                        <small class="text-danger" *ngIf="showErrors && billToRateForm.get('DiscountType')?.invalid">
+                            Discount Type is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Discount Amount</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="DiscountAmount"
+                            (input)="allowNumbersOnly($event)" />
+                        <small class="text-danger" *ngIf="showErrors && billToRateForm.get('DiscountAmount')?.invalid">
+                            Discount Amount is required
+                        </small>
+                    </div>
+                </div>
+
+                <!-- BUTTONS -->
+                <div class="d-flex justify-content-end mt-3">
+                    <div class="btn-1"
+                        style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
+                        <button type="button" (click)="onBillToRateReset()"
+                            style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;">
+                            Cancel
+                        </button>
+
+                        <button type="button" (click)="onBillToRateSubmit()"
+                            style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white;">
+                            Save
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+
     </mat-card-content>
 </mat-card>
+
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>

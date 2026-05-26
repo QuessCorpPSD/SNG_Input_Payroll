@@ -9,6 +9,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MapnameComponent } from '../../../../common/Mapname/mapname/mapname.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
 import { ServiceChargeService } from '../../../../Service/CUSTOMER/service-charge.service';
 import { EncryptionService } from '../../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../../Shared/SessionStorageService';
@@ -16,6 +19,8 @@ import { AddServiceChargeComponent } from '../../ServiceChargeMaster/add-service
 import { AddServicefeeComponent } from '../../ServiceChargeMaster/add-servicefee/add-servicefee.component';
 import { ServiceBillToRateComponent } from '../../ServiceChargeMaster/service-bill-to-rate/service-bill-to-rate.component';
 import { ServiceSlabComponent } from '../../ServiceChargeMaster/service-slab/service-slab.component';
+import { FormControl } from '@angular/forms';
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
 
 interface serviceChargemaster {
   Company_Service_Charge_Master_Id: number
@@ -58,7 +63,7 @@ interface serviceChargemaster {
   Slab_Calculation_Type_Id: number
   Cap_Value: number
   Upfront_Charge: number
-  Upfront_PayCode: number
+  Upfront_PayCode: string
   Upfront_Type_Id: number
   Insurance_Amount: string
   MarginalPayCodeId: number
@@ -84,6 +89,10 @@ interface serviceChargemaster {
     MatTooltipModule,
     MatTableModule,
     MatCardModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule,
+    MatIconModule,
     AddServicefeeComponent,
     // SupplementaryFeeComponent,
     ReactiveFormsModule,
@@ -94,10 +103,7 @@ interface serviceChargemaster {
     // SupplementaryFixedComponent,
     // SupplementaryPercentageComponent,
     MapnameComponent,
-    //NapsserviceFixedComponent,
-    //NapsservicePercentageComponent,
-    //SourcingFeeComponent,
-    //NAPSserviceFeeComponent,
+    MatAutocompleteModule
   ],
   templateUrl: './addservicechargemaster.component.html',
   styleUrl: './addservicechargemaster.component.css'
@@ -111,21 +117,22 @@ export class AddservicechargemasterComponent {
   mapnameUI: any;
   mapNameList: any[] = [];
   suppFixForm!: FormGroup;
+  employeeSearch: any;
   constructor(
     private dialogRef: MatDialogRef<AddServiceChargeComponent>,
     private dialog: MatDialog,
     private serviceChargeService: ServiceChargeService,
-    private decry: EncryptionService,
-    private _sessionStoreage: SessionStorageService,
     private snackBar: MatSnackBar,
     private fb: FormBuilder,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private _decrypt: EncryptionService, private _sessionStoreage: SessionStorageService
   ) { }
 
   // MAIN SECTION VISIBILITIES
   showServiceFeeSection = false;
   showSupplementSection = false;
   showSourcingSection = false;
+  showBillToRate = false;
 
   // SERVICE FEE SUB SECTIONS
   showFixed = false;
@@ -137,11 +144,15 @@ export class AddservicechargemasterComponent {
   showSuppFixed = false;
   showSuppPercentage = false;
 
+  //Billtorate Sub sections
+  showBillToRateTable = false;
+
   serviceChargeMasterList: any[] = [];
   selectedMasterId: number | null = null;
   selectedCompanyId?: number;
   selectedCompanyCode?: string;
   selectedSupplementary: any;
+  selectedBillToRate: any;
   invoiceForm!: FormGroup;
   percentageForm!: FormGroup;
   SourcingForm!: FormGroup;
@@ -155,8 +166,22 @@ export class AddservicechargemasterComponent {
   headCountForm!: FormGroup;
   ctcPerForm!: FormGroup;
   slabPerHeadForm!: FormGroup;
+  billToRateForm!: FormGroup;
+  billToRateTypes: any;
+  unitTypeList: any;
+  empCode: any;
+  isLoading = false;
+  // employeeControl = new FormControl();
+  searchText: any = '';
+  filteredEmpCode: any[] = [];
+
+  displayFn(item: any): string {
+    return item ? item.Employee_Code : '';
+  }
 
   ngOnInit() {
+    const userdetail = this._sessionStoreage.getItem('UserProfile');
+    this.userdetail = JSON.parse(this._decrypt.decrypt(userdetail!));
     this.selectedCompanyId = this.data.companyId;
     this.selectedCompanyCode = this.data.companyCode;
     this.loadServiceChargeMaster();
@@ -191,29 +216,38 @@ export class AddservicechargemasterComponent {
     });
   }
 
+  loadBillToRateTypes() {
+    const masterId = 7;
+
+    this.serviceChargeService.GetServicechargetype(masterId).subscribe({
+      next: (res: any) => {
+        this.billToRateTypes = res?.Data?.data?.Table0 || [];
+      },
+      error: (err) => {
+        console.error("Failed to load bill to rate types", err);
+        this.snackBar.open("Failed to load Bill To Rate types", "Close", { duration: 3000 });
+      }
+    });
+  } s
+
   // -------------------------------------------------------
   // MAIN DROPDOWN CHANGE
   // -------------------------------------------------------
   onMasterSelected() {
     this.resetAllSections();
+    const id = Number(this.selectedMasterId);
 
-    const selected = this.serviceChargeMasterList.find(
-      x => x.Service_Charge_Master_Id == this.selectedMasterId
-    );
-
-    console.log(selected)
-    if (!selected) return;
-
-    const name = selected.Service_Charge_Master_Name.toLowerCase();
-
-    if (name === "service fee") {
+    console.log(id);
+    if (id === 1) {
       this.showServiceFeeSection = true;
       this.loadServiceFeeTypes();
     }
-    else if (name === "supplementary fee") {
+    else if (id === 2) {
       this.showSupplementSection = true;
       this.loadSupplementaryTypes();
-    } else if (name === "sourcing fee") {
+    }
+    else if (id === 3) {
+
       this.showSourcingSection = true;
       this.SourcingForm = this.fb.group({
         mapName: [''],
@@ -233,6 +267,11 @@ export class AddservicechargemasterComponent {
       this.loadSourcingTypes();
       this.loadMapNames();
     }
+    else if (id === 7) {
+      this.showBillToRate = true;
+      this.loadBillToRateTypes();
+    }
+
   }
 
   onServiceFeeChange() {
@@ -248,7 +287,7 @@ export class AddservicechargemasterComponent {
     if (this.showFixed) {
       const json = this._sessionStoreage.getItem('UserProfile');
       if (json) {
-        this.userdetail = JSON.parse(this.decry.decrypt(json));
+        this.userdetail = JSON.parse(this._decrypt.decrypt(json));
       }
       this.invoiceForm = this.fb.group({
 
@@ -281,9 +320,9 @@ export class AddservicechargemasterComponent {
     if (this.showPercentage) {
       const json = this._sessionStoreage.getItem('UserProfile');
       if (json) {
-        this.userdetail = JSON.parse(this.decry.decrypt(json));
+        this.userdetail = JSON.parse(this._decrypt.decrypt(json));
       }
-      
+
       this.percentageForm = this.fb.group({
         mapName: [null],
         paycode: ['FCTC', Validators.required],
@@ -390,6 +429,7 @@ export class AddservicechargemasterComponent {
 
   onSave() {
     this.showErrors = true;
+    this.isLoading = true;
     if (!this.mapnameUI) {
       alert("Please select Map Name");
       return;
@@ -467,15 +507,26 @@ export class AddservicechargemasterComponent {
     console.log(JSON.stringify(request));
     this.serviceChargeService.SaveServiceCharge(request).subscribe({
       next: (res: any) => {
+        this.isLoading = false;
         console.log(res);
         if (res?.StatusCode === 200) {
           alert(res?.Data?.message || "Service Charge saved successfully");
-          this.dialogRef.close(true);
+          // this.dialogRef.close(true);
+          this.showFixed = false;
+          this.onReset();
         } else {
           alert("Save failed");
         }
       },
-      error: () => alert("Failed")
+      error: (err) => {
+
+        this.isLoading = false;
+
+        console.error(err);
+
+        alert("Failed");
+
+      }
     });
   }
 
@@ -487,6 +538,7 @@ export class AddservicechargemasterComponent {
 
   onSubmit() {
     this.showErrors = true;
+    this.isLoading = true;
     if (!this.mapnameUI) {
       alert("Please select Map Name");
       return;
@@ -562,15 +614,25 @@ export class AddservicechargemasterComponent {
     console.log(JSON.stringify(request));
     this.serviceChargeService.SaveServiceCharge(request).subscribe({
       next: (res: any) => {
+        this.isLoading = false;
         console.log(res);
         if (res?.StatusCode === 200) {
           alert(res?.Data?.message || "Service Charge saved successfully");
-          this.dialogRef.close(true);
+          this.showPercentage = false;
+          // this.dialogRef.close(true);
         } else {
           alert("Save failed");
         }
       },
-      error: () => alert("Failed")
+      error: (err) => {
+
+        this.isLoading = false;
+
+        console.error(err);
+
+        alert("Failed");
+
+      }
     });
   }
 
@@ -620,14 +682,81 @@ export class AddservicechargemasterComponent {
     }
   }
 
+  loadUnitType() {
+    this.serviceChargeService.LoadUnitType().subscribe({
+      next: (res: any) => {
+        this.unitTypeList = res?.Data.data.Table0 || [];
+      },
+      error: () => {
+        alert("Failed to load Map Names");
+      }
+    });
+  }
+
+  loadEmployeeCode() {
+    const companyId = this.data.companyId;
+    const empid = 0;
+
+    this.serviceChargeService.loadEmployee(companyId, empid).subscribe({
+      next: (res: any) => {
+        this.empCode = res?.Data?.data?.Table0 || [];
+      },
+      error: () => {
+        alert("Failed to load Map Names");
+      }
+    });
+  }
+
+  filterEmployee(event: any) {
+
+    const search = event.target.value.toLowerCase();
+
+    this.filteredEmpCode = this.empCode.filter((x: any) =>
+      x.Employee_Code.toLowerCase().includes(search)
+    );
+
+  }
+
+  onEmployeeSelected(item: any) {
+
+    this.billToRateForm.patchValue({
+      employeeCode: item
+    });
+
+  }
+  clearSearch() {
+    this.searchText = '';
+    this.billToRateForm.get('employeeCode')?.setValue('');
+    this.filteredEmpCode = this.empCode;
+  }
+
+
+  onBillToRateChange() {
+    // this.resetBillSections();
+    this.showBillToRateTable =
+      this.selectedBillToRate == 1 ||
+      this.selectedBillToRate == 2;
+
+    if (this.showBillToRateTable) {
+      this.loadUnitType();
+      this.loadEmployeeCode();
+      this.filteredEmpCode = this.empCode;
+      this.billToRateForm = this.fb.group({
+        employeeCode: ['', Validators.required],
+        UnitPrice: ['', Validators.required],
+        UnitType: ['', Validators.required],
+        EffectiveDate: ['', Validators.required],
+        DiscountType: ['', Validators.required],
+        DiscountAmount: ['', Validators.required]
+      });
+    }
+  }
   allowNumbersOnly(event: any) {
     const input = event.target as HTMLInputElement;
     input.value = input.value.replace(/[^0-9.]/g, '');
     input.value = input.value.replace(/(\..*)\./g, '$1');
     this.suppFixForm.get(input.getAttribute('formControlName')!)?.setValue(input.value);
   }
-
-
 
   fixedslabChange() {
     if (this.selectedFixedType == 'headcount') {
@@ -673,6 +802,11 @@ export class AddservicechargemasterComponent {
     this.showErrors = false;
   }
 
+  onBillToRateReset() {
+    this.billRateForm.reset();
+    this.showBillToRateTable = false;
+  }
+
   onSourceReset() {
     this.SourcingForm.reset();
     this.showErrors = false;
@@ -680,9 +814,10 @@ export class AddservicechargemasterComponent {
 
   onSourceSubmit() {
     this.showErrors = true;
+    this.isLoading = true;
     const json = this._sessionStoreage.getItem('UserProfile');
     if (json) {
-      this.userdetail = JSON.parse(this.decry.decrypt(json));
+      this.userdetail = JSON.parse(this._decrypt.decrypt(json));
     }
     console.log(this.userdetail)
     if (this.SourcingForm.invalid) {
@@ -751,7 +886,7 @@ export class AddservicechargemasterComponent {
       IsNewJoineeArrearProrate: f.newJoineeArrearprorate,
       QDemyFee_Type_Id: f.qdemyFeeType,
       InEdgeFee_Type_Id: f.inedgeFeeType,
-      TATDaysType:f.tat_days_type
+      TATDaysType: f.tat_days_type
     });
 
     const request = {
@@ -765,15 +900,25 @@ export class AddservicechargemasterComponent {
 
     this.serviceChargeService.SaveSourcingType(request).subscribe({
       next: (res: any) => {
+        this.isLoading = false;
         console.log(res);
         if (res?.StatusCode === 200) {
           alert(res?.Data?.message || "Sourcing Type saved successfully");
-          this.dialogRef.close(true);
+          this.showSourcingSection = false;
+          // this.dialogRef.close(true);
         } else {
           alert("Save failed");
         }
       },
-      error: () => alert("Failed")
+      error: (err) => {
+
+        this.isLoading = false;
+
+        console.error(err);
+
+        alert("Failed");
+
+      }
     });
   }
 
@@ -815,7 +960,7 @@ export class AddservicechargemasterComponent {
     }
     this.showErrors = true;
 
-
+    this.isLoading = true;
     const f = this.ctcForm.value;
 
     const ServiceChargemaster: serviceChargemaster[] = [];
@@ -861,7 +1006,7 @@ export class AddservicechargemasterComponent {
       Slab_Calculation_Type_Id: f.slabCalcType,
       Cap_Value: f.capValue,
       Upfront_Charge: 0,
-      Upfront_PayCode: 0,
+      Upfront_PayCode: '',
       Upfront_Type_Id: 0,
       Insurance_Amount: "",
       MarginalPayCodeId: 0,
@@ -885,15 +1030,25 @@ export class AddservicechargemasterComponent {
     console.log(JSON.stringify(request));
     this.serviceChargeService.SaveServiceCharge(request).subscribe({
       next: (res: any) => {
+        this.isLoading = false;
         console.log(res);
         if (res?.StatusCode === 200) {
           alert(res?.Data?.message || "Service Charge saved successfully");
-          this.dialogRef.close(true);
+          this.selectedFixedType = "";
+          // this.dialogRef.close(true);
         } else {
           alert("Save failed");
         }
       },
-      error: () => alert("Failed")
+      error: (err) => {
+
+        this.isLoading = false;
+
+        console.error(err);
+
+        alert("Failed");
+
+      }
     });
 
     // console.log("Slab Fixed CTC Submitted:", this.ctcForm.value);
@@ -907,7 +1062,7 @@ export class AddservicechargemasterComponent {
 
   onSlabHeadCountSubmit() {
     this.showErrors = true;
-
+    this.isLoading = true;
     if (this.headCountForm.invalid) {
       return; // stop and show errors
     }
@@ -957,7 +1112,7 @@ export class AddservicechargemasterComponent {
       Slab_Calculation_Type_Id: f.slab,
       Cap_Value: 0,
       Upfront_Charge: 0,
-      Upfront_PayCode: 0,
+      Upfront_PayCode: '',
       Upfront_Type_Id: 0,
       Insurance_Amount: "",
       MarginalPayCodeId: 0,
@@ -981,15 +1136,25 @@ export class AddservicechargemasterComponent {
     console.log(JSON.stringify(request));
     this.serviceChargeService.SaveServiceCharge(request).subscribe({
       next: (res: any) => {
+        this.isLoading = false;
         console.log(res);
         if (res?.StatusCode === 200) {
           alert(res?.Data?.message || "Service Charge saved successfully");
-          this.dialogRef.close(true);
+          this.selectedFixedType = "";
+          // this.dialogRef.close(true);
         } else {
           alert("Save failed");
         }
       },
-      error: () => alert("Failed")
+      error: (err) => {
+
+        this.isLoading = false;
+
+        console.error(err);
+
+        alert("Failed");
+
+      }
     });
 
     console.log("Slab Fix HeadCount Submitted:", this.headCountForm.value);
@@ -1007,6 +1172,7 @@ export class AddservicechargemasterComponent {
     if (this.ctcForm.invalid) return;
 
     console.log("Slab Percentage CTC Submitted:", this.ctcForm.value);
+    this.selectedPercentageType = "";
     this.dialogRef.close(this.ctcForm.value);
   }
 
@@ -1015,9 +1181,111 @@ export class AddservicechargemasterComponent {
     this.showErrors = false;
   }
 
+  onBillToRateSubmit() {
+    this.showErrors = true;
+    this.isLoading = true;
+    if (this.billToRateForm.invalid) {
+      alert("Please fill all required fields")
+      return;
+    }
+
+    const f = this.billToRateForm.value;
+
+    const ServiceChargemaster: serviceChargemaster[] = [];
+
+    ServiceChargemaster.push({
+      Company_Service_Charge_Master_Id: Number(this.selectedMasterId),
+      Company_Service_Charge_Type_Id: Number(this.selectedBillToRate),
+      Service_Charge_Slab_Item_Id: 0,
+      Service_Charge_Slab_Inner_Item_Id: 0,
+      Slab_Id: 0,
+      Cost_Center_Mapping_Id: f.employeeCode.Employee_Id,
+      Map_Name: f.employeeCode.Employee_Code,
+      Invoicing_Type: false,
+      Service_Charge_Name: "",
+      PayCode_Code: '',
+      MaxAmount: 0,
+      Type: 0,
+      Value: f.UnitPrice,
+      Effective_Date: f.EffectiveDate,
+      IsBillToRate: 0,
+      IsCTC: 0,
+      IsHeadCount: 0,
+      IsAttendanceProrated: 0,
+      IsCriteriaApplicable: 0,
+      Criteria: "",
+      IsReplacementClauseApplicable: 0,
+      Replacement: 0,
+      IsSourcingWaitingPeriod_Id: 0,
+      SourcingValue: 0,
+      TATDays: 0,
+      IsMapNameRequired: 0,
+      Category_Id: 0,
+      Invoice_Map_Name_Id: 0,
+      Compliance_Fee: 0,
+      RandStad_Fee: 0,
+      UnitType_Id: f.UnitType,
+      Discount_Type_Id: f.DiscountType,
+      Discount_Amount: f.DiscountAmount,
+      Type_Id: 0,
+      Pay_Code_Id: 0,
+      From: 0,
+      To: 0,
+      Slab_Calculation_Type_Id: 0,
+      Cap_Value: 0,
+      Upfront_Charge: 0,
+      Upfront_PayCode: '',
+      Upfront_Type_Id: 0,
+      Insurance_Amount: "",
+      MarginalPayCodeId: 0,
+      QDemyFee: 0,
+      InEdgeFee: 0,
+      IsNewjoineeProrate: 0,
+      IsFAndFProrate: 0,
+      IsFAndFArrearProrate: 0,
+      IsNewJoineeArrearProrate: 0,
+      QDemyFee_Type_Id: 0,
+      InEdgeFee_Type_Id: 0
+    });
+
+    const request = {
+      Created_By: this.userdetail?.user_Id?.toString(),
+      Mode: "ADD",
+      CompanyId: this.selectedCompanyId,
+      ServiceChargemaster: ServiceChargemaster
+    }
+
+    console.log(JSON.stringify(request));
+    this.serviceChargeService.SaveServiceCharge(request).subscribe({
+      next: (res: any) => {
+        this.isLoading = false;
+        console.log(res);
+        if (res?.StatusCode === 200) {
+          alert(res?.Data?.message || "Service Charge saved successfully");
+          // this.dialogRef.close(true);
+          this.showBillToRateTable = false;
+          this.billToRateForm.reset();
+          this.billToRateTypes = null;
+          this.onBillToRateReset();
+        } else {
+          alert("Save failed");
+        }
+      },
+      error: (err) => {
+
+        this.isLoading = false;
+
+        console.error(err);
+
+        alert("Failed");
+
+      }
+    });
+  }
+
   onSlabPerheadcountSubmit() {
     this.showErrors = true;
-
+    this.isLoading = true;
     if (this.slabPerHeadForm.invalid) {
       return; // show error and stop
     }
@@ -1067,7 +1335,7 @@ export class AddservicechargemasterComponent {
       Slab_Calculation_Type_Id: f.slab,
       Cap_Value: 0,
       Upfront_Charge: 0,
-      Upfront_PayCode: 0,
+      Upfront_PayCode: '',
       Upfront_Type_Id: 0,
       Insurance_Amount: "",
       MarginalPayCodeId: 0,
@@ -1091,15 +1359,25 @@ export class AddservicechargemasterComponent {
     console.log(JSON.stringify(request));
     this.serviceChargeService.SaveServiceCharge(request).subscribe({
       next: (res: any) => {
+        this.isLoading = false;
         console.log(res);
         if (res?.StatusCode === 200) {
           alert(res?.Data?.message || "Service Charge saved successfully");
-          this.dialogRef.close(true);
+          this.selectedPercentageType = "";
+          // this.dialogRef.close(true);
         } else {
           alert("Save failed");
         }
       },
-      error: () => alert("Failed")
+      error: (err) => {
+
+        this.isLoading = false;
+
+        console.error(err);
+
+        alert("Failed");
+
+      }
     });
 
     console.log("Slab Percentage Head Count Submitted:", this.slabPerHeadForm.value);
@@ -1138,8 +1416,6 @@ export class AddservicechargemasterComponent {
       }
     });
   }
-
-
 
   // -------------------------------------------------------
   // CHILD → SERVICE FEE SELECTED TYPE
@@ -1181,6 +1457,7 @@ export class AddservicechargemasterComponent {
     this.showServiceFeeSection = false;
     this.showSupplementSection = false;
     this.showSourcingSection = false;
+    this.showBillToRate = false;
     this.resetSubSections();
   }
 
@@ -1192,6 +1469,8 @@ export class AddservicechargemasterComponent {
 
     this.showSuppFixed = false;
     this.showSuppPercentage = false;
+    //billtorate rest
+    this.showBillToRateTable = false;
   }
 
   onClose(): void {

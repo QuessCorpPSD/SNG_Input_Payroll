@@ -470,3 +470,7 @@ input {
         max-width: 100%;
     }
 }
+
+.selected-row {
+    background-color: #e3f2fd !important;
+}

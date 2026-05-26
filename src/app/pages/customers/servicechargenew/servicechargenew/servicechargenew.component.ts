@@ -135,9 +135,11 @@ export class ServicechargenewComponent {
     });
 
   }
+
   onServiceChargeChangeNew(event: any) {
     this.selectedMasterId = event.target.value;
     this.dataSource.data = [];
+    console.log("selected", this.selectedMasterId);
 
     if (this.selectedMasterId = 'ServiceFeeFixed') {
       this.gridData = ['Action', 'SNo', 'Map_Name', 'Value', 'IsAttendanceProrated_Text', 'IsFAndFProrate_Text',
@@ -155,6 +157,7 @@ export class ServicechargenewComponent {
     }
     else if (this.selectedMasterId = 'SuppFeeFixed') {
       this.gridData = [];
+
     }
     else if (this.selectedMasterId = 'SuppFeePercentage') {
 
@@ -196,12 +199,7 @@ export class ServicechargenewComponent {
       return;
     }
 
-    if (!this.selectedMasterId) {
-      alert("Please select Service Charge Master");
-      return;
-    }
-
-    // if (!this.selectedTypeId) {
+    // if (!this.selectedMasterId) {
     //   alert("Please select Service Charge Type");
     //   return;
     // }
@@ -381,14 +379,14 @@ export class ServicechargenewComponent {
 
     this.isLoading = true;
     const payload = {
-      mode: 'Delete',
-      createdBy: this.userdetail.user_Id?.toString(),
-      serviceChargeId: row.Service_Charge_Id,
+      Mode: 'Delete',
+      CreatedBy: this.userdetail.user_Id?.toString(),
+      ServiceChargeId: row.Service_Charge_Id,
       // ServiceCharge: []
     };
     console.log("Delete payload:", JSON.stringify(payload));
 
-    this.serviceChargeServiceNew.SaveServiceCharge(payload).subscribe({
+    this.serviceChargeServiceNew.deleteServiceCharge(payload).subscribe({
       next: (res: any) => {
         if (res?.StatusCode === 200) {
           alert(res?.Data.response);
