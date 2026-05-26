@@ -14,12 +14,14 @@
                     <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label text-muted small">Service Charge Type</label>
-                    <select class="form-select form-select-sm" (change)="onServiceChargeChangeNew($event)">
-                        <option value="">Select</option>
-                        <option *ngFor="let servicecharge of servicechargedata"
-                            [value]="servicecharge.Service_Charge_Type">
-                            {{servicecharge.Service_Charge_Type}}
+                    <label class="form-label text-muted small">
+                        Service Charge Type
+                    </label>
+                    <select class="form-select form-select-sm" (change)="onServiceChargeChangeNew($event)"
+                        [(ngModel)]="selectedServiceCharge">
+                        <option [ngValue]="null">Select</option>
+                        <option *ngFor="let servicecharge of servicechargedata" [ngValue]="servicecharge">
+                            {{ servicecharge.Service_Charge_Type }}
                         </option>
                     </select>
                 </div>
@@ -61,19 +63,20 @@
                         matTooltip="export to excel">
                         <mat-icon>table_chart</mat-icon>
                     </button>
+                    <div style="display: none;">
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
+                            matTooltip="Import" (click)="ImportClick(fileInput)">
+                            <mat-icon>cloud_upload</mat-icon>
+                        </button>
 
-                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
-                        matTooltip="Import" (click)="ImportClick(fileInput)">
-                        <mat-icon>cloud_upload</mat-icon>
-                    </button>
+                        <input type="file" #fileInput style="display: none;" (click)="fileInput.value=''"
+                            (change)="onFileChange($event)" accept=".xlsx, .xls" />
 
-                    <input type="file" #fileInput style="display: none;" (click)="fileInput.value=''"
-                        (change)="onFileChange($event)" accept=".xlsx, .xls" />
-
-                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
-                        matTooltip="Template">
-                        <mat-icon>cloud_download</mat-icon>
-                    </button>
+                        <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                            matTooltip="Template" style="display: none;">
+                            <mat-icon>cloud_download</mat-icon>
+                        </button>
+                    </div>
 
                     <button class="btn btn-sm d-flex align-items-center justify-content-center btn-add" matTooltip="Add"
                         (click)="AddPOOpen()">
@@ -564,6 +567,16 @@
                         <mat-cell *matCellDef="let element">{{ element.IsNewJoineeArrearFixed_Text }}</mat-cell>
                     </ng-container>
 
+                    <ng-container matColumnDef="Employee_Code">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header><strong>Employee
+                                Code</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ element.Employee_Code }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Unit_Price">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header><strong>Unit Price</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ element.Unit_Price }}</mat-cell>
+                    </ng-container>
 
                     <mat-header-row *matHeaderRowDef="displayedColumns" class="header-row"></mat-header-row>
                     <!-- <mat-header-row *matHeaderRowDef="filterDisplayedColumns" class="filter-row"></mat-header-row> -->

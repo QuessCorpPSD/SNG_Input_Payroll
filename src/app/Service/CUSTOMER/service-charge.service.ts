@@ -30,10 +30,10 @@ export class ServiceChargeService implements IServiceCharge {
     return this.http.get<APIResponse>(this.env.apiUrl + 'ServiceCharge/servicechargetype/' + companyid)
   }
 
-  GetSearch(companyId: number): Observable<APIResponse> {
-    return this.http.get<APIResponse>(
-      this.env.apiUrl + 'ServiceCharge/GetAllServiceCharge/' + companyId
+  GetSearch(companyId: number, Service_Charge_Master_Id: number, Service_Charge_Type_Id: number): Observable<APIResponse> {
+    return this.http.get<APIResponse>(this.env.apiUrl + 'ServiceCharge/GetAllServiceCharge/' + companyId + '/' + Service_Charge_Master_Id + '/' + Service_Charge_Type_Id
     );
+
   }
   GetCostCenterMapping(): Observable<APIResponse> {
     return this.http.get<APIResponse>(
@@ -56,7 +56,7 @@ export class ServiceChargeService implements IServiceCharge {
 
   LoadUnitType(): Observable<APIResponse> {
     return this.http.get<APIResponse>(
-      environment.apiUrl + 'ServiceCharge/GetUnitType');
+      environment.apiUrl + 'ServiceCharge/GetUnitTypeBilltoRate');
   }
 
   loadEmployee(companyid: any, employeeid: any): Observable<APIResponse> {
@@ -66,7 +66,13 @@ export class ServiceChargeService implements IServiceCharge {
 
   deleteServiceCharge(payload: any): Observable<APIResponse> {
     return this.http.post<APIResponse>(
-      environment.apiUrl + 'ServiceCharge/ServiceChargeDelete',payload);
+      environment.apiUrl + 'ServiceCharge/ServiceChargeDelete', payload);
+  }
+
+  upload(formData: FormData): Observable<APIResponse> {
+    return this.http.post<APIResponse>(this.env.apiUrl + 'ServiceCharge/FileUploadServiceFeeBilltoRate', formData
+    );
+
   }
 
 

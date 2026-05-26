@@ -70,13 +70,7 @@
             </div>
 
             <!-- Bill to Rate DROPDOWN -->
-            <div class="col-md-4 same-col" *ngIf="showBillToRate">
-                <!-- <app-add-servicefee
-                (fixedSelected)="showFixedSection()"
-                (percentageSelected)="showPercentageSection()"
-                (billSelected)="showBillToRateSection()"
-                (slabSelected)="showSlabSection()">
-              </app-add-servicefee> -->
+            <!-- <div class="col-md-4 same-col" *ngIf="showBillToRate">             
                 <div class="col-md-4 same-col">
                     <label class="form-label text-muted small">Billing To Rate</label>
 
@@ -89,7 +83,7 @@
                         </option>
                     </select>
                 </div>
-            </div>
+            </div> -->
 
         </div>
 
@@ -550,169 +544,137 @@
         </div>
 
         <div class="col-12" *ngIf="showBill">
+            <div class="col-md-2 d-flex gap-2">
+                <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
+                    matTooltip="Import" (click)="ImportClick(fileInput)">
+                    <mat-icon>cloud_upload</mat-icon>
+                </button>
+
+                <input type="file" #fileInput style="display: none;" (click)="fileInput.value=''"
+                    (change)="onFileChange($event)" accept=".xlsx, .xls" />
+
+                <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                    matTooltip="Template" (click)="downloadTemplate()">
+                    <mat-icon>cloud_download</mat-icon>
+                </button>
+            </div>
             <!-- <app-service-bill-to-rate></app-service-bill-to-rate> -->
 
-            <form [formGroup]="billRateForm">
+            <form [formGroup]="billToRateForm">
+                <!-- ROW 1 -->
+                <div class="row g-3 mb-3">
+                    <!-- <div class="col-md-4">
+                        <label class="form-label text-muted small">Employee Code<span
+                                class="text-danger">*</span></label>
+                        <select class="form-select form-select-sm" formControlName="employeeCode">
+                            <option value="">Select</option>
+                            <option *ngFor="let item of empCode" [ngValue]="item">
+                                {{ item.Employee_Code }}
+                            </option>
+                        </select>
+                        <small class="text-danger" *ngIf="showErrors && billToRateForm.get('employeeCode')?.invalid">
+                            employeeCode is required
+                        </small>
+                    </div> -->
+                    <div class="col-md-4">
 
-                <br />
+                        <label class="form-label text-muted small">
+                            Employee Code
+                            <span class="text-danger">*</span>
+                        </label>
 
-                <mat-card-content>
+                        <mat-form-field appearance="outline" class="w-100 hover-clear-field">
+                            <input matInput type="text" placeholder="Search Employee" formControlName="employeeCode"
+                                [matAutocomplete]="auto" (input)="filterEmployee($event)">
 
-                    <!-- ROW 1 -->
-                    <div class="row g-3 mb-3">
+                            <mat-icon matSuffix class="clear-icon" (click)="clearSearch()">
+                                close
+                            </mat-icon>
 
-                        <div class="col-md-4">
-                            <label class="form-label text-muted small">Billing Category <span
-                                    class="text-danger">*</span></label>
-                            <select class="form-select form-select-sm" formControlName="billingCategory">
-                                <option value="">Select</option>
-                                <option *ngFor="let item of mapNameList" [value]="item.cost_Center_Mapping_Id">
-                                    {{ item.map_Name }}
-                                </option>
-                            </select>
-                            <small class="text-danger" *ngIf="showErrors && billRateForm.get('mapName')?.invalid">Map
-                                Name is
-                                required</small>
-                        </div>
-
-
-                        <div class="col-md-4">
-                            <label class="form-label text-muted small">Unit Price <span
-                                    class="text-danger">*</span></label>
-                            <input type="text" class="form-control form-control-sm" formControlName="unitPrice"
-                                (input)="allowNumbersOnly($event)">
-                            <small class="text-danger" *ngIf="showErrors && billRateForm.get('unitPrice')?.invalid">
-                                Unit Price is required
-                            </small>
-                        </div>
-
-                        <div class="col-md-4">
-                            <label class="form-label text-muted small">Unit Type<span
-                                    class="text-danger">*</span></label>
-                            <select class="form-select form-select-sm" formControlName="unitType">
-                                <option value="">Select</option>
-                            </select>
-                            <small class="text-danger" *ngIf="showErrors && billRateForm.get('unitType')?.invalid">
-                                Unit Type is required
-                            </small>
-                        </div>
-
+                            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn"
+                                (optionSelected)="onEmployeeSelected($event.option.value)">
+                                <mat-option *ngFor="let item of filteredEmpCode" [value]="item">
+                                    {{ item.Employee_Code }}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                        <small class="text-danger" *ngIf="showErrors && billToRateForm.get('employeeCode')?.invalid">
+                            employeeCode is required
+                        </small>
                     </div>
 
-
-                    <!-- ROW 2 -->
-                    <div class="row g-3 mb-3">
-
-                        <div class="col-md-4">
-                            <label class="form-label text-muted small">Invoice Category <span
-                                    class="text-danger">*</span></label>
-                            <select class="form-select form-select-sm" formControlName="invoiceCategory">
-                                <option value="">Select</option>
-                                <option value="Single">Single</option>
-                                <option value="Separate">Separate</option>
-                            </select>
-                            <small class="text-danger"
-                                *ngIf="showErrors && billRateForm.get('invoiceCategory')?.invalid">
-                                Invoice Category is required
-                            </small>
-                        </div>
-
-
-                        <div class="col-md-4">
-                            <label class="form-label text-muted small">Map Name <span
-                                    class="text-danger">*</span></label>
-                            <select class="form-select form-select-sm" formControlName="mapName">
-                                <option value="">Select</option>
-                                <option *ngFor="let item of mapNameList" [value]="item.cost_Center_Mapping_Id">
-                                    {{ item.map_Name }}
-                                </option>
-                            </select>
-                            <small class="text-danger" *ngIf="showErrors && billRateForm.get('mapName')?.invalid">Map
-                                Name is
-                                required</small>
-                        </div>
-
-
-
-                        <div class="col-md-4">
-                            <label class="form-label">Effective Date <span class="text-danger">*</span></label>
-                            <input type="date" class="form-control" formControlName="startDate" />
-                            <small class="text-danger" *ngIf="showErrors && billRateForm.get('startDate')?.invalid">
-                                Effective Date is required
-                            </small>
-                        </div>
-
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Unit Price<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control form-control-sm" formControlName="UnitPrice"
+                            (input)="allowNumbersOnly($event)" />
+                        <small class="text-danger" *ngIf="showErrors && billToRateForm.get('UnitPrice')?.invalid">
+                            Unit Price is required
+                        </small>
                     </div>
 
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Unit Type<span class="text-danger">*</span></label>
+                        <select class="form-select form-select-sm" formControlName="UnitType">
+                            <option value="">Select</option>
+                            <option *ngFor="let item of unitTypeList" [value]="item.UnitType_Id">
+                                {{ item.Unit_Type }}
+                            </option>
+                        </select>
+                        <small class="text-danger" *ngIf="showErrors && billToRateForm.get('UnitType')?.invalid">
+                            Unit Type is required
+                        </small>
+                    </div>
+                </div>
 
-                    <!-- ROW 3 -->
-                    <div class="row g-3 mb-3">
+                <!-- ROW 2 -->
+                <div class="row g-3 mb-3">
 
-                        <div class="col-md-4">
-                            <label class="form-label text-muted small">Discount Type <span
-                                    class="text-danger">*</span></label>
-                            <select class="form-select form-select-sm" formControlName="discountType">
-                                <option value="">Select</option>
-                                <option value="Fixed">Fixed</option>
-                                <option value="Percentage">Percentage</option>
-                            </select>
-                            <small class="text-danger" *ngIf="showErrors && billRateForm.get('discountType')?.invalid">
-                                Discount Type is required
-                            </small>
-                        </div>
-
-
-                        <div class="col-md-4">
-                            <label class="form-label text-muted small">Discount Amount<span
-                                    class="text-danger">*</span></label>
-                            <input type="text" class="form-control form-control-sm" formControlName="discountAmount"
-                                (input)="allowNumbersOnly($event)">
-                            <small class="text-danger"
-                                *ngIf="showErrors && billRateForm.get('discountAmount')?.invalid">
-                                Discount Amount is required
-                            </small>
-                        </div>
-
-                        <div class="col-md-4">
-                            <label class="form-label text-muted small">Prorate <span
-                                    class="text-danger">*</span></label>
-                            <select class="form-select form-select-sm" formControlName="prorate">
-                                <option value="">Select</option>
-                                <option value="Yes">Yes</option>
-                                <option value="No">No</option>
-                            </select>
-                            <small class="text-danger" *ngIf="showErrors && billRateForm.get('prorate')?.invalid">
-                                Prorate is required
-                            </small>
-                        </div>
-
-
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Effective Date<span
+                                class="text-danger">*</span></label>
+                        <input type="date" class="form-control form-control-sm" formControlName="EffectiveDate" />
+                        <small class="text-danger" *ngIf="showErrors && billToRateForm.get('EffectiveDate')?.invalid">
+                            Effective Date is required
+                        </small>
                     </div>
 
-                </mat-card-content>
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Discount Type</label>
+                        <select class="form-select form-select-sm" formControlName="DiscountType">
+                            <option value="">Select</option>
+                            <option value="1160">Fixed</option>
+                            <option value="1161">Percentage</option>
+                        </select>
+                        <small class="text-danger" *ngIf="showErrors && billToRateForm.get('DiscountType')?.invalid">
+                            Discount Type is required
+                        </small>
+                    </div>
 
-                <br />
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Discount Amount</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="DiscountAmount"
+                            (input)="allowNumbersOnly($event)" />
+                        <small class="text-danger" *ngIf="showErrors && billToRateForm.get('DiscountAmount')?.invalid">
+                            Discount Amount is required
+                        </small>
+                    </div>
+                </div>
 
+                <!-- BUTTONS -->
                 <div class="d-flex justify-content-end mt-3">
-
                     <div class="btn-1"
                         style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
-
-                        <button type="button" (click)="onBillReset()"
+                        <button type="button" (click)="onBillToRateReset()"
                             style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;">
                             Cancel
                         </button>
 
-
-                        <button type="button" (click)="onBillSubmit()"
+                        <button type="button" (click)="onBillToRateSubmit()"
                             style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white;">
                             Save
                         </button>
-
                     </div>
-
                 </div>
-
             </form>
         </div>
 

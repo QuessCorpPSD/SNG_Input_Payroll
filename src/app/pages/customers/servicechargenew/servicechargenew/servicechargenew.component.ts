@@ -16,6 +16,7 @@ import { EncryptionService } from '../../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../../Shared/SessionStorageService';
 import * as XLSX from 'xlsx';
 import { AddservicechargemasterComponent } from '../../../customers/servicechargenew/addservicechargemaster/addservicechargemaster.component';
+import { Console } from 'node:console';
 
 @Component({
   selector: 'app-servicechargenew',
@@ -48,6 +49,7 @@ export class ServicechargenewComponent {
   Gridtype: string = "ServiceFeeFixed";
   gridData: string[] = [];
   isAddclicked = false;
+  selectedServiceCharge: any;
 
   constructor(
     private dialog: MatDialog,
@@ -105,6 +107,14 @@ export class ServicechargenewComponent {
       alert("Please Select Company for Add");
       return;
     }
+    const dialogData = {
+
+      companyId: this.selectedCompanyId,
+
+      companyCode: this.selectedCompanyCode
+
+    };
+
 
     // this.isAddclicked = true;
     this.dialog.open(AddservicechargemasterComponent, {
@@ -117,6 +127,7 @@ export class ServicechargenewComponent {
         companyCode: this.selectedCompanyCode
       }
     });
+
   }
 
   closeclick() {
@@ -126,7 +137,7 @@ export class ServicechargenewComponent {
   }
   handleCompanyEvent(company) {
     this.selectedCompanyId = company.companyId;
-    this.selectedCompanyCode = company.companyId;
+    this.selectedCompanyCode = company.companyCode;
     this.BindserviceChargeNew(this.selectedCompanyId);
   }
   BindserviceChargeNew(companyId: number) {
@@ -137,36 +148,103 @@ export class ServicechargenewComponent {
   }
 
   onServiceChargeChangeNew(event: any) {
-    this.selectedMasterId = event.target.value;
+    // this.selectedMasterId = event.target.value;
     this.dataSource.data = [];
-    console.log("selected", this.selectedMasterId);
 
-    if (this.selectedMasterId = 'ServiceFeeFixed') {
-      this.gridData = ['Action', 'SNo', 'Map_Name', 'Value', 'IsAttendanceProrated_Text', 'IsFAndFProrate_Text',
-        'IsFAndFArrearProrate_Text', 'IsNewjoineeProrate_Text', 'IsNewJoineeArrearProrate_Text',
-        'Effective_Date', 'Compliance_Fee', 'RandStad_Fee', 'Upfront_Type', 'Upfront_Charge',
-        'Upfront_PayCode', 'Insurance_Amount', 'QDemyFee_Type', 'QDemyFee', 'InEdgeFee_Type', 'InEdgeFee'
+    if (this.selectedServiceCharge.Service_Charge_Type === 'ServiceFee Fixed') {
+      this.gridData = ['Action', 'SNo', 'Map_Name',
+        'Value',
+        'IsAttendanceProrated_Text',
+        'IsFAndFProrate_Text',
+        'IsFAndFArrearProrate_Text',
+        'IsNewjoineeProrate_Text',
+        'IsNewJoineeArrearProrate_Text',
+        'Effective_Date',
+        'Compliance_Fee',
+        'RandStad_Fee',
+        'Upfront_Type',
+        'Upfront_Charge',
+        'Upfront_PayCode',
+        'Insurance_Amount',
+        'QDemyFee',
+        'InEdgeFee'
       ];
       this.displayedColumns = this.gridData;
     }
-    else if (this.selectedMasterId = 'ServiceFeePercentage') {
-      this.gridData = ['Action', 'SNo', 'Map_Name', 'PayCode_Code', 'Value', 'MaxAmount', 'Effective_Date', 'Compliance_Fee', 'RandStad_Fee',
-        'Effective_Date', 'Compliance_Fee', 'RandStad_Fee', 'Upfront_Type', 'Upfront_Charge',
-        'Upfront_PayCode', 'Insurance_Amount', 'QDemyFee_Type', 'QDemyFee', 'InEdgeFee_Type', 'InEdgeFee'
+    else if (this.selectedServiceCharge.Service_Charge_Type === 'ServiceFee Percentage') {
+      this.gridData = ['Action', 'SNo', 'Map_Name',
+        'PayCode_Code',
+        'Value',
+        'Cap_Value',
+        'MaxAmount',
+        'Effective_Date',
+        'Compliance_Fee',
+        'RandStad_Fee',
+        'Upfront_Type',
+        'Upfront_Charge',
+        'Upfront_PayCode',
+        'Insurance_Amount',
+        'QDemyFee',
+        'InEdgeFee'
       ];
+      this.displayedColumns = this.gridData;
     }
-    else if (this.selectedMasterId = 'SuppFeeFixed') {
-      this.gridData = [];
+    else if (this.selectedServiceCharge.Service_Charge_Type === 'ServiceFee Bill To Rate') {
+     
+      this.gridData = ['Action', 'SNo', 'Employee_Code',
+        'Unit_Price',
+        'Unit_Type',
+        'Effective_Date',
+        'Discount_Type',
+        'Discount_Amount'
+      ]
+      this.displayedColumns = this.gridData;
+    }
+    else if (this.selectedServiceCharge.Service_Charge_Type === 'SuppFee Fixed') {
+      this.gridData = ['Action', 'SNo', 'Map_Name',
+        'PayCode_Code',
+        'Value',
+        'Effective_Date'
+      ];
+      this.displayedColumns = this.gridData;
 
     }
-    else if (this.selectedMasterId = 'SuppFeePercentage') {
+    else if (this.selectedServiceCharge.Service_Charge_Type === 'SuppFee Percentage') {
 
-      this.gridData = [];
+      this.gridData = ['Action', 'SNo', 'Map_Name',
+        'PayCode_Code',
+        'Value',
+        'MaxAmount',
+        'Effective_Date',
+        'MarginalPayCode'
+      ];
+      this.displayedColumns = this.gridData;
+    }
+    else if (this.selectedServiceCharge.Service_Charge_Type === 'SourcingFee') {
+
+      this.gridData = ['Action',
+        'SNo',
+        'Type_Names',
+        'Map_Name',
+        'PayCode_Code',
+        'Value',
+        'IsReplacementClauseApplicable_Text',
+        'Replacement',
+        'IsSourcingWaitingPeriod_Text',
+        'SourcingValue',
+        'Criteria',
+        'TATDays',
+        'Effective_Date',
+        'Category_Name'
+
+      ];
+      this.displayedColumns = this.gridData;
     }
     else {
       alert("Couldnot find Service Charge Type");
       return;
     }
+
   }
 
   // BindserviceCharge() {
@@ -199,15 +277,19 @@ export class ServicechargenewComponent {
       return;
     }
 
-    // if (!this.selectedMasterId) {
-    //   alert("Please select Service Charge Type");
-    //   return;
-    // }
+    if (!this.selectedServiceCharge.Service_Charge_Master_Id) {
+      alert("Please select Service Charge Type");
+      return;
+    }
 
     this.isLoading = true;
     const Company_Id = this.selectedCompanyId;
 
-    this.servicecharge.GetSearch(this.selectedCompanyId).subscribe({
+    const serviceChargeId = this.selectedServiceCharge?.Service_Charge_Type_Id;
+
+    const serviceChargeMasterId = this.selectedServiceCharge?.Service_Charge_Master_Id;
+
+    this.servicecharge.GetSearch(this.selectedCompanyId, serviceChargeMasterId, serviceChargeId).subscribe({
       next: (res: any) => {
         this.isLoading = false;
 
@@ -217,7 +299,6 @@ export class ServicechargenewComponent {
           return;
         }
         this.dataSource = new MatTableDataSource<any>(res.Data.data.Table0);
-        console.log("Search results:", res.Data.data.Table0);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
         this.isLoading = false;
@@ -384,7 +465,6 @@ export class ServicechargenewComponent {
       ServiceChargeId: row.Service_Charge_Id,
       // ServiceCharge: []
     };
-    console.log("Delete payload:", JSON.stringify(payload));
 
     this.serviceChargeServiceNew.deleteServiceCharge(payload).subscribe({
       next: (res: any) => {
