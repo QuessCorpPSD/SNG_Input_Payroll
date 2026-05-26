@@ -179,17 +179,14 @@ export class CompanypermissionComponent {
       Zone: 0
     };
 
-    console.time('API Call');
 
     this.service.viewCompanyDetails(payload).subscribe({
       next: res => {
-        console.timeEnd('API Call');
 
         this.isLoading = false;
 
         this.uploadedDataadd = res?.Data?.data?.Table0 || [];
 
-        // 🔥 recreate datasource (important)
         this.uploadedDataSourceadd = new MatTableDataSource(this.uploadedDataadd);
 
         if (this.uploadedDataadd.length === 0) {
@@ -248,21 +245,35 @@ export class CompanypermissionComponent {
 
   isAllSelected(): boolean {
     const data = this.uploadedDataSourceadd.data || [];
-    return data.length > 0 && data.every((row: any) => row.selected);
+    return data.length > 0 && data.every((x: any) => x.selected);
   }
 
   isSomeSelected(): boolean {
     const data = this.uploadedDataSourceadd.data || [];
-    return data.some((row: any) => row.selected) && !this.isAllSelected();
+    return data.some((x: any) => x.selected) &&
+      !data.every((x: any) => x.selected);
   }
   toggleAll(event: any) {
-    const isChecked = event.checked;
+    const checked = event.checked;
+
     this.uploadedDataSourceadd.data.forEach((row: any) => {
-      row.selected = isChecked;
+      row.selected = checked;
     });
+
+    // refresh table
+    this.uploadedDataSourceadd.data = [
+      ...this.uploadedDataSourceadd.data
+    ];
+
+    this.uploadedDataSourceadd._updateChangeSubscription();
   }
   onRowCheck(row: any, event: any) {
     row.selected = event.checked;
+
+    // refresh table
+    this.uploadedDataSourceadd.data = [
+      ...this.uploadedDataSourceadd.data
+    ];
   }
   trackByFn(index: number, item: any) {
     return item.COMPANY_CODE;
@@ -327,8 +338,6 @@ export class CompanypermissionComponent {
       }))
     };
 
-    console.log("📦 Payload:", JSON.stringify(payload));
-
     this.isLoading = true;
 
     this.service.addCompanyPermission(payload).subscribe({
@@ -392,7 +401,6 @@ export class CompanypermissionComponent {
     this.isEditMode = true;
     this.editIndex = this.uploadedDataSourceadd.data.indexOf(row);
 
-    console.log("✏️ Edit Row:", row);
     this.addMenuForm.get('EmployeeId')?.disable();
     this.addMenuForm.get('BusinessUnitName')?.disable();
 
@@ -406,37 +414,68 @@ export class CompanypermissionComponent {
   }
 
   loadEditCompanies(row: any) {
-    const userid = row.User_Id || 0;
 
-    const payload = {
-      Userid: userid,
-      Businessunitnameid: row.BUSINESS_UNIT_NAME_ID || 0,
-      CompanyPermissionId: row.Company_Permission_Id || 0
+    const businessUnitId = row.BUSINESS_UNIT_NAME_ID || 0;
+
+    const payloadCompany = {
+      Businessunitnameid: businessUnitId,
+      Zone: 0
     };
-    this.service.EditDetails(payload).subscribe((res: any) => {
 
-      const apiData = res?.Data?.data?.Table0 || [];
+    this.service.viewCompanyDetails(payloadCompany).subscribe({
+      next: (companyRes: any) => {
 
-      console.log("📦 Edit API Data:", apiData);
+        let tableData = companyRes?.Data?.data?.Table0 || [];
 
-      const selectedIds = apiData
+        tableData.forEach((item: any) => {
+          item.selected = false;
+        });
 
-        .map((x: any) => x.COMPANY_ID);
-      let tableData = this.uploadedDataSourceadd.data || [];
+        const payloadEdit = {
+          Userid: row.User_Id || 0,
+          Businessunitnameid: businessUnitId,
+          CompanyPermissionId: row.COMPANY_PERMISSION_ID || 0
+        };
 
-      tableData.forEach((item: any) => {
-        item.selected = selectedIds.includes(item.COMPANY_ID);
-      });
+        this.service.EditDetails(payloadEdit).subscribe((editRes: any) => {
 
-      tableData = tableData.sort((a: any, b: any) => {
-        return (b.selected ? 1 : 0) - (a.selected ? 1 : 0);
-      });
+          const apiData = editRes?.Data?.data?.Table0 || [];
 
+          const selectedIds = apiData.map((x: any) =>
+            Number(x.COMPANY_ID)
+          );
 
-      this.uploadedDataSourceadd.data = [...tableData];
+          tableData.forEach((item: any) => {
+
+            item.selected = selectedIds.includes(
+              Number(item.COMPANY_ID)
+            );
+
+            const matched = apiData.find((x: any) =>
+              Number(x.COMPANY_ID) === Number(item.COMPANY_ID)
+            );
+
+            if (matched) {
+              item.COMPANY_PERMISSION_DETAILS_ID =
+                matched.COMPANY_PERMISSION_DETAILS_ID;
+
+              item.COMPANY_PERMISSION_ID =
+                matched.COMPANY_PERMISSION_ID;
+            }
+          });
+
+          tableData.sort((a: any, b: any) =>
+            Number(b.selected) - Number(a.selected)
+          );
+
+          this.uploadedDataSourceadd =
+            new MatTableDataSource([...tableData]);
+
+          this.uploadedDataSourceadd._updateChangeSubscription();
+        });
+      }
     });
   }
-
   // loadEditCompanies(row: any) {
 
   //   const userid = row.User_Id || 0;

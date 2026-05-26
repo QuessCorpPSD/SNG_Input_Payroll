@@ -206,7 +206,7 @@
                                 </mat-checkbox> </mat-header-cell>
 
                             <mat-cell *matCellDef="let row">
-                                <mat-checkbox [checked]="row.selected" (change)="onRowCheck(row, $event)">
+                                <mat-checkbox [(ngModel)]="row.selected" (change)="onRowCheck(row, $event)">
                                 </mat-checkbox>
                             </mat-cell>
                         </ng-container>
