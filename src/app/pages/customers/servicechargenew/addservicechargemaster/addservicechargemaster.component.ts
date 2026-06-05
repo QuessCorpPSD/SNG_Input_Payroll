@@ -1184,7 +1184,7 @@ export class AddservicechargemasterComponent {
 
     ServiceChargemaster.push({
       Company_Service_Charge_Master_Id: Number(this.selectedMasterId),
-      Company_Service_Charge_Type_Id: Number(this.selectedBillToRate),
+      Company_Service_Charge_Type_Id: Number(this.selectedService),
       Service_Charge_Slab_Item_Id: 0,
       Service_Charge_Slab_Inner_Item_Id: 0,
       Slab_Id: 0,
