@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -38,19 +38,35 @@ export class AddVendorComponent {
   popupMessage: string = '';
   popupSubMessage: string = '';
   isLoading: boolean = false;
+  isEditMode: boolean = false;
+  editingRowId: number | null = null;
 
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<AddVendorComponent>,
     private VendorService: VendorMasterService,
     private session: SessionStorageService,
-    private decrypt: EncryptionService
+    private decrypt: EncryptionService,
+    @Inject(MAT_DIALOG_DATA) public editData: any,
   ) { }
 
   ngOnInit(): void {
     this.VendorForm = this.fb.group({
       VendorName: ['', Validators.required],
       VendorCode: [{ value: '', disabled: true }]
+    });
+    if (this.editData?.mode?.toLowerCase() === 'edit') {
+      this.isEditMode = true;
+      this.patchEditData();
+    }
+  }
+
+  patchEditData() {
+    const row = this.editData.row;
+    // PATCH FORM VALUES
+    this.VendorForm.patchValue({
+      VendorName: row.Client_Name,
+      VendorCode: row.Client_Code,
     });
   }
 
@@ -64,6 +80,7 @@ export class AddVendorComponent {
     this.showPopup = false;
     this.popupMessage = '';
     this.popupSubMessage = '';
+    this.isEditMode = false;
   }
 
   onSave() {
@@ -79,8 +96,9 @@ export class AddVendorComponent {
 
     const payload = {
       createdBy: 3,
-      mode: "Add",
+      mode: this.isEditMode ? "Edit" : "Add",
       detail: {
+        Client_Id: this.isEditMode ? this.editData.row.Client_Id : 0,
         Client_Code: f.VendorCode || "",
         Client_Name: f.VendorName?.trim()
       }
@@ -103,7 +121,7 @@ export class AddVendorComponent {
 
           setTimeout(() => {
             this.closePopup();
-            this.dialogRef.close(true);
+            this.dialogRef.close('updated');
           }, 900);
 
         } else {

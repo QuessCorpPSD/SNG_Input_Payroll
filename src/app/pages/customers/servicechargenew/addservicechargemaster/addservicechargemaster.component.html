@@ -563,6 +563,12 @@
             <form [formGroup]="billToRateForm">
                 <!-- ROW 1 -->
                 <div class="row g-3 mb-3">
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Map Name <span class="text-danger">*</span></label>
+                        <mapname [selectedCompanyId]="selectedCompanyId" (mapnameEmit)="handleMapNameEvent($event)">
+                        </mapname>
+                    </div>
                     <!-- <div class="col-md-4">
                         <label class="form-label text-muted small">Employee Code<span
                                 class="text-danger">*</span></label>
@@ -612,6 +618,12 @@
                         </small>
                     </div>
 
+
+                </div>
+
+                <!-- ROW 2 -->
+                <div class="row g-3 mb-3">
+
                     <div class="col-md-4">
                         <label class="form-label text-muted small">Unit Type<span class="text-danger">*</span></label>
                         <select class="form-select form-select-sm" formControlName="UnitType">
@@ -624,10 +636,6 @@
                             Unit Type is required
                         </small>
                     </div>
-                </div>
-
-                <!-- ROW 2 -->
-                <div class="row g-3 mb-3">
 
                     <div class="col-md-4">
                         <label class="form-label text-muted small">Effective Date<span

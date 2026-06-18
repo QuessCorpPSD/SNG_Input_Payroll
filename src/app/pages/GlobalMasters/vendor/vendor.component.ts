@@ -12,6 +12,8 @@ import { FormsModule } from '@angular/forms';
 import { AlertpopupComponent } from '../../../common/alertpopup/alertpopup.component';
 import { VendorMasterService } from '../../../Service/GlobalMasters/vendor-master.service';
 import { MatCardModule } from "@angular/material/card";
+import { EncryptionService } from '../../../Shared/encryption.service';
+import { SessionStorageService } from '../../../Shared/SessionStorageService';
 
 @Component({
   selector: 'app-vendor',
@@ -39,6 +41,7 @@ export class VendorComponent {
   isLoading: boolean = false;
   dataSource = new MatTableDataSource<any>();
   uploadDisplayedColumns: string[] = [
+    'action',
     'SI No',
     'Vendor Code',
     'Vendor Name'
@@ -46,11 +49,22 @@ export class VendorComponent {
   @ViewChild('paginator') paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   vendor: any;
+  isAddClicked: boolean = false;
+  isEditClicked: boolean = false;
+  userdetail: any;
+
 
   constructor(
     private dialog: MatDialog,
-    private vendorService: VendorMasterService
+    private vendorService: VendorMasterService,
+    private session: SessionStorageService,
+    private decrypt: EncryptionService,
   ) { }
+
+  ngOnInit() {
+    const userdetail = this.session.getItem('UserProfile');
+    this.userdetail = JSON.parse(this.decrypt.decrypt(userdetail!));
+  }
 
   showAlertPopup(message: string, subMessage: string = '') {
     this.popupMessage = message;
@@ -134,4 +148,61 @@ export class VendorComponent {
       disableClose: true
     });
   }
+
+  openEdit(row: any) {
+    const dialogRef = this.dialog.open(AddVendorComponent, {
+      width: '35%',
+      height: '35vh',
+      disableClose: true,
+      data: { mode: 'Edit', row: row }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'updated') {
+        this.onSearchClick();
+      }
+    });
+  }
+
+  onDelete(row: any) {
+    if (!confirm('Are you sure you want to delete this record?')) {
+      return;
+    }
+
+    this.isLoading = true;
+    const payload = {
+      CreatedBy: this.userdetail.user_Id,
+      mode: 'Delete',
+      detail: {
+        Client_Id: row.Client_Id,
+        Client_Code: "",
+        Client_Name: ""
+      }
+    };
+
+    this.vendorService.CreateVendor(payload).subscribe({
+      next: (res: any) => {
+        this.isLoading = false;
+
+        const message =
+          res?.Data?.data?.Table0?.[0]?.Error_Message ||
+          res?.Data?.message ||
+          "Success";
+
+        if (res?.StatusCode === 200) {
+
+          alert(message);
+
+
+        } else {
+          alert("Delete failed");
+        }
+      },
+
+      error: (err) => {
+        this.isLoading = false;
+        alert("API Error");
+      }
+    });
+  }
+
 }
