@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CpfsummaryService } from '../../../Service/Reports/cpfsummary.service';
 import { ICpfsummary } from '../../../Repository/Reports/ICpfSummaryservice';
+import { finalize } from 'rxjs';
 export const Pay_TOKEN = new InjectionToken<ICpfsummary>('Pay_TOKEN');
 
 @Component({
@@ -93,12 +94,16 @@ export class CPFsummaryComponent {
       "EntityId": this.Entity,
       "PayPeriod": this.PayPeriod?.pay_Period
     };
-
-    this.service.Exporttoexcel(payload).subscribe({
+    this.isLoading = true;
+    this.service.Exporttoexcel(payload).pipe(
+      finalize(() => {
+        this.isLoading = false;
+      })
+    ).subscribe({
       next: (res) => {
-        console.log('export', res);
+
         try {
-          const jsonData = res.Data.data.Table0;
+          const jsonData = res?.Data?.data?.Table0;
           const data = res.Data.message;
 
           if (!jsonData || jsonData.length === 0) {
