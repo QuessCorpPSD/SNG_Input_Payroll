@@ -20,7 +20,7 @@
                     <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
                         matTooltip="Search" (click)="onSearchClick()">
                         <mat-icon>search</mat-icon>
-                    </button> 
+                    </button>
 
                     <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
                         matTooltip="Export to Excel" (click)="exportToExcel()">
@@ -42,14 +42,19 @@
                 <mat-table [dataSource]="dataSource" matSort class="custom-table mat-elevation-z8 auto-fit-table">
 
                     <!-- Action -->
-                    <!-- <ng-container matColumnDef="Action">
-                        <mat-header-cell *matHeaderCellDef><strong>Action</strong></mat-header-cell>
+                    <ng-container matColumnDef="action">
+                        <mat-header-cell *matHeaderCellDef>Action</mat-header-cell>
                         <mat-cell *matCellDef="let row">
-                            <button class="btn btn-sm" matTooltip="Edit">
+                            <button mat-icon-button style="border: none; background: none; color: inherit;"
+                                (click)="openEdit(row)">
                                 <mat-icon>edit</mat-icon>
                             </button>
+                            <button mat-icon-button style="border: none; background: none; color: inherit;"
+                                (click)="onDelete(row)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
                         </mat-cell>
-                    </ng-container> -->
+                    </ng-container>
 
                     <ng-container matColumnDef="SI No">
                         <mat-header-cell *matHeaderCellDef class="sno"><strong>SI

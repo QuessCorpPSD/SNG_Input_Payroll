@@ -1,7 +1,8 @@
 <form [formGroup]="VendorForm" novalidate>
     <mat-card class="custom-card py-1">
         <mat-card-header class="sticky-header">
-            <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;"> Add Vendor</mat-card-title>
+            <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;">
+                {{isEditMode ? 'Edit Vendor' : 'Add Vendor'}}</mat-card-title>
 
             <span class="spacer"></span>
             <button mat-icon-button (click)="onClose()" class="no-border-icon">
@@ -47,7 +48,7 @@
             <!-- ✔ FIXED — removed extra space -->
             <button type="button" (click)="onSave()" style="border: none; border-radius: 7px; width: 80px; height: 30px;
             cursor: pointer; background-color: blue; color: white;">
-                Save
+                {{ isEditMode ? 'Update' : 'Save' }}
             </button>
 
         </div>
@@ -55,10 +56,10 @@
             <img src="assets/Loading.gif" alt="Loading...">
         </div>
 
-        <div *ngIf="showPopup" class="overlay"></div>
-        <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+        <!-- <div *ngIf="showPopup" class="overlay"></div> -->
+        <!-- <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
             (close)="closePopup()">
-        </app-alertpopup>
+        </app-alertpopup> -->
 
 
     </mat-card>

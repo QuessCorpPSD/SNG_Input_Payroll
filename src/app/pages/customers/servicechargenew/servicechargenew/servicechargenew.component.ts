@@ -190,8 +190,8 @@ export class ServicechargenewComponent {
       this.displayedColumns = this.gridData;
     }
     else if (this.selectedServiceCharge.Service_Charge_Type === 'ServiceFee Bill To Rate') {
-     
-      this.gridData = ['Action', 'SNo', 'Employee_Code',
+
+      this.gridData = ['Action', 'SNo', 'Map_Name', 'Employee_Code',
         'Unit_Price',
         'Unit_Type',
         'Effective_Date',

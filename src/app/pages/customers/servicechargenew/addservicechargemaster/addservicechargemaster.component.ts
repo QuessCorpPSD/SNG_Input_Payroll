@@ -78,6 +78,8 @@ interface serviceChargemaster {
   IsNewJoineeArrearProrate: number
   QDemyFee_Type_Id: number
   InEdgeFee_Type_Id: number
+  employee_Id: number
+  employee_code: string
 }
 
 
@@ -353,6 +355,7 @@ export class AddservicechargemasterComponent {
       this.loadEmployeeCode();
       this.filteredEmpCode = this.empCode;
       this.billToRateForm = this.fb.group({
+        mapName: [''],
         employeeCode: ['', Validators.required],
         UnitPrice: ['', Validators.required],
         UnitType: ['', Validators.required],
@@ -502,7 +505,9 @@ export class AddservicechargemasterComponent {
       IsFAndFArrearProrate: f.ffArrearprorate,
       IsNewJoineeArrearProrate: f.newJoineeArrearprorate,
       QDemyFee_Type_Id: f.qdemyFeeType,
-      InEdgeFee_Type_Id: f.inedgeFeeType
+      InEdgeFee_Type_Id: f.inedgeFeeType,
+      employee_Id: 0,
+      employee_code: ""
     });
 
     const request = {
@@ -607,7 +612,9 @@ export class AddservicechargemasterComponent {
       IsFAndFArrearProrate: 0,
       IsNewJoineeArrearProrate: 0,
       QDemyFee_Type_Id: f.qdemyFeeType,
-      InEdgeFee_Type_Id: f.inedgeFeeType
+      InEdgeFee_Type_Id: f.inedgeFeeType,
+      employee_Id: 0,
+      employee_code: ""
     });
 
     const request = {
@@ -1012,7 +1019,9 @@ export class AddservicechargemasterComponent {
       IsFAndFArrearProrate: 0,
       IsNewJoineeArrearProrate: 0,
       QDemyFee_Type_Id: 0,
-      InEdgeFee_Type_Id: 0
+      InEdgeFee_Type_Id: 0,
+      employee_Id: 0,
+      employee_code: ""
     });
 
     const request = {
@@ -1116,7 +1125,9 @@ export class AddservicechargemasterComponent {
       IsFAndFArrearProrate: 0,
       IsNewJoineeArrearProrate: 0,
       QDemyFee_Type_Id: 0,
-      InEdgeFee_Type_Id: 0
+      InEdgeFee_Type_Id: 0,
+      employee_Id: 0,
+      employee_code: ""
     });
 
     const request = {
@@ -1184,12 +1195,12 @@ export class AddservicechargemasterComponent {
 
     ServiceChargemaster.push({
       Company_Service_Charge_Master_Id: Number(this.selectedMasterId),
-      Company_Service_Charge_Type_Id: Number(this.selectedBillToRate),
+      Company_Service_Charge_Type_Id: Number(this.selectedService),
       Service_Charge_Slab_Item_Id: 0,
       Service_Charge_Slab_Inner_Item_Id: 0,
       Slab_Id: 0,
-      Cost_Center_Mapping_Id: f.employeeCode.Employee_Id,
-      Map_Name: f.employeeCode.Employee_Code,
+      Cost_Center_Mapping_Id: this.mapnameUI.mapNameId,
+      Map_Name: this.mapnameUI.mapName,
       Invoicing_Type: false,
       Service_Charge_Name: "",
       PayCode_Code: '',
@@ -1234,7 +1245,10 @@ export class AddservicechargemasterComponent {
       IsFAndFArrearProrate: 0,
       IsNewJoineeArrearProrate: 0,
       QDemyFee_Type_Id: 0,
-      InEdgeFee_Type_Id: 0
+      InEdgeFee_Type_Id: 0,
+      employee_Id: f.employeeCode.Employee_Id,
+      employee_code: f.employeeCode.Employee_Code
+
     });
 
     const request = {
@@ -1243,6 +1257,7 @@ export class AddservicechargemasterComponent {
       CompanyId: this.selectedCompanyId,
       ServiceChargemaster: ServiceChargemaster
     }
+    console.log("service", JSON.stringify(request));
 
     this.serviceChargeService.SaveServiceCharge(request).subscribe({
       next: (res: any) => {
@@ -1333,7 +1348,9 @@ export class AddservicechargemasterComponent {
       IsFAndFArrearProrate: 0,
       IsNewJoineeArrearProrate: 0,
       QDemyFee_Type_Id: 0,
-      InEdgeFee_Type_Id: 0
+      InEdgeFee_Type_Id: 0,
+      employee_Id: 0,
+      employee_code: ""
     });
 
     const request = {
@@ -1465,6 +1482,7 @@ export class AddservicechargemasterComponent {
     const templateData = [
       {
         COMPANY_CODE: this.selectedCompanyCode,
+        MAP_NAME: "",
         EMPLOYEE_CODE: "",
         EFFECTIVE_DATE: "",
         UNIT_PRICE: "",
@@ -1497,7 +1515,6 @@ export class AddservicechargemasterComponent {
 
 
   ImportClick(fileInput: HTMLInputElement): void {
-    alert("1")
     fileInput.click();
   }
 
