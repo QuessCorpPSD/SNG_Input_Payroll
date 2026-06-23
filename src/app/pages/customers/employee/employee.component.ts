@@ -16,6 +16,7 @@ import { MatCardModule } from "@angular/material/card";
 import { EmployeeService } from '../../../Service/CUSTOMER/employee.service';
 import { IEmployeeservice } from '../../../Repository/customer/Iemployee';
 import FileSaver from 'file-saver';
+import { finalize } from 'rxjs/operators';
 export const Pay_TOKEN = new InjectionToken<IEmployeeservice>('Pay_TOKEN');
 
 @Component({
@@ -108,40 +109,50 @@ export class EmployeeComponent {
 
   onsearch() {
     if (!this.selectedCompanyId) {
-      alert('Please Select Company')
+      alert('Please Select Company');
       return;
     }
+
     this.isLoading = true;
     this.isUploadGridVisible = true;
 
     const Companyid = this.selectedCompanyId;
     const empid = this.empid || 0;
-    this.service.search(Companyid, empid).subscribe({
-      next: (res) => {
-        this.employeedata = res?.Data?.data?.Table0;
 
-        if (!this.employeedata) {
-          this.isLoading = false;
-          alert(res.Data.message)
-        }
-        if (this.employeedata && this.employeedata.length > 0) {
-          this.dataSource = new MatTableDataSource(this.employeedata);
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
-          this.uploadDisplayedColumns = [
-            'Action', 'SNo', 'EMPNO', 'EMPNAME', 'CompanyCode', 'DOB', 'Active', 'ORIHIREDDATE', 'SEX', 'Department', 'OCCUPATIONCODE'];
-          this.isLoading = false;
-        } else {
-          this.isLoading = false;
+    this.service.search(Companyid, empid)
+      .pipe(finalize(() => {
+        this.isLoading = false;
+      })).subscribe({
+        next: (res) => {
+          this.employeedata = res?.Data?.data?.Table0 || [];
+
+          if (this.employeedata.length > 0) {
+            this.dataSource = new MatTableDataSource(this.employeedata);
+            this.dataSource.paginator = this.paginator;
+            this.dataSource.sort = this.sort;
+
+            this.uploadDisplayedColumns = [
+              'Action',
+              'SNo',
+              'EMPNO',
+              'EMPNAME',
+              'CompanyCode',
+              'DOB',
+              'Active',
+              'ORIHIREDDATE',
+              'SEX',
+              'Department',
+              'OCCUPATIONCODE'
+            ];
+          } else {
+            this.dataSource.data = [];
+          }
+        },
+        error: (err) => {
+          console.error('Error loading employee data', err);
           this.dataSource.data = [];
         }
-      },
-      error: (err) => {
-        console.error('Error loading Companypaycode release data', err);
-        this.isLoading = false;
-      },
-    });
-    this.isLoading = false;
+      });
   }
 
   exportToExcel(): void {
@@ -430,7 +441,8 @@ export class EmployeeComponent {
         "PASSPORT_EXPIRY_DATE": "",
         "ADDRESS": "",
         "PIN_CODE": "",
-        "INVOICE_LEGAL_ENTITY": ""
+        "INVOICE_LEGAL_ENTITY": "",
+        "GIRO_PAYMENT": ""
 
       }
     ];

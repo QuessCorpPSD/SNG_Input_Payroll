@@ -189,6 +189,7 @@ export class EmployeeAddComponent {
       Abscondreportingdate: [this.rowData.Abscond_Reporting_Date ? this.formatDateTime(this.rowData.Abscond_Reporting_Date) : ''],
       DOD: [this.rowData.Date_Of_Death ? this.formatDate(this.rowData.Date_Of_Death) : ''],
       invoicelegalentity: [this.rowData.Invoice_Legal_Entity, Validators.required],
+      giroPayment: [this.rowData.GIRO_Payment === 'Yes' ? '1' : '0'],
     });
 
     this.BindSprstatus();
@@ -399,6 +400,7 @@ export class EmployeeAddComponent {
         Date_Of_Death: raw.DOD ?? '',
         Death_DocPath: "",
         Invoice_Legal_Entity: raw.invoicelegalentity ?? '',
+        GIRO_Payment: raw.value.giroPayment || '0'
       }
     };
 
