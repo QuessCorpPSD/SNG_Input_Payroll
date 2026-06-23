@@ -190,6 +190,8 @@ import { BankInvoiceNavigationComponent } from './pages/BankInvoice/bank-invoice
 import { BankAdviceSplitCultureComponent } from './pages/BankInvoice/bank-advice-split-culture/bank-advice-split-culture.component';
 import { MulticommercialComponent } from './pages/GlobalMasters/multicommercial/multicommercial.component';
 import { IRFormReportComponent } from './pages/Reports/ir-form-report/ir-form-report.component';
+import { InputaggregatornavigationComponent } from './pages/inputaggregator/inputaggregatornavigation/inputaggregatornavigation.component';
+import { InputaggregatorattendanceComponent } from './pages/inputaggregator/inputaggregatorattendance/inputaggregatorattendance.component';
 
 
 export const routes: Routes = [
@@ -226,6 +228,14 @@ export const routes: Routes = [
           { path: 'increment', component: IncrementComponent },
           { path: 'onetimeinput', component: OnetimeinputComponent },
           { path: 'finalsubmission', component: FinalsubmissionComponent }
+        ]
+      },
+      {
+        path: 'inputaggregator',
+        component: InputaggregatornavigationComponent,
+        children: [
+          { path: 'inputaggregatorattendance', component: InputaggregatorattendanceComponent },
+          
         ]
       },
       {
