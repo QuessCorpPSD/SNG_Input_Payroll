@@ -99,7 +99,6 @@ export class BillableDaysComponent implements OnInit {
 
       this._invoiceService.UploadBillable(formData).subscribe({
         next: (res) => {
-          console.log(res);
           this.datatable = res.Data;
           console.table(this.datatable);
           if (this.datatable && Array.isArray(this.datatable) && this.datatable.length > 0) {
@@ -131,16 +130,17 @@ export class BillableDaysComponent implements OnInit {
     FileSaver.saveAs(blob, fileName);
   }
 
-  FileUpload(fileInput: HTMLInputElement): void { 
+  FileUpload(fileInput: HTMLInputElement): void {
     if (!this.importType) {
       alert("Please select Import Type");
       return;
     }
+    fileInput.value = '';
     fileInput.click();
   }
 
   onFileChange(event: any): void {
-        this.isLoading=true; 
+    this.isLoading = true;
     const target: DataTransfer = <DataTransfer>(event.target);
 
     if (!target.files || target.files.length !== 1) {
@@ -153,7 +153,7 @@ export class BillableDaysComponent implements OnInit {
     this.excelFile = target.files[0];
 
     if (!this.excelFile) {
-      console.error("⚠️ No file selected.");
+      console.error("No file selected.");
       return;
     }
 
@@ -165,7 +165,6 @@ export class BillableDaysComponent implements OnInit {
 
       this._invoiceService.UploadBillable(formData).subscribe({
         next: (res) => {
-          console.log(res);
           this.datatable = res.Data;
           console.table(this.datatable);
           if (this.datatable && Array.isArray(this.datatable) && this.datatable.length > 0) {
@@ -182,7 +181,7 @@ export class BillableDaysComponent implements OnInit {
         }
       });
     }
-  } 
+  }
 
 
 
@@ -231,10 +230,8 @@ export class BillableDaysComponent implements OnInit {
       "Pay_Period_Id": this.payPeriod.payfrequencyid,
       "Employee_Code": this.EmployeeCode
     }
-    console.log(request)
     this._invoiceService.BillableSearch(request).subscribe({
       next: res => {
-        console.log(res.Data);
         this.dataSource = new MatTableDataSource<any>(Array.isArray(res.Data) ? res.Data : []);
         this.dataSource.paginator = this.paginator;
       },
@@ -261,7 +258,6 @@ export class BillableDaysComponent implements OnInit {
   }
   handleImportType(event) {
     this.importType = event;
-    console.log(this.importType);
   }
   TemplateDownload() {
 

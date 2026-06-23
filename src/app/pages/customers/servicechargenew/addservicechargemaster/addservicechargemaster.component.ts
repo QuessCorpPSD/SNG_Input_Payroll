@@ -78,7 +78,7 @@ interface serviceChargemaster {
   IsNewJoineeArrearProrate: number
   QDemyFee_Type_Id: number
   InEdgeFee_Type_Id: number
-  employee_Id: number
+  employee_Id: string
   employee_code: string
 }
 
@@ -506,7 +506,7 @@ export class AddservicechargemasterComponent {
       IsNewJoineeArrearProrate: f.newJoineeArrearprorate,
       QDemyFee_Type_Id: f.qdemyFeeType,
       InEdgeFee_Type_Id: f.inedgeFeeType,
-      employee_Id: 0,
+      employee_Id: "",
       employee_code: ""
     });
 
@@ -613,7 +613,7 @@ export class AddservicechargemasterComponent {
       IsNewJoineeArrearProrate: 0,
       QDemyFee_Type_Id: f.qdemyFeeType,
       InEdgeFee_Type_Id: f.inedgeFeeType,
-      employee_Id: 0,
+      employee_Id: "",
       employee_code: ""
     });
 
@@ -1020,7 +1020,7 @@ export class AddservicechargemasterComponent {
       IsNewJoineeArrearProrate: 0,
       QDemyFee_Type_Id: 0,
       InEdgeFee_Type_Id: 0,
-      employee_Id: 0,
+      employee_Id: "",
       employee_code: ""
     });
 
@@ -1126,7 +1126,7 @@ export class AddservicechargemasterComponent {
       IsNewJoineeArrearProrate: 0,
       QDemyFee_Type_Id: 0,
       InEdgeFee_Type_Id: 0,
-      employee_Id: 0,
+      employee_Id: "",
       employee_code: ""
     });
 
@@ -1246,7 +1246,7 @@ export class AddservicechargemasterComponent {
       IsNewJoineeArrearProrate: 0,
       QDemyFee_Type_Id: 0,
       InEdgeFee_Type_Id: 0,
-      employee_Id: f.employeeCode.Employee_Id,
+      employee_Id: String(f.employeeCode.Employee_Id),
       employee_code: f.employeeCode.Employee_Code
 
     });
@@ -1349,7 +1349,7 @@ export class AddservicechargemasterComponent {
       IsNewJoineeArrearProrate: 0,
       QDemyFee_Type_Id: 0,
       InEdgeFee_Type_Id: 0,
-      employee_Id: 0,
+      employee_Id: "",
       employee_code: ""
     });
 

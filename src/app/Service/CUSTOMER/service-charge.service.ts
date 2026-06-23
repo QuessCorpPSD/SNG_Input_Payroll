@@ -61,7 +61,7 @@ export class ServiceChargeService implements IServiceCharge {
 
   loadEmployee(companyid: any, employeeid: any): Observable<APIResponse> {
     return this.http.get<APIResponse>(
-      this.env.apiUrl + 'Employee/SearchDetails/' + companyid + '/' + employeeid);
+      this.env.apiUrl + 'Employee/GetEmployeeBilltoRate/' + companyid);
   }
 
   deleteServiceCharge(payload: any): Observable<APIResponse> {
