@@ -35,4 +35,14 @@ export class BatchcreationService implements IBatchreation {
     );
   }
 
+  BatchId(batchtype: any, batchdate: any, userid: any): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      `${this.env.apiUrl}BatchGeneration/GetBatchList/${batchtype}/${batchdate}/${userid}`
+    );
+  }
+
+  Downloadbatchfile(batchid: any): Observable<APIResponse> {
+    return this.http.get<APIResponse>(this.env.apiUrl + 'BatchGeneration/DownloadBatchFile/' + batchid);
+  }
+
 }

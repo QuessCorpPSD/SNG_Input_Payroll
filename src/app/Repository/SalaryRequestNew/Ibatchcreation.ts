@@ -7,4 +7,6 @@ export interface IBatchreation {
     Entitylist(userid: any): Observable<APIResponse>;
     Search(batchtype: any, batchcreate: any, entity: any, userid: any): Observable<APIResponse>;
     Export(batchtype: any, batchcreate: any, entity: any, userid: any): Observable<APIResponse>;
+    Downloadbatchfile(batchid: any): Observable<APIResponse>;
+    BatchId(batchtype: any, batchdate: any, userid: any): Observable<APIResponse>
 }

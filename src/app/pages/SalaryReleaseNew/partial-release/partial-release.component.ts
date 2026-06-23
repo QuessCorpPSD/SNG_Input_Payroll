@@ -25,8 +25,6 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PartialReleaseGrid } from '../../../Models/SalaryRelease/PartialRelease';
 import { PartialReleaseImportGrid } from '../../../Models/SalaryRelease/PartialReleaseImport';
 
-
-
 @Component({
   selector: 'PartialRelease',
   standalone: true,

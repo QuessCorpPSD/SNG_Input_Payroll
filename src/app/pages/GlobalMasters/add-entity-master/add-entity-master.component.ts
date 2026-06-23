@@ -77,9 +77,7 @@ export class AddEntityMasterComponent {
     this.popupSubMessage = '';
   }
 
-  // ============================
-  // LOAD DROPDOWN
-  // ============================
+
   bindQuessLegalEntity() {
     this.isLoading = true;
 

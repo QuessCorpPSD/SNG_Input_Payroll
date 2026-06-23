@@ -290,7 +290,7 @@ export const routes: Routes = [
       },
       {
         path: 'salaryreleasemenu',
-        component: SalaryReleaseMenuComponent,
+        component: SalaryReleaseNavigationComponent,
         children: [
           { path: 'BankAccount', component: BankAccountComponent },
           { path: 'Holdrequest', component: HoldRequestComponent },
@@ -299,6 +299,8 @@ export const routes: Routes = [
           { path: 'Yearlypayout', component: YearlyPayoutComponent },
           { path: 'downloadbatch', component: DownloadbatchComponent },
           { path: 'batchcreation', component: BatchcreationprocessComponent },
+          { path: 'SalaryHoldRequest', component: SalaryHoldRequestComponent },
+
         ]
       },
       {
