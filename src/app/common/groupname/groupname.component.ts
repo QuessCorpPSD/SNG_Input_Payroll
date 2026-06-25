@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Inject, InjectionToken, OnChanges, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, Inject, InjectionToken, OnChanges, Input, OnInit, Output, ViewEncapsulation, SimpleChanges } from '@angular/core';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
@@ -31,24 +31,39 @@ export const COMM_TOKEN = new InjectionToken<ICommonService>('COMM_TOKEN');
   }]
 })
 export class GroupnameComponent {
-@Input() selectedCompanyId?: number;
+  @Input() selectedCompanyId?: number;
   options: string[] = [];
   searchText: string = '';
   myControl = new FormControl<string | Groupnameclass>('');
   siteName: Groupnameclass[] = [];
   filteredOptions$!: Observable<Groupnameclass[]>;
   selectedOption?: Groupnameclass;
+  selectedGroupId: any = null;
+  groupList: any[] = [];
+
   @Output() sitenameEmit = new EventEmitter<Groupnameclass>();
   constructor(@Inject(COMM_TOKEN) private _commonService: ICommonService) {
 
   }
-  ngOnChanges() {
-    if (this.selectedCompanyId) {
-      this.Bindmapname(this.selectedCompanyId);
+  // ngOnChanges() {
+  //   if (this.selectedCompanyId) {
+  //     this.Bindmapname(this.selectedCompanyId);
+  //   }
+  // }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['selectedCompanyId']?.currentValue) {
+      // Clear selected group/site
+      this.myControl.setValue('');
+      // Clear existing list
+      this.siteName = [];
+      // Reload based on company
+      this.Bindmapname(changes['selectedCompanyId'].currentValue);
     }
   }
 
   Bindmapname(selectedCompanyId: any) {
+    console.log("Group", selectedCompanyId);
     this._commonService.GetSitesByCompanyId(selectedCompanyId).subscribe({
       next: res => {
         this.siteName = res.Data;
@@ -83,6 +98,7 @@ export class GroupnameComponent {
 
   onOptionSelected(option: any) {
     this.selectedOption = option;
+    console.log("select Group", this.selectedOption);
     this.sitenameEmit.emit(this.selectedOption);
   }
 }
