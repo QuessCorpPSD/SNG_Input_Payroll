@@ -192,6 +192,8 @@ import { MulticommercialComponent } from './pages/GlobalMasters/multicommercial/
 import { IRFormReportComponent } from './pages/Reports/ir-form-report/ir-form-report.component';
 import { InputaggregatornavigationComponent } from './pages/inputaggregator/inputaggregatornavigation/inputaggregatornavigation.component';
 import { InputaggregatorattendanceComponent } from './pages/inputaggregator/inputaggregatorattendance/inputaggregatorattendance.component';
+import { BillingaggregatorComponent } from './pages/inputaggregator/billingaggregator/billingaggregator.component';
+import { LeavemastersComponent } from './pages/inputaggregator/leavemaster/leavemaster.component';
 
 
 export const routes: Routes = [
@@ -235,7 +237,9 @@ export const routes: Routes = [
         component: InputaggregatornavigationComponent,
         children: [
           { path: 'inputaggregatorattendance', component: InputaggregatorattendanceComponent },
-          
+          { path: 'billingaggregator', component: BillingaggregatorComponent },
+          { path: 'leavemaster', component: LeavemastersComponent },
+
         ]
       },
       {

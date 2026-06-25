@@ -1,0 +1,132 @@
+<div class="page-wrapper" style="padding-top: 2%;">
+    <div class="scrollable-content">
+
+        <!-- <div style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700; min-width: 960px">
+            Entity Master
+        </div> -->
+        <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 600;">Leave
+            Master</mat-card-title>
+
+        <div class="container py-2">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3 d-flex gap-2">
+                    <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="Export to Excel" (click)="exportToExcel()">
+                        <mat-icon>download</mat-icon>
+                    </button>
+
+                    <button class="btn btn-success btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="Add" (click)="openAddPopup()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-wrapper" *ngIf="leaveTypes && leaveTypes.length >= 0">
+            <div class="example-container mat-elevation-z8">
+
+                <table mat-table [dataSource]="dataSource" class="custom-table mat-elevation-z8" matSort>
+
+                    <ng-container matColumnDef="delete">
+                        <mat-header-cell *matHeaderCellDef> Delete </mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                            <button class="edit" (click)="deleterow(row)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="leaveName">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Leave Type </mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{ row.leaveName }} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="descriptions">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Description </mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{ row.descriptions }} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="isActive">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Is Active </mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{ row.isActive ? 'Yes' : 'No' }} </mat-cell>
+                    </ng-container>
+
+                    <mat-header-row
+                        *matHeaderRowDef="['delete', 'leaveName', 'descriptions', 'isActive']"></mat-header-row>
+                    <mat-row
+                        *matRowDef="let row; columns: ['delete', 'leaveName', 'descriptions', 'isActive'];"></mat-row>
+
+                </table>
+
+
+            </div>
+
+            <mat-paginator #paginator [pageSize]="5" [pageSizeOptions]="[5,10,25]" showFirstLastButtons></mat-paginator>
+        </div>
+        <div *ngIf="isLoading" class="loading-overlay">
+            <img src="assets/Loading.gif" alt="Loading...">
+        </div>
+
+
+
+    </div>
+</div>
+
+
+<div class="popup-overlay" *ngIf="showAddPopup" (click)="closeAddPopup()">
+</div>
+
+<div class="report-popup" *ngIf="showAddPopup">
+
+    <div class="popup-header">
+        <h2 class="panelreport-title">
+            Add Leave Type</h2>
+        <button class="close-btn" (click)="closeAddPopup()">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+
+    <div class="report-list">
+        <div class="row g-2">
+
+            <div class="col-md-6">
+                <label class="form-label text-muted small">
+                    Leave Type <span style="color:red">*</span>
+                </label>
+                <input type="text" class="form-control" [(ngModel)]="leaveType" />
+            </div>
+
+            <!-- Is Active -->
+            <div class="col-md-6">
+                <label class="form-label text-muted small">
+                    Is Active
+                </label>
+                <select class="form-control" [(ngModel)]="isActive">
+                    <option [ngValue]="1">Yes</option>
+                    <option [ngValue]="0">No</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label text-muted small">
+                    Description <span style="color:red">*</span>
+                </label>
+                <input type="text" class="form-control" [(ngModel)]="description" />
+            </div>
+            <div class="popup-footer">
+                <button type="button" class="btn-secondarys" (click)="closeAddPopup()">
+                    Cancel
+                </button>
+
+                <button type="button" class="search-button" (click)="saveLeaveType()">
+                    <!-- {{ isEditMode ? 'Delete' : 'Save' }} -->
+                    Save
+                </button>
+
+            </div>
+
+
+        </div>
+    </div>
+
+</div>

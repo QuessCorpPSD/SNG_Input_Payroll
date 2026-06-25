@@ -77,7 +77,7 @@ body {
     background: #ffffff;
     font-family: Montserrat;
     color: #302CB3;
-    overflow-y: auto;
+    /* overflow-y: auto; */
    
    }
 
