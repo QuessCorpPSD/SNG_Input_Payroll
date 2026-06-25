@@ -192,6 +192,9 @@ import { MulticommercialComponent } from './pages/GlobalMasters/multicommercial/
 import { IRFormReportComponent } from './pages/Reports/ir-form-report/ir-form-report.component';
 import { InputaggregatornavigationComponent } from './pages/inputaggregator/inputaggregatornavigation/inputaggregatornavigation.component';
 import { InputaggregatorattendanceComponent } from './pages/inputaggregator/inputaggregatorattendance/inputaggregatorattendance.component';
+import { LeaveMasterMappingComponent } from './pages/inputaggregator/leave-master-mapping/leave-master-mapping.component';
+import { MiscPaycodeMappingComponent } from './pages/inputaggregator/misc-paycode-mapping/misc-paycode-mapping.component';
+import { LeaveCategoryComponent } from './pages/inputaggregator/leave-category/leave-category.component';
 
 
 export const routes: Routes = [
@@ -235,7 +238,9 @@ export const routes: Routes = [
         component: InputaggregatornavigationComponent,
         children: [
           { path: 'inputaggregatorattendance', component: InputaggregatorattendanceComponent },
-          
+          { path: "leavemastermapping", component: LeaveMasterMappingComponent },
+          { path: "miscpaycodemapping", component: MiscPaycodeMappingComponent },
+          { path: "leavecategory", component: LeaveCategoryComponent }
         ]
       },
       {

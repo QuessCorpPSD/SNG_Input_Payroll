@@ -12,6 +12,7 @@ import { SessionStorageService } from '../../Shared/SessionStorageService';
 import { OnboardingStateService } from "../../onboarding-state.service";
 export const COMM_TOKEN = new InjectionToken<ICommonService>('COMM_TOKEN');
 import { EncryptionService } from '../../Shared/encryption.service';
+import { MatIconModule } from '@angular/material/icon';
 @Component({
   selector: 'CompanyPicker',
   standalone: true,
@@ -20,7 +21,8 @@ import { EncryptionService } from '../../Shared/encryption.service';
     ReactiveFormsModule,
     MatAutocompleteModule,
     MatInputModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatIconModule
   ],
   templateUrl: './company.component.html',
   styleUrls: ['./company.component.css'],
@@ -44,14 +46,15 @@ export class CompanyComponent implements OnInit, OnChanges {
   myControl = new FormControl<string | Company>('');
   companyCode: Company[] = [];
   filteredOptions$!: Observable<Company[]>;
-  selectedOption?: Company;
   userdetail!: any;
   user_id?: string | null;
-  @Output() companyEmit = new EventEmitter<Company>();
+  selectedOption?: Company | null;
+  @Input() disabled: boolean = false;
+  @Output() companyEmit = new EventEmitter<Company | null>();
 
   constructor(@Inject(COMM_TOKEN) private _commonService: ICommonService, private injector: Injector
-    , private _sessionStoreage: SessionStorageService, private stateService: OnboardingStateService, 
-    private decry:EncryptionService) {
+    , private _sessionStoreage: SessionStorageService, private stateService: OnboardingStateService,
+    private decry: EncryptionService) {
 
     effect(() => {
       const companyValue = this.stateService.getCompany();
@@ -154,5 +157,19 @@ export class CompanyComponent implements OnInit, OnChanges {
     this.onChange(option); // update parent form
     this.onTouched();
     this.companyEmit.emit(this.selectedOption);
+  }
+
+  clearSelection(input: HTMLInputElement) {
+    this.selectedOption = null;
+
+    this.myControl.setValue(null);
+
+    this.onChange(null);
+    this.onTouched();
+    this.companyEmit.emit(null);
+
+    input.blur();
+
+    console.log('Selection cleared:', this.selectedOption, this.myControl.value);
   }
 }
