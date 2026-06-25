@@ -301,13 +301,10 @@ export class SalaryReleaseApproveComponent {
       }))
     };
 
-    console.log('Generated Payload:', JSON.stringify(payload));
-
 
     this.service.Apporoval(payload).subscribe({
       next: (res: any) => {
-        console.log('Response:', res);
-
+        
         const msg = res?.Data || res.Data.message;
 
 
@@ -392,13 +389,9 @@ export class SalaryReleaseApproveComponent {
       }))
     };
 
-    console.log('Generated Payload:', JSON.stringify(payload));
-
-
     this.service.Apporoval(payload).subscribe({
       next: (res: any) => {
-        console.log('Response:', res);
-
+        
         const msg = res?.Data || res.Data.message;
 
 

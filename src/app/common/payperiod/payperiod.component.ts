@@ -135,7 +135,7 @@ export class PayPeriodComponent implements OnChanges {
     else if (this.payPeriodType === "SalaryRelease") {
       this._commonService.GetPayperiodbyCompanySalaryRelease(selectedCompanyId).subscribe({
         next: res => {
-          this.payPeriod = res.data;
+          this.payPeriod = res.Data;
           this.filteredOptions$ = this.myControl.valueChanges.pipe(
             startWith(''),
             map(value => {

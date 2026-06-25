@@ -342,7 +342,6 @@ export const routes: Routes = [
           { path: 'billabledays', component: BillableDaysComponent },
           { path: 'gstinvoice', component: GstinvoiceComponent },
           { path: 'billingpayfrequency', component: BillingpayfrequencyComponent },
-          { path: 'gstinvoice', component: GstinvoiceComponent },
           { path: 'poinitiate', component: POInitiateComponent },
           { path: 'app-invoice-culture', component: InvoiceCultureComponent },
           { path: 'ClientBillableReportDatewise', component: ClientbillablereportsdatewiseComponent },

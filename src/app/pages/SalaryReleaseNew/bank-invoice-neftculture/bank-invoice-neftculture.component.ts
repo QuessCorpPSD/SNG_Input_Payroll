@@ -103,7 +103,6 @@ export class BankInvoiceNEFTCultureComponent {
 
   handleCompanyEvent(company) {
     this.selectedCompanyId = company.companyId;
-    console.log(this.selectedCompanyId);
   }
 
 
@@ -183,7 +182,6 @@ export class BankInvoiceNEFTCultureComponent {
 
     const companyid = this.selectedCompanyId;
     const userid = this.userdetail.user_Id;
-    console.log("id", this.userdetail.user_Id)
 
     this.service.NeftCulturesearch(companyid, userid).subscribe({
       next: (res) => {
@@ -355,8 +353,6 @@ export class BankInvoiceNEFTCultureComponent {
         Bank_Culture_id: bank.bank_Culture_id ?? 0
       }))
     };
-
-    console.log("SAVE PAYLOAD", payload);
 
     this.service.NeftCultureSave(payload).subscribe({
       next: (res: any) => {

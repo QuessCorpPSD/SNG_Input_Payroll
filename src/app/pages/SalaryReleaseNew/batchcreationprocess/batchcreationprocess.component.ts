@@ -118,8 +118,7 @@ export class BatchcreationprocessComponent {
     const batchcreate = this.Batchcreate;
     const entity = this.entity;
     const userid = this.userdetail.user_Id;
-    console.log("batchcreate", this.Batchcreate)
-
+    
     this.service.Search(batchtype, batchcreate, entity, userid).subscribe({
       next: res => {
         if (!res.Data || res.Data.length === 0) {

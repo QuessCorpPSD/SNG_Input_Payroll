@@ -742,7 +742,6 @@ export class HoldRequestComponent implements OnInit {
       })
     ).subscribe({
       next: res => {
-        console.log('res', JSON.stringify(res));
         this.downloadHoldResponseExcel(res);
         this.dataSource.data = [];
         this.selection.clear();
@@ -756,7 +755,7 @@ export class HoldRequestComponent implements OnInit {
   }
 
   downloadHoldResponseExcel(apiResponse: any) {
-    const data = apiResponse?.data?.data;
+    const data = apiResponse?.Data?.data;
     if (!data) {
       alert('No data available to download');
       return;
@@ -820,7 +819,7 @@ export class HoldRequestComponent implements OnInit {
 
 
         const validations: string[] =
-          res?.data?.map((x: any) => x.validation) || [];
+          res?.Data?.map((x: any) => x.validation) || [];
 
         const isSuccess = validations.some(v =>
           v.toLowerCase().includes('uploaded successfully')
@@ -867,7 +866,7 @@ export class HoldRequestComponent implements OnInit {
 
 
         const validations: string[] =
-          res?.data?.map((x: any) => x.error_Message) || [];
+          res?.Data?.map((x: any) => x.error_Message) || [];
 
         const isSuccess = validations.some(v =>
           v.toLowerCase().includes('uploaded successfully')
@@ -912,7 +911,7 @@ export class HoldRequestComponent implements OnInit {
       next: res => {
 
         const validations: string[] =
-          res?.data?.map((x: any) => x.error_Message) || [];
+          res?.Data?.map((x: any) => x.error_Message) || [];
 
         const isSuccess = validations.some(v =>
           v.toLowerCase().includes('uploaded successfully')
@@ -978,7 +977,7 @@ export class HoldRequestComponent implements OnInit {
 
     this.holdservice.DownloadTemplate(Flag, Qzoneusername).subscribe({
       next: res => {
-        const data = res?.data?.data?.Table0 ?? [];
+        const data = res?.Data?.data?.Table0 ?? [];
         if (!data.length) {
           return;
         }
