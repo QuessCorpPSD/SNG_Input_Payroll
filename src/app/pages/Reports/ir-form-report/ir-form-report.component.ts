@@ -237,22 +237,23 @@ export class IRFormReportComponent {
 
     // Form validation
     if (!this.formName) {
-      alert('Please select Form Name');
+      alert('Please select Form Type');
       return;
     }
 
     // IR21 requires Month and Year
     if (this.formName === 'IR21') {
 
-      if (!this.Month) {
-        alert('Please select Month');
-        return;
-      }
-
       if (!this.Year) {
         alert('Please select Year');
         return;
       }
+
+      if (!this.Month) {
+        alert('Please select Month');
+        return;
+      }
+      
     }
 
     // IR8A requires only Year
