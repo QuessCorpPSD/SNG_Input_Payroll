@@ -35,7 +35,7 @@ export class CPFsummaryComponent {
 
   }
   BindEntityName() {
-    this.service.EntitySearch().subscribe({
+    this.service.InvoiceSearch().subscribe({
       next: (res: any) => {
         this.entitySearch = res?.Data?.data?.Table0;
       }

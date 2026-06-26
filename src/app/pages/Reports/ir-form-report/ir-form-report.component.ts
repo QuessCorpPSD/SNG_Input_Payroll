@@ -45,6 +45,7 @@ export class IRFormReportComponent {
   selectedPP?: string;
   isLoading: boolean = false;
   rows: ViewRow[] = [];
+  getYear: any[] = [];
   filteredRows: any[] = [];
   searchText: string = '';
   apiResponse: any;
@@ -52,12 +53,32 @@ export class IRFormReportComponent {
   pageSize = 10;
   currentPage = 0;
   paginatedData: any[] = [];
+  formName: any;
+  showTable = false;
+  Year: any;
+  previousFormName: string = '';
+  months: { name: string, value: string }[] = [
+    { name: 'January', value: 'January' },
+    { name: 'February', value: 'February' },
+    { name: 'March', value: 'March' },
+    { name: 'April', value: 'April' },
+    { name: 'May', value: 'May' },
+    { name: 'June', value: 'June' },
+    { name: 'July', value: 'July' },
+    { name: 'August', value: 'August' },
+    { name: 'September', value: 'September' },
+    { name: 'October', value: 'October' },
+    { name: 'November', value: 'November' },
+    { name: 'December', value: 'December' }
+  ];
+  Month: string = '';
 
   constructor(private irservice: IRFormService, public pdfservice: PdfService) { }
 
   trackRow: TrackByFunction<ViewRow> = (_, row) => row.Employee_Id;
 
   ngOnInit(): void {
+    this.BindYear();
     this.payPeriodTypefromParentall = "All";
   }
 
@@ -67,6 +88,14 @@ export class IRFormReportComponent {
     this.paginatedData = [];
   }
 
+  BindYear() {
+    this.irservice.bindYear().subscribe({
+      next: res => {
+        this.getYear = res.Data.data.Table0;
+      }
+    });
+  };
+
 
   Searchclick() {
     this.isLoading = true;
@@ -75,6 +104,7 @@ export class IRFormReportComponent {
       this.isLoading = false;
       return;
     }
+    this.showTable = true;
 
     // if (!this.selectedPPid) {
     //   alert('Please select Payperiod');
@@ -173,27 +203,134 @@ export class IRFormReportComponent {
     this.setPaginatedData();
   }
 
-  Download(employeeId: number, type) {
-    this.isLoading = true;
-    if (type == 'IR8A') {
-      this.irservice.generate8APdf(String(employeeId)).then((res: any) => {
-        if (res) {
-          alert(type + ' file downloaded successfully')
-          this.isLoading = false;
-        } else {
-          this.isLoading = false;
-        }
-      });
-    } else {
-      this.irservice.generatePdf(String(employeeId)).then((res) => {
-        if (res) {
-          alert(type + ' file downloaded successfully')
-          this.isLoading = false;
-        } else {
-          this.isLoading = false;
-        }
-      });
+  onFormNameChange() {
+
+    if (this.previousFormName &&
+      this.previousFormName !== this.formName) {
+
+      this.Month = '';
+      this.Year = '';
     }
 
+    this.previousFormName = this.formName;
   }
+
+  // onFormNameChange() {
+
+  //   if (this.formName === 'IR8A') {
+  //     // Hide month and clear previous values
+  //     this.Month = '';
+  //   }
+
+  //   if (this.formName === 'IR21') {
+  //     // Optional: clear year when switching forms
+  //     // this.Year = '';
+  //   }
+
+  //   if (!this.formName) {
+  //     this.Month = '';
+  //     this.Year = '';
+  //   }
+  // }
+
+  Download(employeeId: number) {
+
+    // Form validation
+    if (!this.formName) {
+      alert('Please select Form Name');
+      return;
+    }
+
+    // IR21 requires Month and Year
+    if (this.formName === 'IR21') {
+
+      if (!this.Month) {
+        alert('Please select Month');
+        return;
+      }
+
+      if (!this.Year) {
+        alert('Please select Year');
+        return;
+      }
+    }
+
+    // IR8A requires only Year
+    if (this.formName === 'IR8A') {
+
+      if (!this.Year) {
+        alert('Please select Year');
+        return;
+      }
+    }
+
+    this.isLoading = true;
+
+    if (this.formName === 'IR8A') {
+
+      this.irservice.generate8APdf(
+        String(employeeId),
+        String(this.Year)
+      ).then((res: any) => {
+
+        this.isLoading = false;
+
+        if (res) {
+          alert(`${this.formName} file downloaded successfully`);
+        }
+
+      }).catch((err) => {
+        this.isLoading = false;
+        console.error(err);
+        // alert('Failed to download IR8A file');
+      });
+
+    }
+    else if (this.formName === 'IR21') {
+
+      this.irservice.generatePdf(
+        String(employeeId),
+        String(this.Month),
+        String(this.Year)
+      ).then((res: any) => {
+
+        this.isLoading = false;
+
+        if (res) {
+          alert(`${this.formName} file downloaded successfully`);
+        }
+
+      }).catch((err) => {
+        this.isLoading = false;
+        console.error(err);
+        // alert('Failed to download IR21 file');
+      });
+    }
+  }
+  // Download(employeeId: number, type) {
+  //   this.isLoading = true;
+  //   if (type == 'IR8A') {
+  //     this.irservice.generate8APdf(String(employeeId)).then((res: any) => {
+  //       if (res) {
+  //         alert(type + ' file downloaded successfully')
+  //         this.isLoading = false;
+  //       } else {
+  //         this.isLoading = false;
+  //       }
+  //     });
+  //   } else {
+  //     this.irservice.generatePdf(String(employeeId)).then((res) => {
+  //       if (res) {
+  //         alert(type + ' file downloaded successfully')
+  //         this.isLoading = false;
+  //       } else {
+  //         this.isLoading = false;
+  //       }
+  //     });
+  //   }
+
+  // }
+
+
+
 }

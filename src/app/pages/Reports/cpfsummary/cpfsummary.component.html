@@ -11,10 +11,15 @@
                 <div class="col-md-5">
                     <label class="form-label text-muted small">Entity</label>
                     <select class="form-select form-select-sm" [(ngModel)]="Entity">
+                        <option *ngFor="let p of entitySearch" [value]="p.Id">
+                            {{ p.EntityName }}
+                        </option>
+                    </select>
+                    <!-- <select class="form-select form-select-sm" [(ngModel)]="Entity">
                         <option *ngFor="let p of entitySearch" [value]="p.Entity_Id">
                             {{ p.Entity_Name }}
                         </option>
-                    </select>
+                    </select> -->
                 </div>
                 <div class="col-md-3">
                     <label class="form-label text-muted small">Pay Period</label>

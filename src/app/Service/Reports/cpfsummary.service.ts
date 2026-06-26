@@ -12,8 +12,13 @@ export class CpfsummaryService implements ICpfsummary {
   env = environment
   constructor(private http: HttpClient) {
   }
-  EntitySearch(): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.env.apiUrl + 'Entity/Search');
+  // EntitySearch(): Observable<APIResponse> {
+  //   return this.http.get<APIResponse>(this.env.apiUrl + 'Entity/Search');
+  // }
+  InvoiceSearch(): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      this.env.apiUrl + 'InvoiceLegalEntity/Search',
+    );
   }
   GetPayPeriod(): Observable<APIResponse> {
     return this.http.get<APIResponse>(this.env.apiUrl + 'Common/GetPayPeriod');

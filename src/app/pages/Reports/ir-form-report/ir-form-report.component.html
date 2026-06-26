@@ -9,6 +9,31 @@
                 <label class="form-label text-muted small">Company Code</label>
                 <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
             </div>
+            <div class="col-md-2">
+                <label class="form-label text-muted small">Form Name</label>
+                <select class="form-select form-select-sm small-input" [(ngModel)]="formName"
+                    (ngModelChange)="onFormNameChange()">
+                    <option value="">--Select--</option>
+                    <option value="IR21">IR 21</option>
+                    <option value="IR8A">IR 8A</option>
+                </select>
+            </div>
+            <div class="col-md-2" *ngIf="formName">
+                <label class="form-label text-muted small">Year</label>
+                <select class="form-select form-select-sm small-input" [(ngModel)]="Year">
+                    <option value="">Select Month</option>
+                    <option *ngFor="let item of getYear" [value]="item.YEAR">
+                        {{ item.YEAR }}
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-2" *ngIf="formName === 'IR21'">
+                <label class="form-label text-muted small">Month</label>
+                <select class="form-select form-select-sm small-input" [(ngModel)]="Month">
+                    <option value="">Select Month</option>
+                    <option *ngFor="let month of months" [value]="month.value">{{ month.name }}</option>
+                </select>
+            </div>
             <!-- <div class="col-md-3">
                 <label class="form-label text-muted small">Pay Period</label>
                 <PayPeriod [selectedCompanyId]="companyId" [payPeriodType]="payPeriodTypefromParentall"
@@ -23,56 +48,61 @@
                 </div>
             </div>
         </div>
-        <table class="table table-bordered">
-            <tr>
-                <th style="display: none;">
-                    <span class="span-text-header">Employee Id</span>
-                </th>
-                <th>
-                    <span class="span-text-header">Name</span>
-                </th>
-                <th>
-                    <span class="span-text-header">Date of Joining</span>
-                </th>
-                <th>
-                    <span class="span-text-header">Designation</span>
-                </th>
-                <th>
-                    <span class="span-text-header">IR 21</span>
-                </th>
-                <th>
+        <div *ngIf="showTable">
+            <table class="table table-bordered">
+                <tr>
+                    <th style="display: none;">
+                        <span class="span-text-header">Employee Id</span>
+                    </th>
+                    <th>
+                        <span class="span-text-header">Name</span>
+                    </th>
+                    <th>
+                        <span class="span-text-header">Date of Joining</span>
+                    </th>
+                    <th>
+                        <span class="span-text-header">Designation</span>
+                    </th>
+                    <th>
+                        <span class="span-text-header">Download</span>
+                    </th>
+                    <!-- <th>
                     <span class="span-text-header">IR 8A</span>
-                </th>
-            </tr>
-            <tbody *ngIf="paginatedData">
-                <tr *ngFor="let item of paginatedData; trackBy: trackRow" style="height: 30px;vertical-align: middle;">
-                    <td style="display: none;">
-                        <span class="span-text-detail">{{item.Employee_Id}}</span>
-                    </td>
-                    <td>
-                        <span class="span-text-detail">{{item.Name}}</span>
-                    </td>
-                    <td>
-                        <span class="span-text-detail">{{item.Date_Of_Joining | date:'dd MMM YYYY'}}</span>
-                    </td>
-                    <td>
-                        <span class="span-text-detail">{{item.Designation_Name}}</span>
-                    </td>
-                    <td style="text-align: center;vertical-align: bottom;">
-                        <mat-icon (click)="Download(item.Employee_Id,'IR26')"
-                            style="cursor: pointer;">download</mat-icon>
-                    </td>
-                    <td style="text-align: center;vertical-align: bottom;">
+                </th> -->
+                </tr>
+                <tbody *ngIf="paginatedData">
+                    <tr *ngFor="let item of paginatedData; trackBy: trackRow"
+                        style="height: 30px;vertical-align: middle;">
+                        <td style="display: none;">
+                            <span class="span-text-detail">{{item.Employee_Id}}</span>
+                        </td>
+                        <td>
+                            <span class="span-text-detail">{{item.Name}}</span>
+                        </td>
+                        <td>
+                            <span class="span-text-detail">{{item.Date_Of_Joining | date:'dd MMM YYYY'}}</span>
+                        </td>
+                        <td>
+                            <span class="span-text-detail">{{item.Designation_Name}}</span>
+                        </td>
+                        <td style="text-align: center; vertical-align: bottom;">
+                            <mat-icon (click)="Download(item.Employee_Id)" style="cursor: pointer;">
+                                download
+                            </mat-icon>
+                        </td>
+                        <!-- <td style="text-align: center;vertical-align: bottom;">
                         <mat-icon (click)="Download(item.Employee_Id,'IR8A')"
                             style="cursor: pointer;">download</mat-icon>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <div style="margin-bottom: 5%;">
-            <mat-paginator [length]="filteredRows.length" [pageSize]="pageSize" [pageSizeOptions]="[1,5, 10, 20, 50]"
-                (page)="onPageChange($event)">
-            </mat-paginator>
+                    </td> -->
+                    </tr>
+                </tbody>
+            </table>
+
+            <div style="margin-bottom: 5%;">
+                <mat-paginator [length]="filteredRows.length" [pageSize]="pageSize"
+                    [pageSizeOptions]="[1,5, 10, 20, 50]" (page)="onPageChange($event)">
+                </mat-paginator>
+            </div>
         </div>
     </div>
 </div>

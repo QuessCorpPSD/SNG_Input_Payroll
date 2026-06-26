@@ -85,7 +85,7 @@ export class PdfService {
     // Make sure form.pdf is in  src/assets/files/form.pdf
     // ─────────────────────────────────────────────────────────────────────────
 
-    const existingPdfBytes = await fetch('assets/files/form.pdf')
+    const existingPdfBytes = await fetch('assets/files/IR21.pdf')
       .then(res => {
         if (!res.ok) throw new Error('Could not load assets/files/form.pdf');
         return res.arrayBuffer();
@@ -106,7 +106,7 @@ export class PdfService {
     const fill = (fieldName: string, value: string, fontSize = 9) => {
       try {
         const field = form.getTextField(fieldName);
-        field.setText(value ?? '');
+        field.setText(value);
         field.acroField.setDefaultAppearance(
           `/Helv ${fontSize} Tf 0 g`
         );
@@ -595,6 +595,7 @@ export class PdfService {
     const form = pdfDoc.getForm();
     console.log(form)
     const fields = form.getFields();
+    console.log('field names')
     console.log(fields)
 
     // ✅ Your STATIC DATA (customize here)
@@ -619,23 +620,25 @@ export class PdfService {
     // ✅ Loop ALL fields (NO SKIP)
     fields.forEach(field => {
       const name = field.getName();
+      
       const type = field.constructor.name;
-
+      console.log('name :',name,'','type:',type)
       // 👉 Get value: from staticData OR fallback default
-      let value = staticData[name];
+      let value = name;
 
       // 🔥 Default fallback (ensures NOTHING is missed)
       if (value === undefined || value === null) {
         if (type === 'PDFTextField') value = name;
-        if (type === 'PDFCheckBox') value = false;
+        if (type === 'PDFTextField2') value = name;
+        //if (type === 'PDFCheckBox') value = false;
         if (type === 'PDFRadioGroup') value = '';
         if (type === 'PDFDropdown') value = '';
-        if (type === 'PDFOptionList') value = [];
+        //if (type === 'PDFOptionList') value = [];
       }
 
       try {
         // ✅ TEXT FIELD
-        if (type === 'PDFTextField') {
+        if (type === 'PDFTextField' || type === 'PDFTextField2') {
           form.getTextField(name).setText(String(value));
         }
 

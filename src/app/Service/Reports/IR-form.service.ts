@@ -23,14 +23,23 @@ export class IRFormService implements IIRformService {
         return this.http.get<APIResponse>(this.environment.apiUrl + 'PayslipReport/DownloadPayslip/' + EmployeeId);
     }
 
-    async generatePdf(id: any) {
-        const apiResponse = await fetch(this.environment.apiUrl + 'IR/GetIRDetail/' + id)
-            .then(res => {
-                if (!res.ok) throw new Error('Could not fetch IR detail from API');
-                return res.json();
-            });
+    async generatePdf(
+        id: any,
+        month: string,
+        year: string
+    ) {
+
+        const apiResponse = await fetch(
+            `${this.environment.apiUrl}IR/GetIRDetail/${id}/${month}/${year}`
+        ).then(res => {
+            if (!res.ok) throw new Error('Could not fetch IR detail from API');
+            return res.json();
+        });
 
         const raw = apiResponse?.Data?.data?.Table0?.[0];
+        const currentYearData = apiResponse?.Data?.data?.Table1?.[0] ?? {};
+        const previousYearData = apiResponse?.Data?.data?.Table2?.[0] ?? {};
+
         if (!raw) throw new Error('No data found in API response');
 
         //  Helpers 
@@ -64,14 +73,14 @@ export class IRFormService implements IIRformService {
 
         //  Data object 
         const data = {
-            taxRefNo: str(raw.GSTNumber),
+            taxRefNo: str(raw.GstNumber),
             companyName: str(raw.Client_Name),
             streetName: str(raw.BillingAddress),
             postalCode: str(raw.Pincode),
 
 
             employeeName: str(raw.First_Name),
-            nric: '',
+            nric: str(raw.NRICNumber),
             fin: str(raw.FINNumber),
             dob: fmtDate(raw.Date_Of_Birth),
             citizenship: str(raw.Citizenship),
@@ -85,10 +94,9 @@ export class IRFormService implements IIRformService {
             dateDeparture: fmtDate(raw.Last_Working_Day),
             dateResignation: fmtDate(raw.Last_Working_Day),
             designation: str(raw.Designation_Name),
-            amountWithheld: str(raw.Finalpayrollnetpay) || '0',
+            amountWithheld: str(raw.Current_month_E_Gross) || '0',
             dateLastSalary,
-            amountLastSalary: str(raw.Finalpayrollnetpay) || '0',
-            periodLastSalary: str(raw.Lastpayrollmonth),
+            periodLastSalary: str(raw.Period_application_for_Last_Salary_Paid),
             bankName: str(raw.Bank_Name),
 
             // Section F – Income
@@ -113,6 +121,16 @@ export class IRFormService implements IIRformService {
             contactName: str(raw.NameofContactPerson),
             contactNo2: str(raw.ContactNo),
             contactEmail: str(raw.Email_Id),
+            lastDateSalaryPaid: fmtDate(raw.Date_of_Last_salary_paid),
+            amountOfLastSalaryPaid: str(raw.Last_Month_E_Gross),
+            currentFromYear: str(currentYearData?.Current_MinMonth),
+            currentToYear: str(currentYearData?.Current_MaxMonth),
+            currentTotalGross: str(currentYearData?.Current_TotalGross),
+
+            previousFromYear: str(previousYearData?.Prev_MinMonth),
+            previousToYear: str(previousYearData?.Prev_MaxMonth),
+            previousTotalGross: str(previousYearData?.Prev_TotalGross),
+
         };
 
         //  Load template
@@ -149,7 +167,6 @@ export class IRFormService implements IIRformService {
         };
 
         fill('Original', 'X');
-
         fill('undefined_3', data.taxRefNo);
         fill('undefined_4', data.companyName);
         fill('Blk Hse No', '');
@@ -157,25 +174,16 @@ export class IRFormService implements IIRformService {
         fill('undefined_5', '');
         fill('undefined_6', data.streetName);
         fill('Postal Code', data.postalCode);
-
         fill('undefined_7', data.employeeName);
         fill('undefined_8', data.nric);
         fill('FIN', data.fin);
         fill('Malaysian IC if applicable', '');
         fill('4 Date of Birth', data.dob);
-
-
         fill('6 Citizenship', data.citizenship);
         fill('7 Marital Status', data.maritalStatus);
         fill('8 Contact No', data.contactNo);
         fill('9 Email Address', data.email);
-
-
-
-
         fill('undefined_9', data.dateCommencement);
-
-
         fill('undefined_10', data.dateCessation);
 
         fill('14 Date of Resignation  Termination Notice Given',
@@ -192,6 +200,15 @@ export class IRFormService implements IIRformService {
         fill('undefined_11', data.amountWithheld);
         fill('undefined_12', data.amountWithheld);
         fill('undefined_13', '00');
+        fill('Year of Cessation', data.currentFromYear);
+        fill('S', data.currentToYear);
+        fill('Text1', data.currentTotalGross);
+        fill('Text3', data.currentTotalGross);
+
+        fill('Year Prior to Year of Cessation', data.previousFromYear);
+        fill('S_2', data.previousToYear);
+        fill('Text2', data.previousTotalGross);
+        fill('Text4', data.previousTotalGross);
 
         radio('18 Are these all the monies you can withhold from the date of notification of',
             '/Yes');
@@ -202,8 +219,8 @@ export class IRFormService implements IIRformService {
         check('Salary already paid via bank', false);
         check('Employee owes company monies', false);
 
-        fill('undefined_15', data.dateLastSalary);
-        fill('undefined_16', data.amountLastSalary);
+        // fill('undefined_15', data.dateLastSalary);
+        fill('undefined_16', data.amountOfLastSalaryPaid);
         fill('undefined_17', data.periodLastSalary);
         fill('undefined_18', data.bankName);
         fill('undefined_19', '');
@@ -246,18 +263,15 @@ export class IRFormService implements IIRformService {
         fill('FIN  NRIC No', data.fin || data.nric);
 
 
-        fill('Year of Cessation', data.cessationYear);
-        fill('Year Prior to Year of Cessation', data.priorYear);
-        fill('S', 'Jan–Dec ' + data.cessationRangeLabel);
-        fill('S_2', data.priorRangeLabel);
+        // fill('Year of Cessation', data.cessationYear);
+        // fill('Year Prior to Year of Cessation', data.priorYear);
+        // fill('S', 'Jan–Dec ' + data.cessationRangeLabel);
+        // fill('S_2', data.priorRangeLabel);
 
-        fill('00', data.grossSalaryCessation);
+        // fill('00', data.grossSalaryCessation);
         fill('undefined_20', data.grossSalaryPrior);
-
         fill('undefined_21', '0');
         fill('undefined_22', '0');
-
-
         fill('2', '0');
         fill('2_2', '0');
         fill('1', '0');
@@ -315,18 +329,21 @@ export class IRFormService implements IIRformService {
         return true;
     }
 
-    async generate8APdf(id: any) {
+    async generate8APdf(
+        id: any,
+        year: string
+    ) {
         try {
-            // 🔹 Fetch API
-            const apiResponse = await fetch(this.environment.apiUrl + 'IR/GetIR8ADetail/' + id)
-                .then(res => {
-                    if (!res.ok) throw new Error('API failed');
-                    return res.json();
-                });
+
+            const apiResponse = await fetch(
+                `${this.environment.apiUrl}IR/GetIR8ADetail/${id}/${year}`
+            ).then(res => {
+                if (!res.ok) throw new Error('API failed');
+                return res.json();
+            });
 
             const raw = apiResponse?.Data?.data?.Table0?.[0];
             if (!raw) throw new Error('No data found');
-
             // 🔹 Helpers
             const str = (val: any) => (val !== null && val !== undefined && val !== '' ? String(val) : '');
 
@@ -397,7 +414,9 @@ export class IRFormService implements IIRformService {
                 'signature': str(raw.First_Name),
                 'Dec_Date': formatDate(raw.Declaration_Date),
 
-                'Fund_name': str(raw.Name_of_Designated_Pension_Provident_Fund)
+                'Fund_name': str(raw.Name_of_Designated_Pension_Provident_Fund),
+
+
             };
 
             // 🔹 Load PDF template
@@ -441,5 +460,14 @@ export class IRFormService implements IIRformService {
         }
     }
 
+    bindYear(): Observable<APIResponse> {
+        return this.http.get<APIResponse>(this.environment.apiUrl + 'IR/GetLastThreeYear/');
+    }
+
+    // getDownload21Form(employeeId: string, month: string, year: string): Observable<APIResponse> {
+    //     return this.http.get<APIResponse>(
+    //         `${this.environment.apiUrl}PayslipReport/GetIRDetail/${employeeId}/${month}/${year}`
+    //     );
+    // }
 
 }
