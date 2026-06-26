@@ -1,0 +1,473 @@
+.page-wrapper {
+      display: flex;
+      align-items: flex-start;
+      padding-top: 10px !important;
+  }
+
+  /* Left fixed icon area */
+  .left-icon {
+      flex: 0 0 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #f0f0f0;
+      border-right: 1px solid #ddd;
+  }
+
+  /* Scrollable main content */
+  .scrollable-content {
+      flex: 1 1 auto;
+      overflow-x: auto;
+      overflow-y: auto;
+      padding-left: 10px;
+  }
+
+  /* Force min width so horizontal scroll works */
+  .container-fluid,
+  .table-wrapper1 {
+      min-width: 960px;
+      padding-top: 20px !important;
+  }
+
+  .container.py-2 {
+      overflow-y: hidden;
+  }
+
+  /* Remove shadow for flat look */
+  ::ng-deep .mat-elevation-z8 {
+      box-shadow: none !important;
+  }
+
+
+  /* Convert Angular Material flex table to real table */
+  ::ng-deep .mat-mdc-table {
+      display: table !important;
+      table-layout: auto !important;
+      width: max-content !important;
+      min-width: 100% !important;
+  }
+
+  ::ng-deep .mat-mdc-header-row,
+  ::ng-deep .mat-mdc-row {
+      display: table-row !important;
+      height: 50px !important;
+  }
+
+  ::ng-deep .mat-mdc-header-cell,
+  ::ng-deep .mat-mdc-cell {
+      display: table-cell !important;
+      width: auto !important;
+      white-space: nowrap;
+  }
+
+  /* Header Cells */
+  ::ng-deep .mat-mdc-header-cell {
+      background-color: #f5f5f5 !important;
+      color: #555 !important;
+      font-size: 13px;
+      font-family: "Montserrat", sans-serif;
+      font-weight: 600;
+      border-right: 1px solid #ddd;
+      justify-content: left;
+      align-items: center;
+      text-align: center;
+      height: 50px !important;
+      z-index: 1;
+      width: 100%;
+      align-items: center;
+      vertical-align: middle;
+      background: #f5f5f5 !important;
+      z-index: 1001;
+  }
+
+  /* Body Cells */
+  ::ng-deep .mat-mdc-cell {
+      font-family: "Montserrat", sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      color: #222;
+      border-bottom: 1px dashed #E8E8E8 !important;
+      border-right: 1px solid #ddd;
+      justify-content: left;
+      align-items: center;
+      text-align: center;
+      padding: 0 10px;
+      height: 30px;
+      vertical-align: middle;
+  }
+
+  /* Hover effect for rows */
+  ::ng-deep .mat-row:hover {
+      background-color: #f9f9f9 !important;
+      transition: background 0.2s ease-in-out;
+  }
+
+  /* Header Row */
+  ::ng-deep .mat-header-row {
+      height: 32px !important;
+      background-color: #f5f5f5 !important;
+      border-bottom: 1px solid #ddd;
+  }
+
+  /* Row Heights */
+  ::ng-deep .mat-row {
+      height: 32px !important;
+  }
+
+  .table-wrapper1 {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 0px 24px 0 5px;
+      width: 100%;
+      height: 80vh;
+      overflow: hidden;
+      padding-right: 30px;
+  }
+
+  .table-wrapper2 {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 0px 24px 0 5px;
+      width: 700px;
+      height: 50vh;
+      overflow: hidden;
+      padding-right: 30px;
+  }
+
+  .table-scroll {
+      overflow-x: auto;
+      overflow-y: auto;
+      max-height: auto;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+      background-color: #fff;
+      width: 100%;
+      position: relative;
+  }
+
+  .table-scrolls {
+      overflow-x: auto;
+      overflow-y: auto;
+      max-height: auto;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+      background-color: #fff;
+      position: relative;
+  }
+
+  /* make sure both scrollbars are visible */
+  .table-scroll::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+  }
+
+  .table-scroll::-webkit-scrollbar-thumb {
+      background-color: #ccc;
+      border-radius: 3px;
+  }
+
+  /* Header row scrolls with body */
+  ::ng-deep .mat-header-row {
+      height: 32px !important;
+      background-color: #f5f5f5 !important;
+      border-bottom: 1px solid #ddd;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: #f5f5f5;
+  }
+
+  .custom-table {
+      width: max-content;
+      min-width: 100%;
+      table-layout: auto !important;
+  }
+
+  /* ===== Header Cells ===== */
+  ::ng-deep .mat-mdc-header-cell {
+      background-color: transparent !important;
+      color: black !important;
+      font-size: 13px;
+      font-family: "Montserrat", sans-serif;
+      font-weight: 600;
+      border-right: 1px solid #ddd;
+      display: flex;
+      justify-content: left;
+      align-items: center;
+      text-align: center;
+      height: 32px !important;
+      /* ensures consistent width for scrolling */
+      white-space: nowrap;
+  }
+
+  /* ===== Body Cells ===== */
+  ::ng-deep .mat-mdc-cell {
+      font-family: "Montserrat", sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      color: #222;
+      border-bottom: 1px dashed #E8E8E8 !important;
+      border-right: 1px solid #ddd;
+      display: flex;
+      justify-content: left;
+      align-items: center;
+      text-align: center;
+      padding: 0 10px;
+      height: 30px;
+      white-space: nowrap;
+  }
+
+
+  /* ===== Row Styling ===== */
+  ::ng-deep .mat-row {
+      height: 32px !important;
+  }
+
+  /* Hover effect */
+  ::ng-deep .mat-row:hover {
+      background-color: #f9f9f9 !important;
+      transition: background 0.2s ease-in-out;
+  }
+
+  /* ===== Paginator ===== */
+  ::ng-deep .mat-mdc-paginator {
+      border: 1px solid #ddd;
+      border-top: none;
+      border-radius: 0 0 4px 4px;
+      background-color: transparent !important;
+      color: black;
+      padding: 4px 12px !important;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+  }
+
+  ::ng-deep .mat-mdc-paginator-range-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: #555;
+  }
+
+  ::ng-deep .mat-mdc-paginator-icon {
+      color: #302CB3 !important;
+  }
+
+  ::ng-deep .mat-mdc-icon-button:hover {
+      background-color: #f1f1f1 !important;
+  }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 768px) {
+
+      ::ng-deep .mat-mdc-header-cell,
+      ::ng-deep .mat-mdc-cell {
+          font-size: 11px;
+          padding: 4px 6px;
+          min-width: 100px;
+      }
+
+      .custom-table {
+          min-width: 800px;
+      }
+
+      .table-scroll {
+          max-width: 100%;
+      }
+  }
+
+  .description {
+      width: 250px !important;
+      min-width: 250px !important;
+      max-width: 250px !important;
+  }
+
+  .printas {
+      width: 250px !important;
+      min-width: 250px !important;
+      max-width: 250px !important;
+  }
+
+  .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+  }
+
+  .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+  }
+
+  .centered-popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1000;
+  }
+
+  .sno {
+      min-width: 80px;
+      max-width: 80px;
+      width: 80px;
+  }
+
+  .action {
+      min-width: 100px;
+      max-width: 100px;
+      width: 100px;
+  }
+
+  .btn-search {
+      background-color: #0d6efd;
+      color: #fff;
+  }
+
+  .btn-add {
+      background-color: #28a745;
+      color: #fff;
+  }
+
+  .btn-edit {
+      background-color: #fd7e14;
+      color: #fff;
+  }
+
+  .btn-upload {
+      background-color: #6f42c1;
+      color: #fff;
+  }
+
+  .btn-download {
+      background-color: #20c997;
+      color: #fff;
+  }
+
+  /* Overlay */
+  .popup-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+  }
+
+  /* Popup */
+  .popup-container {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1000;
+      background: white;
+      border: 1px solid #cfcfcf;
+  }
+
+  .popup-header {
+      height: 38px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 12px;
+      font-size: 18px;
+      color: #302cb3;
+      font-weight: 600;
+  }
+
+  /* Close */
+  .close-btn {
+      border: none;
+      background: transparent;
+      font-size: 22px;
+      cursor: pointer;
+  }
+
+  .popup-body {
+      padding: 18px;
+  }
+
+  /* Form */
+  .form-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+  }
+
+  .form-group label {
+      font-size: 15px;
+  }
+
+  .required {
+      color: red;
+  }
+
+
+
+
+
+
+
+  ::ng-deep .checkbox-col {
+      width: 30px !important;
+      justify-content: center;
+  }
+
+  .table-input {
+      width: 100%;
+      height: 28px;
+      border: 1px solid #bdbdbd;
+      padding: 0 8px;
+      outline: none;
+  }
+
+  .no-data {
+      text-align: center;
+      padding: 20px;
+      color: #666;
+  }
+
+  .popup-footer {
+      display: flex;
+      gap: 10px;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: flex-end;
+  }
+
+  .save-btn {
+      width: 90px;
+      height: 32px;
+      border: none;
+      background: #2d9cf0;
+      color: white;
+      cursor: pointer;
+      font-size: 14px;
+  }
+
+  .cancel-btn {
+      width: 90px;
+      height: 32px;
+      border: none;
+      background: gray;
+      color: white;
+      cursor: pointer;
+      font-size: 14px;
+  }
+

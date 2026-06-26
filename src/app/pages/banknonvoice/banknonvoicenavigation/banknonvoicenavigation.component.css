@@ -1,0 +1,121 @@
+/* ====== General Styling ====== */
+.selectedInput {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    color: #222222;
+    border-bottom: 1px solid #222222;
+}
+
+::ng-deep .nav-link.inactive-link {
+    color: #8e9294 !important;
+    background-color: transparent !important;
+}
+
+.customer-sop {
+    font-size: 20px;
+    color: #292929;
+    position: static;
+}
+
+.headerSOP {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 5px;
+    background-color: white;
+}
+
+.contentCategory {
+    width: 100%;
+    background-color: #fff;
+    margin-right: 20px;
+    padding-left: 0px !important;
+}
+
+/* ====== Scrollable Horizontal Menu ====== */
+.Categorylist {
+    width: 100%;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Hide scrollbar visually (optional but cleaner look) */
+.Categorylist::-webkit-scrollbar {
+    display: none;
+}
+
+.Categorylist {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+.horizontal-list {
+    display: inline-flex;
+    list-style: none;
+    margin: 0;
+}
+
+.horizontal-list li {
+    display: inline-block;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-family: 'Montserrat';
+    font-size: 14px;
+    color: #A59999;
+}
+
+.horizontal-list li:not(:first-child) {
+    margin-left: 10px;
+}
+
+
+/* ====== Hover and Selected States ====== */
+li:hover {
+    background-color: #f0f0f0;
+}
+
+.selected {
+    background-color: #f0f0f0;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    color: #222222;
+    font-size: 15px;
+}
+
+.selectedGreen {
+    background-color: #EBFFEF;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    color: #222222;
+    font-size: 15px;
+}
+
+
+.horizontal-list {
+    display: flex;
+    gap: 5px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+}
+
+.horizontal-list::-webkit-scrollbar {
+    height: 6px;
+}
+
+.horizontal-list::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+}

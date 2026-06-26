@@ -195,6 +195,18 @@ import { InputaggregatorattendanceComponent } from './pages/inputaggregator/inpu
 import { LeaveMasterMappingComponent } from './pages/inputaggregator/leave-master-mapping/leave-master-mapping.component';
 import { MiscPaycodeMappingComponent } from './pages/inputaggregator/misc-paycode-mapping/misc-paycode-mapping.component';
 import { LeaveCategoryComponent } from './pages/inputaggregator/leave-category/leave-category.component';
+import { BankconsolidatedreportComponent } from './pages/banknonvoice/bankconsolidatedreport/bankconsolidatedreport.component';
+import { BankneftcultureComponent } from './pages/banknonvoice/bankneftculture/bankneftculture.component';
+import { BanknonvoicenavigationComponent } from './pages/banknonvoice/banknonvoicenavigation/banknonvoicenavigation.component';
+import { BonusBatchCreationComponent } from './pages/banknonvoice/bonus-batch-creation/bonus-batch-creation.component';
+import { BonusaccumulatedreportnonvoiceComponent } from './pages/banknonvoice/bonusaccumulatedreportnonvoice/bonusaccumulatedreportnonvoice.component';
+import { BonussalaryreleaseComponent } from './pages/banknonvoice/bonussalaryrelease/bonussalaryrelease.component';
+import { GenericuploadComponent } from './pages/banknonvoice/genericupload/genericupload.component';
+import { GratuityBatchGenerationComponent } from './pages/banknonvoice/gratuity-batch-generation/gratuity-batch-generation.component';
+import { GratuitydownloadbatchComponent } from './pages/banknonvoice/gratuitydownloadbatch/gratuitydownloadbatch.component';
+import { PartialsalaryreleaseComponent } from './pages/banknonvoice/partialsalaryrelease/partialsalaryrelease.component';
+import { SalaryreleaseprocessComponent } from './pages/banknonvoice/salaryreleaseprocess/salaryreleaseprocess.component';
+import { SalaryreleasestatusComponent } from './pages/banknonvoice/salaryreleasestatus/salaryreleasestatus.component';
 
 
 export const routes: Routes = [
@@ -208,7 +220,22 @@ export const routes: Routes = [
       { path: 'user', component: UserMappingComponent },
       { path: 'dashboard', component: DashboardComponent },
       { path: 'changepassword', component: ChangepasswordComponent },
-
+      {
+        path: 'banknonvoicenavigation', component: BanknonvoicenavigationComponent,
+        children: [
+          { path: "bankneftculture", component: BankneftcultureComponent },
+          { path: "gratuitydownloadbatch", component: GratuitydownloadbatchComponent },
+          { path: "salaryreleasestatus", component: SalaryreleasestatusComponent },
+          { path: "partialsalaryrelease", component: PartialsalaryreleaseComponent },
+          { path: "bonussalaryrelease", component: BonussalaryreleaseComponent },
+          { path: "bankconsolidatedreport", component: BankconsolidatedreportComponent },
+          { path: "bonusaccumulatedreportnonvoice", component: BonusaccumulatedreportnonvoiceComponent },
+          { path: "genericupload", component: GenericuploadComponent },
+          { path: "Salaryreleaseprocess", component: SalaryreleaseprocessComponent },
+          { path: "GratuityBatchGeneration", component: GratuityBatchGenerationComponent },
+          { path: "BonusBatchCreation", component: BonusBatchCreationComponent }
+        ]
+      },
       {
         path: 'Admin',
         component: AdminnavigationComponent,
@@ -256,6 +283,7 @@ export const routes: Routes = [
           { path: 'vendoremployee', component: VendorEmployeeComponent }
         ]
       },
+
       {
         path: 'SalaryRelease',
         component: SalaryReleaseNavigationComponent,

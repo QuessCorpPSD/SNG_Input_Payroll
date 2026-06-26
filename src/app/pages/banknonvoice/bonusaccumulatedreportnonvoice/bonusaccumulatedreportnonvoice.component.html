@@ -1,0 +1,37 @@
+
+<div class="page-wrapper">
+
+    <div class="scrollable-content">
+
+        <div style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;">
+            Bonus Accumulated Report</div>
+
+        <div class="container py-2">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Company Code</label>
+                    <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">From Date</label>
+                    <input class="form-control form-control-sm" type="date" [(ngModel)]="fromdate"/>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">To date</label>
+                    <input class="form-control form-control-sm" type="date" [(ngModel)]="todate"/>
+
+                </div>
+                <div class="col-md-2 d-flex gap-2">
+
+                    <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="Export to Excel" (click)="exportToExcel()">
+                        <mat-icon>download</mat-icon>
+                    </button>
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>

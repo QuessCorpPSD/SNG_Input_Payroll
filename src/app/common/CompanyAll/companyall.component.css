@@ -1,4 +1,4 @@
-/* styles.css or component-specific styles */
+
 .custom-height .mat-mdc-form-field-flex {
   height: 30px !important;
   /* Adjust to desired height */
@@ -7,16 +7,17 @@
   padding-bottom: 0px !important;
 }
 
-.custom-height .mat-mdc-form-field-infix {
+::ng-deep .custom-height .mat-mdc-form-field-infix {
   padding: 0 !important;
   min-height: 0 !important;
   height: 20px !important;
   display: flex;
   align-items: center;
+  width: 250px !important;
 }
 
 ::ng-deep .mat-mdc-autocomplete-panel {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 10px !important;
   background-color: #ffffff;
   border: 1px solid #ddd;
@@ -49,17 +50,16 @@
 .clear-icon {
   opacity: 0;
   display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
+  align-items: center !important;      /* vertical center */
+  justify-content: center !important;  /* horizontal center */
   height: 100%;
   padding: 4px;
   cursor: pointer;
 }
 
 
-
 .hover-clear-field .clear-icon {
-  opacity: 2;
+  opacity: 0;
   cursor: pointer;
   font-size: 16px;
   color: #888;

@@ -48,3 +48,10 @@ export interface PricingType {
   invoiceTypeID: number
   invoiceType: string
 }
+
+export interface CompanyGSTInvoice {
+  companyId: number
+  companyCode: string
+  companyName: string
+  displayName: string
+}
