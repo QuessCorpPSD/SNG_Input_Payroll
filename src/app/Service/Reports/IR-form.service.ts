@@ -98,6 +98,7 @@ export class IRFormService implements IIRformService {
             dateLastSalary,
             periodLastSalary: str(raw.Period_application_for_Last_Salary_Paid),
             bankName: str(raw.Bank_Name),
+            datelastSalaryPaid:fmtDate(raw.Date_of_Last_salary_paid),
 
             // Section F – Income
             cessationYear,
@@ -219,7 +220,7 @@ export class IRFormService implements IIRformService {
         check('Salary already paid via bank', false);
         check('Employee owes company monies', false);
 
-        // fill('undefined_15', data.dateLastSalary);
+        fill('undefined_15', data.datelastSalaryPaid);
         fill('undefined_16', data.amountOfLastSalaryPaid);
         fill('undefined_17', data.periodLastSalary);
         fill('undefined_18', data.bankName);
