@@ -21,7 +21,7 @@
             <div class="col-md-2" *ngIf="formName">
                 <label class="form-label text-muted small">Year</label>
                 <select class="form-select form-select-sm small-input" [(ngModel)]="Year">
-                    <option value="">Select Month</option>
+                    <option value="">Select Year</option>
                     <option *ngFor="let item of getYear" [value]="item.YEAR">
                         {{ item.YEAR }}
                     </option>

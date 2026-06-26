@@ -98,7 +98,7 @@ export class IRFormService implements IIRformService {
             dateLastSalary,
             periodLastSalary: str(raw.Period_application_for_Last_Salary_Paid),
             bankName: str(raw.Bank_Name),
-            datelastSalaryPaid:fmtDate(raw.Date_of_Last_salary_paid),
+            datelastSalaryPaid: fmtDate(raw.Date_of_Last_salary_paid),
 
             // Section F – Income
             cessationYear,
@@ -127,10 +127,18 @@ export class IRFormService implements IIRformService {
             currentFromYear: str(currentYearData?.Current_MinMonth),
             currentToYear: str(currentYearData?.Current_MaxMonth),
             currentTotalGross: str(currentYearData?.Current_TotalGross),
+            currentPF: str(currentYearData?.Current_PF),
+            currentSinda: str(currentYearData?.Current_SINDA_CDAC_ECF),
+            currentMbmf: str(currentYearData?.Current_MBMF),
+            currentLic: str(currentYearData?.Current_LIC),
 
             previousFromYear: str(previousYearData?.Prev_MinMonth),
             previousToYear: str(previousYearData?.Prev_MaxMonth),
             previousTotalGross: str(previousYearData?.Prev_TotalGross),
+            previousPF: str(previousYearData?.Prev_PF),
+            previoustSinda: str(previousYearData?.Prev_SINDA_CDAC_ECF),
+            previousMbmf: str(previousYearData?.Prev_MBMF),
+            previousLic: str(previousYearData?.Current_LIC),
 
         };
 
@@ -198,18 +206,26 @@ export class IRFormService implements IIRformService {
         check('Resigned whilst overseas  On home leave', false);
         check('Others Give details', false);
 
-        fill('undefined_11', data.amountWithheld);
+        // fill('undefined_11', data.amountWithheld);
         fill('undefined_12', data.amountWithheld);
         fill('undefined_13', '00');
         fill('Year of Cessation', data.currentFromYear);
         fill('S', data.currentToYear);
         fill('Text1', data.currentTotalGross);
         fill('Text3', data.currentTotalGross);
+        fill('Text5', data.currentPF);
+        fill('Text7', data.currentSinda);
+        fill('Text9', data.currentMbmf);
+        fill('Text11', data.currentLic);
 
         fill('Year Prior to Year of Cessation', data.previousFromYear);
         fill('S_2', data.previousToYear);
         fill('Text2', data.previousTotalGross);
         fill('Text4', data.previousTotalGross);
+        fill('Text6', data.previousPF);
+        fill('Text8', data.previoustSinda);
+        fill('Text10', data.previousMbmf);
+        fill('Text11', data.previousLic);
 
         radio('18 Are these all the monies you can withhold from the date of notification of',
             '/Yes');
