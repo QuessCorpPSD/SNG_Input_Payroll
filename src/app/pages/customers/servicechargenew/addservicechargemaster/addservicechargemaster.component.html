@@ -273,7 +273,21 @@
                         <small class="text-danger"
                             *ngIf="showErrors && invoiceForm.get('inedgeCharge')?.invalid">Required</small>
                     </div>
+
+                    <div class="col-md-4">
+                    <label class="form-label text-muted small">Category <span class="text-danger">*</span></label>
+                    <select class="form-select form-select-sm" formControlName="category">
+                        <option value="">Select</option>
+                        <option value="1066">Regular</option>
+                        <option value="1067">Seperate</option>
+                    </select>
+                    <small class="text-danger" *ngIf="showErrors && invoiceForm.get('category')?.invalid">
+                        Category is required
+                    </small>
                 </div>
+                </div>
+
+                
 
             </form>
 
@@ -494,17 +508,29 @@
                             <!-- ROW 6 -->
                             <div class="row g-3 mb-3">
                                 <div class="col-md-4">
-                                    <label class="form-label text-muted small">InEdge Charge <span
-                                            class="text-danger">*</span></label>
+                                    <label class="form-label text-muted small">InEdge Charge 
+                                        <span class="text-danger">*</span></label>
                                     <input type="number" class="form-control form-control-sm"
                                         formControlName="inedgeCharge">
                                     <small class="text-danger"
                                         *ngIf="showErrors && percentageForm.get('inedgeCharge')?.invalid">
                                         InEdge Charge is required
                                     </small>
+                                </div>  
+                                
+                                 <div class="col-md-4">
+                                    <label class="form-label text-muted small">Category <span class="text-danger">*</span></label>
+                                    <select class="form-select form-select-sm" formControlName="category">
+                                        <option value="">Select</option>
+                                        <option value="1066">Regular</option>
+                                        <option value="1067">Seperate</option>
+                                    </select>
+                                    <small class="text-danger" *ngIf="showErrors && percentageForm.get('category')?.invalid">
+                                        Category is required
+                                    </small>
                                 </div>
                             </div>
-
+                           
                         </div>
                     </mat-card-content>
 
@@ -1544,6 +1570,9 @@
                             <option value="1066">Regular</option>
                             <option value="1067">Seperate</option>
                         </select>
+                        <small class="text-danger" *ngIf="showErrors && SourcingForm.get('category')?.invalid">
+                            Category is required
+                        </small>
                     </div>
                 </div>
                 <div class="row" style="text-align: end;">

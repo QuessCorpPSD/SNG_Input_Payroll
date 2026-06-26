@@ -274,7 +274,8 @@ export class AddservicechargemasterComponent {
         qdemyCharge: ['', Validators.required],
 
         inedgeFeeType: ['', Validators.required],
-        inedgeCharge: ['', Validators.required]
+        inedgeCharge: ['', Validators.required],
+        category:['',Validators.required]
       });
     }
 
@@ -303,7 +304,8 @@ export class AddservicechargemasterComponent {
 
         qdemyCharge: ['', Validators.required],
         inedgeFeeType: ['', Validators.required],
-        inedgeCharge: ['', Validators.required]
+        inedgeCharge: ['', Validators.required],
+        category:['',Validators.required]
       });
       this.loadMapNames();
 
