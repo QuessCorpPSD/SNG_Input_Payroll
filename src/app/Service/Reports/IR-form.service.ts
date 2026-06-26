@@ -340,7 +340,8 @@ export class IRFormService implements IIRformService {
 
         const a = document.createElement('a');
         a.href = url;
-        a.download = `IR21-${data.employeeName}-${data.cessationYear}.pdf`;
+        // a.download = `IR21-${data.employeeName}-${data.cessationYear}.pdf`;
+        a.download = `IR21-${data.employeeName}-${month}-${year}.pdf`;
         a.click();
         window.URL.revokeObjectURL(url);
         return true;
