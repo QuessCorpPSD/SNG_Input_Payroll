@@ -139,7 +139,7 @@ export class IRFormService implements IIRformService {
             previousPF: str(previousYearData?.Prev_PF),
             previoustSinda: str(previousYearData?.Prev_SINDA_CDAC_ECF),
             previousMbmf: str(previousYearData?.Prev_MBMF),
-            previousLic: str(previousYearData?.Current_LIC),
+            previousLic: str(previousYearData?.Prev_LIC),
             declarationEmail: str(raw.Declaration_Date1)
 
         };
@@ -225,10 +225,10 @@ export class IRFormService implements IIRformService {
         fill('S_2', data.previousToYear);
         fill('Text2', data.previousTotalGross);
         fill('Text4', data.previousTotalGross);
-        fill('Text6', data.previousPF);
+        fill('Text14', data.previousPF);
         fill('Text8', data.previoustSinda);
-        fill('Text10', data.previousMbmf);
-        fill('Text11', data.previousLic);
+        fill('Text15', data.previousMbmf);
+        fill('Text12', data.previousLic);
 
         radio('18 Are these all the monies you can withhold from the date of notification of',
             '/Yes');
