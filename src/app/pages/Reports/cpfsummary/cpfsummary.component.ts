@@ -116,7 +116,7 @@ export class CPFsummaryComponent {
 
           const blob = new Blob([txtContent], { type: 'text/plain' });
           const timestamp = new Date().toISOString().split('T')[0];
-          const fileName = `CPFfile_${this.PayPeriod?.pay_Period}.DTL`;
+          const fileName = res?.Data?.data?.Table1?.[0]?.Cpf_FileName || `CPFfile_${this.PayPeriod?.pay_Period}.DTL`;
 
           const link = document.createElement('a');
           link.href = URL.createObjectURL(blob);
