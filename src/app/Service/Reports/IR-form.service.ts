@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
 import { IIRformService } from '../../Repository/Reports/IIRForm.service';
 import { PdfService } from '../pdf.service';
-import { PDFDocument, StandardFonts } from 'pdf-lib';
+import { PDFDocument, StandardFonts, TextAlignment } from 'pdf-lib';
 @Injectable({
     providedIn: 'root'  // ✅ makes the service available app-wide
 })
@@ -157,13 +157,20 @@ export class IRFormService implements IIRformService {
         const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
 
         // Field helpers 
-        const fill = (fieldName: string, value: string, fontSize = 9) => {
+        const fill = (fieldName: string, value: string, fontSize = 9, alignment = TextAlignment.Left) => {
             try {
                 const field = form.getTextField(fieldName);
                 field.setText(value ?? '');
+                field.setAlignment(alignment);
                 field.acroField.setDefaultAppearance(`/Helv ${fontSize} Tf 0 g`);
                 field.updateAppearances(font);
-            } catch { /* field not found or wrong type — silently skip */ }
+            } catch { }
+            // try {
+            //     const field = form.getTextField(fieldName);
+            //     field.setText(value ?? '');
+            //     field.acroField.setDefaultAppearance(`/Helv ${fontSize} Tf 0 g`);
+            //     field.updateAppearances(font);
+            // } catch { /* field not found or wrong type — silently skip */ }
         };
 
         const radio = (fieldName: string, optionValue: string) => {
@@ -214,21 +221,21 @@ export class IRFormService implements IIRformService {
         fill('undefined_13', '00');
         fill('Year of Cessation', data.currentFromYear);
         fill('S', data.currentToYear);
-        fill('Text1', data.currentTotalGross);
-        fill('Text3', data.currentTotalGross);
-        fill('Text5', data.currentPF);
-        fill('Text7', data.currentSinda);
-        fill('Text9', data.currentMbmf);
-        fill('Text11', data.currentLic);
+        fill('Text1', data.currentTotalGross, 9, TextAlignment.Right);
+        fill('Text3', data.currentTotalGross, 9, TextAlignment.Right);
+        fill('Text5', data.currentPF, 9, TextAlignment.Right);
+        fill('Text7', data.currentSinda, 9, TextAlignment.Right);
+        fill('Text9', data.currentMbmf, 9, TextAlignment.Right);
+        fill('Text11', data.currentLic, 9, TextAlignment.Right);
 
         fill('Year Prior to Year of Cessation', data.previousFromYear);
         fill('S_2', data.previousToYear);
-        fill('Text2', data.previousTotalGross);
-        fill('Text4', data.previousTotalGross);
-        fill('Text14', data.previousPF);
-        fill('Text8', data.previoustSinda);
-        fill('Text15', data.previousMbmf);
-        fill('Text12', data.previousLic);
+        fill('Text2', data.previousTotalGross, 9, TextAlignment.Right);
+        fill('Text4', data.previousTotalGross, 9, TextAlignment.Right);
+        fill('Text14', data.previousPF, 9, TextAlignment.Right);
+        fill('Text8', data.previoustSinda, 9, TextAlignment.Right);
+        fill('Text15', data.previousMbmf, 9, TextAlignment.Right);
+        fill('Text12', data.previousLic, 9, TextAlignment.Right);
 
         radio('18 Are these all the monies you can withhold from the date of notification of',
             '/Yes');
