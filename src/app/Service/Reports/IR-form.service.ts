@@ -83,6 +83,7 @@ export class IRFormService implements IIRformService {
             nric: str(raw.NRICNumber),
             fin: str(raw.FINNumber),
             dob: fmtDate(raw.Date_Of_Birth),
+            gender: str(raw.Gender),
             citizenship: str(raw.Citizenship),
             maritalStatus: str(raw.Marital_Status),
             contactNo: str(raw.Mobile_Number),
@@ -118,7 +119,7 @@ export class IRFormService implements IIRformService {
             // Section G – Declaration
             authorisedName: str(raw.AuthorisedPersonnel),
             authorisedDesignation: str(raw.AuthorisedPersonnelDesignation),
-            declarationDate: fmtDate(raw.Last_Working_Day) || fmtDate(new Date().toISOString()),
+            declarationDate: fmtDate(raw.Declaration_Date) || fmtDate(new Date().toISOString()),
             contactName: str(raw.NameofContactPerson),
             contactNo2: str(raw.ContactNo),
             contactEmail: str(raw.Email_Id),
@@ -139,6 +140,7 @@ export class IRFormService implements IIRformService {
             previoustSinda: str(previousYearData?.Prev_SINDA_CDAC_ECF),
             previousMbmf: str(previousYearData?.Prev_MBMF),
             previousLic: str(previousYearData?.Current_LIC),
+            declarationEmail: str(raw.Declaration_Date1)
 
         };
 
@@ -188,6 +190,7 @@ export class IRFormService implements IIRformService {
         fill('FIN', data.fin);
         fill('Malaysian IC if applicable', '');
         fill('4 Date of Birth', data.dob);
+        fill('dhFormfield-6458407508', data.gender);
         fill('6 Citizenship', data.citizenship);
         fill('7 Marital Status', data.maritalStatus);
         fill('8 Contact No', data.contactNo);
@@ -198,7 +201,7 @@ export class IRFormService implements IIRformService {
         fill('14 Date of Resignation  Termination Notice Given',
             data.dateResignation);
         fill('undefined_10', data.designation);
-        fill('if known', data.dateDeparture);
+        fill('15 Designation', data.dateDeparture);
 
 
         check('Absconded  Left without notice', false);
@@ -248,6 +251,7 @@ export class IRFormService implements IIRformService {
         fill('3 Identification No', data.spouseIdNo);
         fill('4 Date of Marriage', data.spouseMarriageDate);
         fill('5 Citizenship', data.spouseCitizenship);
+        fill('Text13', data.declarationEmail)
 
         radio('6 Is the spouses yearly income more than 80001',
             data.spouseHighIncome ? '/Yes_2' : '/No_2');
@@ -301,12 +305,12 @@ export class IRFormService implements IIRformService {
         fill('g Contributions made by employer to any Pension Provident Fund constituted outside Singapore i',
             '');
 
-        check('No_3', true);
-        check('No_4', true);
-        check('Yes fully borne', false);
-        check('Yes fully borne_2', false);
-        check('Yes partially borne', false);
-        check('Yes partially borne_2', false);
+        // check('No_3', true);
+        // check('No_4', true);
+        // check('Yes fully borne', false);
+        // check('Yes fully borne_2', false);
+        // check('Yes partially borne', false);
+        // check('Yes partially borne_2', false);
 
         fill('Amount of employment income for which tax is borne by employer 1', '0');
         fill('Amount of employment income for which tax is borne by employer 2', '0');
@@ -324,7 +328,7 @@ export class IRFormService implements IIRformService {
 
         // Row 2: Contact person
         fill('Full Name of Authorised Personnel', data.contactName);
-        fill('DECLARATION', data.contactName);
+        // fill('DECLARATION', data.contactName);
         fill('undefined_25', '');
 
 
@@ -379,7 +383,7 @@ export class IRFormService implements IIRformService {
                 'nric/fin': str(raw.Employees_Tax_Ref_No),
                 'fullname_nric': str(raw.First_Name),
                 'DOB': formatDate(raw.Date_Of_Birth),
-                'gender': str(raw.Gender),
+                // 'gender': str(raw.Gender),
                 'residential_address': str(raw.Residential_Address),
                 'designation': str(raw.Designation_Name),
                 'Bank_name': str(raw.Bank_Name),

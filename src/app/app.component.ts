@@ -13,7 +13,7 @@ import { PdfService } from './Service/pdf.service';
 export class AppComponent {
   title = 'SPD Web UI';
   constructor(public service : PdfService) {
-    // this.service.fillAllPdfFieldsAndDownload();
+      // this.service.fillAllPdfFieldsAndDownload();
     // this.router.events.subscribe(event => {
     //   if (event instanceof NavigationEnd) {
     //     console.log('Navigated to:', event.url);
