@@ -2,7 +2,6 @@
   <input #companyInput style="color: #222;font-family: Montserrat; font-size: 12px; font-weight: 500;" type="text" matInput
     [formControl]="myControl" placeholder="Select Company" [matAutocomplete]="auto" [disabled]="disabled" />
 
-
   <mat-icon matSuffix class="clear-icon" *ngIf="myControl.value" (click)="clearSelection(companyInput)">
     close
   </mat-icon>

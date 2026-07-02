@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { IinvoiceRuleService } from '../../Repository/Master/IinvoiceRuleService';
 import { Observable } from 'rxjs';
 import { APIResponse } from '../../Models/apiresponse';

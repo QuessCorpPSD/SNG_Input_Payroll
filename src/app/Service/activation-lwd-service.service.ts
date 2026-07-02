@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IActivationLwdService } from '../Repository/iactivation-lwd-service';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { APIResponse } from '../Models/apiresponse';
 import { Observable } from 'rxjs';

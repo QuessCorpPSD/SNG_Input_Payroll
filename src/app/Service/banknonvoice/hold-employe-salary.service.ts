@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { IHoldEmployeeSalary } from '../../Repository/BankNonInvoice/IHoldEmployeeSalary';
+import { IHoldEmployeeSalary } from '../../Repository/banknonvoice/IHoldEmployeeSalary';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../../Environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { APIResponse } from '../../Models/apiresponse';
 
 @Injectable({

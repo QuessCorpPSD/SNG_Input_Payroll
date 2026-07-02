@@ -32,7 +32,7 @@ import { SalaryReleaseImportGrid } from '../../../Models/SalaryRelease/SalaryRel
   standalone: true,
   imports: [CommonModule, MatTableModule, MatCheckboxModule, MatPaginatorModule, MatSort,
     MatSelectModule, MatInputModule, MatFormFieldModule, ReactiveFormsModule, FormsModule,
-    AlertpopupComponent, PayrollinputComponent],
+    AlertpopupComponent],
   templateUrl: './salary-release.component.html',
   styleUrl: './salary-release.component.css',
   providers: [

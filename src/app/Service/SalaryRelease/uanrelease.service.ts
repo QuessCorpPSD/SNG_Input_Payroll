@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { APIResponse } from '../../Models/apiresponse';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { IUANRelease } from '../../Repository/SalaryRequest/Iuanrelease';
 
 @Injectable({

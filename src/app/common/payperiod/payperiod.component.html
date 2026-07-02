@@ -1,10 +1,13 @@
-<mat-form-field class="w-100 custom-height rounded-4" appearance="outline" style="background-color: white;height:30px;">
-  <input style="color: #222;font-family: Montserrat; font-size: 12px; font-weight: 500;"
+<mat-form-field class="w-100 custom-height rounded-1 hover-clear-field" appearance="outline" style="background-color: white;height:30px;">
+  <input #companyInput style="color: #222;font-family: Montserrat; font-size: 12px; font-weight: 500;"
     type="text"
     matInput
     [formControl]="myControl" placeholder="Select PayPeriod"
     [matAutocomplete]="auto"
   />
+  <mat-icon matSuffix class="clear-icon" *ngIf="myControl.value" (click)="clearSelection(companyInput)">
+    close
+  </mat-icon>
   <mat-autocomplete 
     #auto="matAutocomplete"
     [displayWith]="displayFn"

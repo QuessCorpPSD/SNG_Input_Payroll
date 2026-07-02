@@ -3,7 +3,7 @@ import { APIResponse } from '../../Models/apiresponse';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ILeaveruleService } from '../../Repository/Master/ileaverule.service';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'

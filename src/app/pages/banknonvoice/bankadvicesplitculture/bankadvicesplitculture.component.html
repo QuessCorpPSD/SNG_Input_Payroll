@@ -1,0 +1,257 @@
+<div class="page-wrapper">
+
+    <div class="scrollable-content">
+        <div style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;">
+            Bank Advice Split Culture
+        </div>
+        <div class="container py-2">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Comapny Code</label>
+                    <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Vendor</label>
+                    <mat-form-field class="w-100 custom-height rounded-1 hover-clear-field" appearance="outline"
+                        style="background-color:white;height:30px;">
+
+                        <input #vendorInput matInput type="text" placeholder="Select Vendor"
+                            [formControl]="vendorControl" [matAutocomplete]="vendorAuto"
+                            style="color:#222;font-family:Montserrat;font-size:12px;font-weight:500;">
+
+                        <mat-icon matSuffix class="clear-icon" *ngIf="vendorControl.value"
+                            (click)="clearVendor(vendorInput)">
+                            close
+                        </mat-icon>
+
+                        <mat-autocomplete #vendorAuto="matAutocomplete" [displayWith]="displayVendor"
+                            (optionSelected)="onVendorSelected($event.option.value)">
+                            <mat-option *ngFor="let vendor of filteredVendors" [value]="vendor">
+                                {{ vendor.Vendor_Name }}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-2 d-flex gap-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
+                        matTooltip="Search" (click)="onsearch()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                    <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="export to excel" (click)="onexport()">
+                        <mat-icon>download</mat-icon>
+                    </button>
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
+                        (click)="ImportClick(fileInput)" matTooltip="Upload">
+                        <mat-icon>cloud_upload</mat-icon>
+                    </button>
+                    <input type="file" #fileInput style="display:none;" (click)="fileInput.value=''"
+                        (change)="onFileChange($event)" accept=".xlsx,.xls" />
+                    <button class="btn  btn-sm d-flex align-items-center justify-content-center btn-success"
+                        matTooltip="Add" (click)="AddOpen()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                    <!-- <input type="file" #fileInput style="display: none;" (click)="fileInput.value=''"
+                        (change)="onFileChange($event)" accept=".xlsx, .xls" /> -->
+                </div>
+            </div>
+        </div>
+
+        <div class="table-container" style="top:30px;">
+            <div class="table-scroll-window">
+                <mat-table [dataSource]="uploadedDataSource" class="mat-elevation-z8 custom-table">
+
+                    <!--  Action -->
+                    <ng-container matColumnDef="action">
+                        <mat-header-cell *matHeaderCellDef class="action">
+                            <strong>Action</strong>
+                        </mat-header-cell>
+
+                        <mat-cell *matCellDef="let row" class="action">
+                            <div class="action-icons" style="display:flex">
+                                <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                    matTooltip="Edit">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+
+                                <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                    matTooltip="Delete">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </div>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="companycode">
+                        <mat-header-cell *matHeaderCellDef class="companycode"><strong>Company
+                                Code</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="companycode">{{ row.Company_Code}}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="vendorname">
+                        <mat-header-cell *matHeaderCellDef><strong>Vendor Name</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Vendor_Name}}</mat-cell>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="groupname">
+                        <mat-header-cell *matHeaderCellDef class="groupname"><strong>Group
+                                Name</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="groupname">{{ row.Group_Name}}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="splittype">
+                        <mat-header-cell *matHeaderCellDef class="groupname"><strong>Split
+                                Type</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="groupname">{{ row.Culture_Type_Text}}</mat-cell>
+                    </ng-container>
+
+
+                    <!-- Header Rows -->
+                    <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+
+
+                    <!-- Data Rows -->
+                    <mat-row *matRowDef="let row; columns: uploadDisplayedColumns"></mat-row>
+
+                </mat-table>
+            </div>
+
+            <div *ngIf="uploadedDataSource.data.length===0" class="text-center p-4">
+                <p class="text-muted">No data to display</p>
+            </div>
+
+            <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+                style="border-top: 1px solid #ddd;"></mat-paginator>
+        </div>
+
+    </div>
+</div>
+
+<div *ngIf="isAddClicked" class="popup-overlay" (keydown.escape)="closeclick()">
+    <mat-card class="popup-card">
+        <mat-card-header class="popup-header">
+            <mat-card-title class="d-flex justify-content-center align-items-center">
+                {{ iseditClicked ? 'Edit Bank Advice Split Culture' : 'Add Bank Advice Split Culture' }}
+            </mat-card-title>
+
+            <button class="close-btn" matTooltip="Close" (click)="closeclick()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+        <mat-card-content class="scroll-content">
+            <form [formGroup]="addBankAdviceSplitForm" novalidate>
+                <!-- Row 1 -->
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Company Code<span class="text-danger">*</span></label>
+                        <companyall (companyEmit)="handleCompanyEvent($event)" formControlName="CompanyCode">
+                        </companyall>
+                        <div class="text-danger small" *ngIf="addBankAdviceSplitForm.get('CompanyCode')?.touched 
+             && addBankAdviceSplitForm.get('CompanyCode')?.hasError('required')">
+                            companycode is required
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Split Type</label>
+                        <select class="form-select" formControlName="SplitType">
+                            <option value="">-- Select --</option>
+                            <option value="1">Separate</option>
+                            <option value="2">Multiple</option>
+                        </select>
+                        <div class="text-danger small" *ngIf="addBankAdviceSplitForm.get('SplitType')?.touched 
+                                && addBankAdviceSplitForm.get('SplitType')?.hasError('required')">
+                            SplitType is required
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Vendor</label>
+                        <mat-form-field class="w-100 custom-height rounded-1 hover-clear-field" appearance="outline"
+                            style="background-color:white;height:30px;">
+                            <input #vendorInput matInput type="text" placeholder="Select Vendor"
+                                [formControl]="vendorControl" [matAutocomplete]="vendorAuto"
+                                style="color:#222;font-family:Montserrat;font-size:12px;font-weight:500;">
+
+                            <mat-icon matSuffix class="clear-icon" *ngIf="vendorControl.value"
+                                (click)="clearVendor(vendorInput)">
+                                close
+                            </mat-icon>
+
+                            <mat-autocomplete #vendorAuto="matAutocomplete" [displayWith]="displayVendor"
+                                (optionSelected)="onVendorSelected($event.option.value)">
+                                <mat-option *ngFor="let vendor of filteredVendors" [value]="vendor">
+                                    {{ vendor.Vendor_Name }}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+
+                <div class="mt-3">
+                    <div class="table-container mat-elevation-z2">
+
+                        <table mat-table [dataSource]="uploadedDataSource1" class="custom-table">
+
+                            <!-- Checkbox Column -->
+                            <ng-container matColumnDef="select">
+                                <th mat-header-cell *matHeaderCellDef class="checkbox-col"></th>
+                                <td mat-cell *matCellDef="let row" class="checkbox-col">
+                                    <mat-checkbox color="primary" [(ngModel)]="row.select" (change)="row.select = $event.checked"></mat-checkbox>
+                                </td>
+                            </ng-container>
+
+                            <!-- Group Name Column -->
+                            <ng-container matColumnDef="groupName">
+                                <th mat-header-cell *matHeaderCellDef> Group Name </th>
+                                <td mat-cell *matCellDef="let row">
+                                    <input type="text" disabled="true" class="form-control table-input" [(ngModel)]="row.Group_Name"
+                                        [ngModelOptions]="{ standalone: true }" />
+                                </td>
+                            </ng-container>
+
+                            <!-- Header / Row -->
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+                            <!-- No data -->
+                            <tr class="mat-row" *matNoDataRow>
+                                <td class="mat-cell text-center" [attr.colspan]="displayedColumns.length">
+                                    No data to display
+                                </td>
+                            </tr>
+
+                        </table>
+
+                        <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                        </mat-paginator>
+
+                    </div>
+                </div>
+            </form>
+
+            <!-- <mat-card-footer class="footer"> -->
+            <div class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">
+                <!-- <div> -->
+
+                <button type="Cancel"
+                    style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;"
+                    (click)="closeclick()">
+                    Cancel
+                </button>
+
+                <button type="submit"
+                    style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white;"
+                    (click)="onSave()">
+                    Save
+                </button>
+                <!-- </div> -->
+            </div>
+            <!-- </mat-card-footer> -->
+        </mat-card-content>
+
+    </mat-card>
+</div>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets\Loading.gif" alt="Loading...">
+</div>

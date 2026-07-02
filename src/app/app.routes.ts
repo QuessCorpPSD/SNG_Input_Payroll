@@ -55,7 +55,6 @@ import { ProcessComponent } from './pages/Process/process.component';
 import { ReprocessComponent } from './pages/Process/reprocess/reprocess.component';
 import { BonusflushComponent } from './pages/SalaryRelease/bonusflush/bonusflush.component';
 import { DBTholdemployeesalaryComponent } from './pages/SalaryRelease/dbtholdemployeesalary/dbtholdemployeesalary.component';
-import { EmployeesalaryreleaseComponent } from './pages/SalaryRelease/employeesalaryrelease/employeesalaryrelease.component';
 import { HoldEmployeSalaryComponent } from './pages/SalaryRelease/hold-employe-salary/hold-employe-salary.component';
 import { HoldReleaseRequestComponent } from './pages/SalaryRelease/hold-release-request/hold-release-request.component';
 import { NetPaySammaryComponent } from './pages/SalaryRelease/net-pay-sammary/net-pay-sammary.component';
@@ -207,7 +206,13 @@ import { GratuitydownloadbatchComponent } from './pages/banknonvoice/gratuitydow
 import { PartialsalaryreleaseComponent } from './pages/banknonvoice/partialsalaryrelease/partialsalaryrelease.component';
 import { SalaryreleaseprocessComponent } from './pages/banknonvoice/salaryreleaseprocess/salaryreleaseprocess.component';
 import { SalaryreleasestatusComponent } from './pages/banknonvoice/salaryreleasestatus/salaryreleasestatus.component';
-
+import { BatchgenerationComponent } from './pages/banknonvoice/batchgeneration/batchgeneration.component';
+import { BankadvicesplitcultureComponent } from './pages/banknonvoice/bankadvicesplitculture/bankadvicesplitculture.component';
+import { EmployeeSalaryReleaseComponent } from './pages/banknonvoice/employee-salary-release/employee-salary-release.component';
+import { HoldEmployeeSalaryComponent } from './pages/banknonvoice/hold-employee-salary/hold-employee-salary.component';
+import { ReleaseholdEmployeesalaryComponent } from './pages/banknonvoice/releasehold-employeesalary/releasehold-employeesalary.component';
+import { UtrDetailsComponent } from './pages/banknonvoice/utr-details/utr-details.component';
+import { DownloadbatchbanknonvoiceComponent } from './pages/banknonvoice/downloadbatchbanknonvoice/downloadbatchbanknonvoice.component';
 
 export const routes: Routes = [
   {
@@ -233,7 +238,18 @@ export const routes: Routes = [
           { path: "genericupload", component: GenericuploadComponent },
           { path: "Salaryreleaseprocess", component: SalaryreleaseprocessComponent },
           { path: "GratuityBatchGeneration", component: GratuityBatchGenerationComponent },
-          { path: "BonusBatchCreation", component: BonusBatchCreationComponent }
+          { path: "BonusBatchCreation", component: BonusBatchCreationComponent },
+
+          { path: "BatchCreation", component: BatchgenerationComponent },
+          { path: "BanksplitCulture", component: BankadvicesplitcultureComponent },
+          { path: 'downloadBatch', component: DownloadbatchbanknonvoiceComponent },
+          // download split culture
+
+          { path: 'EmployeeSalaryRelease', component: EmployeeSalaryReleaseComponent },
+          { path: 'HoldEmployeeSalary', component: HoldEmployeeSalaryComponent },
+          { path: 'ReleaseholdEmployeesalary', component: ReleaseholdEmployeesalaryComponent },
+          { path: 'UtrDetails', component: UtrDetailsComponent }
+          
         ]
       },
       {
@@ -284,68 +300,67 @@ export const routes: Routes = [
         ]
       },
 
-      {
-        path: 'SalaryRelease',
-        component: SalaryReleaseNavigationComponent,
-        children: [
-          {
-            path: 'SalaryReleaseRequest',
-            component: SalaryReleaseRequestComponent
-          },
-          {
-            path: 'SalaryHoldRequest',
-            component: SalaryHoldRequestComponent
-          },
-          {
-            path: 'HoldReleaseRequest',
-            component: HoldReleaseRequestComponent
-          },
-          {
-            path: 'PartialHoldEmployeeSalary',
-            component: PartialHoldComponent
-          },
-          {
-            path: 'DBTHoldEmployeeSalary',
-            component: DBTholdemployeesalaryComponent
-          },
-          {
-            path: 'UpfrontPortalFinalApproval',
-            component: UpfrontPortalFinalApprovalComponent
-          },
-          {
-            path: 'ReleaseHoldEmployeeSalary',
-            component: ReleaseHoldEmployeeSalaryComponent
-          },
-          {
-            path: 'NetpaySummarynonvoice',
-            component: NetpaysummaryofnonvoiceComponent
-          },
+      // {
+      //   path: 'SalaryRelease',
+      //   component: SalaryReleaseNavigationComponent,
+      //   children: [
+      //     {
+      //       path: 'SalaryReleaseRequest',
+      //       component: SalaryReleaseRequestComponent
+      //     },
+      //     {
+      //       path: 'SalaryHoldRequest',
+      //       component: SalaryHoldRequestComponent
+      //     },
+      //     {
+      //       path: 'HoldReleaseRequest',
+      //       component: HoldReleaseRequestComponent
+      //     },
+      //     {
+      //       path: 'PartialHoldEmployeeSalary',
+      //       component: PartialHoldComponent
+      //     },
+      //     {
+      //       path: 'DBTHoldEmployeeSalary',
+      //       component: DBTholdemployeesalaryComponent
+      //     },
+      //     {
+      //       path: 'UpfrontPortalFinalApproval',
+      //       component: UpfrontPortalFinalApprovalComponent
+      //     },
+      //     {
+      //       path: 'ReleaseHoldEmployeeSalary',
+      //       component: ReleaseHoldEmployeeSalaryComponent
+      //     },
+      //     {
+      //       path: 'NetpaySummarynonvoice',
+      //       component: NetpaysummaryofnonvoiceComponent
+      //     },
 
-          {
-            path: 'NewJoineeBankFailure',
-            component: NewJoineeExistingEmployeeBankVerifiedReportComponent
+      //     {
+      //       path: 'NewJoineeBankFailure',
+      //       component: NewJoineeExistingEmployeeBankVerifiedReportComponent
 
-          },
-          {
-            path: 'bonusflushout',
-            component: BonusflushComponent
+      //     },
+      //     {
+      //       path: 'bonusflushout',
+      //       component: BonusflushComponent
 
-          },
-          {
-            path: 'UANRelease',
-            component: UANReleaseComponent
-          },
-
-
-          { path: 'NetPaySammary', component: NetPaySammaryComponent },
-          { path: 'VANPaymentRequest', component: VANPaymentRequestComponent },
-          { path: 'HoldEmployeSalary', component: HoldEmployeSalaryComponent },
-          { path: 'SalaryAdvanceRequest', component: SalaryAdvanceRequestComponent },
-          { path: 'Employeesalaryrelease', component: EmployeesalaryreleaseComponent }
+      //     },
+      //     {
+      //       path: 'UANRelease',
+      //       component: UANReleaseComponent
+      //     },
 
 
-        ]
-      },
+      //     { path: 'NetPaySammary', component: NetPaySammaryComponent },
+      //     { path: 'VANPaymentRequest', component: VANPaymentRequestComponent },
+      //     { path: 'HoldEmployeSalary', component: HoldEmployeSalaryComponent },
+      //     { path: 'SalaryAdvanceRequest', component: SalaryAdvanceRequestComponent },
+      //      { path: 'Employeesalaryrelease', component: EmployeesalaryreleaseComponent }
+      //   ]
+      // },
+
       {
         path: 'salaryreleasemenu',
         component: SalaryReleaseMenuComponent,

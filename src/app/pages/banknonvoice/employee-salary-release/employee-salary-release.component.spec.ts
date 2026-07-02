@@ -11,7 +11,7 @@ describe('EmployeeSalaryReleaseComponent', () => {
       imports: [EmployeeSalaryReleaseComponent]
     })
     .compileComponents();
-    
+
     fixture = TestBed.createComponent(EmployeeSalaryReleaseComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

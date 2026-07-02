@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../Environments/environment.development';
 import { Observable } from 'rxjs';
 import { APIResponse } from '../../Models/apiresponse';
-import { ICreditNoteRepository } from '../../Repository/AccountReceivableRepository/IcreditNoteRepostory';
+import { ICreditNoteRepository } from '../../Repository/invoice/IcreditnoteRepository';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CreditNoteRequestServiceService implements ICreditNoteRepository {
+export class CreditNoteRequestServiceService {
   environment = environment;
 
   constructor(private http: HttpClient) { }

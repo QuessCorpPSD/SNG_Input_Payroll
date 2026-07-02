@@ -10,6 +10,7 @@ import { CommonService } from '../../Service/CommonService';
 import { Company, Payperiodclass } from '../../Models/Common';
 export const COMM_TOKEN = new InjectionToken<ICommonService>('COMM_TOKEN');
 import { OnboardingStateService } from '../../onboarding-state.service';
+import { MatIconModule } from '@angular/material/icon';
 @Component({
   selector: 'PayPeriod',
   standalone: true,
@@ -18,7 +19,8 @@ import { OnboardingStateService } from '../../onboarding-state.service';
     ReactiveFormsModule,
     MatAutocompleteModule,
     MatInputModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatIconModule
   ],
   templateUrl: './payperiod.component.html',
   styleUrl: './payperiod.component.css',

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ITimesheetService } from '../Repository/itimesheet.service';
 import { Observable } from 'rxjs';
 import { APIResponse } from '../Models/apiresponse';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({

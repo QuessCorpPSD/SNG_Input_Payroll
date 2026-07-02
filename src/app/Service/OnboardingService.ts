@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { IOnboardingServices } from "../Repository/IOnboardingService";
-import { environment } from "../../environments/environment.development";
+import { environment } from "../../environments/environment";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { APIResponse } from "../Models/apiresponse";
 import { Observable } from "rxjs";

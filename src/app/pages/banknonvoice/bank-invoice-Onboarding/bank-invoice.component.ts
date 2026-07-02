@@ -5,17 +5,18 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { CompanyComponent } from '../../../common/company/company.component';
 import { PayPeriodComponent } from '../../../common/payperiod/payperiod.component';
 import { Company, Payperiodclass } from '../../../Models/Common';
-import { BankinvoiceService } from '../../../Service/banknonvoice/bankinvoice.service';
+import { OnboardingStateService } from '../../../onboarding-state.service';
 import { CreditNoteRequestServiceService } from '../../../Service/banknonvoice/credit-note-request-service.service';
+import { BankinvoiceService } from '../../../Service/banknonvoice/bankinvoice.service';
 import { HoldEmployeSalaryService } from '../../../Service/banknonvoice/hold-employe-salary.service';
-
+import { MatIconModule } from "@angular/material/icon";
+import { MatTooltipModule } from '@angular/material/tooltip';
+import {CompanyallComponent} from "../../../common/CompanyAll/companyall.component";
 @Component({
   selector: 'app-bank-invoice',
   imports: [CommonModule,
-    MatFormFieldModule, ReactiveFormsModule,
-    FormsModule, CompanyComponent, PayPeriodComponent,
-
-  ],
+    MatFormFieldModule, ReactiveFormsModule,MatTooltipModule,
+    FormsModule, CompanyComponent, PayPeriodComponent, MatIconModule, CompanyallComponent],
   templateUrl: './bank-invoice.component.html',
   styleUrl: './bank-invoice.component.css',
   standalone: true,
@@ -30,6 +31,9 @@ export class BankInvoiceComponent implements OnInit {
   ) { }
   @Input() visibleDropdowns: number[] = [];
   @Input() showSearchButton: boolean = false;
+  @Input() showTemplateButton: boolean = false;
+  @Input() showImportButton: boolean = false;
+  @Input() showExportButton: boolean = false;
   @Input() payPeriodTypefromParent: string = "";
   @Input() showPurpose: boolean = false;
   @Input() showDNReason: boolean = false;
@@ -41,6 +45,9 @@ export class BankInvoiceComponent implements OnInit {
   @Output() companyUI = new EventEmitter<Company>();
   @Output() payperiodUI = new EventEmitter<Payperiodclass>();
   @Output() searchClicked = new EventEmitter<void>();
+  @Output() templateClicked = new EventEmitter<void>();
+  @Output() importClicked = new EventEmitter<File>();
+  @Output() exportClicked = new EventEmitter<void>();
   @Output() purposeChange = new EventEmitter<string>();
   @Output() salaryHoldTypeChange = new EventEmitter<string>();
   @Output() employeeCodeChange = new EventEmitter<{ EmployeeCode: string }>();
@@ -51,7 +58,7 @@ export class BankInvoiceComponent implements OnInit {
   payPeriod: any;
   Purpose!: string;
   DNReason!: string;
-  SalaryHoldType!: string;
+  SalaryHoldType = 0;
   fromDate!: string;
   toDate!: string;
   selectedCC?: number;
@@ -87,6 +94,7 @@ export class BankInvoiceComponent implements OnInit {
       this.companyUI.emit();
     }
   }
+
   handlePayperiodEvent(payperiod: Payperiodclass) {
     if (payperiod) {
       this.selectedPP = payperiod.payPeriod;
@@ -95,9 +103,35 @@ export class BankInvoiceComponent implements OnInit {
     }
   }
 
-
-  searchClick() {
+  searchClick(): void {
     this.searchClicked.emit();
+  }
+
+  templateClick(): void {
+    this.templateClicked.emit();
+  }
+
+  exportClick(): void {
+    this.exportClicked.emit();
+  }
+
+  openFilePicker(fileInput: HTMLInputElement): void {
+    fileInput.click();
+  }
+
+  onFileChange(event: Event): void {
+
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length !== 1) {
+      alert("Please upload one Excel file.");
+      return;
+    }
+
+    const file = input.files[0];
+
+    this.importClicked.emit(file);
+
+    input.value = '';
   }
 
   BindPurposeDropdown() {
@@ -120,7 +154,7 @@ export class BankInvoiceComponent implements OnInit {
   }
   BindSalaryHoldType() {
     this.holdService.GetSalaryHoldType().subscribe(res => {
-      this.SalaryHoldTypeList = res?.data?.data?.Table0 ?? [];
+      this.SalaryHoldTypeList = res?.Data?.data?.Table0 ?? [];
 
       this.SalaryHoldTypeList = this.SalaryHoldTypeList.map((item: any) => ({
         Value: item.SalaryHoldType_Id,
@@ -130,9 +164,15 @@ export class BankInvoiceComponent implements OnInit {
   }
 
   onSalaryHoldTypeChange() {
+    console.log(this.SalaryHoldType)
+    console.log(this.SalaryHoldTypeList);
+    const selectedItem = this.SalaryHoldTypeList.find(
+      (item: any) => item.Value == this.SalaryHoldType
+    );
 
+    console.log(selectedItem);
     this.salaryHoldTypeChange.emit(
-      this.SalaryHoldType
+      selectedItem
     );
   }
 

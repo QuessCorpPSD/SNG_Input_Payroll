@@ -10,19 +10,18 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { BankInvoiceComponent } from '../bank-invoice-Onboarding/bank-invoice.component';
 import { MatSort } from '@angular/material/sort';
 import { EncryptionService } from '../../../Shared/encryption.service';
+import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 import { MatDialog } from '@angular/material/dialog';
 import { IemployeeSalaryRelease } from '../../../Repository/banknonvoice/IemployeeSalaryRelease';
-import { EmployeeSalaryReleaseService } from '../../../Service/SalaryRelease/employee-salary-release.service';
 import { EmployeeSalaryReleaseServices } from '../../../Service/banknonvoice/employee-salary-release.service';
-import { SessionStorageService } from '../../../Shared/SessionStorageService';
 
 export const Common_TOKEN = new InjectionToken<IemployeeSalaryRelease>('Common_TOKEN');
 
 @Component({
   selector: 'app-employee-salary-release',
-  standalone: true,
+  standalone:true,
   imports: [CommonModule,
     MatIconModule,
     MatTooltipModule,
@@ -32,7 +31,7 @@ export const Common_TOKEN = new InjectionToken<IemployeeSalaryRelease>('Common_T
     ReactiveFormsModule,
     MatRadioModule,
     FormsModule,
-    BankInvoiceComponent],
+    BankInvoiceComponent,],
   templateUrl: './employee-salary-release.component.html',
   styleUrl: './employee-salary-release.component.css',
   providers: [
@@ -68,13 +67,10 @@ export class EmployeeSalaryReleaseComponent {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild('holdPaginator') holdpaginator!: MatPaginator;
 
-
-
-
   handleCompanyEvent(company: any) {
     this.companyUI = company;
     if (!this.companyUI) {
-      alert("Select Company Code");
+      //alert("Select Company Code");
       return;
     }
     //console.log(this.companyUI);
@@ -83,11 +79,11 @@ export class EmployeeSalaryReleaseComponent {
   handlePayperiodEvent(payperiod: any) {
     this.payperiodUI = payperiod;
     if (!this.companyUI) {
-      alert("Select Company Code");
+      //alert("Select Company Code");
       return;
     }
     if (!this.payperiodUI) {
-      alert("Select Pay Period");
+      //alert("Select Pay Period");
       return;
     }
     if (this.companyUI && this.payperiodUI) {
@@ -106,7 +102,7 @@ export class EmployeeSalaryReleaseComponent {
     }
 
     const userInfo = {
-      "userId": this.userdetail.userId,
+      "userId": this.userdetail.user_Id,
       "userName": this.userdetail.userName,
     };
 
@@ -158,7 +154,7 @@ export class EmployeeSalaryReleaseComponent {
       .subscribe({
         next: (res: any) => {
 
-          const tableData = res?.data?.data?.Table0 ?? [];
+          const tableData = res?.Data?.data?.Table0 ?? [];
 
           if (!tableData.length) {
             alert("No data found");
@@ -205,7 +201,7 @@ export class EmployeeSalaryReleaseComponent {
 
           this.isLoading = false;
 
-          const jsonData = res?.data?.data?.Table0 ?? [];
+          const jsonData = res?.Data?.data?.Table0 ?? [];
 
           if (!jsonData.length) {
             alert("No Records Found");
@@ -235,43 +231,47 @@ export class EmployeeSalaryReleaseComponent {
   }
 
   onImportClick(fileInput: HTMLInputElement): void {
+    if (!this.companyUI) {
+      alert("Select Company Code");
+      return;
+    }
+    if (!this.payperiodUI) {
+      alert("Select Pay Period");
+      return;
+    }
     fileInput.value = "";
     fileInput.click();
   }
 
-  onFileChange(event: any): void {
+  onFileChange(file:any): void {
 
-    const target = event.target as HTMLInputElement;
-
-    if (!target.files || target.files.length !== 1) {
-      alert("Please upload one Excel file.");
+    if (!this.companyUI) {
+      alert("Select Company Code");
       return;
     }
 
-    const file = target.files[0];
+    if (!this.payperiodUI) {
+      alert("Select Pay Period");
+      return;
+    }
 
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("User", this.userdetail.userId.toString());
+    formData.append("User", this.userdetail.user_Id.toString());
 
     this.isLoading = true;
 
     this.service.UploadEmployeeSalaryRelease(formData)
       .subscribe({
         next: (res: any) => {
-
           this.isLoading = false;
-
-          const data = res?.data;
-
+          const data = res?.Data;
           if (!data) {
             alert("No response from server");
             return;
           }
 
           let message = "";
-
-          // ✅ PARSE RESPONSE (NO HARDCODE)
           try {
             const parsed = typeof data.response === 'string'
               ? JSON.parse(data.response)
@@ -288,14 +288,12 @@ export class EmployeeSalaryReleaseComponent {
             message = String(data.response ?? "");
           }
 
-          // ✅ SUCCESS
           if (message.toLowerCase().includes("success")) {
             alert(message);
             this.searchClick();
             return;
           }
 
-          // ❌ ERROR → DOWNLOAD EXCEL (NO HARDCODE)
           if (data?.errors && data.errors.length > 0) {
 
             let parsedErrors: any[] = [];
@@ -314,8 +312,6 @@ export class EmployeeSalaryReleaseComponent {
             } catch {
               parsedErrors = [{ Message: "Error parsing server response" }];
             }
-
-            // ✅ KEEP API STRUCTURE AS-IS
             const exportData = parsedErrors.map((row: any) => {
               const obj: any = {};
               Object.keys(row).forEach((key) => {
@@ -336,7 +332,6 @@ export class EmployeeSalaryReleaseComponent {
             return;
           }
 
-          // 🔁 FALLBACK
           alert(message || "Upload completed");
         },
 
@@ -347,6 +342,7 @@ export class EmployeeSalaryReleaseComponent {
         }
       });
   }
+
   downloadValidationExcel(errors: string[]) {
 
     const excelData = errors.map((msg, index) => ({
@@ -379,9 +375,8 @@ export class EmployeeSalaryReleaseComponent {
 
   onTemplateClick() {
     this.isLoading = true;
-
-    const flag = 'SalaryRequestNI';   // ✅ Required
-    const userId = this.userdetail?.userId;
+    const flag = 'SalaryRequestNI';  
+    const userId = this.userdetail?.user_Id;
 
     if (!userId) {
       alert('User ID not available');
@@ -389,26 +384,21 @@ export class EmployeeSalaryReleaseComponent {
       return;
     }
 
-    if (!this.companyUI) {
-      alert('Please Select Company');
-      this.isLoading = false;
-      return;
-    }
+    // if (!this.companyUI) {
+    //   alert('Please Select Company');
+    //   this.isLoading = false;
+    //   return;
+    // }
 
-    if (!this.payperiodUI) {
-      alert('Please Select Payperiod');
-      this.isLoading = false;
-      return;
-    }
-
-    const companyId = this.companyUI.companyId;
-    const payPeriodId = this.payperiodUI.payfrequencyid;
-
-    console.log("Template Params:", { flag, userId, companyId, payPeriodId });
+    // if (!this.payperiodUI) {
+    //   alert('Please Select Payperiod');
+    //   this.isLoading = false;
+    //   return;
+    // }
 
     this.service.DownloadSalaryReleaseTemplate(flag, userId).subscribe({
       next: res => {
-        const data = res?.data?.data?.Table0 ?? [];
+        const data = res?.Data?.data?.Table0 ?? [];
 
         if (!data.length) {
           alert('No template data available.');
@@ -426,9 +416,9 @@ export class EmployeeSalaryReleaseComponent {
         const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
         const blob = new Blob([buffer], { type: 'application/octet-stream' });
 
-        FileSaver.saveAs(blob, 'SalaryRequestNI_Template.xlsx'); // ✅ cleaner name
+        FileSaver.saveAs(blob, 'SalaryRequestNI_Template.xlsx'); 
 
-        this.isLoading = false; // ✅ same as reference code
+        this.isLoading = false; 
       },
       error: err => {
         console.error('Error downloading template', err);

@@ -1,0 +1,169 @@
+<div class="page-wrapper">
+
+    <div class="scrollable-content">
+        <div style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;">
+            Batch Generation
+        </div>
+        <div class="container py-2">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Batch Type</label>
+                    <select class="form-select" [(ngModel)]="BatchType">
+                        <option value="">--select--</option>
+                        <option *ngFor="let p of batchtypes" [value]="p.value">{{p.name}} </option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Business Unit Name/Entity</label>
+                    <select class="form-select" [(ngModel)]="EntityId">
+                        <option *ngFor="let p of EntityList" [value]="p.company_Id">{{p.company_Code}} </option>
+                    </select>
+
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Batch Creation Type</label>
+                    <select class="form-select" [(ngModel)]="batchCreationTypes">
+                        <option *ngFor="let p of batchTypeList" [value]="p.geN_iID">{{p.geN_vDescription}} </option>
+                    </select>
+
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Status</label>
+                    <select class="form-select" [(ngModel)]="Status">
+                        <option value="">--Select--</option>
+                        <option value="1">Approved</option>
+                        <option value="0">Pending</option>
+                        <!-- <option *ngFor="let p of companyName" [value]="p.Client_Id">{{p.Client_Name}} </option> -->
+                    </select>
+
+                </div>
+                <div class="col-md-2 d-flex gap-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
+                        matTooltip="Search" (click)="onSearch()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                    <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="export to excel" (click)="onExport()">
+                        <mat-icon>download</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
+                        (click)="ImportClick(fileInput)" matTooltip="Upload">
+                        <mat-icon>cloud_upload</mat-icon>
+                    </button>
+                    <input type="file" #fileInput style="display:none;" (click)="fileInput.value=''"
+                        (change)="onFileChange($event)" accept=".xlsx,.xls" />
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                        matTooltip="Approve Template" (click)="onDownloadTemplate()">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button>
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                        style="background-color: blue;color: white;" (click)="onGenerate()">
+                        Generate
+                    </button>
+
+                    <!-- <input type="file" #fileInput style="display: none;" (click)="fileInput.value=''"
+                        (change)="onFileChange($event)" accept=".xlsx, .xls" /> -->
+                </div>
+
+            </div>
+        </div>
+
+        <div class="table-container" style="top:30px;">
+            <div class="table-scroll-window">
+                <mat-table [dataSource]="uploadedDataSource" class="mat-elevation-z8 custom-table">
+
+                    <!--  Action -->
+                    <ng-container matColumnDef="checkbox">
+                        <mat-header-cell *matHeaderCellDef>
+                            <mat-checkbox [checked]="isAllSelected()" [indeterminate]="isSomeSelected()"
+                                (change)="toggleAllRows($event.checked)"></mat-checkbox>
+                        </mat-header-cell>
+
+                        <mat-cell *matCellDef="let row">
+                            <mat-checkbox [(ngModel)]="row.selected" (change)="row.selected = $event.checked"></mat-checkbox>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="vendorname">
+                        <mat-header-cell *matHeaderCellDef><strong>Vendor Name</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Vendor_Name}}</mat-cell>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="groupname">
+                        <mat-header-cell *matHeaderCellDef class="groupname"><strong>Group
+                                Name</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="groupname">{{ row.Group_Name}}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="WbsCode">
+                        <mat-header-cell *matHeaderCellDef class="groupname"><strong>WBS Code</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="groupname">{{ row.WBS_Code}}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="attendanceBatch">
+                        <mat-header-cell *matHeaderCellDef class="groupname"><strong>Attendance
+                                Batch</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="groupname">{{ row.BatchId}}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="groupCount">
+                        <mat-header-cell *matHeaderCellDef class="groupname"><strong>Group
+                                Count</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="groupname">{{ row.Group_Count}}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="payperiod">
+                        <mat-header-cell *matHeaderCellDef class="groupname"><strong>Pay
+                                Period</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="groupname">{{ row.Pay_Period}}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="purpose">
+                        <mat-header-cell *matHeaderCellDef class="groupname"><strong>Purpose</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="groupname">{{ row.Purpose}}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="input">
+                        <mat-header-cell *matHeaderCellDef
+                            class="groupname"><strong>Input....</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="groupname">{{ row.Input_No}}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="action">
+                        <mat-header-cell *matHeaderCellDef>
+                            <strong>Action</strong>
+                        </mat-header-cell>
+
+                        <mat-cell *matCellDef="let row">
+                            <button class="btn btn-danger" (click)="onReject(row)">Reject</button>
+                        </mat-cell>
+                    </ng-container>
+
+
+                    <!-- Header Rows -->
+                    <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+
+                    <!-- Data Rows -->
+                    <mat-row *matRowDef="let row; columns: uploadDisplayedColumns"></mat-row>
+
+                </mat-table>
+            </div>
+
+            <div *ngIf="uploadedDataSource.data.length===0" class="text-center p-4">
+                <p class="text-muted">No data to display</p>
+            </div>
+
+            <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+                style="border-top: 1px solid #ddd;"></mat-paginator>
+        </div>
+
+    </div>
+</div>
+
+
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>

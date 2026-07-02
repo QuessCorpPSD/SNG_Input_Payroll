@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { environment } from "../../environments/environment.development";
+import { environment } from "../../environments/environment";
 import { ICommonService } from "../Repository/ICommonService";
 import { APIResponse } from "../Models/apiresponse";
 import { map, Observable } from "rxjs";

@@ -6,4 +6,5 @@ export interface IemployeeSalaryRelease {
     ExportEmployeeSalaryRelease(payload: any): Observable<APIResponse>;
     UploadEmployeeSalaryRelease(formData: FormData): Observable<APIResponse>
     DownloadSalaryReleaseTemplate(Flag: any, Qzoneusername: any): Observable<APIResponse>;
+
 }

@@ -5,16 +5,20 @@
         </mat-card-title>
         <div class="container py-2">
             <div class="row g-3 align-items-end">
-
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Batch Type</label>
+                    <select class="form-select" [(ngModel)]="BatchType" (change)="onBatchChange()">
+                        <option value="">--select--</option>
+                        <option *ngFor="let p of batchtypes" [value]="p.value">{{p.name}} </option>
+                    </select>
+                </div>
                 <div class="col-md-3">
                     <label class="form-label text-muted small">Batch Id<span class="text-danger">*</span></label>
-                    <select class="form-select form-select-sm" [(ngModel)]="selectedBatchId" name="BatchId">
-
+                    <select class="form-select form-select-sm" [(ngModel)]="selectedBatchId" name="BatchId" >
                         <option value="">Select</option>
-                        <option *ngFor="let batch of batchList" [value]="batch.Value">
-                            {{ batch.Label }}
+                        <option *ngFor="let batch of batchList" [value]="batch.batchid">
+                            {{ batch.batchid }}
                         </option>
-
                     </select>
                 </div>
                 <div class="col-md-2 d-flex gap-2">

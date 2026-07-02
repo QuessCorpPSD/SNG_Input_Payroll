@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '../../../Environments/environment.development';
-import { IutrDetails } from '../../Repository/BankNonInvoice/IutrDetails';
+import { environment } from '../../../environments/environment';
+import { IutrDetails } from '../../Repository/banknonvoice/IutrDetails';
 import { Observable } from 'rxjs';
 import { APIResponse } from '../../Models/apiresponse';
 
@@ -15,7 +15,7 @@ export class UtrDetailsService implements IutrDetails {
 
   DownloadUtrDetails(companyId: any, payPeriodId: any): Observable<APIResponse> {
     return this.http.get<APIResponse>(
-      `${this.environment.apiUrl}UtrDetails/GetUtrDetails/${companyId}/${payPeriodId}`
+      `${this.environment.apiUrl}UtrDetails/NetPaysummaryNI/${companyId}/${payPeriodId}`
     );
   }
 }

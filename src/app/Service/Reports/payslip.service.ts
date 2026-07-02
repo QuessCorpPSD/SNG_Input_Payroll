@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { APIResponse } from '../../Models/apiresponse';
 import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { IpayslipService } from '../../Repository/Reports/ipayslip.service';
 
 @Injectable({

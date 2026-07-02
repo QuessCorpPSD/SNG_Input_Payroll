@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { APIResponse } from '../../Models/apiresponse';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { IcomputationRule } from '../../Repository/GlobalMasters/IComputationRule.service';
 
 @Injectable({
