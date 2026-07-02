@@ -4,7 +4,7 @@ import { Component, Inject, InjectionToken } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl, FormsModule, ReactiveFormsModule, ValidatorFn } from '@angular/forms';
 import { Ioffercreation } from '../../../Repository/gsoffer/Ioffercreation';
 import { OffercreationService } from '../../../Service/gsoffer/offercreation.service';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from '../../../../environments/environment';
 import { MatAccordion, MatExpansionPanel, MatExpansionPanelTitle, MatExpansionPanelHeader } from "@angular/material/expansion";
 import { MatStepperModule } from "@angular/material/stepper";
 import { MatIconModule } from "@angular/material/icon";

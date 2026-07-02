@@ -88,34 +88,25 @@ export class CompanyComponent implements OnInit, OnChanges {
     // optional, in case you need disable support
   }
 
+   ngOnChanges(changes: SimpleChanges): void {
+    if (changes['disabled']) {
+      if (this.disabled) {
+        this.myControl.disable({ emitEvent: false });
+      } else {
+        this.myControl.enable({ emitEvent: false });
+      }
+    }
+  }
   ngOnInit(): void {
+
     const json = this._sessionStoreage.getItem('UserProfile');
     if (json) {
       this.userdetail = JSON.parse(this.decry.decrypt(json));
-      //console.log(this.userdetail.user_Id);
+      //console.log(this.userdetail.userId);
     } else {
       console.warn('UserProfile not found in session storage');
     }
     this.BindCompanyCode();
-    runInInjectionContext(this.injector, () => {
-      effect(() => {
-        const companyValue = this.stateService.getCompany();
-        if (companyValue) {
-          this.myControl.setValue(companyValue);  // update the FormControl
-          this.companyEmit.emit(companyValue);    // emit to parent
-        }
-      });
-    });
-
-  }
-  ngOnChanges(changes: SimpleChanges): void {
-    const companyvalue = this.stateService.getCompany()
-    //   const companyvalue = this.stateService.companySignal();
-    if (companyvalue) {
-      //alert("Hi");
-      this.myControl.setValue(companyvalue);
-      this.companyEmit.emit(companyvalue);
-    }
   }
 
 
@@ -172,4 +163,5 @@ export class CompanyComponent implements OnInit, OnChanges {
 
     console.log('Selection cleared:', this.selectedOption, this.myControl.value);
   }
+  
 }

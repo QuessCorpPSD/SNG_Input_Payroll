@@ -6,6 +6,11 @@ table {
   width: 100%;
   
 }
+
+.card{
+  width: 100% !important;
+  max-width:100% !important;
+}
 .mat-header-cell.sticky, .mat-cell.sticky {
   z-index: 100;
   background: white; /* Or your table header background */

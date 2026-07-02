@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { env } from 'process';
 import { Observable } from 'rxjs';
 import { APIResponse } from '../../Models/apiresponse';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { IBankInvoiceNEFTCulture } from '../../Repository/SalaryRequestNew/IBankInvoiceNEFTCulture';
 
 @Injectable({

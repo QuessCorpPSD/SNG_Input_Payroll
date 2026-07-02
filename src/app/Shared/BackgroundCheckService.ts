@@ -2,7 +2,7 @@
 import { Injectable, effect, signal } from '@angular/core';
 import { timer, switchMap } from 'rxjs';
 import { HttpClient,HttpHeaders } from '@angular/common/http';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 import { APIResponse } from '../Models/apiresponse';
 
 @Injectable({

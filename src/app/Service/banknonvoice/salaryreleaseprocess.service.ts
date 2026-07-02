@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { APIResponse } from '../../Models/apiresponse';
 import { ISalaryReleaseProcess } from '../../Repository/banknonvoice/ISalaryReleaseProcess';
 
@@ -24,16 +24,21 @@ export class SalaryreleaseprocessService implements ISalaryReleaseProcess {
     );
   }
 
-  GetNonInvoiceBatchid(
-    companyId: number
-  ): Observable<APIResponse> {
-
+  GetSRPBatchList(BatchType:any,UserId:any): Observable<APIResponse> {
     return this.http.get<APIResponse>(
       this.env.apiUrl +
-      'SalaryReleaseProcess/GetNonInvoiceBatchid/' +
-      companyId
+      'NIBatchGeneration/GetSRPBatchList/' +
+      BatchType +'/'+UserId
     );
   }
+
+  GetSRPBatchData(BatchType:any,BatchId:any,UserId:any): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      this.env.apiUrl +
+      'NIBatchGeneration/GetSRPBatchData/'+BatchType +'/'+BatchId+'/'+UserId
+    );
+  }
+
 
   SalaryReleaseExport(
     payload: any
@@ -41,21 +46,27 @@ export class SalaryreleaseprocessService implements ISalaryReleaseProcess {
 
     return this.http.post<APIResponse>(
       this.env.apiUrl +
-      'SalaryReleaseProcess/SalaryReleaseExport',
+      'NIBatchGeneration/SalaryReleaseExport',
       payload
     );
   }
 
-  Initiate(payload: any): Observable<any> {
-
+  BatchIntitiate(payload: any): Observable<any> {
     return this.http.post(
       this.env.apiUrl +
-      'SalaryReleaseProcess/Initiate',
+      'NIBatchGeneration/BatchIntitiate',
       payload,
       {
         observe: 'response',
         responseType: 'blob'
       }
+    );
+  }
+
+  GetBatchTypeList(userid): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      this.env.apiUrl +
+      'NIBatchGeneration/GetBatchTypeList/' + userid
     );
   }
 }

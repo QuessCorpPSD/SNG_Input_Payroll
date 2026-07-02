@@ -46,6 +46,17 @@
   background-color: white;
 }
 /* 
+
+
+
+
+
+.mat-mdc-form-field-icon-prefix>.mat-icon,
+.mat-mdc-form-field-icon-suffix>.mat-icon {
+  padding: 0 0 0 0 !important;
+  box-sizing: content-box;
+} */
+
 .clear-icon {
   opacity: 0;
   display: inline-flex !important;
@@ -55,8 +66,6 @@
   padding: 4px;
   cursor: pointer;
 }
-
-
 
 .hover-clear-field .clear-icon {
   opacity: 2;
@@ -74,9 +83,3 @@
 .hover-clear-field .clear-icon:hover {
   color: #000;
 }
-
-.mat-mdc-form-field-icon-prefix>.mat-icon,
-.mat-mdc-form-field-icon-suffix>.mat-icon {
-  padding: 0 0 0 0 !important;
-  box-sizing: content-box;
-} */

@@ -12,7 +12,7 @@
     max-width: 100%;  
  }
 
-html, body { height: 100%;width: 100%; }
+html, body { height: 100%;width: 100%;overflow: unset !important; }
  .mat-tooltip {
   background-color: #4CAF50 !important; /* Your desired color */
   color: white !important;              /* Optional: change text color */

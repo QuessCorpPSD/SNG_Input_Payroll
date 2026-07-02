@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IHolidayService } from '../../Repository/Master/iholiday.service';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { APIResponse } from '../../Models/apiresponse';

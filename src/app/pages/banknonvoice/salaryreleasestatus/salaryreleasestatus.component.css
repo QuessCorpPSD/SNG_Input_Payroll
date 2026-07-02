@@ -291,7 +291,7 @@
 .custom-input {
     width: 85px;
     height: 30px;
-    font-family: 'Nunito Sans', sans-serif;
+    font-family: 'Montserrat';
     font-size: 12px;
     font-weight: 500;
     line-height: 22.4px;
@@ -412,7 +412,7 @@
 
 .form-label {
     color: #89898b;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 500;
-    font-family: "Nunito Sans", sans-serif;
+    font-family: "Montserrat";
 }

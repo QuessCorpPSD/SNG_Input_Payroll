@@ -3,7 +3,7 @@ import { IAuthServiceService } from '../Repository/iauth-service.service';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 import { APIResponse } from '../Models/apiresponse';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 
 
 @Injectable({

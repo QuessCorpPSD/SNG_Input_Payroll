@@ -19,7 +19,7 @@ import FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 @Component({
   selector: 'app-salaryreleaseprocess',
-  standalone:true,
+  standalone: true,
   imports: [CommonModule, MatTableModule, MatCheckboxModule, MatPaginatorModule, MatSort,
     MatSelectModule, MatInputModule, MatFormFieldModule, ReactiveFormsModule, FormsModule,
     MatCardModule],
@@ -59,8 +59,10 @@ export class SalaryreleaseprocessComponent {
   displayedColumns: string[] = [
     'SINo', 'CompanyCode', 'EmployeeCode', 'EmployeeName',
     'BatchId', 'InvoiceNo', 'NetPay', 'BankName', 'NeftBankName'
-
   ];
+
+  batchtypes: any;
+  BatchType = '';
 
 
 
@@ -80,6 +82,17 @@ export class SalaryreleaseprocessComponent {
       return;
     }
     //console.log(this.companyUI);
+  }
+
+  loadbatchType(userid): void {
+    this.service.GetBatchTypeList(userid).subscribe({
+      next: (res: any) => {
+        this.batchtypes = res?.Data ?? [];
+      },
+      error: (err: any) => {
+        console.error("Dropdown Error", err);
+      }
+    });
   }
   handlePayperiodEvent(payperiod: any) {
     this.payperiodUI = payperiod;
@@ -111,30 +124,34 @@ export class SalaryreleaseprocessComponent {
       "userId": this.userdetail.user_Id,
       "userName": this.userdetail.userName,
     };
-    this.BindBatchId();
+
+    this.loadbatchType(this.userdetail.user_Id);
     this.payPeriodTypefromParent = "All";
+  }
 
+  onBatchChange() {
+    this.selectedBatchId = '';
+    console.log('Selected Batch Id:', this.BatchType);
+    this.BindBatchId(this.BatchType)
   }
 
 
-  BindBatchId() {
-
-    // this.isLoading = true;
-    this.service
-      .GetNonInvoiceBatchid(0)
-      .subscribe({
-        next: (res: any) => {
-          this.batchList =
-            res?.Data?.data?.Table0 || [];
-          this.isLoading = false;
-        },
-        error: (err) => {
-          console.error(err);
-          alert('Failed to load Batch Id');
-          this.isLoading = false;
-        }
-      });
+  BindBatchId(selectedBatchId) {
+    this.isLoading = true;
+    this.service.GetSRPBatchList(selectedBatchId, this.userdetail.user_Id).subscribe({
+      next: (res: any) => {
+        this.batchList =
+          res?.Data || [];
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error(err);
+        alert('Failed to load Batch Id');
+        this.isLoading = false;
+      }
+    });
   }
+
   applyFilter() {
     const filterValue = this.searchText.trim().toLowerCase();
     this.dataSource.filter = filterValue;
@@ -143,6 +160,11 @@ export class SalaryreleaseprocessComponent {
 
   search() {
 
+    if (!this.BatchType) {
+      alert('Please Select Batch Type');
+      return;
+    }
+
     if (!this.selectedBatchId) {
       alert('Please Select Batch Id');
       return;
@@ -150,7 +172,7 @@ export class SalaryreleaseprocessComponent {
 
     this.isLoading = true;
 
-    this.service.SearchDetails(this.selectedBatchId)
+    this.service.GetSRPBatchData(this.BatchType, this.selectedBatchId, this.userdetail.user_Id)
       .subscribe({
 
         next: (res: any) => {
@@ -239,59 +261,58 @@ export class SalaryreleaseprocessComponent {
 
   onInitiate() {
 
-    //   if (!this.selectedBatchType) {
-    //     alert("Please Select Batch Type");
-    //     return;
-    //   }
+    if (!this.BatchType) {
+      alert("Please Select Batch Type");
+      return;
+    }
 
-    //   if (!this.selectedBatchId) {
-    //     alert("Please Select Batch Id");
-    //     return;
-    //   }
+    if (!this.selectedBatchId) {
+      alert("Please Select Batch Id");
+      return;
+    }
 
-    //   const payload = {
-    //     batchType: this.selectedBatchType,
-    //     batchId: this.selectedBatchId,
-    //     userId: this.userdetail.user_Id
-    //   };
+    const payload = {
+      batchType: this.BatchType,
+      batchId: this.selectedBatchId,
+      userId: this.userdetail.user_Id
+    };
 
-    //   this.isLoading = true;
+    this.isLoading = true;
 
-    //   this.service.Initiate(payload).subscribe({
-    //     next: (response: any) => {
-    //       this.isLoading = false;
+    this.service.BatchIntitiate(payload).subscribe({
+      next: (response: any) => {
+        this.isLoading = false;
 
-    //       const blob = response.body;
+        const blob = response.body;
 
-    //       // 🔥 Get filename from backend header
-    //       let fileName = this.selectedBatchId + '.rar'; // fallback
+        let fileName = this.selectedBatchId + '.rar'; // fallback
 
-    //       const contentDisposition = response.headers.get('content-disposition');
-    //       if (contentDisposition) {
-    //         const matches = /filename="?([^"]+)"?/.exec(contentDisposition);
-    //         if (matches && matches[1]) {
-    //           fileName = matches[1];
-    //         }
-    //       }
+        const contentDisposition = response.headers.get('content-disposition');
+        if (contentDisposition) {
+          const matches = /filename="?([^"]+)"?/.exec(contentDisposition);
+          if (matches && matches[1]) {
+            fileName = matches[1];
+          }
+        }
 
-    //       // 🔥 Download file
-    //       const url = window.URL.createObjectURL(blob);
-    //       const a = document.createElement('a');
-    //       a.href = url;
-    //       a.download = fileName;
-    //       a.click();
-    //       window.URL.revokeObjectURL(url);
+        // 🔥 Download file
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        a.click();
+        window.URL.revokeObjectURL(url);
+        this.selectedBatchId = '';
+        this.dataSource.data = [];
+        this.BindBatchId(this.BatchType);
+        alert('File downloaded successfully!');
+      },
 
-    //       alert('File downloaded successfully!');
-    //     },
-
-    //     error: (err) => {
-    //       this.isLoading = false;
-    //       console.error(err);
-    //       alert('Error while processing');
-    //     }
-    //   });
-    // }
-
+      error: (err) => {
+        this.isLoading = false;
+        console.error(err);
+        alert('Error while processing');
+      }
+    });
   }
 }

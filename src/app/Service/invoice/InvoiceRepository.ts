@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { IInvoiceRepository } from "../../Repository/invoice/IInvoiceRepository";
 import { Observable } from "rxjs";
 import { APIResponse } from "../../Models/apiresponse";
-import { environment } from "../../../environments/environment.development";
+import { environment } from "../../../environments/environment";
 import { HttpClient, HttpHeaders, HttpResponse } from "@angular/common/http";
 
 @Injectable({

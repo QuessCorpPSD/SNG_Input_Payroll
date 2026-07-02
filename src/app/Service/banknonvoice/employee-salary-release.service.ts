@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from '../../../Environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { APIResponse } from '../../Models/apiresponse';
-import { IemployeeSalaryRelease } from '../../Repository/BankNonInvoice/IemployeeSalaryRelease';
+import { IemployeeSalaryRelease } from '../../Repository/banknonvoice/IemployeeSalaryRelease';
 
 @Injectable({
   providedIn: 'root'
