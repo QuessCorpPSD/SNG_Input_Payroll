@@ -270,20 +270,7 @@ export class BatchgenerationComponent implements OnInit {
       Status: this.Status,
       UserId: this.userdetail.user_Id,
 
-      BatchList: selectedRows.map((item: any) => ({
-        Salary_Process_Initiate_detail_Id: item.Salary_Process_Initiate_detail_Id,
-        Salary_Process_Initiate_Id: item.Salary_Process_Initiate_Id,
-        Bank_Culture_Id: item.Bank_Culture_Id,
-        Group_Count: item.Group_Count,
-        BatchId: item.BatchId,
-        Group_Name: item.Group_Name,
-        WBS_Code: item.WBS_Code,
-        Pay_Frequency_Detail_Id: item.Pay_Frequency_Detail_Id,
-        Pay_Period: item.Pay_Period,
-        Vendor_Name: item.Vendor_Name,
-        Purpose: item.Purpose,
-        Input_No: item.Input_No
-      }))
+      BatchList: selectedRows
     };
 
     this.isLoading = true;
