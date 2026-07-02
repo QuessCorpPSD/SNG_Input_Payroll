@@ -1,0 +1,31 @@
+<div class="page-wrapper">
+
+    <div class="scrollable-content">
+
+        <div style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;">
+            Finance Hold Report</div>
+
+        <div class="container py-2">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">PayPeriod</label>
+                    <!-- <payperiodall (FrequencyEmit)="handleFrequencyEvent($event)">
+                    </payperiodall> -->
+                    <select class="form-select form-select-sm" [(ngModel)]="selectedpayperiod">
+                        <option *ngFor="let pay of payperiod" [ngValue]="pay">{{pay.Pay_Period}}</option>
+                    </select>
+                </div>
+                <div class="col-md-2 d-flex gap-2">
+
+                    <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="Export to Excel" (click)="exportToExcel()">
+                        <mat-icon>download</mat-icon>
+                    </button>
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>

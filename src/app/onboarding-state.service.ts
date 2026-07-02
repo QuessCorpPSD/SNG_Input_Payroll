@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { Company, Payperiodclass } from './Models/Common';
+import { Company, CompanyGSTInvoice, Payperiodclass } from './Models/Common';
 
 @Injectable({ providedIn: 'root' })
 export class OnboardingStateService {
@@ -7,6 +7,17 @@ export class OnboardingStateService {
   // signals holding the data
   private companyUI = signal<Company | null>(null);
   private payperiodUI = signal<Payperiodclass | null>(null);
+  private companyGSTUI = signal<CompanyGSTInvoice | null>(null);
+
+
+getCompanyGST(): CompanyGSTInvoice | null {
+    return this.companyGSTUI();  // read current value
+  }
+
+  setCompanyGST(company: CompanyGSTInvoice | null) {
+    this.companyGSTUI.set(company);
+  }
+
 
   // -------- Company --------
   getCompany(): Company | null {

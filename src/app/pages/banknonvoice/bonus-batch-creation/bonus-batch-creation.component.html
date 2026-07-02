@@ -1,0 +1,119 @@
+<div class="page-wrapper">
+    <div class="scrollable-content">
+        <mat-card-title class="main-header">
+            Invoice Bonus Batch Generation Process
+            Release Process
+        </mat-card-title>
+        <div class="container py-2">
+            <div class="row g-3 align-items-end">
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">
+                        Business Unit Name/Entity
+                        <span class="text-danger">*</span>
+                    </label>
+
+                    <select class="form-select form-select-sm" [(ngModel)]="selectedCompanyId">
+                        <option *ngFor="let item of companyList" [value]="item.Company_Id">
+
+                            {{ item.Company_Code }}
+                        </option>
+                    </select>
+                </div>
+                <div class="col-md-3 ">
+                    <label class=" form-label text-muted small">Remarks</label>
+                    <input matInput type="text" [(ngModel)]="Remarks">
+
+
+                </div>
+
+
+                <div class="col-md-2 d-flex gap-2">
+
+                    <button
+                        style="width: 130px; height: 33px; padding: 6px 16px; background: #3d3dea; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; display: flex; justify-content: center; align-items: center; border: none;">
+                        <div
+                            style="color: #F5F5F5; font-size: 12px; font-family: Montserrat; font-weight: 600; letter-spacing: 0.24px;">
+                            Generate
+                        </div>
+                    </button>
+
+
+
+                </div>
+            </div>
+
+
+            <div class="table-container" style="top:30px;">
+                <div class="table-scroll-window">
+                    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+                        <!-- Select Checkbox Column -->
+                        <ng-container matColumnDef="select">
+                            <mat-header-cell *matHeaderCellDef>
+                                <mat-checkbox (change)="masterToggle($event)" [checked]="isAllSelected()"
+                                    [indeterminate]="selectedRows.length > 0 && selectedRows.length < dataSource.data.length">
+                                </mat-checkbox>
+                            </mat-header-cell>
+
+                            <mat-cell *matCellDef="let element">
+                                <mat-checkbox [(ngModel)]="element.isSelected" (change)="toggleRow(element)">
+                                </mat-checkbox>
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Company Code Column -->
+                        <ng-container matColumnDef="CompanyCode">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>
+                                Company Code
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                {{ element.Company_Code }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Pay Period Column -->
+                        <ng-container matColumnDef="PayPeriod">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>
+                                Pay Period
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                {{ element.Pay_Period }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Batch Id Column -->
+                        <ng-container matColumnDef="BatchId">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>
+                                Batch Id
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                {{ element.BatchId }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Header Row -->
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+                        <!-- Data Rows -->
+                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+                    </table>
+                </div>
+
+                <div *ngIf="dataSource.data.length===0" class="text-center p-4">
+                    <p class="text-muted">No data to display</p>
+                </div>
+
+                <mat-paginator #paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons
+                    style="border-top: 1px solid #ddd;">
+                </mat-paginator>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>

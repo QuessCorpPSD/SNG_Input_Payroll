@@ -1,0 +1,151 @@
+<div class="page-wrapper">
+    <div class="scrollable-content">
+        <mat-card-title class="main-header">
+            Partial Salary Release Status
+        </mat-card-title>
+        <div class="container py-2">
+            <div class="row g-3 align-items-end">
+
+                <div class="col-md-3">
+                    <label class="form-label">From Date: <span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" [(ngModel)]="startDate" />
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">To Date: <span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" [(ngModel)]="endDate" />
+                </div>
+                <div class="col-md-2 d-flex gap-2">
+
+                    <!-- Search -->
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
+                        matTooltip="Search" (click)="onSearch()">
+
+                        <mat-icon>search</mat-icon>
+
+                    </button>
+
+                    <!-- Export -->
+
+                    <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="Export To Excel" (click)="exportToExcel()">
+
+                        <mat-icon>download</mat-icon>
+
+                    </button>
+
+                    <!-- Hidden File Upload -->
+
+                    <input type="file" #fileInput style="display: none;" (change)="onFileChange($event)"
+                        accept=".xlsx,.xls" />
+
+                    <!-- Import -->
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
+                        matTooltip="Import" (click)="ImportClick(fileInput)">
+
+                        <mat-icon>cloud_upload</mat-icon>
+
+                    </button>
+
+                    <!-- Template Download -->
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                        matTooltip="Template" (click)="DownloadTemplate()">
+
+                        <mat-icon>cloud_download</mat-icon>
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="table-container" style="top:30px; ">
+                <div class="table-scroll-window">
+                    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+                        <ng-container matColumnDef="select">
+                            <mat-header-cell *matHeaderCellDef>
+                                <mat-checkbox (change)="masterToggle($event)" [checked]="isAllSelected()"
+                                    [indeterminate]="selectedRows.length > 0 && selectedRows.length < dataSource.data.length">
+                                </mat-checkbox>
+                            </mat-header-cell>
+
+                            <mat-cell *matCellDef="let element">
+                                <mat-checkbox [(ngModel)]="element.isSelected" (change)="toggleRow(element)">
+                                </mat-checkbox>
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- SI No -->
+                        <ng-container matColumnDef="SINo">
+                            <mat-header-cell *matHeaderCellDef> SI No </mat-header-cell>
+                            <mat-cell *matCellDef="let element; let i = index"> {{ i + 1 }} </mat-cell>
+                        </ng-container>
+
+                        <!-- Entity -->
+                        <ng-container matColumnDef="Entity">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Entity </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{ element.Entity }} </mat-cell>
+                        </ng-container>
+
+                        <!-- Company Code -->
+                        <ng-container matColumnDef="CompanyCode">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Company Code </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{ element.Company_Code }} </mat-cell>
+                        </ng-container>
+
+                        <!-- Company Name -->
+                        <ng-container matColumnDef="CompanyName">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Company Name </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{ element.Company_Name }} </mat-cell>
+                        </ng-container>
+
+                        <!-- Pay Period -->
+                        <ng-container matColumnDef="PayPeriod">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Pay Period </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{ element.Pay_Period }} </mat-cell>
+                        </ng-container>
+
+                        <!-- Group Name -->
+                        <ng-container matColumnDef="GroupName">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Group Name </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{ element.Group_Name }} </mat-cell>
+                        </ng-container>
+
+                        <!-- Employee Code -->
+                        <ng-container matColumnDef="EmployeeCode">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Employee Code </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{ element.Employee_Code }} </mat-cell>
+                        </ng-container>
+
+                        <!-- Employee Name -->
+                        <ng-container matColumnDef="EmployeeName">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Employee Name </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{ element.Employee_Name }} </mat-cell>
+                        </ng-container>
+
+                        <!-- Net Pay -->
+                        <ng-container matColumnDef="NetPay">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Net Pay </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> ₹ {{ element.Net_Pay }} </mat-cell>
+                        </ng-container>
+
+                        <!-- Header Row -->
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+                        <!-- Data Row -->
+                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                    </table>
+                </div>
+
+                <div *ngIf="dataSource.data.length===0" class="text-center p-4">
+                    <p class="text-muted">No data to display</p>
+                </div>
+
+                <mat-paginator #paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons
+                    style="border-top: 1px solid #ddd;">
+                </mat-paginator>
+            </div>
+        </div>
+    </div>
+</div>

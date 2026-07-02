@@ -1,0 +1,232 @@
+<div class="page-wrapper">
+
+    <div class="scrollable-content">
+
+        <div style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;">
+            Bank NEFT Culture</div>
+
+        <div class="container py-2">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Company Code/Name</label>
+                    <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+
+
+                </div>
+                <div class="col-md-2 d-flex gap-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
+                        matTooltip="Search" (click)="search()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                    <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="Export to Excel" (click)="exportToExcel()">
+                        <mat-icon>download</mat-icon>
+                    </button>
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-add" matTooltip="Add"
+                        (click)="AddPOOpen()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-wrapper1" *ngIf="showTable">
+                <div class="table-scrolls">
+
+                    <mat-table [dataSource]="uploadedDataSource" matSort
+                        class="custom-table mat-elevation-z8 auto-fit-table">
+
+                        <ng-container matColumnDef="Action">
+                            <mat-header-cell *matHeaderCellDef class="Action">
+                                Action
+                            </mat-header-cell>
+
+                            <mat-cell *matCellDef="let row" class="Action">
+                                <div class="action-wrapper">
+                                    <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                        matTooltip="Delete" (click)="deleteRow(row)">
+
+                                        <mat-icon>delete</mat-icon>
+
+                                    </button>
+
+                                    <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                        matTooltip="Edit" (click)="EditData(row)">
+
+                                        <mat-icon>edit</mat-icon>
+
+                                    </button>
+                                </div>
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- SNo -->
+                        <ng-container matColumnDef="SNo">
+                            <mat-header-cell *matHeaderCellDef class="sno">
+                                SNo
+                            </mat-header-cell>
+
+                            <mat-cell *matCellDef="let row" class="sno">
+                                {{ row.SNo }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Company Code -->
+                        <ng-container matColumnDef="Company Code">
+                            <mat-header-cell *matHeaderCellDef class="companycode">
+                                Company Code
+                            </mat-header-cell>
+
+                            <mat-cell *matCellDef="let row" class="companycode">
+                                {{ row.Company_Code }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Company Name -->
+                        <ng-container matColumnDef="Company Name">
+                            <mat-header-cell *matHeaderCellDef class="companyname">
+                                Company Name
+                            </mat-header-cell>
+
+                            <mat-cell *matCellDef="let row" class="companyname">
+                                {{ row.Client_Name }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Bank Name -->
+                        <ng-container matColumnDef="Bank Name">
+                            <mat-header-cell *matHeaderCellDef class="bankname">
+                                Bank Name
+                            </mat-header-cell>
+
+                            <mat-cell *matCellDef="let row" class="bankname">
+                                {{ row.Bank_Name }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+
+                        <mat-row *matRowDef="let row; columns: uploadDisplayedColumns;"></mat-row>
+
+                    </mat-table>
+
+                    <div *ngIf="uploadedDataSource.data.length === 0" class="text-center p-4">
+
+                        <p class="text-muted">No data to display</p>
+
+                    </div>
+
+                </div>
+
+                <mat-paginator [pageSize]="5" [pageSizeOptions]="[5,10,20]" showFirstLastButtons>
+                </mat-paginator>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="isAddclicked" class="popup-overlay">
+
+    <div class="popup-container">
+
+        <div class="popup-header">
+            <span>{{this.isEditMode?'Edit Bank Neft Culture': 'Add Bank Neft Culture'}}</span>
+
+            <button class="close-btn" (click)="closeclick()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+
+        <div class="popup-body">
+
+            <div class="form-group">
+                <label class="form-label text-muted small">
+                    Company Code <span class="required">*</span>
+                </label>
+
+                <companygstinvoice [CompanyId]="selectedCompany?.companyId" (companyEmit)="handleCompanyEvent($event)">
+                </companygstinvoice>
+            </div>
+            <input type="text" [(ngModel)]="searchText" (keyup)="applyFilters()" placeholder="Search"
+                style="border: 1px solid #ddd; outline: none; width: 40%; display: flex;
+                   justify-content: flex-end !important; align-items: flex-end; margin-left: auto; margin-bottom: 10px; height: 30px; border-radius: 12px; font-size: 12px; background-color: transparent;" />
+            <div class="table-wrapper2">
+
+                <div class="table-scrolls">
+
+                    <mat-table [dataSource]="DataSource" class="custom-table mat-elevation-z2">
+
+                        <ng-container matColumnDef="Select">
+
+                            <mat-header-cell *matHeaderCellDef class="checkbox-col">
+
+                                <mat-checkbox (change)="masterToggle()" [checked]="isAllSelected()"
+                                    [indeterminate]="selection.hasValue() && !isAllSelected()">
+                                </mat-checkbox>
+
+                            </mat-header-cell>
+
+                            <mat-cell *matCellDef="let row" class="checkbox-col">
+
+                                <mat-checkbox (click)="$event.stopPropagation()" (change)="selection.toggle(row)"
+                                    [checked]="selection.isSelected(row)">
+                                </mat-checkbox>
+
+                            </mat-cell>
+
+                        </ng-container>
+
+                        <ng-container matColumnDef="BankName">
+
+                            <mat-header-cell *matHeaderCellDef>
+                                Bank Name
+                            </mat-header-cell>
+
+                            <mat-cell *matCellDef="let row" class="bankname">
+
+                                {{row.Bank_Name}}
+
+                            </mat-cell>
+
+                        </ng-container>
+
+                        <!-- Header Row -->
+                        <mat-header-row *matHeaderRowDef="displayedColumns">
+                        </mat-header-row>
+
+                        <!-- Data Row -->
+                        <mat-row *matRowDef="let row; columns: displayedColumns;">
+                        </mat-row>
+
+                    </mat-table>
+
+                    <!-- No Data -->
+                    <div *ngIf="DataSource.data.length === 0" class="no-data">
+                        No data to display
+                    </div>
+
+                </div>
+
+                <!-- <mat-paginator  [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                </mat-paginator> -->
+
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="popup-footer">
+            <button class="cancel-btn" (click)="closeclick()">
+                Cancel
+            </button>
+
+            <button class="save-btn" (click)="SaveData()">
+                {{this.isEditMode ? 'Update' :'Save'}}
+            </button>
+
+
+        </div>
+
+    </div>
+
+</div>

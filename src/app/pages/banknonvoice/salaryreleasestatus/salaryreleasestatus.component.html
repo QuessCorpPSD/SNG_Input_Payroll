@@ -1,0 +1,248 @@
+<div *ngIf="showPopup" class="overlay">
+    <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+        (close)="showPopup = false"></app-alertpopup>
+</div>
+
+<div class="row gap-3 py-2">
+    <div class="justify-content-between align-items-center mb-3">
+        <mat-card-title
+            style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 600;padding-left: 12px;">Salary
+            Release Status
+        </mat-card-title>
+        <div class="container py-2">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Company Code</label>
+                    <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Pay Period</label>
+                    <PayPeriod [selectedCompanyId]="companyId" [payPeriodType]="payPeriodTypefromParentall"
+                        (payperiodEmit)="handlePayperiodEvent($event)"></PayPeriod>
+                </div>
+                <div class="col-md-3">
+                    <label for="StartDate" class="form-label text-muted small">Start Date</label>
+                    <input type="Date" id="StartDate" [(ngModel)]="startDate" class="form-control form-control-sm" />
+                </div>
+                <div class="col-md-3">
+                    <label for="EndDate" class="form-label text-muted small">End Date</label>
+                    <input type="Date" id="EndDate" [(ngModel)]="endDate" class="form-control form-control-sm" />
+                </div>
+                <div class="col-md-3">
+                    <label for="EmployeeCode" class="form-label text-muted small">Employee Code</label>
+                    <input type="text" id="EmployeeCode" class="form-control form-control-sm" />
+                </div>
+                <div class="col-md-3 d-flex gap-2 button-group" style="flex-wrap: nowrap;">
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
+                        matTooltip="Search" (click)="searchClick()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-secondary"
+                        matTooltip="ExportToExcel" (click)="exportToExcel()">
+                        <mat-icon>download</mat-icon>
+                    </button>
+
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
+                        matTooltip="Upload" (click)="ImportClick(fileInput)">
+                        <mat-icon>cloud_upload</mat-icon>
+                    </button>
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                        matTooltip="Download">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button>
+
+                    <input type="file" #fileInput style="display: none;" (click)="fileInput.value=''"
+                        (change)="onFileChange($event)" accept=".xlsx, .xls" />
+                </div>
+
+            </div>
+        </div>
+        <div *ngIf="istablevisible"
+            style="width: 100%;display: flex;justify-content: flex-end; align-items: flex-end;padding-right: 20px;    margin-top: 15px;  ">
+            <!-- <div
+                style="display: flex;align-items: center;border-radius: 10px;border: 1px solid #7E7E7E;width: 180px;height: 30px; background-color: white; padding: 0 10px;">
+                <i style="margin-right: 6px; display: flex;">
+                </i>
+                <input type="text" [(ngModel)]="searchText" (keyup.enter)="applyFilter()" placeholder="Search"
+                    style="border: none;outline: none;flex: 1; font-size: 12px;background-color: transparent;" />
+            </div> -->
+        </div>
+        <div *ngIf="isLoading" class="loading-overlay">
+            <img src="assets/Loading.gif" alt="Loading...">
+        </div>
+        <div class="card-body rounded-4 py-0" *ngIf="istablevisible">
+            <div class="example-container mat-elevation-z8">
+                <table mat-table #searchgrid [dataSource]="dataSource" matSort class="custom-table mat-elevation-z8">
+
+                    <ng-container matColumnDef="SINo">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">SI No</div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.SINo }}</div>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="CompanyCode">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">Company Code</div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.CompanyCode }}</div>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="EmployeeCode">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">Company Name</div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.EmployeeCode }}</div>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="EmployeeName">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">Employee Name</div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.EmployeeName }}</div>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="PayPeriod">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">Pay Period</div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.PayPeriod }}</div>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="ReleaseStatus">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">Release Status</div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.ReleaseStatus }}</div>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="BatchId">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">Batch Id</div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.BatchId }}</div>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="BatchCreatedBy">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">Batch Created By</div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.BatchCreatedBy }}</div>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="BatchCreatedOn">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">Batch Created On</div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.BatchCreatedOn }}</div>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="IkyaLocation">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">Ikya Location</div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.IkyaLocation }}</div>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="WorkLocation">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">Work Location</div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.WorkLocation }}</div>
+                        </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="Bank">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">Bank</div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.Bank }}</div>
+                        </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="AccountNumber">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">Account Number</div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.AccountNumber }}</div>
+                        </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="IFSCCode">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">IFSC Code</div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.IFSCCode }}</div>
+                        </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="PTState">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">PT State</div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.PTState }}</div>
+                        </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="NetPay">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">Net Pay</div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.NetPay }}</div>
+                        </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="BankRefNo">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">Bank Ref No</div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.BankRefNo }}</div>
+                        </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="UTRChequeNo">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">UTR/ChequeNo</div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.UTRChequeNo }}</div>
+                        </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="UTRDate">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <div class="cell-center">UTR Date</div>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div class="cell-center">{{ element.UTRDate }}</div>
+                        </mat-cell>
+                    </ng-container>
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row;let i = index;  columns: displayedColumns;"></mat-row>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
