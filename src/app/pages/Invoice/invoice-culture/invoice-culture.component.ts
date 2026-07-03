@@ -164,13 +164,13 @@ export class InvoiceCultureComponent implements AfterViewInit {
       SheetNames: ['InvoiceCulture']
     };
 
-    const buffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+    // const buffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
 
-    const blob = new Blob([buffer], {
-      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    });
+    // const blob = new Blob([buffer], {
+    //   type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    // });
 
-    FileSaver.saveAs(blob, `InvoiceCulture_Template.xlsx`);
+    XLSX.writeFile(wb, `InvoiceCulture_Template.xlsx`);
   }
   FileUpload(fileInput: HTMLInputElement): void {
     this.isLoading = true;
@@ -225,10 +225,11 @@ export class InvoiceCultureComponent implements AfterViewInit {
       SheetNames: ['Sheet1']
     };
 
-    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
-    const fileName = `${templateId}.xlsx`;
-    FileSaver.saveAs(blob, fileName);
+    // const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    // const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+     const fileName = `${templateId}.xlsx`;
+    // FileSaver.saveAs(blob, fileName);
+    XLSX.writeFile(workbook, fileName);
   }
 
   deleteClick(invoiceCulture_id: number, invoiceType: string) {

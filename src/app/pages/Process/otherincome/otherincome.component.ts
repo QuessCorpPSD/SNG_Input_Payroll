@@ -326,11 +326,12 @@ export class OtherincomeComponent {
       SheetNames: ['otherincome']
     };
 
-    const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+   // const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
     alert('downloaded successfully')
-    const blob = new Blob([buffer], { type: 'application/octet-stream' });
+    // const blob = new Blob([buffer], { type: 'application/octet-stream' });
 
-    FileSaver.saveAs(blob, `otherincome_Template_${Date.now()}.xlsx`);
+    // FileSaver.saveAs(blob, `otherincome_Template_${Date.now()}.xlsx`);
+    XLSX.writeFile(workbook, `otherincome_Template_${Date.now()}.xlsx`);
     this.isLoading = false;
   }
   setPaginatedData() {

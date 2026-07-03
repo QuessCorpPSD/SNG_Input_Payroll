@@ -1500,8 +1500,8 @@ export class AddservicechargemasterComponent {
       SheetNames: ['Table']
     };
 
-    const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    const blob = new Blob([buffer], { type: 'application/octet-stream' });
+    // const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    // const blob = new Blob([buffer], { type: 'application/octet-stream' });
 
     const today = new Date();
 
@@ -1510,7 +1510,9 @@ export class AddservicechargemasterComponent {
       (today.getMonth() + 1).toString().padStart(2, '0') + '_' +
       today.getFullYear();
 
-    FileSaver.saveAs(blob, `ServiceFeeBillToRate_${formattedDate}.xlsx`);
+    XLSX.writeFile(workbook,`ServiceFeeBillToRate_${formattedDate}.xlsx`);
+
+    // FileSaver.saveAs(blob, `ServiceFeeBillToRate_${formattedDate}.xlsx`);
   }
 
 

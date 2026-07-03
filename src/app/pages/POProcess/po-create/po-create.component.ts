@@ -286,9 +286,10 @@ export class PoCreateComponent {
           SheetNames: ['BULKPO']
         };
 
-        const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-        const blob = new Blob([buffer], { type: 'application/octet-stream' });
-        FileSaver.saveAs(blob, `MAINPO_Template_${Date.now()}.xlsx`);
+        // const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+        // const blob = new Blob([buffer], { type: 'application/octet-stream' });
+        // FileSaver.saveAs(blob, `MAINPO_Template_${Date.now()}.xlsx`);
+        XLSX.writeFile(workbook, `MAINPO_Template_${Date.now()}.xlsx`);
       },
       error: err => {
         console.error('Error downloading template', err);

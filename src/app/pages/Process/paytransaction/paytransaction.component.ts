@@ -389,10 +389,11 @@ export class PaytransactionComponent {
       SheetNames: ['Table']
     };
 
-    const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    const blob = new Blob([buffer], { type: 'application/octet-stream' });
+    // const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    // const blob = new Blob([buffer], { type: 'application/octet-stream' });
 
-    FileSaver.saveAs(blob, `PayTransaction_${Date.now()}.xlsx`)
+    // FileSaver.saveAs(blob, `PayTransaction_${Date.now()}.xlsx`)
+    XLSX.writeFile(workbook, `PayTransaction_${Date.now()}.xlsx`);
   }
 
   AddpaytransactionOpen() {

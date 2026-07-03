@@ -398,11 +398,12 @@ export class TimesheetComponent {
       SheetNames: ['Attendance']
     };
 
-    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+    // const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    // const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
 
     const fileName = `${templateId}.xlsx`;
-    FileSaver.saveAs(blob, fileName);
+    // FileSaver.saveAs(blob, fileName);
+    XLSX.writeFile(workbook, fileName);
   }
 
   submitExcelData(): void {

@@ -206,11 +206,12 @@ export class BonusflushComponent {
       const fileName = `BonusFlush_${fromDate}_to_${toDate}.xlsx`;
 
       // Export the file
-      const excelBuffer: any = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
-      const blob = new Blob([excelBuffer], {
-        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      });
-      saveAs(blob, fileName);
+      // const excelBuffer: any = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+      // const blob = new Blob([excelBuffer], {
+      //   type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      // });
+      // saveAs(blob, fileName);
+      XLSX.writeFile(workbook, fileName);
 
       this.showAlertPopup('Success', 'Excel file downloaded successfully!');
     } catch (err) {
@@ -263,9 +264,10 @@ export class BonusflushComponent {
           SheetNames: ['BonusFlush']
         };
 
-        const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-        const blob = new Blob([buffer], { type: 'application/octet-stream' });
-        FileSaver.saveAs(blob, `BonusFlush_${Date.now()}.xlsx`);
+        // const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+        // const blob = new Blob([buffer], { type: 'application/octet-stream' });
+        // FileSaver.saveAs(blob, `BonusFlush_${Date.now()}.xlsx`);
+        XLSX.writeFile(workbook, `BonusFlush_${Date.now()}.xlsx`);
         this.isLoading = false;
       },
       error: err => {

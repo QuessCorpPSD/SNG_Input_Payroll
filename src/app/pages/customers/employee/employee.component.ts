@@ -454,10 +454,12 @@ export class EmployeeComponent {
       SheetNames: ['Table']
     };
 
-    const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    const blob = new Blob([buffer], { type: 'application/octet-stream' });
+    XLSX.writeFile(workbook, 'Employee_Master_Template.xlsx');
 
-    FileSaver.saveAs(blob, `Employee_Master_Template.xlsx`)
+    // const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    // const blob = new Blob([buffer], { type: 'application/octet-stream' });
+
+    // FileSaver.saveAs(blob, `Employee_Master_Template.xlsx`)
   }
 
   downloadSalaryTemplate() {
@@ -479,10 +481,11 @@ export class EmployeeComponent {
       SheetNames: ['Table']
     };
 
-    const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    const blob = new Blob([buffer], { type: 'application/octet-stream' });
+    XLSX.writeFile(workbook, 'New_Joinee_Salary_Template.xlsx');
+    // const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    // const blob = new Blob([buffer], { type: 'application/octet-stream' });
 
-    FileSaver.saveAs(blob, `New_Joinee_Salary_Template.xlsx`)
+    // FileSaver.saveAs(blob, `New_Joinee_Salary_Template.xlsx`)
   }
 
 }

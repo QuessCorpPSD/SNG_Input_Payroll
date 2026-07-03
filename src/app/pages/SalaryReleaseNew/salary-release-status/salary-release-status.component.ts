@@ -126,6 +126,8 @@ export class SalaryReleaseStatusComponent {
     this.dataSource.filter = filterValue;
 
   }
+
+  
   searchClick() {
     this.istablevisible = true;
     this.dataSource.data = [];

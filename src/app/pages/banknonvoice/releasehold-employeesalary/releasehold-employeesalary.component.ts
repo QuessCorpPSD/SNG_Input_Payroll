@@ -262,6 +262,7 @@ export class ReleaseholdEmployeesalaryComponent {
 
           if (!res?.Data?.data?.Table0 || res.Data.data.Table0.length === 0) {
             alert('No data to export');
+            this.isLoading = false;
             return;
           }
 
@@ -277,18 +278,21 @@ export class ReleaseholdEmployeesalaryComponent {
               SheetNames: ['Sheet1']
             };
 
-            const excelBuffer = xlsx.write(workbook, {
-              bookType: 'xlsx',
-              type: 'array'
-            });
+            xlsx.writeFile(workbook,'ReleaseHoldSalary.xlsx');
+            alert('Export completed successfully.');
 
-            const blob = new Blob([excelBuffer], {
-              type: 'application/octet-stream'
-            });
+            // const excelBuffer = xlsx.write(workbook, {
+            //   bookType: 'xlsx',
+            //   type: 'array'
+            // });
 
-            import('file-saver').then(fs => {
-              fs.saveAs(blob, 'ReleaseHoldSalary.xlsx');
-            });
+            // const blob = new Blob([excelBuffer], {
+            //   type: 'application/octet-stream'
+            // });
+
+            // import('file-saver').then(fs => {
+            //   fs.saveAs(blob, 'ReleaseHoldSalary.xlsx');
+            // });
 
           });
 
@@ -325,16 +329,17 @@ export class ReleaseholdEmployeesalaryComponent {
         const worksheet = XLSX.utils.json_to_sheet(data);
 
         const workbook: XLSX.WorkBook = {
-          Sheets: { 'HoldReleaseRequestNI': worksheet },   // ✅ CHANGED
-          SheetNames: ['HoldReleaseRequestNI']             // ✅ CHANGED
+          Sheets: { 'HoldReleaseRequestNI': worksheet },   
+          SheetNames: ['HoldReleaseRequestNI']             
         };
 
-        const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-        const blob = new Blob([buffer], { type: 'application/octet-stream' });
+        XLSX.writeFile(workbook,'HoldReleaseRequestNI_Template.xlsx');
+        // const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+        // const blob = new Blob([buffer], { type: 'application/octet-stream' });
 
-        FileSaver.saveAs(blob, 'HoldReleaseRequestNI_Template.xlsx'); // ✅ CHANGED
-
+        // FileSaver.saveAs(blob, 'HoldReleaseRequestNI_Template.xlsx');
         this.isLoading = false;
+        alert('Template downloaded successfully.');
       },
       error: err => {
         console.error('Error downloading template', err);

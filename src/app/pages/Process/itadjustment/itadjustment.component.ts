@@ -364,10 +364,11 @@ export class ITAdjustmentComponent {
       SheetNames: ['IT Adjustment']
     };
 
-    const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    const blob = new Blob([buffer], { type: 'application/octet-stream' });
+    // const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    // const blob = new Blob([buffer], { type: 'application/octet-stream' });
 
-    FileSaver.saveAs(blob, `ITAdjustment_Template_${Date.now()}.xlsx`);
+    // FileSaver.saveAs(blob, `ITAdjustment_Template_${Date.now()}.xlsx`);
+    XLSX.writeFile(workbook, `ITAdjustment_Template_${Date.now()}.xlsx`);
     this.isLoading = false;
   }
   onDeleteITAdjustment(row: any) {

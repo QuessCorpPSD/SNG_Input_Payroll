@@ -213,6 +213,7 @@ import { HoldEmployeeSalaryComponent } from './pages/banknonvoice/hold-employee-
 import { ReleaseholdEmployeesalaryComponent } from './pages/banknonvoice/releasehold-employeesalary/releasehold-employeesalary.component';
 import { UtrDetailsComponent } from './pages/banknonvoice/utr-details/utr-details.component';
 import { DownloadbatchbanknonvoiceComponent } from './pages/banknonvoice/downloadbatchbanknonvoice/downloadbatchbanknonvoice.component';
+import { PartialHoldReleaseEmployeeSalaryComponent } from './pages/banknonvoice/partial-hold-release-employee-salary/partial-hold-release-employee-salary.component';
 
 export const routes: Routes = [
   {
@@ -248,7 +249,8 @@ export const routes: Routes = [
           { path: 'EmployeeSalaryRelease', component: EmployeeSalaryReleaseComponent },
           { path: 'HoldEmployeeSalary', component: HoldEmployeeSalaryComponent },
           { path: 'ReleaseholdEmployeesalary', component: ReleaseholdEmployeesalaryComponent },
-          { path: 'UtrDetails', component: UtrDetailsComponent }
+          { path: 'UtrDetails', component: UtrDetailsComponent },
+          { path: 'PartialHoldReleaseEmployeeSalary', component: PartialHoldReleaseEmployeeSalaryComponent },
           
         ]
       },

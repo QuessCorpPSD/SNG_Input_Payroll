@@ -412,13 +412,17 @@ export class EmployeeSalaryReleaseComponent {
           Sheets: { 'SalaryRequestNI': worksheet },
           SheetNames: ['SalaryRequestNI']
         };
-
-        const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-        const blob = new Blob([buffer], { type: 'application/octet-stream' });
-
-        FileSaver.saveAs(blob, 'SalaryRequestNI_Template.xlsx'); 
-
         this.isLoading = false; 
+        XLSX.writeFile(workbook,'SalaryRequestNI_Template.xlsx');
+        alert('Template downloaded successfully.');
+        
+
+        // const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+        // const blob = new Blob([buffer], { type: 'application/octet-stream' });
+
+        // FileSaver.saveAs(blob, 'SalaryRequestNI_Template.xlsx'); 
+
+        
       },
       error: err => {
         console.error('Error downloading template', err);
