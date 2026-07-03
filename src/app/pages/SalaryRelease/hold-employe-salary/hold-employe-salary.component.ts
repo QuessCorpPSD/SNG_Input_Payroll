@@ -247,9 +247,10 @@ export class HoldEmployeSalaryComponent {
           SheetNames: ['Holdemployeesalary']
         };
 
-        const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-        const blob = new Blob([buffer], { type: 'application/octet-stream' });
-        FileSaver.saveAs(blob, `Holdemployeesalary_${Date.now()}.xlsx`);
+        // const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+        // const blob = new Blob([buffer], { type: 'application/octet-stream' });
+        // FileSaver.saveAs(blob, `Holdemployeesalary_${Date.now()}.xlsx`);
+        XLSX.writeFile(workbook, `Holdemployeesalary_${Date.now()}.xlsx`);
         this.isLoading = false;
       },
       error: err => {

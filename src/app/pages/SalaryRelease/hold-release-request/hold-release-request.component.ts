@@ -225,14 +225,16 @@ export class HoldReleaseRequestComponent {
           const dateStr = today.toISOString().split("T")[0];
           const fileName = `HoldRelease_Report_${dateStr}.xlsx`;
 
-          const excelBuffer: any = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+          //const excelBuffer: any = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
           // console.log('excelBuffer', excelBuffer);
           this.isLoading = false;
-          const blob = new Blob([excelBuffer], {
-            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-          });
+          // const blob = new Blob([excelBuffer], {
+          //   type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          // });
 
-          saveAs(blob, fileName);
+          // saveAs(blob, fileName);
+
+          XLSX.writeFile(workbook, fileName);
 
         } catch (err) {
           console.error("Failed to parse JSON or create Excel file:", err);
@@ -270,9 +272,10 @@ export class HoldReleaseRequestComponent {
           SheetNames: ['HoldReleaseRequest']
         };
 
-        const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-        const blob = new Blob([buffer], { type: 'application/octet-stream' });
-        FileSaver.saveAs(blob, `HoldReleaseRequest_${Date.now()}.xlsx`);
+        // const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+        // const blob = new Blob([buffer], { type: 'application/octet-stream' });
+        // FileSaver.saveAs(blob, `HoldReleaseRequest_${Date.now()}.xlsx`);
+        XLSX.writeFile(workbook, `HoldReleaseRequest_${Date.now()}.xlsx`);
         this.isLoading = false;
       },
       error: err => {

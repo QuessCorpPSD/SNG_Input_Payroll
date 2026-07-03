@@ -422,10 +422,11 @@ export class HoldEmployeeSalaryComponent {
           SheetNames: ['HoldRequestNI']
         };
 
-        const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-        const blob = new Blob([buffer], { type: 'application/octet-stream' });
+        XLSX.writeFile(workbook,'HoldRequestNI_Template.xlsx');
+        // const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+        // const blob = new Blob([buffer], { type: 'application/octet-stream' });
 
-        FileSaver.saveAs(blob, 'HoldRequestNI_Template.xlsx'); // ✅ clean name
+        // FileSaver.saveAs(blob, 'HoldRequestNI_Template.xlsx'); // ✅ clean name
 
         this.isLoading = false;
       },

@@ -298,10 +298,11 @@ export class InvoiceCultureAddpoComponent implements AfterViewInit {
       Sheets: { 'Sheet1': worksheet },
       SheetNames: ['Sheet1']
     };
-    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+    // const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    // const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
     const fileName = `${templateId}.xlsx`;
-    FileSaver.saveAs(blob, fileName);
+    XLSX.writeFile(workbook, fileName);
+    // FileSaver.saveAs(blob, fileName);
   }
   setupFormListeners(): void {
     this.InvoiceCultureForm.get('InvoiceCategory')?.valueChanges.subscribe(value => {

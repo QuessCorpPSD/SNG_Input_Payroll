@@ -265,11 +265,12 @@ export class AttendanceComponent implements OnInit {
           const fileName = `Attendance_Process_${dateStr}.xlsx`;
 
           // Write workbook to file
-          const excelBuffer: any = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
-          const blob: Blob = new Blob([excelBuffer], {
-            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-          });
-          FileSaver.saveAs(blob, fileName);
+          // const excelBuffer: any = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+          // const blob: Blob = new Blob([excelBuffer], {
+          //   type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+          // });
+          // FileSaver.saveAs(blob, fileName);
+          XLSX.writeFile(workbook, fileName);
           this.isLoading = false;
 
         }

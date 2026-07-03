@@ -39,6 +39,7 @@ export class BankAdviseSplitCultureService implements IBankAdviseSplitCulture {
             payload
         );
     };
+    
     getsearcheditdata(payload: any): Observable<APIResponse> {
         return this.http.post<APIResponse>(
             `${this.env.apiUrl}Bankadvisesplitculture/getsearcheditdata`,

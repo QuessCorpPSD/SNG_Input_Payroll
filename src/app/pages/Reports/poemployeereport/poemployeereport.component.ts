@@ -114,10 +114,11 @@ export class PoemployeereportComponent {
       Sheets: { 'Sheet1': worksheet },
       SheetNames: ['Sheet1']
     };
-    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+    // const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    // const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
     const fileName = `${templateId}.xlsx`;
-    FileSaver.saveAs(blob, fileName);
+    // FileSaver.saveAs(blob, fileName);
+    XLSX.writeFile(workbook, fileName);
   }
 
   ClearClick(): void {

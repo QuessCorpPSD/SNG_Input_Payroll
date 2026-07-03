@@ -371,12 +371,13 @@ export class HolidaymasterComponent {
       SheetNames: ['HolidayMaster']
     };
 
-    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+    // const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    // const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
 
-    var fileName;
-    fileName = `Holiday_Master_Template.xlsx`;
-    FileSaver.saveAs(blob, fileName);
+     var fileName;
+     fileName = `Holiday_Master_Template.xlsx`;
+    // FileSaver.saveAs(blob, fileName);
+    XLSX.writeFile(workbook, fileName);
   }
 
   ImportClick(fileInput: HTMLInputElement): void {

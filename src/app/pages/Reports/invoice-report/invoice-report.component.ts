@@ -217,10 +217,11 @@ export class InvoiceReportComponent {
           SheetNames: ['InvoiceSummary']
         };
 
-        const buffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-        const blob = new Blob([buffer], { type: 'application/octet-stream' });
+        // const buffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+        // const blob = new Blob([buffer], { type: 'application/octet-stream' });
 
-        FileSaver.saveAs(blob, `InvoiceSummary_${Date.now()}.xlsx`);
+        // FileSaver.saveAs(blob, `InvoiceSummary_${Date.now()}.xlsx`);
+        XLSX.writeFile(wb, `InvoiceSummary_${Date.now()}.xlsx`);
 
         this.alert("Success", "Excel exported successfully!");
         this.isLoading = false;

@@ -335,10 +335,11 @@ export class LockpayperiodComponent {
       SheetNames: ['LockPayPeriod']
     };
 
-    const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    const blob = new Blob([buffer], { type: 'application/octet-stream' });
+    // const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    // const blob = new Blob([buffer], { type: 'application/octet-stream' });
 
-    FileSaver.saveAs(blob, `LockPayPeriod_${Date.now()}.xlsx`)
+    // FileSaver.saveAs(blob, `LockPayPeriod_${Date.now()}.xlsx`)
+    XLSX.writeFile(workbook, `LockPayPeriod_${Date.now()}.xlsx`);
   }
 
   AddLockPayPeriodOpen(rowData: any) {

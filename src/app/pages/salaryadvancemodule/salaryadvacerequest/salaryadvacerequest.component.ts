@@ -212,9 +212,10 @@ export class SalaryadvacerequestComponent {
           SheetNames: ['Salaryadvancerequest']
         };
 
-        const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-        const blob = new Blob([buffer], { type: 'application/octet-stream' });
-        FileSaver.saveAs(blob, `SalaryAdvanceRequest_${Date.now()}.xlsx`);
+        // const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+        // const blob = new Blob([buffer], { type: 'application/octet-stream' });
+        // FileSaver.saveAs(blob, `SalaryAdvanceRequest_${Date.now()}.xlsx`);
+        XLSX.writeFile(workbook, `SalaryAdvanceRequest_${Date.now()}.xlsx`);
       },
       error: err => {
         console.error('Error downloading template', err);

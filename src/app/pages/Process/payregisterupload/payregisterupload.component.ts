@@ -182,16 +182,17 @@ export class PayregisteruploadComponent {
           return;
         }
 
-        const buffer = XLSX.write(workbook, {
-          bookType: 'xlsx',
-          type: 'array'
-        });
+        // const buffer = XLSX.write(workbook, {
+        //   bookType: 'xlsx',
+        //   type: 'array'
+        // });
 
-        const blob = new Blob([buffer], {
-          type: 'application/octet-stream'
-        });
+        // const blob = new Blob([buffer], {
+        //   type: 'application/octet-stream'
+        // });
 
-        FileSaver.saveAs(blob, `PayRegisterUpload_Response.xlsx`);
+        // FileSaver.saveAs(blob, `PayRegisterUpload_Response.xlsx`);
+        XLSX.writeFile(workbook, `PayRegisterUpload_Response.xlsx`);
       },
 
       error: () => {
@@ -278,16 +279,17 @@ export class PayregisteruploadComponent {
           return;
         }
 
-        const buffer = XLSX.write(workbook, {
-          bookType: 'xlsx',
-          type: 'array'
-        });
+        // const buffer = XLSX.write(workbook, {
+        //   bookType: 'xlsx',
+        //   type: 'array'
+        // });
 
-        const blob = new Blob([buffer], {
-          type: 'application/octet-stream'
-        });
+        // const blob = new Blob([buffer], {
+        //   type: 'application/octet-stream'
+        // });
 
-        FileSaver.saveAs(blob, `PayRegisterUpload_Template.xlsx`);
+        // FileSaver.saveAs(blob, `PayRegisterUpload_Template.xlsx`);
+        XLSX.writeFile(workbook, `PayRegisterUpload_Template.xlsx`);
       },
 
       error: () => {
@@ -313,10 +315,11 @@ export class PayregisteruploadComponent {
       SheetNames: ['PayRegisterUpload']
     };
 
-    const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    const blob = new Blob([buffer], { type: 'application/octet-stream' });
+    // const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    // const blob = new Blob([buffer], { type: 'application/octet-stream' });
 
-    FileSaver.saveAs(blob, `PayRegisterUpload_${Date.now()}.xlsx`)
+    // FileSaver.saveAs(blob, `PayRegisterUpload_${Date.now()}.xlsx`)
+    XLSX.writeFile(workbook, `PayRegisterUpload_${Date.now()}.xlsx`);
   }
 
 

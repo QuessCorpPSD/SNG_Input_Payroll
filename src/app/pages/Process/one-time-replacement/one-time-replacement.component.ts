@@ -289,9 +289,10 @@ export class OneTimeReplacementComponent {
     const ws = XLSX.utils.json_to_sheet(templateData);
     const wb = { Sheets: { 'onetimereplacement': ws }, SheetNames: ['onetimereplacement'] };
 
-    const buffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-    const blob = new Blob([buffer], { type: 'application/octet-stream' });
-    FileSaver.saveAs(blob, `onetimereplacement_Template_${Date.now()}.xlsx`);
+    // const buffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+    // const blob = new Blob([buffer], { type: 'application/octet-stream' });
+    // FileSaver.saveAs(blob, `onetimereplacement_Template_${Date.now()}.xlsx`);
+    XLSX.writeFile(wb, `onetimereplacement_Template_${Date.now()}.xlsx`);
 
   }
 

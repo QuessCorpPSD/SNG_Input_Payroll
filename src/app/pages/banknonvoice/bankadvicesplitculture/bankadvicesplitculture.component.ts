@@ -44,7 +44,7 @@ export class BankadvicesplitcultureComponent {
   uploadedDataSource = new MatTableDataSource<any>(this.uploadedData);
   displayedColumns: string[] = ['select', 'groupName'];
 
-  uploadedDataSource1 = new MatTableDataSource([]);
+  uploadedDataSource1 = new MatTableDataSource<any>([]);
 
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -159,6 +159,54 @@ export class BankadvicesplitcultureComponent {
     this.filteredVendors = [];
     this.selectedVendor = null;
     this.isAddClicked = false;
+    this.iseditClicked = false;
+    this.selectedCompanyId = '';
+    this.selectedVendor = null;
+    this.addBankAdviceSplitForm.get('CompanyCode')?.enable();
+  }
+
+  onEdit(row: any) {
+    this.isAddClicked = true;
+    this.iseditClicked = true;
+    this.selectedRowSlNo = row.Sl_No;
+    console.log(row);
+    this.selectedCompanyId = row.Company_Id;
+    this.selectedVendor = {
+      Vendor_Id: row.Vendor_Id,
+      Vendor_Name: row.Vendor_Name
+    };
+
+    this.addBankAdviceSplitForm.get('CompanyCode')?.disable();
+    this.addBankAdviceSplitForm.patchValue({
+      CompanyCode: row.Company_Code,
+      SplitType: row.Culture_Type
+    });
+
+    this.uploadedDataSource1.data = [
+      {
+        Group_Name: row.Group_Name,
+        select: true,
+        Group_Detail_Id: row.Group_Detail_Id
+      }
+    ];
+
+  }
+
+  onDelete(row: any) {
+    if (!confirm('Are you sure you want to delete this record?')) {
+      return;
+    }
+
+    const payload = {
+      Company_Id: row.Company_Id,
+      vendor_id: row.Vendor_Id,
+      groupdetail: [{ Group_Detail_Id: row.Group_Detail_Id }],
+      culture_type: row.Culture_Type,
+      created_by: this.userdetail.user_Id,
+      Bank_Culture_id: 0,
+      mode: 'Delete'
+    };
+
   }
 
   onsearch(): void {
@@ -281,7 +329,7 @@ export class BankadvicesplitcultureComponent {
 
     var formdata = this.addBankAdviceSplitForm.value;
 
-    const groupdetail = selectedGroups.map(id => ({
+    const groupdetail = selectedGroups.map((id: any) => ({
       Group_Detail_Id: id
     }));
 
@@ -292,7 +340,7 @@ export class BankadvicesplitcultureComponent {
       culture_type: formdata.SplitType,
       created_by: this.userdetail.user_Id,
       Bank_Culture_id: 0,
-      mode: 'Add'
+      mode: this.iseditClicked ? 'Edit' : 'Add'
     };
 
     this.isLoading = true;
@@ -476,12 +524,14 @@ export class BankadvicesplitcultureComponent {
       const worksheet = xlsx.utils.json_to_sheet(data);
       const workbook = { Sheets: { 'Users': worksheet }, SheetNames: ['Users'] };
 
-      const excelBuffer = xlsx.write(workbook, {
-        bookType: 'xlsx',
-        type: 'array'
-      });
+      // const excelBuffer = xlsx.write(workbook, {
+      //   bookType: 'xlsx',
+      //   type: 'array'
+      // });
 
-      this.saveFile(excelBuffer, filename);
+      xlsx.writeFile(workbook,`${filename}_${new Date().getTime()}.xlsx`);
+
+      // this.saveFile(excelBuffer, filename);
     });
   }
 
@@ -491,12 +541,8 @@ export class BankadvicesplitcultureComponent {
         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
       });
 
-      FileSaver.saveAs(blob, `${filename}${new Date().getTime()}.xlsx`);
+      // FileSaver.saveAs(blob, `${filename}${new Date().getTime()}.xlsx`);
     });
-  }
-
-  onedit(){
-    
   }
 
 }

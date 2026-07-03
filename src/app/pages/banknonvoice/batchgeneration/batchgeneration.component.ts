@@ -305,7 +305,7 @@ export class BatchgenerationComponent implements OnInit {
       next: (res: any) => {
         this.isLoading = false;
 
-        alert(res?.Data.validation);
+        alert(res?.Data[0].validation || 'Group rejected successfully.');
         this.onSearch();
       },
       error: (err: any) => {
@@ -462,12 +462,12 @@ export class BatchgenerationComponent implements OnInit {
       const worksheet = xlsx.utils.json_to_sheet(data);
       const workbook = { Sheets: { 'Users': worksheet }, SheetNames: ['Users'] };
 
-      const excelBuffer = xlsx.write(workbook, {
-        bookType: 'xlsx',
-        type: 'array'
-      });
-
-      this.saveFile(excelBuffer, filename);
+      // const excelBuffer = xlsx.write(workbook, {
+      //   bookType: 'xlsx',
+      //   type: 'array'
+      // });
+      xlsx.writeFile(workbook,`${filename}_${new Date().getTime()}.xlsx`)
+      //this.saveFile(excelBuffer, filename);
     });
   }
 
@@ -477,7 +477,7 @@ export class BatchgenerationComponent implements OnInit {
         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
       });
 
-      FileSaver.saveAs(blob, `${filename}${new Date().getTime()}.xlsx`);
+      //FileSaver.saveAs(blob, `${filename}${new Date().getTime()}.xlsx`);
     });
   }
 

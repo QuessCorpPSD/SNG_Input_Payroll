@@ -278,20 +278,20 @@ export class CostCenterMappingComponent {
       { Map_Name: "", Company_Code: "", Cost_Center: "" }
     ];
 
-    const ws = XLSX.utils.json_to_sheet(templateData);
+    const workSheet = XLSX.utils.json_to_sheet(templateData);
 
-    const wb = {
-      Sheets: { 'Table': ws },
-      SheetNames: ['Table']
+    const workbook: XLSX.WorkBook = {
+      Sheets: { 'table': workSheet },
+      SheetNames: ['table']
     };
 
-    const buffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+    XLSX.writeFile(workbook, 'CostCenterMapping_Template.xlsx');
 
-    const blob = new Blob([buffer], {
-      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    });
+    // const blob = new Blob([buffer], {
+    //   type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    // });
 
-    FileSaver.saveAs(blob, `CostCenterMapping_Template_${Date.now()}.xlsx`);
+    // FileSaver.saveAs(blob, `CostCenterMapping_Template_${Date.now()}.xlsx`);
 
     // this.showAlertPopup("Template Downloaded Successfully!");
   }

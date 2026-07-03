@@ -196,10 +196,11 @@ export class AttendancebatchidUpdateComponent {
       SheetNames: ['Attendancebatchidupdate']
     };
 
-    const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    const blob = new Blob([buffer], { type: 'application/octet-stream' });
+    // const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    // const blob = new Blob([buffer], { type: 'application/octet-stream' });
 
-    FileSaver.saveAs(blob, `Attendancebatchid_Template_${Date.now()}.xlsx`);
+    // FileSaver.saveAs(blob, `Attendancebatchid_Template_${Date.now()}.xlsx`);
+    XLSX.writeFile(workbook, `Attendancebatchid_Template_${Date.now()}.xlsx`);
     this.isLoading = false;
   }
 

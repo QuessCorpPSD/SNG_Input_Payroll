@@ -1,0 +1,40 @@
+<div class="page-wrapper">
+
+    <div class="scrollable-content">
+        <div style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;">
+            Partial Hold/Release Employee Salary
+        </div>
+        <div class="container py-2">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Upload Type</label>
+                    <select class="form-select" [(ngModel)]="UploadType">
+                        <option value="">Select</option>
+                        <option value="Partial Hold Employee Salary">Partial Hold Employee Salary</option>
+                        <option value="Partial Hold Salary Release">Partial Hold Salary Release</option>
+                    </select>
+                </div>
+                <div class="col-md-2 d-flex gap-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
+                        (click)="ImportClick(fileInput)" matTooltip="Upload">
+                        <mat-icon>cloud_upload</mat-icon>
+                    </button>
+                    <input type="file" #fileInput style="display:none;" (click)="fileInput.value=''"
+                        (change)="onFileChange($event)" accept=".xlsx,.xls" />
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                        matTooltip="Download Template" (click)="onDownloadTemplate()">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>

@@ -241,13 +241,14 @@ export class UANReleaseComponent {
           const fileName = `UANRelease_Report_${dateStr}.xlsx`;
           this.isLoading = false;
 
-          const excelBuffer: any = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+          // const excelBuffer: any = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
 
-          const blob = new Blob([excelBuffer], {
-            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-          });
+          // const blob = new Blob([excelBuffer], {
+          //   type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          // });
 
-          saveAs(blob, fileName);
+          // saveAs(blob, fileName);
+          XLSX.writeFile(workbook, fileName);
           this.isLoading = false;
 
         } catch (err) {
@@ -294,9 +295,10 @@ export class UANReleaseComponent {
           SheetNames: ['UANRelease']
         };
 
-        const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-        const blob = new Blob([buffer], { type: 'application/octet-stream' });
-        FileSaver.saveAs(blob, `UANRelease_${Date.now()}.xlsx`);
+        // const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+        // const blob = new Blob([buffer], { type: 'application/octet-stream' });
+        // FileSaver.saveAs(blob, `UANRelease_${Date.now()}.xlsx`);
+        XLSX.writeFile(workbook, `UANRelease_${Date.now()}.xlsx`);
         this.isLoading = false;
       },
       error: err => {

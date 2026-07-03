@@ -221,10 +221,11 @@ export class BankApprovalComponent implements OnInit {
       Sheets: { 'Sheet1': worksheet },
       SheetNames: ['Sheet1']
     };
-    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
-    const fileName = `${templateId}.xlsx`;
-    FileSaver.saveAs(blob, fileName);
+    // const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    // const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+     const fileName = `${templateId}.xlsx`;
+    // FileSaver.saveAs(blob, fileName);
+    XLSX.writeFile(workbook, fileName);
   }
 
 
@@ -401,9 +402,10 @@ export class BankApprovalComponent implements OnInit {
           SheetNames: ['Table']
         };
 
-        const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-        const blob = new Blob([buffer], { type: 'application/octet-stream' });
-        FileSaver.saveAs(blob, `BankApproval_Template.xlsx`);
+        // const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+        // const blob = new Blob([buffer], { type: 'application/octet-stream' });
+        // FileSaver.saveAs(blob, `BankApproval_Template.xlsx`);
+        XLSX.writeFile(workbook, `BankApproval_Template.xlsx`);
         this.isLoading = false;
       },
       error: err => {
@@ -452,18 +454,19 @@ export class BankApprovalComponent implements OnInit {
             SheetNames: ['Bank']
           };
 
-          const excelBuffer: any = XLSX.write(workbook, {
-            bookType: 'xlsx',
-            type: 'array'
-          });
+          // const excelBuffer: any = XLSX.write(workbook, {
+          //   bookType: 'xlsx',
+          //   type: 'array'
+          // });
 
-          const data: Blob = new Blob([excelBuffer], {
-            type:
-              'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
-          });
+          // const data: Blob = new Blob([excelBuffer], {
+          //   type:
+          //     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
+          // });
           const dateTime = this.getDateTime();
 
-          FileSaver.saveAs(data, `Bank_Approval_${dateTime}.xlsx`);
+          // FileSaver.saveAs(data, `Bank_Approval_${dateTime}.xlsx`);
+          XLSX.writeFile(workbook, `Bank_Approval_${dateTime}.xlsx`);
         },
         error: err => {
           console.error('Error fetching data:', err.message);
