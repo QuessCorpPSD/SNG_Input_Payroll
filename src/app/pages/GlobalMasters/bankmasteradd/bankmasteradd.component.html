@@ -8,7 +8,7 @@
         </button>
     </mat-card-header>
 
-    <mat-card-content class="scroll-content">
+    <mat-card-content>
         <form [formGroup]="AddbankForm" novalidate>
             <div class="row g-2 mb-2">
                 <div class="col-md-12">
@@ -54,7 +54,8 @@
                             <option value=">=">&ge;</option>
                             <option value="<=">&le;</option>
                         </select>
-                        <input type="text" class="form-control" formControlName="Bank_Account_Number_Digits" />
+                        <input type="number" class="form-control" formControlName="Bank_Account_Number_Digits" min="0"
+                            max="999" style="width: 80px;" />
                     </div>
                     <div class="text-danger small" *ngIf="AddbankForm.get('Digit_Length_Condition')?.touched 
              && AddbankForm.get('Digit_Length_Condition')?.hasError('required')">
@@ -80,6 +81,19 @@
                         <option value="">-- Select --</option>
                     </select> 
                 </div> -->
+            <div class="row g-2 mb-2">
+                <div class="col-md-12">
+                    <label class="form-label">Swift Code<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" formControlName="Swift_Code" />
+                    <div class="text-danger small" *ngIf="AddbankForm.get('Swift_Code')?.touched 
+             && AddbankForm.get('Swift_Code')?.hasError('required')">
+                        SwiftCode is required
+                    </div>
+                    <!-- <select class="form-select" formControlName="POCategory">
+                        <option value="">-- Select --</option>
+                    </select> -->
+                </div>
+            </div>
         </form>
     </mat-card-content>
     <mat-card-footer class="footer">

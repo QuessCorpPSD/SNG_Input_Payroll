@@ -13,6 +13,7 @@ import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { IBankRepository } from '../../../Repository/GlobalMasters/IBankrepository';
 import { BankService } from '../../../Service/GlobalMasters/Bank.service';
+import { finalize } from 'rxjs/operators';
 
 
 export const Bank_TOKEN = new InjectionToken<IBankRepository>('Bank_TOKEN');
@@ -68,26 +69,29 @@ export class AddEditComponent {
       Bank_Name: new FormControl("", Validators.required),
       Digit_Length_Condition: new FormControl("", Validators.required),
       Bank_Account_Number_Digits: new FormControl("", Validators.required),
+      Swift_Code: new FormControl("", Validators.required)
       // IFSCCode: new FormControl("", Validators.required),
       // IFSCTreatment: new FormControl("")
     })
 
     if (this.Editdata) {
+      console.log("edit", this.Editdata)
       this.EditbankForm.patchValue({
         Bank_Id: this.Editdata.Bank_Id,
         Bank_Name: this.Editdata.Bank_Name,
         Digit_Length_Condition: this.Editdata.Digit_Length_Condition,
         Bank_Account_Number_Digits: this.Editdata.Bank_Account_Number_Digits,
+        Swift_Code: this.Editdata.Swift_code
       });
     }
   }
 
   Save() {
-
     if (this.EditbankForm.invalid) {
       this.EditbankForm.markAllAsTouched();
       return;
     }
+    this.isLoading = true;
 
     const formValue = this.EditbankForm.value;
 
@@ -98,6 +102,7 @@ export class AddEditComponent {
       Bank_Name: formValue.Bank_Name,
       Bank_Account_Number_Digits: formValue.Bank_Account_Number_Digits,
       Digit_Length_Condition: formValue.Digit_Length_Condition,
+      Swift_Code: formValue.Swift_Code
     };
 
     const BankRequest = {
@@ -106,23 +111,27 @@ export class AddEditComponent {
       detail: BankAdd
     };
 
-    this.bankService.PostAddBank(BankRequest).subscribe({
-      next: (res) => {
-        const msg = res.Data.data;
+    this.bankService.PostAddBank(BankRequest)
+      .pipe(
+        finalize(() => {
+          this.isLoading = false;
+        })
+      )
+      .subscribe({
+        next: (res: any) => {
+          const msg = res?.Data?.data?.trim();
 
-        if (msg === "Bank Updated Successfully") {
-          this.dialogRef.close('updated');
-          return;
+          if (msg === "Bank Updated Successfully") {
+            this.dialogRef.close('updated');
+          } else {
+            alert(msg || "Bank update failed");
+          }
+        },
+        error: (err) => {
+          console.error("Error saving:", err);
+          alert("Something went wrong while updating the bank.");
         }
-
-        alert(msg);
-        this.isLoading = false;
-        this.onClose();
-      },
-      error: (err) => {
-        console.error("Error saving:", err);
-      }
-    });
+      });
   }
 
 

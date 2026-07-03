@@ -18,6 +18,7 @@ import { IBankRepository } from '../../../Repository/GlobalMasters/IBankreposito
 import { BankService } from '../../../Service/GlobalMasters/Bank.service';
 import { MatCardModule } from "@angular/material/card";
 import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.component";
+import { finalize } from 'rxjs/operators';
 
 export const Bank_TOKEN = new InjectionToken<IBankRepository>('Bank_TOKEN');
 
@@ -60,7 +61,7 @@ export class BankmasterComponent implements AfterViewInit {
     'bankname',
     'digitlengthcondition',
     'bankacdigit',
-    'ifsctreatment'
+    'swiftcode'
   ];
 
   uploadedDataSource = new MatTableDataSource<any>([]);
@@ -205,18 +206,23 @@ export class BankmasterComponent implements AfterViewInit {
 
 
   AddBankOpen() {
-    this.dialog.open(BankmasteraddComponent, {
+    const dialogRef = this.dialog.open(BankmasteraddComponent, {
       width: '30%',
-      height: '44vh',
+      height: '60vh',
       disableClose: true,
       data: { example: 'Hello from parent!' }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'saved') {
+        this.onsearch();
+      }
     });
   }
 
   openEdit(row: any) {
     const dialogRef = this.dialog.open(AddEditComponent, {
       width: '30%',
-      height: '44vh',
+      height: '60vh',
       disableClose: true,
       data: row
     });
@@ -227,18 +233,18 @@ export class BankmasterComponent implements AfterViewInit {
       }
     });
   }
+
   DeleteBankMaster(row: any) {
-    this.isLoading = true;
     if (!row) {
       alert("Please select a row to delete.");
-      this.isLoading = false;
       return;
     }
 
     if (!confirm("Are you sure you want to delete this bank record?")) {
-      this.isLoading = false;
       return;
     }
+
+    this.isLoading = true;
 
     const BankAdd = {
       Bank_Id: row.Bank_Id,
@@ -247,6 +253,7 @@ export class BankmasterComponent implements AfterViewInit {
       Bank_Name: "",
       Bank_Account_Number_Digits: 0,
       Digit_Length_Condition: "",
+      Swift_Code: ""
     };
 
     const BankRequest = {
@@ -254,22 +261,30 @@ export class BankmasterComponent implements AfterViewInit {
       mode: "Delete",
       detail: BankAdd
     };
-    this.bankService.PostAddBank(BankRequest).subscribe({
-      next: (res: any) => {
-        this.isLoading = false;
-        const msg = res?.Data?.data;
 
-        if (msg === "Bank Deleted Successfully") {
+    this.bankService.PostAddBank(BankRequest)
+      .pipe(
+        finalize(() => {
+          this.isLoading = false;
+        })
+      )
+      .subscribe({
+        next: (res: any) => {
+          const msg = res?.Data?.data;
 
-          alert(msg);
-          this.onsearch();
-          return;
+          if (msg === "Bank details Deleted Successfully") {
+            alert(msg);
+            this.onsearch();
+          } else {
+            alert(msg || "Delete failed");
+          }
+        },
+        error: () => {
+          alert("Failed");
         }
-        alert(msg || "Delete failed");
-      },
-      error: () => alert("Failed")
-    });
+      });
   }
+
   onClose() {
     this.dialogRef.close();
   }
