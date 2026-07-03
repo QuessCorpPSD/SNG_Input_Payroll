@@ -14,6 +14,7 @@ import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.component";
 import { IBankRepository } from '../../../Repository/GlobalMasters/IBankrepository';
 import { BankService } from '../../../Service/GlobalMasters/Bank.service';
+import { finalize } from 'rxjs/operators';
 
 
 export const Bank_TOKEN = new InjectionToken<IBankRepository>('Bank_TOKEN');
@@ -79,6 +80,7 @@ export class BankmasteraddComponent {
       Bank_Name: new FormControl("", Validators.required),
       Digit_Length_Condition: new FormControl("", Validators.required),
       Bank_Account_Number_Digits: new FormControl("", Validators.required),
+      Swift_Code: new FormControl("", Validators.required)
       // IFSCCode: new FormControl("", Validators.required),
       // IFSCTreatment: new FormControl("")
     })
@@ -89,7 +91,11 @@ export class BankmasteraddComponent {
       this.AddbankForm.markAllAsTouched();
       return;
     }
+
+    this.isLoading = true;
+
     const formValue = this.AddbankForm.value;
+
     const BankAdd = {
       Bank_Id: 0,
       Serial_No: 1,
@@ -97,38 +103,43 @@ export class BankmasteraddComponent {
       Bank_Name: formValue.Bank_Name,
       Bank_Account_Number_Digits: formValue.Bank_Account_Number_Digits,
       Digit_Length_Condition: formValue.Digit_Length_Condition,
+      Swift_Code: formValue.Swift_Code
     };
 
     const BankRequest = {
       createdBy: this.userdetail.user_Id,
       mode: 'Add',
       detail: BankAdd
-    }
+    };
 
-    this.bankService.PostAddBank(BankRequest).subscribe({
-      next: (res) => {
-        const errormsg = res.Data.data;
+    this.bankService.PostAddBank(BankRequest)
+      .pipe(
+        finalize(() => this.isLoading = false)
+      )
+      .subscribe({
+        next: (res: any) => {
+          const msg = res.Data.data;
 
-        if (errormsg === "Bank Created Successfully") {
-          this.showPopup = true;
-          this.popupMessage = "Bank Added Successfully";
-        }
-        else {
-          alert("Bank Name already availabe");
-          this.AddbankForm.reset({
-            Bank_Name: '',
-            Bank_Account_Number_Digits: '',
-            Digit_Length_Condition: '',
-          });
-          this.isLoading = false;
-          this.onClose();
+          if (msg === "Bank Created Successfully") {
+            this.dialogRef.close('saved');
+         
+         } else {
+            alert("Bank Name already available");
 
-        }
+            this.AddbankForm.reset({
+              Bank_Name: '',
+              Bank_Account_Number_Digits: '',
+              Digit_Length_Condition: '',
+              Swift_Code: ''
+            });
+
+            this.onClose();
+          }
+        },
         error: (err) => {
           console.error("Error saving:", err);
         }
-      }
-    });
+      });
   }
 
   onClose() {
