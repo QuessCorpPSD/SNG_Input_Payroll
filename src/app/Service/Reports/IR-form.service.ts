@@ -93,7 +93,7 @@ export class IRFormService implements IIRformService {
             dateCommencement: fmtDate(raw.Date_Of_Joining),
             dateCessation: fmtDate(raw.Last_Working_Day),
             dateDeparture: fmtDate(raw.Last_Working_Day),
-            dateResignation: fmtDate(raw.Last_Working_Day),
+            // dateResignation: fmtDate(raw.Last_Working_Day),
             designation: str(raw.Designation_Name),
             amountWithheld: str(raw.Current_month_E_Gross) || '0',
             dateLastSalary,
@@ -205,8 +205,8 @@ export class IRFormService implements IIRformService {
         fill('undefined_9', data.dateCommencement);
         fill('undefined_10', data.dateCessation);
 
-        fill('14 Date of Resignation  Termination Notice Given',
-            data.dateResignation);
+        // fill('14 Date of Resignation  Termination Notice Given',
+        //     data.dateResignation);
         fill('undefined_10', data.designation);
         fill('15 Designation', data.dateDeparture);
 
