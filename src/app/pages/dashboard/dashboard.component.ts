@@ -117,9 +117,11 @@ const workbook: XLSX.WorkBook = {
   SheetNames: ['Sheet1']
 };
 
-const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
-FileSaver.saveAs(blob, 'PendingLot.xlsx');
+XLSX.writeFile(workbook, 'PendingLot.xlsx');
+
+// const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+// const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+// FileSaver.saveAs(blob, 'PendingLot.xlsx');
 
 }
 
@@ -135,9 +137,12 @@ const workbook: XLSX.WorkBook = {
   SheetNames: ['Sheet1']
 };
 
-const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
-FileSaver.saveAs(blob, 'Completed.xlsx');
+
+
+// const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+// const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+// FileSaver.saveAs(blob, 'Completed.xlsx');
+XLSX.writeFile(workbook, 'Completed.xlsx');
 
 }
 applyFilters()

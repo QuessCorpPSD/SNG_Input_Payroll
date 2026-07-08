@@ -234,8 +234,8 @@ export class ActivationLWDComponent {
       SheetNames: ['Sheet1']
     };
 
-    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+    // const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    // const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
 
     var fileName;
 
@@ -245,7 +245,8 @@ export class ActivationLWDComponent {
     else {
       fileName = `LWD_Template.xlsx`;
     }
-    FileSaver.saveAs(blob, fileName);
+    // FileSaver.saveAs(blob, fileName);
+    XLSX.writeFile(workbook, fileName);
   }
 
   // UploadActivationLwd() {

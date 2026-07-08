@@ -191,11 +191,12 @@ export class SalaryHoldRequestComponent {
           const fileName = `SalaryHold_Report_${dateStr}.xlsx`;
 
           // Export the file
-          const excelBuffer: any = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
-          const blob = new Blob([excelBuffer], {
-            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-          });
-          saveAs(blob, fileName);
+          // const excelBuffer: any = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+          // const blob = new Blob([excelBuffer], {
+          //   type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          // });
+          // saveAs(blob, fileName);
+          XLSX.writeFile(workbook, fileName);
           this.showAlertPopup('Success', 'Excel file downloaded successfully!');
           
         } catch (err) {
@@ -249,9 +250,10 @@ export class SalaryHoldRequestComponent {
             SheetNames: ['SalaryHoldRequest']
           };
 
-          const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-          const blob = new Blob([buffer], { type: 'application/octet-stream' });
-          FileSaver.saveAs(blob, `SalaryHoldRequest_${Date.now()}.xlsx`);
+          // const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+          // const blob = new Blob([buffer], { type: 'application/octet-stream' });
+          // FileSaver.saveAs(blob, `SalaryHoldRequest_${Date.now()}.xlsx`);
+          XLSX.writeFile(workbook, `SalaryHoldRequest_${Date.now()}.xlsx`);
           this.showAlertPopup('Success', 'Template downloaded successfully!');
           
         } catch (error) {

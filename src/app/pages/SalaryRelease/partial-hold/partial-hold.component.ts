@@ -144,9 +144,10 @@ export class PartialHoldComponent {
           SheetNames: ['PartialHold']
         };
 
-        const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-        const blob = new Blob([buffer], { type: 'application/octet-stream' });
-        FileSaver.saveAs(blob, `PartialHold_${Date.now()}.xlsx`);
+        // const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+        // const blob = new Blob([buffer], { type: 'application/octet-stream' });
+        // FileSaver.saveAs(blob, `PartialHold_${Date.now()}.xlsx`);
+        XLSX.writeFile(workbook, `PartialHold_${Date.now()}.xlsx`);
         this.showAlertPopup('Success', 'Template downloaded successfully!');
         this.isLoading = false; 
       },

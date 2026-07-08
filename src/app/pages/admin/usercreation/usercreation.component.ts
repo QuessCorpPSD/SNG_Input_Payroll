@@ -239,22 +239,26 @@ export class UsercreationComponent {
       const worksheet = xlsx.utils.json_to_sheet(data);
       const workbook = { Sheets: { 'Users': worksheet }, SheetNames: ['Users'] };
 
-      const excelBuffer = xlsx.write(workbook, {
-        bookType: 'xlsx',
-        type: 'array'
-      });
+      // const excelBuffer = xlsx.write(workbook, {
+      //   bookType: 'xlsx',
+      //   type: 'array'
+      // });
 
-      this.saveFile(excelBuffer);
+      // this.saveFile(excelBuffer);
+      XLSX.writeFile(workbook, `User_Report_${new Date().getTime()}.xlsx`);
     });
   }
   saveFile(buffer: any) {
-    import('file-saver').then(FileSaver => {
-      const blob = new Blob([buffer], {
-        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
-      });
-
-      FileSaver.saveAs(blob, `User_Report_${new Date().getTime()}.xlsx`);
+    const blob = new Blob([buffer], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     });
+    const fileName = `User_Report_${new Date().getTime()}.xlsx`;
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    a.click();
+    window.URL.revokeObjectURL(url);
   }
 
   exportToExcelsave(data: any[]) {
@@ -265,16 +269,18 @@ export class UsercreationComponent {
       SheetNames: ['Result']
     };
 
-    const excelBuffer: any = XLSX.write(workbook, {
-      bookType: 'xlsx',
-      type: 'array'
-    });
+    XLSX.writeFile(workbook, `CompanyPermission_Result.xlsx`);
 
-    const blob: Blob = new Blob([excelBuffer], {
-      type: 'application/octet-stream'
-    });
+    // const excelBuffer: any = XLSX.write(workbook, {
+    //   bookType: 'xlsx',
+    //   type: 'array'
+    // });
 
-    FileSaver.saveAs(blob, 'CompanyPermission_Result.xlsx');
+    // const blob: Blob = new Blob([excelBuffer], {
+    //   type: 'application/octet-stream'
+    // });
+
+    // FileSaver.saveAs(blob, 'CompanyPermission_Result.xlsx');
   }
 
   openEdit(row: any) {

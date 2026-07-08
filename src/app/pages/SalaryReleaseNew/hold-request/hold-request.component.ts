@@ -433,10 +433,11 @@ export class HoldRequestComponent implements OnInit {
       Sheets: { 'Sheet1': worksheet },
       SheetNames: ['Sheet1']
     };
-    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
-    const fileName = `${templateId}.xlsx`;
-    FileSaver.saveAs(blob, fileName);
+    // const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    // const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+     const fileName = `${templateId}.xlsx`;
+    // FileSaver.saveAs(blob, fileName);
+    XLSX.writeFile(workbook, fileName);
   }
 
 
@@ -782,16 +783,17 @@ export class HoldRequestComponent implements OnInit {
     }
 
     // Export file
-    const excelBuffer = XLSX.write(workbook, {
-      bookType: 'xlsx',
-      type: 'array'
-    });
+    // const excelBuffer = XLSX.write(workbook, {
+    //   bookType: 'xlsx',
+    //   type: 'array'
+    // });
 
-    const blob = new Blob([excelBuffer], {
-      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    });
+    // const blob = new Blob([excelBuffer], {
+    //   type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    // });
 
-    saveAs(blob, 'Hold_Request_Response.xlsx');
+    // saveAs(blob, 'Hold_Request_Response.xlsx');
+    XLSX.writeFile(workbook, 'Hold_Request_Response.xlsx');
   }
 
 
@@ -988,9 +990,10 @@ export class HoldRequestComponent implements OnInit {
           SheetNames: ['Table']
         };
 
-        const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-        const blob = new Blob([buffer], { type: 'application/octet-stream' });
-        FileSaver.saveAs(blob, `${Flag}_Template.xlsx`);
+        // const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+        // const blob = new Blob([buffer], { type: 'application/octet-stream' });
+        // FileSaver.saveAs(blob, `${Flag}_Template.xlsx`);
+        XLSX.writeFile(workbook, `${Flag}_Template.xlsx`);
         this.isLoading = false;
       },
       error: err => {
@@ -1057,12 +1060,13 @@ export class HoldRequestComponent implements OnInit {
       workbook.SheetNames.push(sheetName);
     });
 
-    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    const blob = new Blob([excelBuffer], {
-      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    });
+    // const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    // const blob = new Blob([excelBuffer], {
+    //   type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    // });
 
-    FileSaver.saveAs(blob, 'Hold_Request_Export.xlsx');
+    // FileSaver.saveAs(blob, 'Hold_Request_Export.xlsx');
+    XLSX.writeFile(workbook, 'Hold_Request_Export.xlsx');
   }
 
   onDecimalInput(event: any) {

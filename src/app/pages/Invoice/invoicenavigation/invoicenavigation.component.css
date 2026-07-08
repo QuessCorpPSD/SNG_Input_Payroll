@@ -33,7 +33,7 @@
 
   .horizontal-list {
     display: flex;
-    gap: 5px;
+    gap: 20px;
     /* spacing between items */
     list-style: none;
     /* remove default bullets */

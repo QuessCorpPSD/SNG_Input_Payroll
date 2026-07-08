@@ -58,7 +58,7 @@ export class SalaryreleaseprocessComponent {
 
   displayedColumns: string[] = [
     'SINo', 'CompanyCode', 'EmployeeCode', 'EmployeeName',
-    'BatchId', 'InvoiceNo', 'NetPay', 'BankName', 'NeftBankName'
+    'BatchId', 'NetPay', 'BankName', 'NeftBankName'
   ];
 
   batchtypes: any;

@@ -58,8 +58,7 @@
                   "maximumError": "7mb"
                 }
               ],
-              "outputHashing": "all",
-              "optimization": false
+              "outputHashing": "all"
             },
             "development": {
               "optimization": false,

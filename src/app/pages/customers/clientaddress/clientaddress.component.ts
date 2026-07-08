@@ -261,11 +261,13 @@ export class ClientaddressComponent {
       Sheets: { 'Table': workSheet },
       SheetNames: ['Table']
     };
+    
+    XLSX.writeFile(workbook, 'ClientAddress_Template.xlsx');
 
-    const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    const blob = new Blob([buffer], { type: 'application/octet-stream' });
+    // const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    // const blob = new Blob([buffer], { type: 'application/octet-stream' });
 
-    FileSaver.saveAs(blob, `ClientAddress_Template.xlsx`)
+    // FileSaver.saveAs(blob, `ClientAddress_Template.xlsx`)
   }
 
 

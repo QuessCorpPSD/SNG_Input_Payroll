@@ -314,13 +314,14 @@ export class CompanyinvoiceformatComponent {
       SheetNames: ['Sheet1']
     };
 
-    const buffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+    // const buffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
 
-    const blob = new Blob([buffer], {
-      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    });
+    // const blob = new Blob([buffer], {
+    //   type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    // });
 
-    FileSaver.saveAs(blob, `CreditNoteCancel_Template.xlsx`);
+    // FileSaver.saveAs(blob, `CreditNoteCancel_Template.xlsx`);
+    XLSX.writeFile(wb, 'CreditNoteCancel_Template.xlsx');
   }
 
   FileUpload(fileInput: HTMLInputElement): void {

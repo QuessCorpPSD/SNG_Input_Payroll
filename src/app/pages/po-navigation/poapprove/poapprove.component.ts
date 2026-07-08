@@ -533,9 +533,10 @@ bulkUpdate(action: 'APPROVED' | 'REJECTED' | 'REVOKE') {
             const fileName = `PO_Report_${dateStr}.xlsx`;
 
             // Export the file
-            const excelBuffer: any = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
-            const blob: Blob = new Blob([excelBuffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-            saveAs(blob, fileName);
+            // const excelBuffer: any = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+            // const blob: Blob = new Blob([excelBuffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+            // saveAs(blob, fileName);
+            XLSX.writeFile(workbook, fileName);
           } catch (err) {
             // Catch and log any errors that occur during parsing or Excel conversion
             console.error("Failed to parse JSON from Blob:", err);

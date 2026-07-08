@@ -286,17 +286,17 @@ export class CompanypermissionComponent {
       Sheets: { 'Result': worksheet },
       SheetNames: ['Result']
     };
+    XLSX.writeFile(workbook,'CompanyPermission_Result.xlsx')
+    // const excelBuffer: any = XLSX.write(workbook, {
+    //   bookType: 'xlsx',
+    //   type: 'array'
+    // });
 
-    const excelBuffer: any = XLSX.write(workbook, {
-      bookType: 'xlsx',
-      type: 'array'
-    });
+    // const blob: Blob = new Blob([excelBuffer], {
+    //   type: 'application/octet-stream'
+    // });
 
-    const blob: Blob = new Blob([excelBuffer], {
-      type: 'application/octet-stream'
-    });
-
-    FileSaver.saveAs(blob, 'CompanyPermission_Result.xlsx');
+    // FileSaver.saveAs(blob, 'CompanyPermission_Result.xlsx');
   }
   onSave() {
     if (this.addMenuForm.invalid) {

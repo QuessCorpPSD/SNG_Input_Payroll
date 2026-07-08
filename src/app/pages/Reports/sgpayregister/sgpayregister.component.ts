@@ -108,16 +108,17 @@ export class SgpayregisterComponent {
 
         const fileName = `Pay_Register_${dateStr}.xlsx`;
 
-        const excelBuffer: any = XLSX.write(workbook, {
-          bookType: "xlsx",
-          type: "array"
-        });
+        // const excelBuffer: any = XLSX.write(workbook, {
+        //   bookType: "xlsx",
+        //   type: "array"
+        // });
 
-        const blob: Blob = new Blob([excelBuffer], {
-          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        });
+        // const blob: Blob = new Blob([excelBuffer], {
+        //   type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        // });
 
-        FileSaver.saveAs(blob, fileName);
+        // FileSaver.saveAs(blob, fileName);
+        XLSX.writeFile(workbook, fileName);
 
         this.isLoading = false;
       },

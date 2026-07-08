@@ -170,9 +170,10 @@ export class FNFRevokeComponent {
       SheetNames: ['FNF_Revoke']
     };
 
-    const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    const blob = new Blob([buffer], { type: 'application/octet-stream' });
-    FileSaver.saveAs(blob, `FNF_Revoke_Template_${Date.now()}.xlsx`);
+    // const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    // const blob = new Blob([buffer], { type: 'application/octet-stream' });
+    // FileSaver.saveAs(blob, `FNF_Revoke_Template_${Date.now()}.xlsx`);
+    XLSX.writeFile(workbook, `FNF_Revoke_Template_${Date.now()}.xlsx`);
 
     this.showAlertPopup('Downloaded Successfully.');
   }

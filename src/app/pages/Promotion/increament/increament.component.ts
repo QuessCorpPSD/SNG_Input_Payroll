@@ -360,10 +360,11 @@ export class IncreamentComponent {
       SheetNames: ['Table']
     };
 
-    const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    const blob = new Blob([buffer], { type: 'application/octet-stream' });
+    // const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    // const blob = new Blob([buffer], { type: 'application/octet-stream' });
 
-    FileSaver.saveAs(blob, `Increament_Template.xlsx`)
+    // FileSaver.saveAs(blob, `Increament_Template.xlsx`)
+    XLSX.writeFile(workbook, `Increament_Template.xlsx`);
   }
 }
 

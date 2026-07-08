@@ -198,10 +198,11 @@ export class LeaveOpeningBalanceUploadComponent {
             SheetNames: ['LeaveOpeningBalance']
           };
 
-          const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-          const blob = new Blob([buffer], { type: 'application/octet-stream' });
+          // const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+          // const blob = new Blob([buffer], { type: 'application/octet-stream' });
 
-          FileSaver.saveAs(blob, `LeaveOpeningBalance_Template_${Date.now()}.xlsx`);
+          // FileSaver.saveAs(blob, `LeaveOpeningBalance_Template_${Date.now()}.xlsx`);
+          XLSX.writeFile(workbook, `LeaveOpeningBalance_Template_${Date.now()}.xlsx`);
         } else {
           alert('No template data available or backend rejected the request.');
         }

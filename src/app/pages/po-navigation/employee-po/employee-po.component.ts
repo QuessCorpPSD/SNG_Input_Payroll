@@ -202,9 +202,10 @@ export class EmployeePOComponent {
           SheetNames: ['EmployeePO']
         };
 
-        const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-        const blob = new Blob([buffer], { type: 'application/octet-stream' });
-        FileSaver.saveAs(blob, `EmployeePO_Template_${Date.now()}.xlsx`);
+        // const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+        // const blob = new Blob([buffer], { type: 'application/octet-stream' });
+        // FileSaver.saveAs(blob, `EmployeePO_Template_${Date.now()}.xlsx`);
+        XLSX.writeFile(workbook, `EmployeePO_Template_${Date.now()}.xlsx`);
       },
       error: err => {
         console.error('Error downloading template', err);

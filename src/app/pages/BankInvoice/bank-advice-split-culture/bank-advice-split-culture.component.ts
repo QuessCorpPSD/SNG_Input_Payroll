@@ -254,11 +254,12 @@ export class BankAdviceSplitCultureComponent {
       Sheets: { 'Table': workSheet },
       SheetNames: ['Table']
     };
+    XLSX.writeFile(workbook, 'Bank_Advice_Split_Culture_Template.xlsx');
 
-    const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    const blob = new Blob([buffer], { type: 'application/octet-stream' });
+    // const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    // const blob = new Blob([buffer], { type: 'application/octet-stream' });
 
-    FileSaver.saveAs(blob, `Bank_Advice_Split_Culture_Template.xlsx`);
+    // FileSaver.saveAs(blob, `Bank_Advice_Split_Culture_Template.xlsx`);
   }
 
   ImportClick(fileInput: HTMLInputElement): void {

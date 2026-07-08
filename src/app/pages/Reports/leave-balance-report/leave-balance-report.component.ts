@@ -220,9 +220,10 @@ Download() {
       const fileName = `LeaveBalanceReport_${dateStr}.xlsx`;
 
       // Export
-      const excelBuffer: any = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
-      const blob: Blob = new Blob([excelBuffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-      FileSaver.saveAs(blob, fileName);
+      // const excelBuffer: any = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+      // const blob: Blob = new Blob([excelBuffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+      // FileSaver.saveAs(blob, fileName);
+      XLSX.writeFile(workbook, fileName);
     },
     error: (err) => {
       console.error("Download error:", err);

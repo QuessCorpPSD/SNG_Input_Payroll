@@ -215,13 +215,14 @@ export class CreditnoteapproveComponent {
       SheetNames: ['Sheet1']
     };
 
-    const buffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+    // const buffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
 
-    const blob = new Blob([buffer], {
-      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    });
+    // const blob = new Blob([buffer], {
+    //   type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    // });
 
-    FileSaver.saveAs(blob, `CreditNoteApprove_Template.xlsx`);
+    // FileSaver.saveAs(blob, `CreditNoteApprove_Template.xlsx`);
+    XLSX.writeFile(wb, 'CreditNoteApprove_Template.xlsx');
   }
 
   FileUpload(fileInput: HTMLInputElement): void {
@@ -282,10 +283,11 @@ export class CreditnoteapproveComponent {
       SheetNames: ['Sheet1']
     };
 
-    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
-    const fileName = `${templateId}.xlsx`;
-    FileSaver.saveAs(blob, fileName);
+    // const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    // const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+     const fileName = `${templateId}.xlsx`;
+    // FileSaver.saveAs(blob, fileName);
+    XLSX.writeFile(workbook, fileName);
   }
 
   deleteClick() {

@@ -334,10 +334,12 @@ export class DepartmentComponent {
       SheetNames: ['table']
     };
 
-    const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    const blob = new Blob([buffer], { type: 'application/octet-stream' });
+    XLSX.writeFile(workbook, 'Department_Template.xlsx');
 
-    FileSaver.saveAs(blob, `Department${Date.now()}.xlsx`)
+    // const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    // const blob = new Blob([buffer], { type: 'application/octet-stream' });
+
+    // FileSaver.saveAs(blob, `Department${Date.now()}.xlsx`)
   }
 
   ngOnInit(): void {

@@ -376,10 +376,11 @@ export class LOPAdjustmentsComponent {
       SheetNames: ['lopadjustment']
     };
 
-    const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    const blob = new Blob([buffer], { type: 'application/octet-stream' });
+    // const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    // const blob = new Blob([buffer], { type: 'application/octet-stream' });
 
-    FileSaver.saveAs(blob, `lopadjustment_Template_${Date.now()}.xlsx`);
+    // FileSaver.saveAs(blob, `lopadjustment_Template_${Date.now()}.xlsx`);
+    XLSX.writeFile(workbook, `lopadjustment_Template_${Date.now()}.xlsx`);
     this.isLoading = false;
   }
   deleteClick(row: any) {

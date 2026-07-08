@@ -219,9 +219,10 @@ export class VANPaymentRequestComponent implements OnInit {
             SheetNames: ['VANPaymentTemplate']
           };
 
-          const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-          const blob = new Blob([buffer], { type: 'application/octet-stream' });
-          FileSaver.saveAs(blob, `VAN Payment Request_${Date.now()}.xlsx`);
+          // const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+          // const blob = new Blob([buffer], { type: 'application/octet-stream' });
+          // FileSaver.saveAs(blob, `VAN Payment Request_${Date.now()}.xlsx`);
+          XLSX.writeFile(workbook, `VAN Payment Request_${Date.now()}.xlsx`);
           this.showAlertPopup('Success', 'Template downloaded successfully!');
           this.isLoading = false;
 
@@ -462,11 +463,12 @@ export class VANPaymentRequestComponent implements OnInit {
           const dateStr = today.toISOString().split("T")[0];
           const fileName = `VAN Payment request_${dateStr}.xlsx`;
 
-          const excelBuffer: any = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
-          const blob = new Blob([excelBuffer], {
-            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-          });
-          saveAs(blob, fileName);
+          // const excelBuffer: any = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+          // const blob = new Blob([excelBuffer], {
+          //   type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          // });
+          // saveAs(blob, fileName);
+          XLSX.writeFile(workbook, fileName);
           this.isLoading = false;
         } catch (err) {
           console.error("Failed to parse JSON or create Excel file:", err);
