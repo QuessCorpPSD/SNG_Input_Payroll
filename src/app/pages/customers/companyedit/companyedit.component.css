@@ -274,10 +274,10 @@ input[type="date"].form-control-sm {
 }
 
 .bank-box {
-    position: absolute;
+    position: relative;
     /* right: 30px; */
     top: 0;
-    width: 350px;
+    width: 300px;
     /* height: 800px;
     min-height: 800px;
     max-height: 800px; */

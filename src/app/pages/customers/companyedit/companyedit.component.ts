@@ -19,6 +19,7 @@ import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { AlertpopupComponent } from "../../../common/alertpopup/alertpopup.component";
 import { CompanyserviceService } from '../../../Service/CUSTOMER/companyservice.service';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-companyedit',
@@ -73,7 +74,7 @@ export class CompanyeditComponent {
   showPopup = false;
 
   @ViewChild('fileInput') fileInput: any;
-  constructor(private fb: FormBuilder, private dialogRef: MatDialogRef<CompanyeditComponent>, private dialog: MatDialog, private company: CompanyserviceService, @Inject(MAT_DIALOG_DATA) public companyView: any, private _decrypt: EncryptionService, private _sessionStoreage: SessionStorageService) { console.log('data', this.companyView) }
+  constructor(private fb: FormBuilder, private dialogRef: MatDialogRef<CompanyeditComponent>, private dialog: MatDialog, private company: CompanyserviceService, @Inject(MAT_DIALOG_DATA) public companyView: any, private _decrypt: EncryptionService, private _sessionStoreage: SessionStorageService) { }
 
   get invoiceType() {
     return this.CompanyAddForm.get('InvoiceType')?.value;
@@ -508,9 +509,13 @@ export class CompanyeditComponent {
     const companyId = this.companyView.CompanyID;
     const companyCode = this.companyView.companyCode;
 
-    this.company.viewCompanyDetails(companyId).subscribe({
-      next: res => {
+    this.company.viewCompanyDetails(companyId).pipe(
+      finalize(() => {
         this.isLoading = false;
+      })
+    ).subscribe({
+      next: res => {
+
         const table = res?.Data?.data?.Table0;
         const table3 = res?.Data?.data?.Table3;
 
@@ -624,7 +629,7 @@ export class CompanyeditComponent {
 
 
         });
-        console.log(typeof this.companydata.OT_WEEK_DAY_TYPE); // should be "string"
+
 
         this.CompanyAddForm.get('OT_weekend_type')?.updateValueAndValidity({ emitEvent: true });
         this.CompanyAddForm.get('weekday_type')?.updateValueAndValidity({ emitEvent: true });
@@ -872,18 +877,28 @@ export class CompanyeditComponent {
         Adhoc_Service_Formula: formValue.adhoc_service_formula ?? ""
       }
     };
-    console.log('payload', JSON.stringify(payload));
-    this.company.updateCompany(payload).subscribe({
-      next: res => {
-        const msg1 = res.Data.data.Table0[0].Message;
-        alert(msg1);
+
+    this.company.updateCompany(payload).pipe(
+      finalize(() => {
         this.isLoading = false;
+      })
+    ).subscribe({
+      next: res => {
+
+        if (res.StatusCode === 400) {
+          alert(res.Message);
+          return;
+        }
+
+        const msg = res.Data.data.Table0[0].Message;
+        alert(msg);
         this.onClose();
+
       },
       error: err => console.error(err)
     });
 
-    this.isLoading = false;
+
   }
 
   onClose() {

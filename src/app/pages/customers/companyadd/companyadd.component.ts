@@ -13,7 +13,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatCheckbox, MatCheckboxModule } from '@angular/material/checkbox';
 import { CompanyserviceService } from '../../../Service/CUSTOMER/companyservice.service';
-import { from } from 'rxjs';
+import { finalize, from } from 'rxjs';
 import { json } from 'node:stream/consumers';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
@@ -685,18 +685,26 @@ export class CompanyaddComponent {
         Adhoc_Service_Formula: formValue.adhoc_service_formula ?? ''
       }
     };
-    console.log('payload', JSON.stringify(payload))
-    this.company.createCompany(payload).subscribe({
-      next: res => {
-        const msg = res.Data.Message
-        alert(msg);
+
+    this.company.createCompany(payload).pipe(
+      finalize(() => {
         this.isLoading = false;
+      })
+    ).subscribe({
+      next: res => {
+        if (res.StatusCode === 400) {
+          alert(res.Message);
+          return;
+        }
+
+        const msg = res.Data.data.Table0[0].Message;
+        alert(msg);
         this.onClose();
         this.dialogRef.close('refresh');
       },
       error: err => console.error(err)
     });
-    this.isLoading = false;
+
   }
 
   // AddContactDetails() {
