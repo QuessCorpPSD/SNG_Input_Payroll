@@ -127,6 +127,8 @@ export class IRFormService implements IIRformService {
             amountOfLastSalaryPaid: str(raw.Last_Month_E_Gross),
             currentFromYear: str(currentYearData?.Current_MinMonth),
             currentToYear: str(currentYearData?.Current_MaxMonth),
+            currentGross: str(currentYearData?.Current_Gross),
+            currentBonus: str(currentYearData?.Current_Bonus),
             currentTotalGross: str(currentYearData?.Current_TotalGross),
             currentPF: str(currentYearData?.Current_PF),
             currentSinda: str(currentYearData?.Current_SINDA_CDAC_ECF),
@@ -135,6 +137,8 @@ export class IRFormService implements IIRformService {
 
             previousFromYear: str(previousYearData?.Prev_MinMonth),
             previousToYear: str(previousYearData?.Prev_MaxMonth),
+            previousGross: str(previousYearData?.Prev_Gross),
+            previousBonus: str(previousYearData?.Prev_Bonus),
             previousTotalGross: str(previousYearData?.Prev_TotalGross),
             previousPF: str(previousYearData?.Prev_PF),
             previoustSinda: str(previousYearData?.Prev_SINDA_CDAC_ECF),
@@ -219,23 +223,25 @@ export class IRFormService implements IIRformService {
         // fill('undefined_11', data.amountWithheld);
         fill('undefined_12', data.amountWithheld);
         fill('undefined_13', '00');
-        fill('Year of Cessation', data.currentFromYear);
-        fill('S', data.currentToYear);
-        fill('Text1', data.currentTotalGross, 9, TextAlignment.Right);
+        fill('Year of Cessation', data.currentFromYear, 9, TextAlignment.Right);
+        fill('S', data.currentToYear, 9, TextAlignment.Right);
+        fill('Text1', data.currentGross, 9, TextAlignment.Right);
         fill('Text3', data.currentTotalGross, 9, TextAlignment.Right);
         fill('Text5', data.currentPF, 9, TextAlignment.Right);
         fill('Text7', data.currentSinda, 9, TextAlignment.Right);
         fill('Text9', data.currentMbmf, 9, TextAlignment.Right);
         fill('Text11', data.currentLic, 9, TextAlignment.Right);
+        fill('Text16', data.currentBonus, 9, TextAlignment.Right);
 
-        fill('Year Prior to Year of Cessation', data.previousFromYear);
-        fill('S_2', data.previousToYear);
-        fill('Text2', data.previousTotalGross, 9, TextAlignment.Right);
+        fill('Year Prior to Year of Cessation', data.previousFromYear, 9, TextAlignment.Right);
+        fill('S_2', data.previousToYear, 9, TextAlignment.Right);
+        fill('Text19', data.previousGross, 9, TextAlignment.Right);
         fill('Text4', data.previousTotalGross, 9, TextAlignment.Right);
         fill('Text14', data.previousPF, 9, TextAlignment.Right);
         fill('Text8', data.previoustSinda, 9, TextAlignment.Right);
         fill('Text15', data.previousMbmf, 9, TextAlignment.Right);
         fill('Text12', data.previousLic, 9, TextAlignment.Right);
+        fill('Text18', data.previousBonus, 9, TextAlignment.Right);
 
         radio('18 Are these all the monies you can withhold from the date of notification of',
             '/Yes');
