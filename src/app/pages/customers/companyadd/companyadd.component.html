@@ -422,324 +422,336 @@
                 </div>
             </div> -->
             <div class="row g-3 mb-3">
-
-
-
-                <div class="col-md-4" [formGroup]="CompanyAddForm">
-                    <label class="form-label">Onboarding Charges</label>
-                    <div class="d-flex">
-                        <select class="form-select me-2" style="width:40%" formControlName="OnboardingChargesValue">
-                            <option value="">Select</option>
-                            <option value="1">%</option>
-                            <option value="0">Rs.</option>
-                        </select>
-                        <input type="text" class="form-control" formControlName="OnboardingCharges">
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Inedge Category<span class="text-danger"></span></label>
-                    <select class="form-select" formControlName="InedgeCategory">
-                        <option value="">--select---</option>
-                        <option value="1064">Single</option>
-                        <option value="1065s">Separate</option>
-                    </select>
-                </div>
-                <div class="col-md-4">
-                    <div class="bank-box">
-                        <div class="border p-3 rounded">
-                            <h5 class="fw-bold mb-3">Bank Details</h5>
-
-                            <!-- Bank Name -->
-                            <div class="mb-3">
-                                <label class="form-label">Bank Name <span class="text-danger">*</span></label>
-                                <select class="form-control" formControlName="BankName" (change)="onBankChange($event)">
-                                    <option value="">---Select---</option>
-                                    <option *ngFor="let p of BankName" [value]="p.Bank_Id">{{p.Bank_Name}} </option>
+                <div class="col-md-8">
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6" [formGroup]="CompanyAddForm">
+                            <label class="form-label">Onboarding Charges</label>
+                            <div class="d-flex">
+                                <select class="form-select me-2" style="width:40%"
+                                    formControlName="OnboardingChargesValue">
+                                    <option value="">Select</option>
+                                    <option value="1">%</option>
+                                    <option value="0">Rs.</option>
                                 </select>
-                                <div class="text-danger small" *ngIf="CompanyAddForm.get('BankName')?.touched 
-             && CompanyAddForm.get('BankName')?.hasError('required')">
-                                    BankName is required
-                                </div>
+                                <input type="text" class="form-control" formControlName="OnboardingCharges">
                             </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Inedge Category<span class="text-danger"></span></label>
+                            <select class="form-select" formControlName="InedgeCategory">
+                                <option value="">--select---</option>
+                                <option value="1064">Single</option>
+                                <option value="1065s">Separate</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row g-3 mb-3">
 
-                            <!-- A/C No -->
-                            <div class="mb-3">
-                                <label class="form-label">A/C No <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" formControlName="AccountNo">
-                                <div class="text-danger small" *ngIf="CompanyAddForm.get('AccountNo')?.touched 
-             && CompanyAddForm.get('AccountNo')?.hasError('required')">
-                                    AccountNo is required
-                                </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Inedge/WorQ Charges<span class="text-danger"></span></label>
+                            <div class="d-flex">
+                                <select class="form-select me-2" style="width: 40%;"
+                                    formControlName="InedgeChargesValue">
+                                    <option value="">Select</option>
+                                    <option value="1">%</option>
+                                    <option value="0">Rs.</option>
+                                </select>
+                                <input type="text" class="form-control" formControlName="InedgeCharges" />
                             </div>
-
-                            <!-- Swift Code -->
-                            <div class="mb-3">
-                                <label class="form-label">Swift Code <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" formControlName="SwiftCode"
-                                    placeholder="Enter Swift Code">
-                                <div class="text-danger small" *ngIf="CompanyAddForm.get('SwiftCode')?.touched 
-             && CompanyAddForm.get('SwiftCode')?.hasError('required')">
-                                    SwiftCode is required
-                                </div>
-                            </div>
-
-                            <!-- Branch -->
-                            <div class="mb-3">
-                                <label class="form-label">Branch <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" formControlName="Branch">
-                                <div class="text-danger small" *ngIf="CompanyAddForm.get('Branch')?.touched 
-             && CompanyAddForm.get('Branch')?.hasError('required')">
-                                    Branch is required
-                                </div>
-                            </div>
-
-                            <!-- Branch Code -->
-                            <div class="mb-3">
-                                <label class="form-label">Branch Code <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" formControlName="BranchCode"
-                                    placeholder="Enter Branch Code">
-                                <div class="text-danger small" *ngIf="CompanyAddForm.get('BranchCode')?.touched 
-             && CompanyAddForm.get('BranchCode')?.hasError('required')">
-                                    BranchCode is required
-                                </div>
-                            </div>
-
-                            <!-- Bank Code -->
-                            <div class="mb-3">
-                                <label class="form-label">Bank Code <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" formControlName="BankCode"
-                                    placeholder="Enter Bank Code">
-                                <div class="text-danger small" *ngIf="CompanyAddForm.get('BankCode')?.touched 
-             && CompanyAddForm.get('BankCode')?.hasError('required')">
-                                    BankCode is required
-                                </div>
-                            </div>
-
-                            <!-- Bank Address -->
-                            <div class="mb-3">
-                                <label class="form-label">Bank Address <span class="text-danger">*</span></label>
-                                <textarea class="form-control" formControlName="BankAddress" style="height: 80px;"
-                                    placeholder="Enter Bank Address"></textarea>
-                                <div class="text-danger small" *ngIf="CompanyAddForm.get('BankAddress')?.touched 
-             && CompanyAddForm.get('BankAddress')?.hasError('required')">
-                                    BankAddress is required
-                                </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Qdemy Charges<span class="text-danger"></span></label>
+                            <div class="d-flex">
+                                <select class="form-select me-2" style="width: 40%;"
+                                    formControlName="QdemyChargesValue">
+                                    <option value="">Select</option>
+                                    <option value="1">%</option>
+                                    <option value="0">Rs.</option>
+                                </select>
+                                <input type="text" class="form-control" formControlName="QdemyCharges" />
                             </div>
                         </div>
                     </div>
-                </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-4" style="display: none;">
+                            <label class="form-label">Incentive Type<span class="text-danger"></span></label>
+                            <select class="form-select" formControlName="IncentiveType">
+                                <option value="">-- Select --</option>
+                            </select>
+                        </div>
 
-            </div>
-            <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Portal Type<span class="text-danger"></span></label>
+                            <div class="d-flex">
 
-                <div class="col-md-4">
-                    <label class="form-label">Inedge/WorQ Charges<span class="text-danger"></span></label>
-                    <div class="d-flex">
-                        <select class="form-select me-2" style="width: 40%;" formControlName="InedgeChargesValue">
-                            <option value="">Select</option>
-                            <option value="1">%</option>
-                            <option value="0">Rs.</option>
-                        </select>
-                        <input type="text" class="form-control" formControlName="InedgeCharges" />
+                                <input type="text" class="form-control" formControlName="Portal_Type" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label d-block">PO Applicable<span class="text-danger"></span></label>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="POApplicable" value="1"
+                                    formControlName="POApplicable" id="POApplicableyes">
+                                <label class="form-check-label" for="POApplicableyes">
+                                    Yes
+                                </label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="POApplicable" value="0"
+                                    formControlName="POApplicable" id="POApplicableno">
+                                <label class="form-check-label" for="POApplicableno">
+                                    No
+                                </label>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Qdemy Charges<span class="text-danger"></span></label>
-                    <div class="d-flex">
-                        <select class="form-select me-2" style="width: 40%;" formControlName="QdemyChargesValue">
-                            <option value="">Select</option>
-                            <option value="1">%</option>
-                            <option value="0">Rs.</option>
-                        </select>
-                        <input type="text" class="form-control" formControlName="QdemyCharges" />
-                    </div>
-                </div>
-            </div>
-            <div class="row g-3 mb-3">
-                <div class="col-md-4" style="display: none;">
-                    <label class="form-label">Incentive Type<span class="text-danger"></span></label>
-                    <select class="form-select" formControlName="IncentiveType">
-                        <option value="">-- Select --</option>
-                    </select>
-                </div>
+                    <div class="row g-3 mb-3">
 
-                <div class="col-md-4">
-                    <label class="form-label">Portal Type<span class="text-danger"></span></label>
-                    <div class="d-flex">
+                        <div class="col-md-6">
+                            <label class="form-label">Portal Charges<span class="text-danger"></span></label>
+                            <div class="d-flex">
+                                <select class="form-select me-4" style="width: 45%;"
+                                    formControlName="TechSubscriptionChargesvalue">
+                                    <option value="">Select</option>
+                                    <option value="1">Percentage</option>
+                                    <option value="0">Fixed</option>
+                                </select>
+                                <input type="text" class="form-control" formControlName="TechSubscriptionCharges" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label d-block">PO Wise Batch<span class="text-danger"></span></label>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="POWiseBatch" value="1"
+                                    formControlName="POWiseBatch" id="POWiseBatchyes">
+                                <label class="form-check-label" for="POWiseBatchyes">
+                                    Yes
+                                </label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="POWiseBatch" value="0"
+                                    formControlName="POWiseBatch" id="POWiseBatchno">
+                                <label class="form-check-label" for="POWiseBatchno">
+                                    No
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-3 mb-3">
 
-                        <input type="text" class="form-control" formControlName="Portal_Type" />
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label d-block">PO Applicable<span class="text-danger"></span></label>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="POApplicable" value="1"
-                            formControlName="POApplicable" id="POApplicableyes">
-                        <label class="form-check-label" for="POApplicableyes">
-                            Yes
-                        </label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="POApplicable" value="0"
-                            formControlName="POApplicable" id="POApplicableno">
-                        <label class="form-check-label" for="POApplicableno">
-                            No
-                        </label>
-                    </div>
-                </div>
-            </div>
-            <div class="row g-3 mb-3">
-
-                <div class="col-md-4">
-                    <label class="form-label">Portal Charges<span class="text-danger"></span></label>
-                    <div class="d-flex">
-                        <select class="form-select me-4" style="width: 45%;"
-                            formControlName="TechSubscriptionChargesvalue">
-                            <option value="">Select</option>
-                            <option value="1">Percentage</option>
-                            <option value="0">Fixed</option>
-                        </select>
-                        <input type="text" class="form-control" formControlName="TechSubscriptionCharges" />
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label d-block">PO Wise Batch<span class="text-danger"></span></label>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="POWiseBatch" value="1"
-                            formControlName="POWiseBatch" id="POWiseBatchyes">
-                        <label class="form-check-label" for="POWiseBatchyes">
-                            Yes
-                        </label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="POWiseBatch" value="0"
-                            formControlName="POWiseBatch" id="POWiseBatchno">
-                        <label class="form-check-label" for="POWiseBatchno">
-                            No
-                        </label>
-                    </div>
-                </div>
-            </div>
-            <div class="row g-3 mb-3">
-
-                <div class="col-md-4">
-                    <mat-checkbox formControlName="IsNewJoinee">
-                        Is New Joinee
-                    </mat-checkbox>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Dues Based on<span class="text-danger"></span></label>
-                    <select class="form-select" formControlName="FDuesBasedon">
-                        <option value="">--select---</option>
-                        <option value="1">SD</option>
-                        <option value="2">DR</option>
-                    </select>
-                </div>
-                <!-- <div class="col-md-3">
+                        <div class="col-md-6">
+                            <mat-checkbox formControlName="IsNewJoinee">
+                                Is New Joinee
+                            </mat-checkbox>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Dues Based on<span class="text-danger"></span></label>
+                            <select class="form-select" formControlName="FDuesBasedon">
+                                <option value="">--select---</option>
+                                <option value="1">SD</option>
+                                <option value="2">DR</option>
+                            </select>
+                        </div>
+                        <!-- <div class="col-md-3">
                     <label class="form-label">Is New Joinee</label>
                     <input type="checkbox" class="form-control" formControlName="IsNewJoinee"
                         style="width: 18px; height: 18px;" />
                 </div> -->
-            </div>
-            <div class="row g-3 mb-3">
+                    </div>
+                    <div class="row g-3 mb-3">
 
-                <div class="col-md-4">
-                    <label class="form-label">Sourcing/OB Applicable<span class="text-danger"></span></label>
-                    <select class="form-select" formControlName="SourcingOBApplicable">
-                        <option value="">--select---</option>
-                        <option value="1">Yes</option>
-                        <option value="0">No</option>
-                    </select>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Segment<span class="text-danger">*</span></label>
-                    <select class="form-select" formControlName="Segment">
-                        <option *ngFor="let p of segmentName" [value]="p.value">{{p.name}} </option>
-                    </select>
-                    <div class="text-danger small" *ngIf="CompanyAddForm.get('Segment')?.touched 
+                        <div class="col-md-6">
+                            <label class="form-label">Sourcing/OB Applicable<span class="text-danger"></span></label>
+                            <select class="form-select" formControlName="SourcingOBApplicable">
+                                <option value="">--select---</option>
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Segment<span class="text-danger">*</span></label>
+                            <select class="form-select" formControlName="Segment">
+                                <option *ngFor="let p of segmentName" [value]="p.value">{{p.name}} </option>
+                            </select>
+                            <div class="text-danger small" *ngIf="CompanyAddForm.get('Segment')?.touched 
              && CompanyAddForm.get('Segment')?.hasError('required')">
-                        Segment is required
+                                Segment is required
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="row g-3 mb-3">
-                <div class="col-md-3" style="display: none;">
-                    <label class="form-label">Insurance<span class="text-danger"></span></label>
-                    <select class="form-select" formControlName="Insurance">
-                        <option value="">--select---</option>
-                        <option value="1">Yes</option>
-                        <option value="0">No</option>
-                    </select>
-                </div>
-            </div>
-            <div class="row g-3 mb-3">
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-3" style="display: none;">
+                            <label class="form-label">Insurance<span class="text-danger"></span></label>
+                            <select class="form-select" formControlName="Insurance">
+                                <option value="">--select---</option>
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row g-3 mb-3">
 
-                <div class="col-md-3" style="display: none;">
-                    <label class="form-label">Reimb Invoice Format<span class="text-danger"></span></label>
-                    <select class="form-select" formControlName="ReimbInvoiceFormat">
-                        <option value="">--select---</option>
-                    </select>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Sub Segment<span class="text-danger"></span></label>
-                    <select class="form-select" formControlName="SubSegment">
-                        <option value="">--select---</option>
-                        <option *ngFor="let p of subSegmentName" [value]="p.value">{{p.name}} </option>
-                    </select>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Mode of payment<span class="text-danger"></span></label>
-                    <select class="form-select" formControlName="Modeofpayment">
-                        <option value="">--select---</option>
-                        <option value="0">Collections</option>
-                        <option value="1">Upfront</option>
-                    </select>
-                </div>
+                        <div class="col-md-3" style="display: none;">
+                            <label class="form-label">Reimb Invoice Format<span class="text-danger"></span></label>
+                            <select class="form-select" formControlName="ReimbInvoiceFormat">
+                                <option value="">--select---</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Sub Segment<span class="text-danger"></span></label>
+                            <select class="form-select" formControlName="SubSegment">
+                                <option value="">--select---</option>
+                                <option *ngFor="let p of subSegmentName" [value]="p.value">{{p.name}} </option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Mode of payment<span class="text-danger"></span></label>
+                            <select class="form-select" formControlName="Modeofpayment">
+                                <option value="">--select---</option>
+                                <option value="0">Collections</option>
+                                <option value="1">Upfront</option>
+                            </select>
+                        </div>
 
-            </div>
-            <div class="row g-3 mb-3">
+                    </div>
+                    <div class="row g-3 mb-3">
 
-                <div class="col-md-3" style="display: none;">
-                    <label class="form-label">PaySlip Formats<span class="text-danger"></span></label>
-                    <select class="form-select" formControlName="PaySlipFormats">
-                        <option value="">--select---</option>
-                    </select>
-                </div>
-            </div>
-            <div class="row g-3 mb-3">
-                <div class="col-md-3" style="display: none;">
-                    <label class="form-label">Portal PaySlip Format<span class="text-danger"></span></label>
-                    <select class="form-select" formControlName="PortalPaySlipFormat">
-                        <option value="">--select---</option>
-                    </select>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Incharge<span class="text-danger"></span></label>
-                    <input type="text" class="form-control" formControlName="Incharge" />
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Round Off Applicable<span class="text-danger"></span></label>
-                    <select class="form-select" formControlName="RoundOffApplicable">
-                        <option value="1">Yes</option>
-                        <option value="0">No</option>
-                    </select>
-                </div>
-            </div>
-            <div class="row g-3 mb-3">
+                        <div class="col-md-3" style="display: none;">
+                            <label class="form-label">PaySlip Formats<span class="text-danger"></span></label>
+                            <select class="form-select" formControlName="PaySlipFormats">
+                                <option value="">--select---</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-3" style="display: none;">
+                            <label class="form-label">Portal PaySlip Format<span class="text-danger"></span></label>
+                            <select class="form-select" formControlName="PortalPaySlipFormat">
+                                <option value="">--select---</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Incharge<span class="text-danger"></span></label>
+                            <input type="text" class="form-control" formControlName="Incharge" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Round Off Applicable<span class="text-danger"></span></label>
+                            <select class="form-select" formControlName="RoundOffApplicable">
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row g-3 mb-3">
 
-                <div class="col-md-4">
-                    <label class="form-label">TAT(In Days)<span class="text-danger"></span></label>
-                    <input type="text" class="form-control" formControlName="TAT" />
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Valid Date<span class="text-danger">*</span></label>
-                    <input type="date" class="form-control" formControlName="ValidDate" />
-                    <div class="text-danger small" *ngIf="CompanyAddForm.get('ValidDate')?.touched 
+                        <div class="col-md-6">
+                            <label class="form-label">TAT(In Days)<span class="text-danger"></span></label>
+                            <input type="text" class="form-control" formControlName="TAT" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Valid Date<span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" formControlName="ValidDate" />
+                            <div class="text-danger small" *ngIf="CompanyAddForm.get('ValidDate')?.touched 
              && CompanyAddForm.get('ValidDate')?.hasError('required')">
-                        ValidDate is required
+                                ValidDate is required
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-4">
+                            <div class="bank-box">
+                                <div class="border p-3 rounded">
+                                    <h5 class="fw-bold mb-3">Bank Details</h5>
+
+                                    <!-- Bank Name -->
+                                    <div class="mb-3">
+                                        <label class="form-label">Bank Name <span class="text-danger">*</span></label>
+                                        <select class="form-control" formControlName="BankName"
+                                            (change)="onBankChange($event)">
+                                            <option value="">---Select---</option>
+                                            <option *ngFor="let p of BankName" [value]="p.Bank_Id">{{p.Bank_Name}}
+                                            </option>
+                                        </select>
+                                        <div class="text-danger small" *ngIf="CompanyAddForm.get('BankName')?.touched 
+             && CompanyAddForm.get('BankName')?.hasError('required')">
+                                            BankName is required
+                                        </div>
+                                    </div>
+
+                                    <!-- A/C No -->
+                                    <div class="mb-3">
+                                        <label class="form-label">A/C No <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" formControlName="AccountNo">
+                                        <div class="text-danger small" *ngIf="CompanyAddForm.get('AccountNo')?.touched 
+             && CompanyAddForm.get('AccountNo')?.hasError('required')">
+                                            AccountNo is required
+                                        </div>
+                                    </div>
+
+                                    <!-- Swift Code -->
+                                    <div class="mb-3">
+                                        <label class="form-label">Swift Code <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" formControlName="SwiftCode"
+                                            placeholder="Enter Swift Code">
+                                        <div class="text-danger small" *ngIf="CompanyAddForm.get('SwiftCode')?.touched 
+             && CompanyAddForm.get('SwiftCode')?.hasError('required')">
+                                            SwiftCode is required
+                                        </div>
+                                    </div>
+
+                                    <!-- Branch -->
+                                    <div class="mb-3">
+                                        <label class="form-label">Branch <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" formControlName="Branch">
+                                        <div class="text-danger small" *ngIf="CompanyAddForm.get('Branch')?.touched 
+             && CompanyAddForm.get('Branch')?.hasError('required')">
+                                            Branch is required
+                                        </div>
+                                    </div>
+
+                                    <!-- Branch Code -->
+                                    <div class="mb-3">
+                                        <label class="form-label">Branch Code <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" formControlName="BranchCode"
+                                            placeholder="Enter Branch Code">
+                                        <div class="text-danger small" *ngIf="CompanyAddForm.get('BranchCode')?.touched 
+             && CompanyAddForm.get('BranchCode')?.hasError('required')">
+                                            BranchCode is required
+                                        </div>
+                                    </div>
+
+                                    <!-- Bank Code -->
+                                    <div class="mb-3">
+                                        <label class="form-label">Bank Code <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" formControlName="BankCode"
+                                            placeholder="Enter Bank Code">
+                                        <div class="text-danger small" *ngIf="CompanyAddForm.get('BankCode')?.touched 
+             && CompanyAddForm.get('BankCode')?.hasError('required')">
+                                            BankCode is required
+                                        </div>
+                                    </div>
+
+                                    <!-- Bank Address -->
+                                    <div class="mb-3">
+                                        <label class="form-label">Bank Address <span
+                                                class="text-danger">*</span></label>
+                                        <textarea class="form-control" formControlName="BankAddress"
+                                            style="height: 80px;" placeholder="Enter Bank Address"></textarea>
+                                        <div class="text-danger small" *ngIf="CompanyAddForm.get('BankAddress')?.touched 
+             && CompanyAddForm.get('BankAddress')?.hasError('required')">
+                                            BankAddress is required
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
+
             <div class="row g-3 mb-3">
 
                 <div class="col-md-3">
