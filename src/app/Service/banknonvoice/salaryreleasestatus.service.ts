@@ -43,7 +43,7 @@ export class SalaryreleasestatusService implements ISalaryReleaseStatus {
   GetSalaryReleaseStatusdataExport(BatchType, FromDate, Todate, EmployeeCode, userid): Observable<APIResponse> {
     return this.http.get<APIResponse>(
       this.env.apiUrl +
-      'NIBatchGeneration/GetSalaryReleaseStatusdata/' + BatchType + '/' + FromDate + '/' + Todate + '/' + EmployeeCode + '/' + userid
+      'NIBatchGeneration/GetSalaryReleaseStatusdataExport/' + BatchType + '/' + FromDate + '/' + Todate + '/' + EmployeeCode + '/' + userid
     );
   }
 

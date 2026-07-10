@@ -81,15 +81,15 @@
             <img src="assets/Loading.gif" alt="Loading...">
         </div>
         <div class="card-body rounded-4 py-0" *ngIf="istablevisible">
-            <div class="example-container mat-elevation-z8">
-                <table mat-table #searchgrid [dataSource]="dataSource" matSort class="custom-table mat-elevation-z8">
+            <div class="table-scroll-window">
+                <table mat-table #searchgrid [dataSource]="dataSource" matSort class="mat-elevation-z8 custom-table">
 
                     <ng-container matColumnDef="SINo">
                         <mat-header-cell *matHeaderCellDef mat-sort-header>
                             <div class="cell-center">SI No</div>
                         </mat-header-cell>
                         <mat-cell *matCellDef="let element">
-                            <div class="cell-center">{{ element.SINo }}</div>
+                            <div class="cell-center">{{ element.Serial_No }}</div>
                         </mat-cell>
                     </ng-container>
 
@@ -98,16 +98,16 @@
                             <div class="cell-center">Company Code</div>
                         </mat-header-cell>
                         <mat-cell *matCellDef="let element">
-                            <div class="cell-center">{{ element.CompanyCode }}</div>
+                            <div class="cell-center">{{ element.Company_Code }}</div>
                         </mat-cell>
                     </ng-container>
 
-                    <ng-container matColumnDef="EmployeeCode">
+                    <ng-container matColumnDef="Company_Name">
                         <mat-header-cell *matHeaderCellDef mat-sort-header>
                             <div class="cell-center">Company Name</div>
                         </mat-header-cell>
                         <mat-cell *matCellDef="let element">
-                            <div class="cell-center">{{ element.EmployeeCode }}</div>
+                            <div class="cell-center">{{ element.Company_Name }}</div>
                         </mat-cell>
                     </ng-container>
 
@@ -116,7 +116,7 @@
                             <div class="cell-center">Employee Name</div>
                         </mat-header-cell>
                         <mat-cell *matCellDef="let element">
-                            <div class="cell-center">{{ element.EmployeeName }}</div>
+                            <div class="cell-center">{{ element.Employee_Name }}</div>
                         </mat-cell>
                     </ng-container>
 
@@ -125,7 +125,7 @@
                             <div class="cell-center">Pay Period</div>
                         </mat-header-cell>
                         <mat-cell *matCellDef="let element">
-                            <div class="cell-center">{{ element.PayPeriod }}</div>
+                            <div class="cell-center">{{ element.Pay_Period }}</div>
                         </mat-cell>
                     </ng-container>
 
@@ -134,7 +134,7 @@
                             <div class="cell-center">Release Status</div>
                         </mat-header-cell>
                         <mat-cell *matCellDef="let element">
-                            <div class="cell-center">{{ element.ReleaseStatus }}</div>
+                            <div class="cell-center">{{ element.Salary_Status }}</div>
                         </mat-cell>
                     </ng-container>
 
@@ -152,7 +152,7 @@
                             <div class="cell-center">Batch Created By</div>
                         </mat-header-cell>
                         <mat-cell *matCellDef="let element">
-                            <div class="cell-center">{{ element.BatchCreatedBy }}</div>
+                            <div class="cell-center">{{ element.Batch_Created_By }}</div>
                         </mat-cell>
                     </ng-container>
 
@@ -161,7 +161,7 @@
                             <div class="cell-center">Batch Created On</div>
                         </mat-header-cell>
                         <mat-cell *matCellDef="let element">
-                            <div class="cell-center">{{ element.BatchCreatedOn }}</div>
+                            <div class="cell-center">{{ element.Salary_Release_Date }}</div>
                         </mat-cell>
                     </ng-container>
 
@@ -170,7 +170,7 @@
                             <div class="cell-center">Ikya Location</div>
                         </mat-header-cell>
                         <mat-cell *matCellDef="let element">
-                            <div class="cell-center">{{ element.IkyaLocation }}</div>
+                            <div class="cell-center">{{ element.Ikya_Location }}</div>
                         </mat-cell>
                     </ng-container>
 
@@ -179,7 +179,7 @@
                             <div class="cell-center">Work Location</div>
                         </mat-header-cell>
                         <mat-cell *matCellDef="let element">
-                            <div class="cell-center">{{ element.WorkLocation }}</div>
+                            <div class="cell-center">{{ element.Work_Location }}</div>
                         </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="Bank">
@@ -195,7 +195,7 @@
                             <div class="cell-center">Account Number</div>
                         </mat-header-cell>
                         <mat-cell *matCellDef="let element">
-                            <div class="cell-center">{{ element.AccountNumber }}</div>
+                            <div class="cell-center">{{ element.Account_Number }}</div>
                         </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="IFSCCode">
@@ -203,7 +203,7 @@
                             <div class="cell-center">IFSC Code</div>
                         </mat-header-cell>
                         <mat-cell *matCellDef="let element">
-                            <div class="cell-center">{{ element.IFSCCode }}</div>
+                            <div class="cell-center">{{ element.IFSC_Code }}</div>
                         </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="PTState">
@@ -211,7 +211,7 @@
                             <div class="cell-center">PT State</div>
                         </mat-header-cell>
                         <mat-cell *matCellDef="let element">
-                            <div class="cell-center">{{ element.PTState }}</div>
+                            <div class="cell-center">{{ element.PT_State }}</div>
                         </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="NetPay">
@@ -219,7 +219,7 @@
                             <div class="cell-center">Net Pay</div>
                         </mat-header-cell>
                         <mat-cell *matCellDef="let element">
-                            <div class="cell-center">{{ element.NetPay }}</div>
+                            <div class="cell-center">{{ element.Net_Pay }}</div>
                         </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="BankRefNo">
@@ -227,7 +227,7 @@
                             <div class="cell-center">Bank Ref No</div>
                         </mat-header-cell>
                         <mat-cell *matCellDef="let element">
-                            <div class="cell-center">{{ element.BankRefNo }}</div>
+                            <div class="cell-center">{{ element.Bank_ref_no ??'' }}</div>
                         </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="UTRChequeNo">
@@ -235,7 +235,7 @@
                             <div class="cell-center">UTR/ChequeNo</div>
                         </mat-header-cell>
                         <mat-cell *matCellDef="let element">
-                            <div class="cell-center">{{ element.UTRChequeNo }}</div>
+                            <div class="cell-center">{{ element.UTR_CHEQUE_NO ??'' }}</div>
                         </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="UTRDate">
@@ -243,7 +243,7 @@
                             <div class="cell-center">UTR Date</div>
                         </mat-header-cell>
                         <mat-cell *matCellDef="let element">
-                            <div class="cell-center">{{ element.UTRDate }}</div>
+                            <div class="cell-center">{{ element.UTR_Date }}</div>
                         </mat-cell>
                     </ng-container>
                     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

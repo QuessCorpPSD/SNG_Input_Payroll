@@ -102,7 +102,7 @@ export class SalaryreleasestatusComponent {
 
 
   displayedColumns: string[] = [
-    'SINo', 'CompanyCode', 'EmployeeCode', 'EmployeeName', 'PayPeriod', 'ReleaseStatus', 'BatchId', 'BatchCreatedBy', 'BatchCreatedOn', 'IkyaLocation', 'WorkLocation', 'Bank', 'AccountNumber', 'IFSCCode', 'PTState', 'NetPay', 'BankRefNo', 'UTRChequeNo', 'UTRDate'
+    'SINo', 'CompanyCode', 'Company_Name', 'EmployeeName', 'PayPeriod', 'ReleaseStatus', 'BatchId', 'BatchCreatedBy', 'BatchCreatedOn', 'IkyaLocation', 'WorkLocation', 'Bank', 'AccountNumber', 'IFSCCode', 'PTState', 'NetPay', 'BankRefNo', 'UTRChequeNo', 'UTRDate'
 
   ];
 
@@ -155,6 +155,11 @@ export class SalaryreleasestatusComponent {
 
     if (!this.endDate) {
       alert("Please Select To Date");
+      return;
+    }
+
+    if (new Date(this.startDate) > new Date(this.endDate)) {
+      alert("Start Date cannot be greater than End Date");
       return;
     }
 
@@ -219,13 +224,28 @@ export class SalaryreleasestatusComponent {
       return;
     }
 
+    if (new Date(this.startDate) > new Date(this.endDate)) {
+      alert("Start Date cannot be greater than End Date");
+      return;
+    }
+
     this.isLoading = true;
+
+    if (this.startDate) {
+      const [year, month, day] = this.startDate.split('-');
+      this.FormattedStartBatchDate = `${day}-${month}-${year}`;
+    }
+
+    if (this.endDate) {
+      const [year, month, day] = this.endDate.split('-');
+      this.FormattedendBatchDate = `${day}-${month}-${year}`;
+    }
 
     this.service.GetSalaryReleaseStatusdataExport(
       this.BatchType,
-      this.startDate,
-      this.endDate,
-      this.EmployeeCode,
+      this.FormattedStartBatchDate,
+      this.FormattedendBatchDate,
+      this.EmployeeCode ?? 0,
       this.userdetail.user_Id
     )
       .pipe(finalize(() => this.isLoading = false))
@@ -238,7 +258,7 @@ export class SalaryreleasestatusComponent {
             alert('No records found.');
             return;
           }
-
+          alert("Report downloaded successfully.");
           this.exportDataToExcel(tableData, 'salary_release_status_');
 
         },
