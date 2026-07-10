@@ -276,6 +276,17 @@
     width: 85px;
 }
 
+select {
+    width: 100%;
+    padding: 6px 8px;
+    border-radius: 4px;
+    border: 1px solid #A0A0A0;
+    font-size: 12px;
+    font-family: "Montserrat";
+    color: #222;
+    appearance: outline;
+}
+
 .dbt-select1 {
     padding: 6px 10px;
     background: #ADFFDC;

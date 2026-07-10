@@ -19,12 +19,14 @@ import { ISalaryReleaseStatus } from '../../../Repository/banknonvoice/ISalaryRe
 import { SalaryreleasestatusService } from '../../../Service/banknonvoice/salaryreleasestatus.service';
 import { EncryptionService } from '../../../Shared/encryption.service';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
+import { finalize } from 'rxjs';
+import * as XLSX from 'xlsx';
 export const Pay_Token = new InjectionToken<ISalaryReleaseStatus>('Pay_Token');
 
 
 @Component({
   selector: 'app-salaryreleasestatus',
-  standalone:true,
+  standalone: true,
   imports: [CommonModule, MatTableModule, MatCheckboxModule, MatPaginatorModule, MatSort,
     MatSelectModule, MatInputModule, MatFormFieldModule, ReactiveFormsModule, FormsModule,
     AlertpopupComponent, MatCardModule, MatIconModule, MatTooltipModule, PayPeriodComponent, CompanyallComponent],
@@ -89,6 +91,11 @@ export class SalaryreleasestatusComponent {
   selectedPP?: string;
   paginatedData: any[] = [];
   companyId: any;
+  BatchType = '';
+  batchtypes: any;
+  EmployeeCode: any;
+  FormattedStartBatchDate = '';
+  FormattedendBatchDate = '';
 
   constructor(private _decrypt: EncryptionService, private _sessionStoreage: SessionStorageService, @Inject(Pay_Token) private service: ISalaryReleaseStatus) { }
 
@@ -101,13 +108,14 @@ export class SalaryreleasestatusComponent {
 
   ngOnInit(): void {
     this.payPeriodTypefromParentall = "All";
+    const json = this._sessionStoreage.getItem('UserProfile');
+    if (json) {
+      this.userdetail = JSON.parse(this._decrypt.decrypt(json));
+    } else {
+      console.warn('UserProfile not found in session storage');
+    }
+    this.loadbatchType(this.userdetail.user_Id);
   }
-  // handleCompanyEvent(event: any) {
-  //   this.comapnyId = event.companyId;
-  //   this.selectedCompanyCode = event.companyCode;
-  //   this.companyUI = event.company;
-  //   this.BindPurpose(this.comapnyId);
-  // }
 
   handleCompanyEvent(event: any) {
     this.companyId = event.companyId;
@@ -126,25 +134,16 @@ export class SalaryreleasestatusComponent {
     this.payPeriodmain = payperiod;
     this.payperiodIdmain = payperiod.payfrequencyid;
     this.payperiodsmain = payperiod.payPeriod;
-
   }
 
   BindPurpose(companyId: number) {
 
   }
 
-  searchClick() {
 
+  searchClick(): void {
 
-    if (!this.selectedCompanyCode) {
-      alert("Please Select Company Code");
-      return;
-    }
-    this.istablevisible = true;
-  }
-  exportToExcel(): void {
-    // Validation
-    if (!this.selectedBatchType) {
+    if (!this.BatchType) {
       alert("Please Select Batch Type");
       return;
     }
@@ -158,26 +157,269 @@ export class SalaryreleasestatusComponent {
       alert("Please Select To Date");
       return;
     }
+
+    this.isLoading = true;
+
+    if (this.startDate) {
+      const [year, month, day] = this.startDate.split('-');
+      this.FormattedStartBatchDate = `${day}-${month}-${year}`;
+    }
+
+    if (this.endDate) {
+      const [year, month, day] = this.endDate.split('-');
+      this.FormattedendBatchDate = `${day}-${month}-${year}`;
+    }
+
+    this.service.GetSalaryReleaseStatusdata(
+      this.BatchType,
+      this.FormattedStartBatchDate,
+      this.FormattedendBatchDate,
+      this.EmployeeCode ?? 0,
+      this.userdetail.user_Id
+    )
+      .pipe(finalize(() => this.isLoading = false))
+      .subscribe({
+        next: (res: any) => {
+
+          const tableData = res?.Data?.data?.Table0 ?? [];
+
+          this.dataSource.data = tableData;
+
+          if (!tableData.length) {
+            alert('No records found.');
+            this.istablevisible = false;
+          }
+          this.istablevisible = true;
+
+        },
+        error: (err) => {
+          console.error(err);
+          this.dataSource.data = [];
+          this.istablevisible = false;
+          alert('Something went wrong.');
+        }
+      });
+
   }
+
+  exportToExcel(): void {
+
+    if (!this.BatchType) {
+      alert("Please Select Batch Type");
+      return;
+    }
+
+    if (!this.startDate) {
+      alert("Please Select From Date");
+      return;
+    }
+
+    if (!this.endDate) {
+      alert("Please Select To Date");
+      return;
+    }
+
+    this.isLoading = true;
+
+    this.service.GetSalaryReleaseStatusdataExport(
+      this.BatchType,
+      this.startDate,
+      this.endDate,
+      this.EmployeeCode,
+      this.userdetail.user_Id
+    )
+      .pipe(finalize(() => this.isLoading = false))
+      .subscribe({
+        next: (res: any) => {
+
+          const tableData = res?.Data?.data?.Table0 ?? [];
+
+          if (!tableData.length) {
+            alert('No records found.');
+            return;
+          }
+
+          this.exportDataToExcel(tableData, 'salary_release_status_');
+
+        },
+        error: (err) => {
+          console.error(err);
+          alert('Export failed.');
+        }
+      });
+  }
+
   ImportClick(fileInput: HTMLInputElement): void {
     fileInput.value = '';
     fileInput.click();
   }
 
   onFileChange(event: Event): void {
-    this.isLoading = true;
+
     const input = event.target as HTMLInputElement;
-    const file = input?.files?.[0];
-    if (!this.selectedBatchType) {
-      alert('Please select a Batch Type.');
-      this.isLoading = false;
+
+    if (!input.files || input.files.length === 0) {
+      alert('Please select a file.');
       return;
     }
+
+    if (!this.BatchType) {
+      alert('Please select Batch Type.');
+      input.value = '';
+      return;
+    }
+
+    const file = input.files[0];
+
+    const allowedExtensions = ['xlsx', 'xls'];
+    const extension = file.name.split('.').pop()?.toLowerCase();
+
+    if (!allowedExtensions.includes(extension || '')) {
+      alert('Only Excel files (.xls/.xlsx) are allowed.');
+      input.value = '';
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('BatchType', this.BatchType);
+    formData.append('UserId', this.userdetail.user_Id);
+
+    this.isLoading = true;
+
+    this.service.UtrUpload(formData)
+      .pipe(finalize(() => {
+        this.isLoading = false;
+        input.value = '';
+      }))
+      .subscribe({
+
+        next: (res) => {
+
+          if (!res?.Data) {
+            alert('Server returned no data.');
+            return;
+          }
+
+          const response = res.Data.response ?? '';
+
+          if (response.includes('Row(s) Uploaded Successfully.')) {
+            alert('Rows Uploaded Successfully.');
+            return;
+          }
+
+          if (response.includes('Failed to import.')) {
+
+            alert('Failed to Import.');
+
+            const rawErr = res.Data.errors?.[0];
+
+            let errorArray: any[] = [];
+
+            try {
+
+              if (typeof rawErr === 'string') {
+
+                const parsed = JSON.parse(rawErr);
+
+                errorArray = Array.isArray(parsed)
+                  ? parsed
+                  : [parsed];
+
+              } else {
+
+                errorArray = Array.isArray(rawErr)
+                  ? rawErr
+                  : rawErr
+                    ? [rawErr]
+                    : [];
+
+              }
+
+            } catch {
+
+              errorArray = rawErr
+                ? [{ Error_Message: String(rawErr) }]
+                : [];
+
+            }
+
+            const exportData = errorArray.map((x: any) => ({
+              Error_Message: x.Error_Message || x.Validation || ''
+            }));
+
+            const worksheet = XLSX.utils.json_to_sheet(exportData);
+
+            const workbook = {
+              Sheets: {
+                ErrorMessages: worksheet
+              },
+              SheetNames: ['ErrorMessages']
+            };
+
+            XLSX.writeFile(workbook, 'ErrorMessages.xlsx');
+
+          }
+
+        },
+        error: (err) => {
+          console.error(err);
+          alert('Upload failed.');
+        }
+
+      });
   }
+
   applyFilter() {
     const filterValue = this.searchText.trim().toLowerCase();
     this.dataSource.filter = filterValue;
+  }
 
+  loadbatchType(userid): void {
+    this.service.GetBatchTypeList(userid).subscribe({
+      next: (res: any) => {
+        this.batchtypes = res?.Data ?? [];
+      },
+      error: (err: any) => {
+        console.error("Dropdown Error", err);
+      }
+    });
+  }
+
+  onDownloadTemplate() {
+    var flag = 'NIUTR';
+    this.isLoading = true;
+    this.service.GetTemplate(this.userdetail.user_Id, flag)
+      .subscribe({
+        next: (res: any) => {
+          this.isLoading = false;
+          const tableData = res?.Data?.data?.Table0 ?? [];
+
+          if (!tableData.length) {
+            alert('No template data found.');
+            return;
+          }
+          this.exportDataToExcel(tableData, 'batch_generation_template');
+        },
+        error: (err) => {
+          this.isLoading = false;
+          console.error(err);
+          alert('Unable to download template.');
+        }
+
+      });
+  }
+
+  exportDataToExcel(data: any[], filename: string) {
+    import('xlsx').then(xlsx => {
+      const worksheet = xlsx.utils.json_to_sheet(data);
+
+      const workbook = xlsx.utils.book_new();
+      xlsx.utils.book_append_sheet(workbook, worksheet, 'Users');
+
+      xlsx.writeFile(workbook, `${filename}_${new Date().getTime()}.xlsx`
+      );
+    });
   }
 
 }

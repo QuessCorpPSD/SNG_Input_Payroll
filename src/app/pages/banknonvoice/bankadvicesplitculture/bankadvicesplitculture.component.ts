@@ -25,6 +25,8 @@ import { BankAdviseSplitCultureService } from '../../../Service/banknonvoice/Ban
   styleUrl: './bankadvicesplitculture.component.css'
 })
 export class BankadvicesplitcultureComponent {
+  Bank_Culture_Detail_id = '';
+  Bank_Culture_id = '';
   vendorControl = new FormControl();
   filteredVendors: any[] = [];
   selectedVendor: any;
@@ -105,8 +107,9 @@ export class BankadvicesplitcultureComponent {
     //input.value = '';
     this.vendorControl.setValue('');
     this.filteredVendors = [];
-    this.selectedVendor = null;
     this.isAddClicked = true;
+    this.selectedVendor = null;
+    this.selectedCompanyId = '';
   }
 
   getgroupname(): void {
@@ -154,14 +157,13 @@ export class BankadvicesplitcultureComponent {
   closeclick() {
     this.addBankAdviceSplitForm.reset();
     this.uploadedDataSource1.data = [];
-    this.selectedCompanyId = '';
-    this.vendorControl.setValue('');
     this.filteredVendors = [];
-    this.selectedVendor = null;
+    //this.selectedVendor = null;
     this.isAddClicked = false;
     this.iseditClicked = false;
-    this.selectedCompanyId = '';
-    this.selectedVendor = null;
+    //this.selectedCompanyId = '';
+    this.Bank_Culture_Detail_id = '';
+    this.Bank_Culture_id = '';
     this.addBankAdviceSplitForm.get('CompanyCode')?.enable();
   }
 
@@ -170,6 +172,8 @@ export class BankadvicesplitcultureComponent {
     this.iseditClicked = true;
     this.selectedRowSlNo = row.Sl_No;
     console.log(row);
+    this.Bank_Culture_id = row.Bank_Culture_Id;
+    this.Bank_Culture_Detail_id = row.Bank_Culture_Detail_id;
     this.selectedCompanyId = row.Company_Id;
     this.selectedVendor = {
       Vendor_Id: row.Vendor_Id,
@@ -197,15 +201,18 @@ export class BankadvicesplitcultureComponent {
       return;
     }
 
+    console.log(row);
     const payload = {
       Company_Id: row.Company_Id,
       vendor_id: row.Vendor_Id,
-      groupdetail: [{ Group_Detail_Id: row.Group_Detail_Id }],
       culture_type: row.Culture_Type,
       created_by: this.userdetail.user_Id,
-      Bank_Culture_id: 0,
+      Bank_Culture_id: row.Bank_Culture_Id,
+      Bank_Culture_Detail_id: row.Bank_Culture_Detail_id,
       mode: 'Delete'
     };
+    console.log(payload);
+    this.saveaction(payload);
 
   }
 
@@ -329,32 +336,53 @@ export class BankadvicesplitcultureComponent {
 
     var formdata = this.addBankAdviceSplitForm.value;
 
-    const groupdetail = selectedGroups.map((id: any) => ({
-      Group_Detail_Id: id
-    }));
+    // const groupdetail = selectedGroups.map((id: any) => ({
+    //   Group_Detail_Id: id
+    // }));
+    const groupdetail = selectedGroups.join(',');
 
-    const payload = {
-      Company_Id: this.selectedCompanyId,
-      vendor_id: this.selectedVendor.Vendor_Id,
-      groupdetail: groupdetail,
-      culture_type: formdata.SplitType,
-      created_by: this.userdetail.user_Id,
-      Bank_Culture_id: 0,
-      mode: this.iseditClicked ? 'Edit' : 'Add'
-    };
+    if (this.iseditClicked) {
+      const payload = {
+        Company_Id: this.selectedCompanyId,
+        vendor_id: this.selectedVendor.Vendor_Id,
+        culture_type: formdata.SplitType,
+        created_by: this.userdetail.user_Id,
+        Bank_Culture_id:this.Bank_Culture_id,
+        Bank_Culture_Detail_id:this.Bank_Culture_Detail_id,
+        mode: this.iseditClicked ? 'Edit' : 'Add'
+      };
 
+      this.saveaction(payload);
+    } else {
+      const payload = {
+        Company_Id: this.selectedCompanyId,
+        vendor_id: this.selectedVendor.Vendor_Id,
+        culture_type: formdata.SplitType,
+        created_by: this.userdetail.user_Id,
+        Bank_Culture_id:0,
+        Bank_Culture_Detail_id:0,
+        mode: this.iseditClicked ? 'Edit' : 'Add'
+      };
+
+      payload['groupdetail'] = groupdetail;
+
+      this.saveaction(payload);
+    }
+
+  }
+
+
+  saveaction(payload: any): void {
     this.isLoading = true;
 
     this.service.createbankadvisesplitculture(payload)
       .pipe(finalize(() => this.isLoading = false))
       .subscribe({
         next: (res: any) => {
-
           alert(res?.Data.data.Table0[0]['Error_Message'] || 'Saved successfully.');
-
-          // Optional: Reset form
-
+          
           this.closeclick();
+          this.onsearch();
 
         },
         error: (err: any) => {
@@ -364,7 +392,6 @@ export class BankadvicesplitcultureComponent {
 
         }
       });
-
   }
 
   searchVendor(value: string): void {
@@ -529,7 +556,8 @@ export class BankadvicesplitcultureComponent {
       //   type: 'array'
       // });
 
-      xlsx.writeFile(workbook,`${filename}_${new Date().getTime()}.xlsx`);
+      xlsx.writeFile(workbook, `${filename}_${new Date().getTime()}.xlsx`);
+      alert('Exported Successfully.');
 
       // this.saveFile(excelBuffer, filename);
     });
