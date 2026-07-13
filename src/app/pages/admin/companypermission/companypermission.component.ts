@@ -286,7 +286,7 @@ export class CompanypermissionComponent {
       Sheets: { 'Result': worksheet },
       SheetNames: ['Result']
     };
-    XLSX.writeFile(workbook,'CompanyPermission_Result.xlsx')
+    XLSX.writeFile(workbook, 'CompanyPermission_Result.xlsx')
     // const excelBuffer: any = XLSX.write(workbook, {
     //   bookType: 'xlsx',
     //   type: 'array'
@@ -298,6 +298,11 @@ export class CompanypermissionComponent {
 
     // FileSaver.saveAs(blob, 'CompanyPermission_Result.xlsx');
   }
+
+  getCompanyPermissionId(data: any[]): number {
+    return data.find(item => item.COMPANY_PERMISSION_ID != null)?.COMPANY_PERMISSION_ID || 0;
+  }
+
   onSave() {
     if (this.addMenuForm.invalid) {
       this.addMenuForm.markAllAsTouched();
@@ -307,6 +312,7 @@ export class CompanypermissionComponent {
     const f = this.addMenuForm.value;
 
     const data = this.uploadedDataSourceadd.data || [];
+    console.log("data", data)
 
     data.forEach((row: any) => {
       row.selected = !!row.selected;
@@ -319,6 +325,21 @@ export class CompanypermissionComponent {
       return;
     }
 
+    console.log(selectedCompanies)
+
+
+    var Company_Permission_Id = this.getCompanyPermissionId(selectedCompanies);
+
+    var datas = selectedCompanies.map((row: any) => ({
+      Company_Permission_Details_Id: this.isEditMode ? row.COMPANY_PERMISSION_DETAILS_ID ?? 0 : 0,
+      Company_Permission_Id: this.isEditMode ? row.COMPANY_PERMISSION_ID ?? Company_Permission_Id : 0,
+      Is_Permission: true,
+      Company_Id: row.COMPANY_ID || 0,
+      Company_Code: row.COMPANY_CODE,
+    }))
+
+    console.log(datas)
+
     const payload = {
       createdBy: this.userdetail.user_Id,
       mode: this.isEditMode ? "Edit" : "Add",
@@ -328,15 +349,9 @@ export class CompanypermissionComponent {
         Business_Unit_Name_id: Number(f.BusinessUnitName),
         Company_Permission_Id: 0
       },
-
-      CompanyPermissionDetails: selectedCompanies.map((row: any) => ({
-        Company_Permission_Details_Id: this.isEditMode ? row.COMPANY_PERMISSION_DETAILS_ID || 0 : 0,
-        Company_Permission_Id: this.isEditMode ? row.COMPANY_PERMISSION_ID || 0 : 0,
-        Is_Permission: true,
-        Company_Id: row.COMPANY_ID || 0,
-        Company_Code: row.COMPANY_CODE
-      }))
+      CompanyPermissionDetails: datas
     };
+    console.log(JSON.stringify(payload))
 
     this.isLoading = true;
 
@@ -371,6 +386,7 @@ export class CompanypermissionComponent {
           const errorRows = tableData.filter((r: any) => !successCheck(r));
 
           this.exportToExcelsave(tableData);
+          this.onsearch();
 
           if (errorRows.length === 0) {
 
