@@ -16,4 +16,20 @@ export class partialHoldReleaseEmployeeSalaryService implements IpartialHoldRele
   env = environment;
 
   constructor(private http: HttpClient) { }
+  
+  GetTemplate(userid: any, Flag: any): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      this.env.apiUrl +
+      'NIBatchGeneration/GetTemplate/' + Flag + '/' + userid
+    );
+  }
+
+
+   UploadReleaseHoldSalary(formData: FormData,flag:any): Observable<APIResponse> {
+    return this.http.post<APIResponse>(
+      this.env.apiUrl + 'PartialHoldRelease/'+flag,
+      formData
+    );
+  }
+
 }
