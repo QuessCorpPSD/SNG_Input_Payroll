@@ -158,18 +158,6 @@
                         }
                     </div>
                     <div class="col-md-4">
-                        <label class="form-label">Split Type</label>
-                        <select class="form-select" formControlName="SplitType">
-                            <option value="">-- Select --</option>
-                            <option value="1">Separate</option>
-                            <option value="2">Multiple</option>
-                        </select>
-                        <div class="text-danger small" *ngIf="addBankAdviceSplitForm.get('SplitType')?.touched 
-                                && addBankAdviceSplitForm.get('SplitType')?.hasError('required')">
-                            SplitType is required
-                        </div>
-                    </div>
-                    <div class="col-md-4">
                         <label class="form-label">Vendor</label>
                         @if(!iseditClicked){
                         <mat-form-field class="w-100 custom-height rounded-1 hover-clear-field" appearance="outline"
@@ -197,6 +185,19 @@
                             [disabled]="true" />
                         }
                     </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Split Type</label>
+                        <select class="form-select" formControlName="SplitType">
+                            <option value="">-- Select --</option>
+                            <option value="1">Separate</option>
+                            <option value="2">Multiple</option>
+                        </select>
+                        <div class="text-danger small" *ngIf="addBankAdviceSplitForm.get('SplitType')?.touched 
+                                && addBankAdviceSplitForm.get('SplitType')?.hasError('required')">
+                            SplitType is required
+                        </div>
+                    </div>
+                    
                 </div>
 
 

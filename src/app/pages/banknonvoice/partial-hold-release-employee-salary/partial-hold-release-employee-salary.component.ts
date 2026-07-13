@@ -38,6 +38,11 @@ export class PartialHoldReleaseEmployeeSalaryComponent implements OnInit {
   }
 
   ImportClick(fileInput: HTMLInputElement): void {
+    if (!this.UploadType) {
+      alert('Please select Upload Type.');
+      return;
+    }
+
     fileInput.value = '';
     fileInput.click();
   }
@@ -71,117 +76,136 @@ export class PartialHoldReleaseEmployeeSalaryComponent implements OnInit {
 
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('UploadType', this.UploadType);
-    formData.append('UserId', this.userdetail.user_Id);
+    formData.append('User', this.userdetail.user_Id);
 
     this.isLoading = true;
 
-    // this.service.UploadCollectionStatus(formData)
-    //   .pipe(finalize(() => {
-    //     this.isLoading = false;
-    //     input.value = '';
-    //   }))
-    //   .subscribe({
+    var flag = '';
 
-    //     next: (res) => {
+    if(this.UploadType =='Partial Hold Employee Salary'){
+      flag = 'PartialHold';
+    }else{
+      flag = 'PartialHoldRelease'
+    }
+    this.service.UploadReleaseHoldSalary(formData,flag)
+      .pipe(finalize(() => {
+        this.isLoading = false;
+        input.value = '';
+      }))
+      .subscribe({
 
-    //       if (!res?.Data) {
-    //         alert('Server returned no data.');
-    //         return;
-    //       }
+        next: (res) => {
 
-    //       const response = res.Data.error_Message ?? '';
+          if (!res?.Data) {
+            alert('Server returned no data.');
+            return;
+          }
 
-    //       if (response.includes('Row(s) Uploaded Successfully.')) {
-    //         alert('Rows Uploaded Successfully.');
-    //         return;
-    //       }
+          const response = res.Data.response ?? '';
 
-    //       if (response.includes('Failed to import.')) {
+          if (response.includes('Row(s) Uploaded Successfully.')) {
+            alert('Rows Uploaded Successfully.');
+            return;
+          }
 
-    //         alert('Failed to Import.');
+          if (response.includes('Failed to import.')) {
 
-    //         const rawErr = res.Data.errors?.[0];
+            alert('Failed to Import.');
 
-    //         let errorArray: any[] = [];
+            const rawErr = res.Data.errors?.[0];
 
-    //         try {
+            let errorArray: any[] = [];
 
-    //           if (typeof rawErr === 'string') {
+            try {
 
-    //             const parsed = JSON.parse(rawErr);
+              if (typeof rawErr === 'string') {
 
-    //             errorArray = Array.isArray(parsed)
-    //               ? parsed
-    //               : [parsed];
+                const parsed = JSON.parse(rawErr);
 
-    //           } else {
+                errorArray = Array.isArray(parsed)
+                  ? parsed
+                  : [parsed];
 
-    //             errorArray = Array.isArray(rawErr)
-    //               ? rawErr
-    //               : rawErr
-    //                 ? [rawErr]
-    //                 : [];
+              } else {
 
-    //           }
+                errorArray = Array.isArray(rawErr)
+                  ? rawErr
+                  : rawErr
+                    ? [rawErr]
+                    : [];
 
-    //         } catch {
+              }
 
-    //           errorArray = rawErr
-    //             ? [{ Error_Message: String(rawErr) }]
-    //             : [];
+            } catch {
 
-    //         }
+              errorArray = rawErr
+                ? [{ Error_Message: String(rawErr) }]
+                : [];
 
-    //         const exportData = errorArray.map((x: any) => ({
-    //           Error_Message: x.Error_Message || x.Validation || ''
-    //         }));
+            }
 
-    //         const worksheet = XLSX.utils.json_to_sheet(exportData);
+            const exportData = errorArray.map((x: any) => ({
+              Error_Message: x.Error_Message || x.Validation || ''
+            }));
 
-    //         const workbook = {
-    //           Sheets: {
-    //             ErrorMessages: worksheet
-    //           },
-    //           SheetNames: ['ErrorMessages']
-    //         };
+            const worksheet = XLSX.utils.json_to_sheet(exportData);
 
-    //         XLSX.writeFile(workbook, 'ErrorMessages.xlsx');
+            const workbook = {
+              Sheets: {
+                ErrorMessages: worksheet
+              },
+              SheetNames: ['ErrorMessages']
+            };
 
-    //       }
+            XLSX.writeFile(workbook, 'ErrorMessages.xlsx');
 
-    //     },
-    //     error: (err) => {
-    //       console.error(err);
-    //       alert('Upload failed.');
-    //     }
+          }
 
-    //   });
+        },
+        error: (err) => {
+          console.error(err);
+          alert('Upload failed.');
+        }
+
+      });
   }
 
   onDownloadTemplate() {
-    var flag = 'NIStatusApprove';
+
+    if (!this.UploadType) {
+      alert('Please select Upload Type.');
+      return;
+    }
+
+    var flag ='';
+
+    if(this.UploadType =='Partial Hold Employee Salary'){
+      flag ='NIPartialHold'
+    }else{
+      flag ='NIPartialHoldRelease'
+    }
+    
     this.isLoading = true;
-    // this.service.GetTemplate(this.userdetail.user_Id, flag)
-    //   .subscribe({
+    this.service.GetTemplate(this.userdetail.user_Id, flag)
+      .subscribe({
 
-    //     next: (res: any) => {
-    //       this.isLoading = false;
-    //       const tableData = res?.Data?.data?.Table0 ?? [];
+        next: (res: any) => {
+          this.isLoading = false;
+          const tableData = res?.Data?.data?.Table0 ?? [];
 
-    //       if (!tableData.length) {
-    //         alert('No template data found.');
-    //         return;
-    //       }
-    //       this.exportDataToExcel(tableData, 'batch_generation_template');
-    //     },
-    //     error: (err) => {
-    //       this.isLoading = false;
-    //       console.error(err);
-    //       alert('Unable to download template.');
-    //     }
+          if (!tableData.length) {
+            alert('No template data found.');
+            return;
+          }
+          this.exportDataToExcel(tableData, `${this.UploadType}_template`);
+        },
+        error: (err) => {
+          this.isLoading = false;
+          console.error(err);
+          alert('Unable to download template.');
+        }
 
-    //   });
+      });
   }
 
   exportDataToExcel(data: any[], filename: string) {
@@ -191,7 +215,7 @@ export class PartialHoldReleaseEmployeeSalaryComponent implements OnInit {
       const workbook = xlsx.utils.book_new();
       xlsx.utils.book_append_sheet(workbook, worksheet, 'Users');
 
-      xlsx.writeFile(workbook,`${filename}_${new Date().getTime()}.xlsx`
+      xlsx.writeFile(workbook, `${filename}_${new Date().getTime()}.xlsx`
       );
     });
   }
