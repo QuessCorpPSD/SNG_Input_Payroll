@@ -122,19 +122,6 @@
                 <div style="display: inline-block; margin-right: 10px;padding-top: 12px;">
                     <input type="file" #fileInput style="display: none;" (change)="onFileChange($event)"
                         accept=".xlsx, .xls" />
-                    <label style="position: relative; display: inline-block;">
-                        <button class="select-drop1" style="color: #111111;" (click)="DailyClick()">
-                            Daily
-                        </button>
-                        <i
-                            style="position: absolute; top: 48%; right: 30px; transform: translateY(-50%); pointer-events: none;">
-                            <div style="width: 20px; height: 20px; position: relative; border-radius: 20px">
-                                <div
-                                    style="width: 20px; height: 20px; left: 0px; top: 0px; position: absolute; background: #111111; border-radius: 20px">
-                                </div>
-                            </div>
-                        </i>
-                    </label>
                 </div>
                 <div class="right-align">
                     <payrollinput [visibleDropdowns]="[1, 2, 5, 6]" [showSearchButton]="true"
@@ -212,6 +199,19 @@
                             Submit</div>
                     </button>
                 </div>
+                <label style="position: relative; display: inline-block;">
+                    <button class="select-drop1" style="color: #111111;" (click)="DailyClick()">
+                        Daily
+                    </button>
+                    <i
+                        style="position: absolute; top: 48%; right: 30px; transform: translateY(-50%); pointer-events: none;">
+                        <div style="width: 20px; height: 20px; position: relative; border-radius: 20px">
+                            <div
+                                style="width: 20px; height: 20px; left: 0px; top: 0px; position: absolute; background: #111111; border-radius: 20px">
+                            </div>
+                        </div>
+                    </i>
+                </label>
                 <label style="position: relative; display: inline-block;">
                     <button (click)="onDailyTemplateClick()" class="select-drop">
                         Template
@@ -376,18 +376,18 @@
                                 <ng-container *ngFor="let d of dayCols; let i = index">
                                     <!-- OT -->
                                     <td class="day-col" [class.weekend]="d.isWeekend">
-                                        <input #cellInput1  type="text" [(ngModel)]="r.dayValues[i].OT"
-                                            (ngModelChange)="onType(r, i, 'OT', $event)" 
+                                        <input #cellInput1 type="text" [(ngModel)]="r.dayValues[i].OT"
+                                            (ngModelChange)="onType(r, i, 'OT', $event)"
                                             (blur)="onBlur(r, i, 'OT', cellInput1)" style="text-align: center;"
                                             maxlength="10" />
                                     </td>
 
                                     <!-- HOT -->
                                     <td class="day-col" [class.weekend]="d.isWeekend">
-                                        <input #cellInput2  type="text" [(ngModel)]="r.dayValues[i].HOT"
-                                            (ngModelChange)="onType(r, i, 'HOT', $event)" 
+                                        <input #cellInput2 type="text" [(ngModel)]="r.dayValues[i].HOT"
+                                            (ngModelChange)="onType(r, i, 'HOT', $event)"
                                             (blur)="onBlur(r, i, 'HOT', cellInput2)" style="text-align: center;"
-                                            maxlength="10" (keypress)="allowDecimalOnly($event)"/>
+                                            maxlength="10" (keypress)="allowDecimalOnly($event)" />
                                     </td>
                                 </ng-container>
                                 <!-- <td class="ot">

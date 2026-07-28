@@ -1,49 +1,75 @@
 <body>
     <div class="right-align">
         <div *ngIf="visibleDropdowns.includes(1)"
-            style="width: 160px; height: 52px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex">
+            style="display:inline-flex; flex-direction:column; gap:8px; width:200px;">
+
+            <div style="color:#89898B; font-size:10px; font-family:Montserrat; font-weight:500;">
+                Company Code
+            </div>
+
+            <div style="width:100%;">
+                <CompanyPicker style="display:block; width:100%;" (companyEmit)="handleCompanyEvent($event)">
+                </CompanyPicker>
+            </div>
+
+        </div>
+        <!-- <div *ngIf="visibleDropdowns.includes(1)" style="flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+            gap: 8px;
+            display: inline-flex;">
             <div
-                style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
-                Company Code</div>
+                style="width: 80px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
+                Company Code
+            </div>
             <div>
                 <CompanyPicker (companyEmit)="handleCompanyEvent($event)"></CompanyPicker>
             </div>
-        </div>
-        <div *ngIf="visibleDropdowns.includes(2)"
-            style="width: 160px; height: 52px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex">
-            <div
-                style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
-                Pay Period</div>
-            <div class="input-group">
-                <PayPeriod [selectedCompanyId]="selectedCC" [payPeriodType]="payPeriodTypetoChild"
-                    (payperiodEmit)="handlePayperiodEvent($event)"></PayPeriod>
+        </div> -->
+        <div *ngIf="visibleDropdowns.includes(2)" style="display:flex; flex-direction:column; gap:8px; width:220px;">
+
+            <div style="color:#89898B; font-size:10px; font-family:Montserrat; font-weight:500;">
+                Pay Period
             </div>
+
+            <div style="width:100%;">
+                <PayPeriod style="display:block; width:100%;" [selectedCompanyId]="selectedCC"
+                    [payPeriodType]="payPeriodTypetoChild" (payperiodEmit)="handlePayperiodEvent($event)">
+                </PayPeriod>
+            </div>
+
         </div>
         <div *ngIf="visibleDropdowns.includes(3)"
-            style="width: 160px; height: 52px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex">
+            style=" flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex">
             <div
                 style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
-                Map Name</div>
-            <div>
-                <mapname [selectedCompanyId]="selectedCC" (mapnameEmit)="handleMapNameEvent($event)"></mapname>
+                Map Name
+            </div>
+            <div style="width:100%;">
+                <mapname style="display:block; width:100%;" [selectedCompanyId]="selectedCC"
+                    (mapnameEmit)="handleMapNameEvent($event)"></mapname>
             </div>
         </div>
         <div *ngIf="visibleDropdowns.includes(4)"
-            style="width: 160px; height: 52px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex">
+            style=" flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex">
             <div
                 style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
-                Input Type</div>
-            <div>
-                <inputType (inputTypeEmit)="handleInputTypeEvent($event)"></inputType>
+                Input Type
+            </div>
+            <div style="width:100%;">
+                <inputType style="display:block; width:100%;" (inputTypeEmit)="handleInputTypeEvent($event)">
+                </inputType>
             </div>
         </div>
         <div *ngIf="visibleDropdowns.includes(5)"
-            style="width: 160px; height: 52px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex">
+            style=" flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex">
             <div
                 style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
-                Group Name</div>
-            <div>
-                <groupname [selectedCompanyId]="selectedCC" (sitenameEmit)="handleGroupNameEvent($event)"></groupname>
+                Group Name
+            </div>
+            <div style="width:100%;">
+                <groupname style="display:block; width:100%;" [selectedCompanyId]="selectedCC"
+                    (sitenameEmit)="handleGroupNameEvent($event)"></groupname>
             </div>
         </div>
         <!-- <div *ngIf="visibleDropdowns.includes(6)"
@@ -89,7 +115,8 @@
                 style="width: 130px; height: 30px; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
                 <div
                     style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Montserrat; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
-                    Search</div>
+                    Search
+                </div>
             </button>
         </div>
         <div *ngIf="showfinalsubmisionButton"
@@ -98,7 +125,8 @@
                 style="width: 130px; height: 30px; padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #0ec2cf; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
                 <div
                     style="color: var(--background, #F5F5F5); font-size: 12px; font-family: Nunito Sans; font-weight: 600; line-height: 22.40px; letter-spacing: 0.24px; word-wrap: break-word">
-                    Final Submission</div>
+                    Final Submission
+                </div>
             </button>
         </div>
     </div>
