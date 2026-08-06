@@ -1,0 +1,394 @@
+<div class="row" style="padding-top: 10px;">
+    <div class="justify-content-between align-items-center mb-3">
+        <div class="d-flex gap-2" style="padding-left: 20px;">
+            <div class="right-align">
+                <inputaggregatoronboarding [visibleDropdowns]="[1, 2, 5]" [showSearchButton]="true"
+                    [showfinalsubmisionButton]="false" [payPeriodTypefromParent]="payPeriodTypefromParent"
+                    (companyUI)="handleCompanyEvent($event)" (payperiodUI)="handlePayperiodEvent($event)"
+                    (searchClicked)="handleSearch()" (Finalsubmitted)="Finalsubmissionclick()"
+                    (sitenameUI)="handleSiteNameEvent($event)">
+                </inputaggregatoronboarding>
+            </div>
+        </div>
+        <!-- -------------------popup----------------- -->
+        <div class="popup-overlay" *ngIf="showInfoPopup" (click)="closeInfoPopup()"></div>
+
+        <!-- Popup -->
+        <div class="info-popup" *ngIf="showInfoPopup">
+            <div class="popup-header">
+                <h2 class="panel-title">Quess Master Attributes</h2>
+                <button class="close-btn" (click)="closeInfoPopup()">✕</button>
+            </div>
+
+            <!-- Search -->
+            <div class="search-container">
+                <mat-icon class="search-prefix">search</mat-icon>
+
+                <input type="text" class="search-input" placeholder="Search" [(ngModel)]="searchQuery" />
+
+                <button mat-icon-button class="download-btn" (click)="downloadExcel()"
+                    [disabled]="!filteredAttributes.length" title="Download Excel">
+                    <mat-icon>download</mat-icon>
+                </button>
+            </div>
+
+            <div class="popup-list">
+                <div class="attributes-list">
+                    <button type="button" class="attribute-item" *ngFor="let item of filteredAttributes"
+                        [class.active]="selectedItem === item.Quess_Template_Field_Name"
+                        (click)="selectItem(item.Quess_Template_Field_Name)">
+
+                        {{ item.Quess_Template_Field_Name }}
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+
+
+        <div class="popupcli-overlay" *ngIf="showUploadPopup"></div>
+
+        <div class="client-popup" *ngIf="showUploadPopup">
+            <div class="popupcli-header">
+                <h2>Client Input Preview</h2>
+                <button class="close-btn" (click)="closeUploadPopup()">✖</button>
+            </div>
+
+            <div class="table-responsive" *ngIf="previewData.length">
+                <table class="table table-bordered table-sm">
+                    <thead>
+                        <tr>
+                            <th *ngFor="let col of previewColumns">{{ col }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let row of previewData">
+                            <td *ngFor="let col of previewColumns">{{ row[col] }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="text-end mt-3">
+                <button class="btn btn-primary" (click)="submitUpload()">Submit</button>
+            </div>
+        </div>
+        <div class="popup-overlay" *ngIf="showInfocliPopup" (click)="closeInfocliPopup()"></div>
+
+        <!-- Popup -->
+        <div class="info-popup" *ngIf="showInfocliPopup">
+            <div class="popup-header">
+                <h2 class="panel-title">Client Attributes</h2>
+                <button class="close-btn" (click)="closeInfocliPopup()">✕</button>
+            </div>
+
+            <!-- Search -->
+            <div class="search-container">
+                <mat-icon class="search-prefix">search</mat-icon>
+
+                <input type="text" class="search-input" placeholder="Search" [(ngModel)]="searchQueryclient" />
+
+                <button mat-icon-button class="download-btn" (click)="downloadExcelclient()"
+                    [disabled]="!filteredclientAttributes.length" title="Download Excel">
+                    <mat-icon>download</mat-icon>
+                </button>
+            </div>
+
+            <div class="popup-list">
+                <div class="attributes-list">
+                    <div class="attribute-row" *ngFor="let item of filteredclientAttributes; let i = index">
+
+                        <mat-icon class="small-icon delete-icon" (click)="deleteClientAttribute(item)">
+                            delete
+                        </mat-icon>
+
+                        <button type="button" class="attribute-item"
+                            [class.active]="selectedItemcli === item.Template_Field_Name"
+                            (click)="selectItemcli(item.Template_Field_Name)">
+
+                            {{ item.Template_Field_Name }}
+
+                        </button>
+                    </div>
+                    <!-- <button type="button" class="attribute-item" *ngFor="let item of filteredclientAttributes"
+                [class.active]="selectedItemcli === item.Template_Field_Name"
+                (click)="selectItemcli(item.Template_Field_Name)">
+
+                {{ item.Template_Field_Name }}
+            </button> -->
+                </div>
+
+            </div>
+        </div>
+
+        <div style="float:right;">
+
+            <div style="display: inline-block; margin-right: 10px; padding-top: 12px;">
+                <div class="action-dropdown-wrapper">
+                    <label style="position: relative; display: inline-block;">
+
+                        <button type="button" class="select-drop3" (click)="toggleDropdown($event)">
+
+                            Client Input
+                        </button>
+                        <i
+                            style="position: absolute; top: 50%; right: 15px; transform: translateY(-50%); pointer-events: none;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"
+                                fill="none">
+                                <path
+                                    d="M5.64645 0.646447C5.84171 0.451184 6.15829 0.451184 6.35355 0.646447L8.35355 2.64645C8.54882 2.84171 8.54882 3.15829 8.35355 3.35355C8.15829 3.54882 7.84171 3.54882 7.64645 3.35355L6.5 2.20711V8C6.5 8.27614 6.27614 8.5 6 8.5C5.72386 8.5 5.5 8.27614 5.5 8V2.20711L4.35355 3.35355C4.15829 3.54882 3.84171 3.54882 3.64645 3.35355C3.45118 3.15829 3.45118 2.84171 3.64645 2.64645L5.64645 0.646447Z"
+                                    fill="#7E7E7E" />
+                                <path
+                                    d="M1.5 8C1.77614 8 2 8.22386 2 8.5V10C2 10.2761 2.22386 10.5 2.5 10.5H9.5C9.77614 10.5 10 10.2761 10 10V8.5C10 8.22386 10.2239 8 10.5 8C10.7761 8 11 8.22386 11 8.5V10C11 10.8284 10.3284 11.5 9.5 11.5H2.5C1.67157 11.5 1 10.8284 1 10V8.5C1 8.22386 1.22386 8 1.5 8Z"
+                                    fill="#7E7E7E" />
+                            </svg>
+                        </i>
+                    </label>
+                    <input #fileInput type="file" accept=".xlsx,.xls" hidden (change)="onFileChange($event)" />
+                    <input #fileInput6 type="file" accept=".xlsx,.xls" hidden (change)="onFileChangeMSC($event)" />
+                    <input #fileInput7 type="file" accept=".xlsx,.xls" hidden (change)="onFileChangeOI($event)" />
+
+
+                    <div class="template-dropdown" *ngIf="isDropdownOpen">
+                        <div class="dropdown-item" (click)="ImportClickclient(fileInput)">
+                            Billing Report
+                        </div>
+
+                        <div class="dropdown-item" (click)="ImportClickMSC(fileInput6)">
+                            MISC
+                        </div>
+                        <div class="dropdown-item" (click)="ImportClickOI(fileInput7)">
+                            Other Income
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div style="display: inline-block; margin-right: 10px; padding-top: 12px;"
+                (click)="downloadExcelBillablereport()">
+                <div class="action-dropdown-wrapper">
+                    <label style="position: relative; display: inline-block;">
+                        <button type="button" class="select-drop">
+                            Billing Reports
+                        </button>
+                        <i
+                            style="position: absolute; top: 50%; right: 15px; transform: translateY(-50%); pointer-events: none;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"
+                                fill="none">
+                                <path
+                                    d="M6.5 1C6.5 0.723858 6.27614 0.5 6 0.5C5.72386 0.5 5.5 0.723858 5.5 1V6.79289L4.35355 5.64645C4.15829 5.45118 3.84171 5.45118 3.64645 5.64645C3.45118 5.84171 3.45118 6.15829 3.64645 6.35355L5.64609 8.3532C5.6473 8.3544 5.64851 8.35561 5.64973 8.3568C5.6969 8.40313 5.75098 8.43822 5.80861 8.46206C5.86713 8.48633 5.93125 8.4998 5.9985 8.5L6 8.5L6.0015 8.5C6.13732 8.4996 6.26039 8.44505 6.35027 8.3568C6.35149 8.35561 6.3527 8.3544 6.35391 8.3532L8.35355 6.35355C8.54882 6.15829 8.54882 5.84171 8.35355 5.64645C8.15829 5.45118 7.84171 5.45118 7.64645 5.64645L6.5 6.79289V1Z"
+                                    fill="#7E7E7E" />
+                                <path
+                                    d="M1.5 8C1.77614 8 2 8.22386 2 8.5V10C2 10.2761 2.22386 10.5 2.5 10.5H9.5C9.77614 10.5 10 10.2761 10 10V8.5C10 8.22386 10.2239 8 10.5 8C10.7761 8 11 8.22386 11 8.5V10C11 10.8284 10.3284 11.5 9.5 11.5H2.5C1.67157 11.5 1 10.8284 1 10V8.5C1 8.22386 1.22386 8 1.5 8Z"
+                                    fill="#7E7E7E" />
+                            </svg>
+                        </i>
+                    </label>
+
+                </div>
+            </div>
+            <div style="display: inline-block; margin-right: 10px; padding-top: 12px;" (click)="toggleInfocliPopup()">
+
+                <button type="button" class="select-drop2">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10
+         10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
+                    </svg>
+                    Client Attributes
+                </button>
+            </div>
+
+            <div style="display: inline-block; margin-right: 10px; padding-top: 12px;" (click)="toggleInfoPopup()">
+                <button type="button" class="select-drop2">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10
+         10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
+                    </svg>
+                    Quess Attributes
+                </button>
+            </div>
+            <div style="display: inline-block; margin-right: 10px; " (click)="toggleattributesdropdownopen()">
+                <input type="file" #fileInput1 style="display: none;" (click)="fileInput1.value=''"
+                    (change)="onFileChangecli($event)" accept=".xlsx, .xls" />
+                <input type="file" #fileInput8 style="display: none;" (click)="fileInput8.value=''"
+                    (change)="onFileChangeOIattributes($event)" accept=".xlsx, .xls" />
+                <div class="action-dropdown-wrapper">
+
+                    <label style="position: relative; display: inline-block;">
+                        <button class="select-drop">
+                            Attributes Upload
+                        </button>
+                        <i
+                            style="position: absolute; top: 50%; right: 15px; transform: translateY(-50%); pointer-events: none;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"
+                                fill="none">
+                                <path
+                                    d="M5.64645 0.646447C5.84171 0.451184 6.15829 0.451184 6.35355 0.646447L8.35355 2.64645C8.54882 2.84171 8.54882 3.15829 8.35355 3.35355C8.15829 3.54882 7.84171 3.54882 7.64645 3.35355L6.5 2.20711V8C6.5 8.27614 6.27614 8.5 6 8.5C5.72386 8.5 5.5 8.27614 5.5 8V2.20711L4.35355 3.35355C4.15829 3.54882 3.84171 3.54882 3.64645 3.35355C3.45118 3.15829 3.45118 2.84171 3.64645 2.64645L5.64645 0.646447Z"
+                                    fill="#7E7E7E" />
+                                <path
+                                    d="M1.5 8C1.77614 8 2 8.22386 2 8.5V10C2 10.2761 2.22386 10.5 2.5 10.5H9.5C9.77614 10.5 10 10.2761 10 10V8.5C10 8.22386 10.2239 8 10.5 8C10.7761 8 11 8.22386 11 8.5V10C11 10.8284 10.3284 11.5 9.5 11.5H2.5C1.67157 11.5 1 10.8284 1 10V8.5C1 8.22386 1.22386 8 1.5 8Z"
+                                    fill="#7E7E7E" />
+                            </svg>
+                        </i>
+                    </label>
+                    <div class="template-dropdowns" *ngIf="isattributesDropdownOpen">
+
+                        <button class="dropdowns-item" (click)="ImportClickcli(fileInput1)">
+                            Client Attributes Upload
+                        </button>
+                        <button class="dropdowns-item" (click)="ImportClickOIattributes(fileInput8)">
+                            Other Income Attributes Upload
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+
+            <div style="display: inline-block; margin-right: 10px; " (click)="toggleTemplateDropdown()">
+
+                <div class="action-dropdown-wrapper">
+                    <label style="position: relative; display: inline-block;">
+
+                        <button type="button" class="select-drop3">
+
+                            Template
+                        </button>
+                        <i
+                            style="position: absolute; top: 50%; right: 15px; transform: translateY(-50%); pointer-events: none;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"
+                                fill="none">
+                                <path
+                                    d="M6.5 1C6.5 0.723858 6.27614 0.5 6 0.5C5.72386 0.5 5.5 0.723858 5.5 1V6.79289L4.35355 5.64645C4.15829 5.45118 3.84171 5.45118 3.64645 5.64645C3.45118 5.84171 3.45118 6.15829 3.64645 6.35355L5.64609 8.3532C5.6473 8.3544 5.64851 8.35561 5.64973 8.3568C5.6969 8.40313 5.75098 8.43822 5.80861 8.46206C5.86713 8.48633 5.93125 8.4998 5.9985 8.5L6 8.5L6.0015 8.5C6.13732 8.4996 6.26039 8.44505 6.35027 8.3568C6.35149 8.35561 6.3527 8.3544 6.35391 8.3532L8.35355 6.35355C8.54882 6.15829 8.54882 5.84171 8.35355 5.64645C8.15829 5.45118 7.84171 5.45118 7.64645 5.64645L6.5 6.79289V1Z"
+                                    fill="#7E7E7E" />
+                                <path
+                                    d="M1.5 8C1.77614 8 2 8.22386 2 8.5V10C2 10.2761 2.22386 10.5 2.5 10.5H9.5C9.77614 10.5 10 10.2761 10 10V8.5C10 8.22386 10.2239 8 10.5 8C10.7761 8 11 8.22386 11 8.5V10C11 10.8284 10.3284 11.5 9.5 11.5H2.5C1.67157 11.5 1 10.8284 1 10V8.5C1 8.22386 1.22386 8 1.5 8Z"
+                                    fill="#7E7E7E" />
+                            </svg>
+                        </i>
+                    </label>
+                    <div class="template-dropdowns" *ngIf="isTemplateDropdownOpen">
+                        <button class="dropdowns-item" (click)="downloadTemplate('mapping')">
+                            Attributes Mapping Template
+                        </button>
+
+                        <button class="dropdowns-item" (click)="downloadTemplate('client')">
+                            Client Attributes Template
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div style="display: inline-block;padding-top: 12px;margin-right: 10px;" (click)="toggleMappingDropdown()">
+                <div class="action-dropdown-wrapper">
+
+                    <label style="position: relative; display: inline-block;">
+                        <button class="select-drop">
+                            Mapping Upload
+                        </button>
+                        <i
+                            style="position: absolute; top: 50%; right: 15px; transform: translateY(-50%); pointer-events: none;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"
+                                fill="none">
+                                <path
+                                    d="M5.64645 0.646447C5.84171 0.451184 6.15829 0.451184 6.35355 0.646447L8.35355 2.64645C8.54882 2.84171 8.54882 3.15829 8.35355 3.35355C8.15829 3.54882 7.84171 3.54882 7.64645 3.35355L6.5 2.20711V8C6.5 8.27614 6.27614 8.5 6 8.5C5.72386 8.5 5.5 8.27614 5.5 8V2.20711L4.35355 3.35355C4.15829 3.54882 3.84171 3.54882 3.64645 3.35355C3.45118 3.15829 3.45118 2.84171 3.64645 2.64645L5.64645 0.646447Z"
+                                    fill="#7E7E7E" />
+                                <path
+                                    d="M1.5 8C1.77614 8 2 8.22386 2 8.5V10C2 10.2761 2.22386 10.5 2.5 10.5H9.5C9.77614 10.5 10 10.2761 10 10V8.5C10 8.22386 10.2239 8 10.5 8C10.7761 8 11 8.22386 11 8.5V10C11 10.8284 10.3284 11.5 9.5 11.5H2.5C1.67157 11.5 1 10.8284 1 10V8.5C1 8.22386 1.22386 8 1.5 8Z"
+                                    fill="#7E7E7E" />
+                            </svg>
+                        </i>
+                    </label>
+                    <div class="template-dropdowns" *ngIf="ismappingDropdownOpen">
+                        <button class="dropdowns-item" (click)="ImportClickatt(fileInput2)">
+                            Attributes Mapping Upload
+                        </button>
+
+                        <button class="dropdowns-item" (click)="ImportClickattOI(fileInput9)">
+                            Other Income Mapping Upload
+                        </button>
+                    </div>
+                </div>
+                <input type="file" #fileInput2 style="display: none;" (click)="fileInput2.value=''"
+                    (change)="onFileChangeatt($event)" accept=".xlsx, .xls" />
+                <input type="file" #fileInput9 style="display: none;" (click)="fileInput9.value=''"
+                    (change)="onFileChangeattOI($event)" accept=".xlsx, .xls" />
+            </div>
+        </div>
+        <div class="search-containers">
+            <div class="search-boxs">
+                <i>
+                    <!-- SVG -->
+                </i>
+                <input type="text" [(ngModel)]="searchText" (keyup)="applyFilter()" placeholder="Search" />
+            </div>
+        </div>
+        <div class="table-wrapper">
+            <div class="example-container mat-elevation-z8">
+
+                <mat-table [dataSource]="dataSource" class="custom-table" matSort>
+                    <ng-container matColumnDef="action">
+                        <mat-header-cell *matHeaderCellDef>
+                            Action
+                        </mat-header-cell>
+
+                        <mat-cell *matCellDef="let element; let i = index">
+                            <button style="background: transparent; border: none; color: red;"
+                                (click)="deleteRow(element, i)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Client Attribute Column -->
+                    <ng-container matColumnDef="clientattributes">
+                        <mat-header-cell *matHeaderCellDef>
+                            Client Attributes
+                        </mat-header-cell>
+
+                        <mat-cell *matCellDef="let element">
+                            {{ element.Template_Field_Name }}
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Quess Attribute Column -->
+                    <ng-container matColumnDef="quessattributes">
+                        <mat-header-cell *matHeaderCellDef>
+                            Quess Master Attribute <span class="text-danger">*</span>
+                        </mat-header-cell>
+
+                        <mat-cell *matCellDef="let element">
+                            <select [(ngModel)]="element.SelectedQuessAttributeId" class="form-control">
+                                <option value="">Select</option>
+
+                                <option *ngFor="let quessatt of quessMasterAttributes"
+                                    [value]="quessatt.Quess_Template_Field_Id">
+                                    {{ quessatt.Quess_Template_Field_Name }}
+                                </option>
+
+                            </select>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Header & Rows -->
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+                </mat-table>
+
+                <!-- EMPTY STATE -->
+                <div class="no-data" [hidden]="!(attributeMappings.length === 0)">
+                    No attributes mapped yet / Client Attributes Not uploaded
+                </div>
+
+            </div>
+
+            <mat-paginator #paginator [pageSize]="5" [pageSizeOptions]="[5,10,25]" showFirstLastButtons>
+            </mat-paginator>
+        </div>
+
+
+        <div *ngIf="isLoading" class="loading-overlay">
+            <img src="assets/Loading.gif" alt="Loading...">
+        </div>
+    </div>
+</div>

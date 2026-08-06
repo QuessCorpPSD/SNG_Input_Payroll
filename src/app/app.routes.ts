@@ -53,22 +53,6 @@ import { QITSBillingReportComponent } from './pages/Reports/qits-billing-report/
 import { TimesheetReportComponent } from './pages/Reports/timesheet-report/timesheet-report.component';
 import { ProcessComponent } from './pages/Process/process.component';
 import { ReprocessComponent } from './pages/Process/reprocess/reprocess.component';
-import { BonusflushComponent } from './pages/SalaryRelease/bonusflush/bonusflush.component';
-import { DBTholdemployeesalaryComponent } from './pages/SalaryRelease/dbtholdemployeesalary/dbtholdemployeesalary.component';
-import { HoldEmployeSalaryComponent } from './pages/SalaryRelease/hold-employe-salary/hold-employe-salary.component';
-import { HoldReleaseRequestComponent } from './pages/SalaryRelease/hold-release-request/hold-release-request.component';
-import { NetPaySammaryComponent } from './pages/SalaryRelease/net-pay-sammary/net-pay-sammary.component';
-import { NetpaysummaryofnonvoiceComponent } from './pages/SalaryRelease/netpaysummaryofnonvoice/netpaysummaryofnonvoice.component';
-import { NewJoineeExistingEmployeeBankVerifiedReportComponent } from './pages/SalaryRelease/new-joinee-existing-employee-bank-verified-report/new-joinee-existing-employee-bank-verified-report.component';
-import { PartialHoldComponent } from './pages/SalaryRelease/partial-hold/partial-hold.component';
-import { ReleaseHoldEmployeeSalaryComponent } from './pages/SalaryRelease/release-hold-employee-salary/release-hold-employee-salary.component';
-import { SalaryAdvanceRequestComponent } from './pages/SalaryRelease/salary-advance-request/salary-advance-request.component';
-import { SalaryHoldRequestComponent } from './pages/SalaryRelease/salary-hold-request/salary-hold-request.component';
-import { SalaryReleaseNavigationComponent } from './pages/SalaryRelease/salary-release-navigation/salary-release-navigation.component';
-import { SalaryReleaseRequestComponent } from './pages/SalaryRelease/salary-release-request/salary-release-request.component';
-import { UANReleaseComponent } from './pages/SalaryRelease/uanrelease/uanrelease.component';
-import { UpfrontPortalFinalApprovalComponent } from './pages/SalaryRelease/upfront-portal-final-approval/upfront-portal-final-approval.component';
-import { VANPaymentRequestComponent } from './pages/SalaryRelease/vanpayment-request/vanpayment-request.component';
 import { AttendanceComponent } from './pages/Process/attendance/attendance.component';
 import { ArrearAttendanceComponent } from './pages/Process/arrear-attendance/arrear-attendance.component';
 import { BillableDaysComponent } from './pages/Invoice/billable-days/billable-days.component';
@@ -190,10 +174,6 @@ import { BankAdviceSplitCultureComponent } from './pages/BankInvoice/bank-advice
 import { MulticommercialComponent } from './pages/GlobalMasters/multicommercial/multicommercial.component';
 import { IRFormReportComponent } from './pages/Reports/ir-form-report/ir-form-report.component';
 import { InputaggregatornavigationComponent } from './pages/inputaggregator/inputaggregatornavigation/inputaggregatornavigation.component';
-import { InputaggregatorattendanceComponent } from './pages/inputaggregator/inputaggregatorattendance/inputaggregatorattendance.component';
-import { LeaveMasterMappingComponent } from './pages/inputaggregator/leave-master-mapping/leave-master-mapping.component';
-import { MiscPaycodeMappingComponent } from './pages/inputaggregator/misc-paycode-mapping/misc-paycode-mapping.component';
-import { LeaveCategoryComponent } from './pages/inputaggregator/leave-category/leave-category.component';
 import { BankconsolidatedreportComponent } from './pages/banknonvoice/bankconsolidatedreport/bankconsolidatedreport.component';
 import { BankneftcultureComponent } from './pages/banknonvoice/bankneftculture/bankneftculture.component';
 import { BanknonvoicenavigationComponent } from './pages/banknonvoice/banknonvoicenavigation/banknonvoicenavigation.component';
@@ -214,6 +194,7 @@ import { ReleaseholdEmployeesalaryComponent } from './pages/banknonvoice/release
 import { UtrDetailsComponent } from './pages/banknonvoice/utr-details/utr-details.component';
 import { DownloadbatchbanknonvoiceComponent } from './pages/banknonvoice/downloadbatchbanknonvoice/downloadbatchbanknonvoice.component';
 import { PartialHoldReleaseEmployeeSalaryComponent } from './pages/banknonvoice/partial-hold-release-employee-salary/partial-hold-release-employee-salary.component';
+import { BillingaggregatorComponent } from './pages/inputaggregator/billingaggregator/billingaggregator.component';
 
 export const routes: Routes = [
   {
@@ -282,10 +263,7 @@ export const routes: Routes = [
         path: 'inputaggregator',
         component: InputaggregatornavigationComponent,
         children: [
-          { path: 'inputaggregatorattendance', component: InputaggregatorattendanceComponent },
-          { path: "leavemastermapping", component: LeaveMasterMappingComponent },
-          { path: "miscpaycodemapping", component: MiscPaycodeMappingComponent },
-          { path: "leavecategory", component: LeaveCategoryComponent }
+          { path: 'billingaggregator', component: BillingaggregatorComponent }
         ]
       },
       {

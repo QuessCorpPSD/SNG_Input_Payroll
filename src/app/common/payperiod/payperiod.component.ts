@@ -93,8 +93,21 @@ export class PayPeriodComponent implements OnChanges {
         next: res => {
           this.payPeriod = res.Data;
           //console.log(this.payPeriod);
-          this.myControl.setValue(this.payPeriod[0]);
-          this.payperiodEmit.emit(this.payPeriod[0]);
+
+          if (this.payPeriod.length > 0) {
+
+            this.myControl.setValue(this.payPeriod[0]);
+            this.payperiodEmit.emit(this.payPeriod[0]);
+
+          } else {
+
+            this.myControl.reset();
+            this.payperiodEmit.emit();
+
+          }
+
+          // this.myControl.setValue(this.payPeriod[0]);
+          // this.payperiodEmit.emit(this.payPeriod[0]);
           this.filteredOptions$ = this.myControl.valueChanges.pipe(
             startWith(''),
             map(value => {
@@ -164,7 +177,9 @@ export class PayPeriodComponent implements OnChanges {
     );
   }
 
-  displayFn = (option: any): string => option?.payPeriod ?? option.payPeriod;
+  displayFn = (option: Payperiodclass | null): string => {
+    return option?.payPeriod ?? '';
+  };
 
 
   onOptionSelected(option: any) {

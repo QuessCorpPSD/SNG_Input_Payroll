@@ -141,7 +141,8 @@ export class CompanyComponent implements OnInit, OnChanges {
     );
   }
 
-  displayFn = (option: any): string => option?.displayName ?? option.displayName;
+  displayFn = (option: any): string => option?.displayName ?? '';
+
 
   onOptionSelected(option: any) {
     this.selectedOption = option;
