@@ -139,9 +139,9 @@ export class AddEntityMasterComponent {
         Entity_Profit_Center_Id: 0,
         Entity_Id: 0,
         Entity_Name: f.EntityName?.trim(),
-        City_Id: Number(f.ProfitCenter) || 0,
+        City_Id: Number(f.ProfitCenter) || 76,
         City_Name: "",
-        Location: "",
+        Location: "Singapore",
         Error_Message: "",
         Serial_No: 1
       }
