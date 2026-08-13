@@ -188,13 +188,33 @@ export class InvoiceRepository implements IInvoiceRepository {
     }
 
     POInvoiceUpload(formData: FormData): Observable<APIResponse> {
-         const url = `${this.environment.apiUrl}POInvoiceInitiate/Upload`;
+        const url = `${this.environment.apiUrl}POInvoiceInitiate/Upload`;
 
         return this.http.post<APIResponse>(url, formData);
     }
 
-     GetGSTPercentage(): Observable<APIResponse> {
+    GetGSTPercentage(): Observable<APIResponse> {
         return this.http.get<APIResponse>(this.environment.apiUrl + "GSTInvoice/GetGSTPercentage")
+    }
+
+    //attribute code
+    GetAllAttribute(val): Observable<APIResponse> {
+
+        const url = `${this.environment.apiUrl}GSTInvoice/GetAllAttribute`;
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        });
+        const config = new HttpHeaders().set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
+        return this.http.post<APIResponse>(url, JSON.stringify(val), { headers });
+    }
+
+    UploadAttributesGST(formData: FormData): Observable<APIResponse> {
+        return this.http.post<APIResponse>(
+            this.environment.apiUrl + 'GSTInvoice/UploadAttributes',
+            formData
+        );
     }
 
 }

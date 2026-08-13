@@ -21,14 +21,15 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { GstinvoiceaddComponent } from '../gstinvoiceadd/gstinvoiceadd.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIcon } from "@angular/material/icon";
-
+import { AttributeComponent } from "../attribute/attribute.component";
+import { Payperiodclass } from '../../../Models/Common';
 
 export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOKEN');
 
 @Component({
   selector: 'gstinvoice',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatCheckboxModule, MatPaginatorModule, MatSort, MatSelectModule, MatInputModule, MatFormFieldModule, ReactiveFormsModule, FormsModule, MatDatepickerModule, MatNativeDateModule],
+  imports: [CommonModule, MatTableModule, MatCheckboxModule, MatPaginatorModule, MatSort, MatSelectModule, MatInputModule, MatFormFieldModule, ReactiveFormsModule, FormsModule, MatDatepickerModule, MatNativeDateModule, AttributeComponent],
   templateUrl: './gstinvoice.component.html',
   styleUrl: './gstinvoice.component.css',
   providers: [{
@@ -38,6 +39,20 @@ export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOK
 })
 
 export class GstinvoiceComponent {
+
+  //attribute code
+  UploadedResponse: any
+  showPopup?: boolean = false;
+  popupMessage: string = "";
+  showpsd = false;
+  availableItems: any[] = [];
+  currentSelectItems: any[] = [];
+  AttributeType = 'G';
+  selectedItems: any[] = [];
+  Company_Code?: string;
+  pay_period?: string;
+  selectedCompanyId!: number;
+  payPeriodType: string = "All";
 
   companyUI: any;
   payperiodUI: any;
@@ -153,6 +168,25 @@ export class GstinvoiceComponent {
     const userdetail = this._sessionStoreage.getItem('UserProfile');
     this.userdetail = JSON.parse(this._decrypt.decrypt(userdetail!));
     this.BindDashBoard(this.userdetail.user_Id);
+    if (userdetail) {
+      const request = {
+        "id": 0,
+        "AttributeName": "A",
+        "ActionType": "G",
+        "IsActive": false,
+        "CreatedBy": 3,
+        "DateTime": new Date()
+      }
+      this._invoiceService.GetAllAttribute(request).subscribe({
+        next: res => {
+          //console.log('Result',res.Data);
+          this.availableItems = res.Data;
+          //console.log('availableItems',this.availableItems);
+
+        }, error: err => { console.log(err) }
+      })
+    }
+
   }
   applyFilter(event: Event, column: string) {
     const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
@@ -188,13 +222,13 @@ export class GstinvoiceComponent {
     };
     // const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
     // const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
-     const fileName = `${templateId}.xlsx`;
+    const fileName = `${templateId}.xlsx`;
     // FileSaver.saveAs(blob, fileName);
     XLSX.writeFile(workbook, fileName);
   }
 
   TemplateClick(): void {
-      const dataToExport = [
+    const dataToExport = [
       { 'Invoice_Number': '', 'Remarks': '', 'NewInvoiceNumber': '' },
     ]
     this.downloadExcel(dataToExport, "Template_" + this.selectedTemplate);
@@ -247,27 +281,27 @@ export class GstinvoiceComponent {
 
     const formData = new FormData();
     if (this.excelFile) {
-        formData.append('file', this.excelFile);
-        formData.append('userId', this.userdetail.user_Id);
+      formData.append('file', this.excelFile);
+      formData.append('userId', this.userdetail.user_Id);
 
-        this._invoiceService.UploadCancel(formData).subscribe({
-          next: (res: string) => {
-            const error_msg = res ;
-            console.table(error_msg);
-            if (error_msg) {
-              alert(error_msg);
-              this.BindDashBoard(this.userdetail.user_Id);
-              this.isLoading = false;
-            } else {
-              alert("No validations returned");
-              this.isLoading = false;
-            }
-          },
-          error: err => {
-            console.error('❌ Upload failed', err);
+      this._invoiceService.UploadCancel(formData).subscribe({
+        next: (res: string) => {
+          const error_msg = res;
+          console.table(error_msg);
+          if (error_msg) {
+            alert(error_msg);
+            this.BindDashBoard(this.userdetail.user_Id);
+            this.isLoading = false;
+          } else {
+            alert("No validations returned");
             this.isLoading = false;
           }
-        });
+        },
+        error: err => {
+          console.error('❌ Upload failed', err);
+          this.isLoading = false;
+        }
+      });
     }
     else {
       console.error('No Data');
@@ -373,6 +407,113 @@ export class GstinvoiceComponent {
       disableClose: true,
       data: { example: 'Hello from parent!' }
     });
+  }
+
+
+  //attributr code
+
+  onImportClick(fileInput: HTMLInputElement): void {
+    fileInput.value = '';
+    fileInput.click();
+
+  }
+
+  onFileChange(event: any): void {
+    this.isLoading = true;
+    const target: DataTransfer = <DataTransfer>(event.target);
+
+    if (!target.files || target.files.length !== 1) {
+      console.error('Please upload only one Excel file.');
+      this.isLoading = false;
+      return;
+    }
+    const file = target.files[0];
+    this.excelFile = target.files[0];
+    console.log(target.files.length);
+
+    const formData = new FormData();
+    if (this.excelFile) {
+      formData.append('file', this.excelFile);
+      formData.append('CompanyId','0');
+      formData.append('payperiodId', '0');
+      formData.append('CreatedBy', this.userdetail.user_Id);
+
+      this._invoiceService.UploadAttributesGST(formData).subscribe({
+        next: res => {
+          this.UploadedResponse = res;
+          console.log(this.UploadedResponse);
+          if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.Data.response.includes('Row(s) Uploaded Successfully.')) {
+            this.isLoading = false;
+            this.showPopup = true;
+            this.popupMessage = this.UploadedResponse.Data.response;
+            this.BindDashBoard(this.userdetail.user_Id);
+          }
+          else if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.Data.response === 'Failed to import.') {
+
+            const errorArray = JSON.parse(this.UploadedResponse.Data.errors[0]);
+            const exportData = errorArray.map((item: any) => ({
+              Error_Message: item.Error_Message || item.Error_Message || ''
+                || item.Message || item.MESSAGE || item.message
+            }));
+
+            const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+            const workbook: XLSX.WorkBook = {
+              Sheets: { 'ErrorMessages': worksheet },
+              SheetNames: ['ErrorMessages']
+            };
+
+            // Export the file
+            XLSX.writeFile(workbook, 'Attribute_Validations.xlsx');
+            this.isLoading = false;
+            this.showPopup = true;
+            this.popupMessage = 'Import Failed.';
+
+          }
+          else {
+            if (this.UploadedResponse.Data.response != '') {
+              alert(this.UploadedResponse.Data.response);
+              this.isLoading = false;
+            }
+            else {
+              alert('Error while processing response.');
+              this.isLoading = false;
+            }
+
+          }
+        },
+        error: err => {
+          console.error('❌ Upload failed', err);
+          this.isLoading = false;
+        }
+      });
+    }
+  }
+
+
+  onItemsMoved(event): void {
+    this.currentSelectItems = event.selected;
+  }
+
+
+  Attributeclick() {
+    
+
+    const request = {
+      "id": 0,
+      "AttributeName": "A",
+      "ActionType": "S",
+      "IsActive": false,
+      "CreatedBy": 3,
+      "DateTime": new Date()
+    }
+    this._invoiceService.GetAllAttribute(request).subscribe({
+      next: res => {
+        this.availableItems = res.Data;
+      }, error: err => { console.log(err) }
+    })
+    //this.isattributes = true;
+    this.showpsd = true;
+
   }
 
 }

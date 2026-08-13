@@ -1,0 +1,94 @@
+<mat-card style="width: 750px; margin: 500px;" [formGroup]="listBoxForm">
+    <mat-card-header>
+        <div style="
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 20px;
+    ">
+
+            <!-- Title -->
+            <div style="
+        color: #302CB3; 
+        font-family: Nunito Sans; 
+        font-size: 22px; 
+        font-weight: 700;
+      ">
+                Attribute
+                <!-- <button (click)="AttributeAdd()" class="close-btn">
+                    <mat-icon>add</mat-icon>
+                </button> -->
+            </div>
+
+
+
+
+
+            <!-- Close Button -->
+            <button mat-icon-button class="close-btn" (click)="closeclick()">
+                <mat-icon>close</mat-icon>
+            </button>
+
+        </div>
+    </mat-card-header>
+
+    <mat-card-content
+        style="width: 750px; height: 300px;padding-top: 5px;display: flex;  flex-direction: row; align-items: left; gap: 16px; align-self: stretch;border-radius: 0 0 10px 10px; border-top: 1px solid var(--Card-Box-border-color, #D6D6D6); background: #FFF;">
+
+        <div class="example">
+
+
+
+            <input type="text" class="form-control form-control-sm w-75" placeholder="{{ availableFilterPlaceholder }}"
+                formControlName="availableSearchInput" />
+
+            <!-- Available Items List -->
+            <div cdkDropList #availables="cdkDropList" [cdkDropListData]="filteredAvailableItems"
+                [cdkDropListConnectedTo]="[selects]" (cdkDropListDropped)="drop($event)" class="drag-drop-list">
+
+                <div class="drag-drop-box" *ngFor="let item of filteredAvailableItems" cdkDrag>
+                    {{ item.text }}
+                </div>
+
+            </div>
+
+           
+        </div>
+
+        <div class="example">
+
+
+
+            <input type="text" class="form-control form-control-sm w-75" [placeholder]="selectedFilterPlaceholder"
+                formControlName="selectedSearchInput" #selectedSearchInput />
+
+            <!-- Selected Items (Drag & Drop Target) -->
+            <div cdkDropList #selects="cdkDropList" [cdkDropListData]="selectedItems"
+                [cdkDropListConnectedTo]="[availables]" (cdkDropListDropped)="drop($event)" class="drag-drop-list">
+                <div class="drag-drop-box-selected" *ngFor="let item of selectedItems " cdkDrag>
+                    {{ item.text }}
+                </div>
+            </div>
+
+            <!-- <div cdkDropList #doneList="cdkDropList" [cdkDropListData]="done" [cdkDropListConnectedTo]="[todoList]"
+            class="example-list" (cdkDropListDropped)="drop($event)">
+
+            <div class="example-box" *ngFor="let item of done" cdkDrag>
+                {{item.attributeName}}
+            </div>
+        </div> -->
+        </div>
+
+    </mat-card-content>
+    <mat-card-footer style="display: flex; justify-content: center; padding: 16px 0;">
+        <button class="template-btn" (click)="AttributesTemplateclick()">Template</button>
+    </mat-card-footer>
+</mat-card>
+<attribute-add *ngIf="IsAdd" (close)="IsAdd = false" class="popup-add" style="
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+  "></attribute-add>

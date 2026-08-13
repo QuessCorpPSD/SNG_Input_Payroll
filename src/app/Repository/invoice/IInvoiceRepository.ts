@@ -31,4 +31,8 @@ export interface IInvoiceRepository {
     RequestPOInvoice(companyId: number, payPeriodId: number): Observable<any>;
     POInvoiceUpload(payload: FormData): Observable<APIResponse>;
     GetGSTPercentage(): Observable<APIResponse>;
+
+    //attribute code
+    UploadAttributesGST(formData: FormData): Observable<APIResponse>;
+    GetAllAttribute(val): Observable<APIResponse>
 }
