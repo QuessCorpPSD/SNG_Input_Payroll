@@ -12,8 +12,8 @@ export class GenericuploadService implements IGenericUpload {
   env = environment
   constructor(private http: HttpClient) { }
 
-  GetUploadType(): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.env.apiUrl + 'GenericUploadProcess/GenericUploadType')
+  GetUploadType(flag: any, userId: any): Observable<APIResponse> {
+    return this.http.get<APIResponse>(this.env.apiUrl + 'GenericUpload/GetUploadType/' + flag + '/' + userId)
   }
   DownloadTemplate(uploadType: any): Observable<APIResponse> {
     return this.http.get<APIResponse>(
@@ -23,6 +23,6 @@ export class GenericuploadService implements IGenericUpload {
     );
   }
   Importgenericupload(payload: any): Observable<APIResponse> {
-    return this.http.post<APIResponse>(this.env.apiUrl + 'GenericUploadProcess/GenericUpload', payload)
+    return this.http.post<APIResponse>(this.env.apiUrl + 'GenericUpload/FileUpload', payload)
   }
 }

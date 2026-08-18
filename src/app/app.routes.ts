@@ -377,7 +377,7 @@ export const routes: Routes = [
           { path: 'creditnoteapprove', component: CreditnoteapproveComponent },
           { path: 'creditnoteupdate', component: CreditnoteupdateComponent },
           { path: 'companyinvoiceformat', component: CompanyinvoiceformatComponent },
-
+          { path: "genericupload", component: GenericuploadComponent }
         ]
       },
 
