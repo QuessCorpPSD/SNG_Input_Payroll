@@ -1,0 +1,34 @@
+<div class="page-wrapper">
+
+    <div class="scrollable-content">
+        <!-- <div style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;">
+            Cilent Address List
+        </div> -->
+        <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700;">Profoma
+            Import</mat-card-title>
+
+        <div class="container py-2">
+            <div class="row g-3 align-items-end">
+
+                <div class="col-md-3 d-flex gap-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
+                        matTooltip="Import" (click)="ImportClick(fileInput)">
+                        <mat-icon>cloud_upload</mat-icon>
+                    </button>
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                        matTooltip="Template" (click)="downloadTemplate()">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button>
+
+
+                    <input type="file" #fileInput style="display: none;" (click)="fileInput.value=''"
+                        (change)="onFileChange($event)" accept=".xlsx, .xls" />
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- <div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div> -->

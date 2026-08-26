@@ -1,0 +1,197 @@
+<div class="page-wrapper" style="padding-top: 10px;">
+    <div class="scrollable-content">
+        <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 600;">Perm Hire
+            Job Sub
+            Category</mat-card-title>
+        <div class="container py-2">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Company code</label>
+                    <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+                </div>
+                <div class="col-md-2 d-flex gap-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
+                        matTooltip="Search" (click)="onsearch()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+                    <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="export to excel" (click)="exportToExcel()">
+                        <mat-icon>download</mat-icon>
+                    </button>
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
+                        matTooltip="import">
+                        <mat-icon>cloud_upload</mat-icon>
+                    </button>
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-add" matTooltip="Add"
+                        (click)="addOpen()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex align-items-center justify-content-end" style="padding-top: 10px; padding-right: 40px;"
+            *ngIf="showTable">
+            <!-- Search Box -->
+            <div style="display: inline-flex; align-items: center;
+                   border-radius: 10px;
+               border: 1px solid #7E7E7E;
+               width: 260px;
+               height: 30px;
+               background-color: white;
+               padding: 0 10px;">
+                <i style="margin-right: 6px; display: flex; align-items: center;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M8.30883 9.01596C7.539 9.63177 6.5625 10 5.5 10C3.01472 10 1 7.98528 1 5.5C1 3.01472 3.01472 1 5.5 1C7.98528 1 10 3.01472 10 5.5C10 6.56251 9.63176.53901 9.01594 8.30885L10.8535 10.1465C11.0488 10.3417 11.0488 10.6583 10.8535 10.8536C10.6583 11.0488 10.3417 11.0488 10.1464 10.8536L8.30883 9.01596ZM2 5.5C2 3.567 3.567 2 5.5 2C7.433 2 9 3.567 9 5.5C9 6.44299 8.62707 7.29888 8.02066 7.92823C8.00355 7.94139 7.98711 7.95579 7.97144 7.97146C7.95578 7.98712 7.94137 8.00357 7.92822 8.02067C7.29887 8.62708 6.44299 9 5.5 9C3.567 9 2 7.433 2 5.5Z"
+                            fill="#7E7E7E" />
+                    </svg>
+                </i>
+                <input type="text" [(ngModel)]="searchText" (keyup)="applyFilters()" placeholder="Search" style="border: none; outline: none; width: 100%;
+                   font-size: 12px; background-color: transparent;" />
+            </div>
+        </div>
+        <div class="table-wrapper1" *ngIf="showTable">
+            <div class="table-scroll">
+                <mat-table [dataSource]="dataSource" class="mat-elevation-z8 custom-table">
+
+                    <!-- Action -->
+                    <ng-container matColumnDef="action">
+                        <mat-header-cell *matHeaderCellDef>Action</mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                            <button mat-icon-button style="border: none; background: none; color: inherit;"
+                                (click)="openEdit(row)">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                            <button mat-icon-button style="border: none; background: none; color: inherit;"
+                                (click)="onDelete(row)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </mat-cell>
+                    </ng-container>
+                    <!-- 🔹 Sl.No -->
+                    <ng-container matColumnDef="slNo">
+                        <mat-header-cell *matHeaderCellDef>Sl.No</mat-header-cell>
+                        <mat-cell *matCellDef="let row; let i = index">
+                            {{ i + 1 }}
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- 🔹 Pay Code -->
+
+                    <ng-container matColumnDef="companycode">
+                        <mat-header-cell *matHeaderCellDef>Company Code</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.USERNAME }}</mat-cell>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="jobCategory">
+                        <mat-header-cell *matHeaderCellDef>Job Category</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.USERNAME }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="jobSubCategory">
+                        <mat-header-cell *matHeaderCellDef>Job Sub Category</mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.USERNAME }}</mat-cell>
+                    </ng-container>
+
+
+                    <!-- Header Rows -->
+                    <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+
+                    <!-- Data Rows -->
+                    <mat-row *matRowDef="let row; columns: uploadDisplayedColumns"></mat-row>
+
+                </mat-table>
+            </div>
+
+            <div *ngIf="dataSource.data.length === 0" class="text-center p-4">
+                <p class="text-muted">No data to display</p>
+            </div>
+
+            <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+                style="border: 1px solid #ddd;"></mat-paginator>
+        </div>
+
+    </div>
+</div>
+<div *ngIf="isAddclicked" class="popup-overlay" (keydown.escape)="closeclick()">
+    <mat-card class="popup-card">
+        <mat-card-header class="popup-header">
+            <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 600;">
+                {{ isEditMode ? 'Edit Job Category' : 'Add Job Category' }}
+            </mat-card-title>
+            <!-- <mat-card-title class="d-flex justify-content-center align-items-center">
+                
+            </mat-card-title> -->
+
+            <button class="close-btn" matTooltip="Close" (click)="closeclick()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+        <mat-card-content class="scroll-content">
+                <div class="mb-3 w-100">
+
+                    <!-- Company Code -->
+                    <div class="d-flex align-items-center mb-2 w-100">
+                        <label class="mb-0 fw-normal flex-shrink-0" style="width: 185px; white-space: nowrap;">
+                            Company Code<span class="text-danger">*</span>
+                        </label>
+
+                        <div class="flex-grow-1" style="min-width: 0; max-width: 320px;">
+                            <companyall (companyEmit)="handleCompanyEvent2($event)">
+                            </companyall>
+                        </div>
+                    </div>
+
+
+                    <!-- Job Category -->
+                    <div class="d-flex align-items-center mb-2 w-100">
+                        <label class="mb-0 fw-normal flex-shrink-0" style="width: 185px; white-space: nowrap;">
+                            Job Category<span class="text-danger">*</span>
+                        </label>
+
+                        <select class="form-control" [(ngModel)]="jobCategory"
+                            style="height: 35px; width: 100%; max-width: 320px;">
+                            <option *ngFor="let p of category" [value]="p.JOB_Category_ID">{{p.JOB_Category}} </option>
+                        </select>
+
+                    </div>
+
+
+                    <!-- Job Sub Category -->
+                    <div class="d-flex align-items-center mb-2 w-100">
+                        <label class="mb-0 fw-normal flex-shrink-0" style="width: 185px; white-space: nowrap;">
+                            Job Sub Category<span class="text-danger">*</span>
+                        </label>
+
+                        <input type="text" class="form-control" [(ngModel)]="jobSubCategory"
+                            style="height: 35px; width: 100%; max-width: 320px;" />
+                    </div>
+
+                </div>
+        </mat-card-content>
+        <mat-card-footer class="footer">
+            <div class="d-flex justify-content-end mt-3">
+                <div class="btn-1"
+                    style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
+
+                    <button type="Cancel"
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;"
+                        (click)="closeclick()">
+                        Cancel
+                    </button>
+
+                    <button type="submit"
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white; " (click)="onSave()">
+                        {{ isEditMode ? 'Update' : 'Save' }}
+                    </button>
+                </div>
+            </div>
+        </mat-card-footer>
+
+    </mat-card>
+</div>
+
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>
