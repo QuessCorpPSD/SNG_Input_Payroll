@@ -195,6 +195,13 @@ import { UtrDetailsComponent } from './pages/banknonvoice/utr-details/utr-detail
 import { DownloadbatchbanknonvoiceComponent } from './pages/banknonvoice/downloadbatchbanknonvoice/downloadbatchbanknonvoice.component';
 import { PartialHoldReleaseEmployeeSalaryComponent } from './pages/banknonvoice/partial-hold-release-employee-salary/partial-hold-release-employee-salary.component';
 import { BillingaggregatorComponent } from './pages/inputaggregator/billingaggregator/billingaggregator.component';
+import { PermhireComponent } from './pages/customers/permhire/permhire.component';
+import { PermhireservicechargetypeComponent } from './pages/customers/permhireservicechargetype/permhireservicechargetype.component';
+import { JobcategoryComponent } from './pages/customers/jobcategory/jobcategory.component';
+import { PermhirejobsubcategoryComponent } from './pages/customers/permhirejobsubcategory/permhirejobsubcategory.component';
+import { PermhireGSTInvoiceComponent } from './pages/Invoice/permhire-gstinvoice/permhire-gstinvoice.component';
+import { InvoiceInitiateAgainstProfomaComponent } from './pages/Invoice/invoice-initiate-against-profoma/invoice-initiate-against-profoma.component';
+import { ProfomaImportComponent } from './pages/Invoice/profoma-import/profoma-import.component';
 
 export const routes: Routes = [
   {
@@ -232,7 +239,7 @@ export const routes: Routes = [
           { path: 'ReleaseholdEmployeesalary', component: ReleaseholdEmployeesalaryComponent },
           { path: 'UtrDetails', component: UtrDetailsComponent },
           { path: 'PartialHoldReleaseEmployeeSalary', component: PartialHoldReleaseEmployeeSalaryComponent },
-          
+
         ]
       },
       {
@@ -377,6 +384,9 @@ export const routes: Routes = [
           { path: 'creditnoteapprove', component: CreditnoteapproveComponent },
           { path: 'creditnoteupdate', component: CreditnoteupdateComponent },
           { path: 'companyinvoiceformat', component: CompanyinvoiceformatComponent },
+          { path: "permhireGSTinvoice", component: PermhireGSTInvoiceComponent },
+          { path: "InvoiceInitiateAgainstProfoma", component: InvoiceInitiateAgainstProfomaComponent },
+          { path: "ProfomaImport", component: ProfomaImportComponent }
           { path: "genericupload", component: GenericuploadComponent }
         ]
       },
@@ -409,6 +419,10 @@ export const routes: Routes = [
           { path: "cancelledinvoicerepository", component: CancelledinvoicerepositoryComponent },
           { path: "Company", component: CompanyComponent },
           { path: "multicommercial", component: MulticommercialComponent },
+          { path: "permhiremaster", component: PermhireComponent },
+          { path: "permhiremasterservicechargetype", component: PermhireservicechargetypeComponent },
+          { path: "jobcategory", component: JobcategoryComponent },
+          { path: "permhirejobsubjobcategory", component: PermhirejobsubcategoryComponent }
 
         ]
       },

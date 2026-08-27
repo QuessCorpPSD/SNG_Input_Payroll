@@ -1,0 +1,120 @@
+<div class="page-wrapper" style="padding-top: 10px;">
+
+    <div class="scrollable-content">
+        <div style="color: #302CB3; font-size: 22px; font-family: Montserrat;font-weight: 700;">
+            Invoice Initiate Against Profoma
+        </div>
+
+        <div class="container py-2">
+            <div class="row align-items-end">
+                <div class="col-3">
+                    <label class="form-label text-muted small">Company Code</label>
+                    <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+                </div>
+                <div class="col-3">
+                    <label class="form-label text-muted small">Pay Period</label>
+                    <PayPeriod [selectedCompanyId]="selectedCompanyId" [payPeriodType]="payPeriodType"
+                        (payperiodEmit)="handlePayperiodEvent($event)"></PayPeriod>
+                </div>
+
+                <div class="col-md-3 d-flex gap-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
+                        matTooltip="Search" (click)="onsearch()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+
+
+                    <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                        style="display:none" matTooltip="Export to Excel" (click)="exportToExcel()">
+                        <mat-icon>download</mat-icon>
+                    </button>
+                    <button (click)="Invoiceintiate()" [disabled]="isdisabled"
+                        style="width: 130px; height: 30px; color:#ffffff;padding-left: 16px; padding-right: 16px; padding-top: 6px; padding-bottom: 6px; background: #302CB3; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.20); border-radius: 6px; justify-content: center; align-items: center; gap: 10px; display: inline-flex; border: none;">
+                        Initiate
+                    </button>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="table-wrapper1" *ngIf="showTable">
+            <div class="table-scroll">
+                <mat-table [dataSource]="dataSource" matSort class="custom-table mat-elevation-z8 auto-fit-table">
+
+                    <ng-container matColumnDef="action">
+                        <th mat-header-cell *matHeaderCellDef>
+                            <mat-checkbox></mat-checkbox>
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            <mat-checkbox>
+                            </mat-checkbox>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="id">
+                        <mat-header-cell *matHeaderCellDef class="col-sno"><strong>Id</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="col-sno">{{ row.SERIAL_NO }}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="mapName">
+                        <mat-header-cell *matHeaderCellDef class="col-sno"><strong>Map Name</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row" class="col-sno">{{ row.IT_Calender_Id }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="state">
+                        <mat-header-cell *matHeaderCellDef><strong>State</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Company_Code'] }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="group">
+                        <mat-header-cell *matHeaderCellDef><strong>Group</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Company_Id'] }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="inputNumber">
+                        <mat-header-cell *matHeaderCellDef><strong>Input Number</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Financial_Year_Name'] }}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="employeeCount">
+                        <mat-header-cell *matHeaderCellDef><strong>Employee Count</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Financial_Year_Id'] }}</mat-cell>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="netPay">
+                        <mat-header-cell *matHeaderCellDef><strong>Net Pay</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Declaration_CutOff_Date'] }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="ctc">
+                        <mat-header-cell *matHeaderCellDef><strong>CTC</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Submission_CutOff_Date'] }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="serviceChargeAmount">
+                        <mat-header-cell *matHeaderCellDef><strong>Service Charge Amount</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row['Submission_CutOff_Date'] }}</mat-cell>
+                    </ng-container>
+                    <!-- HEADER ROW -->
+                    <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
+
+                    <!-- DATA ROWS -->
+                    <mat-row *matRowDef="let row; columns: uploadDisplayedColumns"></mat-row>
+
+                </mat-table>
+            </div>
+
+            <div *ngIf="dataSource.data.length === 0" class="text-center p-4">
+                <p class="text-muted">No data to display</p>
+            </div>
+
+            <mat-paginator [length]="dataSource.data.length" [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"
+                showFirstLastButtons aria-label="Select page">
+            </mat-paginator>
+        </div>
+
+
+    </div>
+</div>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>
