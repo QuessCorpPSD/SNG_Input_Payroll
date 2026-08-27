@@ -386,7 +386,7 @@ export const routes: Routes = [
           { path: 'companyinvoiceformat', component: CompanyinvoiceformatComponent },
           { path: "permhireGSTinvoice", component: PermhireGSTInvoiceComponent },
           { path: "InvoiceInitiateAgainstProfoma", component: InvoiceInitiateAgainstProfomaComponent },
-          { path: "ProfomaImport", component: ProfomaImportComponent }
+          { path: "ProfomaImport", component: ProfomaImportComponent },
           { path: "genericupload", component: GenericuploadComponent }
         ]
       },
