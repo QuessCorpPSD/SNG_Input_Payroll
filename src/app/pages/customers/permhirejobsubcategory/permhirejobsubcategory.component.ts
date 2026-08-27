@@ -42,6 +42,7 @@ export class PermhirejobsubcategoryComponent {
   editIndex: number | null = null;
   searchText: string = "";
   selectedCompanyCode: any;
+  jobSubCategoryId: number = 0;
   addJobCategory!: FormGroup;
   jobSubCategory: any
   subCategorySearch: any;
@@ -59,6 +60,7 @@ export class PermhirejobsubcategoryComponent {
   uploadedDataSource = new MatTableDataSource<any>(this.uploadedData);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild('editCompany') editCompany!: CompanyallComponent;
 
   ngAfterViewInit() {
     this.uploadedDataSource.paginator = this.paginator;
@@ -75,15 +77,29 @@ export class PermhirejobsubcategoryComponent {
   }
 
 
+  // bindJobCategory() {
+  //   this.service.getJobCategory().subscribe({
+  //     next: res => { this.category = res.Data.data?.Table0 }
+
+  //   });
+  // }
+
   bindJobCategory() {
     this.service.getJobCategory().subscribe({
-      next: res => { this.category = res.Data.data?.Table0 }
+      next: (res) => {
+        this.category = res?.Data?.data?.Table0 || [];
+        console.log('Job Categories:', this.category);
+      },
+      error: (err) => {
+        console.error('Error loading job categories:', err);
+      }
     });
   }
 
   ngOnInit(): void {
     const userdetail = this._sessionStoreage.getItem('UserProfile');
     this.userdetail = JSON.parse(this._decrypt.decrypt(userdetail!));
+    this.bindJobCategory();
 
   }
 
@@ -92,10 +108,22 @@ export class PermhirejobsubcategoryComponent {
     this.dataSource.filter = filterValue;
   }
 
+  // addOpen() {
+  //   this.isAddclicked = true;
+  //   this.isEditMode = false;
+  //   this.jobCategory = null;
+  //   this.jobSubCategory = '';
+  //   this.bindJobCategory();
+  // }
   addOpen() {
     this.isAddclicked = true;
     this.isEditMode = false;
-    this.bindJobCategory();
+    this.selectedCompany = null;
+    this.selectedCompanyCode = '';
+
+    this.jobCategory = null;
+    this.jobSubCategory = '';
+    this.jobSubCategoryId = 0;
   }
 
   closeclick() {
@@ -218,12 +246,26 @@ export class PermhirejobsubcategoryComponent {
       return;
     }
 
+    // const payload = {
+    //   flag: this.isEditMode ? "Edit" : "Add",
+    //   createdBy: this.userdetail.user_Id?.toString(),
+
+    //   Rows: [{
+    //     JOB_SUB_Category_ID: 0,
+    //     Company_Id: this.selectedCompany,
+    //     JOB_Category_ID: this.jobCategory,
+    //     JOB_SUB_Category: this.jobSubCategory
+    //   }],
+    // };
     const payload = {
       flag: this.isEditMode ? "Edit" : "Add",
       createdBy: this.userdetail.user_Id?.toString(),
 
       Rows: [{
-        JOB_SUB_Category_ID: 0,
+        JOB_SUB_Category_ID: this.isEditMode
+          ? this.jobSubCategoryId
+          : 0,
+
         Company_Id: this.selectedCompany,
         JOB_Category_ID: this.jobCategory,
         JOB_SUB_Category: this.jobSubCategory
@@ -263,9 +305,51 @@ export class PermhirejobsubcategoryComponent {
     });
   }
 
+  // openEdit(row: any) {
+  //   this.isAddclicked = true;
+  //   this.isEditMode = true;
+  //   this.jobCategory = row.JOB_Category_Id;
+  //   this.jobSubCategory = row.JOB_SUB_Category
+  // }
   openEdit(row: any) {
     this.isAddclicked = true;
     this.isEditMode = true;
+
+    // Store company information
+    this.selectedCompanyId = row.Company_Id;
+    this.selectedCompany = row.Company_Id;
+    this.selectedCompanyCode = row.Company_Code;
+
+    // Store job category
+    this.jobCategory = row.JOB_Category_Id;
+
+    // Store sub category
+    this.jobSubCategory = row.JOB_SUB_Category;
+
+    // Store record ID
+    this.jobSubCategoryId = row.JOB_SUB_Category_ID;
+
+    // Wait for companyall component to be created
+    setTimeout(() => {
+      if (this.editCompany) {
+
+        const company = this.editCompany.companyCode.find(
+          (x: any) =>
+            x.companyId == this.selectedCompanyId ||
+            x.companyCode == this.selectedCompanyCode ||
+            x.displayName == this.selectedCompanyCode
+        );
+
+        if (company) {
+          // IMPORTANT: set the object, not the string
+          this.editCompany.myControl.setValue(company);
+
+          console.log('Selected company:', company);
+        } else {
+          console.log('Company not found in companyall list');
+        }
+      }
+    }, 500);
   }
 
   onDelete(row: any) {
@@ -280,10 +364,10 @@ export class PermhirejobsubcategoryComponent {
       flag: "Delete",
       createdBy: this.userdetail.user_Id?.toString(),
       Rows: [{
-        JOB_SUB_Category_ID: 0,
+        JOB_SUB_Category_ID: row.JOB_SUB_Category_ID,
         Company_Id: this.selectedCompany,
-        // JOB_Category_ID: form.jobCategory,
-        // JOB_SUB_Category: form.jobSubCategory
+        JOB_Category_ID: Number(row.JOB_Category_Id),
+        JOB_SUB_Category: row.JOB_SUB_Category
       }],
     };
 

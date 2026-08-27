@@ -80,18 +80,18 @@
 
                     <ng-container matColumnDef="companycode">
                         <mat-header-cell *matHeaderCellDef>Company Code</mat-header-cell>
-                        <mat-cell *matCellDef="let row">{{ row.USERNAME }}</mat-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Company_Code }}</mat-cell>
                     </ng-container>
 
 
                     <ng-container matColumnDef="jobCategory">
                         <mat-header-cell *matHeaderCellDef>Job Category</mat-header-cell>
-                        <mat-cell *matCellDef="let row">{{ row.USERNAME }}</mat-cell>
+                        <mat-cell *matCellDef="let row">{{ row.JOB_Category }}</mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="jobSubCategory">
                         <mat-header-cell *matHeaderCellDef>Job Sub Category</mat-header-cell>
-                        <mat-cell *matCellDef="let row">{{ row.USERNAME }}</mat-cell>
+                        <mat-cell *matCellDef="let row">{{ row.JOB_SUB_Category }}</mat-cell>
                     </ng-container>
 
 
@@ -118,7 +118,7 @@
     <mat-card class="popup-card">
         <mat-card-header class="popup-header">
             <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 600;">
-                {{ isEditMode ? 'Edit Job Category' : 'Add Job Category' }}
+                {{ isEditMode ? 'Edit Job Sub Category' : 'Add Job Sub Category' }}
             </mat-card-title>
             <!-- <mat-card-title class="d-flex justify-content-center align-items-center">
                 
@@ -129,46 +129,76 @@
             </button>
         </mat-card-header>
         <mat-card-content class="scroll-content">
-                <div class="mb-3 w-100">
+            <div class="mb-3 w-100">
 
-                    <!-- Company Code -->
-                    <div class="d-flex align-items-center mb-2 w-100">
-                        <label class="mb-0 fw-normal flex-shrink-0" style="width: 185px; white-space: nowrap;">
-                            Company Code<span class="text-danger">*</span>
-                        </label>
+                <!-- Company Code -->
 
-                        <div class="flex-grow-1" style="min-width: 0; max-width: 320px;">
-                            <companyall (companyEmit)="handleCompanyEvent2($event)">
-                            </companyall>
-                        </div>
-                    </div>
+                <div class="d-flex align-items-center mb-2 w-100">
+                    <label class="mb-0 fw-normal flex-shrink-0" style="width: 185px; white-space: nowrap;">
+                        Company Code<span class="text-danger">*</span>
+                    </label>
 
+                    <div class="flex-grow-1" style="min-width: 0; max-width: 320px;">
 
-                    <!-- Job Category -->
-                    <div class="d-flex align-items-center mb-2 w-100">
-                        <label class="mb-0 fw-normal flex-shrink-0" style="width: 185px; white-space: nowrap;">
-                            Job Category<span class="text-danger">*</span>
-                        </label>
-
-                        <select class="form-control" [(ngModel)]="jobCategory"
-                            style="height: 35px; width: 100%; max-width: 320px;">
-                            <option *ngFor="let p of category" [value]="p.JOB_Category_ID">{{p.JOB_Category}} </option>
-                        </select>
+                        <companyall #editCompany (companyEmit)="handleCompanyEvent2($event)">
+                        </companyall>
 
                     </div>
-
-
-                    <!-- Job Sub Category -->
-                    <div class="d-flex align-items-center mb-2 w-100">
-                        <label class="mb-0 fw-normal flex-shrink-0" style="width: 185px; white-space: nowrap;">
-                            Job Sub Category<span class="text-danger">*</span>
-                        </label>
-
-                        <input type="text" class="form-control" [(ngModel)]="jobSubCategory"
-                            style="height: 35px; width: 100%; max-width: 320px;" />
-                    </div>
-
                 </div>
+                <!-- <div class="d-flex align-items-center mb-2 w-100">
+                    <label class="mb-0 fw-normal flex-shrink-0" style="width: 185px; white-space: nowrap;">
+                        Company Code<span class="text-danger">*</span>
+                    </label>
+
+                    <div class="flex-grow-1" style="min-width: 0; max-width: 320px;">
+                        <companyall (companyEmit)="handleCompanyEvent2($event)">
+                        </companyall>
+                    </div>
+                </div> -->
+
+
+                <!-- Job Category -->
+
+                <div class="d-flex align-items-center mb-2 w-100">
+                    <label class="mb-0 fw-normal flex-shrink-0" style="width: 185px; white-space: nowrap;">
+                        Job Category<span class="text-danger">*</span>
+                    </label>
+
+                    <select class="form-select" [(ngModel)]="jobCategory" name="jobCategory"
+                        style="height: 35px; width: 100%; max-width: 320px;">
+
+                        <option *ngFor="let item of category" [ngValue]="item.JOB_Category_ID">
+                            {{ item.JOB_Category }}
+                        </option>
+
+                    </select>
+                </div>
+                <!-- <div class="d-flex align-items-center mb-2 w-100">
+                    <label class="mb-0 fw-normal flex-shrink-0" style="width: 185px; white-space: nowrap;">
+                        Job Category<span class="text-danger">*</span>
+                    </label>
+
+                    <select class="form-select" [(ngModel)]="jobCategory" name="jobCategory">
+                        <option *ngFor="let item of category" [ngValue]="item.JOB_Category_ID">
+                            {{ item.JOB_Category }}
+                        </option>
+
+                    </select>
+
+                </div> -->
+
+
+                <!-- Job Sub Category -->
+                <div class="d-flex align-items-center mb-2 w-100">
+                    <label class="mb-0 fw-normal flex-shrink-0" style="width: 185px; white-space: nowrap;">
+                        Job Sub Category<span class="text-danger">*</span>
+                    </label>
+
+                    <input type="text" class="form-control" [(ngModel)]="jobSubCategory"
+                        style="height: 35px; width: 100%; max-width: 320px;" />
+                </div>
+
+            </div>
         </mat-card-content>
         <mat-card-footer class="footer">
             <div class="d-flex justify-content-end mt-3">
@@ -182,7 +212,8 @@
                     </button>
 
                     <button type="submit"
-                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white; " (click)="onSave()">
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white; "
+                        (click)="onSave()">
                         {{ isEditMode ? 'Update' : 'Save' }}
                     </button>
                 </div>
