@@ -18,18 +18,18 @@ import { json } from 'stream/consumers';
 export const Pay_Token = new InjectionToken<IPermHireServiceCharge>('Pay_Token');
 
 @Component({
-  selector: 'app-permhire',
+  selector: 'app-permhire-request',
   standalone: true,
   imports: [CommonModule, MatIconModule, MatTooltipModule, MatTableModule, MatPaginatorModule, FormsModule, ReactiveFormsModule, MatTooltipModule, MatCard, MatCardModule, MatCheckboxModule, CompanyallComponent],
-  templateUrl: './permhire.component.html',
-  styleUrl: './permhire.component.css',
+  templateUrl: './permhire-request.component.html',
+  styleUrl: './permhire-request.component.css',
   providers: [
     {
       provide: Pay_Token, useClass: PermhireservicechargetypeService,
     }
   ]
 })
-export class PermhireComponent {
+export class PermhireRequestComponent {
   showTable = false;
   selectedCompanyId!: number;
   payPeriodType!: string;
@@ -54,7 +54,7 @@ export class PermhireComponent {
   constructor(private _decrypt: EncryptionService, private _sessionStoreage: SessionStorageService, @Inject(Pay_Token) private service: IPermHireServiceCharge) { }
 
   uploadDisplayedColumns: string[] = [
-    'action', 'slNo', 'clientcode', 'clientname', 'location', 'req_id', 'ref_id', 'cand_id', 'cand_name', 'designation', 'doj', 'vertical', 'vh', 'ctc', 'billablectc', 'branchcode', 'invoiceno', 'totalamount', 'approval_status'];
+    'slNo', 'clientcode', 'clientname', 'location', 'req_id', 'ref_id', 'cand_id', 'cand_name', 'designation', 'doj', 'vertical', 'vh', 'ctc', 'billablectc', 'branchcode', 'invoiceno', 'totalamount', 'approval_status'];
 
 
   uploadedData: any[] = []; // No mock data
@@ -172,7 +172,7 @@ export class PermhireComponent {
           this.dataSource = new MatTableDataSource(this.permHiresearch);
           this.dataSource.paginator = this.paginator;
           this.uploadDisplayedColumns = [
-            'action', 'slNo', 'clientcode', 'clientname', 'location', 'req_id', 'ref_id', 'cand_id', 'cand_name', 'designation', 'doj', 'vertical', 'vh', 'ctc', 'billablectc', 'branchcode', 'invoiceno', 'totalamount', 'approval_status'];
+             'slNo', 'clientcode', 'clientname', 'location', 'req_id', 'ref_id', 'cand_id', 'cand_name', 'designation', 'doj', 'vertical', 'vh', 'ctc', 'billablectc', 'branchcode', 'invoiceno', 'totalamount', 'approval_status'];
         } else {
           this.dataSource.data = [];
           alert('No data found');

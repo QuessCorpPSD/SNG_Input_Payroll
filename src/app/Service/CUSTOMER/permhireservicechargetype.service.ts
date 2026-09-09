@@ -59,4 +59,13 @@ export class PermhireservicechargetypeService implements IPermHireServiceCharge 
     const url = `${this.environment.apiUrl}PermHire/PermHireMasterApproveReject`;
     return this.http.post<APIResponse>(url, payload);
   }
+
+  GetPermHireRequestSearch(CompanyId: number): Observable<APIResponse> {
+    return this.http.get<APIResponse>(this.environment.apiUrl + 'PermHire/GetPermHireRequestSearch/' + CompanyId);
+  }
+
+  PermHireRequest(payload: any): Observable<APIResponse> {
+    const url = `${this.environment.apiUrl}PermHire/PermHireRequest`;
+    return this.http.post<APIResponse>(url, payload);
+  }
 }

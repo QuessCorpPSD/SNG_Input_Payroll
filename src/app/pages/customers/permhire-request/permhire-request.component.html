@@ -8,35 +8,15 @@
                     <label class="form-label text-muted small">Company code</label>
                     <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
                 </div>
-                <div class="col-md-3">
-                    <label class="form-label text-muted small">
-                        Status
-                    </label>
-
-                    <select class="form-select" [(ngModel)]="selectedStatus">
-                        <option value="">Select Status</option>
-                        <option value="Approval">Approval</option>
-                        <option value="Reject">Reject</option>
-                        <option value="Pending To Approve">Pending To Approve</option>
-                    </select>
-                </div>
                 <div class="col-md-2 d-flex gap-2">
                     <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
                         style="cursor: pointer;" matTooltip="Search" (click)="onsearch()">
                         <mat-icon>search</mat-icon>
                     </button>
-                    <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
-                        style="cursor: pointerX;" matTooltip="export to excel">
-                        <mat-icon>download</mat-icon>
-                    </button>
-                    <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
-                        matTooltip="import">
-                        <mat-icon>cloud_upload</mat-icon>
-                    </button> -->
-                    <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center btn-add" matTooltip="Add"
-                        (click)="addOpen()">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-add"
+                        matTooltip="Add">
                         <mat-icon>add</mat-icon>
-                    </button> -->
+                    </button>
                 </div>
             </div>
         </div>
@@ -64,7 +44,6 @@
         <div class="table-wrapper1" *ngIf="showTable">
             <div class="table-scroll">
                 <mat-table [dataSource]="dataSource" class="mat-elevation-z8 custom-table">
-
                     <!-- Action -->
                     <ng-container matColumnDef="action">
                         <mat-header-cell *matHeaderCellDef>Action</mat-header-cell>
