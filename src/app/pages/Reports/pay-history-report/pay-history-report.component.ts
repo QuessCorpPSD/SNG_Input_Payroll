@@ -1,13 +1,19 @@
 import { Component, Inject, InjectionToken } from '@angular/core';
 import { IPayHistoryService } from '../../../Repository/Reports/IPayHistory.service';
 import { PayHistoryService } from '../../../Service/Reports/PayHistory.service';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { MatCardModule } from '@angular/material/card';
+import { finalize } from 'rxjs';
 
 export const Pay_Token = new InjectionToken<IPayHistoryService>('Pay_Token');
 
 @Component({
   selector: 'app-pay-history-report',
   standalone: true,
-  imports: [],
+  imports: [MatIconModule, MatCardModule, MatTooltipModule, CommonModule, FormsModule],
   templateUrl: './pay-history-report.component.html',
   styleUrl: './pay-history-report.component.css',
   providers: [
@@ -20,40 +26,88 @@ export class PayHistoryReportComponent {
 
   constructor(@Inject(Pay_Token) private payHistoryService: IPayHistoryService) { }
 
+  isLoading = false;
+  Entity: any;
+  entitySearch: any;
+  Payperiod: any;
+  getYear: any[] = [];
+  formName: any;
+  Year: any;
+
+  ngOnInit() {
+    this.BindEntityName();
+    this.BindYear();
+  }
+
+  BindEntityName() {
+    this.payHistoryService.GetEntity().subscribe({
+      next: (res: any) => {
+        this.entitySearch = res?.Data?.data?.Table0;
+      }
+    });
+  }
+
+  BindYear() {
+    this.payHistoryService.bindYear().subscribe({
+      next: res => {
+        this.getYear = res.Data.data.Table0;
+      }
+    });
+  };
 
   downloadPayHistory() {
 
-    this.payHistoryService
-      .downloadPayHistory(2, '', '2026')
-      .subscribe({
-        next: (res) => {
-          try {
-            const base64File = res?.Data?.file;
-            let apiFileName = res?.Data?.fileName;
+    if (!this.Entity) {
+      alert('Please select Entity');
+      return;
+    }
 
-            if (!base64File) {
-              alert("No file received from the API");
-              return;
+    if (!this.Year) {
+      alert('Please select Year');
+      return;
+    }
+
+    if (!this.formName) {
+      alert('Please select Report Type');
+      return;
+    }
+
+    if (this.formName === 'PH') {
+      this.isLoading = true;
+      this.payHistoryService
+        .downloadPayHistory(this.Entity, '', this.Year).pipe(
+          finalize(() => this.isLoading = false)
+        )
+        .subscribe({
+          next: (res) => {
+            try {
+              const base64File = res?.Data?.file;
+              let apiFileName = res?.Data?.fileName;
+
+              if (!base64File) {
+                alert("No file received from the API");
+                return;
+              }
+
+              // 🔧 Fix invalid characters in the filename
+              apiFileName = apiFileName
+                .replace(/\//g, "-")
+                .replace(/:/g, "-")
+                .replace(/ /g, "_");
+
+              // remove .xlsx because your download function adds extension
+              apiFileName = apiFileName.replace(".xlsx", "");
+
+              this.downloadExcelFromBase64(base64File, apiFileName, "Excel");
+            } catch (err) {
+              console.error("Error exporting to Excel:", err);
             }
-
-            // 🔧 Fix invalid characters in the filename
-            apiFileName = apiFileName
-              .replace(/\//g, "-")
-              .replace(/:/g, "-")
-              .replace(/ /g, "_");
-
-            // remove .xlsx because your download function adds extension
-            apiFileName = apiFileName.replace(".xlsx", "");
-
-            this.downloadExcelFromBase64(base64File, apiFileName, "Excel");
-          } catch (err) {
-            console.error("Error exporting to Excel:", err);
-          }
-        },
-        error: (err) => {
-          console.error("Error loading data for export", err);
-        },
-      });
+          },
+          error: (err) => {
+            console.error("Error loading data for export", err);
+          },
+        });
+    }
   }
 
   downloadExcelFromBase64(base64String: string, fileName: string, FileType): void {

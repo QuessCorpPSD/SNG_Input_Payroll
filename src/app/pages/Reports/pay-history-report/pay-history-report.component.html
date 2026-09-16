@@ -1,7 +1,47 @@
-<button
-    mat-raised-button
-    color="primary"
-    (click)="downloadPayHistory()">
+<div class="page-wrapper" style="padding-top: 2%;">
+    <div class="scrollable-content">
 
-    Download Pay History
-</button>
+
+        <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 600; ">CPF
+            Summary</mat-card-title>
+
+        <div class="container py-2">
+            <div class="row g-3 align-items-end">
+
+                <div class="col-md-3">
+                    <label class="form-label text-muted small">Entity</label>
+                    <select class="form-select form-select-sm" [(ngModel)]="Entity">
+                        <option *ngFor="let p of entitySearch" [value]="p.Id">
+                            {{ p.EntityName }}
+                        </option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label text-muted small">Year</label>
+                    <select class="form-select form-select-sm small-input" [(ngModel)]="Year">
+                        <option *ngFor="let item of getYear" [value]="item.YEAR">
+                            {{ item.YEAR }}
+                        </option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label text-muted small">Report Type</label>
+                    <select class="form-select form-select-sm small-input" [(ngModel)]="formName">
+                        <option value="PH">Pay History</option>
+                        <option value="PV">Pay Variance</option>
+                        <option value="PHP">Pay History (PDF)</option>
+                    </select>
+                </div>
+                <div class="col-md-3 d-flex gap-2">
+                    <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                        matTooltip="Download" (click)="downloadPayHistory()">
+                        <mat-icon>download</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>

@@ -3,4 +3,6 @@ import { APIResponse } from "../../Models/apiresponse";
 
 export interface IPayHistoryService {
     downloadPayHistory(entityId: number, employeeCode: string, year: string): Observable<APIResponse>;
+    GetEntity(): Observable<APIResponse>;
+    bindYear(): Observable<APIResponse>;
 }

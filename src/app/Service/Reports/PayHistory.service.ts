@@ -23,4 +23,14 @@ export class PayHistoryService implements IPayHistoryService {
             url
         );
     }
+
+    GetEntity(): Observable<APIResponse> {
+        return this.http.get<APIResponse>(
+            this.env.apiUrl + 'InvoiceLegalEntity/Search',
+        );
+    }
+
+    bindYear(): Observable<APIResponse> {
+        return this.http.get<APIResponse>(this.env.apiUrl + 'IR/GetLastThreeYear/');
+    }
 }
