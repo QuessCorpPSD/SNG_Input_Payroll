@@ -14,13 +14,15 @@ import { CompanyallComponent } from '../../../common/CompanyAll/companyall.compo
 import { IPermHireServiceCharge } from '../../../Repository/customer/IPermhireServiceCharge.service';
 import { PermhireservicechargetypeService } from '../../../Service/CUSTOMER/permhireservicechargetype.service';
 import { finalize } from 'rxjs';
-import { json } from 'stream/consumers';
+import { StateComponent } from '../../../common/state/state.component';
+import { MapnameComponent } from '../../../common/Mapname/mapname/mapname.component';
+import { CityComponent } from '../../../common/city/city.component';
 export const Pay_Token = new InjectionToken<IPermHireServiceCharge>('Pay_Token');
 
 @Component({
   selector: 'app-permhire-request',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatTooltipModule, MatTableModule, MatPaginatorModule, FormsModule, ReactiveFormsModule, MatTooltipModule, MatCard, MatCardModule, MatCheckboxModule, CompanyallComponent],
+  imports: [CommonModule, MatIconModule, MatTooltipModule, MatTableModule, MatPaginatorModule, FormsModule, ReactiveFormsModule, MatTooltipModule, MatCard, MatCardModule, MatCheckboxModule, CompanyallComponent, StateComponent, MapnameComponent],
   templateUrl: './permhire-request.component.html',
   styleUrl: './permhire-request.component.css',
   providers: [
@@ -50,33 +52,43 @@ export class PermhireRequestComponent {
   selectedCompanyCode: any;
   selectedStatus: string = '';
   permHiresearch: any;
+  selectedMN: any;
+  mapnameUI: any;
+  selectedCT: any;
+  citynameUI: any;
+  selectedGroupId!: string;
+  jobCategoryList: any[] = [];
+  jobSubCategoryList: any[] = [];
 
   constructor(private _decrypt: EncryptionService, private _sessionStoreage: SessionStorageService, @Inject(Pay_Token) private service: IPermHireServiceCharge) { }
 
   uploadDisplayedColumns: string[] = [
     'slNo', 'clientcode', 'clientname', 'location', 'req_id', 'ref_id', 'cand_id', 'cand_name', 'designation', 'doj', 'vertical', 'vh', 'ctc', 'billablectc', 'branchcode', 'invoiceno', 'totalamount', 'approval_status'];
-
-
-  uploadedData: any[] = []; // No mock data
+  uploadedData: any[] = []; 
 
   uploadedDataSource = new MatTableDataSource<any>(this.uploadedData);
-
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   ngAfterViewInit() {
-    this.uploadedDataSource.paginator = this.paginator;
+    this.dataSource.paginator = this.paginator;
   }
-
   handleCompanyEvent(company) {
     this.selectedCompanyId = company.companyId;
     this.selectedCompanyCode = company.companyCode;
   }
 
-  handleCompanyEvent2(company) {
+  handleCompanyEvent2(company: any) {
+    if (!company) return;
+
     this.selectedCompanyId = company.companyId;
     this.selectedCompanyCode = company.companyCode;
-  }
 
+    this.addPermMaster.patchValue({
+      COMPANY_ID: company.companyId,
+      companyCode: company.companyCode,
+      Clientname: company.companyName
+    });
+  }
   ngOnInit(): void {
     const userdetail = this._sessionStoreage.getItem('UserProfile');
     this.userdetail = JSON.parse(this._decrypt.decrypt(userdetail!));
@@ -141,27 +153,62 @@ export class PermhireRequestComponent {
       DEPARTMENT: new FormControl('')
 
     })
+    this.getJobCategory();
+    this.addPermMaster.get('jobCategory')?.valueChanges.subscribe((categoryName: any) => {
+      if (categoryName) {
+        const selected = this.jobCategoryList.find(x => x.JOB_Category === categoryName);
+        if (selected) {
+          this.getJobSubCategory(Number(selected.JOB_Category_ID));
+        } else {
+          this.jobSubCategoryList = [];
+          this.addPermMaster.patchValue({ jobSubCategory: '' });
+        }
+      } else {
+        this.jobSubCategoryList = [];
+        this.addPermMaster.patchValue({ jobSubCategory: '' });
+      }
+    });
+  }
+  getJobCategory() {
+    this.service.getJobCategory().subscribe({
+      next: (res) => {
+        this.jobCategoryList = (res?.Data?.data?.Table0 || [])
+          .filter((x: any) => x.JOB_Category_ID !== 0);
+      },
+      error: (err) => {
+        console.error('Error loading Job Category', err);
+      }
+    });
+  }
+  getJobSubCategory(jobCategoryId: number) {
+    this.service.getJobSubCategory(jobCategoryId).subscribe({
+      next: (res) => {
+        this.jobSubCategoryList = (res?.Data?.data?.Table0 || [])
+          .filter((x: any) => x.JOB_SUB_Category_ID !== 0);
+      },
+      error: (err) => {
+        console.error('Error loading Job Sub Category', err);
+        this.jobSubCategoryList = [];
+      }
+    });
   }
 
   applyFilters() {
     const filterValue = this.searchText?.trim().toLowerCase();
     this.dataSource.filter = filterValue;
   }
-
   closeclick() {
     this.isAddclicked = false;
   }
   onsearch() {
-
+    if (!this.selectedCompanyId) {
+      alert('Please select company code');
+      return;
+    }
     this.showTable = true;
     this.isLoading = true;
-    const payload = {
-      companyId: this.selectedCompanyId ?? 0,
-      status: this.selectedStatus ?? "",
-      mode: "Search",
-    }
 
-    this.service.GetPermHireMasterSearch(payload).pipe(
+    this.service.GetPermHireRequestSearch(this.selectedCompanyId).pipe(
       finalize(() => {
         this.isLoading = false;
       })
@@ -172,63 +219,18 @@ export class PermhireRequestComponent {
           this.dataSource = new MatTableDataSource(this.permHiresearch);
           this.dataSource.paginator = this.paginator;
           this.uploadDisplayedColumns = [
-             'slNo', 'clientcode', 'clientname', 'location', 'req_id', 'ref_id', 'cand_id', 'cand_name', 'designation', 'doj', 'vertical', 'vh', 'ctc', 'billablectc', 'branchcode', 'invoiceno', 'totalamount', 'approval_status'];
+            'slNo', 'clientcode', 'clientname', 'location', 'req_id', 'ref_id', 'cand_id', 'cand_name', 'designation', 'doj', 'vertical', 'vh', 'ctc', 'billablectc', 'branchcode', 'invoiceno', 'totalamount', 'approval_status'];
         } else {
           this.dataSource.data = [];
           alert('No data found');
         }
-
       },
       error: (err) => {
-        console.error('Error loading salary release data', err);
-        alert('Failed to load salary release data');
+        console.error('Error loading perm hire request data', err);
+        alert('Failed to load perm hire request data');
       },
     });
   }
-
-
-  // exportToExcel(): void {
-  //   this.isLoading = true;
-  //   const UserId = this.EmployeeId;
-  //   const Businessunitnameid = this.BusinessUnitNames;
-
-  //   this.service.exportToExcel(UserId, Businessunitnameid).subscribe({
-  //     next: (res) => {
-  //       try {
-
-  //         const jsonData = res?.Data?.data?.Table0;
-
-  //         //  Check if Data is not an array or empty
-  //         if (!Array.isArray(jsonData) || jsonData.length === 0) {
-  //           alert('No data available for the selected company and pay period.');
-  //           this.isLoading = false;
-  //           return;
-  //         }
-
-  //         // Create Excel file
-  //         const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(jsonData);
-  //         const wb: XLSX.WorkBook = XLSX.utils.book_new();
-
-  //         XLSX.utils.book_append_sheet(wb, ws, 'CompanyPermission');
-
-  //         const timestamp = new Date().toISOString().split('T')[0];
-  //         const fileName = `CompanyPermission_${timestamp}.xlsx`;
-
-  //         XLSX.writeFile(wb, fileName);
-  //         this.isLoading = false;
-  //       } catch (err) {
-  //         console.error('Error exporting to Excel:', err);
-  //         alert('An error occurred while exporting data.');
-  //       }
-  //     },
-  //     error: (err) => {
-  //       console.error('Error loading data for export', err);
-  //       alert('Failed to load data from server.');
-  //       this.isLoading = false;
-  //     },
-  //   });
-  // }
-
   exportToExcelsave(data: any[]) {
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
 
@@ -237,309 +239,113 @@ export class PermhireRequestComponent {
       SheetNames: ['Result']
     };
     XLSX.writeFile(workbook, 'CompanyPermission_Result.xlsx')
-    // const excelBuffer: any = XLSX.write(workbook, {
-    //   bookType: 'xlsx',
-    //   type: 'array'
-    // });
-
-    // const blob: Blob = new Blob([excelBuffer], {
-    //   type: 'application/octet-stream'
-    // });
-
-    // FileSaver.saveAs(blob, 'CompanyPermission_Result.xlsx');
   }
-
-  // onSave() {
-  //   if (this.addPermMaster.invalid) {
-  //     this.addPermMaster.markAllAsTouched();
-  //     return;
-  //   }
-
-  //   const f = this.addPermMaster.value;
-
-  //   const data = this.uploadedDataSourceadd.data || [];
-  //   console.log("data", data)
-
-  //   data.forEach((row: any) => {
-  //     row.selected = !!row.selected;
-  //   });
-
-  //   const selectedCompanies = data.filter((row: any) => row.selected);
-
-  //   if (selectedCompanies.length === 0) {
-  //     alert("Please select at least one company");
-  //     return;
-  //   }
-
-  //   console.log(selectedCompanies)
-
-
-  //   var Company_Permission_Id = this.getCompanyPermissionId(selectedCompanies);
-
-  //   var datas = selectedCompanies.map((row: any) => ({
-  //     Company_Permission_Details_Id: this.isEditMode ? row.COMPANY_PERMISSION_DETAILS_ID ?? 0 : 0,
-  //     Company_Permission_Id: this.isEditMode ? row.COMPANY_PERMISSION_ID ?? Company_Permission_Id : 0,
-  //     Is_Permission: true,
-  //     Company_Id: row.COMPANY_ID || 0,
-  //     Company_Code: row.COMPANY_CODE,
-  //   }))
-
-  //   console.log(datas)
-
-  //   const payload = {
-  //     createdBy: this.userdetail.user_Id,
-  //     mode: this.isEditMode ? "Edit" : "Add",
-
-  //     CompanyPermissionModel: {
-  //       User_Id: Number(f.EmployeeId),
-  //       Business_Unit_Name_id: Number(f.BusinessUnitName),
-  //       Company_Permission_Id: 0
-  //     },
-  //     CompanyPermissionDetails: datas
-  //   };
-  //   console.log(JSON.stringify(payload))
-
-  //   this.isLoading = true;
-
-  //   this.service.addCompanyPermission(payload).subscribe({
-  //     next: (res: any) => {
-  //       this.isLoading = false;
-
-  //       const tableData = res?.Data?.data?.Table0 || [];
-
-  //       const globalError = res?.Data?.message &&
-  //         res?.Data?.statusCode === "400";
-
-  //       if (globalError) {
-
-  //         this.exportToExcelsave([
-  //           {
-  //             Error_Message: res.Data.message
-  //           }
-  //         ]);
-
-  //         return;
-  //       }
-
-  //       if (tableData.length > 0) {
-
-  //         const successCheck = (row: any) =>
-  //           (row.Error_Message || '')
-  //             .toLowerCase()
-  //             .includes('success');
-
-  //         const successRows = tableData.filter(successCheck);
-  //         const errorRows = tableData.filter((r: any) => !successCheck(r));
-
-  //         this.exportToExcelsave(tableData);
-  //         this.onsearch();
-
-  //         if (errorRows.length === 0) {
-
-  //           if (this.isEditMode) {
-  //             alert("Company Permission Updated Successfully");
-  //           } else {
-  //             alert("Company Permission Created Successfully");
-  //           }
-
-  //         }
-
-  //       } else {
-  //         alert("No data returned");
-  //       }
-
-  //       this.closeclick();
-  //     },
-  //     error: (err) => {
-  //       this.isLoading = false;
-  //       console.error("❌ API ERROR:", err);
-  //       alert("API Error");
-  //     }
-  //   });
-  // }
-
-  openEdit(row: any) {
-    this.isAddclicked = true;
-    this.isEditMode = true;
-
-    this.addPermMaster.patchValue({
-      ID: row.ID ?? '',
-      COMPANY_ID: row.COMPANY_ID ?? '',
-      companyCode: row.CLIENT_CODE ?? '',
-      VH: row.VH ?? '',
-      PAN: row.PAN ?? '',
-      Clientname: row.CLIENT_NAME ?? '',
-      Ctc: row.CTC ?? '',
-      aadhar: row.AADHAR ?? '',
-      Clientemployeecode: row.Client_employee_code ?? '',
-      billableCtc: row.BILLABLE_CTC ?? '',
-      mobileNo: row.MOBILE_NUMBER ?? '',
-      reqId: row.REQ_ID ?? '',
-      contractType: row.CONTRACT_TYPE ?? '',
-      state: row.STATE ?? '',
-      refId: row.REF_ID ?? '',
-      branchCode: row.BRANCH_CODE ?? '',
-      jobCategory: row.JOB_CATEGORY ?? '',
-      CandId: row.CAND_ID ?? '',
-      invoiceNo: row.INVOICE_NO ?? '',
-      jobSubCategory: row.JOB_SUB_CATEGORY ?? '',
-      candName: row.CAND_NAME ?? '',
-      totalAmount: row.TOT_INVOICE_AMOUNT ?? '',
-      placmenttype: row.PLACEMENT_TYPE ?? '',
-      designation: row.DESIGNATION ?? '',
-      invoiceState: row.INVOICE_STATE ?? '',
-      yaerExperience: row.YEAR_EXPERIENCE ?? '',
-      doj: row.DOJ ?? '',
-      gstNo: row.GST_NO ?? '',
-      approveBy: row.Approved_Rejected_ByName ?? '',
-      vertical: row.VERTICAL ?? '',
-      status: row.STATUS ?? '',
-      approveRemarks: row.Approved_Rejected_Remarks ?? '',
-      joiningdays: row.JOINING_DAYS ?? '',
-      city: row.CITY ?? '',
-      approvalStatus: row.Approval_Status ?? '',
-      approvalStatusView: row.Approval_Status ?? '',
-      gender: row.GENDER ?? '',
-      dob: row.DOB ?? '',
-      offerApproval: row.Offer_Approval_Raised_by_Recruiter ?? '',
-      jobcode: row.JOBCode ?? '',
-      consultant: row.Consultant ?? '',
-      entityId: row.EntityID ?? '',
-      requestedOn: row.Requested_on ?? '',
-      recruiterEmployeeId: row.Recruiters_Employee_ID ?? '',
-      inputNo: row.Input_Number ?? '',
-      isPoApllicable: row.IS_PO_Applicable ?? '',
-      updatedDate: row.UPDATED_DATE ?? '',
-      organisationHead: row.Organisation_Head ?? '',
-      location: row.LOCATION ?? '',
-      poNumber: row.PO_NUMBER ?? '',
-      costCenter: row.COST_CENTRE ?? '',
-      businessUnit: row.BUSINESS_UNIT ?? '',
-      HiringManager: row.HIRING_MANAGER ?? '',
-      bandGradelevel: row.BAND_GRADE_LEVEL ?? '',
-      personalNo: row.PERSONAL_NUMBER ?? '',
-      ranumber: row.RCCODE_RANUMBER ?? '',
-      applicantId: row.APPLICANT_ID ?? '',
-      DEPARTMENT: row.DEPARTMENT ?? ''
-    });
-
-    this.addPermMaster.disable();
-    this.addPermMaster.get('approvalStatus')?.enable();
-    this.addPermMaster.get('approveRemarks')?.enable();
-  }
-
-  onUpdate() {
+  onSave() {
     const formValue = this.addPermMaster.getRawValue();
 
     const payload = {
       CreatedBy: String(this.userdetail.user_Id),
       Rows: [
         {
-          Id: formValue.ID || 0,
-          Company_Id: String(formValue.COMPANY_ID) || null,
-          LOCATION: String(formValue.location) || null,
-          REQ_ID: String(formValue.reqId) || null,
-          REF_ID: String(formValue.refId) || null,
-          CAND_ID: String(formValue.CandId) || null,
-          CAND_NAME: String(formValue.candName) || null,
-          DESIGNATION: String(formValue.designation) || null,
-          DOJ: String(formValue.doj) || null,
-          VERTICAL: String(formValue.vertical) || null,
-          VH: String(formValue.VH) || null,
-          CTC: String(formValue.Ctc) || null,
-          BILLABLE_CTC: String(formValue.billableCtc) || null,
-          CONTRACT_TYPE: String(formValue.contractType) || null,
-          BRANCH_CODE: String(formValue.branchCode) || null,
-          INVOICE_NO: String(formValue.invoiceNo) || null,
-          INVOICE_STATE: String(formValue.invoiceState) || null,
-          TOT_INVOICE_AMOUNT: String(formValue.totalAmount) || null,
-          GST_NO: String(formValue.gstNo) || null,
-          STATUS: String(formValue.status) || null,
-          CITY: String(formValue.city) || null,
-          DOB: String(formValue.dob) || null,
-          GENDER: String(formValue.gender) || null,
-          PAN: String(formValue.PAN) || null,
-          AADHAR: String(formValue.aadhar) || null,
-          MOBILE_NUMBER: String(formValue.mobileNo) || null,
-          STATE: String(formValue.state) || null,
-          JOB_CATEGORY: String(formValue.jobCategory) || null,
-          JOB_SUB_CATEGORY: String(formValue.jobSubCategory) || null,
-          PLACEMENT_TYPE: String(formValue.placmenttype) || null,
-          YEAR_EXPERIENCE: String(formValue.yaerExperience) || null,
-          JOINING_DAYS: String(formValue.joiningdays) || null,
-          Approved_Rejected_ByName: String(formValue.approveBy) || null,
-          Approved_Rejected_Remarks: String(formValue.approveRemarks) || null,
-          Approval_Status: String(formValue.approvalStatus) || null,
-          JOBCode: String(formValue.jobcode) || null,
-          Consultant: String(formValue.consultant) || null,
-          Offer_Approval_Raised_by_Recruiter: String(formValue.offerApproval) || null,
-          Requested_on: String(formValue.requestedOn) || null,
-          Recruiters_Employee_ID: String(formValue.recruiterEmployeeId) || null,
-          EntityID: String(formValue.entityId) || null,
-          Organisation_Head: String(formValue.organisationHead) || null,
-          UPDATED_DATE: String(formValue.updatedDate) || null,
-          Input_Number: String(formValue.inputNo) || null,
-          IS_PO_Applicable: String(formValue.isPoApllicable) || null,
-          PO_NUMBER: String(formValue.poNumber) || null
+          CLIENT_CODE: formValue.companyCode || null,
+          CLIENT_NAME: formValue.Clientname || null,
+          MAP_NAME: formValue.location || null,
+          REQ_ID: formValue.reqId || null,
+          REF_ID: formValue.refId || null,
+          CAND_NAME: formValue.candName || null,
+          DESIGNATION: formValue.designation || null,
+          DOJ: this.formatDateDDMMYYYY(formValue.doj),
+          VERTICAL: formValue.vertical || null,
+          VH: formValue.VH || null,
+          CTC: formValue.Ctc ? String(formValue.Ctc) : null,
+          BILLABLE_CTC: formValue.billableCtc ? String(formValue.billableCtc) : null,
+          CONTRACT_TYPE: formValue.contractType || null,
+          BRANCH_CODE: formValue.branchCode || null,
+          INVOICE_NO: formValue.invoiceNo || null,
+          TOT_INVOICE_AMOUNT: formValue.totalAmount ? String(formValue.totalAmount) : null,
+          GST_NO: formValue.gstNo || null,
+          Status: formValue.status || null,
+          City: formValue.city || null,
+          DOB: this.formatDateDDMMYYYY(formValue.dob),
+          Gender: formValue.gender || null,
+          MOBILE_NUMBER: formValue.mobileNo || null,
+          DEPARTMENT: formValue.DEPARTMENT || null,
+          JOB_CATEGORY: formValue.jobCategory || null,
+          JOB_SUB_CATEGORY: formValue.jobSubCategory || null,
+          PLACEMENT_TYPE: formValue.placmenttype || null,
+          YEAR_EXPERIENCE: formValue.yaerExperience ? String(formValue.yaerExperience) : null,
+          JOINING_DAYS: formValue.joiningdays ? Number(formValue.joiningdays) : 0,
+          JOBCode: formValue.jobcode || null,
+          Consultant: formValue.consultant || null,
+          Offer_Approval_Raised_by_Recruiter: formValue.offerApproval || null,
+          Requested_on: this.formatDateDDMMYYYY(formValue.requestedOn),
+          Recruiters_Employee_ID: formValue.recruiterEmployeeId || null,
+          EntityID: formValue.entityId || null,
+          Organisation_Head: formValue.organisationHead || null,
+          UPDATED_DATE: this.formatDateDDMMYYYY(formValue.updatedDate),
+          Input_Number: formValue.inputNo ? Number(formValue.inputNo) : 0,
+          IS_PO_Applicable: formValue.isPoApllicable === 'YES',
+          PO_NUMBER: formValue.poNumber || null
         }
       ]
     };
     this.isLoading = true;
-    this.service.PermHireMasterApproveReject(payload).pipe(
+    this.service.PermHireRequest(payload).pipe(
       finalize(() => {
         this.isLoading = false;
       })
     ).subscribe({
       next: (response) => {
-        if (response?.Data?.response === 'Failed to Save.') {
-
-          // errors[0] contains JSON string
-          const errorJson = response?.Data?.errors?.[0];
-
-          if (errorJson) {
-            try {
-              const errorData = JSON.parse(errorJson);
-
-              this.downloadFailedRecordsExcel(errorData);
-
-            } catch (error) {
-              console.error('Error parsing failed records:', error);
-              alert('Failed to save. Unable to generate Excel file.');
-            }
-          } else {
-            alert('Failed to save.');
-          }
-          return;
-        }
-        else {
-          this.isAddclicked = false;
-          this.onsearch();
-          alert(response?.Data?.response || 'Saved successfully.');
-        }
+        this.isAddclicked = false;
+        this.onsearch();
+        alert(response?.Data?.response || 'Saved successfully.');
       },
       error: (error) => {
         console.error('Save failed', error);
+        alert('Failed to save.');
       }
     });
   }
-
-  downloadFailedRecordsExcel(data: any[]): void {
-
-    if (!data || data.length === 0) {
-      alert('No failed records available for download.');
-      return;
+  private formatDateDDMMYYYY(value: any): string | null {
+    if (!value) return null;
+    if (typeof value === 'string' && /^\d{2}\/\d{2}\/\d{4}$/.test(value)) {
+      return value;
     }
+    const date = new Date(value);
+    if (isNaN(date.getTime())) return null;
 
-    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
-
-    const workbook: XLSX.WorkBook = {
-      Sheets: {
-        'Message': worksheet
-      },
-      SheetNames: ['Message']
-    };
-
-    XLSX.writeFile(workbook, 'FermHire_Validation.xlsx');
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
   }
 
+  openAdd() {
+    this.isAddclicked = true;
+    this.isEditMode = false;
+    this.addPermMaster.enable();
+    this.addPermMaster.reset();
+    this.addPermMaster.patchValue({
+      ID: 0
+    });
+  }
+
+  handleStateEvent(state: any) {
+    if (!state) return;
+
+    this.addPermMaster.patchValue({
+      state: state.state_Name
+    });
+  }
+
+  handleMapNameEvent(mapName: any) {
+    this.selectedMN = mapName.mapName;
+    this.mapnameUI = mapName;
+
+    if (!mapName) return;
+
+    this.addPermMaster.patchValue({
+      location: mapName.mapName
+    });
+  }
 }

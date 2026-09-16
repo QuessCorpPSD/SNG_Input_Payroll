@@ -203,6 +203,7 @@ import { PermhireGSTInvoiceComponent } from './pages/Invoice/permhire-gstinvoice
 import { InvoiceInitiateAgainstProfomaComponent } from './pages/Invoice/invoice-initiate-against-profoma/invoice-initiate-against-profoma.component';
 import { ProfomaImportComponent } from './pages/Invoice/profoma-import/profoma-import.component';
 import { PayHistoryReportComponent } from './pages/Reports/pay-history-report/pay-history-report.component';
+import { PermhireRequestComponent } from './pages/customers/permhire-request/permhire-request.component';
 
 export const routes: Routes = [
   {
@@ -421,6 +422,7 @@ export const routes: Routes = [
           { path: "Company", component: CompanyComponent },
           { path: "multicommercial", component: MulticommercialComponent },
           { path: "permhiremaster", component: PermhireComponent },
+          { path: "PermhireRequest", component: PermhireRequestComponent },
           { path: "permhiremasterservicechargetype", component: PermhireservicechargetypeComponent },
           { path: "jobcategory", component: JobcategoryComponent },
           { path: "permhirejobsubjobcategory", component: PermhirejobsubcategoryComponent }
