@@ -470,3 +470,29 @@ input {
         max-width: 100%;
     }
 }
+
+.gender-options {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.gender-option {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 5px;
+    margin: 0;
+    padding: 0;
+    width: auto !important;
+    font-family: "Montserrat" !important;
+    font-size: 12px !important;
+    font-weight: 400 !important;
+    line-height: 22.4px !important;
+    color: #222 !important;
+    white-space: nowrap;
+}
+
+.gender-option input[type="radio"] {
+    width: auto !important;
+    margin: 0;
+}

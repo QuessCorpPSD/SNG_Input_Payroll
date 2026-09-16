@@ -405,11 +405,12 @@ export class PermhireComponent {
       jobcode: row.JOBCode ?? '',
       consultant: row.Consultant ?? '',
       entityId: row.EntityID ?? '',
-      requestedOn: row.Requested_on ?? '',
+      requestedOn: row.Requested_on ? row.Requested_on.split('T')[0] : '',
       recruiterEmployeeId: row.Recruiters_Employee_ID ?? '',
       inputNo: row.Input_Number ?? '',
       isPoApllicable: row.IS_PO_Applicable ?? '',
-      updatedDate: row.UPDATED_DATE ?? '',
+      updatedDate: row.UPDATED_DATE
+        ? row.UPDATED_DATE.split('T')[0] : '',
       organisationHead: row.Organisation_Head ?? '',
       location: row.LOCATION ?? '',
       poNumber: row.PO_NUMBER ?? '',
@@ -430,6 +431,8 @@ export class PermhireComponent {
 
   onUpdate() {
     const formValue = this.addPermMaster.getRawValue();
+    const formattedRequestedOn = this.toDDMMYYYY(formValue.requestedOn);
+    const formattedUpdatedDate = this.toDDMMYYYY(formValue.updatedDate);
 
     const payload = {
       CreatedBy: String(this.userdetail.user_Id),
@@ -473,11 +476,11 @@ export class PermhireComponent {
           JOBCode: String(formValue.jobcode) || null,
           Consultant: String(formValue.consultant) || null,
           Offer_Approval_Raised_by_Recruiter: String(formValue.offerApproval) || null,
-          Requested_on: String(formValue.requestedOn) || null,
+          Requested_on: formattedRequestedOn || null,
           Recruiters_Employee_ID: String(formValue.recruiterEmployeeId) || null,
           EntityID: String(formValue.entityId) || null,
           Organisation_Head: String(formValue.organisationHead) || null,
-          UPDATED_DATE: String(formValue.updatedDate) || null,
+          UPDATED_DATE: formattedUpdatedDate || null,
           Input_Number: String(formValue.inputNo) || null,
           IS_PO_Applicable: String(formValue.isPoApllicable) || null,
           PO_NUMBER: String(formValue.poNumber) || null
@@ -541,5 +544,12 @@ export class PermhireComponent {
 
     XLSX.writeFile(workbook, 'FermHire_Validation.xlsx');
   }
-
+  private toDDMMYYYY(dateStr: string): string {
+    if (!dateStr) return '';
+    const datePart = dateStr.split('T')[0];
+    const parts = datePart.split('-');
+    if (parts.length !== 3) return dateStr;
+    const [yyyy, mm, dd] = parts;
+    return `${dd}/${mm}/${yyyy}`;
+  }
 }
