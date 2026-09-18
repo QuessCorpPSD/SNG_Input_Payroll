@@ -7,13 +7,14 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { finalize } from 'rxjs';
+import { CompanyallComponent } from '../../../common/CompanyAll/companyall.component';
 
 export const Pay_Token = new InjectionToken<IPayHistoryService>('Pay_Token');
 
 @Component({
   selector: 'app-pay-history-report',
   standalone: true,
-  imports: [MatIconModule, MatCardModule, MatTooltipModule, CommonModule, FormsModule],
+  imports: [MatIconModule, MatCardModule, MatTooltipModule, CommonModule, FormsModule, CompanyallComponent],
   templateUrl: './pay-history-report.component.html',
   styleUrl: './pay-history-report.component.css',
   providers: [
@@ -33,10 +34,17 @@ export class PayHistoryReportComponent {
   getYear: any[] = [];
   formName: any;
   Year: any;
+  companyId: any;
+  selectedCompanyCode: any;
 
   ngOnInit() {
-    this.BindEntityName();
+    //this.BindEntityName();
     this.BindYear();
+  }
+
+  handleCompanyEvent(event: any) {
+    this.companyId = event.companyId;
+    this.selectedCompanyCode = event.companyCode;
   }
 
   BindEntityName() {
@@ -57,8 +65,8 @@ export class PayHistoryReportComponent {
 
   downloadPayHistory() {
 
-    if (!this.Entity) {
-      alert('Please select Entity');
+    if (!this.companyId) {
+      alert('Please select Company');
       return;
     }
 

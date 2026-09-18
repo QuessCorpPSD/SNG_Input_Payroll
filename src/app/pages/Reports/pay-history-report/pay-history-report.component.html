@@ -2,19 +2,20 @@
     <div class="scrollable-content">
 
 
-        <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 600; ">CPF
-            Summary</mat-card-title>
+        <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 600; ">Pay
+            History</mat-card-title>
 
         <div class="container py-2">
             <div class="row g-3 align-items-end">
 
                 <div class="col-md-3">
-                    <label class="form-label text-muted small">Entity</label>
-                    <select class="form-select form-select-sm" [(ngModel)]="Entity">
+                    <label class="form-label text-muted small">Company Code</label>
+                    <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+                    <!-- <select class="form-select form-select-sm" [(ngModel)]="Entity">
                         <option *ngFor="let p of entitySearch" [value]="p.Id">
                             {{ p.EntityName }}
                         </option>
-                    </select>
+                    </select> -->
                 </div>
                 <div class="col-md-2">
                     <label class="form-label text-muted small">Year</label>
