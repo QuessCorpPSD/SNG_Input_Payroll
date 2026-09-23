@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
@@ -13,12 +13,11 @@ export class PayHistoryService implements IPayHistoryService {
     env = environment;
     constructor(private http: HttpClient) { }
 
-    downloadPayHistory(entityId: number, employeeCode: string, year: string): Observable<APIResponse> {
+    downloadPayHistory(CompanyId: string, year: string): Observable<APIResponse> {
         const url =
             `${this.env.apiUrl}PayHistory/DownloadPayHistory` +
-            `?entityId=${entityId}` +
-            `&employeeCode=${employeeCode || ''}` +
-            `&Year=${year}`;
+            `/${CompanyId}` +
+            `/${year}`;
         return this.http.get<APIResponse>(
             url
         );
@@ -32,5 +31,25 @@ export class PayHistoryService implements IPayHistoryService {
 
     bindYear(): Observable<APIResponse> {
         return this.http.get<APIResponse>(this.env.apiUrl + 'IR/GetLastThreeYear/');
+    }
+
+    downloadPayHistoryPDF(companyId: string, year: string): Observable<HttpResponse<Blob>> {
+        return this.http.post(
+            `${this.env.apiUrl}PayHistory/DownloadPayHistoryPDF/${companyId}/${year}`,
+            null,
+            {
+                observe: 'response',
+                responseType: 'blob'
+            }
+        );
+    }
+
+    downloadPayVarience(CompanyId: string): Observable<APIResponse> {
+        const url =
+            `${this.env.apiUrl}PayHistory/DownloadPayVarience` +
+            `/${CompanyId}`;
+        return this.http.get<APIResponse>(
+            url
+        );
     }
 }
