@@ -24,11 +24,20 @@
                         </option>
                     </select> -->
                 </div>
-                <div *ngIf="formName !== 'PV' && formName !== ''" class="col-md-2">
+                <!-- <div *ngIf="formName !== 'PV' && formName !== ''" class="col-md-2"> -->
+                <div *ngIf="formName !== ''" class="col-md-2">
                     <label class="form-label text-muted small">Year</label>
                     <select class="form-select form-select-sm small-input" [(ngModel)]="Year">
                         <option *ngFor="let item of getYear" [value]="item.YEAR">
                             {{ item.YEAR }}
+                        </option>
+                    </select>
+                </div>
+                <div *ngIf="formName === 'PV'" class="col-md-2">
+                    <label class="form-label text-muted small">Month</label>
+                    <select class="form-select form-select-sm small-input" [(ngModel)]="Month">
+                        <option *ngFor="let m of getMonths" [value]="m.MonthName">
+                            {{ m.MonthName }}
                         </option>
                     </select>
                 </div>

@@ -36,6 +36,22 @@ export class PayHistoryReportComponent {
   Year: any;
   companyId: any;
   selectedCompanyCode: any;
+  MonthId: any;
+  Month: any;
+  getMonths: any[] = [
+    { MonthId: 1, MonthName: 'January' },
+    { MonthId: 2, MonthName: 'February' },
+    { MonthId: 3, MonthName: 'March' },
+    { MonthId: 4, MonthName: 'April' },
+    { MonthId: 5, MonthName: 'May' },
+    { MonthId: 6, MonthName: 'June' },
+    { MonthId: 7, MonthName: 'July' },
+    { MonthId: 8, MonthName: 'August' },
+    { MonthId: 9, MonthName: 'September' },
+    { MonthId: 10, MonthName: 'October' },
+    { MonthId: 11, MonthName: 'November' },
+    { MonthId: 12, MonthName: 'December' }
+  ];
 
   ngOnInit() {
     //this.BindEntityName();
@@ -63,6 +79,7 @@ export class PayHistoryReportComponent {
     });
   };
 
+
   downloadPayHistory() {
 
     if (!this.formName) {
@@ -81,7 +98,16 @@ export class PayHistoryReportComponent {
         return;
       }
     }
-
+    if (this.formName === 'PV') {
+      if (!this.Year) {
+        alert('Please select Year');
+        return;
+      }
+      if (!this.Month) {
+        alert('Please select Month');
+        return;
+      }
+    }
     if (this.formName === 'PH') {
       this.isLoading = true;
       this.payHistoryService
@@ -172,7 +198,7 @@ export class PayHistoryReportComponent {
     else if (this.formName === 'PV') {
       this.isLoading = true;
       this.payHistoryService
-        .downloadPayVarience(this.companyId).pipe(
+        .downloadPayVarience(this.companyId, this.Month, this.Year).pipe(
           finalize(() => this.isLoading = false)
         )
         .subscribe({

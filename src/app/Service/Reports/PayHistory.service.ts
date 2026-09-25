@@ -44,12 +44,13 @@ export class PayHistoryService implements IPayHistoryService {
         );
     }
 
-    downloadPayVarience(CompanyId: string): Observable<APIResponse> {
+    downloadPayVarience(CompanyId: string, month: string, year: string): Observable<APIResponse> {
         const url =
             `${this.env.apiUrl}PayHistory/DownloadPayVarience` +
-            `/${CompanyId}`;
-        return this.http.get<APIResponse>(
-            url
-        );
+            `/${CompanyId}` +
+            `/${month}` +
+            `/${year}`;
+        return this.http.get<APIResponse>(url);
     }
+    
 }
