@@ -204,6 +204,9 @@ import { InvoiceInitiateAgainstProfomaComponent } from './pages/Invoice/invoice-
 import { ProfomaImportComponent } from './pages/Invoice/profoma-import/profoma-import.component';
 import { PayHistoryReportComponent } from './pages/Reports/pay-history-report/pay-history-report.component';
 import { PermhireRequestComponent } from './pages/customers/permhire-request/permhire-request.component';
+import { PermHireNavigationComponent } from './pages/PermHire/perm-hire-navigation/perm-hire-navigation.component';
+import { PermHireQRSInvoiceInitiationComponent } from './pages/PermHire/perm-hire-qrsinvoice-initiation/perm-hire-qrsinvoice-initiation.component';
+import { PermHireServiceChargeComponent } from './pages/PermHire/perm-hire-service-charge/perm-hire-service-charge.component';
 
 export const routes: Routes = [
   {
@@ -421,11 +424,21 @@ export const routes: Routes = [
           { path: "cancelledinvoicerepository", component: CancelledinvoicerepositoryComponent },
           { path: "Company", component: CompanyComponent },
           { path: "multicommercial", component: MulticommercialComponent },
+
+
+        ]
+      },
+      {
+        path: 'PermHire',
+        component: PermHireNavigationComponent,
+        children: [
           { path: "permhiremaster", component: PermhireComponent },
           { path: "PermhireRequest", component: PermhireRequestComponent },
           { path: "permhiremasterservicechargetype", component: PermhireservicechargetypeComponent },
           { path: "jobcategory", component: JobcategoryComponent },
-          { path: "permhirejobsubjobcategory", component: PermhirejobsubcategoryComponent }
+          { path: "permhirejobsubjobcategory", component: PermhirejobsubcategoryComponent },
+          { path: "PermHireServiceCharge", component: PermHireServiceChargeComponent },
+          { path: "PermHireQRSInvoiceInitiation", component: PermHireQRSInvoiceInitiationComponent }
 
         ]
       },

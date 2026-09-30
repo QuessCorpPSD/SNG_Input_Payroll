@@ -188,6 +188,10 @@ export class PayHistoryReportComponent {
               this.showError(message);
             } else {
               this.showError(
+                error?.error?.Data?.message ||
+                error?.error?.Data?.Message ||
+                error?.error?.Message ||
+                error?.error?.message ||
                 error?.message ||
                 'Unable to generate Pay History PDF.'
               );
@@ -256,8 +260,8 @@ export class PayHistoryReportComponent {
       }
       const json = JSON.parse(text);
       return (
+        json.Data.message ||
         json.Message ||
-        json.message ||
         'Unable to generate Pay History PDF.'
       );
     } catch {

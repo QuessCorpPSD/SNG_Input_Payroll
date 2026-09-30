@@ -73,4 +73,57 @@ export class PermhireservicechargetypeService implements IPermHireServiceCharge 
     const url = `${this.environment.apiUrl}PermHire/PermHireRequest`;
     return this.http.post<APIResponse>(url, payload);
   }
+  GetPermHireServiceChargeType(): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      this.environment.apiUrl + 'PermHire/GetPermHireServiceChargeType'
+    );
+  }
+
+  GetPermHireServiceChargeCategory(): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      this.environment.apiUrl + 'PermHire/GetPermHireServiceChargeCategory'
+    );
+  }
+
+  GetPermHireServiceChargeSearch(CompanyId: number): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      this.environment.apiUrl + 'PermHire/GetPermHireServiceCharge/' + CompanyId
+    );
+  }
+
+  CreateUpdateDelete_PermHireServiceCharge(payload: any): Observable<APIResponse> {
+    const url = `${this.environment.apiUrl}PermHire/CreateUpdateDelete_PermHireServiceCharge`;
+    return this.http.post<APIResponse>(url, payload);
+  }
+
+  GetMapNameByCompany(CompanyId: number): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      this.environment.apiUrl + 'PermHire/GetAllMapNameByCompanyId/' + CompanyId
+    );
+  }
+  GetPermHireServiceChargeJobCategory(payload: any): Observable<APIResponse> {
+    const url = `${this.environment.apiUrl}PermHire/GetPermHireServiceChargeJobCategory`;
+    return this.http.post<APIResponse>(url, payload);
+  }
+
+  GetPermHireServiceChargeJobSubCategory(payload: any): Observable<APIResponse> {
+    const url = `${this.environment.apiUrl}PermHire/GetPermHireServiceChargeJobSubCategory`;
+    return this.http.post<APIResponse>(url, payload);
+  }
+  SearchPermHireInvoiceInitiate(companyId: number, payPeriodId: number): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      this.environment.apiUrl + 'PermHire/SearchPermHireInvoiceInitiate/' + companyId + '/' + payPeriodId
+    );
+  }
+
+  ExportPermHireInvoiceInitiate(companyId: number, payPeriodId: number): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      this.environment.apiUrl + 'PermHire/ExportPermHireInvoiceInitiate/' + companyId + '/' + payPeriodId
+    );
+  }
+
+  PermHireInvoiceInitiate(payload: any): Observable<APIResponse> {
+    const url = `${this.environment.apiUrl}PermHire/PermHireInvoiceInitiate`;
+    return this.http.post<APIResponse>(url, payload);
+  }
 }
