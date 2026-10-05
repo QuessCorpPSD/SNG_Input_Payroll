@@ -40,16 +40,19 @@ export class PermhireservicechargetypeService implements IPermHireServiceCharge 
   getJobCategory(): Observable<APIResponse> {
     return this.http.get<APIResponse>(this.environment.apiUrl + 'PermHire/GetJobCategory')
   }
-  getJobSubCategory(jobCategoryId: number): Observable<APIResponse> {
+  getJobSubCategory(companyid: number, jobCategoryId: number): Observable<APIResponse> {
     return this.http.get<APIResponse>(
-      this.environment.apiUrl + 'PermHire/GetJobSubCategory/' + jobCategoryId
+      this.environment.apiUrl + 'PermHire/GetJobSubCategory/' + companyid + '/' + jobCategoryId
     );
   }
 
   exportJobSubCategory(CompanyId: number): Observable<APIResponse> {
     return this.http.get<APIResponse>(this.environment.apiUrl + 'PermHire/GetJobSubCategoryExport/' + CompanyId);
   }
-
+  Getdetails(payload: any): Observable<APIResponse> {
+    const url = `${this.environment.apiUrl}PermHire/GetBillableCtc`;
+    return this.http.post<APIResponse>(url, payload);
+  }
   createJobSubCategory(payload: any): Observable<APIResponse> {
     const url = `${this.environment.apiUrl}PermHire/JobSubCategoryCreate`;
     return this.http.post<APIResponse>(url, payload);

@@ -9,7 +9,7 @@ export interface IPermHireServiceCharge {
     createJobCategory(payload: any): Observable<APIResponse>;
     searchJobSubCategory(CompanyId: number): Observable<APIResponse>;
     getJobCategory(): Observable<APIResponse>;
-    getJobSubCategory(jobCategoryId: number): Observable<APIResponse>
+    getJobSubCategory(companyid: number, jobCategoryId: number): Observable<APIResponse>;
     exportJobSubCategory(CompanyId: number): Observable<APIResponse>;
     createJobSubCategory(payload: any): Observable<APIResponse>;
     GetPermHireMasterSearch(payload: any): Observable<APIResponse>;
@@ -26,4 +26,5 @@ export interface IPermHireServiceCharge {
     SearchPermHireInvoiceInitiate(companyId: number, payPeriodId: number): Observable<APIResponse>;
     ExportPermHireInvoiceInitiate(companyId: number, payPeriodId: number): Observable<APIResponse>;
     PermHireInvoiceInitiate(payload: any): Observable<APIResponse>;
+    Getdetails(payload: any): Observable<APIResponse>;
 }

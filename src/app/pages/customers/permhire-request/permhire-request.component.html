@@ -163,281 +163,285 @@
                 <mat-icon>close</mat-icon>
             </button>
         </mat-card-header>
+
         <mat-card-content class="scroll-content">
             <form [formGroup]="addPermMaster" novalidate>
                 <div class="row g-3 mb-2">
+
                     <div class="col-md-4">
-                        <label class="form-label text-muted small">Company Code</label>
+                        <label class="form-label text-muted small">
+                            Company Code <span class="text-danger">*</span>
+                        </label>
                         <input *ngIf="isEditMode" type="text" class="form-control form-control-sm"
                             formControlName="companyCode" readonly />
                         <companyall *ngIf="!isEditMode" (companyEmit)="handleCompanyEvent2($event)">
                         </companyall>
+                        <small class="text-danger d-block"
+                            *ngIf="showErrors && addPermMaster.get('companyCode')?.invalid">
+                            Company Code is required
+                        </small>
                     </div>
+
                     <div class="col-md-4">
-                        <label class="form-label text-muted small">Client Name</label>
+                        <label class="form-label text-muted small">
+                            Client Name <span class="text-danger">*</span>
+                        </label>
                         <input type="text" class="form-control form-control-sm" formControlName="Clientname" readonly />
+                        <small class="text-danger d-block"
+                            *ngIf="showErrors && addPermMaster.get('Clientname')?.invalid">
+                            Client Name is required
+                        </small>
                     </div>
+
                     <div class="col-md-4">
-                        <label class="form-label text-muted small">Map Name</label>
+                        <label class="form-label text-muted small">
+                            Map Name <span class="text-danger">*</span>
+                        </label>
                         <mapname [selectedCompanyId]="selectedCompanyId" (mapnameEmit)="handleMapNameEvent($event)">
                         </mapname>
+                        <small class="text-danger d-block" *ngIf="showErrors && addPermMaster.get('location')?.invalid">
+                            Map Name is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">
+                            Cand ID
+                        </label>
+                        <input type="text" class="form-control form-control-sm" formControlName="CandId" readonly />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">
+                            Cand Name <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" class="form-control form-control-sm" formControlName="candName" />
+                        <small class="text-danger d-block" *ngIf="showErrors && addPermMaster.get('candName')?.invalid">
+                            Cand Name is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">
+                            DOJ <span class="text-danger">*</span>
+                        </label>
+                        <input type="date" class="form-control form-control-sm" formControlName="doj" />
+                        <small class="text-danger d-block" *ngIf="showErrors && addPermMaster.get('doj')?.invalid">
+                            DOJ is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">
+                            DOB <span class="text-danger">*</span>
+                        </label>
+                        <input type="date" class="form-control form-control-sm" formControlName="dob" />
+                        <small class="text-danger d-block" *ngIf="showErrors && addPermMaster.get('dob')?.invalid">
+                            DOB is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">
+                            Designation <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" class="form-control form-control-sm" formControlName="designation" />
+                        <small class="text-danger d-block"
+                            *ngIf="showErrors && addPermMaster.get('designation')?.invalid">
+                            Designation is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Mobile Number</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="mobileNo" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">
+                            Job Cat <span class="text-danger">*</span>
+                        </label>
+                        <select class="form-select form-select-sm" formControlName="jobCategory"
+                            (change)="onJobCategoryChange()">
+                            <option value="">Select</option>
+                            <option *ngFor="let jc of jobCategoryList" [value]="jc.JOB_Category_ID">
+                                {{ jc.JOB_Category }}
+                            </option>
+                        </select>
+                        <small class="text-danger d-block"
+                            *ngIf="showErrors && addPermMaster.get('jobCategory')?.invalid">
+                            Job Category is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">
+                            Job Sub Cat <span class="text-danger">*</span>
+                        </label>
+                        <select class="form-select form-select-sm" formControlName="jobSubCategory"
+                            (change)="onJobSubCategoryChange()">
+                            <option value="">Select</option>
+                            <option *ngFor="let jsc of jobSubCategoryList" [value]="jsc.JOB_SUB_Category_ID">
+                                {{ jsc.JOB_SUB_Category }}
+                            </option>
+                        </select>
+                        <small class="text-danger d-block"
+                            *ngIf="showErrors && addPermMaster.get('jobSubCategory')?.invalid">
+                            JOB SUB CAT is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Contract Type</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="contractType" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">
+                            CTC <span class="text-danger">*</span>
+                        </label>
+                        <input type="number" step="0.01" class="form-control form-control-sm" formControlName="Ctc"
+                            (change)="onCtcBlur()" />
+                        <small class="text-danger d-block" *ngIf="showErrors && addPermMaster.get('Ctc')?.invalid">
+                            CTC is required
+                        </small>
                     </div>
                     <div class="col-md-4">
-                        <label class="form-label text-muted small" style="white-space: nowrap;">City</label>
+                        <label class="form-label text-muted small">Billable CTC <span class="text-muted">(Auto
+                                Calculate)</span></label>
+                        <input type="number" step="0.01" class="form-control form-control-sm"
+                            formControlName="billableCtc" readonly />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Is PO Applicable</label>
+                        <select class="form-select form-select-sm" formControlName="isPoApllicable">
+                            <option value="">Select</option>
+                            <option value="YES">YES</option>
+                            <option value="NO">NO</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">PO Number</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="poNumber" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Invoice Number <span
+                                class="text-muted">(Auto)</span></label>
+                        <input type="text" class="form-control form-control-sm" formControlName="invoiceNo" readonly />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Total Invoice Amount <span
+                                class="text-muted">(Auto)</span></label>
+                        <input type="number" step="0.01" class="form-control form-control-sm"
+                            formControlName="totalAmount" readonly />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">City</label>
                         <input type="text" class="form-control form-control-sm" formControlName="city" />
                     </div>
+
                     <div class="col-md-4">
-                        <label class="form-label text-muted small" n style="white-space: nowrap;">VH</label>
+                        <label class="form-label text-muted small">VH</label>
                         <input type="text" class="form-control form-control-sm" formControlName="VH" />
                     </div>
 
                     <div class="col-md-4">
-                        <label class="form-label text-muted small" n style="white-space: nowrap;">CTC</label>
-
-                        <input type="number" step="0.01" class="form-control form-control-sm" formControlName="Ctc" />
-                    </div>
-                    <!-- <div class="col-md-4">
-                        <label class="form-label">Aadhar<span class="text-danger"></span></label>
-                        <input type="text" class="form-control form-control-sm" formControlName="aadhar" />
-                    </div> -->
-                    <div class="col-md-4">
                         <label class="form-label text-muted small">Client Employee Code</label>
                         <input type="text" class="form-control form-control-sm" formControlName="Clientemployeecode" />
                     </div>
+
                     <div class="col-md-4">
-                        <label class="form-label text-muted small" n style="white-space: nowrap;">Billable_CTC</label>
-                        <input type="number" step="0.01" class="form-control form-control-sm"
-                            formControlName="billableCtc" />
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label">Mobile Number<span class="text-danger"></span></label>
-                        <input type="text" class="form-control form-control-sm" formControlName="mobileNo" />
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label text-muted small">Req Id</label>
+                        <label class="form-label text-muted small">Req ID</label>
                         <input type="text" class="form-control form-control-sm" formControlName="reqId" />
                     </div>
+
                     <div class="col-md-4">
-                        <label class="form-label text-muted small" n style="white-space: nowrap;">Contract Type</label>
-                        <input type="text" class="form-control form-control-sm" formControlName="contractType" />
-                    </div>
-                    <!-- <div class="col-md-4">
-                        <label class="form-label">State<span class="text-danger"></span></label>
-                        <input type="text" class="form-control form-control-sm" formControlName="state" />
-                    </div> -->
-                    <div class="col-md-4">
-                        <label class="form-label text-muted small">Ref Id</label>
+                        <label class="form-label text-muted small">Ref ID</label>
                         <input type="text" class="form-control form-control-sm" formControlName="refId" />
                     </div>
+
                     <div class="col-md-4">
-                        <label class="form-label text-muted small" n style="white-space: nowrap;">Branch Code</label>
+                        <label class="form-label text-muted small">Branch Code</label>
                         <input type="text" class="form-control form-control-sm" formControlName="branchCode" />
                     </div>
-                    <div class="col-md-4">
-                        <label class="form-label">Job Category<span class="text-danger"></span></label>
-                        <select class="form-select form-select-sm" formControlName="jobCategory">
-                            <option value="">Select</option>
-                            <option *ngFor="let jc of jobCategoryList" [value]="jc.JOB_Category">
-                                {{ jc.JOB_Category }}
-                            </option>
-                        </select>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label text-muted small">Cand Id</label>
-                        <input type="text" class="form-control form-control-sm" formControlName="CandId" />
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label text-muted small" n style="white-space: nowrap;">Invoice Number</label>
-                        <input type="text" class="form-control form-control-sm" formControlName="invoiceNo" />
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label">Job Sub Category<span class="text-danger"></span></label>
-                        <select class="form-select form-select-sm" formControlName="jobSubCategory">
-                            <option value="">Select</option>
-                            <option *ngFor="let jsc of jobSubCategoryList" [value]="jsc.JOB_SUB_Category">
-                                {{ jsc.JOB_SUB_Category }}
-                            </option>
-                        </select>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label text-muted small">Cand Name</label>
-                        <input type="text" class="form-control form-control-sm" formControlName="candName" />
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label text-muted small" n
-                            style="white-space: nowrap;">Tot_Invoice_Amount</label>
-                        <input type="number" step="0.01" class="form-control form-control-sm"
-                            formControlName="totalAmount" />
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label">Placement Type</label>
 
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Placement Type</label>
                         <select class="form-select form-select-sm" formControlName="placmenttype">
                             <option value="">Select</option>
                             <option value="DOMESTIC">DOMESTIC</option>
                             <option value="OVERSEAS">OVERSEAS</option>
                         </select>
                     </div>
+
                     <div class="col-md-4">
-                        <label class="form-label text-muted small">Designation</label>
-                        <input type="text" class="form-control form-control-sm" formControlName="designation" />
-                    </div>
-                    <!-- <div class="col-md-4">
-                        <label class="form-label text-muted small" n style="white-space: nowrap;">Invoice State</label>
-                        <input type="text" class="form-control form-control-sm" formControlName="invoiceState" />
-                    </div> -->
-                    <div class="col-md-4">
-                        <label class="form-label">Year Experience<span class="text-danger"></span></label>
+                        <label class="form-label text-muted small">Year of Exp</label>
                         <input type="number" step="0.01" class="form-control form-control-sm"
                             formControlName="yaerExperience" />
                     </div>
+
                     <div class="col-md-4">
-                        <label class="form-label text-muted small">DOJ</label>
-                        <input type="date" class="form-control form-control-sm" formControlName="doj" />
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label text-muted small" n style="white-space: nowrap;">GST_No</label>
+                        <label class="form-label text-muted small">GST Number</label>
                         <input type="text" class="form-control form-control-sm" formControlName="gstNo" />
                     </div>
-                    <!-- <div class="col-md-4">
-                        <label class="form-label">Approved/Rejected BY<span class="text-danger"></span></label>
-                        <input type="text" class="form-control form-control-sm" formControlName="approveBy" />
-                    </div> -->
+
                     <div class="col-md-4">
                         <label class="form-label text-muted small">Vertical</label>
                         <input type="text" class="form-control form-control-sm" formControlName="vertical" />
                     </div>
+
                     <div class="col-md-4">
                         <label class="form-label text-muted small">Joining Status</label>
-
                         <select class="form-select form-select-sm" formControlName="status">
                             <option value="">Select</option>
                             <option value="New">New</option>
                             <option value="Joined">Joined</option>
                         </select>
                     </div>
-                    <!-- <div class="col-md-4">
-                        <label class="form-label">Approved/Rejected Remarks<span class="text-danger"></span></label>
-                        <input type="text" class="form-control form-control-sm" formControlName="approveRemarks" />
-                    </div> -->
+
                     <div class="col-md-4">
                         <label class="form-label text-muted small">Joining Days</label>
                         <input type="text" class="form-control form-control-sm" formControlName="joiningdays" />
                     </div>
 
                     <div class="col-md-4">
-                        <label class="form-label">Approval Status<span class="text-danger"></span></label>
-                        <select class="form-select" formControlName="approvalStatus">
-                            <option value="">Select Status</option>
-                            <option value="Approve">Approve</option>
-                            <option value="Reject">Reject</option>
-                        </select>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label text-muted small">
-                            Gender <span class="text-danger">*</span>
-                        </label>
-
-                        <div class="gender-options">
-                            <label class="gender-option">
-                                <input type="radio" formControlName="gender" value="Male">
-                                <span>Male</span>
-                            </label>
-
-                            <label class="gender-option">
-                                <input type="radio" formControlName="gender" value="Female">
-                                <span>Female</span>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label text-muted small" n style="white-space: nowrap;">DOB</label>
-                        <input type="date" class="form-control form-control-sm" formControlName="dob" />
-                    </div>
-                    <!-- <div class="col-md-4">
-                        <label class="form-label">Offer Approval Raised by Recruiter<span
-                                class="text-danger"></span></label>
-                        <input type="text" class="form-control form-control-sm" formControlName="offerApproval" />
-                    </div> -->
-                    <div class="col-md-4">
-                        <label class="form-label text-muted small">Job Code</label>
+                        <label class="form-label text-muted small">JOB Code</label>
                         <input type="text" class="form-control form-control-sm" formControlName="jobcode" />
                     </div>
+
                     <div class="col-md-4">
-                        <label class="form-label text-muted small" n style="white-space: nowrap;">Consultant</label>
-                        <input type="text" class="form-control form-control-sm" formControlName="consultant" />
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label">Entity Id<span class="text-danger"></span></label>
-                        <input type="text" class="form-control form-control-sm" formControlName="entityId" />
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label text-muted small">Requested On</label>
-                        <input type="date" class="form-control form-control-sm" formControlName="requestedOn" />
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label text-muted small" n style="white-space: nowrap;">Recruiter Employee
-                            ID</label>
+                        <label class="form-label text-muted small">
+                            Recr Employ Code <span class="text-danger">*</span>
+                        </label>
                         <input type="text" class="form-control form-control-sm" formControlName="recruiterEmployeeId" />
+                        <small class="text-danger d-block"
+                            *ngIf="showErrors && addPermMaster.get('recruiterEmployeeId')?.invalid">
+                            Recr Employ Code is required
+                        </small>
                     </div>
+
+
+
                     <div class="col-md-4">
-                        <label class="form-label">Input Number<span class="text-danger"></span></label>
-                        <input type="text" class="form-control form-control-sm" formControlName="inputNo" />
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label text-muted small">Is PO Applicable</label>
-                        <select class="form-select" formControlName="isPoApllicable">
-                            <option value="">Select</option>
-                            <option value="YES">YES</option>
-                            <option value="NO">NO</option>
-                        </select>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label text-muted small" style="white-space: nowrap;">Updated Date</label>
+                        <label class="form-label text-muted small">Updated Date</label>
                         <input type="date" class="form-control form-control-sm" formControlName="updatedDate" />
                     </div>
-                    <div class="col-md-4">
-                        <label class="form-label">Organisation Head<span class="text-danger"></span></label>
-                        <input type="text" class="form-control form-control-sm" formControlName="organisationHead" />
-                    </div>
 
                     <div class="col-md-4">
-                        <label class="form-label text-muted small" n style="white-space: nowrap;">PO Number</label>
-                        <input type="text" class="form-control form-control-sm" formControlName="poNumber" />
+                        <label class="form-label text-muted small">Org Head</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="organisationHead"
+                            readonly />
                     </div>
-                    <!-- <div class="col-md-4">
-                        <label class="form-label">Cost Center<span class="text-danger"></span></label>
-                        <input type="text" class="form-control form-control-sm" formControlName="costCenter" />
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label text-muted small">Business Unit</label>
-                        <input type="text" class="form-control form-control-sm" formControlName="businessUnit" />
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label text-muted small" n style="white-space: nowrap;">Hiring Manager</label>
-                        <input type="text" class="form-control form-control-sm" formControlName="HiringManager" />
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label">Band Grade Level<span class="text-danger"></span></label>
-                        <input type="text" class="form-control form-control-sm" formControlName="bandGradelevel" />
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label text-muted small">Personal Number</label>
-                        <input type="text" class="form-control form-control-sm" formControlName="personalNo" />
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label text-muted small" n
-                            style="white-space: nowrap;">Rccode_Ranumber</label>
-                        <input type="text" class="form-control form-control-sm" formControlName="ranumber" />
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label">Applicant Id<span class="text-danger"></span></label>
-                        <input type="text" class="form-control form-control-sm" formControlName="applicantId" />
-                    </div> -->
+
                 </div>
             </form>
-
         </mat-card-content>
+
         <mat-card-footer class="footer" style="padding-bottom: 1%;">
             <div class="d-flex justify-content-end mt-3">
                 <div class="btn-1"
@@ -451,7 +455,7 @@
 
                     <button *ngIf="addPermMaster.get('approvalStatusView')?.value?.toLowerCase() !== 'approve'"
                         type="submit" (click)="onSave()"
-                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white; ">
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white;">
                         Save
                     </button>
                 </div>

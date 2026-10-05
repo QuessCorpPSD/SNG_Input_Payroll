@@ -17,17 +17,34 @@ import { finalize } from 'rxjs';
 import { StateComponent } from '../../../common/state/state.component';
 import { MapnameComponent } from '../../../common/Mapname/mapname/mapname.component';
 import { CityComponent } from '../../../common/city/city.component';
+
 export const Pay_Token = new InjectionToken<IPermHireServiceCharge>('Pay_Token');
 
 @Component({
   selector: 'app-permhire-request',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatTooltipModule, MatTableModule, MatPaginatorModule, FormsModule, ReactiveFormsModule, MatTooltipModule, MatCard, MatCardModule, MatCheckboxModule, CompanyallComponent, StateComponent, MapnameComponent],
+  imports: [
+    CommonModule,
+    MatIconModule,
+    MatTooltipModule,
+    MatTableModule,
+    MatPaginatorModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatCard,
+    MatCardModule,
+    MatCheckboxModule,
+    CompanyallComponent,
+    StateComponent,
+    MapnameComponent,
+    CityComponent
+  ],
   templateUrl: './permhire-request.component.html',
   styleUrl: './permhire-request.component.css',
   providers: [
     {
-      provide: Pay_Token, useClass: PermhireservicechargetypeService,
+      provide: Pay_Token,
+      useClass: PermhireservicechargetypeService,
     }
   ]
 })
@@ -59,20 +76,29 @@ export class PermhireRequestComponent {
   selectedGroupId!: string;
   jobCategoryList: any[] = [];
   jobSubCategoryList: any[] = [];
+  showErrors: boolean = false;
+  apiError: string = '';
 
-  constructor(private _decrypt: EncryptionService, private _sessionStoreage: SessionStorageService, @Inject(Pay_Token) private service: IPermHireServiceCharge) { }
+  constructor(
+    private _decrypt: EncryptionService,
+    private _sessionStoreage: SessionStorageService,
+    @Inject(Pay_Token) private service: IPermHireServiceCharge
+  ) { }
 
   uploadDisplayedColumns: string[] = [
-    'slNo', 'clientcode', 'clientname', 'location', 'req_id', 'ref_id', 'cand_id', 'cand_name', 'designation', 'doj', 'vertical', 'vh', 'ctc', 'billablectc', 'branchcode', 'invoiceno', 'totalamount', 'approval_status'];
-  uploadedData: any[] = []; 
+    'slNo', 'clientcode', 'clientname', 'location', 'req_id', 'ref_id', 'cand_id', 'cand_name', 'designation', 'doj', 'vertical', 'vh', 'ctc', 'billablectc', 'branchcode', 'invoiceno', 'totalamount', 'approval_status'
+  ];
 
+  uploadedData: any[] = [];
   uploadedDataSource = new MatTableDataSource<any>(this.uploadedData);
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
-  handleCompanyEvent(company) {
+
+  handleCompanyEvent(company: any) {
     this.selectedCompanyId = company.companyId;
     this.selectedCompanyCode = company.companyCode;
   }
@@ -88,38 +114,42 @@ export class PermhireRequestComponent {
       companyCode: company.companyCode,
       Clientname: company.companyName
     });
+
+    this.apiError = '';
   }
+
   ngOnInit(): void {
     const userdetail = this._sessionStoreage.getItem('UserProfile');
     this.userdetail = JSON.parse(this._decrypt.decrypt(userdetail!));
+
     this.addPermMaster = new FormGroup({
       ID: new FormControl(''),
       COMPANY_ID: new FormControl(''),
-      companyCode: new FormControl(''),
+      companyCode: new FormControl('', Validators.required),
       VH: new FormControl(''),
       PAN: new FormControl(''),
-      Clientname: new FormControl(''),
-      Ctc: new FormControl(''),
+      Clientname: new FormControl('', Validators.required),
+      Ctc: new FormControl('', Validators.required),
       aadhar: new FormControl(''),
       Clientemployeecode: new FormControl(''),
-      billableCtc: new FormControl(''),
+      billableCtc: new FormControl({ value: '', disabled: true }),
       mobileNo: new FormControl(''),
       reqId: new FormControl(''),
       contractType: new FormControl(''),
       state: new FormControl(''),
       refId: new FormControl(''),
       branchCode: new FormControl(''),
-      jobCategory: new FormControl(''),
-      CandId: new FormControl(''),
-      invoiceNo: new FormControl(''),
-      jobSubCategory: new FormControl(''),
-      candName: new FormControl(''),
-      totalAmount: new FormControl(''),
+      jobCategory: new FormControl('', Validators.required),
+      CandId: new FormControl({ value: '', disabled: true }),
+      invoiceNo: new FormControl({ value: '', disabled: true }),
+      jobSubCategory: new FormControl('', Validators.required),
+      candName: new FormControl('', Validators.required),
+      totalAmount: new FormControl({ value: '', disabled: true }),
       placmenttype: new FormControl(''),
-      designation: new FormControl(''),
+      designation: new FormControl('', Validators.required),
       invoiceState: new FormControl(''),
       yaerExperience: new FormControl(''),
-      doj: new FormControl(''),
+      doj: new FormControl('', Validators.required),
       gstNo: new FormControl(''),
       approveBy: new FormControl(''),
       vertical: new FormControl(''),
@@ -130,18 +160,18 @@ export class PermhireRequestComponent {
       approvalStatus: new FormControl(''),
       approvalStatusView: new FormControl(''),
       gender: new FormControl(''),
-      dob: new FormControl(''),
+      dob: new FormControl('', Validators.required),
       offerApproval: new FormControl(''),
       jobcode: new FormControl(''),
       consultant: new FormControl(''),
       entityId: new FormControl(''),
       requestedOn: new FormControl(''),
-      recruiterEmployeeId: new FormControl(''),
+      recruiterEmployeeId: new FormControl('', Validators.required),
       inputNo: new FormControl(''),
       isPoApllicable: new FormControl(''),
       updatedDate: new FormControl(''),
-      organisationHead: new FormControl(''),
-      location: new FormControl(''),
+      organisationHead: new FormControl('VIKAS'),
+      location: new FormControl('', Validators.required),
       poNumber: new FormControl(''),
       costCenter: new FormControl(''),
       businessUnit: new FormControl(''),
@@ -151,24 +181,12 @@ export class PermhireRequestComponent {
       ranumber: new FormControl(''),
       applicantId: new FormControl(''),
       DEPARTMENT: new FormControl('')
-
-    })
-    this.getJobCategory();
-    this.addPermMaster.get('jobCategory')?.valueChanges.subscribe((categoryName: any) => {
-      if (categoryName) {
-        const selected = this.jobCategoryList.find(x => x.JOB_Category === categoryName);
-        if (selected) {
-          this.getJobSubCategory(Number(selected.JOB_Category_ID));
-        } else {
-          this.jobSubCategoryList = [];
-          this.addPermMaster.patchValue({ jobSubCategory: '' });
-        }
-      } else {
-        this.jobSubCategoryList = [];
-        this.addPermMaster.patchValue({ jobSubCategory: '' });
-      }
     });
+
+    this.getJobCategory();
+    this.addPermMaster.get('organisationHead')?.disable();
   }
+
   getJobCategory() {
     this.service.getJobCategory().subscribe({
       next: (res) => {
@@ -180,8 +198,10 @@ export class PermhireRequestComponent {
       }
     });
   }
+
   getJobSubCategory(jobCategoryId: number) {
-    this.service.getJobSubCategory(jobCategoryId).subscribe({
+    const companyid = this.selectedCompanyId;
+    this.service.getJobSubCategory(companyid, jobCategoryId).subscribe({
       next: (res) => {
         this.jobSubCategoryList = (res?.Data?.data?.Table0 || [])
           .filter((x: any) => x.JOB_SUB_Category_ID !== 0);
@@ -193,13 +213,34 @@ export class PermhireRequestComponent {
     });
   }
 
+  onJobCategoryChange() {
+    const categoryId = this.addPermMaster.get('jobCategory')?.value;
+    this.jobSubCategoryList = [];
+    this.addPermMaster.patchValue({ jobSubCategory: '' });
+    this.apiError = '';
+
+    if (categoryId) {
+      this.getJobSubCategory(Number(categoryId));
+      this.triggerContractTypeApi();
+    }
+  }
+
+  onJobSubCategoryChange() {
+    this.apiError = '';
+    this.triggerContractTypeApi();
+  }
+
   applyFilters() {
     const filterValue = this.searchText?.trim().toLowerCase();
     this.dataSource.filter = filterValue;
   }
+
   closeclick() {
     this.isAddclicked = false;
+    this.showErrors = false;
+    this.apiError = '';
   }
+
   onsearch() {
     if (!this.selectedCompanyId) {
       alert('Please select company code');
@@ -219,7 +260,8 @@ export class PermhireRequestComponent {
           this.dataSource = new MatTableDataSource(this.permHiresearch);
           this.dataSource.paginator = this.paginator;
           this.uploadDisplayedColumns = [
-            'slNo', 'clientcode', 'clientname', 'location', 'req_id', 'ref_id', 'cand_id', 'cand_name', 'designation', 'doj', 'vertical', 'vh', 'ctc', 'billablectc', 'branchcode', 'invoiceno', 'totalamount', 'approval_status'];
+            'slNo', 'clientcode', 'clientname', 'location', 'req_id', 'ref_id', 'cand_id', 'cand_name', 'designation', 'doj', 'vertical', 'vh', 'ctc', 'billablectc', 'branchcode', 'invoiceno', 'totalamount', 'approval_status'
+          ];
         } else {
           this.dataSource.data = [];
           alert('No data found');
@@ -231,6 +273,7 @@ export class PermhireRequestComponent {
       },
     });
   }
+
   exportToExcelsave(data: any[]) {
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
 
@@ -238,9 +281,107 @@ export class PermhireRequestComponent {
       Sheets: { 'Result': worksheet },
       SheetNames: ['Result']
     };
-    XLSX.writeFile(workbook, 'CompanyPermission_Result.xlsx')
+    XLSX.writeFile(workbook, 'CompanyPermission_Result.xlsx');
   }
+
+  onCtcBlur() {
+    const companyId = this.addPermMaster.get('COMPANY_ID')?.value;
+    const jobCategoryId = this.addPermMaster.get('jobCategory')?.value;
+    const jobSubCategoryId = this.addPermMaster.get('jobSubCategory')?.value;
+    const ctc = this.addPermMaster.get('Ctc')?.value;
+
+    if (!companyId || !jobCategoryId || !jobSubCategoryId || !ctc) {
+      return;
+    }
+
+    this.apiError = '';
+    this.triggerBillableCtcApi();
+  }
+  triggerContractTypeApi() {
+    const companyId = this.addPermMaster.get('COMPANY_ID')?.value;
+    const jobCategoryId = this.addPermMaster.get('jobCategory')?.value;
+    const jobSubCategoryId = this.addPermMaster.get('jobSubCategory')?.value;
+
+    if (!companyId) {
+      this.apiError = 'Please select Company Code';
+      return;
+    }
+    if (!jobCategoryId) {
+      this.apiError = 'Please select Job Category';
+      return;
+    }
+    if (!jobSubCategoryId) {
+      this.apiError = 'Please select Job Sub Category';
+      return;
+    }
+
+    const payload = {
+      jobcategoryid: Number(jobCategoryId),
+      jobsubcategoryid: Number(jobSubCategoryId),
+      CTC: String(this.addPermMaster.get('Ctc')?.value || ''),
+      flag: 'contract_type',
+      COMPANY_ID: Number(companyId)
+    };
+
+    this.service.Getdetails(payload).subscribe({
+      next: (res: any) => {
+        const contractType = res?.Data?.[0]?.value || '';
+        this.addPermMaster.patchValue({ contractType: contractType });
+      },
+      error: (err) => {
+        console.error('Error fetching contract type', err);
+      }
+    });
+  }
+
+  triggerBillableCtcApi() {
+    const companyId = this.addPermMaster.get('COMPANY_ID')?.value;
+    const jobCategoryId = this.addPermMaster.get('jobCategory')?.value;
+    const jobSubCategoryId = this.addPermMaster.get('jobSubCategory')?.value;
+    const ctc = this.addPermMaster.get('Ctc')?.value;
+
+    if (!companyId) {
+      this.apiError = 'Please select Company Code';
+      return;
+    }
+    if (!jobCategoryId) {
+      this.apiError = 'Please select Job Category';
+      return;
+    }
+    if (!jobSubCategoryId) {
+      this.apiError = 'Please select Job Sub Category';
+      return;
+    }
+    if (!ctc) {
+      this.apiError = 'Please enter CTC';
+      return;
+    }
+
+    const payload = {
+      jobcategoryid: Number(jobCategoryId),
+      jobsubcategoryid: Number(jobSubCategoryId),
+      CTC: String(ctc),
+      flag: 'Billable_CTC',
+      COMPANY_ID: Number(companyId)
+    };
+
+    this.service.Getdetails(payload).subscribe({
+      next: (res: any) => {
+        const billableCtc = res?.Data?.[0]?.value || '';
+        this.addPermMaster.patchValue({ billableCtc: billableCtc });
+      },
+      error: (err) => {
+        console.error('Error fetching billable CTC', err);
+      }
+    });
+  }
+
   onSave() {
+    if (this.addPermMaster.invalid) {
+      this.showErrors = true;
+      return;
+    }
+
     const formValue = this.addPermMaster.getRawValue();
 
     const payload = {
@@ -259,7 +400,7 @@ export class PermhireRequestComponent {
           VH: formValue.VH || null,
           CTC: formValue.Ctc ? String(formValue.Ctc) : null,
           BILLABLE_CTC: formValue.billableCtc ? String(formValue.billableCtc) : null,
-          CONTRACT_TYPE: formValue.contractType || null,
+          CONTRACT_TYPE: String(formValue.contractType) || null,
           BRANCH_CODE: formValue.branchCode || null,
           INVOICE_NO: formValue.invoiceNo || null,
           TOT_INVOICE_AMOUNT: formValue.totalAmount ? String(formValue.totalAmount) : null,
@@ -289,6 +430,7 @@ export class PermhireRequestComponent {
         }
       ]
     };
+
     this.isLoading = true;
     this.service.PermHireRequest(payload).pipe(
       finalize(() => {
@@ -306,6 +448,7 @@ export class PermhireRequestComponent {
       }
     });
   }
+
   private formatDateDDMMYYYY(value: any): string | null {
     if (!value) return null;
     if (typeof value === 'string' && /^\d{2}\/\d{2}\/\d{4}$/.test(value)) {
@@ -323,11 +466,18 @@ export class PermhireRequestComponent {
   openAdd() {
     this.isAddclicked = true;
     this.isEditMode = false;
+    this.showErrors = false;
+    this.apiError = '';
     this.addPermMaster.enable();
     this.addPermMaster.reset();
     this.addPermMaster.patchValue({
-      ID: 0
+      ID: 0,
+      organisationHead: 'VIKAS'
     });
+    this.addPermMaster.get('billableCtc')?.disable();
+    this.addPermMaster.get('CandId')?.disable();
+    this.addPermMaster.get('invoiceNo')?.disable();
+    this.addPermMaster.get('totalAmount')?.disable();
   }
 
   handleStateEvent(state: any) {
