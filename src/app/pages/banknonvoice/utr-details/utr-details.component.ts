@@ -17,11 +17,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { IutrDetails } from '../../../Repository/banknonvoice/IutrDetails';
 import { UtrDetailsService } from '../../../Service/banknonvoice/utr-details.service';
 export const Common_TOKEN = new InjectionToken<IutrDetails>('Common_TOKEN');
+import { finalize } from 'rxjs/operators';
 
 
 @Component({
   selector: 'app-utr-details',
-  standalone:true,
+  standalone: true,
   imports: [CommonModule,
     MatIconModule,
     MatTooltipModule,
@@ -39,14 +40,17 @@ export const Common_TOKEN = new InjectionToken<IutrDetails>('Common_TOKEN');
 })
 export class UtrDetailsComponent {
   companyUI: any;
+  payPeriodChange: any;
   isLoading = false;
   userdetail!: any;
   payperiodUI: any;
   payPeriodTypefromParent: string = '';
   dataSource = new MatTableDataSource<any>([]);
+  Entity: any;
 
   datatable: Array<{ [key: string]: any }> = [];
   searchText: string = '';
+  entity: any;
 
   constructor(
     private _sessionStoreage: SessionStorageService,
@@ -67,6 +71,11 @@ export class UtrDetailsComponent {
       return;
     }
     //console.log(this.companyUI);
+  }
+
+  handlePayPeriodChange(id: number) {
+    console.log('Selected PayPeriod ID:', id);
+    this.payPeriodChange = id;
   }
 
   handlePayperiodEvent(payperiod: any) {
@@ -98,6 +107,7 @@ export class UtrDetailsComponent {
       "userId": this.userdetail.userId,
       "userName": this.userdetail.userName,
     };
+    this.BindEntityName();
 
     this.payPeriodTypefromParent = "All";
 
@@ -108,53 +118,65 @@ export class UtrDetailsComponent {
     this.dataSource.filter = filterValue;
   }
 
-  onTemplateClick() {
+  BindEntityName() {
+    this.service.EntitySearch().subscribe({
+      next: (res: any) => {
+        this.entity = res?.Data?.data?.Table0;
+      }
+    });
+  }
 
-    if (!this.companyUI) {
-      alert("Select Company Code");
+  onTemplateClick() {
+    console.log(this.Entity);
+    console.log(this.companyUI)
+    if (!this.companyUI && !this.Entity) {
+      alert("Select either Company Code or Entity");
       return;
     }
 
-    if (!this.payperiodUI) {
+    if (!this.payPeriodChange) {
       alert("Select Pay Period");
       return;
     }
 
+
     this.isLoading = true;
 
-    const companyId = this.companyUI.companyId;
-    const payPeriodId = this.payperiodUI.payfrequencyid;
+    const companyId = this.companyUI ? this.companyUI.companyId: 0 ;
+    const payPeriodId = this.payPeriodChange;
+    const EntityId = this.Entity ?? 0;
 
-    this.service.DownloadUtrDetails(companyId, payPeriodId)
-      .subscribe({
-        next: (res: any) => {
-          if (res.Data) {
-            const base64 = res.Data.file;
-            let fileName = res.Data.fileName || 'UtrDetails_NonInvoice';
-            if (!fileName.endsWith('.xlsx')) {
-              fileName += '.xlsx';
-            }
-
-            if (base64) {
-              this.downloadExcelFromBase64(base64, fileName);
-            } else {
-              alert("File data is empty");
-            }
-
-          } else {
-            alert(res?.message || "No record(s) found!");
+    this.service.DownloadUtrDetails(companyId, payPeriodId, EntityId).pipe(
+      finalize(() => {
+        this.isLoading = false;
+      })
+    ).subscribe({
+      next: (res: any) => {
+        if (res.Data) {
+          const base64 = res.Data.file;
+          let fileName = res.Data.fileName || 'UtrDetails_NonInvoice';
+          if (!fileName.endsWith('.xlsx')) {
+            fileName += '.xlsx';
           }
 
-          this.isLoading = false;
-        },
+          if (base64) {
+            this.downloadExcelFromBase64(base64, fileName);
+          } else {
+            alert("File data is empty");
+          }
 
-        error: err => {
-          console.error('Error downloading UTR Details', err);
-          alert("Download failed");
-          this.isLoading = false;
+        } else {
+          alert(res?.message || "No record(s) found!");
         }
-      });
+      },
+
+      error: err => {
+        console.error('Error downloading UTR Details', err);
+        alert("Download failed");
+      }
+    });
   }
+
   downloadExcelFromBase64(base64: string, filename: string) {
 
     const byteCharacters = atob(base64);

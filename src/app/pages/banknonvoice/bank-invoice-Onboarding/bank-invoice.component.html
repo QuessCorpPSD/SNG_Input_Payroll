@@ -1,16 +1,18 @@
 <div class="right-align">
     <div *ngIf="visibleDropdowns.includes(1)"
         style="width: 160px; height: 52px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex">
-        <div style="width: 160px; height: 12.35px; font-size: 12px; color: #6c757d ; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
+        <div
+            style="width: 160px; height: 12.35px; font-size: 12px; color: #6c757d ; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
             Company Code</div>
         <div style="width:160px;">
-             <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+            <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
         </div>
     </div>
 
     <div *ngIf="visibleDropdowns.includes(15)"
         style="width: 160px; height: 52px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex">
-        <div style="width: 160px; height: 12.35px; font-size: 12px; color: #6c757d ; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
+        <div
+            style="width: 160px; height: 12.35px; font-size: 12px; color: #6c757d ; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
             Client Name</div>
         <div>
             <CompanyPicker (companyEmit)="handleCompanyEvent($event)"></CompanyPicker>
@@ -19,7 +21,8 @@
 
     <div *ngIf="showPurpose" style="width: 150px; display: flex; flex-direction: column; gap: 8px; margin-right: 10px;">
 
-        <div style="width: 160px; height: 12.35px; font-size: 12px; color: #6c757d ; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
+        <div
+            style="width: 160px; height: 12.35px; font-size: 12px; color: #6c757d ; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
             Purpose
         </div>
 
@@ -45,6 +48,21 @@
                 (payperiodEmit)="handlePayperiodEvent($event)"></PayPeriod>
         </div>
     </div>
+
+    <div *ngIf="visibleDropdowns.includes(3)"
+        style="width: 160px; height: 52px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex">
+        <div
+            style="width: 160px; height: 12.35px; font-size: 12px; color: #6c757d ; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
+            Pay Period</div>
+        <div style="width:160px;">
+            <select class="form-select form-select-sm" [(ngModel)]="PayPeriodId" (change)="onPayPeriodChange($event)">
+                <option *ngFor="let pp of PayperiodList" [value]="pp.pay_Period">
+                    {{ pp.pay_Period }}
+                </option>
+            </select>
+        </div>
+    </div>
+    
     <div *ngIf="showEmployeeCode"
         style="width: 160px; height: 52px; flex-direction: row; justify-content: flex-start; align-items: flex-start; gap: 16px; display: inline-flex">
         <div
@@ -62,7 +80,8 @@
     <div *ngIf="showSalaryHoldType"
         style="width:150px; display:flex; flex-direction:column; gap:8px; margin-right:10px;">
 
-        <div style="width: 160px; height: 12.35px; font-size: 12px; color: #6c757d ; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
+        <div
+            style="width: 160px; height: 12.35px; font-size: 12px; color: #6c757d ; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
             Salary Hold Type
         </div>
 
@@ -110,16 +129,20 @@
     </div>
 
     <!-- Download Template -->
-    <div *ngIf="showTemplateButton" style="padding-top: 19px; width: 40px; height: 52px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex">
-        <button class="btn btn-sm btn-download d-flex align-items-center justify-content-center" matTooltip="Download Template" (click)="templateClick()">
+    <div *ngIf="showTemplateButton"
+        style="padding-top: 19px; width: 40px; height: 52px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex">
+        <button class="btn btn-sm btn-download d-flex align-items-center justify-content-center"
+            matTooltip="Download Template" (click)="templateClick()">
             <mat-icon>cloud_download</mat-icon>
         </button>
     </div>
 
     <!-- Import -->
-    <div *ngIf="showImportButton" style="padding-top: 19px; width: 40px; height: 52px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex">
+    <div *ngIf="showImportButton"
+        style="padding-top: 19px; width: 40px; height: 52px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex">
 
-        <button class="btn btn-sm btn-upload d-flex align-items-center justify-content-center" matTooltip="Upload" (click)="openFilePicker(fileInput)">
+        <button class="btn btn-sm btn-upload d-flex align-items-center justify-content-center" matTooltip="Upload"
+            (click)="openFilePicker(fileInput)">
             <mat-icon>cloud_upload</mat-icon>
         </button>
 
@@ -127,8 +150,10 @@
     </div>
 
     <!-- Export -->
-    <div *ngIf="showExportButton" style="padding-top: 19px; width: 40px; height: 52px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex">
-        <button class="btn btn-sm btn-secondary d-flex align-items-center justify-content-center" matTooltip="Export" (click)="exportClick()">
+    <div *ngIf="showExportButton"
+        style="padding-top: 19px; width: 40px; height: 52px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex">
+        <button class="btn btn-sm btn-secondary d-flex align-items-center justify-content-center" matTooltip="Export"
+            (click)="exportClick()">
             <mat-icon>download</mat-icon>
         </button>
     </div>

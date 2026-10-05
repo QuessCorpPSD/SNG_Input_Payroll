@@ -13,9 +13,13 @@ export class UtrDetailsService implements IutrDetails {
 
   constructor(private http: HttpClient) { }
 
-  DownloadUtrDetails(companyId: any, payPeriodId: any): Observable<APIResponse> {
+  DownloadUtrDetails(companyId: any, payPeriodId: any, EntityId: any): Observable<APIResponse> {
     return this.http.get<APIResponse>(
-      `${this.environment.apiUrl}UtrDetails/NetPaysummaryNI/${companyId}/${payPeriodId}`
+      `${this.environment.apiUrl}UtrDetails/NetPaysummaryNI/${companyId}/${payPeriodId}/${EntityId}`
     );
+  }
+
+  EntitySearch(): Observable<APIResponse> {
+    return this.http.get<APIResponse>(this.environment.apiUrl + 'Entity/Search');
   }
 }

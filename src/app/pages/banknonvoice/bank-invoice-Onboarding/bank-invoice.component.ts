@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, Inject, InjectionToken, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CompanyComponent } from '../../../common/company/company.component';
@@ -11,23 +11,35 @@ import { BankinvoiceService } from '../../../Service/banknonvoice/bankinvoice.se
 import { HoldEmployeSalaryService } from '../../../Service/banknonvoice/hold-employe-salary.service';
 import { MatIconModule } from "@angular/material/icon";
 import { MatTooltipModule } from '@angular/material/tooltip';
-import {CompanyallComponent} from "../../../common/CompanyAll/companyall.component";
+import { CompanyallComponent } from "../../../common/CompanyAll/companyall.component";
+
+import { IpayregisterentitywiseService } from '../../../Repository/Reports/Ipayregisterentitywise';
+import { PayregisterentitywiseService } from '../../../Service/Reports/payregisterentitywise.service';
+export const Pay_TOKEN = new InjectionToken<IpayregisterentitywiseService>('Pay_TOKEN');
+
 @Component({
   selector: 'app-bank-invoice',
+  standalone: true,
   imports: [CommonModule,
-    MatFormFieldModule, ReactiveFormsModule,MatTooltipModule,
+    MatFormFieldModule, ReactiveFormsModule, MatTooltipModule,
     FormsModule, CompanyComponent, PayPeriodComponent, MatIconModule, CompanyallComponent],
   templateUrl: './bank-invoice.component.html',
   styleUrl: './bank-invoice.component.css',
-  standalone: true,
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  providers: [
+    {
+      provide: Pay_TOKEN,
+      useClass: PayregisterentitywiseService,
+    }
+  ]
 })
 export class BankInvoiceComponent implements OnInit {
 
   constructor(
     public stateService: BankinvoiceService,
     private creditNoteService: CreditNoteRequestServiceService,
-    private holdService: HoldEmployeSalaryService
+    private holdService: HoldEmployeSalaryService,
+    @Inject(Pay_TOKEN) private service: IpayregisterentitywiseService
   ) { }
   @Input() visibleDropdowns: number[] = [];
   @Input() showSearchButton: boolean = false;
@@ -41,6 +53,11 @@ export class BankInvoiceComponent implements OnInit {
   @Input() showDateRange: boolean = false;
   @Input() showEmployeeCode: boolean = false;
   @Input() showSalaryHoldType: boolean = false;
+
+  PayperiodList: any;
+   @Output() payPeriodChange = new EventEmitter<any>();
+
+  PayPeriodId!: number;
 
   @Output() companyUI = new EventEmitter<Company>();
   @Output() payperiodUI = new EventEmitter<Payperiodclass>();
@@ -81,6 +98,8 @@ export class BankInvoiceComponent implements OnInit {
       this.BindSalaryHoldType();
     }
 
+    this.BindPayPeriod();
+
   }
 
   handleCompanyEvent(company: any) {
@@ -95,12 +114,25 @@ export class BankInvoiceComponent implements OnInit {
     }
   }
 
+  onPayPeriodChange(event: any) {
+    const id = String((event.target as HTMLSelectElement).value);
+    this.payPeriodChange.emit(id);
+  }
+
   handlePayperiodEvent(payperiod: Payperiodclass) {
     if (payperiod) {
       this.selectedPP = payperiod.payPeriod;
       this.stateService.setPayperiod(payperiod);
       this.payperiodUI.emit(payperiod);
     }
+  }
+
+  BindPayPeriod() {
+    this.service.GetPayPeriod().subscribe({
+      next: (res: any) => {
+        this.PayperiodList = res?.Data;
+      }
+    });
   }
 
   searchClick(): void {
