@@ -451,6 +451,8 @@ export const routes: Routes = [
           { path: "itcalender", component: ITcalenderComponent, },
           { path: 'companypaycodemapping', component: CompanypaycodemappingComponent },
           { path: 'clientaddress', component: ClientaddressComponent },
+          { path: 'dynamicremove', component: DynamicRemoveComponent },
+
         ]
       },
       {
@@ -483,7 +485,6 @@ export const routes: Routes = [
           { path: 'Report', component: ReportComponent },
           { path: 'cpfsummary', component: CPFsummaryComponent },
           { path: 'payhistory', component: PayHistoryReportComponent },
-          { path: 'dynamicremove', component: DynamicRemoveComponent },
 
         ]
       },
