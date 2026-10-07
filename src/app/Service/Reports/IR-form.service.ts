@@ -337,7 +337,14 @@ export class IRFormService implements IIRformService {
         fill('I declare that the information given in this form appendices and in any documents attached is true and complete',
             data.authorisedName);
         fill('undefined_24', data.authorisedDesignation);
-        fill('Date', data.declarationDate);
+
+        const today = new Date();
+
+        const date =
+            String(today.getDate()).padStart(2, '0') + '-' +
+            String(today.getMonth() + 1).padStart(2, '0') + '-' +
+            today.getFullYear();
+        fill('Date', date);
 
         // Row 2: Contact person
         fill('Full Name of Authorised Personnel', data.contactName);
