@@ -207,6 +207,7 @@ import { PermhireRequestComponent } from './pages/customers/permhire-request/per
 import { PermHireNavigationComponent } from './pages/PermHire/perm-hire-navigation/perm-hire-navigation.component';
 import { PermHireQRSInvoiceInitiationComponent } from './pages/PermHire/perm-hire-qrsinvoice-initiation/perm-hire-qrsinvoice-initiation.component';
 import { PermHireServiceChargeComponent } from './pages/PermHire/perm-hire-service-charge/perm-hire-service-charge.component';
+import { DynamicRemoveComponent } from './pages/Reports/dynamic-remove/dynamic-remove.component';
 
 export const routes: Routes = [
   {
@@ -482,6 +483,8 @@ export const routes: Routes = [
           { path: 'Report', component: ReportComponent },
           { path: 'cpfsummary', component: CPFsummaryComponent },
           { path: 'payhistory', component: PayHistoryReportComponent },
+          { path: 'dynamicremove', component: DynamicRemoveComponent },
+
         ]
       },
       {
