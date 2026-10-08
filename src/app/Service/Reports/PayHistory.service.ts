@@ -33,9 +33,9 @@ export class PayHistoryService implements IPayHistoryService {
         return this.http.get<APIResponse>(this.env.apiUrl + 'IR/GetLastThreeYear/');
     }
 
-    downloadPayHistoryPDF(companyId: string, year: string): Observable<HttpResponse<Blob>> {
+    downloadPayHistoryPDF(companyId: string, year: string, employeeCode: any): Observable<HttpResponse<Blob>> {
         return this.http.post(
-            `${this.env.apiUrl}PayHistory/DownloadPayHistoryPDF/${companyId}/${year}`,
+            `${this.env.apiUrl}PayHistory/DownloadPayHistoryPDF/${companyId}/${year}/${employeeCode}`,
             null,
             {
                 observe: 'response',
@@ -44,7 +44,7 @@ export class PayHistoryService implements IPayHistoryService {
         );
     }
 
-    downloadPayVarience(CompanyId: string, month: string, year: string): Observable<APIResponse> {
+    downloadPayVarience(CompanyId: string, month: string, year: string, ): Observable<APIResponse> {
         const url =
             `${this.env.apiUrl}PayHistory/DownloadPayVarience` +
             `/${CompanyId}` +
@@ -52,5 +52,5 @@ export class PayHistoryService implements IPayHistoryService {
             `/${year}`;
         return this.http.get<APIResponse>(url);
     }
-    
+
 }
