@@ -341,8 +341,8 @@ export class IRFormService implements IIRformService {
         const today = new Date();
 
         const date =
-            String(today.getDate()).padStart(2, '0') + '-' +
-            String(today.getMonth() + 1).padStart(2, '0') + '-' +
+            String(today.getDate()).padStart(2, '0') + '/' +
+            String(today.getMonth() + 1).padStart(2, '0') + '/' +
             today.getFullYear();
         fill('Date', date);
 

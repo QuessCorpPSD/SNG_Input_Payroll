@@ -132,4 +132,8 @@ export class CommonService implements ICommonService {
     return this.http.get<APIResponse>(url);
   }
 
+  GetEmployeeCode(payload: any): Observable<APIResponse> {
+    return this.http.post<APIResponse>(this.environment.apiUrl + 'Common/GetEmployeeDetailsByCompanyID', payload)
+  }
+
 }
