@@ -78,6 +78,8 @@ export class PermhireRequestComponent {
   jobSubCategoryList: any[] = [];
   showErrors: boolean = false;
   apiError: string = '';
+  selectedjobCategoryId: any;
+  selectedjobSubCategoryId: any;
 
   constructor(
     private _decrypt: EncryptionService,
@@ -116,6 +118,7 @@ export class PermhireRequestComponent {
     });
 
     this.apiError = '';
+    this.getJobCategory();
   }
 
   ngOnInit(): void {
@@ -183,7 +186,7 @@ export class PermhireRequestComponent {
       DEPARTMENT: new FormControl('')
     });
 
-    this.getJobCategory();
+
     this.addPermMaster.get('organisationHead')?.disable();
   }
 
@@ -200,6 +203,10 @@ export class PermhireRequestComponent {
   }
 
   getJobSubCategory(jobCategoryId: number) {
+    if (!this.selectedCompanyId) {
+      alert('Please select Company');
+      return;
+    }
     const companyid = this.selectedCompanyId;
     this.service.getJobSubCategory(companyid, jobCategoryId).subscribe({
       next: (res) => {
@@ -213,21 +220,36 @@ export class PermhireRequestComponent {
     });
   }
 
-  onJobCategoryChange() {
-    const categoryId = this.addPermMaster.get('jobCategory')?.value;
+  onJobCategoryChange(event: any) {
+    const selectedCategory = this.jobCategoryList.find(
+      x => x.JOB_Category === event.target.value
+    );
+
+    const jobCategoryId = selectedCategory?.JOB_Category_ID;
+
+    this.selectedjobCategoryId = jobCategoryId;
+
     this.jobSubCategoryList = [];
     this.addPermMaster.patchValue({ jobSubCategory: '' });
     this.apiError = '';
 
-    if (categoryId) {
-      this.getJobSubCategory(Number(categoryId));
-      this.triggerContractTypeApi();
+    if (jobCategoryId) {
+      this.getJobSubCategory(Number(jobCategoryId));
     }
   }
 
-  onJobSubCategoryChange() {
+  onJobSubCategoryChange(event: any) {
+    const selectedsubCategory = this.jobSubCategoryList.find(
+      x => x.JOB_SUB_Category === event.target.value
+    );
+
+    const jobSubCategoryId = selectedsubCategory?.JOB_SUB_Category_ID;
+
+
+    this.selectedjobSubCategoryId = jobSubCategoryId;
+
     this.apiError = '';
-    this.triggerContractTypeApi();
+    this.triggerContractTypeApi(this.selectedjobCategoryId, this.selectedjobSubCategoryId);
   }
 
   applyFilters() {
@@ -286,8 +308,8 @@ export class PermhireRequestComponent {
 
   onCtcBlur() {
     const companyId = this.addPermMaster.get('COMPANY_ID')?.value;
-    const jobCategoryId = this.addPermMaster.get('jobCategory')?.value;
-    const jobSubCategoryId = this.addPermMaster.get('jobSubCategory')?.value;
+    const jobCategoryId = this.selectedjobCategoryId;
+    const jobSubCategoryId = this.selectedjobSubCategoryId;
     const ctc = this.addPermMaster.get('Ctc')?.value;
 
     if (!companyId || !jobCategoryId || !jobSubCategoryId || !ctc) {
@@ -295,12 +317,12 @@ export class PermhireRequestComponent {
     }
 
     this.apiError = '';
-    this.triggerBillableCtcApi();
+    this.triggerBillableCtcApi(jobCategoryId, jobSubCategoryId);
   }
-  triggerContractTypeApi() {
+  triggerContractTypeApi(jobCategory: any, jobSubCategory: any) {
     const companyId = this.addPermMaster.get('COMPANY_ID')?.value;
-    const jobCategoryId = this.addPermMaster.get('jobCategory')?.value;
-    const jobSubCategoryId = this.addPermMaster.get('jobSubCategory')?.value;
+    const jobCategoryId = jobCategory;
+    const jobSubCategoryId = jobSubCategory;
 
     if (!companyId) {
       this.apiError = 'Please select Company Code';
@@ -334,10 +356,10 @@ export class PermhireRequestComponent {
     });
   }
 
-  triggerBillableCtcApi() {
+  triggerBillableCtcApi(jobcategory: any, jobSubCategory: any) {
     const companyId = this.addPermMaster.get('COMPANY_ID')?.value;
-    const jobCategoryId = this.addPermMaster.get('jobCategory')?.value;
-    const jobSubCategoryId = this.addPermMaster.get('jobSubCategory')?.value;
+    const jobCategoryId = jobcategory;
+    const jobSubCategoryId = jobSubCategory;
     const ctc = this.addPermMaster.get('Ctc')?.value;
 
     if (!companyId) {
@@ -478,6 +500,7 @@ export class PermhireRequestComponent {
     this.addPermMaster.get('CandId')?.disable();
     this.addPermMaster.get('invoiceNo')?.disable();
     this.addPermMaster.get('totalAmount')?.disable();
+    this.addPermMaster.get('contractType')?.disable();
   }
 
   handleStateEvent(state: any) {

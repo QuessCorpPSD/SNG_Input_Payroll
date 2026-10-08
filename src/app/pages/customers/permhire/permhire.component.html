@@ -220,7 +220,7 @@
     <mat-card class="popup-card">
         <mat-card-header class="popup-header">
             <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 600;">
-                {{ isEditMode ? 'Approve/Reject Perm Hire Master' : 'Approve/Reject Perm Hire Master' }}
+                {{ isEditMode ? 'Perm Hire Approve/Reject' : 'Perm Hire Approve/Reject' }}
             </mat-card-title>
             <!-- <mat-card-title class="d-flex justify-content-center align-items-center">
                 
@@ -237,54 +237,92 @@
                     <div class="col-md-4">
                         <label class="form-label text-muted small">Company Code</label>
                         <input type="text" class="form-control form-control-sm" formControlName="companyCode" />
-                        <!-- <companyall (companyEmit)="handleCompanyEvent2($event)" formControlName="companyCode">
-                        </companyall> -->
                     </div>
-                    <div class="col-md-4">
-                        <label class="form-label text-muted small" n style="white-space: nowrap;">VH</label>
-                        <input type="text" class="form-control form-control-sm" formControlName="VH" />
-                    </div>
-                    <!-- <div class="col-md-4">
-                        <label class="form-label">PAN<span class="text-danger"></span></label>
-                        <input type="text" class="form-control form-control-sm" formControlName="PAN" />
-                    </div> -->
-
                     <div class="col-md-4">
                         <label class="form-label text-muted small">Client Name</label>
                         <input type="text" class="form-control form-control-sm" formControlName="Clientname" />
                     </div>
                     <div class="col-md-4">
-                        <label class="form-label text-muted small" n style="white-space: nowrap;">CTC</label>
-                        <input type="text" class="form-control form-control-sm" formControlName="Ctc" />
-                    </div>
-                    <!-- <div class="col-md-4">
-                        <label class="form-label">Aadhar<span class="text-danger"></span></label>
-                        <input type="text" class="form-control form-control-sm" formControlName="aadhar" />
-                    </div> -->
-                    <div class="col-md-4">
-                        <label class="form-label text-muted small">Client Employee Code</label>
-                        <input type="text" class="form-control form-control-sm" formControlName="Clientemployeecode" />
+                        <label class="form-label text-muted small">Cand Id</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="CandId" />
                     </div>
                     <div class="col-md-4">
-                        <label class="form-label text-muted small" n style="white-space: nowrap;">Billable_CTC</label>
-                        <input type="text" class="form-control form-control-sm" formControlName="billableCtc" />
+                        <label class="form-label text-muted small">Cand Name</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="candName" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Gender</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="gender" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Map Name</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="location" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">DOJ</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="doj" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small" n style="white-space: nowrap;">DOB</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="dob" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Designation</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="designation" />
                     </div>
                     <div class="col-md-4">
                         <label class="form-label">Mobile Number<span class="text-danger"></span></label>
                         <input type="text" class="form-control form-control-sm" formControlName="mobileNo" />
                     </div>
                     <div class="col-md-4">
-                        <label class="form-label text-muted small">Req Id</label>
-                        <input type="text" class="form-control form-control-sm" formControlName="reqId" />
+                        <label class="form-label">Job Category<span class="text-danger"></span></label>
+                        <input type="text" class="form-control form-control-sm" formControlName="jobCategory" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Job Sub Category<span class="text-danger"></span></label>
+                        <input type="text" class="form-control form-control-sm" formControlName="jobSubCategory" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small" n style="white-space: nowrap;">CTC</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="Ctc" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small" n style="white-space: nowrap;">Billable_CTC</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="billableCtc" />
                     </div>
                     <div class="col-md-4">
                         <label class="form-label text-muted small" n style="white-space: nowrap;">Contract Type</label>
                         <input type="text" class="form-control form-control-sm" formControlName="contractType" />
                     </div>
-                    <!-- <div class="col-md-4">
-                        <label class="form-label">State<span class="text-danger"></span></label>
-                        <input type="text" class="form-control form-control-sm" formControlName="state" />
-                    </div> -->
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small" n style="white-space: nowrap;">Invoice Number</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="invoiceNo" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small" n style="white-space: nowrap;">Total Invoice
+                            Amount</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="totalAmount" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Is PO Applicable</label>
+                        <select class="form-select" formControlName="isPoApllicable">
+                            <option value="">Select</option>
+                            <option value="YES">YES</option>
+                            <option value="NO">NO</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small" n style="white-space: nowrap;">PO Number</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="poNumber" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Client Employee Code</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="Clientemployeecode" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Req Id</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="reqId" />
+                    </div>
                     <div class="col-md-4">
                         <label class="form-label text-muted small">Ref Id</label>
                         <input type="text" class="form-control form-control-sm" formControlName="refId" />
@@ -294,57 +332,16 @@
                         <input type="text" class="form-control form-control-sm" formControlName="branchCode" />
                     </div>
                     <div class="col-md-4">
-                        <label class="form-label">Job Category<span class="text-danger"></span></label>
-                        <input type="text" class="form-control form-control-sm" formControlName="jobCategory" />
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label text-muted small">Cand Id</label>
-                        <input type="text" class="form-control form-control-sm" formControlName="CandId" />
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label text-muted small" n style="white-space: nowrap;">Invoice Number</label>
-                        <input type="text" class="form-control form-control-sm" formControlName="invoiceNo" />
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label">Job Sub Category<span class="text-danger"></span></label>
-                        <input type="text" class="form-control form-control-sm" formControlName="jobSubCategory" />
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label text-muted small">Cand Name</label>
-                        <input type="text" class="form-control form-control-sm" formControlName="candName" />
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label text-muted small" n
-                            style="white-space: nowrap;">Tot_Invoice_Amount</label>
-                        <input type="text" class="form-control form-control-sm" formControlName="totalAmount" />
-                    </div>
-                    <div class="col-md-4">
                         <label class="form-label">Placement Type<span class="text-danger"></span></label>
                         <input type="text" class="form-control form-control-sm" formControlName="placmenttype" />
                     </div>
-                    <div class="col-md-4">
-                        <label class="form-label text-muted small">Designation</label>
-                        <input type="text" class="form-control form-control-sm" formControlName="designation" />
-                    </div>
-                    <!-- <div class="col-md-4">
-                        <label class="form-label text-muted small" n style="white-space: nowrap;">Invoice State</label>
-                        <input type="text" class="form-control form-control-sm" formControlName="invoiceState" />
-                    </div> -->
                     <div class="col-md-4">
                         <label class="form-label">Year Experience<span class="text-danger"></span></label>
                         <input type="text" class="form-control form-control-sm" formControlName="yaerExperience" />
                     </div>
                     <div class="col-md-4">
-                        <label class="form-label text-muted small">DOJ</label>
-                        <input type="text" class="form-control form-control-sm" formControlName="doj" />
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label text-muted small" n style="white-space: nowrap;">GST_No</label>
+                        <label class="form-label text-muted small" n style="white-space: nowrap;">GST No</label>
                         <input type="text" class="form-control form-control-sm" formControlName="gstNo" />
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label">Approved/Rejected BY<span class="text-danger"></span></label>
-                        <input type="text" class="form-control form-control-sm" formControlName="approveBy" />
                     </div>
                     <div class="col-md-4">
                         <label class="form-label text-muted small">Vertical</label>
@@ -354,7 +351,6 @@
                         <label class="form-label text-muted small" n style="white-space: nowrap;">Status</label>
                         <input type="text" class="form-control form-control-sm" formControlName="status" />
                     </div>
-                   
                     <div class="col-md-4">
                         <label class="form-label text-muted small">Joining Days</label>
                         <input type="text" class="form-control form-control-sm" formControlName="joiningdays" />
@@ -362,20 +358,6 @@
                     <div class="col-md-4">
                         <label class="form-label text-muted small" n style="white-space: nowrap;">City</label>
                         <input type="text" class="form-control form-control-sm" formControlName="city" />
-                    </div>
-                    
-                    <div class="col-md-4">
-                        <label class="form-label text-muted small">Gender</label>
-                        <input type="text" class="form-control form-control-sm" formControlName="gender" />
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label text-muted small" n style="white-space: nowrap;">DOB</label>
-                        <input type="text" class="form-control form-control-sm" formControlName="dob" />
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label">Offer Approval Raised by Recruiter<span
-                                class="text-danger"></span></label>
-                        <input type="text" class="form-control form-control-sm" formControlName="offerApproval" />
                     </div>
                     <div class="col-md-4">
                         <label class="form-label text-muted small">Job Code</label>
@@ -394,68 +376,36 @@
                         <input type="date" class="form-control form-control-sm" formControlName="requestedOn" />
                     </div>
                     <div class="col-md-4">
-                        <label class="form-label text-muted small" n style="white-space: nowrap;">Recruiter Employee
-                            ID</label>
-                        <input type="text" class="form-control form-control-sm" formControlName="recruiterEmployeeId" />
-                    </div>
-                    <div class="col-md-4">
                         <label class="form-label">Input Number<span class="text-danger"></span></label>
                         <input type="text" class="form-control form-control-sm" formControlName="inputNo" />
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label text-muted small">Is PO Applicable</label>
-                        <select class="form-select" formControlName="isPoApllicable">
-                            <option value="">Select</option>
-                            <option value="YES">YES</option>
-                            <option value="NO">NO</option>
-                        </select>
                     </div>
                     <div class="col-md-4">
                         <label class="form-label text-muted small" style="white-space: nowrap;">Updated Date</label>
                         <input type="date" class="form-control form-control-sm" formControlName="updatedDate" />
                     </div>
                     <div class="col-md-4">
+                        <label class="form-label text-muted small" n style="white-space: nowrap;">Recruiter Employee
+                            ID</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="recruiterEmployeeId" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Offer Approval Raised by Recruiter<span
+                                class="text-danger"></span></label>
+                        <input type="text" class="form-control form-control-sm" formControlName="offerApproval" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small" n style="white-space: nowrap;">VH</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="VH" />
+                    </div>
+                    <div class="col-md-4">
                         <label class="form-label">Organisation Head<span class="text-danger"></span></label>
                         <input type="text" class="form-control form-control-sm" formControlName="organisationHead" />
                     </div>
                     <div class="col-md-4">
-                        <label class="form-label text-muted small">Map Name</label>
-                        <input type="text" class="form-control form-control-sm" formControlName="location" />
+                        <label class="form-label">Approved/Rejected BY<span class="text-danger"></span></label>
+                        <input type="text" class="form-control form-control-sm" formControlName="approveBy" />
                     </div>
                     <div class="col-md-4">
-                        <label class="form-label text-muted small" n style="white-space: nowrap;">PO Number</label>
-                        <input type="text" class="form-control form-control-sm" formControlName="poNumber" />
-                    </div>
-                    <!-- <div class="col-md-4">
-                        <label class="form-label">Cost Center<span class="text-danger"></span></label>
-                        <input type="text" class="form-control form-control-sm" formControlName="costCenter" />
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label text-muted small">Business Unit</label>
-                        <input type="text" class="form-control form-control-sm" formControlName="businessUnit" />
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label text-muted small" n style="white-space: nowrap;">Hiring Manager</label>
-                        <input type="text" class="form-control form-control-sm" formControlName="HiringManager" />
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label">Band Grade Level<span class="text-danger"></span></label>
-                        <input type="text" class="form-control form-control-sm" formControlName="bandGradelevel" />
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label text-muted small">Personal Number</label>
-                        <input type="text" class="form-control form-control-sm" formControlName="personalNo" />
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label text-muted small" n
-                            style="white-space: nowrap;">Rccode_Ranumber</label>
-                        <input type="text" class="form-control form-control-sm" formControlName="ranumber" />
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label">Applicant Id<span class="text-danger"></span></label>
-                        <input type="text" class="form-control form-control-sm" formControlName="applicantId" />
-                    </div> -->
-                     <div class="col-md-4">
                         <label class="form-label">Approved/Rejected Remarks<span class="text-danger"></span></label>
                         <input type="text" class="form-control form-control-sm" formControlName="approveRemarks" />
                     </div>

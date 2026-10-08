@@ -427,6 +427,7 @@ export class PermhireComponent {
     this.addPermMaster.disable();
     this.addPermMaster.get('approvalStatus')?.enable();
     this.addPermMaster.get('approveRemarks')?.enable();
+    this.addPermMaster.get('inputNo')?.enable();
   }
 
   onUpdate() {

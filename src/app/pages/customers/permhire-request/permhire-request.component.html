@@ -157,7 +157,7 @@
     <mat-card class="popup-card">
         <mat-card-header class="popup-header">
             <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 600;">
-                {{ isEditMode ? 'Approve/Reject Perm Hire Master' : 'Add Perm Hire Master' }}
+                {{ isEditMode ? 'Perm Hire Approve/Reject' : 'Add Perm Hire Master' }}
             </mat-card-title>
             <button class="close-btn" matTooltip="Close" (click)="closeclick()">
                 <mat-icon>close</mat-icon>
@@ -262,9 +262,9 @@
                             Job Cat <span class="text-danger">*</span>
                         </label>
                         <select class="form-select form-select-sm" formControlName="jobCategory"
-                            (change)="onJobCategoryChange()">
+                            (change)="onJobCategoryChange($event)">
                             <option value="">Select</option>
-                            <option *ngFor="let jc of jobCategoryList" [value]="jc.JOB_Category_ID">
+                            <option *ngFor="let jc of jobCategoryList" [value]="jc.JOB_Category">
                                 {{ jc.JOB_Category }}
                             </option>
                         </select>
@@ -279,9 +279,9 @@
                             Job Sub Cat <span class="text-danger">*</span>
                         </label>
                         <select class="form-select form-select-sm" formControlName="jobSubCategory"
-                            (change)="onJobSubCategoryChange()">
+                            (change)="onJobSubCategoryChange($event)">
                             <option value="">Select</option>
-                            <option *ngFor="let jsc of jobSubCategoryList" [value]="jsc.JOB_SUB_Category_ID">
+                            <option *ngFor="let jsc of jobSubCategoryList" [value]="jsc.JOB_SUB_Category">
                                 {{ jsc.JOB_SUB_Category }}
                             </option>
                         </select>
@@ -293,7 +293,7 @@
 
                     <div class="col-md-4">
                         <label class="form-label text-muted small">Contract Type</label>
-                        <input type="text" class="form-control form-control-sm" formControlName="contractType" />
+                        <input type="text" class="form-control form-control-sm" formControlName="contractType" readonly />
                     </div>
 
                     <div class="col-md-4">
