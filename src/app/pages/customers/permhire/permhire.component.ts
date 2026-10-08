@@ -518,7 +518,7 @@ export class PermhireComponent {
         else {
           this.isAddclicked = false;
           this.onsearch();
-          alert(response?.Data?.response || 'Saved successfully.');
+          alert(response?.Data?.response || 'Integrated successfully.');
         }
       },
       error: (error) => {

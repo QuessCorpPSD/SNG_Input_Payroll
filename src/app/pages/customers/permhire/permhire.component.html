@@ -431,12 +431,11 @@
                         (click)="closeclick()">
                         Cancel
                     </button>
-
                     <button *ngIf="addPermMaster.get('approvalStatusView')?.value?.toLowerCase() !== 'approve'"
                         type="submit" (click)="onUpdate()"
                         style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white; ">
                         {{ isEditMode ? 'Submit' : 'Save' }}
-                    </button>
+                    </button>                    
                 </div>
             </div>
         </mat-card-footer>
