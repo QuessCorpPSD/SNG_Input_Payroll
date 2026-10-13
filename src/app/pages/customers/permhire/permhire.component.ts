@@ -50,6 +50,7 @@ export class PermhireComponent {
   selectedCompanyCode: any;
   selectedStatus: string = '';
   permHiresearch: any;
+  showErrors: boolean = false;
 
   constructor(private _decrypt: EncryptionService, private _sessionStoreage: SessionStorageService, @Inject(Pay_Token) private service: IPermHireServiceCharge) { }
 
@@ -112,10 +113,10 @@ export class PermhireComponent {
       approveBy: new FormControl(''),
       vertical: new FormControl(''),
       status: new FormControl(''),
-      approveRemarks: new FormControl(''),
+      approveRemarks: new FormControl('', Validators.required),
       joiningdays: new FormControl(''),
       city: new FormControl(''),
-      approvalStatus: new FormControl(''),
+      approvalStatus: new FormControl('', Validators.required),
       approvalStatusView: new FormControl(''),
       gender: new FormControl(''),
       dob: new FormControl(''),
@@ -125,7 +126,7 @@ export class PermhireComponent {
       entityId: new FormControl(''),
       requestedOn: new FormControl(''),
       recruiterEmployeeId: new FormControl(''),
-      inputNo: new FormControl(''),
+      inputNo: new FormControl('', Validators.required),
       isPoApllicable: new FormControl(''),
       updatedDate: new FormControl(''),
       organisationHead: new FormControl(''),
@@ -150,6 +151,7 @@ export class PermhireComponent {
 
   closeclick() {
     this.isAddclicked = false;
+    this.showErrors = false;
   }
   onsearch() {
 
@@ -360,6 +362,7 @@ export class PermhireComponent {
 
   openEdit(row: any) {
     this.isAddclicked = true;
+    this.showErrors = false;
     this.isEditMode = true;
 
     this.addPermMaster.patchValue({
@@ -431,6 +434,12 @@ export class PermhireComponent {
   }
 
   onUpdate() {
+
+    if (this.addPermMaster.invalid) {
+      this.showErrors = true;
+      return;
+    }
+
     const formValue = this.addPermMaster.getRawValue();
     const formattedRequestedOn = this.toDDMMYYYY(formValue.requestedOn);
     const formattedUpdatedDate = this.toDDMMYYYY(formValue.updatedDate);

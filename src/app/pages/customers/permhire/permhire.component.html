@@ -378,6 +378,11 @@
                     <div class="col-md-4">
                         <label class="form-label">Input Number<span class="text-danger"></span></label>
                         <input type="text" class="form-control form-control-sm" formControlName="inputNo" />
+                        <small class="text-danger d-block" *ngIf="showErrors && 
+       (addPermMaster.get('inputNo')?.invalid || 
+        addPermMaster.get('inputNo')?.value == 0)">
+                            Input Number required
+                        </small>
                     </div>
                     <div class="col-md-4">
                         <label class="form-label text-muted small" style="white-space: nowrap;">Updated Date</label>
@@ -408,6 +413,10 @@
                     <div class="col-md-4">
                         <label class="form-label">Approved/Rejected Remarks<span class="text-danger"></span></label>
                         <input type="text" class="form-control form-control-sm" formControlName="approveRemarks" />
+                        <small class="text-danger d-block"
+                            *ngIf="showErrors && addPermMaster.get('approveRemarks')?.invalid">
+                            Approved/Rejected Remarks required
+                        </small>
                     </div>
                     <div class="col-md-4">
                         <label class="form-label">Approval Status<span class="text-danger"></span></label>
@@ -416,6 +425,11 @@
                             <option value="Approve">Approve</option>
                             <option value="Reject">Reject</option>
                         </select>
+                        <small class="text-danger d-block" *ngIf="showErrors &&
+    (!addPermMaster.get('approvalStatus')?.value ||
+     addPermMaster.get('approvalStatus')?.value === 'Pending To Approve')">
+                            Approval Status required
+                        </small>
                     </div>
                 </div>
             </form>
@@ -435,7 +449,7 @@
                         type="submit" (click)="onUpdate()"
                         style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white; ">
                         {{ isEditMode ? 'Submit' : 'Save' }}
-                    </button>                    
+                    </button>
                 </div>
             </div>
         </mat-card-footer>
