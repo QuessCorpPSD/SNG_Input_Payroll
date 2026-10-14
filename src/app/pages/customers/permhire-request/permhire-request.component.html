@@ -137,6 +137,17 @@
                         <mat-header-cell *matHeaderCellDef>Approval Status</mat-header-cell>
                         <mat-cell *matCellDef="let row">{{ row.Approval_Status }}</mat-cell>
                     </ng-container>
+
+                    <ng-container matColumnDef="download">
+                        <mat-header-cell *matHeaderCellDef><strong>Download</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                            <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                                matTooltip="Download" (click)="downloadFile()">
+                                <mat-icon>download</mat-icon>
+                            </button>
+                        </mat-cell>
+                    </ng-container>
+
                     <mat-header-row *matHeaderRowDef="uploadDisplayedColumns"></mat-header-row>
                     <mat-row *matRowDef="let row; columns: uploadDisplayedColumns"></mat-row>
 
@@ -439,6 +450,13 @@
                             readonly />
                     </div>
 
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">
+                            Attachment<span class="text-danger">*</span>
+                        </label>
+                        <input type="file" class="form-control form-control-sm" formControlName="fileUpload"
+                            (change)="onFileSelected($event)" required />
+                    </div>
                 </div>
             </form>
         </mat-card-content>

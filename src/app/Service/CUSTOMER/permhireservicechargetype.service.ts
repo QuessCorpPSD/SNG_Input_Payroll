@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { APIResponse } from '../../Models/apiresponse';
 import { IPermHireServiceCharge } from '../../Repository/customer/IPermhireServiceCharge.service';
@@ -72,10 +72,17 @@ export class PermhireservicechargetypeService implements IPermHireServiceCharge 
     return this.http.get<APIResponse>(this.environment.apiUrl + 'PermHire/GetPermHireRequestSearch/' + CompanyId);
   }
 
-  PermHireRequest(payload: any): Observable<APIResponse> {
+  PermHireRequest(formData: FormData): Observable<APIResponse> {
     const url = `${this.environment.apiUrl}PermHire/PermHireRequest`;
-    return this.http.post<APIResponse>(url, payload);
+
+    // Remove Content-Type if it was set globally
+    const headers = new HttpHeaders().delete('Content-Type');
+
+    return this.http.post<APIResponse>(url, formData, {
+      headers: headers
+    });
   }
+
   GetPermHireServiceChargeType(): Observable<APIResponse> {
     return this.http.get<APIResponse>(
       this.environment.apiUrl + 'PermHire/GetPermHireServiceChargeType'
@@ -128,5 +135,12 @@ export class PermhireservicechargetypeService implements IPermHireServiceCharge 
   PermHireInvoiceInitiate(payload: any): Observable<APIResponse> {
     const url = `${this.environment.apiUrl}PermHire/PermHireInvoiceInitiate`;
     return this.http.post<APIResponse>(url, payload);
+  }
+
+  DownloadFileAttachment(filePath: string): Observable<APIResponse> {
+    const url = `${this.environment.apiUrl}Common/DownloadFileAttachment`;
+    return this.http.get<APIResponse>(url, {
+      params: { filePath }
+    });
   }
 }
