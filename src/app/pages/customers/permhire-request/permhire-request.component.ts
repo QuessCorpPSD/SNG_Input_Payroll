@@ -78,6 +78,7 @@ export class PermhireRequestComponent {
   jobSubCategoryList: any[] = [];
   showErrors: boolean = false;
   apiError: string = '';
+  selectedFile: File | null = null;
 
   constructor(
     private _decrypt: EncryptionService,
@@ -86,7 +87,7 @@ export class PermhireRequestComponent {
   ) { }
 
   uploadDisplayedColumns: string[] = [
-    'slNo', 'clientcode', 'clientname', 'location', 'req_id', 'ref_id', 'cand_id', 'cand_name', 'designation', 'doj', 'vertical', 'vh', 'ctc', 'billablectc', 'branchcode', 'invoiceno', 'totalamount', 'approval_status'
+    'slNo', 'clientcode', 'clientname', 'location', 'req_id', 'ref_id', 'cand_id', 'cand_name', 'designation', 'doj', 'vertical', 'vh', 'ctc', 'billablectc', 'branchcode', 'invoiceno', 'totalamount', 'approval_status', 'download'
   ];
 
   uploadedData: any[] = [];
@@ -139,10 +140,10 @@ export class PermhireRequestComponent {
       state: new FormControl(''),
       refId: new FormControl(''),
       branchCode: new FormControl(''),
-      jobCategory: new FormControl('', Validators.required),
+      jobCategory: new FormControl(''),
       CandId: new FormControl({ value: '', disabled: true }),
       invoiceNo: new FormControl({ value: '', disabled: true }),
-      jobSubCategory: new FormControl('', Validators.required),
+      jobSubCategory: new FormControl(''),
       candName: new FormControl('', Validators.required),
       totalAmount: new FormControl({ value: '', disabled: true }),
       placmenttype: new FormControl(''),
@@ -180,11 +181,27 @@ export class PermhireRequestComponent {
       personalNo: new FormControl(''),
       ranumber: new FormControl(''),
       applicantId: new FormControl(''),
-      DEPARTMENT: new FormControl('')
+      DEPARTMENT: new FormControl(''),
+      fileUpload: new FormControl('', Validators.required)
     });
 
     this.getJobCategory();
     this.addPermMaster.get('organisationHead')?.disable();
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+      console.log('Selected file:', this.selectedFile);
+    }
+  }
+
+
+  clearFile(fileInput: HTMLInputElement): void {
+    fileInput.value = '';
+    this.selectedFile = null;
   }
 
   getJobCategory() {
@@ -260,7 +277,7 @@ export class PermhireRequestComponent {
           this.dataSource = new MatTableDataSource(this.permHiresearch);
           this.dataSource.paginator = this.paginator;
           this.uploadDisplayedColumns = [
-            'slNo', 'clientcode', 'clientname', 'location', 'req_id', 'ref_id', 'cand_id', 'cand_name', 'designation', 'doj', 'vertical', 'vh', 'ctc', 'billablectc', 'branchcode', 'invoiceno', 'totalamount', 'approval_status'
+            'slNo', 'clientcode', 'clientname', 'location', 'req_id', 'ref_id', 'cand_id', 'cand_name', 'designation', 'doj', 'vertical', 'vh', 'ctc', 'billablectc', 'branchcode', 'invoiceno', 'totalamount', 'approval_status', 'download'
           ];
         } else {
           this.dataSource.data = [];
@@ -428,11 +445,20 @@ export class PermhireRequestComponent {
           IS_PO_Applicable: formValue.isPoApllicable === 'YES',
           PO_NUMBER: formValue.poNumber || null
         }
-      ]
+      ],
+
     };
 
+    const formData = new FormData();
+
+    formData.append('CreatedBy', payload.CreatedBy);
+    formData.append('Rows', JSON.stringify(payload.Rows));
+
+    if (this.selectedFile) {
+      formData.append('file', this.selectedFile, this.selectedFile.name);
+    }
     this.isLoading = true;
-    this.service.PermHireRequest(payload).pipe(
+    this.service.PermHireRequest(formData).pipe(
       finalize(() => {
         this.isLoading = false;
       })
@@ -497,5 +523,61 @@ export class PermhireRequestComponent {
     this.addPermMaster.patchValue({
       location: mapName.mapName
     });
+  }
+
+  downloadFile() {
+    this.isLoading = true;
+    const file = 'C:/SNG/PermHire/PermHire_12d7be5e1d924a9285349ac5408d14af.pdf';
+
+    this.service.DownloadFileAttachment(file)
+      .pipe(finalize(() => (this.isLoading = false)))
+      .subscribe({
+        next: (res: any) => {
+          const statusCode = res?.StatusCode ?? res?.statusCode ?? res?.statuscode;
+          const data = res?.Data ?? res?.data;
+
+          if (statusCode === 200 && data) {
+            const base64 = data.file ?? data.File;
+            const fileName = data.fileName ?? data.FileName ?? 'download.pdf';
+
+            if (base64) {
+              this.downloadFileFromBase64(base64, fileName);
+            } else {
+              alert('File not found');
+            }
+          } else {
+            console.error('Unexpected response', res);
+          }
+        },
+        error: (error: any) => {
+          console.error('Error downloading file:', error);
+        }
+      });
+  }
+
+  downloadFileFromBase64(base64: string, filename: string) {
+    try {
+      const byteChars = atob(base64.replace(/\s/g, ''));
+      const bytes = new Uint8Array(byteChars.length);
+
+      for (let i = 0; i < byteChars.length; i++) {
+        bytes[i] = byteChars.charCodeAt(i);
+      }
+
+      const blob = new Blob([bytes], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      window.URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error('Invalid base64 data', e);
+      alert('Could not process the file');
+    }
   }
 }
