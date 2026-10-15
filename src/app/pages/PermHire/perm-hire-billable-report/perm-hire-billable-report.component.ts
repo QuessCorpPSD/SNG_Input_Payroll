@@ -1,0 +1,105 @@
+import { Component, Inject, InjectionToken } from '@angular/core';
+import { MatIconModule } from "@angular/material/icon";
+import { MatCardModule } from "@angular/material/card";
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { CommonModule } from '@angular/common';
+import * as XLSX from 'xlsx';
+import { IPermHireServiceCharge } from '../../../Repository/customer/IPermhireServiceCharge.service';
+import { PermhireservicechargetypeService } from '../../../Service/CUSTOMER/permhireservicechargetype.service';
+
+export const Pay_TOKEN = new InjectionToken<IPermHireServiceCharge>('Pay_TOKEN');
+
+@Component({
+  selector: 'app-perm-hire-billable-report',
+  standalone: true,
+  imports: [CommonModule, MatIconModule, MatCardModule, FormsModule, FormsModule],
+  templateUrl: './perm-hire-billable-report.component.html',
+  styleUrl: './perm-hire-billable-report.component.css',
+  providers: [
+    {
+      provide: Pay_TOKEN,
+      useClass: PermhireservicechargetypeService,
+    }
+  ]
+})
+export class PermHireBillableReportComponent {
+  entitySearch: any;
+  data: any;
+  today: string = new Date().toISOString().split('T')[0];
+  Startdate = '';
+  Enddate = '';
+  Entity: any;
+
+  constructor(@Inject(Pay_TOKEN) private service: IPermHireServiceCharge, private fb: FormBuilder,) { }
+
+  ngOnInit() {
+    this.BindEntityName()
+
+  }
+
+  BindEntityName() {
+    this.service.EntitySearch().subscribe({
+      next: (res: any) => {
+        this.entitySearch = res?.Data?.data?.Table0;
+      }
+    });
+  }
+  exportToExcel(): void {
+
+    const Entityid = this.Entity;
+    const fromdate = this.Startdate;
+    const todate = this.Enddate;
+
+    if (!Entityid) {
+      alert("Please select Entity");
+      return;
+    }
+
+    if ((!fromdate)) {
+      alert("Please select from date.");
+      return;
+    }
+    if ((!todate)) {
+      alert("Please select todate.");
+      return;
+    }
+
+    if (fromdate > todate) {
+      alert("From Date cannot be greater than todate.");
+      return;
+    }
+
+
+    this.service.PermHireBillableReportExporttoexcel(Entityid, fromdate, todate).subscribe({
+      next: (res) => {
+        try {
+          const jsonData = res.Data.data.Table0;
+          this.data = res.Data.message;
+
+          if (!jsonData || jsonData.length === 0) {
+            alert(this.data);
+            return;
+          }
+
+          const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(jsonData);
+          const wb: XLSX.WorkBook = XLSX.utils.book_new();
+
+          XLSX.utils.book_append_sheet(wb, ws, "PermHireBillableReports");
+
+          const timestamp = new Date().toISOString().split('T')[0];
+          const fileName = `PermHireBillablereportsentitywise_${timestamp}.xlsx`;
+
+          XLSX.writeFile(wb, fileName);
+
+        } catch (err) {
+          console.error('Error exporting to Excel:', err);
+        }
+      },
+      error: (err) => {
+        console.error('Error loading data for export', err);
+      },
+    });
+  }
+
+}
+

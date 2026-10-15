@@ -143,4 +143,14 @@ export class PermhireservicechargetypeService implements IPermHireServiceCharge 
       params: { filePath }
     });
   }
+
+  EntitySearch(): Observable<APIResponse> {
+    return this.http.get<APIResponse>(this.environment.apiUrl + 'Entity/Search');
+  }
+
+  PermHireBillableReportExporttoexcel(entityid: any, fromdate: string, todate: string): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      `${this.environment.apiUrl}PermHire/PermHireBillableReportExporttoexcel/${entityid}/${fromdate}/${todate}`
+    );
+  }
 }

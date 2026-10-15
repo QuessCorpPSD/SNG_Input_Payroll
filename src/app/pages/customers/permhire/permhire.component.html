@@ -201,7 +201,7 @@
                         <mat-header-cell *matHeaderCellDef><strong>Download</strong></mat-header-cell>
                         <mat-cell *matCellDef="let row">
                             <button class="btn btn-sm d-flex align-items-center justify-content-center"
-                                matTooltip="Download">
+                                matTooltip="Download" (click)="downloadFile(row)">
                                 <mat-icon>download</mat-icon>
                             </button>
                         </mat-cell>

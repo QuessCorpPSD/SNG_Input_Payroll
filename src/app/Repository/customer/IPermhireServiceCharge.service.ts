@@ -28,4 +28,6 @@ export interface IPermHireServiceCharge {
     PermHireInvoiceInitiate(payload: any): Observable<APIResponse>;
     Getdetails(payload: any): Observable<APIResponse>;
     DownloadFileAttachment(filePath: string): Observable<APIResponse>;
+    EntitySearch(): Observable<APIResponse>;
+    PermHireBillableReportExporttoexcel(entityid: any, fromdate: string, todate: string): Observable<APIResponse>;
 }

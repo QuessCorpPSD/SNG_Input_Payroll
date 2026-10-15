@@ -97,7 +97,7 @@
 
 <div *ngIf="isAddclicked" class="popup-overlay">
     <mat-card class="popup-card">
-        <mat-card-header style="border-bottom: 1px solid #89898B; gap:350px; padding: 15px 15px 15px 15px">
+        <mat-card-header style="border-bottom: 1px solid #89898B; gap:330px; padding: 15px 15px 15px 15px">
             <mat-card-title style="color: #302CB3;">Create Company Invoice Format</mat-card-title>
             <button style="border: none; background: transparent;"><mat-icon (click)="closeclick()"
                     matTooltip="close">close</mat-icon></button>
@@ -117,8 +117,8 @@
                         style="width: 160px; height: 12.35px; color: var(--text-field-heading-, #89898B); font-size: 10px; font-family: Montserrat; font-weight: 500; word-wrap: break-word">
                         Group Detail</div>
                     <div style="padding-top: 5px;">
-                        <groupname [selectedCompanyId]="comapnyId" (sitenameEmit)="handleGroupNameEvent($event)">
-                        </groupname>
+                        <groupnameall [selectedCompanyId]="comapnyId" (sitenameEmit)="handleGroupNameEvent($event)">
+                        </groupnameall>
                     </div>
                 </div>
                 <!-- <div class="col-md-6">

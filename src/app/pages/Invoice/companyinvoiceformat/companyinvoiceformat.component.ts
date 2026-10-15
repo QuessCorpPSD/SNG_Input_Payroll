@@ -20,7 +20,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { SelectionModel } from '@angular/cdk/collections';
 import { CompanyInvoiceFormatRepository } from '../../../Service/invoice/CompanyInvoiceFormatRepository.service';
 import { MatCardModule } from "@angular/material/card";
-import { GroupnameComponent } from "../../../common/groupname/groupname.component";
+import { GroupnameallComponent } from '../../../common/groupnameall/groupnameall.component';
 
 @Component({
   selector: 'companyinvoiceformat',
@@ -37,7 +37,7 @@ import { GroupnameComponent } from "../../../common/groupname/groupname.componen
     MatButtonModule,
     //CompanyComponent,
     MatTooltipModule,
-    MatCheckboxModule, MatCardModule, CompanyComponent, GroupnameComponent],
+    MatCheckboxModule, MatCardModule, CompanyComponent, GroupnameallComponent],
   templateUrl: './companyinvoiceformat.component.html',
   styleUrl: './companyinvoiceformat.component.css'
 })

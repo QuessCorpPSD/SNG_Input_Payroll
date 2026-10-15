@@ -55,7 +55,7 @@ export class PermhireComponent {
   constructor(private _decrypt: EncryptionService, private _sessionStoreage: SessionStorageService, @Inject(Pay_Token) private service: IPermHireServiceCharge) { }
 
   uploadDisplayedColumns: string[] = [
-    'action', 'slNo', 'clientcode', 'clientname', 'location', 'req_id', 'ref_id', 'cand_id', 'cand_name', 'designation', 'doj', 'vertical', 'vh', 'ctc', 'billablectc', 'branchcode', 'invoiceno', 'totalamount', 'approval_status','download'];
+    'action', 'slNo', 'clientcode', 'clientname', 'location', 'req_id', 'ref_id', 'cand_id', 'cand_name', 'designation', 'doj', 'vertical', 'vh', 'ctc', 'billablectc', 'branchcode', 'invoiceno', 'totalamount', 'approval_status', 'download'];
 
 
   uploadedData: any[] = []; // No mock data
@@ -174,7 +174,7 @@ export class PermhireComponent {
           this.dataSource = new MatTableDataSource(this.permHiresearch);
           this.dataSource.paginator = this.paginator;
           this.uploadDisplayedColumns = [
-            'action', 'slNo', 'clientcode', 'clientname', 'location', 'req_id', 'ref_id', 'cand_id', 'cand_name', 'designation', 'doj', 'vertical', 'vh', 'ctc', 'billablectc', 'branchcode', 'invoiceno', 'totalamount', 'approval_status','download'];
+            'action', 'slNo', 'clientcode', 'clientname', 'location', 'req_id', 'ref_id', 'cand_id', 'cand_name', 'designation', 'doj', 'vertical', 'vh', 'ctc', 'billablectc', 'branchcode', 'invoiceno', 'totalamount', 'approval_status', 'download'];
         } else {
           this.dataSource.data = [];
           alert('No data found');
@@ -561,5 +561,60 @@ export class PermhireComponent {
     if (parts.length !== 3) return dateStr;
     const [yyyy, mm, dd] = parts;
     return `${dd}/${mm}/${yyyy}`;
+  }
+  downloadFile(row: any) {
+    this.isLoading = true;
+    const file = row.Doc_Path;
+
+    this.service.DownloadFileAttachment(file)
+      .pipe(finalize(() => (this.isLoading = false)))
+      .subscribe({
+        next: (res: any) => {
+          const statusCode = res?.StatusCode ?? res?.statusCode ?? res?.statuscode;
+          const data = res?.Data ?? res?.data;
+
+          if (statusCode === 200 && data) {
+            const base64 = data.file ?? data.File;
+            const fileName = data.fileName ?? data.FileName ?? 'download.pdf';
+
+            if (base64) {
+              this.downloadFileFromBase64(base64, fileName);
+            } else {
+              alert('File not found');
+            }
+          } else {
+            console.error('Unexpected response', res);
+          }
+        },
+        error: (error: any) => {
+          console.error('Error downloading file:', error);
+        }
+      });
+  }
+
+  downloadFileFromBase64(base64: string, filename: string) {
+    try {
+      const byteChars = atob(base64.replace(/\s/g, ''));
+      const bytes = new Uint8Array(byteChars.length);
+
+      for (let i = 0; i < byteChars.length; i++) {
+        bytes[i] = byteChars.charCodeAt(i);
+      }
+
+      const blob = new Blob([bytes], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      window.URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error('Invalid base64 data', e);
+      alert('Could not process the file');
+    }
   }
 }

@@ -548,9 +548,9 @@ export class PermhireRequestComponent {
     });
   }
 
-  downloadFile() {
+  downloadFile(row: any) {
     this.isLoading = true;
-    const file = 'C:/SNG/PermHire/PermHire_12d7be5e1d924a9285349ac5408d14af.pdf';
+    const file = row.Doc_Path;
 
     this.service.DownloadFileAttachment(file)
       .pipe(finalize(() => (this.isLoading = false)))
