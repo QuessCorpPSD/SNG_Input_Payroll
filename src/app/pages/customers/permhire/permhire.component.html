@@ -437,7 +437,7 @@
                     <div class="col-md-4">
                         <label class="form-label">Applicant Id<span class="text-danger"></span></label>
                         <input type="text" class="form-control form-control-sm" formControlName="applicantId" />
-                    </div> -->
+                    </div>
                     <div class="col-md-4">
                         <label class="form-label">Approved/Rejected Remarks<span class="text-danger"></span></label>
                         <input type="text" class="form-control form-control-sm" formControlName="approveRemarks" />
@@ -458,6 +458,15 @@
      addPermMaster.get('approvalStatus')?.value === 'Pending To Approve')">
                             Approval Status required
                         </small>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Attachment</label>
+                        <div>
+                            <a href="javascript:void(0)" (click)="downloadFile(selectedRow)"
+                                style="color: blue; text-decoration: underline; cursor: pointer;">
+                                Download Attachment
+                            </a>
+                        </div>
                     </div>
                 </div>
             </form>

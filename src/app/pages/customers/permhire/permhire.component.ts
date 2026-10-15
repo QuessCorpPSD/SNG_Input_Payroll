@@ -51,6 +51,7 @@ export class PermhireComponent {
   selectedStatus: string = '';
   permHiresearch: any;
   showErrors: boolean = false;
+  selectedRow: any;
 
   constructor(private _decrypt: EncryptionService, private _sessionStoreage: SessionStorageService, @Inject(Pay_Token) private service: IPermHireServiceCharge) { }
 
@@ -364,6 +365,7 @@ export class PermhireComponent {
     this.isAddclicked = true;
     this.showErrors = false;
     this.isEditMode = true;
+    this.selectedRow = row;
 
     this.addPermMaster.patchValue({
       ID: row.ID ?? '',
@@ -562,6 +564,7 @@ export class PermhireComponent {
     const [yyyy, mm, dd] = parts;
     return `${dd}/${mm}/${yyyy}`;
   }
+  
   downloadFile(row: any) {
     this.isLoading = true;
     const file = row.Doc_Path;
