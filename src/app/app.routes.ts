@@ -207,6 +207,7 @@ import { PermhireRequestComponent } from './pages/customers/permhire-request/per
 import { PermHireNavigationComponent } from './pages/PermHire/perm-hire-navigation/perm-hire-navigation.component';
 import { PermHireQRSInvoiceInitiationComponent } from './pages/PermHire/perm-hire-qrsinvoice-initiation/perm-hire-qrsinvoice-initiation.component';
 import { PermHireServiceChargeComponent } from './pages/PermHire/perm-hire-service-charge/perm-hire-service-charge.component';
+import { InterCompanyInvoiceComponent } from './pages/Invoice/inter-company-invoice/inter-company-invoice.component';
 
 export const routes: Routes = [
   {
@@ -381,6 +382,7 @@ export const routes: Routes = [
           { path: 'perfomainvoice', component: PerfomainvoiceComponent },
           { path: 'billabledays', component: BillableDaysComponent },
           { path: 'gstinvoice', component: GstinvoiceComponent },
+          { path: 'intercompanyinvoice', component: InterCompanyInvoiceComponent },
           { path: 'billingpayfrequency', component: BillingpayfrequencyComponent },
           { path: 'poinitiate', component: POInitiateComponent },
           { path: 'app-invoice-culture', component: InvoiceCultureComponent },

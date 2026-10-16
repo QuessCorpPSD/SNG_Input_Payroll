@@ -216,5 +216,43 @@ export class InvoiceRepository implements IInvoiceRepository {
             formData
         );
     }
+    InterCompanyInitiationSearch(val): Observable<APIResponse> {
+
+        const url = `${this.environment.apiUrl}InvoiceInitiation/InterCompanyInitiationSearch`;
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        });
+        const config = new HttpHeaders().set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
+        return this.http.post<APIResponse>(url, JSON.stringify(val), { headers });
+    }
+    InterCompanyInitiationSearchExport(val): Observable<APIResponse> {
+
+        const url = `${this.environment.apiUrl}InvoiceInitiation/InterCompanyInitiationSearchExport`;
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        });
+        const config = new HttpHeaders().set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
+        return this.http.post<APIResponse>(url, JSON.stringify(val), { headers });
+    }
+    InterCompanyInvoiceInitiate(val): Observable<APIResponse> {
+
+        const url = `${this.environment.apiUrl}InvoiceInitiation/InterCompanyInvoiceInitiate`;
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        });
+        const config = new HttpHeaders().set('Content-Type', 'application/json')
+            .set('Accept', 'application/json')
+        return this.http.post<APIResponse>(url, JSON.stringify(val), { headers });
+    }
+    InterCompanyGetAllInvoiceDetails(companyId: number, payPeriodId: number, userId: string): Observable<APIResponse> {
+        const url = `${this.environment.apiUrl}Invoice/InterCompanyGetAllInvoiceDetails/${companyId}/${payPeriodId}/${userId}`;
+        //console.log(url);
+        return this.http.get<APIResponse>(url);
+    }
 
 }

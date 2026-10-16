@@ -32,7 +32,11 @@ export interface IInvoiceRepository {
     POInvoiceUpload(payload: FormData): Observable<APIResponse>;
     GetGSTPercentage(): Observable<APIResponse>;
 
-    //attribute code
     UploadAttributesGST(formData: FormData): Observable<APIResponse>;
     GetAllAttribute(val): Observable<APIResponse>
+    InterCompanyInitiationSearch(val): Observable<APIResponse>;
+    InterCompanyInvoiceInitiate(val): Observable<APIResponse>;
+    InterCompanyInitiationSearchExport(val): Observable<APIResponse>;
+    InterCompanyGetAllInvoiceDetails(companyId: number, payPeriodId: number, userId: string): Observable<APIResponse>;
+ 
 }

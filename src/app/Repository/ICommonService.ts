@@ -30,5 +30,5 @@ export interface ICommonService {
     GetPOItemType(): Observable<APIResponse>;
     GetInvoiceType(): Observable<APIResponse>;
     GetPayCodes(): Observable<APIResponse>;
-
+    GetInterCompanyCodes(userId: number): Observable<APIResponse>
 }
