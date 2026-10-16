@@ -63,7 +63,6 @@ export class GroupnameComponent {
   }
 
   Bindmapname(selectedCompanyId: any) {
-    console.log("Group", selectedCompanyId);
     this._commonService.GetSitesByCompanyId(selectedCompanyId).subscribe({
       next: res => {
         this.siteName = res.Data;
@@ -84,7 +83,6 @@ export class GroupnameComponent {
       },
       error: err => console.error(err.message)
     });
-    console.log
   }
 
   private _filter(value: string): Groupnameclass[] {
@@ -98,7 +96,6 @@ export class GroupnameComponent {
 
   onOptionSelected(option: any) {
     this.selectedOption = option;
-    console.log("select Group", this.selectedOption);
     this.sitenameEmit.emit(this.selectedOption);
   }
 }

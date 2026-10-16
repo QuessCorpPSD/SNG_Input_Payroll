@@ -5,10 +5,10 @@
     <div class="row py-2">
         <br />
         <div class="row align-items-end" style="padding-bottom: 1rem;">
-            <div class="col-md-3 ">
+            <div class="col-md-2 ">
                 <label class="form-label text-muted small">Company Code</label>
                 <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
-            </div>
+            </div>           
             <div class="col-md-2">
                 <label class="form-label text-muted small">Form Type</label>
                 <select class="form-select form-select-sm small-input" [(ngModel)]="formName"
@@ -40,7 +40,7 @@
                     (payperiodEmit)="handlePayperiodEvent($event)"></PayPeriod>
             </div> -->
             <div class="col-md-2" style="padding-top: 25px;">
-                <div class="d-flex gap-2">
+                <div class="d-flex gap-1">
                     <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
                         matTooltip="Search" (click)="Searchclick()">
                         <mat-icon>search</mat-icon>

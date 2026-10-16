@@ -208,6 +208,8 @@ import { PermHireNavigationComponent } from './pages/PermHire/perm-hire-navigati
 import { PermHireQRSInvoiceInitiationComponent } from './pages/PermHire/perm-hire-qrsinvoice-initiation/perm-hire-qrsinvoice-initiation.component';
 import { PermHireServiceChargeComponent } from './pages/PermHire/perm-hire-service-charge/perm-hire-service-charge.component';
 import { InterCompanyInvoiceComponent } from './pages/Invoice/inter-company-invoice/inter-company-invoice.component';
+import { DynamicRemoveComponent } from './pages/Reports/dynamic-remove/dynamic-remove.component';
+import { PermHireBillableReportComponent } from './pages/PermHire/perm-hire-billable-report/perm-hire-billable-report.component';
 
 export const routes: Routes = [
   {
@@ -440,7 +442,8 @@ export const routes: Routes = [
           { path: "jobcategory", component: JobcategoryComponent },
           { path: "permhirejobsubjobcategory", component: PermhirejobsubcategoryComponent },
           { path: "PermHireServiceCharge", component: PermHireServiceChargeComponent },
-          { path: "PermHireQRSInvoiceInitiation", component: PermHireQRSInvoiceInitiationComponent }
+          { path: "PermHireQRSInvoiceInitiation", component: PermHireQRSInvoiceInitiationComponent },
+          { path: "PermHireBillableReport", component: PermHireBillableReportComponent }
 
         ]
       },
@@ -452,6 +455,8 @@ export const routes: Routes = [
           { path: "itcalender", component: ITcalenderComponent, },
           { path: 'companypaycodemapping', component: CompanypaycodemappingComponent },
           { path: 'clientaddress', component: ClientaddressComponent },
+          { path: 'dynamicremove', component: DynamicRemoveComponent },
+
         ]
       },
       {
@@ -484,6 +489,7 @@ export const routes: Routes = [
           { path: 'Report', component: ReportComponent },
           { path: 'cpfsummary', component: CPFsummaryComponent },
           { path: 'payhistory', component: PayHistoryReportComponent },
+
         ]
       },
       {

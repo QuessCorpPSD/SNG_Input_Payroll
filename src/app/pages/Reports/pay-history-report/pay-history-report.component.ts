@@ -8,13 +8,21 @@ import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { finalize } from 'rxjs';
 import { CompanyallComponent } from '../../../common/CompanyAll/companyall.component';
+import { CommonService } from '../../../Service/CommonService';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 
 export const Pay_Token = new InjectionToken<IPayHistoryService>('Pay_Token');
 
 @Component({
   selector: 'app-pay-history-report',
   standalone: true,
-  imports: [MatIconModule, MatCardModule, MatTooltipModule, CommonModule, FormsModule, CompanyallComponent],
+  imports: [MatIconModule, MatCardModule, MatTooltipModule, CommonModule, FormsModule, CompanyallComponent,
+    MatAutocompleteModule, MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule,],
   templateUrl: './pay-history-report.component.html',
   styleUrl: './pay-history-report.component.css',
   providers: [
@@ -24,8 +32,10 @@ export const Pay_Token = new InjectionToken<IPayHistoryService>('Pay_Token');
   ]
 })
 export class PayHistoryReportComponent {
+  employeeCode: any;
+  filteredEmployeeCode: any;
 
-  constructor(@Inject(Pay_Token) private payHistoryService: IPayHistoryService) { }
+  constructor(@Inject(Pay_Token) private payHistoryService: IPayHistoryService, private service: CommonService) { }
 
   isLoading = false;
   Entity: any;
@@ -38,6 +48,9 @@ export class PayHistoryReportComponent {
   selectedCompanyCode: any;
   MonthId: any;
   Month: any;
+  employee: any;
+  employeeSearch: string = '';
+  filteredEmpCode: any[] = [];
   getMonths: any[] = [
     { MonthId: 1, MonthName: 'January' },
     { MonthId: 2, MonthName: 'February' },
@@ -58,9 +71,40 @@ export class PayHistoryReportComponent {
     this.BindYear();
   }
 
+  filterEmployee(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const searchValue = input.value.toLowerCase().trim();
+
+    if (!searchValue) {
+      this.filteredEmpCode = this.employeeCode;
+      return;
+    }
+
+    this.filteredEmpCode = this.employeeCode.filter((item: any) =>
+      item.Employee_Code?.toLowerCase().includes(searchValue)
+    );
+  }
+
+  displayEmployee(employee: any): string {
+    return employee ? employee.Employee_Code : '';
+  }
+
+  onEmployeeSelected(employee: any): void {
+    this.employee = employee.Employee_Code;
+    this.employeeSearch = employee;
+  }
+
+  clearSearch(): void {
+    this.employeeSearch = '';
+    this.employee = '';
+    this.filteredEmpCode = this.employeeCode;
+  }
+
   handleCompanyEvent(event: any) {
     this.companyId = event.companyId;
     this.selectedCompanyCode = event.companyCode;
+    this.BindEmployeeCode();
+
   }
 
   BindEntityName() {
@@ -79,8 +123,19 @@ export class PayHistoryReportComponent {
     });
   };
 
+  BindEmployeeCode() {
+    const payload = {
+      "CompanyId": this.companyId?.toString()
+    }
+    this.service.GetEmployeeCode(payload).subscribe({
+      next: res => { this.employeeCode = res.Data.data.Table0 }
+    });
+  }
+
 
   downloadPayHistory() {
+
+    const employeecode = this.employee || 0
 
     if (!this.formName) {
       alert('Please select Report Type');
@@ -148,7 +203,7 @@ export class PayHistoryReportComponent {
     else if (this.formName === 'PHP') {
       this.isLoading = true;
       this.payHistoryService
-        .downloadPayHistoryPDF(this.companyId, this.Year)
+        .downloadPayHistoryPDF(this.companyId, this.Year, employeecode)
         .pipe(
           finalize(() => this.isLoading = false)
         )

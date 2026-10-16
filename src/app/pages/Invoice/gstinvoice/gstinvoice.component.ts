@@ -23,6 +23,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatIcon } from "@angular/material/icon";
 import { AttributeComponent } from "../attribute/attribute.component";
 import { Payperiodclass } from '../../../Models/Common';
+import { finalize } from 'rxjs';
 
 export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOKEN');
 
@@ -177,11 +178,14 @@ export class GstinvoiceComponent {
         "CreatedBy": 3,
         "DateTime": new Date()
       }
-      this._invoiceService.GetAllAttribute(request).subscribe({
+      this.isLoading = true;
+      this._invoiceService.GetAllAttribute(request).pipe(
+        finalize(() => {
+          this.isLoading = false;
+        })
+      ).subscribe({
         next: res => {
-          //console.log('Result',res.Data);
           this.availableItems = res.Data;
-          //console.log('availableItems',this.availableItems);
 
         }, error: err => { console.log(err) }
       })
@@ -198,9 +202,13 @@ export class GstinvoiceComponent {
     this.dataSource.filter = filterValue;
   }
   BindDashBoard(userId: number) {
-    this._invoiceService.GetGSTInvoice(userId).subscribe({
+    this.isLoading = true;
+    this._invoiceService.GetGSTInvoice(userId).pipe(
+      finalize(() => {
+        this.isLoading = false;
+      })
+    ).subscribe({
       next: res => {
-        console.log(res);
         this.dataSource = new MatTableDataSource<any>(res.Data);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
@@ -214,7 +222,6 @@ export class GstinvoiceComponent {
   }
 
   downloadExcel(data: any[], templateId: string): void {
-    //console.log("export");
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
     const workbook: XLSX.WorkBook = {
       Sheets: { 'GstInvoice': worksheet },
@@ -273,7 +280,6 @@ export class GstinvoiceComponent {
 
   submitExcelData(): void {
     this.showPreviewModal = false;
-    this.isLoading = true;
     if (!this.excelFile) {
       console.error("⚠️ No file selected.");
       return;
@@ -283,29 +289,29 @@ export class GstinvoiceComponent {
     if (this.excelFile) {
       formData.append('file', this.excelFile);
       formData.append('userId', this.userdetail.user_Id);
-
-      this._invoiceService.UploadCancel(formData).subscribe({
+      this.isLoading = true;
+      this._invoiceService.UploadCancel(formData).pipe(
+        finalize(() => {
+          this.isLoading = false;
+        })
+      ).subscribe({
         next: (res: string) => {
           const error_msg = res;
           console.table(error_msg);
           if (error_msg) {
             alert(error_msg);
             this.BindDashBoard(this.userdetail.user_Id);
-            this.isLoading = false;
           } else {
             alert("No validations returned");
-            this.isLoading = false;
           }
         },
         error: err => {
           console.error('❌ Upload failed', err);
-          this.isLoading = false;
         }
       });
     }
     else {
       console.error('No Data');
-      this.isLoading = false;
     }
   }
 
@@ -316,7 +322,11 @@ export class GstinvoiceComponent {
   }
   DownloadInvoice(invoiceId: number, invoice_Number: string) {
     this.isLoading = true;
-    this._invoiceService.DownloadInvoice(invoiceId).subscribe(response => {
+    this._invoiceService.DownloadInvoice(invoiceId).pipe(
+      finalize(() => {
+        this.isLoading = false;
+      })
+    ).subscribe(response => {
       const contentDisposition = response.headers.get('Content-Disposition');
       let fileName = invoice_Number + '.pdf';
 
@@ -337,11 +347,9 @@ export class GstinvoiceComponent {
       a.download = fileName;
       a.click();
       window.URL.revokeObjectURL(url);
-      this.isLoading = false;
     });
   }
   BulkDownload() {
-    this.isLoading = true;
     const filteredSelected = this.selection.selected.filter((item: any) =>
       this.dataSource.filteredData.includes(item)
     );
@@ -353,7 +361,12 @@ export class GstinvoiceComponent {
     const BulkInvoices = {
       invoiceIds: selectedInvoiceIds
     }
-    this._invoiceService.BulkDownloadInvoice(BulkInvoices).subscribe(response => {
+    this.isLoading = true;
+    this._invoiceService.BulkDownloadInvoice(BulkInvoices).pipe(
+      finalize(() => {
+        this.isLoading = false;
+      })
+    ).subscribe(response => {
       const contentDisposition = response.headers.get('Content-Disposition');
       let fileName = 'invoices.zip';
 
@@ -374,7 +387,6 @@ export class GstinvoiceComponent {
       a.download = fileName;
       a.click();
       window.URL.revokeObjectURL(url);
-      this.isLoading = false;
     });
   }
 
@@ -419,31 +431,30 @@ export class GstinvoiceComponent {
   }
 
   onFileChange(event: any): void {
-    this.isLoading = true;
     const target: DataTransfer = <DataTransfer>(event.target);
 
     if (!target.files || target.files.length !== 1) {
       console.error('Please upload only one Excel file.');
-      this.isLoading = false;
       return;
     }
     const file = target.files[0];
     this.excelFile = target.files[0];
-    console.log(target.files.length);
 
     const formData = new FormData();
     if (this.excelFile) {
       formData.append('file', this.excelFile);
-      formData.append('CompanyId','0');
+      formData.append('CompanyId', '0');
       formData.append('payperiodId', '0');
       formData.append('CreatedBy', this.userdetail.user_Id);
-
-      this._invoiceService.UploadAttributesGST(formData).subscribe({
+      this.isLoading = true;
+      this._invoiceService.UploadAttributesGST(formData).pipe(
+        finalize(() => {
+          this.isLoading = false;
+        })
+      ).subscribe({
         next: res => {
           this.UploadedResponse = res;
-          console.log(this.UploadedResponse);
           if (this.UploadedResponse.StatusCode === 200 && this.UploadedResponse.Data.response.includes('Row(s) Uploaded Successfully.')) {
-            this.isLoading = false;
             this.showPopup = true;
             this.popupMessage = this.UploadedResponse.Data.response;
             this.BindDashBoard(this.userdetail.user_Id);
@@ -464,7 +475,6 @@ export class GstinvoiceComponent {
 
             // Export the file
             XLSX.writeFile(workbook, 'Attribute_Validations.xlsx');
-            this.isLoading = false;
             this.showPopup = true;
             this.popupMessage = 'Import Failed.';
 
@@ -472,18 +482,15 @@ export class GstinvoiceComponent {
           else {
             if (this.UploadedResponse.Data.response != '') {
               alert(this.UploadedResponse.Data.response);
-              this.isLoading = false;
             }
             else {
               alert('Error while processing response.');
-              this.isLoading = false;
             }
 
           }
         },
         error: err => {
           console.error('❌ Upload failed', err);
-          this.isLoading = false;
         }
       });
     }
@@ -496,7 +503,7 @@ export class GstinvoiceComponent {
 
 
   Attributeclick() {
-    
+    this.isLoading = true;
 
     const request = {
       "id": 0,
@@ -506,7 +513,11 @@ export class GstinvoiceComponent {
       "CreatedBy": 3,
       "DateTime": new Date()
     }
-    this._invoiceService.GetAllAttribute(request).subscribe({
+    this._invoiceService.GetAllAttribute(request).pipe(
+      finalize(() => {
+        this.isLoading = false;
+      })
+    ).subscribe({
       next: res => {
         this.availableItems = res.Data;
       }, error: err => { console.log(err) }

@@ -5,50 +5,112 @@
         <mat-card-title style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 600; ">Pay
             History/Varience Report</mat-card-title>
 
-        <div class="container py-2">
+        <div class="container py-3">
             <div class="row g-3 align-items-end">
+
+                <!-- Report Type -->
                 <div class="col-md-2">
-                    <label class="form-label text-muted small">Report Type</label>
+                    <label class="form-label text-muted small mb-1">
+                        Report Type
+                    </label>
+
                     <select class="form-select form-select-sm small-input" [(ngModel)]="formName">
+
                         <option value="PH">Pay History</option>
                         <option value="PV">Pay Variance</option>
                         <option value="PHP">Pay History (PDF)</option>
+
                     </select>
                 </div>
+
+                <!-- Company Code -->
                 <div class="col-md-3">
-                    <label class="form-label text-muted small">Company Code</label>
-                    <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
-                    <!-- <select class="form-select form-select-sm" [(ngModel)]="Entity">
-                        <option *ngFor="let p of entitySearch" [value]="p.Id">
-                            {{ p.EntityName }}
-                        </option>
-                    </select> -->
+                    <label class="form-label text-muted small mb-1">
+                        Company Code
+                    </label>
+
+                    <companyall (companyEmit)="handleCompanyEvent($event)">
+                    </companyall>
                 </div>
-                <!-- <div *ngIf="formName !== 'PV' && formName !== ''" class="col-md-2"> -->
+
+                <!-- Employee Code -->
+                <div class="col-md-3" *ngIf="formName === 'PHP'">
+                    <label class="form-label text-muted small mb-1">
+                        Employee Code
+                    </label>
+
+                    <mat-form-field appearance="outline" class="employee-field">
+
+                        <input matInput type="text" placeholder="Search Employee" [(ngModel)]="employeeSearch"
+                            [matAutocomplete]="employeeAuto" (input)="filterEmployee($event)" />
+
+                        <mat-icon matSuffix class="clear-icon" *ngIf="employeeSearch" (click)="clearSearch()">
+                            close
+                        </mat-icon>
+
+                        <mat-autocomplete #employeeAuto="matAutocomplete" [displayWith]="displayEmployee"
+                            (optionSelected)="onEmployeeSelected($event.option.value)">
+
+                            <mat-option *ngFor="let item of filteredEmpCode" [value]="item">
+
+                                {{ item.Employee_Code }}
+
+                            </mat-option>
+
+                        </mat-autocomplete>
+
+                    </mat-form-field>
+                </div>
+                <!-- Year -->
                 <div *ngIf="formName !== ''" class="col-md-2">
-                    <label class="form-label text-muted small">Year</label>
+
+                    <label class="form-label text-muted small mb-1">
+                        Year
+                    </label>
+
                     <select class="form-select form-select-sm small-input" [(ngModel)]="Year">
+
                         <option *ngFor="let item of getYear" [value]="item.YEAR">
+
                             {{ item.YEAR }}
+
                         </option>
+
                     </select>
                 </div>
+
+                <!-- Month -->
                 <div *ngIf="formName === 'PV'" class="col-md-2">
-                    <label class="form-label text-muted small">Month</label>
+
+                    <label class="form-label text-muted small mb-1">
+                        Month
+                    </label>
+
                     <select class="form-select form-select-sm small-input" [(ngModel)]="Month">
+
                         <option *ngFor="let m of getMonths" [value]="m.MonthName">
+
                             {{ m.MonthName }}
+
                         </option>
+
                     </select>
                 </div>
-                <div class="col-md-3 d-flex gap-2">
-                    <button class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+
+                <!-- Download -->
+                <div class="col-md-1">
+                    <button type="button"
+                        class="btn btn-secondary btn-sm download-btn d-flex align-items-center justify-content-center"
                         matTooltip="Download" (click)="downloadPayHistory()">
+
                         <mat-icon>download</mat-icon>
+
                     </button>
                 </div>
+
             </div>
         </div>
+
     </div>
 </div>
 <div *ngIf="isLoading" class="loading-overlay">

@@ -78,6 +78,9 @@ export class PermhireRequestComponent {
   jobSubCategoryList: any[] = [];
   showErrors: boolean = false;
   apiError: string = '';
+  selectedFile: File | null = null;
+  selectedjobCategoryId: any;
+  selectedjobSubCategoryId: any;
 
   constructor(
     private _decrypt: EncryptionService,
@@ -86,7 +89,7 @@ export class PermhireRequestComponent {
   ) { }
 
   uploadDisplayedColumns: string[] = [
-    'slNo', 'clientcode', 'clientname', 'location', 'req_id', 'ref_id', 'cand_id', 'cand_name', 'designation', 'doj', 'vertical', 'vh', 'ctc', 'billablectc', 'branchcode', 'invoiceno', 'totalamount', 'approval_status'
+    'slNo', 'clientcode', 'clientname', 'location', 'req_id', 'ref_id', 'cand_id', 'cand_name', 'designation', 'doj', 'vertical', 'vh', 'ctc', 'billablectc', 'branchcode', 'invoiceno', 'totalamount', 'approval_status', 'download'
   ];
 
   uploadedData: any[] = [];
@@ -116,6 +119,7 @@ export class PermhireRequestComponent {
     });
 
     this.apiError = '';
+    this.getJobCategory();
   }
 
   ngOnInit(): void {
@@ -139,10 +143,10 @@ export class PermhireRequestComponent {
       state: new FormControl(''),
       refId: new FormControl(''),
       branchCode: new FormControl(''),
-      jobCategory: new FormControl('', Validators.required),
+      jobCategory: new FormControl(''),
       CandId: new FormControl({ value: '', disabled: true }),
       invoiceNo: new FormControl({ value: '', disabled: true }),
-      jobSubCategory: new FormControl('', Validators.required),
+      jobSubCategory: new FormControl(''),
       candName: new FormControl('', Validators.required),
       totalAmount: new FormControl({ value: '', disabled: true }),
       placmenttype: new FormControl(''),
@@ -180,11 +184,27 @@ export class PermhireRequestComponent {
       personalNo: new FormControl(''),
       ranumber: new FormControl(''),
       applicantId: new FormControl(''),
-      DEPARTMENT: new FormControl('')
+      DEPARTMENT: new FormControl(''),
+      fileUpload: new FormControl('', Validators.required)
     });
 
-    this.getJobCategory();
+
     this.addPermMaster.get('organisationHead')?.disable();
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+      console.log('Selected file:', this.selectedFile);
+    }
+  }
+
+
+  clearFile(fileInput: HTMLInputElement): void {
+    fileInput.value = '';
+    this.selectedFile = null;
   }
 
   getJobCategory() {
@@ -200,6 +220,10 @@ export class PermhireRequestComponent {
   }
 
   getJobSubCategory(jobCategoryId: number) {
+    if (!this.selectedCompanyId) {
+      alert('Please select Company');
+      return;
+    }
     const companyid = this.selectedCompanyId;
     this.service.getJobSubCategory(companyid, jobCategoryId).subscribe({
       next: (res) => {
@@ -213,21 +237,36 @@ export class PermhireRequestComponent {
     });
   }
 
-  onJobCategoryChange() {
-    const categoryId = this.addPermMaster.get('jobCategory')?.value;
+  onJobCategoryChange(event: any) {
+    const selectedCategory = this.jobCategoryList.find(
+      x => x.JOB_Category === event.target.value
+    );
+
+    const jobCategoryId = selectedCategory?.JOB_Category_ID;
+
+    this.selectedjobCategoryId = jobCategoryId;
+
     this.jobSubCategoryList = [];
     this.addPermMaster.patchValue({ jobSubCategory: '' });
     this.apiError = '';
 
-    if (categoryId) {
-      this.getJobSubCategory(Number(categoryId));
-      this.triggerContractTypeApi();
+    if (jobCategoryId) {
+      this.getJobSubCategory(Number(jobCategoryId));
     }
   }
 
-  onJobSubCategoryChange() {
+  onJobSubCategoryChange(event: any) {
+    const selectedsubCategory = this.jobSubCategoryList.find(
+      x => x.JOB_SUB_Category === event.target.value
+    );
+
+    const jobSubCategoryId = selectedsubCategory?.JOB_SUB_Category_ID;
+
+
+    this.selectedjobSubCategoryId = jobSubCategoryId;
+
     this.apiError = '';
-    this.triggerContractTypeApi();
+    this.triggerContractTypeApi(this.selectedjobCategoryId, this.selectedjobSubCategoryId);
   }
 
   applyFilters() {
@@ -260,7 +299,7 @@ export class PermhireRequestComponent {
           this.dataSource = new MatTableDataSource(this.permHiresearch);
           this.dataSource.paginator = this.paginator;
           this.uploadDisplayedColumns = [
-            'slNo', 'clientcode', 'clientname', 'location', 'req_id', 'ref_id', 'cand_id', 'cand_name', 'designation', 'doj', 'vertical', 'vh', 'ctc', 'billablectc', 'branchcode', 'invoiceno', 'totalamount', 'approval_status'
+            'slNo', 'clientcode', 'clientname', 'location', 'req_id', 'ref_id', 'cand_id', 'cand_name', 'designation', 'doj', 'vertical', 'vh', 'ctc', 'billablectc', 'branchcode', 'invoiceno', 'totalamount', 'approval_status', 'download'
           ];
         } else {
           this.dataSource.data = [];
@@ -286,8 +325,8 @@ export class PermhireRequestComponent {
 
   onCtcBlur() {
     const companyId = this.addPermMaster.get('COMPANY_ID')?.value;
-    const jobCategoryId = this.addPermMaster.get('jobCategory')?.value;
-    const jobSubCategoryId = this.addPermMaster.get('jobSubCategory')?.value;
+    const jobCategoryId = this.selectedjobCategoryId;
+    const jobSubCategoryId = this.selectedjobSubCategoryId;
     const ctc = this.addPermMaster.get('Ctc')?.value;
 
     if (!companyId || !jobCategoryId || !jobSubCategoryId || !ctc) {
@@ -295,12 +334,12 @@ export class PermhireRequestComponent {
     }
 
     this.apiError = '';
-    this.triggerBillableCtcApi();
+    this.triggerBillableCtcApi(jobCategoryId, jobSubCategoryId);
   }
-  triggerContractTypeApi() {
+  triggerContractTypeApi(jobCategory: any, jobSubCategory: any) {
     const companyId = this.addPermMaster.get('COMPANY_ID')?.value;
-    const jobCategoryId = this.addPermMaster.get('jobCategory')?.value;
-    const jobSubCategoryId = this.addPermMaster.get('jobSubCategory')?.value;
+    const jobCategoryId = jobCategory;
+    const jobSubCategoryId = jobSubCategory;
 
     if (!companyId) {
       this.apiError = 'Please select Company Code';
@@ -334,10 +373,10 @@ export class PermhireRequestComponent {
     });
   }
 
-  triggerBillableCtcApi() {
+  triggerBillableCtcApi(jobcategory: any, jobSubCategory: any) {
     const companyId = this.addPermMaster.get('COMPANY_ID')?.value;
-    const jobCategoryId = this.addPermMaster.get('jobCategory')?.value;
-    const jobSubCategoryId = this.addPermMaster.get('jobSubCategory')?.value;
+    const jobCategoryId = jobcategory;
+    const jobSubCategoryId = jobSubCategory;
     const ctc = this.addPermMaster.get('Ctc')?.value;
 
     if (!companyId) {
@@ -428,11 +467,20 @@ export class PermhireRequestComponent {
           IS_PO_Applicable: formValue.isPoApllicable === 'YES',
           PO_NUMBER: formValue.poNumber || null
         }
-      ]
+      ],
+
     };
 
+    const formData = new FormData();
+
+    formData.append('CreatedBy', payload.CreatedBy);
+    formData.append('Rows', JSON.stringify(payload.Rows));
+
+    if (this.selectedFile) {
+      formData.append('file', this.selectedFile, this.selectedFile.name);
+    }
     this.isLoading = true;
-    this.service.PermHireRequest(payload).pipe(
+    this.service.PermHireRequest(formData).pipe(
       finalize(() => {
         this.isLoading = false;
       })
@@ -478,6 +526,7 @@ export class PermhireRequestComponent {
     this.addPermMaster.get('CandId')?.disable();
     this.addPermMaster.get('invoiceNo')?.disable();
     this.addPermMaster.get('totalAmount')?.disable();
+    this.addPermMaster.get('contractType')?.disable();
   }
 
   handleStateEvent(state: any) {
@@ -497,5 +546,61 @@ export class PermhireRequestComponent {
     this.addPermMaster.patchValue({
       location: mapName.mapName
     });
+  }
+
+  downloadFile(row: any) {
+    this.isLoading = true;
+    const file = row.Doc_Path;
+
+    this.service.DownloadFileAttachment(file)
+      .pipe(finalize(() => (this.isLoading = false)))
+      .subscribe({
+        next: (res: any) => {
+          const statusCode = res?.StatusCode ?? res?.statusCode ?? res?.statuscode;
+          const data = res?.Data ?? res?.data;
+
+          if (statusCode === 200 && data) {
+            const base64 = data.file ?? data.File;
+            const fileName = data.fileName ?? data.FileName ?? 'download.pdf';
+
+            if (base64) {
+              this.downloadFileFromBase64(base64, fileName);
+            } else {
+              alert('File not found');
+            }
+          } else {
+            console.error('Unexpected response', res);
+          }
+        },
+        error: (error: any) => {
+          console.error('Error downloading file:', error);
+        }
+      });
+  }
+
+  downloadFileFromBase64(base64: string, filename: string) {
+    try {
+      const byteChars = atob(base64.replace(/\s/g, ''));
+      const bytes = new Uint8Array(byteChars.length);
+
+      for (let i = 0; i < byteChars.length; i++) {
+        bytes[i] = byteChars.charCodeAt(i);
+      }
+
+      const blob = new Blob([bytes], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      window.URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error('Invalid base64 data', e);
+      alert('Could not process the file');
+    }
   }
 }
