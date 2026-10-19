@@ -24,6 +24,7 @@ import { MatIcon } from "@angular/material/icon";
 import { AttributeComponent } from "../attribute/attribute.component";
 import { Payperiodclass } from '../../../Models/Common';
 import { finalize } from 'rxjs';
+import { forkJoin } from 'rxjs';
 
 export const Invoice_TOKEN = new InjectionToken<IInvoiceRepository>('Invoice_TOKEN');
 
@@ -178,10 +179,9 @@ export class GstinvoiceComponent {
         "CreatedBy": 3,
         "DateTime": new Date()
       }
-      this.isLoading = true;
       this._invoiceService.GetAllAttribute(request).pipe(
         finalize(() => {
-          this.isLoading = false;
+
         })
       ).subscribe({
         next: res => {
@@ -320,34 +320,89 @@ export class GstinvoiceComponent {
   getTableColumns(): string[] {
     return this.excelPreviewData?.length ? Object.keys(this.excelPreviewData[0]) : [];
   }
-  DownloadInvoice(invoiceId: number, invoice_Number: string) {
+
+
+  DownloadInvoice(invoiceId: number, invoice_Number: string, entity: string, companyId: number) {
     this.isLoading = true;
-    this._invoiceService.DownloadInvoice(invoiceId).pipe(
-      finalize(() => {
-        this.isLoading = false;
+
+    if (entity === 'QRS') {
+
+      forkJoin({
+        invoice: this._invoiceService.DownloadInvoice(invoiceId),
+        secondFile: this._invoiceService.DownloadPermHireInvoivce(companyId, invoiceId)
       })
-    ).subscribe(response => {
-      const contentDisposition = response.headers.get('Content-Disposition');
-      let fileName = invoice_Number + '.pdf';
+        .pipe(
+          finalize(() => {
+            this.isLoading = false;
+          })
+        )
+        .subscribe({
+          next: (response) => {
+            // Download first PDF
+            this.downloadPdf(
+              response.invoice,
+              `${invoice_Number}_1.pdf`
+            );
 
-      // Extract file name from header
-      if (contentDisposition) {
-        const match = contentDisposition.match(/filename="?(.*?)"?$/);
-        if (match && match.length > 1) {
-          fileName = match[1];
-        }
+            // Download second PDF
+            this.downloadPdf(
+              response.secondFile,
+              `${invoice_Number}_2.pdf`
+            );
+          },
+          error: (error) => {
+            console.error('Error downloading invoice files:', error);
+          }
+        });
+
+    } else {
+
+      this._invoiceService.DownloadInvoice(invoiceId)
+        .pipe(
+          finalize(() => {
+            this.isLoading = false;
+          })
+        )
+        .subscribe({
+          next: (response) => {
+            this.downloadPdf(
+              response,
+              `${invoice_Number}.pdf`
+            );
+          },
+          error: (error) => {
+            console.error('Error downloading invoice:', error);
+          }
+        });
+    }
+  }
+
+  downloadPdf(response: any, fallbackFileName: string) {
+    const contentDisposition =
+      response.headers.get('Content-Disposition');
+
+    let fileName = fallbackFileName;
+
+    if (contentDisposition) {
+      const match = contentDisposition.match(/filename="?([^"]+)"?/i);
+
+      if (match?.[1]) {
+        fileName = match[1];
       }
+    }
 
-      const blob = new Blob([response.body!], { type: 'application/pdf' });
-
-      // Create link and trigger download
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = fileName;
-      a.click();
-      window.URL.revokeObjectURL(url);
+    const blob = new Blob([response.body!], {
+      type: 'application/pdf'
     });
+
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+
+    a.href = url;
+    a.download = fileName;
+    a.click();
+
+    window.URL.revokeObjectURL(url);
   }
   BulkDownload() {
     const filteredSelected = this.selection.selected.filter((item: any) =>

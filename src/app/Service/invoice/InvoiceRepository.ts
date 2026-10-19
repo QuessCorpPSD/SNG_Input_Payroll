@@ -255,4 +255,9 @@ export class InvoiceRepository implements IInvoiceRepository {
         return this.http.get<APIResponse>(url);
     }
 
+    DownloadPermHireInvoivce(companyId: number, invoiceId: number): Observable<HttpResponse<Blob>> {
+        const url = `${this.environment.apiUrl}GSTInvoice/DownloadPermHireInvoivce/${companyId}/${invoiceId}`;
+        return this.http.get(url, { responseType: 'blob', observe: 'response' });
+    }
+
 }

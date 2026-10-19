@@ -295,7 +295,7 @@
                                 <mat-cell *matCellDef="let element" class="fixed-width-column"
                                     style="position: sticky;">
                                     <img src="assets/Icons/download_enabled.svg"
-                                        (click)="DownloadInvoice(element.invoice_Id, element.invoice_Number)"
+                                        (click)="DownloadInvoice(element.invoice_Id, element.invoice_Number,element.entity,element.company_Id)"
                                         matTooltip="Pdf Download" matTooltipPosition="above"
                                         style="cursor: pointer; width: 24px; height: 22px; max-width: 100px;" />
                                     <!-- <img *ngIf="!element.IRN_Number && !element.BatchFile" src="assets/Icons/download_disabled.svg"
@@ -581,8 +581,8 @@
 
             <attribute class="centered-popup" [availables]="availableItems" valueField="value" textField="text"
                 [selects]="selectedItems" valueField="value" textField="text" (itemsMoved)="onItemsMoved($event)"
-                [Company_Code]="'0'" [pay_period]="'0'" [AttributeType]="AttributeType"
-                (close)="showpsd = false"></attribute>
+                [Company_Code]="'0'" [pay_period]="'0'" [AttributeType]="AttributeType" (close)="showpsd = false">
+            </attribute>
         </div>
     </div>
     <br><br><br><br><br><br>

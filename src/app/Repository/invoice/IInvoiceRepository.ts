@@ -38,5 +38,5 @@ export interface IInvoiceRepository {
     InterCompanyInvoiceInitiate(val): Observable<APIResponse>;
     InterCompanyInitiationSearchExport(val): Observable<APIResponse>;
     InterCompanyGetAllInvoiceDetails(companyId: number, payPeriodId: number, userId: string): Observable<APIResponse>;
- 
+    DownloadPermHireInvoivce(companyId: number, invoiceId: number): Observable<HttpResponse<Blob>>;
 }
