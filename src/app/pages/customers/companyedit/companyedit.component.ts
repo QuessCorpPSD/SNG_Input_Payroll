@@ -821,7 +821,7 @@ export class CompanyeditComponent {
         Client_Escalation_Manager_Mobile_No: "",
         Portal_Payslip_Format: formValue?.PortalPaySlipFormat?.toString() ?? "",
         IsNewJoinee: formValue?.IsNewJoinee?.toString() ? "1" : "0",
-        ReimbPaymentId: Number(formValue?.ReimbPaymentId),
+        ReimbPaymentId: Number(formValue?.ReimbPayment),
         PayrollWithDecimalId: Number(formValue?.PayrollWithDecimal ?? 0),
         PfCategoryId: 0,
         IsSignature: formValue?.IsSignature?.toString() ? 1 : 0,

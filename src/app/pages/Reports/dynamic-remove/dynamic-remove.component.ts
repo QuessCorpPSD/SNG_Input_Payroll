@@ -122,177 +122,105 @@ export class DynamicRemoveComponent {
       })
     ).subscribe({
 
+
       next: (res: any) => {
+        console.log('API Response:', res);
 
-        this.isLoading = false;
+        const data = res?.Data ?? res?.data ?? {};
+        const responseText =
+          data?.response ?? data?.Response ?? '';
 
-        console.log("API Response:", res);
+        // Get all returned messages, including success and validation errors.
+        let items: any[] = [];
 
-        if (!res || !res.Data) {
-          alert(
-            "Upload request processed. Server did not return any data."
-          );
-          return;
+        const rawErrors = data?.errors ?? data?.Errors;
+
+        if (Array.isArray(rawErrors)) {
+          items.push(...rawErrors);
+        } else if (rawErrors) {
+          items.push(rawErrors);
         }
 
-        // Success
-        if (
-          res?.Data?.response?.includes(
-            "Row(s) Uploaded Successfully."
-          )
-        ) {
-          alert("Row(s) Uploaded Successfully.");
-          return;
-        }
+        // Also process the response if it contains JSON.
+        if (responseText) {
+          const parsedResponse = this.tryParseResponse(responseText);
+          const parsed = parsedResponse?.parsed;
 
-        // Parse response
-        const { parsed, msg } =
-          this.tryParseResponse(
-            res?.Data?.response
-          );
-
-        const successMsg =
-          'Row(s) Uploaded Successfully.';
-
-        const successMatch =
-          (
-            Array.isArray(parsed) &&
-            parsed[0]?.Error_Message?.trim() === successMsg
-          ) ||
-          (
-            parsed &&
-            typeof parsed === 'object' &&
-            parsed?.Error_Message?.trim() === successMsg
-          );
-
-        if (
-          res?.StatusCode === 200 &&
-          successMatch
-        ) {
-          return;
-        }
-
-        // Failed import
-        if (
-          res?.StatusCode === 200 &&
-          msg?.trim() === 'Failed to import.'
-        ) {
-
-          alert("Failed to Import");
-
-          const rawErr =
-            res?.Data?.errors?.[0];
-
-          let errorArray: any[] = [];
-
-          try {
-
-            if (typeof rawErr === 'string') {
-
-              const tryJson =
-                JSON.parse(rawErr);
-
-              errorArray =
-                Array.isArray(tryJson)
-                  ? tryJson
-                  : [tryJson];
-
-            } else if (
-              Array.isArray(rawErr)
-            ) {
-
-              errorArray = rawErr;
-
-            } else if (rawErr) {
-
-              errorArray = [rawErr];
-            }
-
-          } catch {
-
-            errorArray = rawErr
-              ? [
-                {
-                  Error_Message:
-                    String(rawErr)
-                }
-              ]
-              : [];
+          if (Array.isArray(parsed)) {
+            items.push(...parsed);
+          } else if (parsed && typeof parsed === 'object') {
+            items.push(parsed);
+          } else if (
+            typeof responseText === 'string' &&
+            !items.length
+          ) {
+            // Preserve plain-text success/error responses.
+            items.push({ Error_Message: responseText });
           }
+        }
 
-          const exportData =
-            errorArray.map(
-              (item: any) => ({
-                Error_Message:
-                  item?.Error_Message || ''
-              })
-            );
+        // Handle responses where Data itself is an array.
+        if (Array.isArray(data)) {
+          items.push(...data);
+        }
 
-          if (exportData.length > 0) {
+        // Remove duplicate messages without losing either message type.
+        const seen = new Set<string>();
 
-            const worksheet:
-              XLSX.WorkSheet =
-              XLSX.utils.json_to_sheet(
-                exportData
-              );
-
-            const workbook:
-              XLSX.WorkBook = {
-              Sheets: {
-                ErrorMessages: worksheet
-              },
-              SheetNames: [
-                'ErrorMessages'
-              ]
-            };
-
-            XLSX.writeFile(workbook, 'ErrorMessages_DeleteOption.xlsx');
+        items = items.filter((item: any) => {
+          const key = JSON.stringify(item);
+          if (seen.has(key)) {
+            return false;
           }
+          seen.add(key);
+          return true;
+        });
 
-          return;
+        // Create Excel rows for both success and failure responses.
+        const exportData = items.map((item: any) => ({
+          Status: item?.Validation
+            ? 'Failed'
+            : (
+              (item?.error_Message ?? '').toString()
+                .toLowerCase()
+                .includes('successfully')
+                ? 'Success'
+                : 'Message'
+            ),
+          Validation: item?.validation ?? '',
+          Error_Message: item?.error_Message ?? '',
+          API_Response: responseText
+        }));
+
+        // Ensure even an empty response can be downloaded.
+        if (exportData.length === 0) {
+          exportData.push({
+            Status: res?.StatusCode === 200 ? 'Success' : 'Failed',
+            Validation: '',
+            Error_Message: '',
+            API_Response: responseText || 'No response messages returned.'
+          });
         }
 
-        // Data contains Error_Message
-        if (
-          Array.isArray(res.Data) &&
-          res.Data[0]?.Error_Message
-        ) {
+        const worksheet: XLSX.WorkSheet =
+          XLSX.utils.json_to_sheet(exportData);
 
-          alert(
-            res.Data[0].Error_Message
-          );
+        const workbook: XLSX.WorkBook = {
+          Sheets: { ImportResults: worksheet },
+          SheetNames: ['ImportResults']
+        };
 
-          return;
-        }
+        XLSX.writeFile(
+          workbook,
+          'DynamicRemove_ImportResults.xlsx'
+        );
 
-        // Fallback
-        const fallback =
-          msg ||
-          (
-            Array.isArray(parsed)
-              ? JSON.stringify(parsed)
-              : (
-                parsed &&
-                typeof parsed === 'object' &&
-                parsed.Error_Message
-              )
-                ? parsed.Error_Message
-                : (
-                  parsed
-                    ? JSON.stringify(parsed)
-                    : ''
-                )
-          );
-
-        if (fallback) {
-          alert(fallback);
-        } else {
-          alert(
-            "Error while processing response."
-          );
-        }
+        // Display the API summary after generating Excel.
+        alert(
+          responseText ||
+          'Import response downloaded to Excel.'
+        );
       },
-
       error: (err: any) => {
 
         this.isLoading = false;
