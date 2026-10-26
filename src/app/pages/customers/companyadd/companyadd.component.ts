@@ -628,7 +628,7 @@ export class CompanyaddComponent {
         Client_Escalation_Manager_Mobile_No: "",
         Portal_Payslip_Format: formValue?.PortalPaySlipFormat ?? "",
         IsNewJoinee: formValue?.IsNewJoinee ? "1" : "0",
-        ReimbPaymentId: Number(formValue?.ReimbPaymentId ?? 0),
+        ReimbPaymentId: Number(formValue?.ReimbPayment ?? 0),
         PayrollWithDecimalId: Number(formValue?.PayrollWithDecimal ?? 0),
         PfCategoryId: 0,
         IsSignature: formValue?.IsSignature ? 1 : 0,
