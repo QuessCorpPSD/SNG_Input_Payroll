@@ -9,28 +9,28 @@ import { map, Observable, startWith } from "rxjs";
 
 @Component({
   selector: 'import-type',
-  imports: [  CommonModule,
+  imports: [CommonModule,
     ReactiveFormsModule,
     MatAutocompleteModule,
     MatInputModule,
     MatFormFieldModule],
-    standalone:true,
+  standalone: true,
   templateUrl: './bill-import-type.component.html',
   styleUrl: './bill-import-type.component.css'
 })
 export class BillImportTypeComponent {
   @Output() importType = new EventEmitter<any>();
-myControl = new FormControl<ImportTypeUI | string>('');   // <-- typed control
+  myControl = new FormControl<ImportTypeUI | string>('');   // <-- typed control
   options: ImportTypeUI[] = [
     { value: 0, Text: "Billable Days" },
     { value: 1, Text: "Arrear Billable Days" },
-    // { value: 2, Text: "Billable Report" }
+    { value: 2, Text: "Billable Report" }
   ];
 
   filteredOptions$!: Observable<ImportTypeUI[]>;
-onOptionSelected(event){
-this.importType.emit(event);
-}
+  onOptionSelected(event) {
+    this.importType.emit(event);
+  }
   ngOnInit() {
     this.filteredOptions$ = this.myControl.valueChanges.pipe(
       startWith(''),
