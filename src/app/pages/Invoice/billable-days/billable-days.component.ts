@@ -18,7 +18,7 @@ import { TextFieldModule } from '@angular/cdk/text-field';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import * as XLSX from 'xlsx';
 import FileSaver from 'file-saver';
-import { Observable, ReplaySubject } from 'rxjs';
+import { finalize, Observable, ReplaySubject } from 'rxjs';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { SessionStorageService } from '../../../Shared/SessionStorageService';
 import { BillImportTypeComponent } from '../../../common/bill-import-type/bill-import-type.component';
@@ -84,7 +84,7 @@ export class BillableDaysComponent implements OnInit {
 
   submitExcelData(): void {
     this.showPreviewModal = false;
-    this.isLoading = true;
+
     if (!this.excelFile) {
       console.error("⚠️ No file selected.");
       return;
@@ -96,22 +96,19 @@ export class BillableDaysComponent implements OnInit {
       formData.append('userId', this.userdetail.user_Id);
       formData.append('importType', this.importType.value);
 
-
-      this._invoiceService.UploadBillable(formData).subscribe({
+      this.isLoading = true;
+      this._invoiceService.UploadBillable(formData).pipe(finalize(() => { this.isLoading = false })).subscribe({
         next: (res) => {
           this.datatable = res.Data;
           console.table(this.datatable);
           if (this.datatable && Array.isArray(this.datatable) && this.datatable.length > 0) {
             this.downloadExcel(this.datatable, "Billable_Days_Validations");
-            this.isLoading = false;
           } else {
             alert("No validations returned");
-            this.isLoading = false;
           }
         },
         error: err => {
           console.error('❌ Upload failed', err);
-          this.isLoading = false;
         }
       });
     }
@@ -141,12 +138,11 @@ export class BillableDaysComponent implements OnInit {
   }
 
   onFileChange(event: any): void {
-    this.isLoading = true;
+
     const target: DataTransfer = <DataTransfer>(event.target);
 
     if (!target.files || target.files.length !== 1) {
       console.error('Please upload only one Excel file.');
-      this.isLoading = false;
       return;
     }
 
@@ -163,22 +159,19 @@ export class BillableDaysComponent implements OnInit {
       formData.append('file', this.excelFile);
       formData.append('userId', this.userdetail.user_Id);
       formData.append('importType', this.importType.value);
-
-      this._invoiceService.UploadBillable(formData).subscribe({
+      this.isLoading = true;
+      this._invoiceService.UploadBillable(formData).pipe(finalize(() => { this.isLoading = false })).subscribe({
         next: (res) => {
           this.datatable = res.Data;
           console.table(this.datatable);
           if (this.datatable && Array.isArray(this.datatable) && this.datatable.length > 0) {
             this.downloadExcel(this.datatable, "Billable_Days_Validations");
-            this.isLoading = false;
           } else {
             alert("No validations returned");
-            this.isLoading = false;
           }
         },
         error: err => {
           console.error('❌ Upload failed', err);
-          this.isLoading = false;
         }
       });
     }
@@ -250,8 +243,7 @@ export class BillableDaysComponent implements OnInit {
 
   }
   downloadExcelFromBase64(base64: string, filename: string) {
-    //this.isLoading=false;
-    const source = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${base64}`;
+        const source = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${base64}`;
     const downloadLink = document.createElement('a');
     downloadLink.href = source;
     downloadLink.download = filename;
@@ -261,8 +253,12 @@ export class BillableDaysComponent implements OnInit {
     this.importType = event;
   }
   TemplateDownload() {
-
-    this._invoiceService.BillableTemplateDownload(this.importType.value).subscribe({
+    this.isLoading = true;
+    this._invoiceService.BillableTemplateDownload(this.importType.value).pipe(
+      finalize(() => {
+        this.isLoading = false;
+      })
+    ).subscribe({
       next: res => {
         this.downloadExcelFromBase64(res.Data.file, res.Data.fileName)
       },
