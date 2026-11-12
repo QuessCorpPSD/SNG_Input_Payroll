@@ -91,10 +91,17 @@
                 </div> -->
 
                 <div class="col-md-4">
-                    <label for="cgstCheck" class="form-label text-muted small mb-0">GST Percentage</label>
+                    <label for="cgstCheck" class="form-label text-muted small">GST Percentage</label>
                     <span style="color: red;">*</span>
-                    <input type="number" class="form-control form-control-sm w-100" [(ngModel)]="cgstPercentage"
+                    <input type="number" class="form-control form-control-sm" [(ngModel)]="cgstPercentage"
                         name="cgstPercentage" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">EA License No</label>
+                    <span style="color: red;">*</span>
+                    <!-- <input class="form-control form-control-sm" [(ngModel)]="EALicenseNo" name="EALicenseNo" /> -->
+                    <input type="text" class="form-control form-control-sm" maxlength="20" [(ngModel)]="EALicenseNo"
+                        name="EALicenseNo" />
                 </div>
             </div>
             <div style="display: none;" class="row g-3 mb-3">

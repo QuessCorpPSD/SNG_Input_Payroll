@@ -52,7 +52,7 @@ export class GSTEditComponent {
       this.userdetail = JSON.parse(this.decry.decrypt(json));
     }
     else {
-      console.warn('UserProfile not found in the session Storage');
+      //console.warn('UserProfile not found in the session Storage');
     }
 
     this.Gsteditform = this.fb.group({
@@ -63,7 +63,8 @@ export class GSTEditComponent {
       CompanyAddress: [this.editData.CompanyAddress ?? '', Validators.required],
       PinCode: [this.editData.PinCode ?? '', [Validators.required]],
       cgstPercentage: [this.editData.Gst_Percentage ?? '', [Validators.required]],
-      Entity: [this.editData.EntityId ?? '', [Validators.required]]
+      Entity: [this.editData.EntityId ?? '', [Validators.required]],
+      EALicenseNo: [this.editData.EALicenseNo ?? '']
     });
     this.LoadEntity();
   }
@@ -116,9 +117,10 @@ export class GSTEditComponent {
       "CompanyName": String(form.CompanyName),
       "CompanyAddress": String(form.CompanyAddress),
       "CreatedBy": this.userdetail.user_Id,
-      "Gst_Percentage":String(form.cgstPercentage),
+      "Gst_Percentage": String(form.cgstPercentage),
       "EntityId": Number(form.Entity),
-      "Pincode": String(form.PinCode)
+      "Pincode": String(form.PinCode),
+      "EALicenseNo": String(form.EALicenseNo)
     };
     this.gstService.Edit(payload).subscribe({
       next: (res: any) => {

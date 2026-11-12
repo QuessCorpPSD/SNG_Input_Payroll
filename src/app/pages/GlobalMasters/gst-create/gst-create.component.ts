@@ -46,7 +46,7 @@ export class GSTCreateComponent {
       this.userdetail = JSON.parse(this.decry.decrypt(json));
     }
     else {
-      console.warn('UserProfile not found in the session Storage');
+      // console.warn('UserProfile not found in the session Storage');
     }
     this.LoadEntity();
   }
@@ -65,6 +65,7 @@ export class GSTCreateComponent {
   CompanyAddress = '';
   PinCode = '';
   Entity = '';
+  EALicenseNo = '';
   isLoading: boolean = false;
   showPopup: boolean = false;
   popupMessage = '';
@@ -105,7 +106,8 @@ export class GSTCreateComponent {
           this.entity = res.Data.data.Table0;
         }
       },
-      error: err => console.error(" Pay Category API Error:", err)
+      error: err => 
+        console.error(" Pay Category API Error:", err)
     });
   }
   SaveClick() {
@@ -160,14 +162,15 @@ export class GSTCreateComponent {
       "CreatedBy": this.userdetail.user_Id,
       "Gst_Percentage": String(this.cgstPercentage),
       "EntityId": Number(this.Entity),
-      "Pincode": String(this.PinCode)
+      "Pincode": String(this.PinCode),
+      "EALicenseNo": String(this.EALicenseNo)
 
     };
 
     this.gstService.Create(payload).subscribe({
       next: (res: any) => {
 
-        const msg=res?.Data?.response;
+        const msg = res?.Data?.response;
 
         if (msg.includes('Success')) {
           this.showPopup = true;
