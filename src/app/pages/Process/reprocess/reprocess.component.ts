@@ -40,7 +40,7 @@ export const Pay_TOKEN = new InjectionToken<IPayProcessRepository>('Pay_TOKEN');
 })
 export class ReprocessComponent implements OnInit {
   selectedCompanyId!: number;
-  payPeriod!: Payperiodclass;
+  payPeriod!: Payperiodclass | null;
   payPeriodType!: string;
   isLoading: boolean = false;
   selectedDate: string = '';
@@ -65,23 +65,33 @@ export class ReprocessComponent implements OnInit {
     this.selectoption = user;
     //console.log(user)
   }
-  handlePayperiodEvent(payperiod: Payperiodclass) {
-    this.payPeriod = payperiod;
+  handlePayperiodEvent(value: Payperiodclass | null): void {
 
+    this.payPeriod = value;
 
-    if (this.selectedCompanyId != 0 || this.selectedCompanyId != undefined) {
+    // When PayPeriod is cleared (FPP), stop here
+    if (!value) {
+      this.selectedDate = '';
+      this.actual_Or_delcare = '';
+      return;
+    }
+
+    // Check company selection
+    if (this.selectedCompanyId != 0 && this.selectedCompanyId != undefined) {
+
       const requestdate = {
-        PayPeriod: this.payPeriod.payPeriod
+        PayPeriod: value.payPeriod
       };
 
       this._payProcessService.GetDate(requestdate)
         .pipe(
           switchMap(res => {
+
             const date = res?.Data?.date;
 
             if (!date) {
               this.selectedDate = '';
-              return of(null); // stop second API
+              return of(null);
             }
 
             this.selectedDate = date;
@@ -102,13 +112,12 @@ export class ReprocessComponent implements OnInit {
           },
           error: err => console.error(err)
         });
-
     }
   }
 
 
   ngOnInit(): void {
-    this.payPeriodType = "All";
+    this.payPeriodType = "Current";
     const now = new Date();
     const formatted = this.datePipe.transform(now, 'dd-MM-yyyy');
     // this.selectedDate = String(formatted);
@@ -340,6 +349,15 @@ export class ReprocessComponent implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+
+  onOptionChange(value: string): void {
+    if (value === 'PP') {
+      this.payPeriodType = "Current";
+    }
+    else if (value === 'FPP') {
+      this.payPeriodType = "FutureFF";
+    }
   }
 
 }

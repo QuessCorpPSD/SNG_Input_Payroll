@@ -54,7 +54,7 @@ interface ViewRow {
 })
 export class ArrearAttendanceComponent implements OnInit {
   selectedCompanyId!: number;
-  payPeriod!: Payperiodclass;
+  payPeriod!: Payperiodclass | null;
   payPeriodType!: string;
   isLoading: boolean = false;
   userdetail!: any;
@@ -78,8 +78,8 @@ export class ArrearAttendanceComponent implements OnInit {
   }
 
 
-  handlePayperiodEvent(payperiod: Payperiodclass) {
-    this.payPeriod = payperiod;
+  handlePayperiodEvent(value: Payperiodclass | null): void {
+    this.payPeriod = value;
   }
 
 

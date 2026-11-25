@@ -32,5 +32,5 @@ export interface ICommonService {
     GetPayCodes(): Observable<APIResponse>;
     GetInterCompanyCodes(userId: number): Observable<APIResponse>
     GetEmployeeCode(payload: any): Observable<APIResponse>
-
+    GetFuturePayperiod(companyId: any): Observable<APIResponse>;
 }

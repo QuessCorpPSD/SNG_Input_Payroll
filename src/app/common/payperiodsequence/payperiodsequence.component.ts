@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, InjectionToken, Injector, Input, OnChanges, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, InjectionToken, Injector, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { Payperiodclass } from '../../Models/Common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { map, Observable, startWith } from 'rxjs';
@@ -12,7 +12,7 @@ import { CommonService } from '../../Service/CommonService';
 export const COMM_TOKEN = new InjectionToken<ICommonService>('COMM_TOKEN');
 @Component({
   selector: 'payperiodsequence',
-  standalone:true,
+  standalone: true,
   imports: [CommonModule,
     ReactiveFormsModule,
     MatAutocompleteModule,
@@ -26,33 +26,43 @@ export const COMM_TOKEN = new InjectionToken<ICommonService>('COMM_TOKEN');
   }]
 })
 export class PayperiodsequenceComponent implements OnChanges {
- @Input() selectedCompanyId?: number;
+  @Input() selectedCompanyId?: number;
   @Input() payPeriodType?: string;
 
   options: string[] = [];
   searchText: string = '';
-  myControl = new FormControl<string | Payperiodclass>('');
+  myControl = new FormControl<string | Payperiodclass | null>('');
   payPeriod: Payperiodclass[] = [];
   filteredOptions$!: Observable<Payperiodclass[]>;
   selectedOption?: Payperiodclass;
-  @Output() payperiodEmit = new EventEmitter<Payperiodclass>();
-  constructor(@Inject(COMM_TOKEN) private _commonService: ICommonService,  private injector: Injector
-      ) {
+  @Output() payperiodEmit = new EventEmitter<Payperiodclass | null>();
+  constructor(@Inject(COMM_TOKEN) private _commonService: ICommonService, private injector: Injector
+  ) {
 
-  
+
 
   }
-  ngOnChanges() {
+  ngOnChanges(changes: SimpleChanges): void {
+
+    if (changes['payPeriodType'] && this.payPeriodType === 'FutureFF') {
+
+      // Clear PayPeriod autocomplete
+      this.myControl.setValue(null);
+
+      // Clear selected PayPeriod in parent
+      this.selectedOption = undefined;
+      this.payperiodEmit.emit(null);
+    }
+
     if (this.selectedCompanyId) {
       this.BindPayperiod(this.selectedCompanyId);
     }
-      
   }
 
 
 
   BindPayperiod(selectedCompanyId: any) {
-    
+
     if (this.payPeriodType === "Current") {
       this._commonService.GetCurrentPayperiod(selectedCompanyId).subscribe({
         next: res => {
@@ -82,7 +92,30 @@ export class PayperiodsequenceComponent implements OnChanges {
       this._commonService.GetPayperiodbyCompany(selectedCompanyId).subscribe({
         next: res => {
           this.payPeriod = res.Data;
-         // console.log(this.payPeriod);
+          // console.log(this.payPeriod);
+          this.filteredOptions$ = this.myControl.valueChanges.pipe(
+            startWith(''),
+            map(value => {
+              let searchText = '';
+              if (typeof value === 'string') {
+                searchText = value;
+              } else if (value && typeof value === 'object' && 'payPeriod' in value) {
+                searchText = value?.payPeriod;
+              }
+
+              return this._filter(searchText);
+            })
+          );
+        },
+        error: err => console.error(err.message)
+      });
+    }
+    else if (this.payPeriodType === "FutureFF") {
+      console.log("FutureFF");
+      this._commonService.GetFuturePayperiod(selectedCompanyId).subscribe({
+        next: res => {
+          this.payPeriod = res.Data;
+          // console.log(this.payPeriod);
           this.filteredOptions$ = this.myControl.valueChanges.pipe(
             startWith(''),
             map(value => {
@@ -109,7 +142,8 @@ export class PayperiodsequenceComponent implements OnChanges {
     );
   }
 
-  displayFn = (option: any): string => option?.payPeriod ?? option.payPeriod;
+  displayFn = (option: Payperiodclass | null): string =>
+    option?.payPeriod ?? '';
 
 
   onOptionSelected(option: any) {

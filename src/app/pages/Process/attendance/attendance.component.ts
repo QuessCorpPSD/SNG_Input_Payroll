@@ -54,7 +54,7 @@ interface ViewRow {
 })
 export class AttendanceComponent implements OnInit {
   selectedCompanyId!: number;
-  payPeriod!: Payperiodclass;
+  payPeriod!: Payperiodclass | null;
   payPeriodType!: string;
   isLoading: boolean = false;
   empid: any;
@@ -80,10 +80,10 @@ export class AttendanceComponent implements OnInit {
   }
 
 
-  handlePayperiodEvent(payperiod: Payperiodclass) {
-    this.payPeriod = payperiod;
-  }
 
+  handlePayperiodEvent(value: Payperiodclass | null): void {
+    this.payPeriod = value;
+  }
 
   ngOnInit(): void {
     this.payPeriodType = "All";
