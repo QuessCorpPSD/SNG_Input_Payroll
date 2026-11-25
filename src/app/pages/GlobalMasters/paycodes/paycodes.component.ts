@@ -168,7 +168,7 @@ export class PaycodesComponent implements AfterViewInit {
       "PayId": 0
     }
 
-    this.payCode.SearchPayCode(payload).subscribe({
+    this.payCode.ExportPayCode(payload).subscribe({
       next: (res) => {
         this.isLoading = false;
         try {

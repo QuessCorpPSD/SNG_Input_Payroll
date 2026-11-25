@@ -3,8 +3,9 @@ import { APIResponse } from "../../Models/apiresponse";
 
 export interface IPAycodeService {
     GetPayType(): Observable<APIResponse>;
-    SearchPayCode(payload: any): Observable<APIResponse>;
+    SearchPayCode(payload: any): Observable<APIResponse>;    
     CreatePayCode(payload: any): Observable<APIResponse>;
     GetPageType(): Observable<APIResponse>;
+    ExportPayCode(payload: any): Observable<APIResponse>;
 
 }

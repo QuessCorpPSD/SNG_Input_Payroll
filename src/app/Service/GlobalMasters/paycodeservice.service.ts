@@ -27,4 +27,8 @@ export class PaycodeserviceService implements IPAycodeService {
   GetPageType(): Observable<APIResponse> {
     return this.http.get<APIResponse>(this.env.apiUrl + 'Paycode/GetPageType')
   }
+
+  ExportPayCode(payload: any): Observable<APIResponse> {
+    return this.http.post<APIResponse>(this.env.apiUrl + 'Paycode/ExportPayCode', payload)
+  }
 }
